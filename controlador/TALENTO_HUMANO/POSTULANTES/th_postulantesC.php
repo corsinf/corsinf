@@ -11,6 +11,10 @@ if (isset($_GET['listar'])) {
 if (isset($_GET['listar_todo'])) {
     echo json_encode($controlador->listar_todo());
 }
+if (isset($_GET['listar_postulantes'])) {
+    $coincidencias = isset($_POST['coincidencias']) ? $_POST['coincidencias'] : false;
+    echo json_encode($controlador->listarNoContratados($_POST['id'], $coincidencias));
+}
 
 if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
@@ -80,6 +84,12 @@ class th_postulantesC
         $lista = $this->modelo->where('th_pos_estado', 1)->where('th_pos_contratado', 0)->listar();
         return $lista;
     }
+
+   function listarNoContratados($id, $coincidencias = false)
+{
+    $lista = $this->modelo->listarNoContratados($id, $coincidencias);
+    return $lista;
+}
 
     function insertar_editar($parametros)
     {

@@ -25,6 +25,11 @@ if (isset($_GET['listar_personas_rol'])) {
     echo json_encode($controlador->listar_personas_rol());
 }
 
+if (isset($_GET['listar_postulantes'])) {
+    $coincidencias = isset($_POST['coincidencias']) ? $_POST['coincidencias'] : false;
+    echo json_encode($controlador->listar_postulantes($_POST['id'], $coincidencias));
+}
+
 if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
@@ -232,6 +237,12 @@ class th_personasC
         return $datos;
     }
 
+    function listar_postulantes($id = '', $coincidencias = false)
+    {
+        $datos = $this->modelo->listar_personas_no_asignadas($id, $coincidencias);
+        return $datos;
+    }
+    
     function listar_personas_rol()
     {
         $id = $_SESSION['INICIO']['NO_CONCURENTE'];

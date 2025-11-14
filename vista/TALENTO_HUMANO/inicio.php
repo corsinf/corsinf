@@ -239,6 +239,9 @@ if ($_GET['acc'] == 'th_contr_postulaciones') {
 if ($_GET['acc'] == 'th_contr_postulados') {
 	include('TALENTO_HUMANO/CONTRATACION/POSTULACIONES/th_contr_postulados.php');
 }
+if ($_GET['acc'] == 'th_registro_postulaciones') {
+	include('TALENTO_HUMANO/CONTRATACION/POSTULACIONES/th_registro_postulaciones.php');
+}
 
 
 
@@ -248,4 +251,14 @@ if ($_GET['acc'] == 'th_contr_requisitos') {
 }
 if ($_GET['acc'] == 'th_contr_requisitos_plaza') {
 	include('TALENTO_HUMANO/CONTRATACION/REQUISITOS/th_contr_requisitos_plaza.php');
+}
+
+
+
+if ($_GET['acc'] == 'th_contr_etapas_proceso') {
+	include('TALENTO_HUMANO/CONTRATACION/ETAPAS_PROCESO/th_contr_etapas_proceso.php');
+}
+
+if ($_GET['acc'] == 'th_registro_etapa_proceso') {
+	include('TALENTO_HUMANO/CONTRATACION/ETAPAS_PROCESO/th_registro_etapa_proceso.php');
 }

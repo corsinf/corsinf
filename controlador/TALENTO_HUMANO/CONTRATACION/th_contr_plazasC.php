@@ -8,6 +8,9 @@ $controlador = new th_contr_plazasC();
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
+if (isset($_GET['listar_plaza'])) {
+    echo json_encode($controlador->listar_plaza($_POST['id'] ?? ''));
+}
 
 if (isset($_GET['insertar_editar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
@@ -30,6 +33,19 @@ if (isset($_GET['buscar'])) {
     );
 
     echo json_encode($controlador->buscar($parametros));
+}
+if (isset($_GET['buscar_todas'])) {
+    $query = '';
+
+    if (isset($_GET['q'])) {
+        $query = $_GET['q'];
+    }
+
+    $parametros = array(
+        'query' => $query,
+    );
+
+    echo json_encode($controlador->buscar_todas($parametros));
 }
 
 
@@ -54,6 +70,13 @@ class  th_contr_plazasC
         }
        
 
+        return $datos; 
+
+    }
+    function listar_plaza($id = '')
+    {
+       
+        $datos = $this->modelo->where('th_pla_id',$id)->where('th_pla_estado',1)->listar();
         return $datos; 
 
     }
@@ -125,6 +148,22 @@ class  th_contr_plazasC
 
         $datos = $this->modelo->editar($datos, $where);
         return $datos;
+        
+    }
+
+     public function buscar_todas($parametros)
+    {
+
+        $lista = array();
+        $concat = "th_pla_titulo, th_pla_estado";
+        $datos = $this->modelo->where('th_pla_estado', 1)->like($concat, $parametros['query']);
+
+        foreach ($datos as $key => $value) {
+            $text = $value['th_pla_titulo'];
+            $lista[] = array('id' => ($value['th_pla_id']), 'text' => ($text), /* 'data' => $value */);
+        }
+
+        return $lista;
         
     }
 

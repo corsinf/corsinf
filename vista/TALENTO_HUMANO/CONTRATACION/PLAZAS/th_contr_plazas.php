@@ -15,74 +15,81 @@ if (isset($_GET['_id'])) {
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script type="text/javascript">
-    $(document).ready(function() {
+$(document).ready(function() {
 
-        tbl_plazas = $('#tbl_plazas').DataTable($.extend({}, configuracion_datatable('Nombre', 'cuidad', 'telefono'), {
-            reponsive: true,
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-            },
-            ajax: {
-                url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_plazasC.php?listar=true',
-                dataSrc: '',
-                 
-            },
-            columns: [
-                {
-                    data: null,
-                    render: function(data, type, item) {
-                        // enlace al módulo de requisitos
-                        const href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_requisitos_plaza&_id=${item._id}`;
+    tbl_plazas = $('#tbl_plazas').DataTable($.extend({}, configuracion_datatable('Nombre', 'cuidad',
+        'telefono'), {
+        reponsive: true,
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+        },
+        ajax: {
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_plazasC.php?listar=true',
+            dataSrc: '',
 
-                        // botón único
-                        const btn = `
+        },
+        columns: [{
+                data: null,
+                render: function(data, type, item) {
+                    // enlace al módulo de requisitos
+                    const href =
+                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_requisitos_plaza&_id=${item._id}`;
+
+                    // botón único
+                    const btn = `
                             <a href="${href}" class="btn btn-xs btn-primary" title="Ver Requerimientos">
                                 <i class="bx bx-list-check fs-6 me-0"></i>
                             </a>
                         `;
 
-                        return btn;
-                    }
-                },
-                {
-                    data: null,
-                    render: function(data, type, item) {
-                        // enlace al módulo de requisitos
-                        const href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_postulados&_id=${item._id}`;
+                    return btn;
+                }
+            },
+            {
+                data: null,
+                render: function(data, type, item) {
+                    // enlace al módulo de requisitos
+                    const href =
+                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_postulados&_id=${item._id}`;
 
-                        // botón único
-                        const btn = `
+                    // botón único
+                    const btn = `
                             <a href="${href}" class="btn btn-xs btn-primary" title="Ver Postulaciones">
                                <i class="bx bx-briefcase fs-6 me-0" aria-hidden="true" title="Postulaciones"></i>
                             </a>
                         `;
 
-                        return btn;
-                    }
-                },
-                {
-                    data: null,
-                    render: function(data, type, item) {
-                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_plaza&_id=${item._id}`;
-                        return `<a href="${href}"><u>${item.th_pla_titulo}</u></a>`;
-                    }
-                },
-                {
-                    data: 'th_pla_descripcion'
-                },
-                {
-                    data: 'th_pla_tipo'
-                },
-                {
-                    data: 'th_pla_num_vacantes'
-                },
-            ],
-            order: [
-                [1, 'asc']
-            ]
-        }));
+                    return btn;
+                }
+            },
+            {
+                data: null,
+                render: function(data, type, item) {
+                    href =
+                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_plaza&_id=${item._id}`;
+                    return `<a href="${href}"><u>${item.th_pla_titulo}</u></a>`;
+                }
+            },
+            {
+                data: 'th_pla_descripcion',
+                render: function(data, type, row) {
+                    if (!data) return '';
+                    return data.length > 50 ? data.substring(0, 50) + '...' : data;
+                }
+            },
+            {
+                data: 'th_pla_tipo'
+            },
+            {
+                data: 'th_pla_num_vacantes'
+            },
+        ],
+        order: [
+            [1, 'asc']
+        ]
+    }));
 
-    });
+});
 </script>
 
 <div class="page-wrapper">
@@ -158,7 +165,8 @@ if (isset($_GET['_id'])) {
 </div>
 
 
-<div class="modal" id="modal_blank" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal" id="modal_blank" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static"
+    data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
@@ -190,7 +198,8 @@ if (isset($_GET['_id'])) {
 
                 <div class="row pt-3">
                     <div class="col-12 text-end">
-                        <button type="button" class="btn btn-success btn-sm" onclick=""><i class="bx bx-save"></i> Agregar</button>
+                        <button type="button" class="btn btn-success btn-sm" onclick=""><i class="bx bx-save"></i>
+                            Agregar</button>
                     </div>
                 </div>
 
