@@ -507,11 +507,17 @@ function insertar_personas_plaza(parametros) {
                                     class="btn btn-outline-dark btn-sm">
                                     <i class="bx bx-arrow-back"></i> Regresar
                                 </a>
+
                                 <button type="button" class="btn btn-success btn-sm"
                                     onclick="abrir_modal_postulantes()">
                                     <i class="bx bx-plus me-1"></i> Nuevo
                                 </button>
+
+                                <button type="button" class="btn btn-primary btn-sm" onclick="actualizar_seguimiento()">
+                                    <i class="bx bx-refresh me-1"></i> Actualizar pruebas
+                                </button>
                             </div>
+
 
                         </div>
                         <hr>
