@@ -37,17 +37,27 @@ if (isset($_GET['id'])) {
                 $('#txt_segundo_apellido').val(response[0].th_pos_segundo_apellido);
                 $('#txt_fecha_nacimiento').val(response[0].th_pos_fecha_nacimiento);
                 $('#ddl_nacionalidad').val(response[0].th_pos_nacionalidad);
-                $('#txt_numero_cedula').val(response[0].th_pos_cedula);
+                $('#txt_cedula').val(response[0].th_pos_cedula);
                 $('#ddl_estado_civil').val(response[0].th_pos_estado_civil);
                 $('#ddl_sexo').val(response[0].th_pos_sexo);
                 $('#txt_telefono_1').val(response[0].th_pos_telefono_1);
                 $('#txt_telefono_2').val(response[0].th_pos_telefono_2);
                 $('#txt_correo').val(response[0].th_pos_correo);
-                $('#txt_direccion_postal').val(response[0].th_pos_postal);
+                $('#txt_codigo_postal').val(response[0].th_pos_postal);
                 $('#txt_direccion').val(response[0].th_pos_direccion);
                 calcular_edad('txt_edad', response[0].th_pos_fecha_nacimiento);
                 //Cargar foto
-                $('#img_postulante_inf').attr('src', response[0].th_pos_foto_url + '?' + Math.random());
+                // $('#img_postulante_inf').attr('src', response[0].th_pos_foto_url + '?' + Math.random());
+                $('#img_postulante_inf')
+                    .off('error') // limpiar por si acaso
+                    .one('error', function() {
+                        console.log("Error 404");
+                        $(this).attr('src', '../img/sin_imagen.jpg');
+                    })
+                    .attr('src', response[0].th_pos_foto_url + '?' + Math.random());
+
+
+
 
                 //Cargar Selects de provincia-ciudad-parroquia
                 url_provinciaC = '../controlador/GENERAL/th_provinciasC.php?listar=true';
@@ -101,7 +111,7 @@ if (isset($_GET['id'])) {
         var txt_segundo_apellido = $('#txt_segundo_apellido').val();
         var txt_fecha_nacimiento = $('#txt_fecha_nacimiento').val();
         var ddl_nacionalidad = $('#ddl_nacionalidad').val();
-        var txt_numero_cedula = $('#txt_numero_cedula').val();
+        var txt_cedula = $('#txt_cedula').val();
         var ddl_estado_civil = $('#ddl_estado_civil').val();
         var ddl_sexo = $('#ddl_sexo').val();
         var txt_telefono_1 = $('#txt_telefono_1').val();
@@ -110,7 +120,7 @@ if (isset($_GET['id'])) {
         var ddl_provincias = $('#ddl_provincias').val();
         var ddl_ciudad = $('#ddl_ciudad').val();
         var ddl_parroquia = $('#ddl_parroquia').val();
-        var txt_direccion_postal = $('#txt_direccion_postal').val();
+        var txt_codigo_postal = $('#txt_codigo_postal').val();
         var txt_direccion = $('#txt_direccion').val();
 
         var parametros_informacion_personal = {
@@ -121,7 +131,7 @@ if (isset($_GET['id'])) {
             'txt_segundo_apellido': txt_segundo_apellido,
             'txt_fecha_nacimiento': txt_fecha_nacimiento,
             'ddl_nacionalidad': ddl_nacionalidad,
-            'txt_numero_cedula': txt_numero_cedula,
+            'txt_cedula': txt_cedula,
             'ddl_estado_civil': ddl_estado_civil,
             'ddl_sexo': ddl_sexo,
             'txt_telefono_1': txt_telefono_1,
@@ -130,7 +140,7 @@ if (isset($_GET['id'])) {
             'ddl_provincias': ddl_provincias,
             'ddl_ciudad': ddl_ciudad,
             'ddl_parroquia': ddl_parroquia,
-            'txt_direccion_postal': txt_direccion_postal,
+            'txt_codigo_postal': txt_codigo_postal,
             'txt_direccion': txt_direccion,
 
         };
@@ -218,54 +228,54 @@ if (isset($_GET['id'])) {
 
                                     <!-- Información Personal -->
                                     <div class="mt-3 bg-light rounded-3 p-3 shadow-sm">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-         <div class="d-flex align-items-center">
-        <i class="bx bx-info-circle fs-5 text-primary me-2"></i>
-        <h6 class="fw-bold mb-0 text-primary">Información Personal</h6>
-      </div>
-        <a href="#" class="text-secondary" data-bs-toggle="modal" data-bs-target="#modal_informacion_personal">
-            <i class="bx bx-pencil bx-sm"></i>
-        </a>
-    </div>
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bx bx-info-circle fs-5 text-primary me-2"></i>
+                                                <h6 class="fw-bold mb-0 text-primary">Información Personal</h6>
+                                            </div>
+                                            <a href="#" class="text-secondary" data-bs-toggle="modal" data-bs-target="#modal_informacion_personal">
+                                                <i class="bx bx-pencil bx-sm"></i>
+                                            </a>
+                                        </div>
 
-    <div class="d-flex flex-column gap-3">
+                                        <div class="d-flex flex-column gap-3">
 
-        <div class="d-flex align-items-center border-bottom pb-2">
-            <i class="bx bx-id-card text-primary fs-5 me-3"></i>
-            <span id="txt_nombres_completos_v" class="fw-semibold text-dark"></span>
-        </div>
+                                            <div class="d-flex align-items-center border-bottom pb-2">
+                                                <i class="bx bx-id-card text-primary fs-5 me-3"></i>
+                                                <span id="txt_nombres_completos_v" class="fw-semibold text-dark"></span>
+                                            </div>
 
-        <div class="d-flex align-items-center border-bottom pb-2">
-            <i class="bx bx-calendar text-primary fs-5 me-3"></i>
-            <span id="txt_fecha_nacimiento_v" class="text-dark"></span>
-        </div>
+                                            <div class="d-flex align-items-center border-bottom pb-2">
+                                                <i class="bx bx-calendar text-primary fs-5 me-3"></i>
+                                                <span id="txt_fecha_nacimiento_v" class="text-dark"></span>
+                                            </div>
 
-        <div class="d-flex align-items-center border-bottom pb-2">
-            <i class="bx bx-flag text-primary fs-5 me-3"></i>
-            <span id="txt_nacionalidad_v" class="text-dark"></span>
-        </div>
+                                            <div class="d-flex align-items-center border-bottom pb-2">
+                                                <i class="bx bx-flag text-primary fs-5 me-3"></i>
+                                                <span id="txt_nacionalidad_v" class="text-dark"></span>
+                                            </div>
 
-        <div class="d-flex align-items-center border-bottom pb-2">
-            <i class="bx bx-id-card text-primary fs-5 me-3"></i>
-            <span id="txt_numero_cedula_v" class="text-dark"></span>
-        </div>
+                                            <div class="d-flex align-items-center border-bottom pb-2">
+                                                <i class="bx bx-id-card text-primary fs-5 me-3"></i>
+                                                <span id="txt_numero_cedula_v" class="text-dark"></span>
+                                            </div>
 
-        <div class="d-flex align-items-center border-bottom pb-2">
-            <i class="bx bx-heart text-primary fs-5 me-3"></i>
-            <span id="txt_estado_civil_v" class="text-dark"></span>
-        </div>
+                                            <div class="d-flex align-items-center border-bottom pb-2">
+                                                <i class="bx bx-heart text-primary fs-5 me-3"></i>
+                                                <span id="txt_estado_civil_v" class="text-dark"></span>
+                                            </div>
 
-        <div class="d-flex align-items-center border-bottom pb-2">
-            <i class="bx bx-phone text-primary fs-5 me-3"></i>
-            <span id="txt_telefono_1_v" class="text-dark"></span>
-        </div>
+                                            <div class="d-flex align-items-center border-bottom pb-2">
+                                                <i class="bx bx-phone text-primary fs-5 me-3"></i>
+                                                <span id="txt_telefono_1_v" class="text-dark"></span>
+                                            </div>
 
-        <div class="d-flex align-items-center">
-            <i class="bx bx-envelope text-primary fs-5 me-3"></i>
-            <span id="txt_correo_v" class="text-dark text-break"></span>
-        </div>
-    </div>
-</div>
+                                            <div class="d-flex align-items-center">
+                                                <i class="bx bx-envelope text-primary fs-5 me-3"></i>
+                                                <span id="txt_correo_v" class="text-dark text-break"></span>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
@@ -624,8 +634,8 @@ if (isset($_GET['id'])) {
                     <div class="row mb-col">
 
                         <div class="col-md-3">
-                            <label for="txt_numero_cedula" class="form-label form-label-sm">N° de Cédula</label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_numero_cedula" id="txt_numero_cedula" maxlength="10">
+                            <label for="txt_cedula" class="form-label form-label-sm">N° de Cédula</label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_cedula" id="txt_cedula" maxlength="10">
                         </div>
                         <div class="col-md-3">
                             <label for="ddl_sexo" class="form-label form-label-sm">Sexo</label>
@@ -714,7 +724,7 @@ if (isset($_GET['id'])) {
         agregar_asterisco_campo_obligatorio('txt_segundo_apellido');
         agregar_asterisco_campo_obligatorio('txt_primer_nombre');
         agregar_asterisco_campo_obligatorio('txt_segundo_nombre');
-        agregar_asterisco_campo_obligatorio('txt_numero_cedula');
+        agregar_asterisco_campo_obligatorio('txt_cedula');
         agregar_asterisco_campo_obligatorio('ddl_sexo');
         agregar_asterisco_campo_obligatorio('txt_fecha_nacimiento');
         agregar_asterisco_campo_obligatorio('txt_edad');
@@ -743,7 +753,7 @@ if (isset($_GET['id'])) {
                 txt_segundo_nombre: {
                     required: true,
                 },
-                txt_numero_cedula: {
+                txt_cedula: {
                     required: true,
                 },
                 ddl_sexo: {
@@ -784,7 +794,7 @@ if (isset($_GET['id'])) {
                 txt_segundo_nombre: {
                     required: "Por favor ingrese el segundo nombre",
                 },
-                txt_numero_cedula: {
+                txt_cedula: {
                     required: "Por favor ingresa un número de cédula",
                 },
                 ddl_sexo: {
