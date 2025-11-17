@@ -130,4 +130,6 @@ class  th_contr_cargosC
         return $lista;
        
     }
+
+    
 }
