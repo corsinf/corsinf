@@ -6,8 +6,15 @@ require_once(dirname(__DIR__, 3)  . '/modelo/TALENTO_HUMANO/CONTRATACION/th_cont
 $controlador = new th_contr_etapas_procesoC();
 
 if (isset($_GET['listar'])) {
-    echo json_encode($controlador->listar($_POST['id'] ?? ''));
+    echo json_encode($controlador->listar($_POST['id'] ?? '', $_POST['id_plaza'] ?? ''));
 }
+
+if (isset($_GET['organizar'])) {
+    // Recibimos 'ordenes' como JSON: [{id:..., orden:...}, ...]
+    $ordenes_json = $_POST['ordenes'] ?? '';
+    echo json_encode($controlador->organizar($ordenes_json));
+}
+
 
 if (isset($_GET['insertar_editar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
@@ -41,21 +48,17 @@ class th_contr_etapas_procesoC
         $this->modelo = new th_contr_etapas_procesoM();
     }
 
-    function listar($id = '')
+    function listar($id = '', $id_plaza = '')
     {
-        if ($id == '') {
-            $datos = $this->modelo->where('th_etapa_estado', 1)->listar();
-        } else {
-            $datos = $this->modelo->where('th_etapa_id', $id)->where('th_etapa_estado', 1)->listar();
-        }
-
+        
+        $datos = $this->modelo->listar_etapa_plaza($id, $id_plaza);
         return $datos;
     }
 
     function insertar_editar($parametros)
     {
         // Determinar id de la plaza (acepta varias keys comunes)
-        $th_pla_id = $parametros['sel_th_pla_id'] ?? $parametros['txt_th_pla_id'] ?? $parametros['th_pla_id'] ?? '';
+        $th_pla_id = $parametros['ddl_plaza'] ?? $parametros['txt_th_pla_id'] ?? $parametros['th_pla_id'] ?? '';
 
         // Preparar datos comunes
         $datos = array(
@@ -65,7 +68,7 @@ class th_contr_etapas_procesoC
             array('campo' => 'th_etapa_orden', 'dato' => ($parametros['txt_th_etapa_orden'] ?? '') !== '' ? (int)$parametros['txt_th_etapa_orden'] : null),
             array('campo' => 'th_etapa_obligatoria', 'dato' => isset($parametros['chk_th_etapa_obligatoria']) ? ($parametros['chk_th_etapa_obligatoria'] ? 1 : 0) : 0),
             array('campo' => 'th_etapa_descripcion', 'dato' => $parametros['txt_th_etapa_descripcion'] ?? ''),
-            array('campo' => 'th_etapa_estado', 'dato' => isset($parametros['chk_th_etapa_estado']) ? ($parametros['chk_th_etapa_estado'] ? 1 : 0) : 1),
+            array('campo' => 'th_etapa_estado', 'dato' => 1),
             // auditoría
             array('campo' => 'th_etapa_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
         );
@@ -135,4 +138,63 @@ class th_contr_etapas_procesoC
 
         return $lista;
     }
+
+    public function organizar($ordenes_json)
+{
+    if (empty($ordenes_json)) return -1;
+
+    // Intentar decodificar
+    $ordenes = json_decode($ordenes_json, true);
+    if (!is_array($ordenes)) return -1;
+
+    // Puedes usar transacción si tu DB wrapper la soporta; aquí intento un enfoque simple
+    $ok = true;
+    foreach ($ordenes as $o) {
+        $id = isset($o['id']) ? (int)$o['id'] : 0;
+        $orden = isset($o['orden']) ? (int)$o['orden'] : null;
+        if ($id <= 0 || $orden === null) {
+            $ok = false;
+            break;
+        }
+        $res = $this->actualizar_orden($id, $orden);
+        if ($res !== 1 && $res !== true) { // dependiendo de lo que retorne tu modelo
+            $ok = false;
+            break;
+        }
+    }
+
+    return $ok ? 1 : -1;
+}
+public function actualizar_orden($id, $orden)
+{
+    $datos = [
+        ['campo' => 'th_etapa_orden', 'dato' => (int)$orden],
+        ['campo' => 'th_etapa_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')]
+    ];
+
+    $where = [
+        ['campo' => 'th_etapa_id', 'dato' => (int)$id]
+    ];
+
+    return $this->modelo->editar($datos, $where);
+}
+
+/**
+ * Opcional: actualizar múltiples ordenes en batch (recibe array [{id,orden},...])
+ */
+public function actualizar_ordenes_batch($ordenes)
+{
+    if (!is_array($ordenes)) return false;
+
+    // Si tu $this->db soporta transacciones, úsala aquí.
+    $allOk = true;
+    foreach ($ordenes as $o) {
+        $id = (int)($o['id'] ?? 0);
+        $orden = (int)($o['orden'] ?? 0);
+        if ($id <= 0) { $allOk = false; break; }
+        $res = $this->actualizar_orden($id, $orden);
+        if (!$res) { $allOk = false; break; }
+    }
+    return $allOk ? 1 : 0;
+}
 }

@@ -262,3 +262,13 @@ if ($_GET['acc'] == 'th_contr_etapas_proceso') {
 if ($_GET['acc'] == 'th_registro_etapa_proceso') {
 	include('TALENTO_HUMANO/CONTRATACION/ETAPAS_PROCESO/th_registro_etapa_proceso.php');
 }
+
+if ($_GET['acc'] == 'th_organizar_etapas_proceso') {
+	include('TALENTO_HUMANO/CONTRATACION/ETAPAS_PROCESO/th_organizar_etapas_proceso.php');
+}
+
+
+
+if ($_GET['acc'] == 'th_contr_seguimiento_postulante') {
+	include('TALENTO_HUMANO/CONTRATACION/SEGUIMIENTO_POSTULANTE/th_contr_seguimiento_postulante.php');
+}

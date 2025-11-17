@@ -35,8 +35,14 @@ $(document).ready(function() {
                 render: function(data, type, item) {
                     // link al formulario de registro/modificación (ajusta acc si lo tienes distinto)
                     href =
-                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_etapa&_id=${item._id}`;
+                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_etapa_proceso&_id=${item._id}`;
                     return `<a href="${href}"><u>${item.nombre}</u></a>`;
+                }
+            },
+            {
+                data: 'plaza_titulo',
+                render: function(data) {
+                    return data ? data : '';
                 }
             },
             {
@@ -123,7 +129,6 @@ function guardar_etapa_rapida() {
         'chk_obligatoria': $('#quick_obligatoria').is(':checked') ? 1 : 0,
         'txt_descripcion': $('#quick_descripcion').val().trim(),
         'sel_th_pla_id': $('#sel_th_pla_id').val(), // opcional
-        'chk_estado': $('#quick_estado').is(':checked') ? 1 : 0
     };
 
     $.ajax({
@@ -212,109 +217,55 @@ function guardar_etapa_rapida() {
 
                             <h5 class="mb-0 text-primary"></h5>
 
-                            <div class="row mx-0">
+                            <div class="row mx-0 align-items-center">
+                                <div class="col-12 d-flex align-items-center gap-2">
+                                    <h5 class="mb-0 text-primary me-3">Etapas del proceso</h5>
 
-                                <div class="" id="btn_nuevo">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_etapa"
-                                        type="button" class="btn btn-success btn-sm ">
-                                        <i class="bx bx-plus me-0 pb-1"></i> Nuevo
-                                    </a>
+                                    <div id="btn_nuevo">
+                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_etapa_proceso"
+                                            class="btn btn-success btn-sm">
+                                            <i class="bx bx-plus me-1"></i> Nuevo
+                                        </a>
+                                    </div>
+
+                                    <div id="btn_organizar">
+                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_organizar_etapas_proceso"
+                                            class="btn btn-outline-primary btn-sm">
+                                            <i class="bx bx-sort me-1"></i> Organizar etapas
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
+
+
                         </div>
-
-
-                        <section class="content pt-2">
-                            <div class="container-fluid">
-                                <div class="table-responsive">
-                                    <table class="table table-striped responsive " id="tbl_etapas" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Nombre</th>
-                                                <th>Tipo</th>
-                                                <th>Orden</th>
-                                                <th>Obligatoria</th>
-                                                <th>Descripción</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="">
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div><!-- /.container-fluid -->
-                        </section>
                     </div>
+
+
+                    <section class="content pt-2">
+                        <div class="container-fluid">
+                            <div class="table-responsive">
+                                <table class="table table-striped responsive " id="tbl_etapas" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Plaza</th>
+                                            <th>Tipo</th>
+                                            <th>Orden</th>
+                                            <th>Obligatoria</th>
+                                            <th>Descripción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div><!-- /.container-fluid -->
+                    </section>
                 </div>
             </div>
         </div>
-        <!--end row-->
     </div>
+    <!--end row-->
 </div>
-
-
-<!-- Modal de creación rápida de etapa -->
-<div class="modal" id="modal_etapa_quick" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static"
-    data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5 class="modal-title">Agregar etapa (rápido)</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-
-                <div class="row g-2">
-                    <div class="col-md-6">
-                        <label for="sel_th_pla_id" class="form-label">Plaza (opcional)</label>
-                        <select id="sel_th_pla_id" class="form-select form-select-sm">
-                            <option value="">-- Cargando plazas... --</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="quick_nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
-                        <input type="text" id="quick_nombre" class="form-control form-control-sm" />
-                    </div>
-
-                    <div class="col-md-4 pt-2">
-                        <label for="quick_tipo" class="form-label">Tipo</label>
-                        <input type="text" id="quick_tipo" class="form-control form-control-sm" />
-                    </div>
-
-                    <div class="col-md-4 pt-2">
-                        <label for="quick_orden" class="form-label">Orden</label>
-                        <input type="number" id="quick_orden" class="form-control form-control-sm" />
-                    </div>
-
-                    <div class="col-md-4 pt-2">
-                        <label class="form-label d-block">Obligatoria</label>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="quick_obligatoria">
-                            <label class="form-check-label" for="quick_obligatoria">Sí</label>
-                        </div>
-                    </div>
-
-                    <div class="col-12 pt-2">
-                        <label for="quick_descripcion" class="form-label">Descripción</label>
-                        <textarea id="quick_descripcion" class="form-control form-control-sm" rows="3"></textarea>
-                    </div>
-
-                    <div class="col-12 pt-3 text-end">
-                        <div class="form-check form-switch d-inline-block me-3">
-                            <input class="form-check-input" type="checkbox" id="quick_estado" checked>
-                            <label class="form-check-label" for="quick_estado">Activo</label>
-                        </div>
-
-                        <button type="button" class="btn btn-success btn-sm" onclick="guardar_etapa_rapida()"><i
-                                class="bx bx-save"></i> Agregar</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
 </div>
