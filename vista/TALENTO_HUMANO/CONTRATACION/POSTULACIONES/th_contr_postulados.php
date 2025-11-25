@@ -300,6 +300,11 @@ $(document).ready(function() {
             }
         }));
     }
+
+
+
+
+
     $('#ddl_tipo_postulante').on('change', function() {
         const tipo = $(this).val();
         if (tipo === 'interno') {
@@ -314,6 +319,66 @@ $(document).ready(function() {
 
 
 });
+
+
+function obtener_ids_postulaciones() {
+    var array_ids = tbl_postulaciones.rows().data().toArray().map(function(item) {
+        return item._id;
+    });
+    return array_ids;
+}
+
+function actualizar_seguimiento() {
+    var ids = obtener_ids_postulaciones();
+
+    var parametros = {
+        'postulantes_seleccionadas': ids,
+        'ddl_tipo_postulante': $('#ddl_plaza').val(),
+        'th_pla_id': <?= $_id ?>,
+    };
+
+    insertar_postulantes_pruebas(parametros);
+
+}
+
+
+function insertar_postulantes_pruebas(parametros) {
+    $.ajax({
+        data: {
+            parametros: parametros
+        },
+        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_seguimiento_postulanteC.php?insertar_editar=true',
+        type: 'post',
+        dataType: 'json',
+
+        success: function(response) {
+
+            // Si devuelve objetos tipo {ok: true, msg: "...", etapas_creadas: 0}
+            if (response.ok === true) {
+                Swal.fire('', response.msg, 'success');
+                return;
+            }
+
+            // Si devuelve error personalizado (ej. -2)
+            if (response == -2) {
+                Swal.fire('', 'Seleccione personas', 'warning');
+                return;
+            }
+
+            // Si no coincide nada, mostrar mensaje genérico
+            Swal.fire('', 'Respuesta no esperada del servidor', 'warning');
+        },
+
+        error: function(xhr, status, error) {
+            console.log('Status: ' + status);
+            console.log('Error: ' + error);
+            console.log('XHR Response: ' + xhr.responseText);
+
+            Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+        }
+    });
+}
+
 
 let personas_seleccionadas = []; //Array de personas seleccionadas
 let tbl_personas = null; // Variable global para la tabla

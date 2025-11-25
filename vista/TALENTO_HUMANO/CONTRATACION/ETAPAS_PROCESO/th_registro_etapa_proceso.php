@@ -17,16 +17,7 @@ $(document).ready(function() {
     cargar_etapa(<?= $_id ?>);
     <?php } ?>
 
-    // Inicializar y cargar selects (plaza y cargo)
-    cargar_selects2();
 
-    function cargar_selects2() {
-        // Ajusta estas URLs si tus controladores difieren
-        var url_plazas = '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_plazasC.php?buscar_todas=true';
-
-        // helper que ya usas en el proyecto: cargar_select2_url(nombre_select, url)
-        cargar_select2_url('ddl_plaza', url_plazas);
-    }
 
     // Añadir asterisco a campos obligatorios
     agregar_asterisco_campo_obligatorio('txt_th_etapa_nombre');
@@ -97,11 +88,7 @@ function cargar_etapa(id) {
             var r = response[0];
 
             $('#txt_th_etapa_id').val(r._id);
-            $('#ddl_plaza').append($('<option>', {
-                value: r.plaza_id,
-                text: r.plaza_titulo,
-                selected: true
-            }));
+
             $('#txt_th_etapa_nombre').val(r.nombre || '');
             $('#txt_th_etapa_tipo').val(r.tipo || '');
             $('#txt_th_etapa_orden').val(r.orden !== null ? r.orden : '');
@@ -116,14 +103,11 @@ function cargar_etapa(id) {
     });
 }
 
-
-
 // Guardar / actualizar (decide según si existe id)
 function editar_insertar_etapa() {
     var txt_th_etapa_id = $('#txt_th_etapa_id').val(); // hidden id
     var parametros = {
         '_id': txt_th_etapa_id,
-        'ddl_plaza': $('#ddl_plaza').val(),
         'txt_th_etapa_nombre': $('#txt_th_etapa_nombre').val().trim(),
         'txt_th_etapa_tipo': $('#txt_th_etapa_tipo').val().trim(),
         'txt_th_etapa_orden': $('#txt_th_etapa_orden').val().trim(),
@@ -341,14 +325,6 @@ $(document).ready(function() {
                                 </div>
                                 <div class="card-body">
                                     <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label for="ddl_plaza" class="form-label fw-bold">
-                                                <i class="bx bx-briefcase me-2 text-primary"></i> Plaza (opcional)
-                                            </label>
-                                            <select id="ddl_plaza" name="ddl_plaza" class="form-select">
-                                                <option value="">-- Seleccione plaza (opcional) --</option>
-                                            </select>
-                                        </div>
 
                                         <div class="col-md-6">
                                             <label for="txt_th_etapa_nombre" class="form-label fw-bold">

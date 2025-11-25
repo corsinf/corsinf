@@ -5,87 +5,108 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
+$(document).ready(function() {
 
-        tbl_departmento_horario = $('#tbl_departmento_horario').DataTable($.extend({}, configuracion_datatable('Turnos', 'turnos', 'contenedor_botones_departamento'), {
-            reponsive: true,
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+    tbl_departmento_horario = $('#tbl_departmento_horario').DataTable($.extend({}, configuracion_datatable(
+        'Turnos', 'turnos', 'contenedor_botones_departamento'), {
+        reponsive: true,
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+        },
+        ajax: {
+            url: '../controlador/TALENTO_HUMANO/th_programar_horariosC.php?listar_departamentos_horarios=true',
+            dataSrc: ''
+        },
+        columns: [{
+                data: null,
+                render: function(data, type, item) {
+                    href =
+                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_programar_horarios&_id=${item._id}`;
+                    return `<a href="${href}"><u>${item.nombre_departamento}</u></a>`;
+                }
             },
-            ajax: {
-                url: '../controlador/TALENTO_HUMANO/th_programar_horariosC.php?listar_departamentos_horarios=true',
-                dataSrc: ''
+            {
+                data: 'nombre_horario'
             },
-            columns: [{
-                    data: null,
-                    render: function(data, type, item) {
-                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_programar_horarios&_id=${item._id}`;
-                        return `<a href="${href}"><u>${item.nombre_departamento}</u></a>`;
-                    }
-                },
-                {
-                    data: 'nombre_horario'
-                },
-                {
-                    data: null,
-                    render: function(data, type, item) {
-                        salida = fecha_formateada(item.fecha_inicio);
-                        return salida;
-                    }
-                },
-                {
-                    data: null,
-                    render: function(data, type, item) {
-                        salida = fecha_formateada(item.fecha_fin);
-                        return salida;
-                    }
-                },
-            ],
-            order: [
-                [1, 'asc']
-            ]
-        }));
+            {
+                data: null,
+                render: function(data, type, item) {
+                    salida = fecha_formateada(item.fecha_inicio);
+                    return salida;
+                }
+            },
+            {
+                data: null,
+                render: function(data, type, item) {
+                    salida = fecha_formateada(item.fecha_fin);
+                    return salida;
+                }
+            },
+        ],
+        order: [
+            [1, 'asc']
+        ]
+    }));
 
-        tbl_persona_horario = $('#tbl_persona_horario').DataTable($.extend({}, configuracion_datatable('Turnos', 'turnos', 'contenedor_botones_persona'), {
-            reponsive: true,
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+    tbl_persona_horario = $('#tbl_persona_horario').DataTable($.extend({}, configuracion_datatable('Turnos',
+        'turnos', 'contenedor_botones_persona'), {
+        reponsive: true,
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+        },
+        ajax: {
+            url: '../controlador/TALENTO_HUMANO/th_programar_horariosC.php?listar_personas_horarios=true',
+            dataSrc: ''
+        },
+        columns: [{
+                data: null,
+                render: function(data, type, item) {
+                    href =
+                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_programar_horarios&_id=${item._id}`;
+                    return `<a href="${href}"><u>${item.nombre_persona}</u></a>`;
+                }
             },
-            ajax: {
-                url: '../controlador/TALENTO_HUMANO/th_programar_horariosC.php?listar_personas_horarios=true',
-                dataSrc: ''
+            {
+                data: 'nombre_horario'
             },
-            columns: [{
-                    data: null,
-                    render: function(data, type, item) {
-                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_programar_horarios&_id=${item._id}`;
-                        return `<a href="${href}"><u>${item.nombre_persona}</u></a>`;
-                    }
-                },
-                {
-                    data: 'nombre_horario'
-                },
-                {
-                    data: null,
-                    render: function(data, type, item) {
-                        salida = fecha_formateada(item.fecha_inicio);
-                        return salida;
-                    }
-                },
-                {
-                    data: null,
-                    render: function(data, type, item) {
-                        salida = fecha_formateada(item.fecha_fin);
-                        return salida;
-                    }
-                },
-            ],
-            order: [
-                [1, 'asc']
-            ]
-        }));
+            {
+                data: null,
+                render: function(data, type, item) {
+                    salida = fecha_formateada(item.fecha_inicio);
+                    return salida;
+                }
+            },
+            {
+                data: null,
+                render: function(data, type, item) {
+                    salida = fecha_formateada(item.fecha_fin);
+                    return salida;
+                }
+            },
+        ],
+        order: [
+            [1, 'asc']
+        ]
+    }));
 
-    });
+});
+
+
+function nuevo_registro() {
+    // Detectar tab activo
+    let tabActivo = $('.nav-link.active .tab-title').text().trim().toLowerCase();
+
+    let tipo = '';
+    if (tabActivo === 'departamentos') {
+        tipo = 'departamento';
+    } else if (tabActivo === 'personas') {
+        tipo = 'persona';
+    }
+
+    // Redirigir con el parámetro correcto
+    window.location.href =
+        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_programar_horarios&tipo=${tipo}`;
+}
 </script>
 
 <div class="page-wrapper">
@@ -122,10 +143,9 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                 <div class="card-title d-flex align-items-center">
 
                                     <div class="" id="btn_nuevo">
-                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_programar_horarios"
-                                            type="button" class="btn btn-success btn-sm ">
+                                        <button type="button" class="btn btn-success btn-sm" onclick="nuevo_registro()">
                                             <i class="bx bx-plus me-0 pb-1"></i> Nuevo
-                                        </a>
+                                        </button>
                                     </div>
 
                                 </div>
@@ -139,7 +159,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                             <div class="">
                                 <ul class="nav nav-tabs nav-primary" role="tablist">
                                     <li class="nav-item" role="presentation">
-                                        <a class="nav-link active" data-bs-toggle="tab" href="#primaryhome" role="tab" aria-selected="true">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#primaryhome" role="tab"
+                                            aria-selected="true">
                                             <div class="d-flex align-items-center">
                                                 <div class="tab-icon"><i class='bx bxs-school font-18 me-1'></i>
                                                 </div>
@@ -148,7 +169,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                         </a>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <a class="nav-link" data-bs-toggle="tab" href="#primaryprofile" role="tab" aria-selected="false">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#primaryprofile" role="tab"
+                                            aria-selected="false">
                                             <div class="d-flex align-items-center">
                                                 <div class="tab-icon"><i class='bx bx-group font-18 me-1'></i>
                                                 </div>
@@ -162,10 +184,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                         <section class="content pt-0">
                                             <div class="container-fluid">
 
-                                             
+
 
                                                 <div class="table-responsive">
-                                                    <table class="table table-striped responsive " id="tbl_departmento_horario" style="width:100%">
+                                                    <table class="table table-striped responsive "
+                                                        id="tbl_departmento_horario" style="width:100%">
                                                         <thead>
                                                             <tr>
                                                                 <th>Departamento</th>
@@ -187,9 +210,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                         <section class="content pt-0">
                                             <div class="container-fluid">
 
-                                               
+
                                                 <div class="table-responsive">
-                                                    <table class="table table-striped responsive " id="tbl_persona_horario" style="width:100%">
+                                                    <table class="table table-striped responsive "
+                                                        id="tbl_persona_horario" style="width:100%">
                                                         <thead>
                                                             <tr>
                                                                 <th>Persona</th>

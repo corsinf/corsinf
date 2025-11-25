@@ -8,6 +8,11 @@ $controlador = new th_contr_plazasC();
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
+
+if (isset($_GET['resumen_plaza'])) {
+    echo json_encode($controlador->resumen_plaza($_POST['id'] ?? ''));
+}
+
 if (isset($_GET['listar_plaza'])) {
     echo json_encode($controlador->listar_plaza($_POST['id'] ?? ''));
 }
@@ -80,6 +85,14 @@ class  th_contr_plazasC
         return $datos; 
 
     }
+
+    function resumen_plaza($id = '')
+    {
+       
+        $datos = $this->modelo->obtener_resumen_plaza($id);
+        return $datos; 
+
+    }
     
 
     function insertar_editar($parametros)
@@ -125,14 +138,15 @@ class  th_contr_plazasC
             // insertar y obtener id
             $id = $this->modelo->insertar_id($datos);
             // devolver 1 si se insertó correctamente (manteniendo coherencia con tu JS)
-            return ($id) ? 1 : 0;
+            return ($id) ? $id : 0;
         } else {
             // Edición: actualizar por id
             $where[0]['campo'] = 'th_pla_id';
             $where[0]['dato'] = $parametros['_id'];
             $res = $this->modelo->editar($datos, $where);
-            return $res;
+             return ($parametros['_id']) ? $parametros['_id'] : 0;
         }
+        return -2;
     }
 
 
@@ -170,7 +184,7 @@ class  th_contr_plazasC
    
 
     //Para usar en select2
-    public function buscar($parametros)
+    function buscar($parametros)
 {
     $lista = [];
 

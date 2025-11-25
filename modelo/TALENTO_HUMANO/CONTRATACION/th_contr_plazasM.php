@@ -90,4 +90,58 @@ class th_contr_plazasM extends BaseModel
 
     return $this->db->datos($sql);
 }
+
+
+
+public function obtener_resumen_plaza($pla_id = 0)
+{
+    $pla_id = (int)$pla_id;
+    if ($pla_id <= 0) return array();
+
+    $sql = "
+    DECLARE @pla_id INT = {$pla_id};
+
+    SELECT
+      p.*,
+      (SELECT
+         STUFF((
+           SELECT ', ' + ISNULL(c.th_car_nombre,'<sin nombre>')
+                        + ' x' + COALESCE(CONVERT(VARCHAR(10), pc2.th_pc_cantidad),'0')
+                        + ISNULL(' (' + CONVERT(VARCHAR(50), pc2.th_pc_salario_ofertado) + ')','')
+           FROM th_contr_plaza_cargo pc2
+           LEFT JOIN th_contr_cargos c ON c.th_car_id = pc2.th_car_id
+           WHERE pc2.th_pla_id = p.th_pla_id AND pc2.th_pc_estado = 1
+           FOR XML PATH(''), TYPE).value('.','NVARCHAR(MAX)')
+         ,1,2,'')
+      ) AS cargos_resumen,
+      (SELECT
+         STUFF((
+           SELECT ', ' + ISNULL(req.th_req_descripcion,'<sin descripcion>')
+                        + CASE WHEN req.th_req_obligatorio = 1 THEN ' (Obligatorio)' ELSE '' END
+           FROM th_contr_plaza_requisitos pr2
+           LEFT JOIN th_contr_requisitos req ON req.th_req_id = pr2.th_req_id
+           WHERE pr2.th_pla_id = p.th_pla_id
+           FOR XML PATH(''), TYPE).value('.','NVARCHAR(MAX)')
+         ,1,2,'')
+      ) AS requisitos_resumen,
+      (SELECT
+         STUFF((
+           SELECT ' -> ' + CONVERT(VARCHAR(10), et.th_etapa_orden) + '. ' + ISNULL(et.th_etapa_nombre,'<sin nombre>')
+           FROM th_contr_plaza_etapas pe2
+           LEFT JOIN th_contr_etapas_proceso et ON et.th_etapa_id = pe2.th_eta_id
+           WHERE pe2.th_pla_id = p.th_pla_id AND (pe2.th_pla_eta_estado = 1 OR pe2.th_pla_eta_estado IS NULL)
+           ORDER BY et.th_etapa_orden
+           FOR XML PATH(''), TYPE).value('.','NVARCHAR(MAX)')
+         ,1,4,'')
+      ) AS etapas_resumen
+    FROM th_contr_plazas p
+    WHERE p.th_pla_id = @pla_id
+      AND p.th_pla_estado = 1;
+    ";
+
+    return $this->db->datos($sql); // adapta según el método de tu DB
+}
+
+
+
 }

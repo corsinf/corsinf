@@ -52,7 +52,7 @@ class  th_contr_requisitosC
             $datos = $this->modelo->where('th_req_estado',1)->listar();
 
         }else{
-             $datos = $this->modelo->where('th_pla_id',$id)->where('th_req_estado',1)->listar();
+             $datos = $this->modelo->where('th_req_id',$id)->where('th_req_estado',1)->listar();
         }
        
 
@@ -72,38 +72,31 @@ class  th_contr_requisitosC
     $toBoolInt = function ($v) { return ($v === 1 || $v === '1' || $v === true || $v === 'true') ? 1 : 0; };
 
     $datos = array(
-        array('campo' => 'th_pla_id', 'dato' => $parametros['th_pla_id']),
         array('campo' => 'th_req_tipo', 'dato' => $parametros['th_req_tipo'] ?? ''),
         array('campo' => 'th_req_descripcion', 'dato' => $parametros['th_req_descripcion'] ?? ''),
         array('campo' => 'th_req_obligatorio', 'dato' => $toBoolInt($parametros['th_req_obligatorio'] ?? 0)),
         array('campo' => 'th_req_ponderacion', 'dato' => $toInt($parametros['th_req_ponderacion'] ?? 0)),
-        // ⚠️ REMOVIDO th_req_estado porque no lo envías desde JavaScript
         array('campo' => 'th_req_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
     );
 
     // Inserción
     if (empty($parametros['_id'])) {
         $datos[] = array('campo' => 'th_req_fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
-        // ⚠️ AGREGAR: estado inicial en 1 al crear
         $datos[] = array('campo' => 'th_req_estado', 'dato' => 1);
         
         $id = $this->modelo->insertar_id($datos);
         
-        // ⚠️ IMPORTANTE: Asegurar que devuelve exactamente 1 o array con status
         if ($id) {
-            return 1; // o return array('status' => 1, 'id' => $id);
+            return 1; 
         } else {
-            return 0; // o return array('status' => 0, 'msg' => 'Error al insertar');
+            return 0; 
         }
     } else {
         // Edición
-        $where = array(); // ⚠️ Inicializar array correctamente
-        $where[0]['campo'] = 'th_req_id'; // ⚠️ Verificar que este sea el nombre correcto del campo ID
+        $where = array(); 
+        $where[0]['campo'] = 'th_req_id'; 
         $where[0]['dato']  = $parametros['_id'];
-        
         $res = $this->modelo->editar($datos, $where);
-        
-        // ⚠️ IMPORTANTE: Normalizar respuesta
         return ($res) ? 1 : 0;
     }
 }
@@ -122,11 +115,40 @@ class  th_contr_requisitosC
     }
 
 
-    //Para usar en select2
-    function buscar($parametros)
-    {
+      function buscar($parametros)
+{
+    $lista = [];
 
-        
-       
+    // query para filtrar (texto ingresado por el usuario)
+    $query = isset($parametros['query']) ? trim($parametros['query']) : '';
+
+    // obtener el id de la plaza desde parámetros (recomendable pasarlo)
+    $pla_id = isset($parametros['pla_id']) ? intval($parametros['pla_id']) : 0;
+
+    // si no hay plaza, devolvemos vacío (o podrías devolver todos los requisitos no asignados globalmente)
+    if ($pla_id <= 0) {
+        return $lista;
     }
+
+    // pedimos al modelo los requisitos no asignados a la plaza
+    $datos = $this->modelo->listar_requisitos_no_asignados($pla_id);
+
+    foreach ($datos as $row) {
+        // usar th_req_tipo como "título" (ajusta si prefieres otro campo)
+        $titulo = isset($row['th_req_tipo']) ? $row['th_req_tipo'] : '';
+
+        // comparar SOLO por el título (case-insensitive)
+        if ($query === '' || stripos($titulo, $query) !== false) {
+            $lista[] = [
+                'id'   => $row['th_req_id'],
+                'text' => $titulo,
+                'data' => $row // opcional: incluir fila completa por si la UI la necesita
+            ];
+        }
+    }
+
+    return $lista;
+}
+
+
 }

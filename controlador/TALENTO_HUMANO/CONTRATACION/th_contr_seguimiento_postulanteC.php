@@ -3,6 +3,8 @@ date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 3)  . '/modelo/TALENTO_HUMANO/CONTRATACION/th_contr_seguimiento_postulanteM.php');
 
+require_once(dirname(__DIR__, 3)  . '/modelo/TALENTO_HUMANO/CONTRATACION/th_contr_plaza_etapas_procesoM.php');
+
 $controlador = new th_contr_seguimiento_postulanteC();
 
 if (isset($_GET['listar'])) {
@@ -34,10 +36,13 @@ if (isset($_GET['buscar'])) {
 class th_contr_seguimiento_postulanteC
 {
     private $modelo;
+    private $plaza_etapas_proceso;
 
     function __construct()
     {
         $this->modelo = new th_contr_seguimiento_postulanteM();
+
+        $this->plaza_etapas_proceso = new th_contr_plaza_etapas_procesoM();
     }
 
     function listar($id = '')
@@ -61,42 +66,111 @@ class th_contr_seguimiento_postulanteC
         return $datos;
     }
 
-    function insertar_editar($parametros)
-    {
-        // Campos comunes
-        $datos = array(
-            array('campo' => 'th_posu_id', 'dato' => $parametros['txt_th_posu_id'] ?? ''),
-            array('campo' => 'th_etapa_id', 'dato' => $parametros['txt_th_etapa_id'] ?? ''),
-            array('campo' => 'th_seg_fecha_programada', 'dato' => $parametros['txt_th_seg_fecha_programada'] ?? null),
-            array('campo' => 'th_seg_fecha_realizada', 'dato' => $parametros['txt_th_seg_fecha_realizada'] ?? null),
-            array('campo' => 'th_seg_calificacion', 'dato' => $parametros['txt_th_seg_calificacion'] ?? null),
-            array('campo' => 'th_seg_resultado', 'dato' => $parametros['txt_th_seg_resultado'] ?? null),
-            array('campo' => 'th_seg_responsable_persona_id', 'dato' => $parametros['txt_th_seg_responsable_persona_id'] ?? null),
-            array('campo' => 'th_seg_observaciones', 'dato' => $parametros['txt_th_seg_observaciones'] ?? ''),
-            array('campo' => 'th_seg_documentos_json', 'dato' => $parametros['txt_th_seg_documentos_json'] ?? null),
-            array('campo' => 'th_seg_estado', 'dato' => isset($parametros['chk_th_seg_estado']) ? ($parametros['chk_th_seg_estado'] ? 1 : 0) : 1),
+  function insertar_editar($parametros)
+{
+    // Validar entrada mínima
+    if (!isset($parametros['postulantes_seleccionadas']) || 
+        !is_array($parametros['postulantes_seleccionadas']) || 
+        count($parametros['postulantes_seleccionadas']) == 0) {
+        return -2;
+    }
 
-            // auditoría
-            array('campo' => 'th_seg_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+    $postulantes = $parametros['postulantes_seleccionadas'];
+    $pla_id = isset($parametros['th_pla_id']) ? intval($parametros['th_pla_id']) : 0;
+    
+    if ($pla_id <= 0) {
+        return ['ok' => false, 'msg' => 'Falta th_pla_id'];
+    }
+
+    // Extraer IDs de postulantes
+    $postulantes_ids = array_map(function($p) {
+        return is_array($p) ? intval($p['id']) : intval($p);
+    }, $postulantes);
+
+    // Listar etapas faltantes usando la función optimizada (USAR v3 que es la más compatible)
+    $etapas_faltantes = $this->modelo->listar_etapas_faltantes_postulantes_v3($pla_id, $postulantes_ids);
+
+    if (empty($etapas_faltantes)) {
+        return [
+            'ok' => true, 
+            'msg' => 'Todos los postulantes ya tienen todas las etapas asignadas',
+            'etapas_creadas' => 0
+        ];
+    }
+
+    // Insertar cada etapa faltante con el formato array campo/dato
+    $now = date('Y-m-d H:i:s');
+    $etapas_creadas = 0;
+    $errores = [];
+
+    foreach ($etapas_faltantes as $faltante) {
+        $datos_insertar = array(
+            array('campo' => 'th_posu_id', 'dato' => $faltante['th_posu_id']),
+            array('campo' => 'th_etapa_id', 'dato' => $faltante['th_eta_id']),
+            array('campo' => 'th_seg_fecha_programada', 'dato' => null),
+            array('campo' => 'th_seg_fecha_realizada', 'dato' => null),
+            array('campo' => 'th_seg_calificacion', 'dato' => null),
+            array('campo' => 'th_seg_resultado', 'dato' => null),
+            array('campo' => 'th_seg_responsable_persona_id', 'dato' => null),
+            array('campo' => 'th_seg_observaciones', 'dato' => ''),
+            array('campo' => 'th_seg_documentos_json', 'dato' => null),
+            array('campo' => 'th_seg_estado', 'dato' => 1),
+            array('campo' => 'th_seg_fecha_creacion', 'dato' => $now),
+            array('campo' => 'th_seg_fecha_modificacion', 'dato' => $now)
         );
 
-        // Insertar
-        if (empty($parametros['_id'])) {
-
-            // Insertar fecha de creación
-            $datos[] = array('campo' => 'th_seg_fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
-
-            $id = $this->modelo->insertar_id($datos);
-
-            return 1;
+        $resultado = $this->modelo->insertar_id($datos_insertar);
+        
+        if ($resultado > 0) {
+            $etapas_creadas++;
+        } else {
+            $errores[] = "Error al crear etapa {$faltante['th_eta_id']} para postulante {$faltante['th_posu_id']}";
         }
-
-        // Editar
-        $where[0]['campo'] = 'th_seg_id';
-        $where[0]['dato'] = $parametros['_id'];
-
-        return $this->modelo->editar($datos, $where);
     }
+
+    $mensaje = "{$etapas_creadas} de " . count($etapas_faltantes) . " etapas creadas exitosamente";
+    if (!empty($errores)) {
+        $mensaje .= ". Errores: " . implode(', ', $errores);
+    }
+
+    return [
+        'ok' => $etapas_creadas > 0,
+        'msg' => $mensaje,
+        'etapas_creadas' => $etapas_creadas,
+        'total_faltantes' => count($etapas_faltantes),
+        'errores' => $errores
+    ];
+}
+// Función auxiliar para obtener resumen de etapas por postulante
+function obtener_resumen_etapas_postulante($postulante_id, $plaza_id)
+{
+    // Obtener etapas de la plaza
+    $etapas_plaza = $this->plaza_etapas_proceso
+        ->where('th_pla_id', $plaza_id)
+        ->where('th_pla_eta_estado', 1)
+        ->listar();
+
+    $resumen = [];
+    
+    foreach ($etapas_plaza as $etapa) {
+        $etapa_id = is_array($etapa) ? $etapa['th_eta_id'] : $etapa;
+        
+        // Verificar si existe seguimiento
+        $seguimiento = $this->modelo
+            ->where('th_posu_id', $postulante_id)
+            ->where('th_etapa_id', $etapa_id)
+            ->where('th_seg_estado', 1)
+            ->listar();
+        
+        $resumen[] = [
+            'etapa_id' => $etapa_id,
+            'existe' => !empty($seguimiento),
+            'seguimiento' => !empty($seguimiento) ? $seguimiento[0] : null
+        ];
+    }
+    
+    return $resumen;
+}
 
     function eliminar($id)
     {

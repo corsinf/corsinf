@@ -12,7 +12,6 @@ class th_contr_requisitosM extends BaseModel
 
     // Campos que puedes insertar/actualizar
     protected $camposPermitidos = [
-        'th_pla_id',
         'th_req_tipo as tipo',
         'th_req_descripcion as descripcion',
         'th_req_obligatorio as obligatorio',
