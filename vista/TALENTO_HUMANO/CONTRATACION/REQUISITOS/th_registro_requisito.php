@@ -57,19 +57,6 @@ $(document).ready(function() {
     }
 
 
-    // helper: cargar select2 de tipos (estático)
-    function cargar_tipos_req() {
-        var tipos = ['Formación', 'Experiencia', 'Certificado', 'Habilidad', 'Otro'];
-        tipos.forEach(function(t) {
-            $('#ddl_th_req_tipo').append($('<option>', {
-                value: t,
-                text: t
-            }));
-        });
-    }
-    cargar_tipos_req();
-
-
     // Parametros que enviaremos al controlador
     function ParametrosReq() {
         return {
@@ -333,11 +320,33 @@ function cargar_requisito(id) {
                                 <label for="ddl_th_req_tipo" class="form-label fw-bold">
                                     <i class="bx bx-category me-1"></i>Tipo de Requisito
                                 </label>
+
                                 <select id="ddl_th_req_tipo" class="form-select select2-validation"
                                     name="ddl_th_req_tipo" required>
                                     <option value="" selected hidden>-- Seleccione el tipo de requisito --</option>
+
+                                    <option value="identificacion">Identificación</option>
+                                    <option value="certificado_domicilio">Certificado de Domicilio</option>
+                                    <option value="referencias_personales">Referencias Personales</option>
+
+                                    <option value="titulo_academico">Título Académico</option>
+                                    <option value="certificado_estudios">Certificado de Estudios</option>
+                                    <option value="cursos_aprobados">Cursos Aprobados</option>
+
+                                    <option value="experiencia_laboral">Experiencia Laboral</option>
+                                    <option value="referencias_laborales">Referencias Laborales</option>
+                                    <option value="certificado_trabajo">Certificado de Trabajo</option>
+
+                                    <option value="antecedentes_penales">Antecedentes Penales</option>
+                                    <option value="antecedentes_policia">Antecedentes de Policía</option>
+                                    <option value="certificado_medico">Certificado Médico</option>
+
+                                    <option value="hoja_vida">Hoja de Vida</option>
+                                    <option value="documentos_varios">Documentos Varios</option>
+                                    <option value="otro">Otro</option>
                                 </select>
                             </div>
+
 
                             <!-- Sección: Configuración -->
                             <div class="row g-3 mb-4">

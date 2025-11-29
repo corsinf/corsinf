@@ -19,6 +19,9 @@ if (isset($_GET['listar_todos'])) {
 if (isset($_GET['insertar_editar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
+if (isset($_GET['editar'])) {
+    echo json_encode($controlador->editar_seguimiento($_POST['parametros']));
+}
 
 if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
@@ -62,12 +65,61 @@ class th_contr_seguimiento_postulanteC
     }
     function listar_todos($id_plaza = '', $id_etapa = '', $id_pos = '')
     {
-        $datos = $this->modelo->listar_seguimiento_postulante($id_plaza,$id_etapa,$id_pos);
+        $datos = $this->modelo->listar_seguimiento_postulante_plaza($id_plaza,$id_etapa,$id_pos);
         return $datos;
     }
+     public function editar_seguimiento($parametros)
+{
+    // Helpers (misma lógica que usas en insertar_editar)
+    $toDateTime = function ($val) {
+        if ($val === null || $val === '') return null;
+        $val = str_replace('T', ' ', $val);
+        if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/', $val)) {
+            $val .= ':00';
+        }
+        $ts = strtotime($val);
+        return $ts ? date('Y-m-d H:i:s', $ts) : null;
+    };
+    $toInt = function ($v) { return ($v === '' || $v === null) ? null : (int)$v; };
+    $toFloat = function ($v) { return ($v === '' || $v === null) ? null : (float)$v; };
+    $toBoolInt = function ($v) { return ($v === 1 || $v === '1' || $v === true || $v === 'true') ? 1 : 0; };
+
+    // requiere id para editar
+    if (empty($parametros['_id'])) {
+        return -2; // identificar error (sin id)
+    }
+
+    // Preparar datos a actualizar (solo los campos editables)
+    $datos = array(
+        array('campo' => 'th_posu_id', 'dato' => $toInt($parametros['txt_th_posu_id'] ?? null)),
+        array('campo' => 'th_etapa_id', 'dato' => $toInt($parametros['txt_th_etapa_id'] ?? null)),
+        array('campo' => 'th_seg_fecha_programada', 'dato' => $toDateTime($parametros['txt_th_seg_fecha_programada'] ?? null)),
+        array('campo' => 'th_seg_fecha_realizada', 'dato' => $toDateTime($parametros['txt_th_seg_fecha_realizada'] ?? null)),
+        array('campo' => 'th_seg_calificacion', 'dato' => $toFloat($parametros['txt_th_seg_calificacion'] ?? null)),
+        array('campo' => 'th_seg_resultado', 'dato' => $parametros['txt_th_seg_resultado'] ?? null),
+        // responsable viene desde ddl_responsable en tu JS
+        array('campo' => 'th_seg_responsable_persona_id', 'dato' => $toInt($parametros['ddl_responsable'] ?? null)),
+        array('campo' => 'th_seg_observaciones', 'dato' => $parametros['txt_th_seg_observaciones'] ?? null),
+        array('campo' => 'th_seg_documentos_json', 'dato' => $parametros['txt_th_seg_documentos_json'] ?? null),
+        array('campo' => 'th_seg_estado', 'dato' => 1),
+        array('campo' => 'th_seg_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+    );
+
+    // Where por id
+    $where = array();
+    $where[0]['campo'] = 'th_seg_id';
+    $where[0]['dato']  = $parametros['_id'];
+
+    // Ejecutar update
+    $res = $this->modelo->editar($datos, $where);
+
+    // devolver id si ok, 0 si fallo
+    return ($res) ? 1 : 0;
+}
+
 
   function insertar_editar($parametros)
-{
+    {
     // Validar entrada mínima
     if (!isset($parametros['postulantes_seleccionadas']) || 
         !is_array($parametros['postulantes_seleccionadas']) || 
@@ -140,7 +192,7 @@ class th_contr_seguimiento_postulanteC
         'total_faltantes' => count($etapas_faltantes),
         'errores' => $errores
     ];
-}
+    }
 // Función auxiliar para obtener resumen de etapas por postulante
 function obtener_resumen_etapas_postulante($postulante_id, $plaza_id)
 {

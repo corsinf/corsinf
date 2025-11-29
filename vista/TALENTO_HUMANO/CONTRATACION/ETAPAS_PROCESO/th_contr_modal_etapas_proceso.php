@@ -55,7 +55,6 @@ function Parametros_PE() {
 
 function insertar_plaza_etapa() {
 
-
     $.ajax({
         data: {
             parametros: Parametros_PE()
@@ -68,6 +67,9 @@ function insertar_plaza_etapa() {
                 Swal.fire('', 'Plaza creada con éxito.', 'success').then(function() {
                     $('#modal_etapa_proceso').modal('hide');
                     $('#tbl_etapas_proceso').DataTable().ajax.reload(null, false);
+                    $('#ddl_etapas_proceso').empty().append(
+                        '<option value="" selected hidden>-- Seleccione el etapa proceso --</option>'
+                    );
                 });
             } else if (res == -2) {
                 Swal.fire('', res.msg || 'Error al guardar plaza.', 'error');

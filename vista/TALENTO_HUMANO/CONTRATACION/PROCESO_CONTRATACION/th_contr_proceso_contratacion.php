@@ -1,10 +1,11 @@
 <?php
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
-
 $_id = '';
+
 if (isset($_GET['_id'])) {
     $_id = $_GET['_id'];
 }
+
 ?>
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
@@ -24,6 +25,8 @@ function formatDateToInput(dateStr) {
     }
     return dateStr;
 }
+
+
 
 function boolVal(val) {
     // normalizamos 1/0 / true/false / 'true' / 'false'
@@ -221,6 +224,9 @@ $(document).ready(function() {
 
         var url_cargos = '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargosC.php?buscar=true';
         cargar_select2_url('ddl_cargo', url_cargos);
+
+        url_personasC = '../controlador/TALENTO_HUMANO/th_personasC.php?buscar=true';
+        cargar_select2_url('ddl_th_pla_responsable', url_personasC);
 
     }
 
@@ -420,7 +426,7 @@ function ParametrosPlaza() {
         'txt_th_pla_tiempo_contrato': $('#txt_th_pla_tiempo_contrato').val(),
         'txt_th_pla_salario_min': $('#txt_th_pla_salario_min').val(),
         'txt_th_pla_salario_max': $('#txt_th_pla_salario_max').val(),
-        'txt_th_pla_responsable_persona_id': $('#txt_th_pla_responsable_persona_id').val(),
+        'ddl_th_pla_responsable': $('#ddl_th_pla_responsable').val(),
         'chk_th_pla_prioridad_interna': $('#chk_th_pla_prioridad_interna').is(':checked') ? 1 : 0,
         'chk_th_pla_requiere_documentos': $('#chk_th_pla_requiere_documentos').is(':checked') ? 1 : 0,
         'txt_th_pla_descripcion': $('#txt_th_pla_descripcion').val(),
@@ -489,7 +495,7 @@ function cargar_plaza(id) {
                 .th_pla_prioridad_interna));
             $('#chk_th_pla_requiere_documentos').prop('checked', boolVal(r
                 .th_pla_requiere_documentos));
-            $('#txt_th_pla_responsable_persona_id').val(r.th_pla_responsable_persona_id);
+            $('#ddl_th_pla_responsable').val(r.th_pla_responsable_persona_id);
             $('#txt_th_pla_observaciones').val(r.th_pla_observaciones);
             $('#txt_th_pla_fecha_creacion').val(formatDateToInput(r.th_pla_fecha_creacion));
             $('#txt_th_pla_fecha_modificacion').val(formatDateToInput(r
@@ -984,17 +990,20 @@ function eliminarEtapa(id) {
                                                 </div>
 
                                                 <div class="row g-2 mb-3">
+
                                                     <div class="col-md-4">
-                                                        <label for="txt_th_pla_responsable_persona_id"
-                                                            class="form-label fw-bold">
-                                                            <i class="bx bx-user-check me-2 text-info"></i>Responsable
-                                                            (ID)
+                                                        <label for="ddl_th_pla_responsable" class="form-label fw-bold">
+                                                            <i class="bx bx-user me-2 text-primary"></i> Responsable
                                                         </label>
-                                                        <input type="number" min="0" class="form-control"
-                                                            id="txt_th_pla_responsable_persona_id"
-                                                            name="txt_th_pla_responsable_persona_id"
-                                                            placeholder="Ingrese el ID del responsable" required />
+
+                                                        <select id="ddl_th_pla_responsable"
+                                                            name="ddl_th_pla_responsable"
+                                                            class="form-select select2-validation" required>
+                                                            <option value="" selected hidden>-- Seleccione el
+                                                                responsable --</option>
+                                                        </select>
                                                     </div>
+
 
                                                     <div class="col-md-4">
                                                         <label class="form-label fw-bold d-block">

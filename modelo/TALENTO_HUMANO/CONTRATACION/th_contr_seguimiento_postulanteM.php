@@ -168,4 +168,105 @@ public function listar_etapas_faltantes_postulantes_v3($plaza_id, $postulantes_i
     return $this->db->datos($sql);
 }
 
+
+public function listar_seguimiento_postulante_plaza($id_plaza = '', $id_etapa = '', $id_pos = '')
+{
+    $sql = "
+        SELECT 
+            s.th_seg_id AS _id,
+            s.th_posu_id,
+            s.th_etapa_id,
+            s.th_seg_fecha_programada,
+            s.th_seg_fecha_realizada,
+            s.th_seg_calificacion,
+            s.th_seg_resultado,
+            s.th_seg_responsable_persona_id,
+            s.th_seg_observaciones,
+            s.th_seg_documentos_json,
+            s.th_seg_estado,
+            s.th_seg_fecha_creacion,
+            s.th_seg_fecha_modificacion,
+            e.th_etapa_nombre,
+            e.th_etapa_tipo,
+            e.th_etapa_orden,
+            e.th_etapa_obligatoria,
+            e.th_etapa_descripcion,
+            po.th_pla_id AS postulacion_plaza_id,
+            po.th_pla_id,
+            po.th_posu_id AS postulacion_id,
+            po.th_persona_id,
+            po.th_postulante_id,
+            po.th_posu_fecha,
+            po.th_posu_estado_descrip,
+            po.th_posu_estado AS postulacion_estado,
+            po.th_posu_fuente,
+            po.th_posu_score,
+            po.th_posu_prioridad,
+            CASE 
+                WHEN pos.th_pos_id IS NOT NULL THEN 
+                    LTRIM(RTRIM(
+                        ISNULL(pos.th_pos_primer_nombre, '') + ' ' +
+                        ISNULL(pos.th_pos_segundo_nombre, '') + ' ' +
+                        ISNULL(pos.th_pos_primer_apellido, '') + ' ' +
+                        ISNULL(pos.th_pos_segundo_apellido, '')
+                    ))
+                ELSE 
+                    LTRIM(RTRIM(
+                        ISNULL(per.th_per_primer_nombre, '') + ' ' +
+                        ISNULL(per.th_per_segundo_nombre, '') + ' ' +
+                        ISNULL(per.th_per_primer_apellido, '') + ' ' +
+                        ISNULL(per.th_per_segundo_apellido, '')
+                    ))
+            END AS nombre_completo,
+            ISNULL(pos.th_pos_cedula, per.th_per_cedula) AS cedula,
+            ISNULL(pos.th_pos_telefono_1, per.th_per_telefono_1) AS telefono,
+            ISNULL(pos.th_pos_correo, per.th_per_correo) AS correo,
+            ISNULL(pos.th_pos_telefono_2, per.th_per_telefono_2) AS telefono_2,
+            per.th_per_foto_url AS foto_url,
+            CASE 
+                WHEN pos.th_pos_id IS NOT NULL THEN 'Postulante Externo'
+                WHEN per.th_per_id IS NOT NULL THEN 'Empleado Interno'
+                ELSE 'Sin Clasificar'
+            END AS tipo_candidato
+        FROM th_contr_seguimiento_postulante s
+        INNER JOIN th_contr_postulaciones po 
+            ON s.th_posu_id = po.th_posu_id
+        INNER JOIN th_contr_etapas_proceso e 
+            ON s.th_etapa_id = e.th_etapa_id
+        -- LEFT JOIN con postulantes externos
+        LEFT JOIN th_postulantes pos 
+            ON po.th_postulante_id = pos.th_pos_id
+        -- LEFT JOIN con personas internas
+        LEFT JOIN th_personas per 
+            ON po.th_persona_id = per.th_per_id
+        WHERE s.th_seg_estado = 1
+    ";
+
+    // filtro por plaza -> usar la plaza de la postulación (po.th_pla_id)
+    if ($id_plaza !== '' && $id_plaza !== null) {
+        $idp = (int) $id_plaza;
+        $sql .= " AND po.th_pla_id = {$idp}";
+    }
+
+    if ($id_etapa !== '' && $id_etapa !== null) {
+        $id = (int) $id_etapa;
+        $sql .= " AND s.th_etapa_id = {$id}";
+    }
+
+    if ($id_pos !== '' && $id_pos !== null) {
+        $idpos = (int) $id_pos;
+        $sql .= " AND (pos.th_pos_id = {$idpos} OR per.th_per_id = {$idpos})";
+    }
+
+    $sql .= " 
+        ORDER BY 
+            e.th_etapa_orden ASC, 
+            s.th_seg_fecha_programada DESC, 
+            s.th_seg_fecha_creacion DESC
+    ";
+
+    return $this->db->datos($sql);
+}
+
+
 }

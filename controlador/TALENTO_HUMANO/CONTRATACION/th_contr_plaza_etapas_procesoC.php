@@ -35,6 +35,15 @@ if (isset($_GET['buscar'])) {
     echo json_encode($datos);
     exit;
 }
+if (isset($_GET['buscar_etapas_plaza'])) {
+    $parametros = array(
+        'query'  => isset($_GET['q']) ? $_GET['q'] : '',
+        'pla_id' => isset($_GET['pla_id']) ? $_GET['pla_id'] : 0
+    );
+    $datos = $controlador->buscar_etapas_plaza($parametros);
+    echo json_encode($datos);
+    exit;
+}
 
 
 
@@ -147,4 +156,34 @@ class th_contr_plaza_etapas_procesoC
 
         return $lista;
     }
+    function buscar_etapas_plaza($parametros)
+    {
+        $lista = [];
+
+        $query = isset($parametros['query']) ? trim($parametros['query']) : '';
+        $pla_id = isset($parametros['pla_id']) ? (int)$parametros['pla_id'] : 0;
+
+        if ($pla_id <= 0) return $lista;
+
+        $datos = $this->modelo->listar_etapas_por_plaza($pla_id);
+
+        foreach ($datos as $et) {
+            $nombre = isset($et['th_etapa_nombre']) ? $et['th_etapa_nombre'] : '';
+            $descripcion = isset($et['th_etapa_descripcion']) ? $et['th_etapa_descripcion'] : '';
+        
+        $textoCompleto = trim($nombre . ' - ' . $descripcion);
+            if ($query === '' || stripos($textoCompleto, $query) !== false) {
+                $lista[] = [
+                    'id' => $et['th_etapa_id'],
+                    'text' => $textoCompleto,
+                    'data' => $et
+                ];
+            }
+        }
+
+        return $lista;
+    }
+
+
+    
 }

@@ -1,54 +1,40 @@
-<?php //include('../cabeceras/header.php');
-
+<?php
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
-
 $_id = '';
-
-if (isset($_GET['_id'])) {
-    $_id = $_GET['_id'];
-}
-
+if (isset($_GET['_id'])) { $_id = $_GET['_id']; }
 ?>
 
-<script src="../js/ACTIVOS_FIJOS/avaluos.js"></script>
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function() {
 
-    tbl_cargos = $('#tbl_cargos').DataTable($.extend({}, configuracion_datatable('Nombre', 'area', 'nivel'), {
+    tbl_requisitos = $('#tbl_requisitos').DataTable($.extend({}, configuracion_datatable('Nombre',
+        'descripcion', 'fecha'), {
         responsive: true,
         language: {
             url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
         },
         ajax: {
-            // Cambia la ruta si es diferente en tu proyecto
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargosC.php?listar=true',
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_requisitosC.php?listar=true',
             dataSrc: ''
         },
         columns: [{
                 data: null,
                 render: function(data, type, item) {
                     // link al formulario de registro/modificación (ajusta acc si lo tienes distinto)
-                    href =
-                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_cargo&_id=${item._id}`;
-                    return `<a href="${href}"><u>${item.nombre}</u></a>`;
+                    const href =
+                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_cargo_requisitos&_id=${item._id}`;
+                    return `<a href="${href}"><u>${item.nombre || 'Sin nombre'}</u></a>`;
                 }
             },
             {
                 data: 'descripcion',
                 render: function(data, type, item) {
                     if (!data) return '';
-                    // Acortar descripción en la tabla
                     return data.length > 120 ? data.substring(0, 117) + '...' : data;
                 }
-            },
-            {
-                data: 'nivel'
-            },
-            {
-                data: 'departamento'
             }
         ],
         order: [
@@ -63,15 +49,12 @@ $(document).ready(function() {
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Cargos</div>
+            <div class="breadcrumb-title pe-3">Requisitos de Cargo</div>
             <div class="ps-3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
-                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">
-                            Todos los cargos
-                        </li>
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Catálogo de requisitos</li>
                     </ol>
                 </nav>
             </div>
@@ -82,38 +65,33 @@ $(document).ready(function() {
             <div class="col-xl-12 mx-auto">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
-                        <div class="card-title d-flex align-items-center">
+                        <div class="card-title d-flex align-items-center justify-content-between mb-3">
+                            <h5 class="mb-0 text-primary">Catálogo de Requisitos</h5>
 
-                            <h5 class="mb-0 text-primary"></h5>
-
-                            <div class="row mx-0">
-
-                                <div class="d-flex gap-2">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_cargo"
-                                        class="btn btn-success btn-sm">
-                                        <i class="bx bx-plus me-0 pb-1"></i> Nuevo Cargo
-                                    </a>
-                                </div>
-
+                            <div class="d-flex gap-2">
+                                <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_cargo_requisitos"
+                                    class="btn btn-success btn-sm">
+                                    <i class="bx bx-plus me-0 pb-1"></i> Nuevo Requisito
+                                </a>
+                                <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_requisitos_detalles"
+                                    class="btn btn-success btn-sm">
+                                    <i class="bx bx-plus me-0 pb-1"></i> Lista de requisitos detalles
+                                </a>
                             </div>
                         </div>
-
 
                         <section class="content pt-2">
                             <div class="container-fluid">
                                 <div class="table-responsive">
-                                    <table class="table table-striped responsive " id="tbl_cargos" style="width:100%">
+                                    <table class="table table-striped responsive" id="tbl_requisitos"
+                                        style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
                                                 <th>Descripción</th>
-                                                <th>Nivel</th>
-                                                <th>Departamento</th>
                                             </tr>
                                         </thead>
-                                        <tbody class="">
-
-                                        </tbody>
+                                        <tbody></tbody>
                                     </table>
                                 </div>
                             </div><!-- /.container-fluid -->

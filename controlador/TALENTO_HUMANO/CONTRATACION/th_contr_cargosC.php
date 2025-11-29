@@ -44,29 +44,23 @@ class  th_contr_cargosC
     function listar($id = '')
     {
        
-        if($id == ''){
-
-            $datos = $this->modelo->where('th_car_estado',1)->listar();
-
-        }else{
-             $datos = $this->modelo->where('th_car_id',$id)->where('th_car_estado',1)->listar();
-        }
-       
-
+        $datos = $this->modelo->listar_cargos_con_departamentos($id);
         return $datos; 
 
     }
 
     function insertar_editar($parametros)
 {
+        $toInt = function ($v) { return ($v === '' || $v === null) ? null : (int)$v; };
+        $th_dep_id = $toInt($parametros['ddl_departamentos'] ?? $parametros['ddl_departamentos'] ?? null);
+        $th_niv_id = $toInt($parametros['ddl_niveles'] ?? $parametros['ddl_niveles'] ?? null);
     // Preparar datos comunes
     $datos = array(
         array('campo' => 'th_car_nombre', 'dato' => $parametros['txt_th_car_nombre'] ?? ''),
         array('campo' => 'th_car_descripcion', 'dato' => $parametros['txt_th_car_descripcion'] ?? ''),
-        array('campo' => 'th_car_nivel', 'dato' => $parametros['txt_th_car_nivel'] ?? ''),
-        array('campo' => 'th_car_area', 'dato' => $parametros['txt_th_car_area'] ?? ''),
+        array('campo' => 'th_dep_id', 'dato' => $th_dep_id ?? ''),
+        array('campo' => 'th_niv_id', 'dato' => $th_niv_id ?? ''),
         array('campo' => 'th_car_estado', 'dato' => isset($parametros['chk_th_car_estado']) ? ($parametros['chk_th_car_estado'] ? 1 : 0) : 1),
-        // auditoría
         array('campo' => 'th_car_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
     );
 

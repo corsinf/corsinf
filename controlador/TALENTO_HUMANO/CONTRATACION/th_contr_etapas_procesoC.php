@@ -59,10 +59,14 @@ class th_contr_etapas_procesoC
 
     function insertar_editar($parametros)
     {
+
+        
+        $ddl_etapa_tipo = $parametros['ddl_etapa_tipo'] ?? $parametros['ddl_etapa_tipo'] ?? null;
+        
         
         $datos = array(
             array('campo' => 'th_etapa_nombre', 'dato' => $parametros['txt_th_etapa_nombre'] ?? ''),
-            array('campo' => 'th_etapa_tipo', 'dato' => $parametros['txt_th_etapa_tipo'] ?? ''),
+            array('campo' => 'th_etapa_tipo', 'dato' => $ddl_etapa_tipo),
             array('campo' => 'th_etapa_orden', 'dato' => ($parametros['txt_th_etapa_orden'] ?? '') !== '' ? (int)$parametros['txt_th_etapa_orden'] : null),
             array('campo' => 'th_etapa_obligatoria', 'dato' => isset($parametros['chk_th_etapa_obligatoria']) ? ($parametros['chk_th_etapa_obligatoria'] ? 1 : 0) : 0),
             array('campo' => 'th_etapa_descripcion', 'dato' => $parametros['txt_th_etapa_descripcion'] ?? ''),

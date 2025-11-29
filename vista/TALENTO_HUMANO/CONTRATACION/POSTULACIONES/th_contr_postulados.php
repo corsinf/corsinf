@@ -568,7 +568,7 @@ function insertar_personas_plaza(parametros) {
                                 <i class="bx bx-clipboard-check me-1"></i> Gestión de Postulaciones
                             </h5>
                             <div class="d-flex align-items-center gap-2">
-                                <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_plazas"
+                                <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_plaza&_id=<?= $_id ?>"
                                     class="btn btn-outline-dark btn-sm">
                                     <i class="bx bx-arrow-back"></i> Regresar
                                 </a>

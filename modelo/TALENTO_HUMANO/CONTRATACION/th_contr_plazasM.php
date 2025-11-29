@@ -141,6 +141,37 @@ public function obtener_resumen_plaza($pla_id = 0)
 
     return $this->db->datos($sql); // adapta según el método de tu DB
 }
+public function listar_etapas_por_plaza($pla_id)
+{
+    $pla_id = intval($pla_id);
+
+    $sql = "
+        SELECT
+            e.th_etapa_id,
+            e.th_etapa_nombre,
+            e.th_etapa_tipo,
+            e.th_etapa_orden,
+            e.th_etapa_obligatoria,
+            e.th_etapa_descripcion,
+            e.th_etapa_estado,
+            e.th_etapa_fecha_creacion,
+            pe.th_pla_eta_id,
+            pe.th_pla_id,
+            pe.th_eta_id,
+            pe.th_pla_eta_estado,
+            pe.th_pla_eta_fecha_creacion,
+            pe.th_pla_eta_modificacion
+        FROM th_contr_etapas_proceso e
+        INNER JOIN th_contr_plaza_etapas pe
+            ON pe.th_eta_id = e.th_etapa_id
+        WHERE pe.th_pla_id = {$pla_id}
+          AND pe.th_pla_eta_estado = 1     -- solo asignaciones activas
+          AND e.th_etapa_estado = 1        -- solo etapas activas
+        ORDER BY e.th_etapa_orden, e.th_etapa_nombre
+    ";
+
+    return $this->db->datos($sql);
+}
 
 
 
