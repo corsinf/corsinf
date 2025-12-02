@@ -78,7 +78,6 @@ class th_contr_cargo_complianceC
         }
 
         $ultima_revision = $parametros['th_comp_ultima_revision'] ?? null;
-        $estado = isset($parametros['th_comp_estado']) ? $parametros['th_comp_estado'] : null;
         $observaciones = $parametros['th_comp_observaciones'] ?? null;
 
         $datos = [
@@ -88,7 +87,7 @@ class th_contr_cargo_complianceC
             ['campo' => 'th_comp_requisitos_completados', 'dato' => $completados],
             ['campo' => 'th_comp_requisitos_faltantes', 'dato' => $faltantes],
             ['campo' => 'th_comp_ultima_revision', 'dato' => $ultima_revision],
-            ['campo' => 'th_comp_estado', 'dato' => $estado],
+            ['campo' => 'th_comp_estado', 'dato' => 1],
             ['campo' => 'th_comp_observaciones', 'dato' => $observaciones],
             ['campo' => 'th_comp_fecha_modificacion', 'dato' => $now]
         ];

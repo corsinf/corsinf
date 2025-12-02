@@ -847,25 +847,76 @@ function verificar_compliance_existente(cargoId) {
             if (response && (Array.isArray(response) ? response.length > 0 : true)) {
                 const data = Array.isArray(response) ? response[0] : response;
 
-                // Llenar formulario para edición
-                $('#th_comp_id').val(data.th_comp_id || data.id);
-                $('#th_comp_requisitos_totales').val(data.th_comp_requisitos_totales || 0);
-                $('#th_comp_requisitos_completados').val(data.th_comp_requisitos_completados || 0);
-                $('#th_comp_ultima_revision').val(data.th_comp_ultima_revision || '');
-                $('#th_comp_estado').val(data.th_comp_estado || '');
-                $('#th_comp_observaciones').val(data.th_comp_observaciones || '');
+                // Llenar formulario para edición (sin prefijo th_comp_)
+                $('#th_comp_id').val(data._id || data.id || '');
+                $('#th_comp_requisitos_totales').val(data.requisitos_totales || 0);
+                $('#th_comp_requisitos_completados').val(data.requisitos_completados || 0);
 
-                // Calcular valores
+                // Formatear fecha para input type="date" (YYYY-MM-DD)
+                if (data.ultima_revision) {
+                    const fecha = new Date(data.ultima_revision);
+                    const fechaFormatted = fecha.toISOString().split('T')[0];
+                    $('#th_comp_ultima_revision').val(fechaFormatted);
+                }
+
+                $('#th_comp_observaciones').val(data.observaciones || '');
+
+                // Calcular valores automáticos
                 calcularComplianceModal();
 
                 // Cambiar a modo edición
                 $('#pnl_crear_compliance').hide();
                 $('#pnl_actualizar_compliance').show();
                 $('#modalComplianceLabel').html(
-                    '<i class="bx bx-edit me-2"></i> Editar Compliance del Cargo');
+                    '<i class="bx bx-edit me-2"></i> Editar Compliance del Cargo'
+                );
+
+                console.log('Compliance existente cargado para edición:', data);
+            } else {
+                // Modo crear nuevo
+                $('#pnl_crear_compliance').show();
+                $('#pnl_actualizar_compliance').hide();
+                $('#modalComplianceLabel').html(
+                    '<i class="bx bx-check-shield me-2"></i> Registrar Compliance del Cargo'
+                );
             }
+        },
+        error: function(err) {
+            console.error('Error al verificar compliance:', err);
+            // Modo crear nuevo por defecto
+            $('#pnl_crear_compliance').show();
+            $('#pnl_actualizar_compliance').hide();
+            $('#modalComplianceLabel').html(
+                '<i class="bx bx-check-shield me-2"></i> Registrar Compliance del Cargo'
+            );
         }
     });
+}
+
+// ============================================
+// FUNCIÓN PARA CALCULAR AUTOMÁTICAMENTE
+// ============================================
+function calcularComplianceModal() {
+    const totales = parseInt($('#th_comp_requisitos_totales').val()) || 0;
+    const completados = parseInt($('#th_comp_requisitos_completados').val()) || 0;
+
+    // Validar que completados no sea mayor que totales
+    if (completados > totales) {
+        $('#th_comp_requisitos_completados').val(totales);
+        return calcularComplianceModal();
+    }
+
+    const faltantes = totales - completados;
+    const porcentaje = totales > 0 ? ((completados / totales) * 100).toFixed(2) : 0;
+
+    // Actualizar campos calculados
+    $('#th_comp_requisitos_faltantes').val(faltantes);
+    $('#th_comp_porcentaje_completado').val(porcentaje);
+
+    // Actualizar vista previa
+    $('#preview_completados').text(completados);
+    $('#preview_faltantes').text(faltantes);
+    $('#preview_porcentaje').text(porcentaje + '%');
 }
 
 // Calcular automáticamente los valores en el modal
@@ -902,7 +953,6 @@ function obtenerParametrosCompliance() {
         'th_comp_requisitos_completados': $('#th_comp_requisitos_completados').val() || 0,
         'th_comp_requisitos_faltantes': $('#th_comp_requisitos_faltantes').val() || 0,
         'th_comp_ultima_revision': $('#th_comp_ultima_revision').val() || null,
-        'th_comp_estado': $('#th_comp_estado').val() || 1,
         'th_comp_observaciones': $('#th_comp_observaciones').val().trim() || ''
     };
 }
@@ -985,14 +1035,14 @@ function listar_compliance_cargo(cargoId) {
 
             const data = Array.isArray(response) ? response[0] : response;
 
-            // Extraer datos
-            const porcentaje = parseFloat(data.th_comp_porcentaje_completado || 0).toFixed(2);
-            const totales = parseInt(data.th_comp_requisitos_totales || 0);
-            const completados = parseInt(data.th_comp_requisitos_completados || 0);
-            const faltantes = parseInt(data.th_comp_requisitos_faltantes || 0);
-            const ultimaRevision = data.th_comp_ultima_revision || '';
-            const estado = data.th_comp_estado || '';
-            const observaciones = data.th_comp_observaciones || '';
+            // Extraer datos SIN el prefijo th_comp_
+            const porcentaje = parseFloat(data.porcentaje_completado || 0).toFixed(2);
+            const totales = parseInt(data.requisitos_totales || 0);
+            const completados = parseInt(data.requisitos_completados || 0);
+            const faltantes = parseInt(data.requisitos_faltantes || 0);
+            const ultimaRevision = data.ultima_revision || '';
+            const estado = data.estado || '';
+            const observaciones = data.observaciones || '';
 
             // Actualizar vista principal
             $('#comp_porcentaje').text(porcentaje + '%');
@@ -1060,6 +1110,8 @@ function listar_compliance_cargo(cargoId) {
             $('#badge_resumen').html(
                 `<i class="bi bi-graph-up me-1"></i>Completados: ${completados} de ${totales} (${porcentaje}%)`
             );
+
+            console.log('Compliance cargado exitosamente:', data);
         },
         error: function(err) {
             console.error('Error al cargar compliance:', err);
@@ -1164,6 +1216,369 @@ function eliminar_compliance() {
         }
     });
 }
+</script>
+
+<script>
+// ============================================
+// FUNCIONES PARA FUNCIONES DEL CARGO
+// ============================================
+
+function abrir_modal_funciones() {
+    var modal = new bootstrap.Modal(
+        document.getElementById('modal_funciones_cargo'), {
+            backdrop: 'static',
+            keyboard: false
+        }
+    );
+
+    // Limpiar formulario
+    $('#form_funciones_cargo')[0].reset();
+    $('#th_carfun_id').val('');
+    $('#th_car_id_funcion').val(<?= $_id ?>);
+    $('#pnl_crear_funcion').show();
+    $('#pnl_actualizar_funcion').hide();
+    $('#modalFuncionesLabel').html('<i class="bx bx-list-check me-2"></i> Registrar Función del Cargo');
+
+    // Limpiar vista previa
+    $('#preview_frecuencia').text('-');
+    $('#preview_porcentaje').text('0%');
+    $('#preview_tipo').removeClass('bg-warning bg-info').addClass('bg-secondary').text('-');
+    $('#preview_orden').text('#1');
+
+    modal.show();
+}
+
+// ============================================
+// ACTUALIZAR VISTA PREVIA EN TIEMPO REAL
+// ============================================
+function actualizarVistaPrevia() {
+    const frecuencia = $('#th_carfun_frecuencia').val() || '-';
+    const porcentaje = $('#th_carfun_porcentaje_tiempo').val() || '0';
+    const esPrincipal = $('#th_carfun_es_principal').val();
+    const orden = $('#th_carfun_orden').val() || '1';
+
+    $('#preview_frecuencia').text(frecuencia);
+    $('#preview_porcentaje').text(porcentaje + '%');
+    $('#preview_orden').text('#' + orden);
+
+    const $tipoBadge = $('#preview_tipo');
+    $tipoBadge.removeClass('bg-warning bg-info bg-secondary');
+
+    if (esPrincipal === '1') {
+        $tipoBadge.addClass('bg-warning').text('Principal');
+    } else if (esPrincipal === '0') {
+        $tipoBadge.addClass('bg-info').text('Secundaria');
+    } else {
+        $tipoBadge.addClass('bg-secondary').text('-');
+    }
+}
+
+// ============================================
+// OBTENER PARÁMETROS DEL FORMULARIO
+// ============================================
+function obtenerParametrosFuncion() {
+    return {
+        '_id': $('#th_carfun_id').val() || '',
+        'th_car_id': <?= $_id ?>,
+        'nombre': $('#th_carfun_nombre').val().trim(),
+        'descripcion': $('#th_carfun_descripcion').val().trim(),
+        'frecuencia': $('#th_carfun_frecuencia').val(),
+        'porcentaje_tiempo': $('#th_carfun_porcentaje_tiempo').val() || 0,
+        'es_principal': $('#th_carfun_es_principal').val() === '1' ? 1 : 0,
+        'orden': $('#th_carfun_orden').val() || 1,
+        'estado': 1
+    };
+}
+
+// ============================================
+// VALIDAR PARÁMETROS
+// ============================================
+function validarFuncionParametros(p) {
+    if (!p.th_car_id || p.th_car_id === '') {
+        Swal.fire('', 'ID del cargo no encontrado.', 'warning');
+        return false;
+    }
+    if (!p.nombre || p.nombre === '') {
+        Swal.fire('', 'El nombre de la función es obligatorio.', 'warning');
+        return false;
+    }
+    if (!p.frecuencia || p.frecuencia === '') {
+        Swal.fire('', 'La frecuencia es obligatoria.', 'warning');
+        return false;
+    }
+    const porcentaje = parseFloat(p.porcentaje_tiempo);
+    if (porcentaje < 0 || porcentaje > 100) {
+        Swal.fire('', 'El porcentaje de tiempo debe estar entre 0 y 100.', 'warning');
+        return false;
+    }
+    if (p.es_principal === '' || p.es_principal === null) {
+        Swal.fire('', 'Debe indicar si es función principal o no.', 'warning');
+        return false;
+    }
+    return true;
+}
+
+// ============================================
+// GUARDAR O ACTUALIZAR FUNCIÓN
+// ============================================
+function guardar_o_actualizar_funcion() {
+    var parametros = obtenerParametrosFuncion();
+
+    if (!validarFuncionParametros(parametros)) return;
+
+    $.ajax({
+        data: {
+            parametros: parametros
+        },
+        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_funcionesC.php?insertar_editar=true',
+        type: 'post',
+        dataType: 'json',
+        success: function(response) {
+            if (response == 1 || response === true) {
+                Swal.fire('', (parametros._id ? 'Función actualizada con éxito.' :
+                        'Función creada con éxito.'), 'success')
+                    .then(function() {
+                        var modalEl = document.getElementById('modal_funciones_cargo');
+                        var modal = bootstrap.Modal.getInstance(modalEl);
+                        if (modal) modal.hide();
+
+                        // Recargar tabla de funciones
+                        listar_funciones_cargo(<?= $_id ?>);
+                    });
+            } else if (response == -2) {
+                Swal.fire('', 'Ya existe una función con ese nombre para este cargo.', 'warning');
+            } else {
+                var msg = (typeof response === 'object' && response.msg) ? response.msg :
+                    'Error al guardar la función.';
+                Swal.fire('', msg, 'error');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error guardar_funcion:', status, error, xhr.responseText);
+            Swal.fire('', 'Error al conectar con el servidor: ' + xhr.responseText, 'error');
+        }
+    });
+}
+
+
+// ============================================
+// LISTAR FUNCIONES EN LA TABLA
+// ============================================
+function listar_funciones_cargo(cargoId) {
+    $.ajax({
+        data: {
+            id: cargoId
+        },
+        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_funcionesC.php?listar=true',
+        type: 'post',
+        dataType: 'json',
+        success: function(response) {
+            const $tbody = $('#tbody_funciones');
+            $tbody.empty();
+
+            if (!response || response.length === 0) {
+                $tbody.html(`
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">
+                            <i class="bx bx-info-circle" style="font-size: 2rem;"></i>
+                            <p class="mb-0 mt-2">No hay funciones registradas para este cargo</p>
+                        </td>
+                    </tr>
+                `);
+                actualizarEstadisticasFunciones(0, 0, 0, 0);
+                return;
+            }
+
+            let totalPrincipales = 0;
+            let totalSecundarias = 0;
+            let porcentajeAcumulado = 0;
+
+            response.forEach((func, index) => {
+                const esPrincipal = parseInt(func.th_carfun_es_principal) === 1;
+                const porcentaje = parseFloat(func.th_carfun_porcentaje_tiempo || 0);
+
+                if (esPrincipal) totalPrincipales++;
+                else totalSecundarias++;
+
+                porcentajeAcumulado += porcentaje;
+
+                const tipoBadge = esPrincipal ?
+                    '<span class="badge bg-warning"><i class="bx bx-star"></i> Principal</span>' :
+                    '<span class="badge bg-info"><i class="bx bx-bookmark"></i> Secundaria</span>';
+
+                const row = `
+                    <tr>
+                        <td class="text-center fw-bold">${index + 1}</td>
+                        <td>
+                            <div class="fw-bold text-primary">${func.th_carfun_nombre}</div>
+                            ${func.th_carfun_descripcion ? `<small class="text-muted">${func.th_carfun_descripcion}</small>` : ''}
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">
+                                <i class="bx bx-time"></i> ${func.th_carfun_frecuencia || 'N/A'}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <strong class="text-success">${porcentaje.toFixed(2)}%</strong>
+                        </td>
+                        <td class="text-center">${tipoBadge}</td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-primary" onclick="editar_funcion('${func._id}')" title="Editar">
+                                <i class="bx bx-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="confirmar_eliminar_funcion('${func._id}')" title="Eliminar">
+                                <i class="bx bx-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                $tbody.append(row);
+            });
+
+            actualizarEstadisticasFunciones(response.length, totalPrincipales, totalSecundarias,
+                porcentajeAcumulado);
+        },
+        error: function(err) {
+            console.error('Error al cargar funciones:', err);
+            $('#tbody_funciones').html(`
+                <tr>
+                    <td colspan="6" class="text-center py-4 text-danger">
+                        <i class="bx bx-error-circle" style="font-size: 2rem;"></i>
+                        <p class="mb-0 mt-2">Error al cargar las funciones</p>
+                    </td>
+                </tr>
+            `);
+        }
+    });
+}
+
+// ============================================
+// ACTUALIZAR ESTADÍSTICAS EN EL FOOTER
+// ============================================
+function actualizarEstadisticasFunciones(total, principales, secundarias, porcentajeTotal) {
+    $('#stat_total').text(total);
+    $('#stat_principales').text(principales);
+    $('#stat_secundarias').text(secundarias);
+    $('#stat_porcentaje_total').text(porcentajeTotal.toFixed(2) + '%');
+}
+
+// ============================================
+// EDITAR FUNCIÓN
+// ============================================
+function editar_funcion() {
+    $.ajax({
+        data: {
+            id: <?= $_id ?>
+        },
+        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_funcionesC.php?listar=true',
+        type: 'post',
+        dataType: 'json',
+        success: function(response) {
+            // Llenar formulario
+            $('#th_carfun_id').val(response[0]._id);
+            $('#th_car_id_funcion').val(response[0].th_car_id);
+            $('#th_carfun_nombre').val(response[0].th_carfun_nombre);
+            $('#th_carfun_descripcion').val(response[0].th_carfun_descripcion || '');
+            $('#th_carfun_frecuencia').val(response[0].th_carfun_frecuencia);
+            $('#th_carfun_porcentaje_tiempo').val(response[0].th_carfun_porcentaje_tiempo || 0);
+            $('#th_carfun_es_principal').val(response[0].th_carfun_es_principal);
+            $('#th_carfun_orden').val(response[0].th_carfun_orden || 1);
+
+            // Actualizar vista previa
+            actualizarVistaPrevia();
+
+            // Cambiar a modo edición
+            $('#pnl_crear_funcion').hide();
+            $('#pnl_actualizar_funcion').show();
+            $('#modalFuncionesLabel').html('<i class="bx bx-edit me-2"></i> Editar Función del Cargo');
+
+            // Abrir modal
+            var modal = new bootstrap.Modal(document.getElementById('modal_funciones_cargo'));
+            modal.show();
+        },
+        error: function(err) {
+            console.error('Error al cargar función:', err);
+            Swal.fire('', 'Error al cargar los datos de la función', 'error');
+        }
+    });
+}
+
+// ============================================
+// CONFIRMAR ELIMINAR FUNCIÓN
+// ============================================
+function confirmar_eliminar_funcion(funcionId) {
+    Swal.fire({
+        title: '¿Está seguro?',
+        text: "Esta acción eliminará la función del cargo",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            eliminar_funcion(funcionId);
+        }
+    });
+}
+
+// ============================================
+// ELIMINAR FUNCIÓN
+// ============================================
+function eliminar_funcion(funcionId) {
+    $.ajax({
+        data: {
+            id: funcionId
+        },
+        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_funcionesC.php?eliminar=true',
+        type: 'post',
+        dataType: 'json',
+        success: function(response) {
+            if (response == 1 || response === true) {
+                Swal.fire('Eliminado', 'La función ha sido eliminada.', 'success')
+                    .then(function() {
+                        listar_funciones_cargo(<?= $_id ?>);
+                    });
+            } else {
+                Swal.fire('', 'Error al eliminar la función.', 'error');
+            }
+        },
+        error: function(xhr) {
+            Swal.fire('', 'Error al conectar con el servidor: ' + xhr.responseText, 'error');
+        }
+    });
+}
+
+// ============================================
+// EVENT LISTENERS
+// ============================================
+$(function() {
+    // Actualizar vista previa en tiempo real
+    $('#th_carfun_frecuencia, #th_carfun_porcentaje_tiempo, #th_carfun_es_principal, #th_carfun_orden')
+        .on('input change', actualizarVistaPrevia);
+
+    // Actualizar
+    $(document).on('click', '#btn_editar_funcion', function(e) {
+        e.preventDefault();
+        guardar_o_actualizar_funcion();
+    });
+
+    // Eliminar desde modal
+    $(document).on('click', '#btn_eliminar_funcion', function(e) {
+        e.preventDefault();
+        const funcionId = $('#th_carfun_id').val();
+        if (funcionId) {
+            confirmar_eliminar_funcion(funcionId);
+        }
+    });
+
+    // Cargar funciones al iniciar
+    const cargoId = <?= $_id ?>;
+    if (cargoId) {
+        listar_funciones_cargo(cargoId);
+    }
+});
 </script>
 
 <style>
@@ -1588,6 +2003,8 @@ function eliminar_compliance() {
                                     </div>
                                 </div>
 
+
+
                                 <div class="tab-pane fade" id="complianceprofile" role="tabpanel">
                                     <section class="content pt-0">
                                         <div class="container-fluid">
@@ -1603,14 +2020,19 @@ function eliminar_compliance() {
                                                         Estado de cumplimiento de requisitos y documentación
                                                     </small>
                                                 </div>
-                                                <div class="col-md-4 text-end">
+
+                                                <div class="col-md-4 d-flex justify-content-end gap-2">
+                                                    <button type="button" class="btn btn-success btn-sm shadow-sm"
+                                                        onclick="abrir_modal_funciones()">
+                                                        <i class="bx bx-plus-circle me-1"></i> Funciones
+                                                    </button>
+
                                                     <button type="button" class="btn btn-success btn-sm shadow-sm"
                                                         onclick="abrir_modal_compliance()">
                                                         <i class="bx bx-plus-circle me-1"></i> Actualizar Compliance
                                                     </button>
                                                 </div>
                                             </div>
-
                                             <!-- Tarjeta Principal de Compliance -->
                                             <div class="card border-0 shadow-sm">
                                                 <div class="card-body p-4">
@@ -1760,6 +2182,79 @@ function eliminar_compliance() {
                                             </div>
 
                                         </div>
+
+                                        <div class="row mb-3 align-items-center">
+                                            <div class="col-md-8">
+                                                <h5 class="fw-bold text-primary mb-1">
+                                                    <i class="bx bx-list-check me-2"></i>Funciones del Cargo
+                                                </h5>
+                                                <small class="text-muted">
+                                                    <i class="bi bi-briefcase me-1"></i>
+                                                    Listado de funciones y responsabilidades del cargo
+                                                </small>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tarjeta con Tabla -->
+                                        <div class="card border-0 shadow-sm">
+                                            <div class="card-body p-0">
+
+                                                <!-- Tabla de Funciones -->
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover table-striped mb-0"
+                                                        id="tabla_funciones">
+                                                        <thead class="bg-light">
+                                                            <tr>
+                                                                <th class="text-center" style="width: 50px;">#</th>
+                                                                <th><i class="bx bx-notepad me-1"></i> Función</th>
+                                                                <th><i class="bx bx-time me-1"></i> Frecuencia</th>
+                                                                <th class="text-center"><i
+                                                                        class="bx bx-pie-chart-alt-2 me-1"></i> %
+                                                                    Tiempo</th>
+                                                                <th class="text-center"><i class="bx bx-star me-1"></i>
+                                                                    Tipo</th>
+                                                                <th class="text-center"><i class="bx bx-cog me-1"></i>
+                                                                    Acciones</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbody_funciones">
+                                                            <!-- Se cargará dinámicamente -->
+                                                            <tr>
+                                                                <td colspan="6" class="text-center py-4 text-muted">
+                                                                    <i class="bx bx-loader bx-spin"
+                                                                        style="font-size: 2rem;"></i>
+                                                                    <p class="mb-0 mt-2">Cargando funciones...</p>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <!-- Footer con estadísticas -->
+                                                <div class="card-footer bg-light">
+                                                    <div class="row text-center">
+                                                        <div class="col-md-3">
+                                                            <small class="text-muted d-block">Total
+                                                                Funciones</small>
+                                                            <strong class="text-primary" id="stat_total">0</strong>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <small class="text-muted d-block">Principales</small>
+                                                            <strong class="text-warning"
+                                                                id="stat_principales">0</strong>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <small class="text-muted d-block">Secundarias</small>
+                                                            <strong class="text-info" id="stat_secundarias">0</strong>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <small class="text-muted d-block">% Asignado</small>
+                                                            <strong class="text-success"
+                                                                id="stat_porcentaje_total">0%</strong>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                     </section>
                                 </div>
                             </div>
@@ -2009,18 +2504,7 @@ function eliminar_compliance() {
                         </div>
 
                         <!-- Estado -->
-                        <div class="col-md-6">
-                            <label for="th_comp_estado" class="form-label fw-bold">
-                                <i class="bx bx-flag me-2 text-secondary"></i> Estado
-                            </label>
-                            <select class="form-select" id="th_comp_estado" name="th_comp_estado" required>
-                                <option value="">-- Seleccione --</option>
-                                <option value="1">Activo</option>
-                                <option value="0">Inactivo</option>
-                                <option value="2">En Revisión</option>
-                                <option value="3">Observado</option>
-                            </select>
-                        </div>
+
 
                         <!-- Observaciones -->
                         <div class="col-md-12">
@@ -2084,3 +2568,244 @@ function eliminar_compliance() {
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="modal_funciones_cargo" tabindex="-1" aria-labelledby="modalFuncionesLabel"
+    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-modal="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalFuncionesLabel">
+                    <i class="bx bx-list-check me-2"></i> Registrar Función del Cargo
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Cerrar"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body p-4">
+                <form id="form_funciones_cargo">
+                    <input type="hidden" id="th_carfun_id" name="th_carfun_id">
+                    <input type="hidden" id="th_car_id_funcion" name="th_car_id_funcion">
+
+                    <div class="row g-3">
+
+                        <!-- Nombre de la Función -->
+                        <div class="col-md-12">
+                            <label for="th_carfun_nombre" class="form-label fw-bold">
+                                <i class="bx bx-notepad me-2 text-primary"></i> Nombre de la Función
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="th_carfun_nombre" name="th_carfun_nombre"
+                                placeholder="Ej: Supervisión de equipos de trabajo" required>
+                            <small class="text-muted">
+                                <i class="bi bi-info-circle"></i> Título breve y descriptivo de la función
+                            </small>
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="col-md-12">
+                            <label for="th_carfun_descripcion" class="form-label fw-bold">
+                                <i class="bx bx-message-detail me-2 text-info"></i> Descripción
+                            </label>
+                            <textarea class="form-control" id="th_carfun_descripcion" name="th_carfun_descripcion"
+                                rows="4"
+                                placeholder="Detalle las actividades y responsabilidades específicas de esta función..."></textarea>
+                            <small class="text-muted">
+                                <i class="bi bi-pencil"></i> Describa detalladamente las actividades de esta función
+                            </small>
+                        </div>
+
+                        <!-- Frecuencia -->
+                        <div class="col-md-6">
+                            <label for="th_carfun_frecuencia" class="form-label fw-bold">
+                                <i class="bx bx-time me-2 text-warning"></i> Frecuencia
+                                <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select" id="th_carfun_frecuencia" name="th_carfun_frecuencia" required>
+                                <option value="">-- Seleccione frecuencia --</option>
+                                <option value="Diaria">Diaria</option>
+                                <option value="Semanal">Semanal</option>
+                                <option value="Quincenal">Quincenal</option>
+                                <option value="Mensual">Mensual</option>
+                                <option value="Trimestral">Trimestral</option>
+                                <option value="Semestral">Semestral</option>
+                                <option value="Anual">Anual</option>
+                                <option value="Eventual">Eventual</option>
+                                <option value="Permanente">Permanente</option>
+                            </select>
+                        </div>
+
+                        <!-- Porcentaje de Tiempo -->
+                        <div class="col-md-6">
+                            <label for="th_carfun_porcentaje_tiempo" class="form-label fw-bold">
+                                <i class="bx bx-pie-chart-alt-2 me-2 text-success"></i> Porcentaje de Tiempo (%)
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="number" class="form-control" id="th_carfun_porcentaje_tiempo"
+                                name="th_carfun_porcentaje_tiempo" min="0" max="100" step="0.01" placeholder="Ej: 25.5"
+                                required>
+                            <small class="text-muted">
+                                <i class="bi bi-calculator"></i> % del tiempo dedicado a esta función (0-100)
+                            </small>
+                        </div>
+
+                        <!-- Es Función Principal -->
+                        <div class="col-md-6">
+                            <label for="th_carfun_es_principal" class="form-label fw-bold">
+                                <i class="bx bx-star me-2 text-warning"></i> ¿Es Función Principal?
+                                <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select" id="th_carfun_es_principal" name="th_carfun_es_principal"
+                                required>
+                                <option value="">-- Seleccione --</option>
+                                <option value="1">Sí, es función principal</option>
+                                <option value="0">No, es función secundaria</option>
+                            </select>
+                            <small class="text-muted">
+                                <i class="bi bi-info-circle"></i> Indica si es una función primaria del cargo
+                            </small>
+                        </div>
+
+                        <!-- Orden de Prioridad -->
+                        <div class="col-md-6">
+                            <label for="th_carfun_orden" class="form-label fw-bold">
+                                <i class="bx bx-sort-alt-2 me-2 text-secondary"></i> Orden de Prioridad
+                            </label>
+                            <input type="number" class="form-control" id="th_carfun_orden" name="th_carfun_orden"
+                                min="1" placeholder="Ej: 1, 2, 3..." value="1">
+                            <small class="text-muted">
+                                <i class="bi bi-sort-numeric-down"></i> Orden en que aparecerá la función (menor número
+                                = mayor prioridad)
+                            </small>
+                        </div>
+
+                        <!-- Resumen Visual -->
+                        <div class="col-12">
+                            <div class="alert alert-light border">
+                                <h6 class="fw-bold mb-3">
+                                    <i class="bi bi-eye me-2"></i>Vista Previa:
+                                </h6>
+                                <div class="row g-2">
+                                    <div class="col-md-3">
+                                        <small class="text-muted d-block">Frecuencia</small>
+                                        <strong id="preview_frecuencia" class="text-primary">-</strong>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <small class="text-muted d-block">% Tiempo</small>
+                                        <strong id="preview_porcentaje" class="text-success">0%</strong>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <small class="text-muted d-block">Tipo</small>
+                                        <span id="preview_tipo" class="badge bg-secondary">-</span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <small class="text-muted d-block">Prioridad</small>
+                                        <strong id="preview_orden" class="text-dark">#1</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="d-flex justify-content-end gap-2 pt-3 mt-3 border-top">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                            <i class="bx bx-x me-1"></i> Cancelar
+                        </button>
+
+                        <div id="pnl_crear_funcion">
+                            <button type="button" class="btn btn-success" onclick="guardar_o_actualizar_funcion()">
+                                <i class="bx bx-save me-1"></i> Guardar Función
+                            </button>
+                        </div>
+
+                        <div id="pnl_actualizar_funcion" style="display:none">
+                            <button type="button" class="btn btn-danger" id="btn_eliminar_funcion">
+                                <i class="bx bx-trash me-1"></i> Eliminar
+                            </button>
+                            <button type="button" class="btn btn-primary" id="btn_editar_funcion">
+                                <i class="bx bx-check me-1"></i> Actualizar Función
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+// ============================================
+// FUNCIONES PARA VISTA PREVIA EN TIEMPO REAL
+// ============================================
+
+$(function() {
+    // Actualizar vista previa de frecuencia
+    $('#th_carfun_frecuencia').on('change', function() {
+        const valor = $(this).val();
+        $('#preview_frecuencia').text(valor || '-');
+    });
+
+    // Actualizar vista previa de porcentaje
+    $('#th_carfun_porcentaje_tiempo').on('input change', function() {
+        const valor = parseFloat($(this).val()) || 0;
+        $('#preview_porcentaje').text(valor.toFixed(2) + '%');
+    });
+
+    // Actualizar vista previa de tipo (principal/secundaria)
+    $('#th_carfun_es_principal').on('change', function() {
+        const valor = $(this).val();
+        const $badge = $('#preview_tipo');
+
+        if (valor === '1') {
+            $badge.removeClass('bg-secondary bg-info')
+                .addClass('bg-warning')
+                .html('<i class="bx bx-star me-1"></i>Principal');
+        } else if (valor === '0') {
+            $badge.removeClass('bg-secondary bg-warning')
+                .addClass('bg-info')
+                .html('<i class="bx bx-checkbox-checked me-1"></i>Secundaria');
+        } else {
+            $badge.removeClass('bg-warning bg-info')
+                .addClass('bg-secondary')
+                .text('-');
+        }
+    });
+
+    // Actualizar vista previa de orden
+    $('#th_carfun_orden').on('input change', function() {
+        const valor = parseInt($(this).val()) || 1;
+        $('#preview_orden').text('#' + valor);
+    });
+});
+
+// ============================================
+// FUNCIÓN PARA ABRIR MODAL DE NUEVA FUNCIÓN
+// ============================================
+function abrir_modal_funcion(cargoId) {
+    // Limpiar formulario
+    $('#form_funciones_cargo')[0].reset();
+    $('#th_carfun_id').val('');
+    $('#th_car_id_funcion').val(cargoId);
+
+    // Resetear vista previa
+    $('#preview_frecuencia').text('-');
+    $('#preview_porcentaje').text('0%');
+    $('#preview_tipo').removeClass('bg-warning bg-info').addClass('bg-secondary').text('-');
+    $('#preview_orden').text('#1');
+
+    // Modo crear
+    $('#pnl_crear_funcion').show();
+    $('#pnl_actualizar_funcion').hide();
+    $('#modalFuncionesLabel').html('<i class="bx bx-list-check me-2"></i> Registrar Función del Cargo');
+
+    // Abrir modal
+    $('#modal_funciones_cargo').modal('show');
+}
+</script>

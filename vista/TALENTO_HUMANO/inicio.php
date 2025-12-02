@@ -319,3 +319,8 @@ if ($_GET['acc'] == 'th_contr_niveles_cargo') {
 if ($_GET['acc'] == 'th_registrar_niveles_cargo') {
 	include('TALENTO_HUMANO/CONTRATACION/CARGO_NIVELES/th_registrar_niveles_cargo.php');
 }
+
+
+if ($_GET['acc'] == 'th_servicio_catering') {
+	include('TALENTO_HUMANO/CONTRATACION/CATERING/th_servicio_catering.php');
+}
