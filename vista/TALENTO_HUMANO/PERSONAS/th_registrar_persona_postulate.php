@@ -12,454 +12,622 @@ if (isset($_GET['_id_per'])) {
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script type="text/javascript">
-    $(document).ready(function() {
-        dispositivos();
-        // cargar_tabla();
-        <?php if (isset($_GET['_id_per'])) { ?>
-            cargar_datos_persona(<?= $_id ?>);
-            cargar_departamento(<?= $_id ?>);
-        <?php } ?>
-        cargar_selects2();
+$(document).ready(function() {
+    dispositivos();
 
+    <?php if (isset($_GET['_id_per'])) { ?>
+    cargar_datos_persona(<?= $_id ?>);
+    cargar_departamento(<?= $_id ?>);
+    <?php } ?>
+
+    cargar_selects2();
+    inicializar_eventos_formulario();
+});
+
+/**
+ * Inicializar eventos del formulario
+ */
+function inicializar_eventos_formulario() {
+    // Calcular edad al cambiar fecha de nacimiento
+    $('#txt_fecha_nacimiento').on('change', function() {
+        calcular_edad('txt_edad', $(this).val());
     });
 
-     function cargar_datos_persona(id) {
-        $.ajax({
-            url: '../controlador/GENERAL/th_personasC.php?listar=true',
-            type: 'post',
-            data: { id: id },
-            dataType: 'json',
-            success: function(response) {
-                if (!response || response.length === 0) {
-                    console.error('No se encontraron datos para la persona');
-                    return;
-                }
+    // Evento para click en imagen de foto
+    $('#img_foto_preview').on('click', function() {
+        $('#file_foto').click();
+    });
 
-                let persona = response[0];
-                
-                // Cargar datos personales
-                $('#txt_primer_nombre').val(persona.primer_nombre);
-                $('#txt_segundo_nombre').val(persona.segundo_nombre);
-                $('#txt_primer_apellido').val(persona.primer_apellido);
-                $('#txt_segundo_apellido').val(persona.segundo_apellido);
-                $('#txt_fecha_nacimiento').val(persona.fecha_nacimiento);
-                $('#ddl_nacionalidad').val(persona.nacionalidad);
-                $('#txt_cedula').val(persona.cedula);
-                $('#ddl_estado_civil').val(persona.estado_civil);
-                $('#ddl_sexo').val(persona.sexo);
-                $('#txt_telefono_1').val(persona.telefono_1);
-                $('#txt_telefono_2').val(persona.telefono_2);
-                $('#txt_correo').val(persona.correo);
-                $('#txt_codigo_postal').val(persona.postal);
-                $('#txt_direccion').val(persona.direccion);
-                $('#txt_observaciones').val(persona.observaciones);
-                $('#ddl_tipo_sangre').val(persona.tipo_sangre);
-
-                calcular_edad('txt_edad', persona.fecha_nacimiento);
-
-                // Cargar ubicación
-                if (persona.id_provincia != null) {
-                    cargar_select2_con_id('ddl_provincias', 
-                        '../controlador/GENERAL/th_provinciasC.php?listar=true', 
-                        persona.id_provincia, 'th_prov_nombre');
-                    cargar_select2_con_id('ddl_ciudad', 
-                        '../controlador/GENERAL/th_ciudadC.php?listar=true', 
-                        persona.id_ciudad, 'th_ciu_nombre');
-                    cargar_select2_con_id('ddl_parroquia', 
-                        '../controlador/GENERAL/th_parroquiasC.php?listar=true', 
-                        persona.id_parroquia, 'th_parr_nombre');
-                }
-
-                // Datos de visualización
-                let nombres_completos = `${persona.primer_apellido} ${persona.segundo_apellido} ${persona.primer_nombre} ${persona.segundo_nombre}`;
-                $('#txt_nombres_completos_v').html(nombres_completos);
-                $('#txt_fecha_nacimiento_v').html(persona.fecha_nacimiento);
-                $('#txt_nacionalidad_v').html(persona.nacionalidad);
-                $('#txt_estado_civil_v').html(persona.estado_civil);
-                $('#txt_numero_cedula_v').html(persona.cedula);
-                $('#txt_telefono_1_v').html(persona.telefono_1);
-                $('#txt_correo_v').html(persona.correo);
-
-                // Inputs para modales (mantener compatibilidad)
-                $('input[name="txt_postulante_id"]').val(<?=$_id_postulante?>);
-                $('input[name="txt_postulante_cedula"]').val(persona.cedula);
-
-                // Guardar id_comunidad si existe (para relación postulante)
-                if (persona.id_comunidad) {
-                    console.log('ID Comunidad (Postulante asociado):', persona.id_comunidad);
-                    // Puedes guardar esto en un campo hidden o variable global
-                    window.idPostulanteAsociado = persona.id_comunidad;
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error cargando datos de persona:', error);
-                Swal.fire('Error', 'No se pudieron cargar los datos de la persona', 'error');
+    // Evento para cambio de archivo de foto
+    $('#file_foto').on('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $('#img_foto_preview').attr('src', e.target.result);
             }
-        });
-    }
-    function parametros_persona() {
-        return parametros = {
-            'txt_primer_nombre': $('#txt_primer_nombre').val(),
-            'txt_segundo_nombre': $('#txt_segundo_nombre').val(),
-            'txt_primer_apellido': $('#txt_primer_apellido').val(),
-            'txt_segundo_apellido': $('#txt_segundo_apellido').val(),
-            'txt_fecha_nacimiento': $('#txt_fecha_nacimiento').val(),
-            'ddl_nacionalidad': $('#ddl_nacionalidad').val(),
-            'txt_cedula': $('#txt_cedula').val(),
-            'ddl_estado_civil': $('#ddl_estado_civil').val(),
-            'ddl_sexo': $('#ddl_sexo').val(),
-            'txt_telefono_1': $('#txt_telefono_1').val(),
-            'txt_telefono_2': $('#txt_telefono_2').val(),
-            'txt_correo': $('#txt_correo').val(),
-            'ddl_provincias': $('#ddl_provincias').val(),
-            'ddl_ciudad': $('#ddl_ciudad').val(),
-            'ddl_parroquia': $('#ddl_parroquia').val(),
-            'txt_codigo_postal': $('#txt_codigo_postal').val(),
-            'txt_direccion': $('#txt_direccion').val(),
-            'txt_observaciones': $('#txt_observaciones').val(),
-            'ddl_tipo_sangre': $('#ddl_tipo_sangre').val(),
-        };
-    }
-
-     function insertar_editar_persona() {
-        let parametros = {
-            '_id': '<?= $_id ?>',
-        };
-
-        let parametros_vista_persona = parametros_persona();
-        parametros = {
-            ...parametros,
-            ...parametros_vista_persona
-        };
-
-        if ($("#registrar_personas").valid()) {
-            // Si es válido, puedes proceder a enviar los datos por AJAX
-            insertar(parametros);
+            reader.readAsDataURL(file);
         }
-    }
+    });
 
-    function insertar(parametros) {
-        $.ajax({
-            data: {
-                parametros: parametros
-            },
-            url: '../controlador/GENERAL/th_personasC.php?insertar=true',
-            type: 'post',
-            dataType: 'json',
+    // Cascada de select ubicación
+    $('#ddl_provincias').on('change', function() {
+        const provinciaId = $(this).val();
+        if (provinciaId) {
+            cargar_select2_con_filtro('ddl_ciudad', '../controlador/GENERAL/th_ciudadC.php?listar=true',
+                'th_prov_id', provinciaId);
+        }
+        $('#ddl_parroquia').html('<option value="">-- Selecciona una Parroquia --</option>');
+    });
 
-            success: function(response) {
-                if (response == 1) {
-                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                    });
-                } else if (response == -2) {
-                    //Swal.fire('', 'Operación fallida', 'warning');
-                    $(txt_cedula).addClass('is-invalid');
-                    $('#error_txt_cedula').text('La cédula ya está en uso.');
+    $('#ddl_ciudad').on('change', function() {
+        const ciudadId = $(this).val();
+        if (ciudadId) {
+            cargar_select2_con_filtro('ddl_parroquia', '../controlador/GENERAL/th_parroquiasC.php?listar=true',
+                'th_ciu_id', ciudadId);
+        }
+    });
+
+    // Mostrar/ocultar campos de discapacidad
+    $('#ddl_tipo_discapacidad').on('change', function() {
+        if ($(this).val() === 'Ninguna' || $(this).val() === '') {
+            $('#txt_porcentaje_discapacidad').val('').prop('disabled', true);
+            $('#ddl_escala_discapacidad').val('').prop('disabled', true);
+        } else {
+            $('#txt_porcentaje_discapacidad').prop('disabled', false);
+            $('#ddl_escala_discapacidad').prop('disabled', false);
+        }
+    });
+
+    // Limpiar error de cédula al escribir
+    $('#txt_cedula').on('input', function() {
+        $(this).removeClass('is-invalid');
+        $('#error_txt_cedula').text('');
+    });
+}
+
+/**
+ * Cargar datos de persona desde la BD
+ */
+function cargar_datos_persona(id) {
+    $.ajax({
+        url: '../controlador/GENERAL/th_personasC.php?listar=true',
+        type: 'post',
+        data: {
+            id: id
+        },
+        dataType: 'json',
+        beforeSend: function() {
+            Swal.fire({
+                title: 'Cargando...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
                 }
-            },
+            });
+        },
+        success: function(response) {
+            Swal.close();
 
-            error: function(xhr, status, error) {
-                console.log('Status: ' + status);
-                console.log('Error: ' + error);
-                console.log('XHR Response: ' + xhr.responseText);
-
-                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            if (!response || response.length === 0) {
+                Swal.fire('Error', 'No se encontraron datos para la persona', 'error');
+                return;
             }
-        });
 
-        $('#txt_cedula').on('input', function() {
-            $('#error_txt_cedula').text('');
-        });
+            const persona = response[0];
+
+            // Cargar datos en el formulario
+            cargar_formulario_persona(persona);
+
+            // Cargar datos de visualización
+            cargar_vista_persona(persona);
+
+            // Cargar ubicación
+            cargar_ubicacion_persona(persona);
+
+            // Cargar cargo
+            if (persona.th_car_id && persona.th_car_id != 0) {
+                $('#ddl_cargo').append($('<option>', {
+                    value: persona.th_car_id,
+                    text: persona.th_car_nombre || 'Cargo',
+                    selected: true
+                }));
+            }
+
+            // Cargar foto
+            if (persona.th_per_foto_url) {
+                $('#img_persona_inf').attr('src', persona.th_per_foto_url + '?' + Math.random());
+                $('#img_foto_preview').attr('src', persona.th_per_foto_url);
+            }
+
+            // Datos para compatibilidad con postulantes
+            $('input[name="txt_postulante_id"]').val(<?=$_id_postulante ?? 0?>);
+            $('input[name="txt_postulante_cedula"]').val(persona.th_per_cedula);
+
+            if (persona.th_per_id_comunidad) {
+                window.idPostulanteAsociado = persona.th_per_id_comunidad;
+            }
+        },
+        error: function(xhr, status, error) {
+            Swal.close();
+            console.error('Error cargando datos:', error);
+            Swal.fire('Error', 'No se pudieron cargar los datos de la persona', 'error');
+        }
+    });
+}
+
+/**
+ * Cargar datos en formulario
+ */
+function cargar_formulario_persona(persona) {
+    $('#txt_primer_nombre').val(persona.primer_nombre || persona.th_per_primer_nombre || '');
+    $('#txt_segundo_nombre').val(persona.segundo_nombre || persona.th_per_segundo_nombre || '');
+    $('#txt_primer_apellido').val(persona.primer_apellido || persona.th_per_primer_apellido || '');
+    $('#txt_segundo_apellido').val(persona.segundo_apellido || persona.th_per_segundo_apellido || '');
+    $('#txt_fecha_nacimiento').val(persona.fecha_nacimiento || persona.th_per_fecha_nacimiento || '');
+    $('#ddl_nacionalidad').val(persona.nacionalidad || persona.th_per_nacionalidad || '');
+    $('#txt_cedula').val(persona.cedula || persona.th_per_cedula || '');
+    $('#ddl_estado_civil').val(persona.estado_civil || persona.th_per_estado_civil || '');
+    $('#ddl_sexo').val(persona.sexo || persona.th_per_sexo || '');
+    $('#txt_telefono_1').val(persona.telefono_1 || persona.th_per_telefono_1 || '');
+    $('#txt_telefono_2').val(persona.telefono_2 || persona.th_per_telefono_2 || '');
+    $('#txt_correo').val(persona.correo || persona.th_per_correo || '');
+    $('#txt_codigo_postal').val(persona.postal || persona.th_per_postal || '');
+    $('#txt_direccion').val(persona.direccion || persona.th_per_direccion || '');
+    $('#txt_observaciones').val(persona.observaciones || persona.th_per_observaciones || '');
+    $('#ddl_tipo_sangre').val(persona.tipo_sangre || persona.th_per_tipo_sangre || '');
+
+    // campos nuevos (usa el alias sin prefijo si existe, sino con prefijo)
+    $('#ddl_etnia').val(persona.etnia || persona.th_per_etnia || '');
+    $('#ddl_orientacion').val(persona.orientacion || persona.th_per_orientacion || '');
+    $('#ddl_religion').val(persona.religion || persona.th_per_religion || '');
+    $('#ddl_tipo_discapacidad').val(persona.tipo_discapacidad || persona.th_per_tipo_discapacidad || '');
+    $('#txt_porcentaje_discapacidad').val(persona.porcentaje_discapacidad || persona.th_per_porcentaje_discapacidad ||
+        '');
+    $('#ddl_escala_discapacidad').val(persona.escala_discapacidad || persona.th_per_escala_discapacidad || '');
+
+    $('#txt_nivel_academico_general').val(persona.nivel_academico_general || persona.th_per_nivel_academico_general ||
+        '');
+    $('#txt_titulo_maximo').val(persona.titulo_maximo || persona.th_per_titulo_maximo || '');
+    $('#txt_senescyt_maximo').val(persona.numero_registro_senescyt_maximo || persona.th_per_senescyt_maximo || '');
+
+    $('#ddl_clase_auto').val(persona.clase_auto || persona.th_per_clase_auto || '');
+    $('#txt_placa_original').val(persona.placa_original || persona.th_per_placa_original || '');
+    $('#txt_placa_sintesis').val(persona.placa_sintesis || persona.th_per_placa_sintesis || '');
+
+    $('#txt_comision_asuntos_sociales').val(persona.comision_asuntos_sociales || persona
+        .th_per_comision_asuntos_sociales || '');
+    $('#txt_remuneracion').val(persona.remuneracion || persona.th_per_remuneracion || '');
+    // fecha_ingreso: si viene con timestamp, tomar solo la parte fecha para el input date
+    var fechaIngreso = persona.fecha_ingreso || persona.th_per_fecha_ingreso || '';
+    $('#txt_fecha_ingreso').val(fechaIngreso ? (fechaIngreso.split(' ')[0] || fechaIngreso) : '');
+    $('#txt_anios_trabajo').val(persona.anios_trabajo || persona.th_per_anios_trabajo || '');
+    $('#txt_seccion').val(persona.seccion || persona.th_per_seccion || '');
+
+    // cargo: carga select con nombre si viene (usa id para seleccionar)
+    if (persona.th_car_id || persona.th_car_id === 0) {
+        $('#ddl_cargo').append($('<option>', {
+            value: persona.th_car_id,
+            text: persona.th_car_nombre || '',
+            selected: true
+        }));
     }
 
-    function delete_datos_persona() {
-        var id = '<?= $_id; ?>';
-        Swal.fire({
-            title: 'Eliminar Registro?',
-            text: "Esta seguro de eliminar este registro?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.value) {
-                eliminar_persona(id);
-            }
-        })
+    // Si tienes nombres y quieres mostrarlos en la vista
+    var nombres = persona.nombres_completos || persona.th_per_nombres_completos ||
+        `${persona.primer_apellido || ''} ${persona.segundo_apellido || ''} ${persona.primer_nombre || ''} ${persona.segundo_nombre || ''}`
+        .trim();
+    $('#txt_nombres_completos_v').html(nombres);
+
+    // calcular edad si hay fecha
+    var fechaNac = persona.fecha_nacimiento || persona.th_per_fecha_nacimiento || '';
+    if (fechaNac) {
+        calcular_edad('txt_edad', fechaNac);
     }
 
-    function eliminar_persona(id) {
-        $.ajax({
-            data: {
-                id: id
-            },
-            url: '../controlador/GENERAL/th_personasC.php?eliminar=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                if (response == 1) {
-                    Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-                    });
+    console.log('Datos cargados en formulario:', persona);
+}
+
+
+/**
+ * Cargar datos de visualización (panel izquierdo)
+ */
+function cargar_vista_persona(persona) {
+    const nombres_completos =
+        `${persona.th_per_primer_apellido || ''} ${persona.th_per_segundo_apellido || ''} ${persona.th_per_primer_nombre || ''} ${persona.th_per_segundo_nombre || ''}`
+        .trim();
+
+    $('#txt_nombres_completos_v').html(persona.nombres_completos);
+    $('#txt_fecha_nacimiento_v').html(persona.fecha_nacimiento || 'N/A');
+    $('#txt_nacionalidad_v').html(persona.nacionalidad || 'N/A');
+    $('#txt_estado_civil_v').html(persona.estado_civil || 'N/A');
+    $('#txt_numero_cedula_v').html(persona.cedula || 'N/A');
+    $('#txt_telefono_1_v').html(persona.telefono_1 || 'N/A');
+    $('#txt_correo_v').html(persona.correo || 'N/A');
+}
+
+/**
+ * Cargar ubicación con select2
+ */
+function cargar_ubicacion_persona(persona) {
+    if (persona.th_prov_id && persona.th_prov_id != 0) {
+        cargar_select2_con_id('ddl_provincias',
+            '../controlador/GENERAL/th_provinciasC.php?listar=true',
+            persona.th_prov_id,
+            'th_prov_nombre');
+    }
+
+    if (persona.th_ciu_id && persona.th_ciu_id != 0) {
+        cargar_select2_con_id('ddl_ciudad',
+            '../controlador/GENERAL/th_ciudadC.php?listar=true',
+            persona.th_ciu_id,
+            'th_ciu_nombre');
+    }
+
+    if (persona.th_parr_id && persona.th_parr_id != 0) {
+        cargar_select2_con_id('ddl_parroquia',
+            '../controlador/GENERAL/th_parroquiasC.php?listar=true',
+            persona.th_parr_id,
+            'th_parr_nombre');
+    }
+}
+
+/**
+ * Obtener parámetros del formulario
+ */
+function parametros_persona() {
+    return {
+        '_id': '<?= $_id ?>',
+        'txt_primer_nombre': $('#txt_primer_nombre').val().trim(),
+        'txt_segundo_nombre': $('#txt_segundo_nombre').val().trim(),
+        'txt_primer_apellido': $('#txt_primer_apellido').val().trim(),
+        'txt_segundo_apellido': $('#txt_segundo_apellido').val().trim(),
+        'txt_fecha_nacimiento': $('#txt_fecha_nacimiento').val(),
+        'ddl_nacionalidad': $('#ddl_nacionalidad').val(),
+        'txt_cedula': $('#txt_cedula').val().trim(),
+        'ddl_estado_civil': $('#ddl_estado_civil').val(),
+        'ddl_sexo': $('#ddl_sexo').val(),
+        'txt_telefono_1': $('#txt_telefono_1').val().trim(),
+        'txt_telefono_2': $('#txt_telefono_2').val().trim(),
+        'txt_correo': $('#txt_correo').val().trim(),
+        'ddl_provincias': $('#ddl_provincias').val(),
+        'ddl_ciudad': $('#ddl_ciudad').val(),
+        'ddl_parroquia': $('#ddl_parroquia').val(),
+        'ddl_cargo': $('#ddl_cargo').val(),
+        'txt_codigo_postal': $('#txt_codigo_postal').val().trim(),
+        'txt_direccion': $('#txt_direccion').val().trim(),
+        'txt_observaciones': $('#txt_observaciones').val().trim(),
+        'ddl_tipo_sangre': $('#ddl_tipo_sangre').val(),
+        'ddl_etnia': $('#ddl_etnia').val(),
+        'ddl_religion': $('#ddl_religion').val(),
+        'ddl_orientacion': $('#ddl_orientacion').val(),
+        'ddl_tipo_discapacidad': $('#ddl_tipo_discapacidad').val(),
+        'txt_porcentaje_discapacidad': $('#txt_porcentaje_discapacidad').val(),
+        'ddl_escala_discapacidad': $('#ddl_escala_discapacidad').val(),
+        'txt_foto_url': $('#img_foto_preview').attr('src')
+    };
+}
+
+/**
+ * Insertar o editar información personal
+ */
+function insertar_editar_informacion_personal() {
+    if (!$("#form_informacion_personal").valid()) {
+        Swal.fire('Advertencia', 'Por favor complete todos los campos obligatorios', 'warning');
+        return;
+    }
+
+    const parametros = parametros_persona();
+
+    // Validaciones adicionales
+    if (!validar_cedula(parametros.txt_cedula)) {
+        Swal.fire('Advertencia', 'La cédula ingresada no es válida', 'warning');
+        return;
+    }
+
+    if (parametros.txt_correo && !validar_email(parametros.txt_correo)) {
+        Swal.fire('Advertencia', 'El correo electrónico no es válido', 'warning');
+        return;
+    }
+
+    $.ajax({
+        data: {
+            parametros: parametros
+        },
+        url: '../controlador/GENERAL/th_personasC.php?insertar=true',
+        type: 'post',
+        dataType: 'json',
+        beforeSend: function() {
+            Swal.fire({
+                title: 'Guardando...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
                 }
-            }
-        });
-    }
-
-
-
-    function dispositivos() {
-        $.ajax({
-            // data: {
-            //     id: id
-            // },
-            url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?listar=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                console.log(response);
-                op = '';
-                response.forEach(function(item, i) {
-                    op += '<option value="' + item._id + '">' + item.nombre + '</option>';
-                })
-                $('#ddl_dispositivos').html(op);
-
-            },
-            error: function(xhr, status, error) {
-                console.log('Status: ' + status);
-                console.log('Error: ' + error);
-                console.log('XHR Response: ' + xhr.responseText);
-
-                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
-            }
-        });
-    }
-
-    function cargar_departamento(id) {
-        $.ajax({
-            data: {
-                id: id
-            },
-            url: '../controlador/TALENTO_HUMANO/th_personasC.php?listar_persona_departamento=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                if (response && response.length > 0) {
-                    // Cargar el _id_perdep en el campo oculto para edición
-                    $('#id_perdep').val(response[0]._id_perdep);
-
-                    // Cargar el departamento seleccionado
-                    $('#ddl_departamentos').append($('<option>', {
-                        value: response[0].id_departamento,
-                        text: response[0].nombre_departamento,
-                        selected: true
-                    }));
-
-                    if (response[0].id_departamento == 0) {
-                        cargar_persona_horario(response[0].id_persona);
-                        $('#pnl_horarios_persona').hide();
-                    } else {
-                        cargar_persona_horario(response[0].id_persona);
-                        $('#pnl_horarios_persona').show();
-                    }
-                }
-            },
-            error: function(xhr, status, error) { 
-                console.error('Error al cargar departamento:', error);
-            }
-        });
-    }
-
-  
-
-    
-
-
-    function cargar_turnos_horario(id_horario) {
-
-        $.ajax({
-            url: '../controlador/TALENTO_HUMANO/th_turnos_horarioC.php?listar=true',
-            type: 'post',
-            data: {
-                id: id_horario,
-            },
-            dataType: 'json',
-
-            success: function(response) {
-
-                calendar.removeAllEvents();
-                // Recorrer la respuesta y agregar eventos al arreglo events
-                response.forEach(function(evento) {
-                    //console.log(evento);
-
-                    if (evento.dia == '1') {
-                        fecha_dia_estatico = '2024-02-11';
-                    } else if (evento.dia == '2') {
-                        fecha_dia_estatico = '2024-02-12';
-                    } else if (evento.dia == '3') {
-                        fecha_dia_estatico = '2024-02-13';
-                    } else if (evento.dia == '4') {
-                        fecha_dia_estatico = '2024-02-14';
-                    } else if (evento.dia == '5') {
-                        fecha_dia_estatico = '2024-02-15';
-                    } else if (evento.dia == '6') {
-                        fecha_dia_estatico = '2024-02-16';
-                    } else if (evento.dia == '7') {
-                        fecha_dia_estatico = '2024-02-17';
-                    }
-
-                    calendar.addEvent({
-                        //id: evento.id_turno,
-                        title: (evento.nombre),
-                        start: fecha_dia_estatico + 'T' + minutos_formato_hora(evento.hora_entrada),
-                        end: fecha_dia_estatico + 'T' + minutos_formato_hora(evento.hora_salida),
-                        extendedProps: {
-                            id_turno_horario: evento._id,
-                            id_turno: evento.id_turno,
-                        },
-
-                        color: evento.color
-
-                    });
+            });
+        },
+        success: function(response) {
+            if (response == 1) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: 'Operación realizada con éxito',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(function() {
+                    $('#modal_informacion_personal').modal('hide');
+                    // Recargar datos
+                    <?php if (isset($_GET['_id_per'])) { ?>
+                    cargar_datos_persona(<?= $_id ?>);
+                    <?php } ?>
                 });
-                // Renderizar el calendario después de agregar los eventos
-                calendar.render();
-
+            } else if (response == -2) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'Ya existe una persona registrada con esta cédula'
+                });
+                $('#txt_cedula').addClass('is-invalid');
+                $('#error_txt_cedula').text('La cédula ya está en uso.');
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Operación fallida. Intente nuevamente.'
+                });
             }
-        });
+        },
+        error: function(xhr, status, error) {
+            Swal.fire('Error', 'Error en la conexión: ' + error, 'error');
+        }
+    });
+}
 
+/**
+ * Eliminar persona
+ */
+function delete_datos_persona() {
+    var id = '<?= $_id; ?>';
+    Swal.fire({
+        title: '¿Eliminar Registro?',
+        text: "Esta acción no se puede deshacer",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                data: {
+                    id: id
+                },
+                url: '../controlador/GENERAL/th_personasC.php?eliminar=true',
+                type: 'post',
+                dataType: 'json',
+                success: function(response) {
+                    if (response == 1) {
+                        Swal.fire('Eliminado', 'Registro eliminado correctamente', 'success').then(
+                            function() {
+                                window.location.href =
+                                    '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_personas';
+                            });
+                    }
+                }
+            });
+        }
+    });
+}
+
+/**
+ * Calcular edad
+ */
+function calcular_edad(campo_destino, fecha_nacimiento) {
+    if (!fecha_nacimiento) {
+        $('#' + campo_destino).val('');
+        return;
     }
-     function cargar_selects2() {
 
-        url_departamentosC = '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true';
-        cargar_select2_url('ddl_departamentos', url_departamentosC);
+    const hoy = new Date();
+    const nacimiento = new Date(fecha_nacimiento);
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const mes = hoy.getMonth() - nacimiento.getMonth();
 
+    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
+        edad--;
     }
 
+    $('#' + campo_destino).val(edad + ' años');
+}
 
-    function recargar_imagen(id) {
-        $.ajax({
-            url: '../controlador/GENERAL/th_personasC.php?listar=true',
-            type: 'post',
-            data: {
-                id: id
-            },
-            dataType: 'json',
-            success: function(response) {
+/**
+ * Validar cédula ecuatoriana
+ */
+function validar_cedula(cedula) {
+    if (!cedula || cedula.length !== 10) return false;
+
+    const digitoRegion = parseInt(cedula.substring(0, 2));
+    if (digitoRegion < 1 || digitoRegion > 24) return false;
+
+    const ultimoDigito = parseInt(cedula.substring(9, 10));
+    const pares = parseInt(cedula.substring(1, 2)) + parseInt(cedula.substring(3, 4)) +
+        parseInt(cedula.substring(5, 6)) + parseInt(cedula.substring(7, 8));
+
+    let numeroUno = parseInt(cedula.substring(0, 1)) * 2;
+    if (numeroUno > 9) numeroUno -= 9;
+
+    let numeroTres = parseInt(cedula.substring(2, 3)) * 2;
+    if (numeroTres > 9) numeroTres -= 9;
+
+    let numeroCinco = parseInt(cedula.substring(4, 5)) * 2;
+    if (numeroCinco > 9) numeroCinco -= 9;
+
+    let numeroSiete = parseInt(cedula.substring(6, 7)) * 2;
+    if (numeroSiete > 9) numeroSiete -= 9;
+
+    let numeroNueve = parseInt(cedula.substring(8, 9)) * 2;
+    if (numeroNueve > 9) numeroNueve -= 9;
+
+    const impares = numeroUno + numeroTres + numeroCinco + numeroSiete + numeroNueve;
+    const sumaTotal = pares + impares;
+    const primerDigitoSuma = String(sumaTotal).substring(0, 1);
+    const decena = (parseInt(primerDigitoSuma) + 1) * 10;
+    let digitoValidador = decena - sumaTotal;
+
+    if (digitoValidador === 10) digitoValidador = 0;
+
+    return digitoValidador === ultimoDigito;
+}
+
+/**
+ * Validar email
+ */
+function validar_email(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+}
+
+/**
+ * Cargar select2 con filtro
+ */
+function cargar_select2_con_filtro(id_select, url, campo_filtro, valor_filtro) {
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: {
+            [campo_filtro]: valor_filtro
+        },
+        dataType: 'json',
+        success: function(response) {
+            $('#' + id_select).html('<option value="">-- Selecciona una opción --</option>');
+            $.each(response, function(index, item) {
+                $('#' + id_select).append($('<option>', {
+                    value: item.id,
+                    text: item.nombre
+                }));
+            });
+        }
+    });
+}
+
+/**
+ * Cargar selects2 iniciales
+ */
+function cargar_selects2() {
+    const url_departamentosC = '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true';
+    cargar_select2_url('ddl_departamentos', url_departamentosC);
+
+    const url_cargos = '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargosC.php?buscar=true';
+    cargar_select2_url('ddl_cargo', url_cargos, '', '#modal_informacion_personal');
+}
+
+/**
+ * Recargar imagen de perfil
+ */
+function recargar_imagen(id) {
+    $.ajax({
+        url: '../controlador/GENERAL/th_personasC.php?listar=true',
+        type: 'post',
+        data: {
+            id: id
+        },
+        dataType: 'json',
+        success: function(response) {
+            if (response && response[0]) {
                 $('#img_persona_inf').attr('src', response[0].th_per_foto_url + '?' + Math.random());
             }
-        });
-    }
-
-    function insertar_editar_informacion_personal() {
-
-        var txt_primer_nombre = $('#txt_primer_nombre').val();
-        var txt_segundo_nombre = $('#txt_segundo_nombre').val();
-        var txt_primer_apellido = $('#txt_primer_apellido').val();
-        var txt_segundo_apellido = $('#txt_segundo_apellido').val();
-        var txt_fecha_nacimiento = $('#txt_fecha_nacimiento').val();
-        var ddl_nacionalidad = $('#ddl_nacionalidad').val();
-        var txt_numero_cedula = $('#txt_numero_cedula').val();
-        var ddl_estado_civil = $('#ddl_estado_civil').val();
-        var ddl_sexo = $('#ddl_sexo').val();
-        var txt_telefono_1 = $('#txt_telefono_1').val();
-        var txt_telefono_2 = $('#txt_telefono_2').val();
-        var txt_correo = $('#txt_correo').val();
-        var ddl_provincias = $('#ddl_provincias').val();
-        var ddl_ciudad = $('#ddl_ciudad').val();
-        var ddl_parroquia = $('#ddl_parroquia').val();
-        var txt_direccion_postal = $('#txt_direccion_postal').val();
-        var txt_direccion = $('#txt_direccion').val();
-
-        var parametros_informacion_personal = {
-            '_id': '<?= $_id ?>',
-            'txt_primer_nombre': txt_primer_nombre,
-            'txt_segundo_nombre': txt_segundo_nombre,
-            'txt_primer_apellido': txt_primer_apellido,
-            'txt_segundo_apellido': txt_segundo_apellido,
-            'txt_fecha_nacimiento': txt_fecha_nacimiento,
-            'ddl_nacionalidad': ddl_nacionalidad,
-            'txt_numero_cedula': txt_numero_cedula,
-            'ddl_estado_civil': ddl_estado_civil,
-            'ddl_sexo': ddl_sexo,
-            'txt_telefono_1': txt_telefono_1,
-            'txt_telefono_2': txt_telefono_2,
-            'txt_correo': txt_correo,
-            'ddl_provincias': ddl_provincias,
-            'ddl_ciudad': ddl_ciudad,
-            'ddl_parroquia': ddl_parroquia,
-            'txt_direccion_postal': txt_direccion_postal,
-            'txt_direccion': txt_direccion,
-
-        };
-
-        if ($("#form_informacion_personal").valid()) {
-            insertar_informacion_personal(parametros_informacion_personal);
         }
-    }
+    });
+}
 
-    function insertar_informacion_personal(parametros) {
-        $.ajax({
-            data: {
-                parametros: parametros
-            },
-            url: '../controlador/GENERAL/th_personasC.php?insertar=true',
-            type: 'post',
-            dataType: 'json',
-
-            success: function(response) {
-                if (response == 1) {
-                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-
-                    });
-                    <?php if (isset($_GET['_id'])) { ?>
-                        cargarDatos_informacion_personal(<?= $_id ?>);
-                    <?php } ?>
-                    $('#modal_informacion_personal').modal('hide');
-                } else if (response == -2) {
-                    Swal.fire('', 'Operación fallida', 'warning');
-                }
-            }
-        });
-    }
-
-    function insertar_persona_departamento() {
-        var deptId = $('#ddl_departamentos').val();
-        var perdepId = $('#id_perdep').val();
-
-        if (!deptId) {
-            Swal.fire('', 'Seleccione un departamento', 'warning');
-            return;
+// Funciones auxiliares de departamento y dispositivos
+function dispositivos() {
+    $.ajax({
+        url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?listar=true',
+        type: 'post',
+        dataType: 'json',
+        success: function(response) {
+            let op = '<option value="">-- Seleccione --</option>';
+            response.forEach(function(item) {
+                op += '<option value="' + item._id + '">' + item.nombre + '</option>';
+            });
+            $('#ddl_dispositivos').html(op);
+        },
+        error: function(xhr, status, error) {
+            console.error('Error cargando dispositivos:', error);
         }
+    });
+}
 
-        var parametros = {
-            '_id': perdepId || '',
-            'id_persona': '<?= $_id ?>',
-            'id_departamento': deptId,
-            'txt_visitor': $('#txt_visitor').val() || ''
-        };
+function cargar_departamento(id) {
+    $.ajax({
+        data: {
+            id: id
+        },
+        url: '../controlador/TALENTO_HUMANO/th_personasC.php?listar_persona_departamento=true',
+        type: 'post',
+        dataType: 'json',
+        success: function(response) {
+            if (response && response.length > 0) {
+                $('#id_perdep').val(response[0]._id_perdep);
 
-        $.ajax({
-            url: '../controlador/TALENTO_HUMANO/th_personas_departamentosC.php?insertar_editar_persona=true',
-            type: 'post',
-            dataType: 'json',
-            data: {
-                parametros: parametros
-            },
-            success: function(response) {
-                if (response == 1) {
-                    Swal.fire('', 'Operación realizada con éxito.', 'success').then(() => {
-                        location.reload();
-                    });
-                } else if (response == -2) {
-                    Swal.fire('', 'Esta persona ya está asignada a este departamento', 'warning');
+                $('#ddl_departamentos').append($('<option>', {
+                    value: response[0].id_departamento,
+                    text: response[0].nombre_departamento,
+                    selected: true
+                }));
+
+                if (response[0].id_departamento == 0) {
+                    $('#pnl_horarios_persona').hide();
                 } else {
-                    Swal.fire('', 'Error en la operación', 'error');
+                    cargar_persona_horario(response[0].id_persona);
+                    $('#pnl_horarios_persona').show();
                 }
             }
-        });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al cargar departamento:', error);
+        }
+    });
+}
+
+function insertar_persona_departamento() {
+    const deptId = $('#ddl_departamentos').val();
+    const perdepId = $('#id_perdep').val();
+
+    if (!deptId) {
+        Swal.fire('', 'Seleccione un departamento', 'warning');
+        return;
     }
+
+    const parametros = {
+        '_id': perdepId || '',
+        'id_persona': '<?= $_id ?>',
+        'id_departamento': deptId,
+        'txt_visitor': $('#txt_visitor').val() || ''
+    };
+
+    $.ajax({
+        url: '../controlador/TALENTO_HUMANO/th_personas_departamentosC.php?insertar_editar_persona=true',
+        type: 'post',
+        dataType: 'json',
+        data: {
+            parametros: parametros
+        },
+        success: function(response) {
+            if (response == 1) {
+                Swal.fire('', 'Operación realizada con éxito.', 'success').then(() => {
+                    location.reload();
+                });
+            } else if (response == -2) {
+                Swal.fire('', 'Esta persona ya está asignada a este departamento', 'warning');
+            } else {
+                Swal.fire('', 'Error en la operación', 'error');
+            }
+        }
+    });
+}
 </script>
 
 <!-- Vista de la página -->
@@ -479,7 +647,9 @@ if (isset($_GET['_id_per'])) {
             </div>
             <div class="row m-2">
                 <div class="col-sm-12">
-                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_personas" class="btn btn-outline-dark btn-sm d-flex align-items-center"><i class="bx bx-arrow-back"></i> Personas</a>
+                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_personas"
+                        class="btn btn-outline-dark btn-sm d-flex align-items-center"><i class="bx bx-arrow-back"></i>
+                        Personas</a>
                 </div>
             </div>
         </div>
@@ -494,16 +664,20 @@ if (isset($_GET['_id_per'])) {
                                 <div class="align-items-center">
                                     <!-- Cambiar Foto -->
                                     <div class="text-center">
-                                       <!-- <?php include_once('../vista/GENERAL/per_cambiar_foto.php'); ?> -->
+                                        <!-- <?php include_once('../vista/GENERAL/per_cambiar_foto.php'); ?> -->
 
                                         <div class="position-relative">
 
                                             <div class="widget-user-image text-center">
-                                                <img class="rounded-circle p-1 bg-primary" src="../img/sin_imagen.jpg" class="img-fluid" id="img_persona_inf" alt="Imagen Perfil Persona" width="110" height="110" />
+                                                <img class="rounded-circle p-1 bg-primary" src="../img/sin_imagen.jpg"
+                                                    class="img-fluid" id="img_persona_inf" alt="Imagen Perfil Persona"
+                                                    width="110" height="110" />
                                             </div>
 
                                             <div>
-                                                <a href="#" class="d-flex justify-content-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_cambiar_foto" onclick="abrir_modal_cambiar_foto('<?= $_id ?>');">
+                                                <a href="#" class="d-flex justify-content-center" data-bs-toggle="modal"
+                                                    data-bs-target="#modal_agregar_cambiar_foto"
+                                                    onclick="abrir_modal_cambiar_foto('<?= $_id ?>');">
                                                     <i class='bx bxs-camera bx-sm'></i>
                                                 </a>
                                             </div>
@@ -512,54 +686,55 @@ if (isset($_GET['_id_per'])) {
 
                                     <!-- Información Personal -->
                                     <div class="mt-3 bg-light rounded-3 p-3 shadow-sm">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-         <div class="d-flex align-items-center">
-        <i class="bx bx-info-circle fs-5 text-primary me-2"></i>
-        <h6 class="fw-bold mb-0 text-primary">Información Personal</h6>
-      </div>
-        <a href="#" class="text-secondary" data-bs-toggle="modal" data-bs-target="#modal_informacion_personal">
-            <i class="bx bx-pencil bx-sm"></i>
-        </a>
-    </div>
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bx bx-info-circle fs-5 text-primary me-2"></i>
+                                                <h6 class="fw-bold mb-0 text-primary">Información Personal</h6>
+                                            </div>
+                                            <a href="#" class="text-secondary" data-bs-toggle="modal"
+                                                data-bs-target="#modal_informacion_personal">
+                                                <i class="bx bx-pencil bx-sm"></i>
+                                            </a>
+                                        </div>
 
-    <div class="d-flex flex-column gap-3">
+                                        <div class="d-flex flex-column gap-3">
 
-        <div class="d-flex align-items-center border-bottom pb-2">
-            <i class="bx bx-id-card text-primary fs-5 me-3"></i>
-            <span id="txt_nombres_completos_v" class="fw-semibold text-dark"></span>
-        </div>
+                                            <div class="d-flex align-items-center border-bottom pb-2">
+                                                <i class="bx bx-id-card text-primary fs-5 me-3"></i>
+                                                <span id="txt_nombres_completos_v" class="fw-semibold text-dark"></span>
+                                            </div>
 
-        <div class="d-flex align-items-center border-bottom pb-2">
-            <i class="bx bx-calendar text-primary fs-5 me-3"></i>
-            <span id="txt_fecha_nacimiento_v" class="text-dark"></span>
-        </div>
+                                            <div class="d-flex align-items-center border-bottom pb-2">
+                                                <i class="bx bx-calendar text-primary fs-5 me-3"></i>
+                                                <span id="txt_fecha_nacimiento_v" class="text-dark"></span>
+                                            </div>
 
-        <div class="d-flex align-items-center border-bottom pb-2">
-            <i class="bx bx-flag text-primary fs-5 me-3"></i>
-            <span id="txt_nacionalidad_v" class="text-dark"></span>
-        </div>
+                                            <div class="d-flex align-items-center border-bottom pb-2">
+                                                <i class="bx bx-flag text-primary fs-5 me-3"></i>
+                                                <span id="txt_nacionalidad_v" class="text-dark"></span>
+                                            </div>
 
-        <div class="d-flex align-items-center border-bottom pb-2">
-            <i class="bx bx-id-card text-primary fs-5 me-3"></i>
-            <span id="txt_numero_cedula_v" class="text-dark"></span>
-        </div>
+                                            <div class="d-flex align-items-center border-bottom pb-2">
+                                                <i class="bx bx-id-card text-primary fs-5 me-3"></i>
+                                                <span id="txt_numero_cedula_v" class="text-dark"></span>
+                                            </div>
 
-        <div class="d-flex align-items-center border-bottom pb-2">
-            <i class="bx bx-heart text-primary fs-5 me-3"></i>
-            <span id="txt_estado_civil_v" class="text-dark"></span>
-        </div>
+                                            <div class="d-flex align-items-center border-bottom pb-2">
+                                                <i class="bx bx-heart text-primary fs-5 me-3"></i>
+                                                <span id="txt_estado_civil_v" class="text-dark"></span>
+                                            </div>
 
-        <div class="d-flex align-items-center border-bottom pb-2">
-            <i class="bx bx-phone text-primary fs-5 me-3"></i>
-            <span id="txt_telefono_1_v" class="text-dark"></span>
-        </div>
+                                            <div class="d-flex align-items-center border-bottom pb-2">
+                                                <i class="bx bx-phone text-primary fs-5 me-3"></i>
+                                                <span id="txt_telefono_1_v" class="text-dark"></span>
+                                            </div>
 
-        <div class="d-flex align-items-center">
-            <i class="bx bx-envelope text-primary fs-5 me-3"></i>
-            <span id="txt_correo_v" class="text-dark text-break"></span>
-        </div>
-    </div>
-</div>
+                                            <div class="d-flex align-items-center">
+                                                <i class="bx bx-envelope text-primary fs-5 me-3"></i>
+                                                <span id="txt_correo_v" class="text-dark text-break"></span>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
@@ -574,12 +749,13 @@ if (isset($_GET['_id_per'])) {
                                                 <h5 class="fw-bold text-primary">Contacto de Emergencia</h5>
                                             </div>
                                             <div class="col-2">
-                                                <a href="#" class="text-dark icon-hover" data-bs-toggle="modal" data-bs-target="#modal_contacto_emergencia">
+                                                <a href="#" class="text-dark icon-hover" data-bs-toggle="modal"
+                                                    data-bs-target="#modal_contacto_emergencia">
                                                     <i class='bx bx-show bx-sm'></i></a>
                                             </div>
                                         </div>
 
-                                         <!--  <?php include_once('../vista/GENERAL/per_contacto_emergencia.php'); ?>-->
+                                        <!--  <?php include_once('../vista/GENERAL/per_contacto_emergencia.php'); ?>-->
 
                                     </div>
                                 </div>
@@ -591,9 +767,10 @@ if (isset($_GET['_id_per'])) {
                     <div class="col-xs-7 col-sm-7 col-md-7 col-lg-8 col-xxl-8">
                         <div class="card-body">
                             <!-- Nav Cards -->
-                             <ul class="nav nav-tabs nav-success" role="tablist">
+                            <ul class="nav nav-tabs nav-success" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#tab_experiencia" role="tab" aria-selected="true">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#tab_experiencia" role="tab"
+                                        aria-selected="true">
                                         <div class="d-flex align-items-center">
                                             <div class="tab-icon"><i class="bx bxs-briefcase font-18 me-1"></i>
                                             </div>
@@ -602,7 +779,8 @@ if (isset($_GET['_id_per'])) {
                                     </a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#successdocs" role="tab" aria-selected="true">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#successdocs" role="tab"
+                                        aria-selected="true">
                                         <div class="d-flex align-items-center">
                                             <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
                                             </div>
@@ -611,7 +789,8 @@ if (isset($_GET['_id_per'])) {
                                     </a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#successprofile" role="tab" aria-selected="false" tabindex="-1">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#successprofile" role="tab"
+                                        aria-selected="false" tabindex="-1">
                                         <div class="d-flex align-items-center">
                                             <div class="tab-icon"><i class="bx bx-brain font-18 me-1"></i>
                                             </div>
@@ -620,7 +799,8 @@ if (isset($_GET['_id_per'])) {
                                     </a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#successcontact" role="tab" aria-selected="false" tabindex="-1">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#successcontact" role="tab"
+                                        aria-selected="false" tabindex="-1">
                                         <div class="d-flex align-items-center">
                                             <div class="tab-icon"><i class="bx bxs-user-check font-18 me-1"></i>
                                             </div>
@@ -629,7 +809,8 @@ if (isset($_GET['_id_per'])) {
                                     </a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#tab_departamento" role="tab" aria-selected="false" tabindex="-1">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tab_departamento" role="tab"
+                                        aria-selected="false" tabindex="-1">
                                         <div class="d-flex align-items-center">
                                             <div class="tab-icon"><i class="bx bxs-school font-18 me-1"></i>
                                             </div>
@@ -638,7 +819,7 @@ if (isset($_GET['_id_per'])) {
                                     </a>
                                 </li>
                             </ul>
-                           
+
                             <div class="tab-content pt-3">
                                 <!-- Primera Sección, Historial Laboral -->
                                 <div class="tab-pane fade show active" id="tab_experiencia" role="tabpanel">
@@ -649,11 +830,15 @@ if (isset($_GET['_id_per'])) {
                                                 <div class="mb-2">
                                                     <div class="row">
                                                         <div class="col-9 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Experiencia Previa:</h6>
+                                                            <h6 class="mb-0 fw-bold text-primary">Experiencia Previa:
+                                                            </h6>
                                                         </div>
 
                                                         <div class="col-3 d-flex justify-content-end">
-                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_experiencia">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal_agregar_experiencia">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar</span>
                                                             </a>
@@ -670,10 +855,15 @@ if (isset($_GET['_id_per'])) {
                                                 <div class="mb-2">
                                                     <div class="row">
                                                         <div class="col-9 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Formación Académica:</h6>
+                                                            <h6 class="mb-0 fw-bold text-primary">Formación Académica:
+                                                            </h6>
                                                         </div>
                                                         <div class="col-3 d-flex justify-content-end">
-                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" id="btn_modal_agregar_formacion_academica" data-bs-toggle="modal" data-bs-target="#modal_agregar_formacion">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                id="btn_modal_agregar_formacion_academica"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal_agregar_formacion">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar</span>
                                                             </a>
@@ -690,10 +880,14 @@ if (isset($_GET['_id_per'])) {
                                                 <div class="mb-2">
                                                     <div class="row">
                                                         <div class="col-9 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Certificación y/o Capacitación:</h6>
+                                                            <h6 class="mb-0 fw-bold text-primary">Certificación y/o
+                                                                Capacitación:</h6>
                                                         </div>
                                                         <div class="col-3 d-flex justify-content-end">
-                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_certificaciones">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal_agregar_certificaciones">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar</span>
                                                             </a>
@@ -717,10 +911,15 @@ if (isset($_GET['_id_per'])) {
                                                 <div class="mb-2">
                                                     <div class="row">
                                                         <div class="col-7 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Documento de Identidad:</h6>
+                                                            <h6 class="mb-0 fw-bold text-primary">Documento de
+                                                                Identidad:</h6>
                                                         </div>
-                                                        <div class="col-5 d-flex justify-content-end align-items-center">
-                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_documentos_identidad">
+                                                        <div
+                                                            class="col-5 d-flex justify-content-end align-items-center">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal_agregar_documentos_identidad">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span class="">Agregar</span>
                                                             </a>
@@ -737,10 +936,15 @@ if (isset($_GET['_id_per'])) {
                                                 <div class="mb-2">
                                                     <div class="row">
                                                         <div class="col-7 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Contratos de Trabajo:</h6>
+                                                            <h6 class="mb-0 fw-bold text-primary">Contratos de Trabajo:
+                                                            </h6>
                                                         </div>
-                                                        <div class="col-5 d-flex justify-content-end align-items-center">
-                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_contratos">
+                                                        <div
+                                                            class="col-5 d-flex justify-content-end align-items-center">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal_agregar_contratos">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span class="">Agregar</span>
                                                             </a>
@@ -757,10 +961,15 @@ if (isset($_GET['_id_per'])) {
                                                 <div class="mb-2">
                                                     <div class="row">
                                                         <div class="col-7 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Certificados Médicos:</h6>
+                                                            <h6 class="mb-0 fw-bold text-primary">Certificados Médicos:
+                                                            </h6>
                                                         </div>
-                                                        <div class="col-5 d-flex justify-content-end align-items-center">
-                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_certificados_medicos">
+                                                        <div
+                                                            class="col-5 d-flex justify-content-end align-items-center">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal_agregar_certificados_medicos">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span class="">Agregar</span>
                                                             </a>
@@ -777,10 +986,15 @@ if (isset($_GET['_id_per'])) {
                                                 <div class="mb-2">
                                                     <div class="row">
                                                         <div class="col-7 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Referencias laborales:</h6>
+                                                            <h6 class="mb-0 fw-bold text-primary">Referencias laborales:
+                                                            </h6>
                                                         </div>
-                                                        <div class="col-5 d-flex justify-content-end align-items-center">
-                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_referencia_laboral">
+                                                        <div
+                                                            class="col-5 d-flex justify-content-end align-items-center">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal_agregar_referencia_laboral">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span class="">Agregar</span>
                                                             </a>
@@ -807,7 +1021,10 @@ if (isset($_GET['_id_per'])) {
                                                             <h6 class="mb-0 fw-bold text-primary">Idiomas</h6>
                                                         </div>
                                                         <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_idioma">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal_agregar_idioma">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar</span>
                                                             </a>
@@ -827,7 +1044,11 @@ if (isset($_GET['_id_per'])) {
                                                             <h6 class="mb-0 fw-bold text-primary">Aptitudes</h6>
                                                         </div>
                                                         <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_aptitudes" onclick="activar_select2();">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal_agregar_aptitudes"
+                                                                onclick="activar_select2();">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar</span>
                                                             </a>
@@ -853,7 +1074,10 @@ if (isset($_GET['_id_per'])) {
                                                             <h6 class="mb-0 fw-bold text-primary">Estado laboral:</h6>
                                                         </div>
                                                         <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_estado_laboral">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal_estado_laboral">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar</span>
                                                             </a>
@@ -875,7 +1099,10 @@ if (isset($_GET['_id_per'])) {
                                             <div class="card-body">
                                                 <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/th_persona_departamento_horario.php'); ?>
                                                 <div class="d-flex justify-content-end pt-2">
-                                                    <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_persona_departamento();" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                                    <button
+                                                        class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center"
+                                                        onclick="insertar_persona_departamento();" type="button"><i
+                                                            class="bx bx-save"></i> Guardar</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -891,160 +1118,384 @@ if (isset($_GET['_id_per'])) {
 </div>
 
 <!-- Modal para la informacion personal -->
-<div class="modal modal_general" id="modal_informacion_personal" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
+<!-- Modal Información Personal -->
+<div class="modal fade" id="modal_informacion_personal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold">Información Personal</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalLabel">
+                    <i class="fas fa-user-edit"></i> Información Personal
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <div class="modal-body">
+                <form id="form_informacion_personal">
+                    <input type="hidden" id="_id" name="_id" value="">
 
-            <!-- Modal body -->
-            <form id="registrar_personas">
-                <div class="modal-body">
-                    
-                    <div class="row">
-                        <!-- Columna Izquierda: Foto -->
-                        <div class="col-md-3">
-                            <div class="text-center border-end pe-3" style="min-height: 100%;">
-                                <label class="form-label form-label-sm fw-bold d-block mb-3">Fotografía</label>
-                                <div class="foto-perfil-container d-inline-block position-relative mb-2">
-                                    <img id="preview_foto" class="foto-perfil" src="" alt="Foto de perfil" style="display: none; width: 130px; height: 130px; border-radius: 50%; object-fit: cover; border: 4px solid #0d6efd; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                                    <div id="foto-placeholder" class="d-flex align-items-center justify-content-center" style="width: 130px; height: 130px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: 4px solid #0d6efd; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                                        <i class="fas fa-user" style="font-size: 50px; color: white;"></i>
+                    <!-- Fotografía -->
+                    <div class="row mb-4">
+                        <div class="col-md-12 text-center">
+                            <div class="form-group">
+                                <label class="font-weight-bold">Fotografía</label>
+                                <div class="mt-2">
+                                    <img id="img_foto_preview" src="../img/user-default.png" alt="Foto"
+                                        class="img-thumbnail"
+                                        style="width: 150px; height: 150px; object-fit: cover; cursor: pointer;">
+                                    <div class="mt-2">
+                                        <small class="text-muted">Click en la imagen para subir foto</small>
                                     </div>
-                                    <label for="input_foto" class="btn-cambiar-foto position-absolute" style="bottom: 5px; right: 5px; width: 36px; height: 36px; border-radius: 50%; background-color: #0d6efd; border: 3px solid white; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-                                        <i class="fas fa-camera" style="color: white; font-size: 14px;"></i>
-                                    </label>
-                                    <input type="file" id="input_foto" name="input_foto" accept="image/*" style="display: none;">
-                                </div>
-                                <p class="text-muted mb-0" style="font-size: 10px; line-height: 1.3;">Click en el ícono de cámara para subir imagen</p>
-                            </div>
-                        </div>
-
-                        <!-- Columna Derecha: Formulario -->
-                        <div class="col-md-9">
-                            <div class="row mb-2">
-                                <div class="col-md-3">
-                                    <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido</label>
-                                    <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_apellido" id="txt_primer_apellido" maxlength="50">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido</label>
-                                    <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_apellido" id="txt_segundo_apellido" maxlength="50">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre</label>
-                                    <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_nombre" id="txt_primer_nombre" maxlength="50">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre</label>
-                                    <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_nombre" id="txt_segundo_nombre" maxlength="50">
-                                </div>
-                            </div>
-
-                            <div class="row mb-2">
-                                <div class="col-md-3">
-                                    <label for="txt_cedula" class="form-label form-label-sm">N° de Cédula</label>
-                                    <input type="text" class="form-control form-control-sm no_caracteres" name="txt_cedula" id="txt_cedula" maxlength="10">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="ddl_sexo" class="form-label form-label-sm">Sexo</label>
-                                    <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo">
-                                        <option selected disabled value="">-- Selecciona una opción --</option>
-                                        <option value="Masculino">Masculino</option>
-                                        <option value="Femenino">Femenino</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento</label>
-                                    <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="txt_edad" class="form-label form-label-sm">Edad </label>
-                                    <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_edad" id="txt_edad" readonly>
-                                </div>
-                            </div>
-
-                            <div class="row mb-2">
-                                <div class="col-md-4">
-                                    <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 </label>
-                                    <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_1" id="txt_telefono_1" value="" maxlength="12" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 </label>
-                                    <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_2" id="txt_telefono_2" value="" maxlength="12">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico </label>
-                                    <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" maxlength="100">
-                                </div>
-                            </div>
-
-                            <div class="row mb-2">
-                                <div class="col-md-4">
-                                    <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad</label>
-                                    <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
-                                        <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
-                                        <option value="Ecuatoriano">Ecuatoriano</option>
-                                        <option value="Colombiano">Colombiano</option>
-                                        <option value="Peruano">Peruano</option>
-                                        <option value="Venezolano">Venezolano</option>
-                                        <option value="Paraguayo">Paraguayo</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil</label>
-                                    <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
-                                        <option selected disabled value="">-- Selecciona un Estado Civil --</option>
-                                        <option value="Soltero">Soltero/a</option>
-                                        <option value="Casado">Casado/a</option>
-                                        <option value="Divorciado">Divorciado/a</option>
-                                        <option value="Viudo">Viudo/a</option>
-                                        <option value="Union">Unión de hecho</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="ddl_tipo_sangre" class="form-label form-label-sm">Tipo Sangre </label>
-                                    <select class="form-select form-select-sm" id="ddl_tipo_sangre" name="ddl_tipo_sangre" required>
-                                        <option selected disabled value="">-- Selecciona una opción --</option>
-                                        <option value="A+">A+</option>
-                                        <option value="A-">A-</option>
-                                        <option value="B+">B+</option>
-                                        <option value="B-">B-</option>
-                                        <option value="O+">O+</option>
-                                        <option value="O-">O-</option>
-                                        <option value="AB+">AB+</option>
-                                        <option value="AB-">AB-</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/provincias_ciudades_parroquias.php'); ?>
-
-                            <div class="row mb-2">
-                                <div class="col-md-12">
-                                    <label for="txt_direccion" class="form-label form-label-sm">Dirección </label>
-                                    <input type="text" class="form-control form-control-sm no_caracteres" name="txt_direccion" id="txt_direccion">
-                                </div>
-                            </div>
-
-                            <div class="row mb-2">
-                                <div class="col-md-12">
-                                    <label for="txt_observaciones" class="form-label form-label-sm">Observaciones </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_observaciones" id="txt_observaciones" maxlength="200">
+                                    <input type="file" id="file_foto" name="file_foto" accept="image/*"
+                                        style="display: none;">
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_personal" onclick="insertar_editar_persona();">Guardar</button>
-                </div>
-            </form>
+                    <!-- Datos Personales -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0"><i class="fas fa-user"></i> Datos Personales</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="txt_primer_apellido">Primer Apellido <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="txt_primer_apellido"
+                                            name="txt_primer_apellido" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="txt_segundo_apellido">Segundo Apellido</label>
+                                        <input type="text" class="form-control" id="txt_segundo_apellido"
+                                            name="txt_segundo_apellido">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="txt_primer_nombre">Primer Nombre <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="txt_primer_nombre"
+                                            name="txt_primer_nombre" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="txt_segundo_nombre">Segundo Nombre</label>
+                                        <input type="text" class="form-control" id="txt_segundo_nombre"
+                                            name="txt_segundo_nombre">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txt_cedula">N° de Cédula <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="txt_cedula" name="txt_cedula"
+                                            required maxlength="10">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ddl_sexo">Sexo <span class="text-danger">*</span></label>
+                                        <select class="form-control" id="ddl_sexo" name="ddl_sexo" required>
+                                            <option value="">-- Selecciona una opción --</option>
+                                            <option value="M">Masculino</option>
+                                            <option value="F">Femenino</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txt_fecha_nacimiento">Fecha de Nacimiento <span
+                                                class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="txt_fecha_nacimiento"
+                                            name="txt_fecha_nacimiento" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txt_edad">Edad</label>
+                                        <input type="text" class="form-control" id="txt_edad" name="txt_edad" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ddl_nacionalidad">Nacionalidad <span
+                                                class="text-danger">*</span></label>
+                                        <select class="form-control" id="ddl_nacionalidad" name="ddl_nacionalidad"
+                                            required>
+                                            <option value="">-- Selecciona una Nacionalidad --</option>
+                                            <option value="Ecuatoriano">Ecuatoriano</option>
+                                            <option value="Colombiano">Colombiano</option>
+                                            <option value="Peruano">Peruano</option>
+                                            <option value="Venezolano">Venezolano</option>
+                                            <option value="Paraguayo">Paraguayo</option>
+                                            <option value="Otro">Otro</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ddl_estado_civil">Estado Civil <span
+                                                class="text-danger">*</span></label>
+                                        <select class="form-control" id="ddl_estado_civil" name="ddl_estado_civil"
+                                            required>
+                                            <option value="">-- Selecciona un Estado Civil --</option>
+                                            <option value="Soltero/a">Soltero/a</option>
+                                            <option value="Casado/a">Casado/a</option>
+                                            <option value="Divorciado/a">Divorciado/a</option>
+                                            <option value="Viudo/a">Viudo/a</option>
+                                            <option value="Unión de hecho">Unión de hecho</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Datos de Contacto -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0"><i class="fas fa-phone"></i> Datos de Contacto</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txt_telefono_1">Teléfono 1 <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="txt_telefono_1"
+                                            name="txt_telefono_1" required maxlength="10">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txt_telefono_2">Teléfono 2</label>
+                                        <input type="text" class="form-control" id="txt_telefono_2"
+                                            name="txt_telefono_2" maxlength="10">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txt_correo">Correo Electrónico <span
+                                                class="text-danger">*</span></label>
+                                        <input type="email" class="form-control" id="txt_correo" name="txt_correo"
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ubicación -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0"><i class="fas fa-map-marker-alt"></i> Ubicación</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ddl_provincias">Provincia</label>
+                                        <select class="form-control select2" id="ddl_provincias" name="ddl_provincias">
+                                            <option value="">-- Selecciona una Provincia --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ddl_ciudad">Ciudad</label>
+                                        <select class="form-control select2" id="ddl_ciudad" name="ddl_ciudad">
+                                            <option value="">-- Selecciona una Ciudad --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ddl_parroquia">Parroquia</label>
+                                        <select class="form-control select2" id="ddl_parroquia" name="ddl_parroquia">
+                                            <option value="">-- Selecciona una Parroquia --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="txt_direccion">Dirección</label>
+                                        <textarea class="form-control" id="txt_direccion" name="txt_direccion"
+                                            rows="2"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txt_codigo_postal">Código Postal</label>
+                                        <input type="text" class="form-control" id="txt_codigo_postal"
+                                            name="txt_codigo_postal">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información Adicional -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0"><i class="fas fa-info-circle"></i> Información Adicional</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ddl_tipo_sangre">Tipo de Sangre</label>
+                                        <select class="form-control" id="ddl_tipo_sangre" name="ddl_tipo_sangre">
+                                            <option value="">-- Selecciona una opción --</option>
+                                            <option value="A+">A+</option>
+                                            <option value="A-">A-</option>
+                                            <option value="B+">B+</option>
+                                            <option value="B-">B-</option>
+                                            <option value="O+">O+</option>
+                                            <option value="O-">O-</option>
+                                            <option value="AB+">AB+</option>
+                                            <option value="AB-">AB-</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ddl_etnia">Etnia</label>
+                                        <select class="form-control" id="ddl_etnia" name="ddl_etnia">
+                                            <option value="">-- Selecciona una opción --</option>
+                                            <option value="Mestizo">Mestizo</option>
+                                            <option value="Indígena">Indígena</option>
+                                            <option value="Afroecuatoriano">Afroecuatoriano</option>
+                                            <option value="Montubio">Montubio</option>
+                                            <option value="Blanco">Blanco</option>
+                                            <option value="Otro">Otro</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ddl_religion">Religión</label>
+                                        <select class="form-control" id="ddl_religion" name="ddl_religion">
+                                            <option value="">-- Selecciona una opción --</option>
+                                            <option value="Católico">Católico</option>
+                                            <option value="Cristiano">Cristiano</option>
+                                            <option value="Evangélico">Evangélico</option>
+                                            <option value="Testigo de Jehová">Testigo de Jehová</option>
+                                            <option value="Ateo">Ateo</option>
+                                            <option value="Agnóstico">Agnóstico</option>
+                                            <option value="Otro">Otro</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ddl_orientacion">Orientación Sexual</label>
+                                        <select class="form-control" id="ddl_orientacion" name="ddl_orientacion">
+                                            <option value="">-- Selecciona una opción --</option>
+                                            <option value="Heterosexual">Heterosexual</option>
+                                            <option value="Homosexual">Homosexual</option>
+                                            <option value="Bisexual">Bisexual</option>
+                                            <option value="Prefiero no decir">Prefiero no decir</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ddl_cargo">Cargo</label>
+                                        <select class="form-control select2" id="ddl_cargo" name="ddl_cargo">
+                                            <option value="">-- Selecciona un cargo --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información sobre Discapacidad -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0"><i class="fas fa-wheelchair"></i> Información sobre Discapacidad</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ddl_tipo_discapacidad">Tipo de Discapacidad</label>
+                                        <select class="form-control" id="ddl_tipo_discapacidad"
+                                            name="ddl_tipo_discapacidad">
+                                            <option value="">-- Selecciona una opción --</option>
+                                            <option value="Ninguna">Ninguna</option>
+                                            <option value="Física">Física</option>
+                                            <option value="Visual">Visual</option>
+                                            <option value="Auditiva">Auditiva</option>
+                                            <option value="Intelectual">Intelectual</option>
+                                            <option value="Psicosocial">Psicosocial</option>
+                                            <option value="Múltiple">Múltiple</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txt_porcentaje_discapacidad">Porcentaje de Discapacidad (%)</label>
+                                        <input type="number" class="form-control" id="txt_porcentaje_discapacidad"
+                                            name="txt_porcentaje_discapacidad" min="0" max="100">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ddl_escala_discapacidad">Escala de Discapacidad</label>
+                                        <select class="form-control" id="ddl_escala_discapacidad"
+                                            name="ddl_escala_discapacidad">
+                                            <option value="">-- Selecciona una opción --</option>
+                                            <option value="Leve">Leve (1-24%)</option>
+                                            <option value="Moderada">Moderada (25-49%)</option>
+                                            <option value="Grave">Grave (50-74%)</option>
+                                            <option value="Muy Grave">Muy Grave (75-100%)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Observaciones -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0"><i class="fas fa-comment"></i> Observaciones</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <textarea class="form-control" id="txt_observaciones" name="txt_observaciones" rows="3"
+                                    placeholder="Ingrese observaciones adicionales"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" onclick="insertar_editar_informacion_personal()">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -1067,128 +1518,128 @@ document.getElementById('input_foto').addEventListener('change', function(e) {
 
 
 <script>
-    //Validacion de formulario
-    $(document).ready(function() {
-        agregar_asterisco_campo_obligatorio('txt_primer_apellido');
-        agregar_asterisco_campo_obligatorio('txt_segundo_apellido');
-        agregar_asterisco_campo_obligatorio('txt_primer_nombre');
-        agregar_asterisco_campo_obligatorio('txt_segundo_nombre');
-        agregar_asterisco_campo_obligatorio('txt_numero_cedula');
-        agregar_asterisco_campo_obligatorio('ddl_sexo');
-        agregar_asterisco_campo_obligatorio('txt_fecha_nacimiento');
-        agregar_asterisco_campo_obligatorio('txt_edad');
-        agregar_asterisco_campo_obligatorio('txt_telefono_1');
-        agregar_asterisco_campo_obligatorio('txt_telefono_2');
-        agregar_asterisco_campo_obligatorio('txt_correo');
-        agregar_asterisco_campo_obligatorio('ddl_nacionalidad');
-        agregar_asterisco_campo_obligatorio('ddl_estado_civil');
-        agregar_asterisco_campo_obligatorio('ddl_provincias');
-        agregar_asterisco_campo_obligatorio('ddl_ciudad');
-        agregar_asterisco_campo_obligatorio('ddl_parroquia');
-        agregar_asterisco_campo_obligatorio('txt_codigo_postal');
-        agregar_asterisco_campo_obligatorio('txt_direccion');
-        
-        //Validación Información Personal
-        $("#form_informacion_personal").validate({
-            rules: {
-                txt_primer_apellido: {
-                    required: true,
-                },
-                txt_segundo_apellido: {
-                    required: true,
-                },
-                txt_primer_nombre: {
-                    required: true,
-                },
-                txt_segundo_nombre: {
-                    required: true,
-                },
-                txt_numero_cedula: {
-                    required: true,
-                },
-                ddl_sexo: {
-                    required: true,
-                },
-                txt_fecha_nacimiento: {
-                    required: true,
-                },
-                txt_edad: {
-                    required: true,
-                },
-                txt_telefono_1: {
-                    required: true,
-                },
-                txt_telefono_2: {
-                    required: true,
-                },
-                txt_correo: {
-                    required: true,
-                },
-                ddl_nacionalidad: {
-                    required: true,
-                },
-                ddl_estado_civil: {
-                    required: true,
-                },
-            },
-            messages: {
-                txt_primer_apellido: {
-                    required: "Por favor ingrese el primer apellido",
-                },
-                txt_segundo_apellido: {
-                    required: "Por favor ingrese el segundo apellido",
-                },
-                txt_primer_nombre: {
-                    required: "Por favor ingrese el primer nombre",
-                },
-                txt_segundo_nombre: {
-                    required: "Por favor ingrese el segundo nombre",
-                },
-                txt_numero_cedula: {
-                    required: "Por favor ingresa un número de cédula",
-                },
-                ddl_sexo: {
-                    required: "Por favor seleccione el sexo",
-                },
-                txt_fecha_nacimiento: {
-                    required: "Por favor ingrese la fecha de nacimiento",
-                },
-                txt_edad: {
-                    required: "Por favor ingrese la edad (fecha de nacimiento)",
-                },
-                txt_telefono_1: {
-                    required: "Por favor ingrese el primero teléfono",
-                },
-                txt_telefono_2: {
-                    required: "Por favor ingrese el segundo teléfono",
-                },
-                txt_correo: {
-                    required: "Por favor ingrese un correo",
-                },
-                ddl_nacionalidad: {
-                    required: "Por favor seleccione su nacionalidad",
-                },
-                ddl_estado_civil: {
-                    required: "Por favor seleccione su estado civil",
-                },
-            },
+//Validacion de formulario
+$(document).ready(function() {
+    agregar_asterisco_campo_obligatorio('txt_primer_apellido');
+    agregar_asterisco_campo_obligatorio('txt_segundo_apellido');
+    agregar_asterisco_campo_obligatorio('txt_primer_nombre');
+    agregar_asterisco_campo_obligatorio('txt_segundo_nombre');
+    agregar_asterisco_campo_obligatorio('txt_numero_cedula');
+    agregar_asterisco_campo_obligatorio('ddl_sexo');
+    agregar_asterisco_campo_obligatorio('txt_fecha_nacimiento');
+    agregar_asterisco_campo_obligatorio('txt_edad');
+    agregar_asterisco_campo_obligatorio('txt_telefono_1');
+    agregar_asterisco_campo_obligatorio('txt_telefono_2');
+    agregar_asterisco_campo_obligatorio('txt_correo');
+    agregar_asterisco_campo_obligatorio('ddl_nacionalidad');
+    agregar_asterisco_campo_obligatorio('ddl_estado_civil');
+    agregar_asterisco_campo_obligatorio('ddl_provincias');
+    agregar_asterisco_campo_obligatorio('ddl_ciudad');
+    agregar_asterisco_campo_obligatorio('ddl_parroquia');
+    agregar_asterisco_campo_obligatorio('txt_codigo_postal');
+    agregar_asterisco_campo_obligatorio('txt_direccion');
 
-            highlight: function(element) {
-                // Agrega la clase 'is-invalid' al input que falla la validación
-                $(element).addClass('is-invalid');
-                $(element).removeClass('is-valid');
+    //Validación Información Personal
+    $("#form_informacion_personal").validate({
+        rules: {
+            txt_primer_apellido: {
+                required: true,
             },
-            unhighlight: function(element) {
-                // Elimina la clase 'is-invalid' si la validación pasa
-                $(element).removeClass('is-invalid');
-                $(element).addClass('is-valid');
+            txt_segundo_apellido: {
+                required: true,
+            },
+            txt_primer_nombre: {
+                required: true,
+            },
+            txt_segundo_nombre: {
+                required: true,
+            },
+            txt_numero_cedula: {
+                required: true,
+            },
+            ddl_sexo: {
+                required: true,
+            },
+            txt_fecha_nacimiento: {
+                required: true,
+            },
+            txt_edad: {
+                required: true,
+            },
+            txt_telefono_1: {
+                required: true,
+            },
+            txt_telefono_2: {
+                required: true,
+            },
+            txt_correo: {
+                required: true,
+            },
+            ddl_nacionalidad: {
+                required: true,
+            },
+            ddl_estado_civil: {
+                required: true,
+            },
+        },
+        messages: {
+            txt_primer_apellido: {
+                required: "Por favor ingrese el primer apellido",
+            },
+            txt_segundo_apellido: {
+                required: "Por favor ingrese el segundo apellido",
+            },
+            txt_primer_nombre: {
+                required: "Por favor ingrese el primer nombre",
+            },
+            txt_segundo_nombre: {
+                required: "Por favor ingrese el segundo nombre",
+            },
+            txt_numero_cedula: {
+                required: "Por favor ingresa un número de cédula",
+            },
+            ddl_sexo: {
+                required: "Por favor seleccione el sexo",
+            },
+            txt_fecha_nacimiento: {
+                required: "Por favor ingrese la fecha de nacimiento",
+            },
+            txt_edad: {
+                required: "Por favor ingrese la edad (fecha de nacimiento)",
+            },
+            txt_telefono_1: {
+                required: "Por favor ingrese el primero teléfono",
+            },
+            txt_telefono_2: {
+                required: "Por favor ingrese el segundo teléfono",
+            },
+            txt_correo: {
+                required: "Por favor ingrese un correo",
+            },
+            ddl_nacionalidad: {
+                required: "Por favor seleccione su nacionalidad",
+            },
+            ddl_estado_civil: {
+                required: "Por favor seleccione su estado civil",
+            },
+        },
 
-            }
-        });
+        highlight: function(element) {
+            // Agrega la clase 'is-invalid' al input que falla la validación
+            $(element).addClass('is-invalid');
+            $(element).removeClass('is-valid');
+        },
+        unhighlight: function(element) {
+            // Elimina la clase 'is-invalid' si la validación pasa
+            $(element).removeClass('is-invalid');
+            $(element).addClass('is-valid');
 
+        }
     });
 
-    function convertir_postulante_a_persona(id_postulante) {
+});
+
+function convertir_postulante_a_persona(id_postulante) {
     Swal.fire({
         title: '¿Convertir a Persona?',
         text: "Se creará un registro de persona con todos los datos del postulante",
@@ -1225,7 +1676,8 @@ function procesar_conversion_postulante(id_postulante) {
                     confirmButtonText: 'Ver Persona'
                 }).then(() => {
                     // Redirigir a la vista de persona creada
-                    window.location.href = '../vista/inicio.php?mod=' + <?= $modulo_sistema ?> + '&acc=th_persona_informacion&_id=' + response.id_persona;
+                    window.location.href = '../vista/inicio.php?mod=' + <?= $modulo_sistema ?> +
+                        '&acc=th_persona_informacion&_id=' + response.id_persona;
                 });
             } else if (response.status == -1) {
                 Swal.fire('Error', 'Ya existe una persona con esta cédula', 'error');
@@ -1271,7 +1723,8 @@ function verificar_postulante_convertido(id_postulante) {
  * Función para ir a la vista de persona
  */
 function ir_a_persona(id_persona) {
-    window.location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_persona_informacion&_id=' + id_persona;
+    window.location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_persona_informacion&_id=' +
+        id_persona;
 }
 
 /**
@@ -1509,12 +1962,12 @@ function copiar_todos_datos_postulante(id_postulante, id_persona) {
                         Swal.fire({
                             title: 'Éxito',
                             html: 'Datos copiados correctamente:<br>' +
-                                  'Experiencias: ' + response.experiencias + '<br>' +
-                                  'Formaciones: ' + response.formaciones + '<br>' +
-                                  'Certificaciones: ' + response.certificaciones + '<br>' +
-                                  'Documentos: ' + response.documentos + '<br>' +
-                                  'Idiomas: ' + response.idiomas + '<br>' +
-                                  'Aptitudes: ' + response.aptitudes,
+                                'Experiencias: ' + response.experiencias + '<br>' +
+                                'Formaciones: ' + response.formaciones + '<br>' +
+                                'Certificaciones: ' + response.certificaciones + '<br>' +
+                                'Documentos: ' + response.documentos + '<br>' +
+                                'Idiomas: ' + response.idiomas + '<br>' +
+                                'Aptitudes: ' + response.aptitudes,
                             icon: 'success'
                         }).then(() => {
                             location.reload();
@@ -1532,5 +1985,3 @@ function copiar_todos_datos_postulante(id_postulante, id_persona) {
     });
 }
 </script>
-
-

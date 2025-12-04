@@ -57,6 +57,199 @@ function guardar_plaza() {
 
 $(document).ready(function() {
 
+    // #########################
+    // Coloca esto en tu hoja principal (antes de usar las funciones cargar_requisitos/cargar_etapas_proceso)
+    // #########################
+
+    var tbl_requisitos = null;
+    var tbl_etapas_proceso = null;
+
+    // Helper para obtener idPlaza seguro
+    function obtenerIdPlaza() {
+        var id = Number(localStorage.getItem('plaza_id'));
+        return (id && id > 0) ? id : '';
+    }
+
+    // -------------------------
+    // Evento personalizado: cuando el modal notifique que hubo un cambio
+    // -------------------------
+    $(document).on('plaza:actualizada', function(e, detalle) {
+        var idPlaza = (detalle && detalle.idPlaza) ? Number(detalle.idPlaza) : obtenerIdPlaza();
+        if (!idPlaza) return;
+
+        // REQUISITOS
+        if (tbl_requisitos && tbl_requisitos.ajax && typeof tbl_requisitos.ajax.reload === 'function') {
+            tbl_requisitos.ajax.reload(null, false);
+        } else {
+            // Si no existe la instancia, inicializarla (tu función debe existir en global)
+            if (typeof cargar_requisitos === 'function') cargar_requisitos(idPlaza);
+        }
+
+        // ETAPAS
+        if (tbl_etapas_proceso && tbl_etapas_proceso.ajax && typeof tbl_etapas_proceso.ajax.reload ===
+            'function') {
+            tbl_etapas_proceso.ajax.reload(null, false);
+        } else {
+            if (typeof cargar_etapas === 'function') cargar_etapas(idPlaza);
+        }
+    });
+
+    // -------------------------
+    // Fallback: escuchar cierre de modales (Bootstrap)
+    // -------------------------
+    $('#modal_etapa_proceso').on('hidden.bs.modal', function() {
+        var idPlaza = obtenerIdPlaza();
+        if (!idPlaza) return;
+
+        if (tbl_etapas_proceso && tbl_etapas_proceso.ajax && typeof tbl_etapas_proceso.ajax.reload ===
+            'function') {
+            tbl_etapas_proceso.ajax.reload(null, false);
+        } else {
+            if (typeof cargar_etapas === 'function') cargar_etapas(idPlaza);
+        }
+    });
+
+    $('#modal_requisito').on('hidden.bs.modal', function() {
+        var idPlaza = obtenerIdPlaza();
+        if (!idPlaza) return;
+
+        if (tbl_requisitos && tbl_requisitos.ajax && typeof tbl_requisitos.ajax.reload === 'function') {
+            tbl_requisitos.ajax.reload(null, false);
+        } else {
+            if (typeof cargar_requisitos === 'function') cargar_requisitos(idPlaza);
+        }
+    });
+
+
+
+
+    function validarFechas() {
+        const fechaPublicacionStr = $('#txt_th_pla_fecha_publicacion').val();
+        const fechaCierreStr = $('#txt_th_pla_fecha_cierre').val();
+
+        if (!fechaPublicacionStr || !fechaCierreStr) return;
+
+        const fechaPublicacion = new Date(fechaPublicacionStr);
+        const fechaCierre = new Date(fechaCierreStr);
+        const fechaActual = new Date();
+
+        // Normalizar (remover segundos y ms)
+        fechaActual.setSeconds(0, 0);
+
+        // Validar que las fechas sean mayores o iguales a la actual
+        if (fechaPublicacion < fechaActual) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Fecha inválida',
+                text: 'La fecha de publicación no puede ser anterior a la fecha actual.',
+                confirmButtonText: 'Entendido',
+                confirmButtonColor: '#3085d6'
+            }).then(() => {
+                $('#txt_th_pla_fecha_publicacion').val('');
+                $('#txt_th_pla_fecha_publicacion').focus();
+            });
+            return false;
+        }
+
+        if (fechaCierre < fechaActual) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Fecha inválida',
+                text: 'La fecha de cierre no puede ser anterior a la fecha actual.',
+                confirmButtonText: 'Entendido',
+                confirmButtonColor: '#3085d6'
+            }).then(() => {
+                $('#txt_th_pla_fecha_cierre').val('');
+                $('#txt_th_pla_fecha_cierre').focus();
+            });
+            return false;
+        }
+
+        // Validar que la fecha de cierre sea mayor o igual que la publicación
+        if (fechaCierre < fechaPublicacion) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Rango de fechas incorrecto',
+                text: 'La fecha de cierre no puede ser menor que la fecha de publicación.',
+                confirmButtonText: 'Corregir',
+                confirmButtonColor: '#d33'
+            }).then(() => {
+                $('#txt_th_pla_fecha_cierre').val('');
+                $('#txt_th_pla_fecha_cierre').focus();
+            });
+            return false;
+        }
+
+        return true;
+    }
+
+    // Ejecutar validación cada vez que cambie una de las fechas
+    $('#txt_th_pla_fecha_publicacion, #txt_th_pla_fecha_cierre').on('change', function() {
+        validarFechas();
+    });
+
+    function validarSalarios() {
+        const salarioMinStr = $('#txt_th_pla_salario_min').val();
+        const salarioMaxStr = $('#txt_th_pla_salario_max').val();
+
+        if (!salarioMinStr || !salarioMaxStr) return;
+
+        const salarioMin = parseFloat(salarioMinStr);
+        const salarioMax = parseFloat(salarioMaxStr);
+
+        // Salario mínimo no puede ser negativo
+        if (salarioMin < 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Valor inválido',
+                text: 'El salario mínimo no puede ser negativo.',
+                confirmButtonText: 'Entendido',
+                confirmButtonColor: '#3085d6'
+            }).then(() => {
+                $('#txt_th_pla_salario_min').val('');
+                $('#txt_th_pla_salario_min').focus();
+            });
+            return false;
+        }
+
+        // Salario máximo no puede ser negativo
+        if (salarioMax < 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Valor inválido',
+                text: 'El salario máximo no puede ser negativo.',
+                confirmButtonText: 'Entendido',
+                confirmButtonColor: '#3085d6'
+            }).then(() => {
+                $('#txt_th_pla_salario_max').val('');
+                $('#txt_th_pla_salario_max').focus();
+            });
+            return false;
+        }
+
+        // Validar que el salario mínimo no sea mayor al máximo
+        if (salarioMin > salarioMax) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Rango de salarios incorrecto',
+                text: 'El salario mínimo no puede ser mayor que el salario máximo.',
+                confirmButtonText: 'Corregir',
+                confirmButtonColor: '#d33'
+            }).then(() => {
+                $('#txt_th_pla_salario_min').val('');
+                $('#txt_th_pla_salario_min').focus();
+            });
+            return false;
+        }
+
+        return true;
+    }
+
+    // Ejecutar validación cada vez que cambie uno de los salarios
+    $('#txt_th_pla_salario_min, #txt_th_pla_salario_max').on('change', function() {
+        validarSalarios();
+    });
+
 
     $('#btn_eliminar_todo').on('click', function() {
 
@@ -92,12 +285,6 @@ $(document).ready(function() {
         // Asegurarnos de que id_plaza no sea undefined
         id_plaza = id_plaza || '';
 
-        // Si ya existe el DataTable, lo destruimos para evitar duplicados
-        if ($.fn.dataTable.isDataTable('#tbl_requisitos')) {
-            $('#tbl_requisitos').DataTable().clear().destroy();
-            $('#tbl_requisitos').empty(); // opcional: limpia el tbody
-        }
-
         tbl_requisitos = $('#tbl_requisitos').DataTable($.extend({}, configuracion_datatable('ID',
             'Candidato'), {
             responsive: true,
@@ -113,7 +300,10 @@ $(document).ready(function() {
                 dataSrc: ''
             },
             columns: [{
-                    data: 'th_req_tipo'
+                    data: 'th_req_tipo',
+                    render: function(data) {
+                        return data ? data.replace(/_/g, ' ') : '';
+                    }
                 },
                 {
                     data: 'th_req_descripcion'
@@ -153,11 +343,11 @@ $(document).ready(function() {
         // Asegurarnos de que id_plaza no sea undefined
         id_plaza = id_plaza || '';
 
-        // Si ya existe el DataTable, lo destruimos para evitar duplicados
-        if ($.fn.dataTable.isDataTable('#tbl_etapas_proceso')) {
+        if ($.fn.DataTable.isDataTable('#tbl_etapas_proceso')) {
             $('#tbl_etapas_proceso').DataTable().clear().destroy();
-            $('#tbl_etapas_proceso').empty(); // opcional: limpia el tbody
+            $('#tbl_etapas_proceso tbody').empty();
         }
+
 
         tbl_etapas_proceso = $('#tbl_etapas_proceso').DataTable($.extend({}, configuracion_datatable('ID',
             'Candidato'), {
@@ -177,7 +367,10 @@ $(document).ready(function() {
                     data: 'th_etapa_nombre'
                 },
                 {
-                    data: 'th_etapa_tipo'
+                    data: 'th_etapa_tipo',
+                    render: function(data) {
+                        return data ? data.replace(/_/g, ' ') : '';
+                    }
                 },
                 {
                     data: 'th_etapa_obligatoria'
@@ -529,6 +722,11 @@ function cargar_plaza(id) {
                 text: r.th_pla_titulo,
                 selected: true
             }));
+            $('#ddl_th_pla_responsable').append($('<option>', {
+                value: r.per_id,
+                text: r.per_cedula ? r.per_cedula : "" + " - " + r.per_nombre_completo,
+                selected: true
+            }));
 
         },
         error: function(err) {
@@ -669,8 +867,8 @@ function eliminarRequisito(id) {
                 success: function(resp) {
                     if (resp == 1 || resp === true) {
                         Swal.fire('', 'Requisito eliminado.', 'success');
+                        // recargar DataTable}
 
-                        // recargar DataTable
                         $('#tbl_requisitos').DataTable().ajax.reload(null, false);
                     } else {
                         Swal.fire('', 'No se pudo eliminar.', 'error');
@@ -954,7 +1152,7 @@ function eliminarEtapa(id) {
                                                         </label>
                                                         <input type="number" step="0.01" class="form-control ps-4"
                                                             id="txt_th_pla_salario_min" name="txt_th_pla_salario_min"
-                                                            placeholder="0.00" required />
+                                                            placeholder="0.00" required min="0" />
                                                     </div>
 
 
@@ -964,7 +1162,7 @@ function eliminarEtapa(id) {
                                                         </label>
                                                         <input type="number" step="0.01" class="form-control ps-4"
                                                             id="txt_th_pla_salario_max" name="txt_th_pla_salario_max"
-                                                            placeholder="0.00" required />
+                                                            placeholder="0.00" required min="0" />
                                                     </div>
 
 

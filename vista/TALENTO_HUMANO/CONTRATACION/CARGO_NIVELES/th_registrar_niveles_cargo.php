@@ -153,7 +153,7 @@ function eliminar_nivel() {
                     </div>
 
                     <div>
-                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_niveles"
+                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_niveles_cargo"
                             class="btn btn-outline-dark btn-sm">
                             <i class="bx bx-arrow-back"></i> Regresar
                         </a>

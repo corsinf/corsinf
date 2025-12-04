@@ -133,7 +133,10 @@ class th_contr_plaza_requisitosC
 
     foreach ($datos as $requisito) {
         $descripcion = isset($requisito['th_req_descripcion']) ? $requisito['th_req_descripcion'] : '';
-        $tipo = isset($requisito['th_req_tipo']) ? $requisito['th_req_tipo'] : '';
+       $tipo = isset($requisito['th_req_tipo']) 
+    ? str_replace('_', ' ', $requisito['th_req_tipo']) 
+    : '';
+
         $textoCompleto = trim($tipo . ' - ' . $descripcion);
         if ($query === '' || stripos($textoCompleto, $query) !== false) {
             $lista[] = [

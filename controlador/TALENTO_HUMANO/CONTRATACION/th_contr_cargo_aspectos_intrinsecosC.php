@@ -57,7 +57,7 @@ class th_contr_cargo_aspectos_intrinsecosC
         if ($id == '') {
             $datos = $this->modelo->listar(); // listar todos
         } else {
-            $datos = $this->modelo->where('th_carasp_estado',1)->where('th_car_id',$id)->listar();
+            $datos = $this->modelo->listar_aspecto_cargo_completo($id);
         }
 
         return $datos;
@@ -65,62 +65,75 @@ class th_contr_cargo_aspectos_intrinsecosC
 
     
     function insertar_editar($parametros)
-    {
-        // helpers
-        $toInt = function ($v) { return ($v === '' || $v === null) ? null : (int)$v; };
+{
+    $toInt = function ($v) { 
+        return ($v === '' || $v === null) ? null : (int)$v; 
+    };
 
-        $th_car_id = $toInt($parametros['ddl_th_car_id'] ?? ($parametros['th_car_id'] ?? null));
-        $nivel_cargo = $parametros['txt_th_carasp_nivel_cargo'] ?? ($parametros['th_carasp_nivel_cargo'] ?? null);
-        $subordinacion = $parametros['txt_th_carasp_subordinacion'] ?? ($parametros['th_carasp_subordinacion'] ?? null);
-        $supervision = $parametros['txt_th_carasp_supervision'] ?? ($parametros['th_carasp_supervision'] ?? null);
-        $comunicaciones = $parametros['txt_th_carasp_comunicaciones_colaterales'] ?? ($parametros['th_carasp_comunicaciones_colaterales'] ?? null);
+    $toText = function ($v) {
+        if ($v === '' || $v === null) return null;
+        $clean = trim($v);
+        return $clean === '' ? null : $clean;
+    };
 
-        // preparar datos comunes
-        $datos = array(
-            array('campo' => 'th_car_id', 'dato' => $th_car_id),
-            array('campo' => 'th_carasp_nivel_cargo', 'dato' => $nivel_cargo),
-            array('campo' => 'th_carasp_subordinacion', 'dato' => $subordinacion),
-            array('campo' => 'th_carasp_supervision', 'dato' => $supervision),
-            array('campo' => 'th_carasp_comunicaciones_colaterales', 'dato' => $comunicaciones),
-            array('campo' => 'th_carasp_estado', 'dato' => isset($parametros['chk_th_carasp_estado']) ? ($parametros['chk_th_carasp_estado'] ? 1 : 0) : 1),
-            array('campo' => 'th_carasp_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
-        );
-
-        // Inserción
-        if (empty($parametros['_id'])) {
-            // validar duplicado: por ejemplo no permitir dos aspectos activos con mismo cargo + mismo nivel
-            $whereDup = $this->modelo->where('th_car_id', $th_car_id)
-                                    ->where('th_carasp_nivel_cargo', $nivel_cargo)
-                                    ->where('th_carasp_estado', 1)
-                                    ->listar();
-
-            if (count($whereDup) == 0) {
-                // agregar fecha de creación
-                $datos[] = array('campo' => 'th_carasp_fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
-                $id = $this->modelo->insertar_id($datos);
-                // devolver id insertado si quieres; por coherencia con tu otro controlador devuelvo 1
-                return 1;
-            } else {
-                return -2; // duplicado
-            }
-        } else {
-            // Edición: verificar duplicado en otro id
-            $dup = $this->modelo->where('th_car_id', $th_car_id)
-                               ->where('th_carasp_nivel_cargo', $nivel_cargo)
-                               ->where('th_carasp_id !', $parametros['_id'])
-                               ->listar();
-
-            if (count($dup) == 0) {
-                $where[0]['campo'] = 'th_carasp_id';
-                $where[0]['dato']  = $parametros['_id'];
-
-                $res = $this->modelo->editar($datos, $where);
-                return $res;
-            } else {
-                return -2; // duplicado en otro registro
-            }
-        }
+    $th_car_id = $toInt($parametros['ddl_th_car_id'] ?? ($parametros['th_car_id'] ?? null));
+    $nivel_cargo = $parametros['txt_th_carasp_nivel_cargo'] ?? ($parametros['th_carasp_nivel_cargo'] ?? null);
+    $subordinacion_id = $toInt($parametros['th_carasp_subordinacion_id'] ?? null);
+    $subordinacion_texto = $toText($parametros['txt_th_carasp_subordinacion'] ?? ($parametros['th_carasp_subordinacion'] ?? null));
+    if ($subordinacion_id !== null) {
+        $subordinacion_texto = null;
+    } else {
+        $subordinacion_id = null;
     }
+   
+    $supervision_id = $toInt($parametros['th_carasp_supervision_id'] ?? null);
+    $supervision_texto = $toText($parametros['txt_th_carasp_supervision'] ?? ($parametros['th_carasp_supervision'] ?? null));
+    if ($supervision_id !== null) {
+        $supervision_texto = null;
+    } else {
+        $supervision_id = null;
+    }
+   
+    $comunicaciones_id = $toInt($parametros['th_carasp_comunicaciones_id'] ?? null);
+    $comunicaciones_texto = $toText($parametros['txt_th_carasp_comunicaciones_colaterales'] ?? ($parametros['th_carasp_comunicaciones_colaterales'] ?? null));
+    if ($comunicaciones_id !== null) {
+        $comunicaciones_texto = null;
+    } else {
+        $comunicaciones_id = null;
+    }
+    $datos = array(
+        array('campo' => 'th_car_id', 'dato' => $th_car_id),
+        array('campo' => 'th_carasp_nivel_cargo', 'dato' => $nivel_cargo),
+        array('campo' => 'th_carasp_subordinacion', 'dato' => $subordinacion_texto),
+        array('campo' => 'th_carasp_subordinacion_id', 'dato' => $subordinacion_id),
+        array('campo' => 'th_carasp_supervision', 'dato' => $supervision_texto),
+        array('campo' => 'th_carasp_supervision_id', 'dato' => $supervision_id),
+        array('campo' => 'th_carasp_comunicaciones_colaterales', 'dato' => $comunicaciones_texto),
+        array('campo' => 'th_carasp_comunicaciones_id', 'dato' => $comunicaciones_id),
+        array('campo' => 'th_carasp_estado', 'dato' => 1),
+        array('campo' => 'th_carasp_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+    );
+
+   
+    if (empty($parametros['_id'])) {
+       
+            $datos[] = array('campo' => 'th_carasp_fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
+            
+            $id = $this->modelo->insertar_id($datos);
+            
+            return $id ? 1 : -2;
+    } 
+  
+    else {
+       
+            $where = array(
+                array('campo' => 'th_carasp_id', 'dato' => $parametros['_id'])
+            );
+            $res = $this->modelo->editar($datos, $where);
+        
+            return $res;
+    }
+}
 
     
     function eliminar($id)

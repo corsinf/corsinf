@@ -55,7 +55,7 @@ function Parametros() {
 
 function insertar_plaza_requerimiento() {
 
-
+    let idPlaza = Number(localStorage.getItem('plaza_id'));
     $.ajax({
         data: {
             parametros: Parametros()
@@ -66,8 +66,13 @@ function insertar_plaza_requerimiento() {
         success: function(res) {
             if (res > 0) {
                 Swal.fire('', 'Requisito asignado con éxito.', 'success').then(function() {
+
+                    $(document).trigger('plaza:actualizada', {
+                        idPlaza: idPlaza,
+                        entidad: 'requisito'
+                    });
                     $('#modal_requisito').modal('hide');
-                    $('#tbl_requisitos').DataTable().ajax.reload(null, false);
+
                     $('#ddl_requisitos').empty().append(
                         '<option value="" selected hidden>-- Seleccione el requisito--</option>'
                     );

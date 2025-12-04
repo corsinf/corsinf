@@ -29,9 +29,14 @@ $(document).ready(function() {
         columns: [{
                 data: null,
                 render: function(data, type, item) {
+
+                    // quitar guiones bajos en el texto
+                    let tipoLimpio = item.tipo ? item.tipo.replace(/_/g, ' ') : '';
+
                     let href =
                         `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_requisito&_id=${item._id}`;
-                    return `<a href="${href}"><u>${item.tipo}</u></a>`;
+
+                    return `<a href="${href}"><u>${tipoLimpio}</u></a>`;
                 }
             },
             {

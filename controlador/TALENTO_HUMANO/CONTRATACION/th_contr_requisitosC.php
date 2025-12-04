@@ -135,8 +135,7 @@ class  th_contr_requisitosC
 
     foreach ($datos as $row) {
         // usar th_req_tipo como "título" (ajusta si prefieres otro campo)
-        $titulo = isset($row['th_req_tipo']) ? $row['th_req_tipo'] : '';
-
+        $titulo = isset($row['th_req_tipo']) ? str_replace('_', ' ', $row['th_req_tipo']) : '';
         // comparar SOLO por el título (case-insensitive)
         if ($query === '' || stripos($titulo, $query) !== false) {
             $lista[] = [

@@ -42,7 +42,7 @@ $(document).ready(function() {
             {
                 data: 'tipo',
                 render: function(data) {
-                    return data ? data : '';
+                    return data ? data.replace(/_/g, ' ') : '';
                 }
             },
             {

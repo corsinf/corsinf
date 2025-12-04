@@ -54,7 +54,7 @@ function Parametros_PE() {
 
 
 function insertar_plaza_etapa() {
-
+    let idPlaza = Number(localStorage.getItem('plaza_id'));
     $.ajax({
         data: {
             parametros: Parametros_PE()
@@ -65,11 +65,19 @@ function insertar_plaza_etapa() {
         success: function(res) {
             if (res > 0) {
                 Swal.fire('', 'Plaza creada con éxito.', 'success').then(function() {
+
+                    $(document).trigger('plaza:actualizada', {
+                        idPlaza: idPlaza,
+                        entidad: 'etapa'
+                    });
+
                     $('#modal_etapa_proceso').modal('hide');
-                    $('#tbl_etapas_proceso').DataTable().ajax.reload(null, false);
+
                     $('#ddl_etapas_proceso').empty().append(
                         '<option value="" selected hidden>-- Seleccione el etapa proceso --</option>'
                     );
+                    cargar_etapas(idPlaza);
+
                 });
             } else if (res == -2) {
                 Swal.fire('', res.msg || 'Error al guardar plaza.', 'error');

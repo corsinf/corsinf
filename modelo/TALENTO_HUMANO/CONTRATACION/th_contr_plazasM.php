@@ -33,7 +33,7 @@ class th_contr_plazasM extends BaseModel
 
 
     function listar_plazas_con_horarios($id_plaza)
-    {
+{
     $sql = "
         SELECT
             p.th_pla_id AS _id,
@@ -54,7 +54,15 @@ class th_contr_plazasM extends BaseModel
             p.th_pla_estado,
             p.th_pla_fecha_creacion,
             p.th_pla_fecha_modificacion,
-            -- Campos del horario asociado
+            p.th_pla_completado,
+            per.th_per_id AS per_id,
+            per.th_per_cedula AS per_cedula,
+            CONCAT(
+                per.th_per_primer_nombre, ' ',
+                per.th_per_segundo_nombre, ' ',
+                per.th_per_primer_apellido, ' ',
+                per.th_per_segundo_apellido
+            ) AS per_nombre_completo,
             h.th_hor_id AS hor_id,
             h.th_hor_nombre AS hor_nombre,
             h.th_hor_tipo AS hor_tipo,
@@ -64,13 +72,21 @@ class th_contr_plazasM extends BaseModel
             h.th_hor_fecha_creacion AS hor_fecha_creacion,
             h.th_hor_fecha_modificacion AS hor_fecha_modificacion
         FROM th_contr_plazas p
-        LEFT JOIN th_horarios h ON p.th_pla_jornada_id = h.th_hor_id
-        WHERE p.th_pla_id = '$id_plaza' AND p.th_pla_estado = 1
+        LEFT JOIN th_horarios h 
+            ON p.th_pla_jornada_id = h.th_hor_id
+
+        LEFT JOIN th_personas per
+            ON per.th_per_id = p.th_pla_responsable_persona_id
+
+        WHERE p.th_pla_id = '$id_plaza'
+          AND p.th_pla_estado = 1
+
         ORDER BY p.th_pla_fecha_creacion DESC;
     ";
-    $datos = $this->db->datos($sql);
-    return $datos;
-    }
+    
+    return $this->db->datos($sql);
+}
+
 
 
     public function listar_plazas_no_asignadas()
