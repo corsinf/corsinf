@@ -1007,7 +1007,7 @@ function para_ftp($nombre,$texto)
 		 		$parametrosSp = array($db_origen,
 		    								$db_destino,
 		    								'0');
-		  		$sql = "EXEC EstructuraBase @origen_bd = ?,@destino_bd = ?";
+		  		// //$sql = "EXEC EstructuraBase @origen_bd = ?,@destino_bd = ?";
 		  		// print_r($parametros);
 		  		$this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
 		  		$sql3 = "EXEC GenerarVistasBase @origen_bd = ?,@destino_bd = ?,@db_tercero = ?";

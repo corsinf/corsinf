@@ -284,7 +284,7 @@ foto,link_fb,link_gmail,link_ins,link_tw,link_web";
 		$empresa = $_SESSION['INICIO']['ID_EMPRESA'];
 
 
-		$sql = "SELECT Campo_Usuario as 'usu',Campo_pass as 'pass'
+		$sql = "SELECT Campo_Usuario as 'usu',Campo_pass as 'pass',campo_img as 'foto'
 		FROM TABLAS_NOCONCURENTE
 		WHERE Tabla = '".$tabla."'
 		AND Id_Empresa = '".$empresa."'

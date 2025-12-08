@@ -183,17 +183,20 @@ class loginC
 			 //buscamos las empresas en donde el usuario es no concurente
 			 	 $datos = array();		
 			 	 $no_concurentes = $this->login->empresa_tabla_noconcurente(false,false,1);
+			 	 // print_r($no_concurentes);die();
 			 	 foreach ($no_concurentes as $key => $value) {
+			 	 	// print_r($value);die();
 			 	 		$primera_vez = 0;
 			 	 		$tipo = $value['tipo'];
 			 	 	 	$empresa = $this->login->lista_empresa($value['Id_Empresa']);
 			 	 	 	$parametros['Campo_Usuario'] = $value['Campo_usuario'];
 			 	 	 	$Campo_Pass = $value['Campo_pass'];
 			 	 	 	$parametros['tabla'] = $value['Tabla'];
-			 	 	 	// print_r($empresa);die();
+			 	 	 	// print_r($empresa);
 			 	 	 	if(count($empresa)>0)
 			 	 	 	{
 					 	 	 	$busqueda_tercero = $this->login->buscar_db_terceros($empresa[0]['Base_datos'],$empresa[0]['Usuario_db'],$empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db'],$parametros);
+					 	 	 	// print_r($busqueda_tercero);die();
 					 	 		if(count($busqueda_tercero)>0)
 					 	 	 	{
 					 	 	 		if($busqueda_tercero[0][$Campo_Pass]=='' || $busqueda_tercero[0][$Campo_Pass]==null)
@@ -211,14 +214,18 @@ class loginC
 
 					 	 	 		if($existe_en_lista==0)
 					 	 	 		{
+					 	 	 			// print_r($lista_empresas);die();
 					 	 	 			$lista_empresas[] = array('Logo'=>$empresa[0]['Logo'],'Id_Empresa'=>$empresa[0]['Id_Empresa'],'Nombre_Comercial'=>$empresa[0]['Nombre_Comercial'],'ActiveDirectory'=>$active_Valido,'normal'=>0,'no_concurente'=>1,'PERFIL'=>$tipo,'Cod_Perfil'=>$value['tipo_perfil'],'primera_vez'=>$primera_vez); 
 					 	 	 				$existe_en_lista = 0;
 					 	 	 		}
 					 	 	 	}
 				 	 	 }
+
+			 	 		// print_r($value);
 			 	 }
 
 			 	 // print_r($lista_empresas);die();
+			 	 // print_r('expression');die();
 			 	 // $datos = $this->login->buscar_empresas_no_concurentes($parametros['email'],$parametros['pass']);
 
 			 	 if(count($lista_empresas)==0)
@@ -268,6 +275,7 @@ class loginC
 									</div>									
 								</div>';
 			 }
+			 // print_r($empresas);die();
 			 return array('lista'=>$empresas,'no_concurente'=>$no_concurente);
 	}
 
@@ -859,7 +867,7 @@ class loginC
 	{
 
 				// print_r($parametros);die();
-				$parametros['pass'] = $this->cod_global->enciptar_clave($parametros['pass']);
+				// $parametros['pass'] = $this->cod_global->enciptar_clave($parametros['pass']);
 				$datos = $this->login->datos_login(false,false,2);
 				// busca en tabla no concurrentes 
 				 $no_concurentes = $this->login->empresa_tabla_noconcurente($parametros['empresa'],false,false,$parametros['tipo']);
@@ -880,6 +888,7 @@ class loginC
 
 			 	 	 	// print_r($parametros);die();
 			 	 	 	$busqueda_tercero = $this->login->buscar_db_terceros($empresa[0]['Base_datos'],$empresa[0]['Usuario_db'],$empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db'],$parametros);
+			 	 	 	// print_r($busqueda_tercero);die();
 			 	 	 	if(count($busqueda_tercero)>0)
 			 	 	 	{
 			 	 	 		break;
@@ -1407,6 +1416,7 @@ class loginC
 		$pagina = '';
 		// print_r($datosEmp);
 		// print_r($datos);die();
+		$_SESSION['INICIO']["LISTA_MODULOS"] = $datos;
 		$modulos_draw = array();
 		foreach ($datos as $key => $value) {
 			$licencia = 1;
