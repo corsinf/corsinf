@@ -18,11 +18,74 @@ $(document).ready(function() {
     <?php if (isset($_GET['_id_per'])) { ?>
     cargar_datos_persona(<?= $_id ?>);
     cargar_departamento(<?= $_id ?>);
+    cargar_niveles_academicos(<?= $_id ?>);
     <?php } ?>
 
     cargar_selects2();
     inicializar_eventos_formulario();
 });
+
+
+var tbl_nivel_academico = null;
+
+function cargar_niveles_academicos(id_persona) {
+
+    if (!id_persona) {
+        console.warn("⚠ ID_PERSONA está vacío, no se carga la tabla.");
+        return;
+    }
+
+    // destruir si ya existe
+    if ($.fn.dataTable.isDataTable('#tbl_nivel_academico')) {
+        $('#tbl_nivel_academico').DataTable().clear().destroy();
+        $('#tbl_nivel_academico').empty();
+    }
+
+    tbl_nivel_academico = $('#tbl_nivel_academico').DataTable($.extend({}, configuracion_datatable(
+        'Tipo de nivel', 'Nivel Académico', 'Titulo'
+    ), {
+        responsive: true,
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+        },
+        ajax: {
+            url: '../controlador/TALENTO_HUMANO/th_persona_nivel_academicoC.php?listar_persona_nivel_academico=true',
+            type: 'POST',
+            data: function(d) {
+                d.id = id_persona;
+            },
+            dataSrc: '' // ← IMPORTANTE: controlador debe devolver array JSON
+        },
+        columns: [{
+                data: null,
+                render: function(data, type, item) {
+
+                    return `
+            <a href="#" onclick="abrir_modal_nivel_academico(${item._id}); return false;">
+                <u>${item.tipo_nivel}</u>
+            </a>
+        `;
+                }
+            }, {
+                data: 'nivel_academico'
+            },
+            {
+                data: 'titulo',
+                className: 'text-center',
+                render: d => d ? (d.length > 40 ? d.substring(0, 40) + '...' : d) : ''
+            },
+            {
+                data: 'registro_senescyt',
+                className: 'text-center'
+            }
+        ],
+        order: [
+            [0, 'asc']
+        ]
+    }));
+}
+
+
 
 /**
  * Inicializar eventos del formulario
@@ -33,22 +96,6 @@ function inicializar_eventos_formulario() {
         calcular_edad('txt_edad', $(this).val());
     });
 
-    // Evento para click en imagen de foto
-    $('#img_foto_preview').on('click', function() {
-        $('#file_foto').click();
-    });
-
-    // Evento para cambio de archivo de foto
-    $('#file_foto').on('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                $('#img_foto_preview').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(file);
-        }
-    });
 
     // Cascada de select ubicación
     $('#ddl_provincias').on('change', function() {
@@ -80,7 +127,7 @@ function inicializar_eventos_formulario() {
     });
 
     // Limpiar error de cédula al escribir
-    $('#txt_cedula').on('input', function() {
+    $('#txt_cedula_persona').on('input', function() {
         $(this).removeClass('is-invalid');
         $('#error_txt_cedula').text('');
     });
@@ -122,8 +169,6 @@ function cargar_datos_persona(id) {
             // Cargar datos de visualización
             cargar_vista_persona(persona);
 
-            // Cargar ubicación
-            cargar_ubicacion_persona(persona);
 
             // Cargar cargo
             if (persona.th_car_id && persona.th_car_id != 0) {
@@ -132,12 +177,6 @@ function cargar_datos_persona(id) {
                     text: persona.th_car_nombre || 'Cargo',
                     selected: true
                 }));
-            }
-
-            // Cargar foto
-            if (persona.th_per_foto_url) {
-                $('#img_persona_inf').attr('src', persona.th_per_foto_url + '?' + Math.random());
-                $('#img_foto_preview').attr('src', persona.th_per_foto_url);
             }
 
             // Datos para compatibilidad con postulantes
@@ -166,7 +205,7 @@ function cargar_formulario_persona(persona) {
     $('#txt_segundo_apellido').val(persona.segundo_apellido || persona.th_per_segundo_apellido || '');
     $('#txt_fecha_nacimiento').val(persona.fecha_nacimiento || persona.th_per_fecha_nacimiento || '');
     $('#ddl_nacionalidad').val(persona.nacionalidad || persona.th_per_nacionalidad || '');
-    $('#txt_cedula').val(persona.cedula || persona.th_per_cedula || '');
+    $('#txt_cedula_persona').val(persona.cedula || persona.th_per_cedula || '');
     $('#ddl_estado_civil').val(persona.estado_civil || persona.th_per_estado_civil || '');
     $('#ddl_sexo').val(persona.sexo || persona.th_per_sexo || '');
     $('#txt_telefono_1').val(persona.telefono_1 || persona.th_per_telefono_1 || '');
@@ -204,6 +243,10 @@ function cargar_formulario_persona(persona) {
     $('#txt_anios_trabajo').val(persona.anios_trabajo || persona.th_per_anios_trabajo || '');
     $('#txt_seccion').val(persona.seccion || persona.th_per_seccion || '');
 
+
+    $('#img_persona_inf').attr('src', persona.foto_url + '?' + Math.random());
+    $('#img_persona_form').attr('src', persona.foto_url + '?' + Math.random());
+
     // cargo: carga select con nombre si viene (usa id para seleccionar)
     if (persona.th_car_id || persona.th_car_id === 0) {
         $('#ddl_cargo').append($('<option>', {
@@ -212,6 +255,16 @@ function cargar_formulario_persona(persona) {
             selected: true
         }));
     }
+
+    url_provinciaC = '../controlador/GENERAL/th_provinciasC.php?listar=true';
+    cargar_select2_con_id('ddl_provincias', url_provinciaC, persona.id_provincia, 'th_prov_nombre');
+
+    url_ciudadC = '../controlador/GENERAL/th_ciudadC.php?listar=true';
+    cargar_select2_con_id('ddl_ciudad', url_ciudadC, persona.id_ciudad, 'th_ciu_nombre');
+
+    url_parroquiaC = '../controlador/GENERAL/th_parroquiasC.php?listar=true';
+    cargar_select2_con_id('ddl_parroquia', url_parroquiaC, persona.id_parroquia, 'th_parr_nombre');
+
 
     // Si tienes nombres y quieres mostrarlos en la vista
     var nombres = persona.nombres_completos || persona.th_per_nombres_completos ||
@@ -225,7 +278,6 @@ function cargar_formulario_persona(persona) {
         calcular_edad('txt_edad', fechaNac);
     }
 
-    console.log('Datos cargados en formulario:', persona);
 }
 
 
@@ -246,68 +298,66 @@ function cargar_vista_persona(persona) {
     $('#txt_correo_v').html(persona.correo || 'N/A');
 }
 
-/**
- * Cargar ubicación con select2
- */
-function cargar_ubicacion_persona(persona) {
-    if (persona.th_prov_id && persona.th_prov_id != 0) {
-        cargar_select2_con_id('ddl_provincias',
-            '../controlador/GENERAL/th_provinciasC.php?listar=true',
-            persona.th_prov_id,
-            'th_prov_nombre');
-    }
-
-    if (persona.th_ciu_id && persona.th_ciu_id != 0) {
-        cargar_select2_con_id('ddl_ciudad',
-            '../controlador/GENERAL/th_ciudadC.php?listar=true',
-            persona.th_ciu_id,
-            'th_ciu_nombre');
-    }
-
-    if (persona.th_parr_id && persona.th_parr_id != 0) {
-        cargar_select2_con_id('ddl_parroquia',
-            '../controlador/GENERAL/th_parroquiasC.php?listar=true',
-            persona.th_parr_id,
-            'th_parr_nombre');
-    }
-}
 
 /**
  * Obtener parámetros del formulario
  */
 function parametros_persona() {
     return {
-        '_id': '<?= $_id ?>',
+        // ID para edición
+        '_id': <?= $_id ?>,
+
+        // Datos personales
         'txt_primer_nombre': $('#txt_primer_nombre').val().trim(),
         'txt_segundo_nombre': $('#txt_segundo_nombre').val().trim(),
         'txt_primer_apellido': $('#txt_primer_apellido').val().trim(),
         'txt_segundo_apellido': $('#txt_segundo_apellido').val().trim(),
+        'txt_cedula_persona': $('#txt_cedula_persona').val().trim(),
+        'ddl_sexo': $('#ddl_sexo').val(),
         'txt_fecha_nacimiento': $('#txt_fecha_nacimiento').val(),
         'ddl_nacionalidad': $('#ddl_nacionalidad').val(),
-        'txt_cedula': $('#txt_cedula').val().trim(),
         'ddl_estado_civil': $('#ddl_estado_civil').val(),
-        'ddl_sexo': $('#ddl_sexo').val(),
+
+        // Datos de contacto
         'txt_telefono_1': $('#txt_telefono_1').val().trim(),
         'txt_telefono_2': $('#txt_telefono_2').val().trim(),
         'txt_correo': $('#txt_correo').val().trim(),
+
+        // Ubicación
+        'txt_direccion': $('#txt_direccion').val().trim(),
+        'txt_codigo_postal': $('#txt_codigo_postal').val().trim(),
         'ddl_provincias': $('#ddl_provincias').val(),
         'ddl_ciudad': $('#ddl_ciudad').val(),
         'ddl_parroquia': $('#ddl_parroquia').val(),
-        'ddl_cargo': $('#ddl_cargo').val(),
-        'txt_codigo_postal': $('#txt_codigo_postal').val().trim(),
-        'txt_direccion': $('#txt_direccion').val().trim(),
-        'txt_observaciones': $('#txt_observaciones').val().trim(),
+
+        // Información adicional
         'ddl_tipo_sangre': $('#ddl_tipo_sangre').val(),
         'ddl_etnia': $('#ddl_etnia').val(),
         'ddl_religion': $('#ddl_religion').val(),
         'ddl_orientacion': $('#ddl_orientacion').val(),
+        'ddl_cargo': $('#ddl_cargo').val(),
+
+        // Información laboral
+        'txt_fecha_ingreso': $('#txt_fecha_ingreso').val(),
+        'txt_anios_trabajo': $('#txt_anios_trabajo').val(),
+        'txt_seccion': $('#txt_seccion').val(),
+        'txt_remuneracion': $('#txt_remuneracion').val(),
+        'txt_comision_asuntos_sociales': $('#txt_comision_asuntos_sociales').val().trim(),
+
+        // Información sobre discapacidad
         'ddl_tipo_discapacidad': $('#ddl_tipo_discapacidad').val(),
         'txt_porcentaje_discapacidad': $('#txt_porcentaje_discapacidad').val(),
         'ddl_escala_discapacidad': $('#ddl_escala_discapacidad').val(),
-        'txt_foto_url': $('#img_foto_preview').attr('src')
+
+        // Información de vehículo
+        'ddl_clase_auto': $('#ddl_clase_auto').val(),
+        'txt_placa_original': $('#txt_placa_original').val().trim(),
+        'txt_placa_sintesis': $('#txt_placa_sintesis').val().trim(),
+
+        // Observaciones
+        'txt_observaciones': $('#txt_observaciones').val().trim()
     };
 }
-
 /**
  * Insertar o editar información personal
  */
@@ -318,12 +368,6 @@ function insertar_editar_informacion_personal() {
     }
 
     const parametros = parametros_persona();
-
-    // Validaciones adicionales
-    if (!validar_cedula(parametros.txt_cedula)) {
-        Swal.fire('Advertencia', 'La cédula ingresada no es válida', 'warning');
-        return;
-    }
 
     if (parametros.txt_correo && !validar_email(parametros.txt_correo)) {
         Swal.fire('Advertencia', 'El correo electrónico no es válido', 'warning');
@@ -367,7 +411,7 @@ function insertar_editar_informacion_personal() {
                     title: 'Advertencia',
                     text: 'Ya existe una persona registrada con esta cédula'
                 });
-                $('#txt_cedula').addClass('is-invalid');
+                $('#txt_cedula_persona').addClass('is-invalid');
                 $('#error_txt_cedula').text('La cédula ya está en uso.');
             } else {
                 Swal.fire({
@@ -444,41 +488,7 @@ function calcular_edad(campo_destino, fecha_nacimiento) {
 /**
  * Validar cédula ecuatoriana
  */
-function validar_cedula(cedula) {
-    if (!cedula || cedula.length !== 10) return false;
 
-    const digitoRegion = parseInt(cedula.substring(0, 2));
-    if (digitoRegion < 1 || digitoRegion > 24) return false;
-
-    const ultimoDigito = parseInt(cedula.substring(9, 10));
-    const pares = parseInt(cedula.substring(1, 2)) + parseInt(cedula.substring(3, 4)) +
-        parseInt(cedula.substring(5, 6)) + parseInt(cedula.substring(7, 8));
-
-    let numeroUno = parseInt(cedula.substring(0, 1)) * 2;
-    if (numeroUno > 9) numeroUno -= 9;
-
-    let numeroTres = parseInt(cedula.substring(2, 3)) * 2;
-    if (numeroTres > 9) numeroTres -= 9;
-
-    let numeroCinco = parseInt(cedula.substring(4, 5)) * 2;
-    if (numeroCinco > 9) numeroCinco -= 9;
-
-    let numeroSiete = parseInt(cedula.substring(6, 7)) * 2;
-    if (numeroSiete > 9) numeroSiete -= 9;
-
-    let numeroNueve = parseInt(cedula.substring(8, 9)) * 2;
-    if (numeroNueve > 9) numeroNueve -= 9;
-
-    const impares = numeroUno + numeroTres + numeroCinco + numeroSiete + numeroNueve;
-    const sumaTotal = pares + impares;
-    const primerDigitoSuma = String(sumaTotal).substring(0, 1);
-    const decena = (parseInt(primerDigitoSuma) + 1) * 10;
-    let digitoValidador = decena - sumaTotal;
-
-    if (digitoValidador === 10) digitoValidador = 0;
-
-    return digitoValidador === ultimoDigito;
-}
 
 /**
  * Validar email
@@ -520,12 +530,22 @@ function cargar_selects2() {
 
     const url_cargos = '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargosC.php?buscar=true';
     cargar_select2_url('ddl_cargo', url_cargos, '', '#modal_informacion_personal');
+
+    const url_provincias = '../controlador/GENERAL/th_provinciasC.php?listar=true';
+    cargar_select2_url('ddl_provincias', url_provincias, '', '#modal_informacion_personal');
+
+    const url_ciudad = '../controlador/GENERAL/th_ciudadC.php?listar=true';
+    cargar_select2_url('ddl_ciudad', url_ciudad, '', '#modal_informacion_personal');
+
+    const url_parroquias = '../controlador/GENERAL/th_parroquiasC.php?listar=true';
+    cargar_select2_url('ddl_parroquia', url_parroquias, '', '#modal_informacion_personal');
+
 }
 
 /**
  * Recargar imagen de perfil
  */
-function recargar_imagen(id) {
+function recargar_imagen_persona(id) {
     $.ajax({
         url: '../controlador/GENERAL/th_personasC.php?listar=true',
         type: 'post',
@@ -535,7 +555,9 @@ function recargar_imagen(id) {
         dataType: 'json',
         success: function(response) {
             if (response && response[0]) {
-                $('#img_persona_inf').attr('src', response[0].th_per_foto_url + '?' + Math.random());
+                $('#img_persona_inf').attr('src', response[0].foto_url + '?' + Math.random());
+                $('#img_persona_inf_modal').attr('src', response[0].foto_url + '?' + Math.random());
+                $('#img_persona_form').attr('src', response[0].foto_url + '?' + Math.random());
             }
         }
     });
@@ -630,6 +652,77 @@ function insertar_persona_departamento() {
 }
 </script>
 
+
+<script>
+$(document).ready(function() {
+    function cerrarModalNivelAcademico() {
+        let modal = document.getElementById('modal_nivel_academico');
+        let instance = bootstrap.Modal.getInstance(modal);
+        if (!instance) {
+            instance = new bootstrap.Modal(modal);
+        }
+        instance.hide();
+    }
+
+});
+
+function abrir_modal_nivel_academico() {
+
+    var modal = new bootstrap.Modal(document.getElementById('modal_nivel_academico'));
+    modal.show();
+}
+
+
+function insertar_editar_nivel_academico() {
+    // Recolectar parámetros desde el formulario
+    let parametros = {
+        _id: $('#_id').val(),
+        th_per_id: <?= isset($_id) ? $_id : '' ?>,
+        pna_tipo_nivel: $('#pna_tipo_nivel').val(),
+        pna_nivel_academico: $('#pna_nivel_academico').val(),
+        pna_titulo: $('#pna_titulo').val(),
+        pna_registro_senescyt: $('#pna_registro_senescyt').val(),
+        chk_estado: $('#chk_estado').is(':checked') ? 1 : 0
+    };
+
+    // Validaciones simples
+    if (!parametros.th_per_id) {
+        Swal.fire('Atención', 'Ingresa el ID de la persona', 'warning');
+        return;
+    }
+    if (!parametros.pna_titulo || !parametros.pna_nivel_academico) {
+        Swal.fire('Atención', 'Completa el nivel y el título', 'warning');
+        return;
+    }
+
+    $.ajax({
+        url: '../controlador/TALENTO_HUMANO/th_persona_nivel_academicoC.php?insertar_editar=true',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            parametros: parametros
+        },
+        success: function(resp) {
+            // El controlador devuelve 1, -1, -2 o el resultado de editar
+            if (resp == 1) {
+                Swal.fire('Éxito', 'Registro guardado', 'success');
+                cerrarModalNivelAcademico();
+                listar_niveles_academicos(parametros.th_per_id);
+            } else if (resp == -2) {
+                Swal.fire('Atención', 'Registro duplicado', 'warning');
+            } else {
+                Swal.fire('Error', 'No se pudo guardar', 'error');
+                console.log('Resp server:', resp);
+            }
+        },
+        error: function(xhr) {
+            console.error(xhr.responseText);
+            Swal.fire('Error', 'Error en el servidor', 'error');
+        }
+    });
+}
+</script>
+
 <!-- Vista de la página -->
 <div class="page-wrapper">
     <div class="page-content">
@@ -664,20 +757,20 @@ function insertar_persona_departamento() {
                                 <div class="align-items-center">
                                     <!-- Cambiar Foto -->
                                     <div class="text-center">
-                                        <!-- <?php include_once('../vista/GENERAL/per_cambiar_foto.php'); ?> -->
+                                        <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/th_per_cambiar_foto.php'); ?>
 
                                         <div class="position-relative">
 
                                             <div class="widget-user-image text-center">
-                                                <img class="rounded-circle p-1 bg-primary" src="../img/sin_imagen.jpg"
-                                                    class="img-fluid" id="img_persona_inf" alt="Imagen Perfil Persona"
-                                                    width="110" height="110" />
+                                                <img class="rounded-circle p-1 bg-primary" src="" class="img-fluid"
+                                                    id="img_persona_inf" alt="Imagen Perfil Persona" width="110"
+                                                    height="110" />
                                             </div>
 
                                             <div>
                                                 <a href="#" class="d-flex justify-content-center" data-bs-toggle="modal"
-                                                    data-bs-target="#modal_agregar_cambiar_foto"
-                                                    onclick="abrir_modal_cambiar_foto('<?= $_id ?>');">
+                                                    data-bs-target="#modal_agregar_cambiar_foto_persona"
+                                                    onclick="abrir_modal_cambiar_foto_persona('<?= $_id ?>');">
                                                     <i class='bx bxs-camera bx-sm'></i>
                                                 </a>
                                             </div>
@@ -805,6 +898,16 @@ function insertar_persona_departamento() {
                                             <div class="tab-icon"><i class="bx bxs-user-check font-18 me-1"></i>
                                             </div>
                                             <div class="tab-title">Estado del Empleado</div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tab_nivel_academico" role="tab"
+                                        aria-selected="false" tabindex="-1">
+                                        <div class="d-flex align-items-center">
+                                            <div class="tab-icon"><i class="bx bxs-school font-18 me-1"></i>
+                                            </div>
+                                            <div class="tab-title">Nivel Académico</div>
                                         </div>
                                     </a>
                                 </li>
@@ -1092,6 +1195,37 @@ function insertar_persona_departamento() {
                                         </div>
                                     </div>
                                 </div>
+                                <div class="tab-pane fade" id="tab_nivel_academico" role="tabpanel">
+                                    <div class="card">
+                                        <div class="card-body p-3">
+                                            <div class="d-flex justify-content-end mb-3">
+                                                <button class="btn btn-primary btn-sm px-4 d-flex align-items-center"
+                                                    onclick="abrir_modal_nivel_academico()" type="button">
+                                                    <i class="bx bx-save me-1"></i> Nivel Académico
+                                                </button>
+                                            </div>
+
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered"
+                                                    id="tbl_nivel_academico" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Tipo de nivel</th>
+                                                            <th>Nivel Académico</th>
+                                                            <th class="text-center">Título</th>
+                                                            <th class="text-center">No° Registro</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
                                 <!-- Cuarta Sección, Departamento -->
                                 <div class="tab-pane fade" id="tab_departamento" role="tabpanel">
                                     <div class="card">
@@ -1141,9 +1275,8 @@ function insertar_persona_departamento() {
                             <div class="form-group">
                                 <label class="font-weight-bold">Fotografía</label>
                                 <div class="mt-2">
-                                    <img id="img_foto_preview" src="../img/user-default.png" alt="Foto"
-                                        class="img-thumbnail"
-                                        style="width: 150px; height: 150px; object-fit: cover; cursor: pointer;">
+                                    <img class="rounded-circle p-1 bg-primary" src="" class="img-fluid"
+                                        id="img_persona_form" alt="Imagen Perfil Persona" width="110" height="110" />
                                     <div class="mt-2">
                                         <small class="text-muted">Click en la imagen para subir foto</small>
                                     </div>
@@ -1197,9 +1330,10 @@ function insertar_persona_departamento() {
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="txt_cedula">N° de Cédula <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="txt_cedula" name="txt_cedula"
-                                            required maxlength="10">
+                                        <label for="txt_cedula_persona">N° de Cédula <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="txt_cedula_persona"
+                                            name="txt_cedula_persona" required maxlength="10">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -1304,32 +1438,6 @@ function insertar_persona_departamento() {
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="ddl_provincias">Provincia</label>
-                                        <select class="form-control select2" id="ddl_provincias" name="ddl_provincias">
-                                            <option value="">-- Selecciona una Provincia --</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="ddl_ciudad">Ciudad</label>
-                                        <select class="form-control select2" id="ddl_ciudad" name="ddl_ciudad">
-                                            <option value="">-- Selecciona una Ciudad --</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="ddl_parroquia">Parroquia</label>
-                                        <select class="form-control select2" id="ddl_parroquia" name="ddl_parroquia">
-                                            <option value="">-- Selecciona una Parroquia --</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-md-8">
                                     <div class="form-group">
                                         <label for="txt_direccion">Dirección</label>
@@ -1337,16 +1445,11 @@ function insertar_persona_departamento() {
                                             rows="2"></textarea>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="txt_codigo_postal">Código Postal</label>
-                                        <input type="text" class="form-control" id="txt_codigo_postal"
-                                            name="txt_codigo_postal">
-                                    </div>
-                                </div>
+                                <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/provincias_ciudades_parroquias.php'); ?>
                             </div>
                         </div>
                     </div>
+
 
                     <!-- Información Adicional -->
                     <div class="card mb-3">
@@ -1426,6 +1529,94 @@ function insertar_persona_departamento() {
                         </div>
                     </div>
 
+                    <!-- Agregar DESPUÉS de la sección "Información Adicional" y ANTES de "Información sobre Discapacidad" -->
+
+                    <!-- Información Laboral -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0"><i class="fas fa-briefcase"></i> Información Laboral</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txt_fecha_ingreso">Fecha de Ingreso</label>
+                                        <input type="date" class="form-control" id="txt_fecha_ingreso"
+                                            name="txt_fecha_ingreso">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txt_anios_trabajo">Años de Trabajo</label>
+                                        <input type="number" class="form-control" id="txt_anios_trabajo"
+                                            name="txt_anios_trabajo" min="0" step="0.1" placeholder="Ej: 5.5">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txt_seccion">Sección/Departamento</label>
+                                        <input type="text" class="form-control" id="txt_seccion" name="txt_seccion"
+                                            placeholder="Ej: Recursos Humanos">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="txt_remuneracion">Remuneración</label>
+                                        <input type="number" class="form-control" id="txt_remuneracion"
+                                            name="txt_remuneracion" min="0" step="0.01" placeholder="Ej: 1500.00">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="txt_comision_asuntos_sociales">Comisión Asuntos Sociales</label>
+                                        <input type="text" class="form-control" id="txt_comision_asuntos_sociales"
+                                            name="txt_comision_asuntos_sociales" placeholder="Ej: Comité de eventos">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información de Vehículo -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0"><i class="fas fa-car"></i> Información de Vehículo</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ddl_clase_auto">Clase de Vehículo</label>
+                                        <select class="form-control" id="ddl_clase_auto" name="ddl_clase_auto">
+                                            <option value="">-- Selecciona una opción --</option>
+                                            <option value="Automóvil">Automóvil</option>
+                                            <option value="Camioneta">Camioneta</option>
+                                            <option value="SUV">SUV</option>
+                                            <option value="Motocicleta">Motocicleta</option>
+                                            <option value="Ninguno">Ninguno</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txt_placa_original">Placa Original</label>
+                                        <input type="text" class="form-control" id="txt_placa_original"
+                                            name="txt_placa_original" placeholder="Ej: ABC-1234" maxlength="10">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txt_placa_sintesis">Placa Síntesis</label>
+                                        <input type="text" class="form-control" id="txt_placa_sintesis"
+                                            name="txt_placa_sintesis" placeholder="Ej: XYZ-5678" maxlength="10">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Información sobre Discapacidad -->
                     <div class="card mb-3">
                         <div class="card-header bg-light">
@@ -1489,7 +1680,7 @@ function insertar_persona_departamento() {
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                <button type="button" class="btn btn-secondary" onclick="cerrarModalInformacionPersonal()">
                     <i class="fas fa-times"></i> Cancelar
                 </button>
                 <button type="button" class="btn btn-primary" onclick="insertar_editar_informacion_personal()">
@@ -1500,24 +1691,88 @@ function insertar_persona_departamento() {
     </div>
 </div>
 
-<script>
-// Script para preview de la foto
-document.getElementById('input_foto').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('preview_foto').src = e.target.result;
-            document.getElementById('preview_foto').style.display = 'block';
-            document.getElementById('foto-placeholder').style.display = 'none';
-        }
-        reader.readAsDataURL(file);
-    }
-});
-</script>
+
+<!-- MODAL NIVEL ACADÉMICO -->
+<div class="modal fade" id="modal_nivel_academico" tabindex="-1" aria-labelledby="modal_nivel_academico_label"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modal_nivel_academico_label">
+                    Nivel Académico
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="form_nivel_academico">
+
+                    <!-- ID OCULTO PARA EDITAR -->
+                    <input type="hidden" id="_per_id" name="_per_id">
+
+                    <!-- ID PERSONA -->
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Tipo de Nivel *</label>
+                            <select id="pna_tipo_nivel" name="pna_tipo_nivel" class="form-select" required>
+                                <option value="">Seleccione...</option>
+                                <option value="TERCER NIVEL">Tercer Nivel</option>
+                                <option value="CUARTO NIVEL">Cuarto Nivel</option>
+                                <option value="GENERAL">General</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- NIVEL ACADEMICO Y TITULO -->
+                    <div class="row mb-3">
+
+                        <div class="col-md-6">
+                            <label class="form-label">Nivel Académico *</label>
+                            <input type="text" id="pna_nivel_academico" name="pna_nivel_academico" class="form-control"
+                                placeholder="Ej: Ingeniería, Maestría..." required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Título *</label>
+                            <input type="text" id="pna_titulo" name="pna_titulo" class="form-control"
+                                placeholder="Ej: Ingeniero en Sistemas" required>
+                        </div>
+                    </div>
+
+                    <!-- REGISTRO SENESCYT -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Registro SENESCYT</label>
+                            <input type="text" id="pna_registro_senescyt" name="pna_registro_senescyt"
+                                class="form-control" placeholder="Ej: 1234-ABCD">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="cerrarModalNivelAcademico()">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" onclick="insertar_editar_nivel_academico()">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 
 
 <script>
+function cerrarModalInformacionPersonal() {
+    $('#modal_informacion_personal').modal('hide');
+}
+
 //Validacion de formulario
 $(document).ready(function() {
     agregar_asterisco_campo_obligatorio('txt_primer_apellido');

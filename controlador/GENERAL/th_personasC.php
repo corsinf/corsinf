@@ -17,6 +17,10 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
 
+if (isset($_GET['insertar_imagen'])) {
+    echo json_encode($controlador->insertar_imagen($_FILES, $_POST));
+}
+
 
 class th_personasC
 {
@@ -54,7 +58,7 @@ class th_personasC
         );
 
         // Obtener cédula (puede venir de txt_cedula o txt_numero_cedula)
-        $cedula = $parametros['txt_cedula'] ?? $parametros['txt_numero_cedula'] ?? '';
+        $cedula = $parametros['txt_cedula_persona'] ?? $parametros['txt_numero_cedula'] ?? '';
 
         // Array de datos - SOLO CAMPOS QUE EXISTEN EN LA BD
         $datos = array(
@@ -138,24 +142,13 @@ class th_personasC
                 return -2; // Cédula duplicada
             }
         } else {
-            // === EDICIÓN ===
-            // Verificar que no exista otra persona con la misma cédula
-            $existe = $this->modelo
-                ->where('th_per_cedula', trim($cedula))
-                ->where('th_per_id !', $parametros['_id'])
-                ->where('th_per_estado', '1')
-                ->listar();
-            
-            if (count($existe) == 0) {
+           
                 $where = array(
                     array('campo' => 'th_per_id', 'dato' => $parametros['_id'])
                 );
                 
                 $resultado = $this->modelo->editar($datos, $where);
-                return $resultado;
-            } else {
-                return -2; // Cédula duplicada
-            }
+                return $resultado ? 1 : -2;
         }
     } catch (Exception $e) {
         error_log("Error en insertar_editar: " . $e->getMessage());
@@ -176,4 +169,95 @@ class th_personasC
         $datos = $this->modelo->editar($datos, $where);
         return $datos;
     }
+
+    //Para colocar una imagen a una persona existente
+function insertar_imagen($file, $parametros)
+{
+    $id_persona = $parametros['txt_persona_id'];
+
+    if ($id_persona != '') {
+        if ($file['txt_copia_cambiar_foto']['tmp_name'] != '' && $file['txt_copia_cambiar_foto']['tmp_name'] != null) {
+            $datos = $this->guardar_archivo($file, $parametros, $id_persona);
+        }
+    }
+
+    return $datos;
+}
+
+private function guardar_archivo($file, $post, $id_insertar_editar)
+{
+    // Obtener el ID de la empresa desde la sesión
+    $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
+
+    // Definir la ruta donde se guardarán las imágenes
+    $ruta = dirname(__DIR__, 2) . '/REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/'; 
+    $ruta .= $post['txt_cedula'] . '/' . 'FOTO_PERFIL/';
+
+    // Verificar si la carpeta existe, si no, crearla
+    if (!file_exists($ruta)) {
+        mkdir($ruta, 0777, true);
+    }
+
+    // Validar formato de la imagen
+    if ($this->validar_formato($file) === 1) {
+        
+        // Obtener la ubicación temporal del archivo cargado
+        $uploadfile_temporal = $file['txt_copia_cambiar_foto']['tmp_name'];
+        // Obtener la extensión del archivo
+        $extension = pathinfo($file['txt_copia_cambiar_foto']['name'], PATHINFO_EXTENSION);
+
+        // Crear un nuevo nombre para la imagen
+        $nombre = 'foto_perfil_' . $id_insertar_editar . '.' . $extension;
+        $nuevo_nom = $ruta . $nombre;
+
+        // Ruta que se almacenará en la base de datos
+        $nombre_ruta = '../REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/' . $post['txt_cedula'] . '/' . 'FOTO_PERFIL/';
+        $nombre_ruta .= $nombre;
+
+        // Verificar si el archivo ha sido cargado correctamente
+        if (is_uploaded_file($uploadfile_temporal)) {
+            // Mover el archivo de su ubicación temporal al destino final
+            if (move_uploaded_file($uploadfile_temporal, $nuevo_nom)) {
+
+                // Datos para actualizar la URL de la foto en la base de datos
+                $datos = array(
+                    array('campo' => 'th_per_foto_url', 'dato' => $nombre_ruta),
+                );
+
+                // Condición para identificar la persona que se debe actualizar
+                $where = array(
+                    array('campo' => 'th_per_id', 'dato' => $id_insertar_editar),
+                );
+
+                // Ejecutar la actualización en la base de datos
+                $base = $this->modelo->editar($datos, $where);
+
+                return $base == 1 ? 1 : -1;
+            } else {
+                return -1;
+            }
+        } else {
+            return -1;
+        }
+    } else {
+        return -2; // Formato inválido
+    }
+}
+
+//Sirve para validar imágenes 
+function validar_formato($file)
+{
+    switch ($file['txt_copia_cambiar_foto']['type']) {
+        case 'image/jpeg':
+        case 'image/pjpeg':
+        case 'image/gif':
+        case 'image/png':
+        case 'image/jpg':
+            return 1;
+            break;
+        default:
+            return -1;
+            break;
+    }
+}
 }

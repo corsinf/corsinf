@@ -1770,6 +1770,18 @@ $(function() {
 });
 </script>
 
+<script>
+function abrir_modal_competencias() {
+    var modal = new bootstrap.Modal(
+        document.getElementById('modal_cargo_competencia'), {
+            backdrop: 'static',
+            keyboard: false
+        }
+    );
+    modal.show();
+}
+</script>
+
 <style>
 /* Animación hover para las tarjetas */
 .hover-lift {
@@ -1880,6 +1892,16 @@ $(function() {
                                                 <div class="tab-icon"><i class='bx bxs-file-blank font-18 me-1'></i>
                                                 </div>
                                                 <div class="tab-title">Compliance</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#competencias" role="tab"
+                                            aria-selected="false">
+                                            <div class="d-flex align-items-center">
+                                                <div class="tab-icon"><i class='bx bxs-file-blank font-18 me-1'></i>
+                                                </div>
+                                                <div class="tab-title">Competencias</div>
                                             </div>
                                         </a>
                                     </li>
@@ -2190,261 +2212,324 @@ $(function() {
                                             </div><!-- /.container-fluid -->
                                         </section>
                                     </div>
-                                </div>
 
 
 
-                                <div class="tab-pane fade" id="complianceprofile" role="tabpanel">
-                                    <section class="content pt-0">
-                                        <div class="container-fluid">
 
-                                            <!-- Encabezado -->
+                                    <div class="tab-pane fade" id="complianceprofile" role="tabpanel">
+                                        <section class="content pt-0">
+                                            <div class="container-fluid">
+
+                                                <!-- Encabezado -->
+                                                <div class="row mb-3 align-items-center">
+                                                    <div class="col-md-8">
+                                                        <h5 class="fw-bold text-primary mb-1">
+                                                            <i class="bx bx-check-shield me-2"></i>Compliance del Cargo
+                                                        </h5>
+                                                        <small class="text-muted">
+                                                            <i class="bi bi-clipboard-check me-1"></i>
+                                                            Estado de cumplimiento de requisitos y documentación
+                                                        </small>
+                                                    </div>
+
+                                                    <div class="col-md-4 d-flex justify-content-end gap-2">
+                                                        <button type="button" class="btn btn-success btn-sm shadow-sm"
+                                                            onclick="abrir_modal_funciones()">
+                                                            <i class="bx bx-plus-circle me-1"></i> Funciones
+                                                        </button>
+
+                                                        <button type="button" class="btn btn-success btn-sm shadow-sm"
+                                                            onclick="abrir_modal_compliance()">
+                                                            <i class="bx bx-plus-circle me-1"></i> Actualizar Compliance
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <!-- Tarjeta Principal de Compliance -->
+                                                <div class="card border-0 shadow-sm">
+                                                    <div class="card-body p-4">
+
+                                                        <!-- Indicador de Progreso Principal -->
+                                                        <div class="row mb-4">
+                                                            <div class="col-12">
+                                                                <div class="text-center p-4 bg-light rounded-3 border">
+                                                                    <h3 class="fw-bold text-primary mb-2"
+                                                                        id="comp_porcentaje">
+                                                                        0%</h3>
+                                                                    <p class="text-muted mb-3 small">Porcentaje de
+                                                                        Completitud
+                                                                    </p>
+
+                                                                    <div class="progress" style="height: 25px;">
+                                                                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                                                            id="comp_progress_bar" role="progressbar"
+                                                                            style="width: 0%;" aria-valuenow="0"
+                                                                            aria-valuemin="0" aria-valuemax="100">
+                                                                            <span class="fw-bold"
+                                                                                id="comp_progress_text">0%</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Estadísticas Rápidas -->
+                                                        <div class="row g-3 mb-4">
+
+                                                            <!-- Requisitos Totales -->
+                                                            <div class="col-md-4">
+                                                                <div
+                                                                    class="card border-primary border-2 h-100 shadow-sm">
+                                                                    <div class="card-body text-center p-3">
+                                                                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2"
+                                                                            style="width: 50px; height: 50px;">
+                                                                            <i class="bi bi-list-check text-primary"
+                                                                                style="font-size: 1.5rem;"></i>
+                                                                        </div>
+                                                                        <h4 class="fw-bold text-primary mb-1"
+                                                                            id="comp_totales">
+                                                                            0</h4>
+                                                                        <small class="text-muted">Requisitos
+                                                                            Totales</small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Requisitos Completados -->
+                                                            <div class="col-md-4">
+                                                                <div
+                                                                    class="card border-success border-2 h-100 shadow-sm">
+                                                                    <div class="card-body text-center p-3">
+                                                                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2"
+                                                                            style="width: 50px; height: 50px;">
+                                                                            <i class="bi bi-check-circle-fill text-success"
+                                                                                style="font-size: 1.5rem;"></i>
+                                                                        </div>
+                                                                        <h4 class="fw-bold text-success mb-1"
+                                                                            id="comp_completados">
+                                                                            0</h4>
+                                                                        <small class="text-muted">Completados</small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Requisitos Faltantes -->
+                                                            <div class="col-md-4">
+                                                                <div
+                                                                    class="card border-danger border-2 h-100 shadow-sm">
+                                                                    <div class="card-body text-center p-3">
+                                                                        <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2"
+                                                                            style="width: 50px; height: 50px;">
+                                                                            <i class="bi bi-exclamation-circle-fill text-danger"
+                                                                                style="font-size: 1.5rem;"></i>
+                                                                        </div>
+                                                                        <h4 class="fw-bold text-danger mb-1"
+                                                                            id="comp_faltantes">0
+                                                                        </h4>
+                                                                        <small class="text-muted">Faltantes</small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <!-- Información Adicional -->
+                                                        <div class="row g-3">
+
+                                                            <!-- Última Revisión y Estado -->
+                                                            <div class="col-md-6">
+                                                                <div
+                                                                    class="p-3 bg-light rounded border-start border-info border-4">
+                                                                    <div class="d-flex align-items-center mb-2">
+                                                                        <i class="bi bi-calendar-check text-info me-2"
+                                                                            style="font-size: 1.2rem;"></i>
+                                                                        <strong class="text-dark">Última
+                                                                            Revisión:</strong>
+                                                                    </div>
+                                                                    <p class="mb-0 text-muted small"
+                                                                        id="comp_ultima_revision">
+                                                                        <em>No registrada</em>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                                <div
+                                                                    class="p-3 bg-light rounded border-start border-warning border-4">
+                                                                    <div class="d-flex align-items-center mb-2">
+                                                                        <i class="bi bi-flag text-warning me-2"
+                                                                            style="font-size: 1.2rem;"></i>
+                                                                        <strong class="text-dark">Estado:</strong>
+                                                                    </div>
+                                                                    <span class="badge bg-secondary"
+                                                                        id="comp_estado_badge">
+                                                                        <i class="bi bi-circle-fill me-1"></i>Sin estado
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Observaciones -->
+                                                            <div class="col-12">
+                                                                <div
+                                                                    class="p-3 bg-light rounded border-start border-primary border-4">
+                                                                    <div class="d-flex align-items-center mb-2">
+                                                                        <i class="bi bi-chat-left-text text-primary me-2"
+                                                                            style="font-size: 1.2rem;"></i>
+                                                                        <strong
+                                                                            class="text-dark">Observaciones:</strong>
+                                                                    </div>
+                                                                    <p class="mb-0 text-muted small"
+                                                                        id="comp_observaciones">
+                                                                        <em>Sin observaciones registradas</em>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <!-- Badge de Resumen -->
+                                                        <div class="mt-3 pt-3 border-top text-center">
+                                                            <span
+                                                                class="badge rounded-pill bg-info-subtle text-info px-3 py-2 me-2"
+                                                                id="badge_resumen">
+                                                                <i class="bi bi-graph-up me-1"></i>
+                                                                Completados: 0 de 0 (0%)
+                                                            </span>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
                                             <div class="row mb-3 align-items-center">
                                                 <div class="col-md-8">
                                                     <h5 class="fw-bold text-primary mb-1">
-                                                        <i class="bx bx-check-shield me-2"></i>Compliance del Cargo
+                                                        <i class="bx bx-list-check me-2"></i>Funciones del Cargo
                                                     </h5>
                                                     <small class="text-muted">
-                                                        <i class="bi bi-clipboard-check me-1"></i>
-                                                        Estado de cumplimiento de requisitos y documentación
+                                                        <i class="bi bi-briefcase me-1"></i>
+                                                        Listado de funciones y responsabilidades del cargo
                                                     </small>
                                                 </div>
-
-                                                <div class="col-md-4 d-flex justify-content-end gap-2">
-                                                    <button type="button" class="btn btn-success btn-sm shadow-sm"
-                                                        onclick="abrir_modal_funciones()">
-                                                        <i class="bx bx-plus-circle me-1"></i> Funciones
-                                                    </button>
-
-                                                    <button type="button" class="btn btn-success btn-sm shadow-sm"
-                                                        onclick="abrir_modal_compliance()">
-                                                        <i class="bx bx-plus-circle me-1"></i> Actualizar Compliance
-                                                    </button>
-                                                </div>
                                             </div>
-                                            <!-- Tarjeta Principal de Compliance -->
+
+                                            <!-- Tarjeta con Tabla -->
                                             <div class="card border-0 shadow-sm">
-                                                <div class="card-body p-4">
+                                                <div class="card-body p-0">
 
-                                                    <!-- Indicador de Progreso Principal -->
-                                                    <div class="row mb-4">
-                                                        <div class="col-12">
-                                                            <div class="text-center p-4 bg-light rounded-3 border">
-                                                                <h3 class="fw-bold text-primary mb-2"
-                                                                    id="comp_porcentaje">
-                                                                    0%</h3>
-                                                                <p class="text-muted mb-3 small">Porcentaje de
-                                                                    Completitud
-                                                                </p>
-
-                                                                <div class="progress" style="height: 25px;">
-                                                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-                                                                        id="comp_progress_bar" role="progressbar"
-                                                                        style="width: 0%;" aria-valuenow="0"
-                                                                        aria-valuemin="0" aria-valuemax="100">
-                                                                        <span class="fw-bold"
-                                                                            id="comp_progress_text">0%</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                    <!-- Tabla de Funciones -->
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover table-striped mb-0"
+                                                            id="tabla_funciones">
+                                                            <thead class="bg-light">
+                                                                <tr>
+                                                                    <th class="text-center" style="width: 50px;">#</th>
+                                                                    <th><i class="bx bx-notepad me-1"></i> Función</th>
+                                                                    <th><i class="bx bx-time me-1"></i> Frecuencia</th>
+                                                                    <th class="text-center"><i
+                                                                            class="bx bx-pie-chart-alt-2 me-1"></i> %
+                                                                        Tiempo</th>
+                                                                    <th class="text-center"><i
+                                                                            class="bx bx-star me-1"></i>
+                                                                        Tipo</th>
+                                                                    <th class="text-center"><i
+                                                                            class="bx bx-cog me-1"></i>
+                                                                        Acciones</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbody_funciones">
+                                                                <!-- Se cargará dinámicamente -->
+                                                                <tr>
+                                                                    <td colspan="6" class="text-center py-4 text-muted">
+                                                                        <i class="bx bx-loader bx-spin"
+                                                                            style="font-size: 2rem;"></i>
+                                                                        <p class="mb-0 mt-2">Cargando funciones...</p>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
                                                     </div>
 
-                                                    <!-- Estadísticas Rápidas -->
-                                                    <div class="row g-3 mb-4">
-
-                                                        <!-- Requisitos Totales -->
-                                                        <div class="col-md-4">
-                                                            <div class="card border-primary border-2 h-100 shadow-sm">
-                                                                <div class="card-body text-center p-3">
-                                                                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2"
-                                                                        style="width: 50px; height: 50px;">
-                                                                        <i class="bi bi-list-check text-primary"
-                                                                            style="font-size: 1.5rem;"></i>
-                                                                    </div>
-                                                                    <h4 class="fw-bold text-primary mb-1"
-                                                                        id="comp_totales">
-                                                                        0</h4>
-                                                                    <small class="text-muted">Requisitos Totales</small>
-                                                                </div>
+                                                    <!-- Footer con estadísticas -->
+                                                    <div class="card-footer bg-light">
+                                                        <div class="row text-center">
+                                                            <div class="col-md-3">
+                                                                <small class="text-muted d-block">Total
+                                                                    Funciones</small>
+                                                                <strong class="text-primary" id="stat_total">0</strong>
                                                             </div>
-                                                        </div>
-
-                                                        <!-- Requisitos Completados -->
-                                                        <div class="col-md-4">
-                                                            <div class="card border-success border-2 h-100 shadow-sm">
-                                                                <div class="card-body text-center p-3">
-                                                                    <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2"
-                                                                        style="width: 50px; height: 50px;">
-                                                                        <i class="bi bi-check-circle-fill text-success"
-                                                                            style="font-size: 1.5rem;"></i>
-                                                                    </div>
-                                                                    <h4 class="fw-bold text-success mb-1"
-                                                                        id="comp_completados">
-                                                                        0</h4>
-                                                                    <small class="text-muted">Completados</small>
-                                                                </div>
+                                                            <div class="col-md-3">
+                                                                <small class="text-muted d-block">Principales</small>
+                                                                <strong class="text-warning"
+                                                                    id="stat_principales">0</strong>
                                                             </div>
-                                                        </div>
-
-                                                        <!-- Requisitos Faltantes -->
-                                                        <div class="col-md-4">
-                                                            <div class="card border-danger border-2 h-100 shadow-sm">
-                                                                <div class="card-body text-center p-3">
-                                                                    <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2"
-                                                                        style="width: 50px; height: 50px;">
-                                                                        <i class="bi bi-exclamation-circle-fill text-danger"
-                                                                            style="font-size: 1.5rem;"></i>
-                                                                    </div>
-                                                                    <h4 class="fw-bold text-danger mb-1"
-                                                                        id="comp_faltantes">0
-                                                                    </h4>
-                                                                    <small class="text-muted">Faltantes</small>
-                                                                </div>
+                                                            <div class="col-md-3">
+                                                                <small class="text-muted d-block">Secundarias</small>
+                                                                <strong class="text-info"
+                                                                    id="stat_secundarias">0</strong>
                                                             </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <!-- Información Adicional -->
-                                                    <div class="row g-3">
-
-                                                        <!-- Última Revisión y Estado -->
-                                                        <div class="col-md-6">
-                                                            <div
-                                                                class="p-3 bg-light rounded border-start border-info border-4">
-                                                                <div class="d-flex align-items-center mb-2">
-                                                                    <i class="bi bi-calendar-check text-info me-2"
-                                                                        style="font-size: 1.2rem;"></i>
-                                                                    <strong class="text-dark">Última Revisión:</strong>
-                                                                </div>
-                                                                <p class="mb-0 text-muted small"
-                                                                    id="comp_ultima_revision">
-                                                                    <em>No registrada</em>
-                                                                </p>
+                                                            <div class="col-md-3">
+                                                                <small class="text-muted d-block">% Asignado</small>
+                                                                <strong class="text-success"
+                                                                    id="stat_porcentaje_total">0%</strong>
                                                             </div>
-                                                        </div>
-
-                                                        <div class="col-md-6">
-                                                            <div
-                                                                class="p-3 bg-light rounded border-start border-warning border-4">
-                                                                <div class="d-flex align-items-center mb-2">
-                                                                    <i class="bi bi-flag text-warning me-2"
-                                                                        style="font-size: 1.2rem;"></i>
-                                                                    <strong class="text-dark">Estado:</strong>
-                                                                </div>
-                                                                <span class="badge bg-secondary" id="comp_estado_badge">
-                                                                    <i class="bi bi-circle-fill me-1"></i>Sin estado
-                                                                </span>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Observaciones -->
-                                                        <div class="col-12">
-                                                            <div
-                                                                class="p-3 bg-light rounded border-start border-primary border-4">
-                                                                <div class="d-flex align-items-center mb-2">
-                                                                    <i class="bi bi-chat-left-text text-primary me-2"
-                                                                        style="font-size: 1.2rem;"></i>
-                                                                    <strong class="text-dark">Observaciones:</strong>
-                                                                </div>
-                                                                <p class="mb-0 text-muted small"
-                                                                    id="comp_observaciones">
-                                                                    <em>Sin observaciones registradas</em>
-                                                                </p>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <!-- Badge de Resumen -->
-                                                    <div class="mt-3 pt-3 border-top text-center">
-                                                        <span
-                                                            class="badge rounded-pill bg-info-subtle text-info px-3 py-2 me-2"
-                                                            id="badge_resumen">
-                                                            <i class="bi bi-graph-up me-1"></i>
-                                                            Completados: 0 de 0 (0%)
-                                                        </span>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <div class="row mb-3 align-items-center">
-                                            <div class="col-md-8">
-                                                <h5 class="fw-bold text-primary mb-1">
-                                                    <i class="bx bx-list-check me-2"></i>Funciones del Cargo
-                                                </h5>
-                                                <small class="text-muted">
-                                                    <i class="bi bi-briefcase me-1"></i>
-                                                    Listado de funciones y responsabilidades del cargo
-                                                </small>
-                                            </div>
-                                        </div>
-
-                                        <!-- Tarjeta con Tabla -->
-                                        <div class="card border-0 shadow-sm">
-                                            <div class="card-body p-0">
-
-                                                <!-- Tabla de Funciones -->
-                                                <div class="table-responsive">
-                                                    <table class="table table-hover table-striped mb-0"
-                                                        id="tabla_funciones">
-                                                        <thead class="bg-light">
-                                                            <tr>
-                                                                <th class="text-center" style="width: 50px;">#</th>
-                                                                <th><i class="bx bx-notepad me-1"></i> Función</th>
-                                                                <th><i class="bx bx-time me-1"></i> Frecuencia</th>
-                                                                <th class="text-center"><i
-                                                                        class="bx bx-pie-chart-alt-2 me-1"></i> %
-                                                                    Tiempo</th>
-                                                                <th class="text-center"><i class="bx bx-star me-1"></i>
-                                                                    Tipo</th>
-                                                                <th class="text-center"><i class="bx bx-cog me-1"></i>
-                                                                    Acciones</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="tbody_funciones">
-                                                            <!-- Se cargará dinámicamente -->
-                                                            <tr>
-                                                                <td colspan="6" class="text-center py-4 text-muted">
-                                                                    <i class="bx bx-loader bx-spin"
-                                                                        style="font-size: 2rem;"></i>
-                                                                    <p class="mb-0 mt-2">Cargando funciones...</p>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-
-                                                <!-- Footer con estadísticas -->
-                                                <div class="card-footer bg-light">
-                                                    <div class="row text-center">
-                                                        <div class="col-md-3">
-                                                            <small class="text-muted d-block">Total
-                                                                Funciones</small>
-                                                            <strong class="text-primary" id="stat_total">0</strong>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <small class="text-muted d-block">Principales</small>
-                                                            <strong class="text-warning"
-                                                                id="stat_principales">0</strong>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <small class="text-muted d-block">Secundarias</small>
-                                                            <strong class="text-info" id="stat_secundarias">0</strong>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <small class="text-muted d-block">% Asignado</small>
-                                                            <strong class="text-success"
-                                                                id="stat_porcentaje_total">0%</strong>
                                                         </div>
                                                     </div>
                                                 </div>
+                                        </section>
+                                    </div>
+                                    <div class="tab-pane fade" id="competencias" role="tabpanel">
+
+                                        <section class="content pt-0">
+                                            <div class="container-fluid">
+
+                                                <div class="row mb-3 align-items-center">
+
+                                                    <!-- Título -->
+                                                    <div class="col-md-8">
+                                                        <h5 class="fw-bold text-primary mb-1">
+                                                            <i class="bx bx-check-shield me-2"></i> Competencias
+                                                        </h5>
+
+                                                        <small class="text-muted">
+                                                            <i class="bi bi-clipboard-check me-1"></i>
+                                                            Estado de cumplimiento de habilidades y competencias
+                                                        </small>
+                                                    </div>
+
+                                                    <!-- Botonera -->
+                                                    <div class="col-md-4 d-flex justify-content-end gap-2"
+                                                        id="pnl_competencias_botonera">
+                                                        <button type="button" class="btn btn-success btn-sm shadow-sm"
+                                                            id="btn_abrir_modal_competencias"
+                                                            onclick="abrir_modal_competencias()">
+                                                            <i class="bx bx-plus-circle me-1"></i> Competencias
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- Aquí puedes colocar la tabla -->
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <table id="tbl_competencias" class="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Competencia</th>
+                                                                    <th>Nivel Requerido</th>
+                                                                    <th>Ponderación</th>
+                                                                    <th>Crítica</th>
+                                                                    <th>Acciones</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
                                             </div>
-                                    </section>
+                                        </section>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2455,6 +2540,175 @@ $(function() {
         <!--end row-->
     </div>
 </div>
+
+
+<div class="modal fade" id="modal_cargo_competencia" tabindex="-1" aria-labelledby="lbl_modal_cargo_competencia"
+    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-modal="true">
+
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+
+            <!-- Header -->
+            <div class="modal-header bg-light">
+                <h5 class="modal-title" id="lbl_modal_cargo_competencia">
+                    <i class="bx bx-brain me-2"></i> Registrar Competencia del Cargo
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body p-4">
+                <form id="form_cargo_competencia">
+
+                    <!-- IDs ocultos -->
+                    <input type="hidden" id="txt_th_carcomp_id" name="th_carcomp_id">
+                    <input type="hidden" id="txt_th_car_id" name="th_car_id">
+
+                    <!-- Competencia -->
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label fw-bold">
+                            <i class="bx bx-target-lock text-primary me-1"></i> Competencia
+                        </label>
+                        <select class="form-select select2-validation" id="ddl_th_comp_id" name="th_comp_id" required>
+                            <option value="" hidden selected>-- Seleccione la competencia --</option>
+                        </select>
+                    </div>
+
+                    <!-- Niveles -->
+                    <div class="row g-3 border rounded p-3 mb-3 bg-light">
+                        <h6 class="fw-bold text-secondary">Niveles de competencia</h6>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Nivel Requerido</label>
+                            <input type="number" min="0" max="100" class="form-control"
+                                id="txt_th_carcomp_nivel_requerido" name="th_carcomp_nivel_requerido">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Nivel Utilización</label>
+                            <input type="number" min="0" max="100" class="form-control"
+                                id="txt_th_carcomp_nivel_utilizacion" name="th_carcomp_nivel_utilizacion">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Nivel Contribución</label>
+                            <input type="number" min="0" max="100" class="form-control"
+                                id="txt_th_carcomp_nivel_contribucion" name="th_carcomp_nivel_contribucion">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Nivel Habilidad</label>
+                            <input type="number" min="0" max="100" class="form-control"
+                                id="txt_th_carcomp_nivel_habilidad" name="th_carcomp_nivel_habilidad">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Nivel Maestría</label>
+                            <input type="number" min="0" max="100" class="form-control"
+                                id="txt_th_carcomp_nivel_maestria" name="th_carcomp_nivel_maestria">
+                        </div>
+                    </div>
+
+                    <!-- DISC -->
+                    <div class="row g-3 border rounded p-3 mb-3">
+                        <h6 class="fw-bold text-secondary">Valores DISC</h6>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Valor D</label>
+                            <input type="number" class="form-control" id="txt_th_carcomp_disc_valor_d"
+                                name="th_carcomp_disc_valor_d">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Valor I</label>
+                            <input type="number" class="form-control" id="txt_th_carcomp_disc_valor_i"
+                                name="th_carcomp_disc_valor_i">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Valor S</label>
+                            <input type="number" class="form-control" id="txt_th_carcomp_disc_valor_s"
+                                name="th_carcomp_disc_valor_s">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Valor C</label>
+                            <input type="number" class="form-control" id="txt_th_carcomp_disc_valor_c"
+                                name="th_carcomp_disc_valor_c">
+                        </div>
+                    </div>
+
+                    <!-- Evaluación -->
+                    <div class="row g-3 border rounded p-3 mb-3">
+                        <h6 class="fw-bold text-secondary">Evaluación</h6>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Es Crítica</label>
+                            <select id="ddl_th_carcomp_es_critica" name="th_carcomp_es_critica" class="form-select">
+                                <option value="0">No</option>
+                                <option value="1">Sí</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Es Evaluable</label>
+                            <select id="ddl_th_carcomp_es_evaluable" name="th_carcomp_es_evaluable" class="form-select">
+                                <option value="0">No</option>
+                                <option value="1">Sí</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Método Evaluación</label>
+                            <input type="text" class="form-control" id="txt_th_carcomp_metodo_evaluacion"
+                                name="th_carcomp_metodo_evaluacion" placeholder="Ej: entrevista, prueba técnica...">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Ponderación (%)</label>
+                            <input type="number" min="0" max="100" class="form-control" id="txt_th_carcomp_ponderacion"
+                                name="th_carcomp_ponderacion">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label">Observaciones</label>
+                            <textarea class="form-control" id="txt_th_carcomp_observaciones"
+                                name="th_carcomp_observaciones" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer justify-content-end gap-2">
+
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    <i class="bx bx-x me-1"></i> Cerrar
+                </button>
+
+                <div id="pnl_crear">
+                    <button type="button" class="btn btn-success" onclick="insertar_cargo_competencia()">
+                        <i class="bx bx-save me-1"></i> Crear
+                    </button>
+                </div>
+
+                <div id="pnl_actualizar" style="display:none;">
+                    <button type="button" class="btn btn-danger" onclick="eliminar_cargo_competencia()">
+                        <i class="bx bx-trash me-1"></i> Eliminar
+                    </button>
+
+                    <button type="button" class="btn btn-primary" onclick="actualizar_cargo_competencia()">
+                        <i class="bx bx-check me-1"></i> Actualizar
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 
 
