@@ -131,6 +131,12 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 
 		//menu_lateral();
 		$(document).ready(function() {
+			$.ajaxSetup({
+		        headers: {
+		            'X-Custom-Variable': '<?php echo $_GET['mod']; ?>'
+		        }
+		    });
+
 			restriccion();
 			//notificaciones();
 			notificaciones_1(parametros_noti);

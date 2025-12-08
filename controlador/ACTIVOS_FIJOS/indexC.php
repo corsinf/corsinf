@@ -37,6 +37,7 @@ class indexC
 	function lista_articulos_tipo()
 	{
 		$datos = $this->modelo->lista_articulos_tipo();
+		// print_r($datos);die();
 		return $datos;
 	}
 

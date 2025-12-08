@@ -9,7 +9,6 @@ require_once(dirname(__DIR__, 2) . '/lib/excel_spout.php');
 /**
  * 
  **/
-
 $controlador = new articulosC();
 if (isset($_GET['lista'])) {
 	// print_r($_POST);die();

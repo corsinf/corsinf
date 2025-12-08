@@ -39,7 +39,7 @@ class articulosM
 			'host' => $IP_HOST,
 		);
 
-		$table = 'v_articulos_detalle';
+		$table = $this->db->esquema_modulo('v_articulos_detalle',1);
 
 		$primaryKey = 'id';
 

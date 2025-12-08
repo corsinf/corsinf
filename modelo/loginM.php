@@ -38,6 +38,7 @@ class loginM
 				}
 				// print_r($sql);die();
 		$datos = $this->db->datos($sql,1);
+		// print_r($datos);die();
 		return $datos;
 	}
 
@@ -78,9 +79,14 @@ class loginM
 		if(isset($parametros['Campo_Pass']))
 		{
 		    $sql.=" AND ".$parametros['Campo_Pass']."='".$parametros['pass']."'";
+		    // print_r($parametros);
+		    // print_r($sql);die();
 		}
+		// print_r($parametros);
 		// print_r($sql);
-		if($this->db->conexion_db_terceros($database,$usuario,$password,$servidor,$puerto)!=-1)
+		$dbconnection = $this->db->conexion_db_terceros($database,$usuario,$password,$servidor,$puerto);
+		// print_r($dbconnection);die();
+		if($dbconnection!=-1)
 		{
 		 	$item = $this->db->datos_db_terceros($database,$usuario,$password,$servidor,$puerto,$sql);
 		 	// print_r($item);
@@ -240,7 +246,7 @@ class loginM
 	{
 		if($_SESSION['INICIO']['TIPO']=="DBA")
 		{
-			$sql = "SELECT DISTINCT id_modulos as 'id',nombre_modulo,link,icono   
+			$sql = "SELECT DISTINCT id_modulos as 'id',nombre_modulo,link,icono,esquema   
 			FROM MODULOS_SISTEMA MS
 			INNER JOIN LICENCIAS L ON MS.id_modulos = L.Id_Modulo
 			WHERE estado ='A'";
@@ -248,7 +254,7 @@ class loginM
 			// AND DATEDIFF(DAY, GETDATE(), Fecha_exp) >= 0
 		}else
 		{
-			$sql = "SELECT DISTINCT(MS.id_modulos) as 'id', MS.nombre_modulo,MS.icono,MS.link
+			$sql = "SELECT DISTINCT(MS.id_modulos) as 'id', MS.nombre_modulo,MS.icono,MS.link,MS.esquema
 			FROM ACCESOS A 
 			INNER JOIN PAGINAS P ON A.id_paginas = P.id_paginas
 			INNER JOIN MODULOS M ON P.id_modulo = M.id_modulo
