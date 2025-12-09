@@ -44,15 +44,11 @@ class th_contr_seguimiento_postulanteM extends BaseModel
             s.th_seg_estado,
             s.th_seg_fecha_creacion,
             s.th_seg_fecha_modificacion,
-            
-            -- Datos de la etapa
             e.th_etapa_nombre,
             e.th_etapa_tipo,
             e.th_etapa_orden,
             e.th_etapa_obligatoria,
             e.th_pla_id,
-            
-            -- Datos de la postulación
             po.th_pla_id AS postulacion_plaza_id,
             po.th_persona_id,
             po.th_postulante_id,
@@ -62,8 +58,6 @@ class th_contr_seguimiento_postulanteM extends BaseModel
             po.th_posu_fuente,
             po.th_posu_score,
             po.th_posu_prioridad,
-            
-            -- Datos del postulante (desde th_postulantes)
             CASE 
                 WHEN pos.th_pos_id IS NOT NULL THEN 
                     CONCAT(
@@ -80,28 +74,19 @@ class th_contr_seguimiento_postulanteM extends BaseModel
                         ISNULL(per.th_per_segundo_apellido, '')
                     )
             END AS nombre_completo,
-            
             ISNULL(pos.th_pos_cedula, per.th_per_cedula) AS cedula,
             ISNULL(pos.th_pos_telefono_1, per.th_per_telefono_1) AS telefono,
             ISNULL(pos.th_pos_correo, per.th_per_correo) AS correo,
             ISNULL(pos.th_pos_telefono_2, per.th_per_telefono_2) AS telefono_2
-            
         FROM th_contr_seguimiento_postulante s
-        
         INNER JOIN th_contr_postulaciones po 
             ON s.th_posu_id = po.th_posu_id
-        
         INNER JOIN th_contr_etapas_proceso e 
             ON s.th_etapa_id = e.th_etapa_id
-        
-        -- LEFT JOIN con postulantes
         LEFT JOIN th_postulantes pos 
             ON po.th_postulante_id = pos.th_pos_id
-        
-        -- LEFT JOIN con personas
         LEFT JOIN th_personas per 
             ON po.th_persona_id = per.th_per_id
-        
         WHERE s.th_seg_estado = 1
     ";
     

@@ -119,8 +119,6 @@ function obtener_departamento_cargos_personas($dep_id)
                     c.th_car_descripcion,
                     c.th_car_estado,
                     c.th_niv_id,
-
-                    -- PERSONAS EN CADA CARGO
                     (
                         SELECT
                         
@@ -140,7 +138,6 @@ function obtener_departamento_cargos_personas($dep_id)
                           AND p.th_per_estado = 1
                         FOR JSON PATH
                     ) AS personas_json
-
                 FROM th_contr_cargos c
                 WHERE c.th_dep_id = d.th_dep_id
                   AND c.th_car_estado = 1

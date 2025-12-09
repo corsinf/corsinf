@@ -74,13 +74,10 @@ class th_contr_plazasM extends BaseModel
         FROM th_contr_plazas p
         LEFT JOIN th_horarios h 
             ON p.th_pla_jornada_id = h.th_hor_id
-
         LEFT JOIN th_personas per
             ON per.th_per_id = p.th_pla_responsable_persona_id
-
         WHERE p.th_pla_id = '$id_plaza'
           AND p.th_pla_estado = 1
-
         ORDER BY p.th_pla_fecha_creacion DESC;
     ";
     
@@ -115,8 +112,6 @@ public function obtener_resumen_plaza($pla_id = 0)
     if ($pla_id <= 0) return array();
 
     $sql = "
-    DECLARE @pla_id INT = {$pla_id};
-
     SELECT
       p.*,
       (SELECT
@@ -151,12 +146,16 @@ public function obtener_resumen_plaza($pla_id = 0)
          ,1,4,'')
       ) AS etapas_resumen
     FROM th_contr_plazas p
-    WHERE p.th_pla_id = @pla_id
-      AND p.th_pla_estado = 1;
+    WHERE p.th_pla_id = {$pla_id}
+      AND p.th_pla_estado = 1
     ";
 
-    return $this->db->datos($sql); // adapta según el método de tu DB
+    // Si tu db->datos() soporta un flag para NO transformar esquemas, úsalo:
+    // return $this->db->datos($sql, true);
+
+    return $this->db->datos($sql);
 }
+
 public function listar_etapas_por_plaza($pla_id)
 {
     $pla_id = intval($pla_id);
