@@ -211,6 +211,7 @@ class db
 		// print_r($datos);die();		
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
+		if(!$master){ $tabla = $this->esquema_modulo($tabla,1);	}
 
 		$valores = '';
 		$campos = '';
@@ -297,6 +298,8 @@ class db
 	{
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
+		if(!$master){ $tabla = $this->esquema_modulo($tabla,1);	}
+
 
 		$valores = '';
 		$campos = '';
@@ -345,6 +348,7 @@ class db
 		// print_r($master);die();
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
+		if(!$master){ $tabla = $this->esquema_modulo($tabla,1);	}
 
 		$valores = '';
 		$campos = '';
@@ -436,7 +440,8 @@ class db
 	{
 
 		$this->parametros_conexion($master);
-		$conn = $this->conexion();
+		$conn = $this->conexion();		
+		if(!$master){ $sql = $this->esquema_modulo($sql);	}
 		// print_r($sql);
 
 		try {
@@ -928,93 +933,133 @@ class db
 
 	function esquema_modulo($sqltbl,$solotabla=false)
 	{		
-
-		$listaTablas = array();	
-		if(strpos($sqltbl,"JOIN") !== false)
+		if(!$solotabla)
 		{
-			$sqlProcesar = str_replace(array('INNER','LEFT','RIGHT'), array("","",""), $sqltbl);
-			$partes = explode("JOIN", $sqlProcesar);
-			foreach ($partes as $key => $value) {
-				if (strpos($value," ON ") !== false) {
-					if (strpos($value,"sys.") === false && strpos($value,"INFORMATION_SCHEMA.") === false) {
-						$tabla1 = explode("ON",$value);
-						$tabla1 = explode(" ",trim($tabla1[0]));
-						$tabla1 = trim($tabla1[0]);
-						// print_r($tabla1);die();
-						$esquemaTabla1 = $this->esquema_x_tabla($tabla1);
-						// print_r($esquemaTabla1);die();
-						$listaTablas[$tabla1] = $esquemaTabla1[0]['esquema'].'.'.$tabla1;
+				$listaTablas = array();	
+				if(strpos($sqltbl,"JOIN") !== false)
+				{
+					$sqlProcesar = str_replace(array('INNER','LEFT','RIGHT'), array("","",""), $sqltbl);
+					$partes = explode("JOIN", $sqlProcesar);
+					foreach ($partes as $key => $value) {
+						if (strpos($value," ON ") !== false) {
+							if (strpos($value,"sys.") === false && strpos($value,"INFORMATION_SCHEMA.") === false) {
+								$tabla1 = explode("ON",$value);
+								$tabla1 = explode(" ",trim($tabla1[0]));
+								$tabla1 = trim($tabla1[0]);
+								// print_r($tabla1);die();
+								$esquemaTabla1 = $this->esquema_x_tabla($tabla1);
+								// print_r($esquemaTabla1);die();
+								$listaTablas[$tabla1] = $esquemaTabla1[0]['esquema'].'.'.$tabla1;
+							}
+
+						}else
+						{
+							if (strpos($value," WHERE ") !== false) {
+								$antesWhere = explode("WHERE",$value);
+								$value = $antesWhere[0];
+							}
+
+							if (strpos($value,"sys.") === false && strpos($value,"INFORMATION_SCHEMA.") === false) {
+
+								$despuesFrom = explode("FROM",$value);
+								$tablaPrincipal = trim($despuesFrom[1]);
+								$tablaPrincipal = explode(" ",trim($tablaPrincipal));
+								$tablaPrincipal = $tablaPrincipal[0];
+
+								// if(substr($tablaPrincipal,0,-1)==";");
+								// {
+								// 	$tablaPrincipal = substr($tablaPrincipal,0,(strlen($tablaPrincipal)-1));
+								// }
+
+								$esquemaTabla1 = $this->esquema_x_tabla($tablaPrincipal);
+								$listaTablas[$tablaPrincipal] = $esquemaTabla1[0]['esquema'].'.'.$tablaPrincipal;
+							}
+						}
 					}
+				}else if(strpos($sqltbl,"UPDATE") !== false || strpos($sqltbl,"INSERT") !== false || strpos($sqltbl,"DELETE") !== false){
+					// print_r($sqltbl);die();
+					$tabla = "";
+					if (strpos($sqltbl,"INSERT") !== false) {
+
+						$partes = trim(str_replace("INSERT INTO","", $sqltbl));	
+						$partes = explode("(",$partes);
+						$partes = $partes[0];
+						$tabla = trim($partes);						
+					}
+					if (strpos($sqltbl,"UPDATE") !== false) {
+						$partes = explode("SET", $sqltbl);
+						$partes = $partes[0];
+						$tabla = trim(str_replace("UPDATE","", $partes));
+						
+					}
+					if (strpos($sqltbl,"DELETE") !== false) {
+						
+					}
+
+					$esquemaTabla1 = $this->esquema_x_tabla($tabla);
+					$tblEsquema = $esquemaTabla1[0]['esquema'].'.'.$tabla;
+					$sql = str_replace($tabla,$tblEsquema, $sqltbl);
+
+					// print_r($sql);die();
+					return $sql;
+					// print_r($tabla);die();
 
 				}else
-				{
-					if (strpos($value," WHERE ") !== false) {
-						$antesWhere = explode("WHERE",$value);
-						$value = $antesWhere[0];
-					}
+				{			
+					if (strpos($sqltbl," WHERE ") !== false) {
+							$antesWhere = explode("WHERE",$sqltbl);
+							$value = $antesWhere[0];
+						}else
+						{
+							$value = $sqltbl;
+						}
+						if (strpos($value,"sys.") === false && strpos($value,"INFORMATION_SCHEMA.") === false) {
 
-					if (strpos($value,"sys.") === false && strpos($value,"INFORMATION_SCHEMA.") === false) {
+							$despuesFrom = explode("FROM",$value);
+							if(isset($despuesFrom[1]))
+							{
+								$tablaPrincipal = trim($despuesFrom[1]);
+							}else{
+								$tablaPrincipal = trim($despuesFrom[0]);
+							}
+							$tablaPrincipal = explode(" ",trim($tablaPrincipal));
+							$tablaPrincipal = trim($tablaPrincipal[0]);
 
-						$despuesFrom = explode("FROM",$value);
-						$tablaPrincipal = trim($despuesFrom[1]);
-						$tablaPrincipal = explode(" ",trim($tablaPrincipal));
-						$tablaPrincipal = $tablaPrincipal[0];
 
-						// if(substr($tablaPrincipal,0,-1)==";");
-						// {
-						// 	$tablaPrincipal = substr($tablaPrincipal,0,(strlen($tablaPrincipal)-1));
-						// }
+							if(substr($tablaPrincipal,-1,1)==";")
+							{
+								$tablaPunto = $tablaPrincipal;
+								$tablaPrincipal = substr($tablaPrincipal,0,(strlen($tablaPrincipal)-1));
+								$esquemaTabla1 = $this->esquema_x_tabla($tablaPrincipal);
+								$listaTablas[$tablaPunto] = $esquemaTabla1[0]['esquema'].'.'.$tablaPrincipal;
+							}else{
 
-						$esquemaTabla1 = $this->esquema_x_tabla($tablaPrincipal);
-						$listaTablas[$tablaPrincipal] = $esquemaTabla1[0]['esquema'].'.'.$tablaPrincipal;
-					}
+								$esquemaTabla1 = $this->esquema_x_tabla($tablaPrincipal);
+								$listaTablas[$tablaPrincipal] = $esquemaTabla1[0]['esquema'].'.'.$tablaPrincipal;
+							}
+						}
 				}
-			}
-		}else
-		{			
-			if (strpos($sqltbl," WHERE ") !== false) {
-					$antesWhere = explode("WHERE",$sqltbl);
-					$value = $antesWhere[0];
-				}else
-				{
-					$value = $sqltbl;
-				}
-				if (strpos($value,"sys.") === false && strpos($value,"INFORMATION_SCHEMA.") === false) {
 
-					$despuesFrom = explode("FROM",$value);
-					$tablaPrincipal = trim($despuesFrom[1]);
-					$tablaPrincipal = explode(" ",trim($tablaPrincipal));
-					$tablaPrincipal = trim($tablaPrincipal[0]);
+				$sqltbl = str_replace(["\r\n", "\r", "\n"], '', $sqltbl);
 
-
-					if(substr($tablaPrincipal,-1,1)==";")
-					{
-						$tablaPunto = $tablaPrincipal;
-						$tablaPrincipal = substr($tablaPrincipal,0,(strlen($tablaPrincipal)-1));
-						$esquemaTabla1 = $this->esquema_x_tabla($tablaPrincipal);
-						$listaTablas[$tablaPunto] = $esquemaTabla1[0]['esquema'].'.'.$tablaPrincipal;
+				foreach ($listaTablas as $key => $value) {
+					if(strpos($key,";") !== false )
+					{				
+						$sqltbl = str_replace($key,$value.";", $sqltbl);
 					}else{
+						// print_r($listaTablas);die();
 
-						$esquemaTabla1 = $this->esquema_x_tabla($tablaPrincipal);
-						$listaTablas[$tablaPrincipal] = $esquemaTabla1[0]['esquema'].'.'.$tablaPrincipal;
+						$sqltbl = str_replace(" ".$key." ", " ".$value." ", $sqltbl);
 					}
 				}
+
+				return $sqltbl;
+		}else
+		{
+			$esquemaTabla1 = $this->esquema_x_tabla($sqltbl);
+			return $esquemaTabla1[0]['esquema'].'.'.$sqltbl;
 		}
 
-		$sqltbl = str_replace(["\r\n", "\r", "\n"], '', $sqltbl);
-
-		foreach ($listaTablas as $key => $value) {
-			if(strpos($key,";") !== false )
-			{				
-				$sqltbl = str_replace($key,$value.";", $sqltbl);
-			}else{
-				// print_r($listaTablas);die();
-
-				$sqltbl = str_replace(" ".$key." ", " ".$value." ", $sqltbl);
-			}
-		}
-
-		return $sqltbl;
 
 		// print_r($sqltbl);die();
 
