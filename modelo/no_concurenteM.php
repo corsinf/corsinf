@@ -20,7 +20,7 @@ class no_concurenteM
 	{
 		$sql = "SELECT TABLE_NAME
 				FROM INFORMATION_SCHEMA.COLUMNS
-				WHERE TABLE_SCHEMA = 'dbo' AND COLUMN_NAME = 'PERFIL'";
+				WHERE COLUMN_NAME = 'PERFIL'";
 
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
