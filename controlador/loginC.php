@@ -145,12 +145,13 @@ class loginC
 
 	function buscar_empresas($parametros)
 	{
+
+		$lista_empresas = array();
 		if(isset($_SESSION['INICIO']))
 			{
 				 session_destroy();
 			}
 
-			 $lista_empresas = array();
 			 $parametros['pass'] = $this->cod_global->enciptar_clave($parametros['pass']);
 			 $no_concurente = 0;
 
@@ -184,6 +185,7 @@ class loginC
 			 	 $datos = array();		
 			 	 $no_concurentes = $this->login->empresa_tabla_noconcurente(false,false,1);
 			 	 // print_r($no_concurentes);die();
+			 	 // print_r($lista_empresas);die();
 			 	 foreach ($no_concurentes as $key => $value) {
 			 	 	// print_r($value);die();
 			 	 		$primera_vez = 0;
@@ -193,24 +195,34 @@ class loginC
 			 	 	 	$Campo_Pass = $value['Campo_pass'];
 			 	 	 	$parametros['tabla'] = $value['Tabla'];
 			 	 	 	// print_r($empresa);
+
+			 // print_r($lista_empresas);die();
 			 	 	 	if(count($empresa)>0)
 			 	 	 	{
 					 	 	 	$busqueda_tercero = $this->login->buscar_db_terceros($empresa[0]['Base_datos'],$empresa[0]['Usuario_db'],$empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db'],$parametros);
-					 	 	 	// print_r($busqueda_tercero);die();
+					 	 	 	// print_r($busqueda_tercero);
 					 	 		if(count($busqueda_tercero)>0)
 					 	 	 	{
+					 	 	 		// print_r('s');die();
 					 	 	 		if($busqueda_tercero[0][$Campo_Pass]=='' || $busqueda_tercero[0][$Campo_Pass]==null)
 					 	 	 		{
 					 	 	 			$primera_vez = 1;
 					 	 	 		}
 					 	 	 		$existe_en_lista = 0;
-					 	 	 		foreach ($lista_empresas as $key2 => $value2) {
-					 	 	 				if($value2['Id_Empresa']==$empresa[0]['Id_empresa'])
+					 	 	 		for ($i=0; $i < count($lista_empresas); $i++) { 
+					 	 	 			if($lista_empresas[$i]['Id_Empresa']==$empresa[0]['Id_empresa'])
 					 	 	 				{
 					 	 	 					 $existe_en_lista = 1;
 					 	 	 					 break;
 					 	 	 				}
 					 	 	 		}
+					 	 	 		// foreach ($lista_empresas as $key2 => $value2) {
+					 	 	 		// 		if($value2['Id_Empresa']==$empresa[0]['Id_empresa'])
+					 	 	 		// 		{
+					 	 	 		// 			 $existe_en_lista = 1;
+					 	 	 		// 			 break;
+					 	 	 		// 		}
+					 	 	 		// }
 
 					 	 	 		if($existe_en_lista==0)
 					 	 	 		{
@@ -218,12 +230,17 @@ class loginC
 					 	 	 			$lista_empresas[] = array('Logo'=>$empresa[0]['Logo'],'Id_Empresa'=>$empresa[0]['Id_Empresa'],'Nombre_Comercial'=>$empresa[0]['Nombre_Comercial'],'ActiveDirectory'=>$active_Valido,'normal'=>0,'no_concurente'=>1,'PERFIL'=>$tipo,'Cod_Perfil'=>$value['tipo_perfil'],'primera_vez'=>$primera_vez); 
 					 	 	 				$existe_en_lista = 0;
 					 	 	 		}
+					 	 	 	}else{
+
+			 // print_r($lista_empresas);
 					 	 	 	}
 				 	 	 }
+
 
 			 	 		// print_r($value);
 			 	 }
 
+			 // print_r($lista_empresas);die();
 			 	 // print_r($lista_empresas);die();
 			 	 // print_r('expression');die();
 			 	 // $datos = $this->login->buscar_empresas_no_concurentes($parametros['email'],$parametros['pass']);
@@ -470,36 +487,36 @@ class loginC
 			//actualizamos
 			$empresa = $this->login->lista_empresa($parametros['empresa']);
 			// print_r($empresa);die();
-			if($empresa[0]['Ip_host']==IP_MASTER)
-			{
-				// print_r($licencias);print_r($empresa);die();
-				$tablas_iguales = $this->cod_global->tablas_por_licencias($licencias,$empresa);			
-				// print_r($tablas_iguales);die();	
-		 		$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
-		 		// print_r($res);die();
-		 		// print_r($tablas_iguales);die();
-		 		if($tablas_iguales==-1){
-			 		foreach ($licencias as $key => $value) {
-			 		// print_r($licencias);die();
-			 				$r = $this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos']);
-			 				// print_r($r);die();
-			 		}
-		 		}
-		 	}else{
+			// if($empresa[0]['Ip_host']==IP_MASTER)
+			// {
+			// 	// print_r($licencias);print_r($empresa);die();
+			// 	$tablas_iguales = $this->cod_global->tablas_por_licencias($licencias,$empresa);			
+			// 	// print_r($tablas_iguales);die();	
+		 	// 	$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
+		 	// 	// print_r($res);die();
+		 	// 	// print_r($tablas_iguales);die();
+		 	// 	if($tablas_iguales==-1){
+			//  		foreach ($licencias as $key => $value) {
+			//  		// print_r($licencias);die();
+			//  				$r = $this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos']);
+			//  				// print_r($r);die();
+			//  		}
+		 	// 	}
+		 	// }else{
 
-		 		// print_r('s');die();
+		 	// 	// print_r('s');die();
 
-				$tablas_iguales = $this->cod_global->tablas_por_licencias($licencias,$empresa,1);
-				// print_r($tablas_iguales);die();
-		 		$res = $this->cod_global->generar_primera_vez_terceros($empresa,$parametros['empresa']);
-		 		if($tablas_iguales==-1){
-			 		foreach ($licencias as $key => $value) {
-			 				$this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos'],1,$empresa);
-			 				sleep(10);
-			 		}
-			 	}
-		 		// print_r($empresa);die();
-		 	}
+			// 	$tablas_iguales = $this->cod_global->tablas_por_licencias($licencias,$empresa,1);
+			// 	// print_r($tablas_iguales);die();
+		 	// 	$res = $this->cod_global->generar_primera_vez_terceros($empresa,$parametros['empresa']);
+		 	// 	if($tablas_iguales==-1){
+			//  		foreach ($licencias as $key => $value) {
+			//  				$this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos'],1,$empresa);
+			//  				sleep(10);
+			//  		}
+			//  	}
+		 	// 	// print_r($empresa);die();
+		 	// }
 		 	$rol = '';
 		 	$noConcu = 0;		 	
 		 	$num_roles = count($roles);
@@ -564,7 +581,7 @@ class loginC
 		 	// print_r(array('respuesta'=>$res,'num_roles'=>$num_roles,'roles'=>$rol,'normal'=>$noConcu));die();
 
 
-			return array('respuesta'=>$res,'num_roles'=>$num_roles,'roles'=>$rol,'normal'=>$noConcu);
+			return array('respuesta'=>1,'num_roles'=>$num_roles,'roles'=>$rol,'normal'=>$noConcu);
 		}
 	}
 
@@ -774,6 +791,7 @@ class loginC
 			{
 				$this->cod_global->generar_primera_vez($base_des,$parametros['empresa']);
 				$this->cod_global->Copiar_estructura($parametros['modulo'],$base_des);
+				
 				return 1;
 			}else{
 				$this->cod_global->generar_primera_vez_terceros($empresa,$parametros['empresa']);
