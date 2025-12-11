@@ -159,7 +159,6 @@ class th_programar_horariosM extends BaseModel
         // Primera parte: horarios de departamentos a los que pertenece la persona
         // Segunda parte: horarios personales de la persona
         $sql = "
-    -- horarios de los departamentos a los que pertenece la persona (si hay)
     SELECT
         pro_hor.th_pro_id AS _id,
         pro_hor.th_hor_id AS id_horario,
