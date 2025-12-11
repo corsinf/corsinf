@@ -627,6 +627,7 @@ function eliminar_detalle_competencia(id) {
                                             <small class="text-muted">Subcompetencias, indicadores y comportamientos
                                                 observables</small>
                                         </div>
+                                        <?php if($_id != ''){ ?>
 
                                         <div class="col-md-4 text-end">
                                             <button type="button" class="btn btn-success btn-sm shadow-sm"
@@ -634,10 +635,8 @@ function eliminar_detalle_competencia(id) {
                                                 <i class="bx bx-plus-circle me-1"></i> Registrar Aspectos
                                             </button>
                                         </div>
-
                                         <div class="table-responsive">
-                                            <table class="table table-striped table-bordered"
-                                                id="tbl_competencia_detalles" style="width:100%">
+                                            <table class="table" id="tbl_competencia_detalles" style="width:100%">
                                                 <thead>
                                                     <tr>
                                                         <th>Subcompetencia</th>
@@ -654,6 +653,8 @@ function eliminar_detalle_competencia(id) {
                                                 <tbody></tbody>
                                             </table>
                                         </div>
+                                        <?php } ?>
+
                                     </div>
                                 </div>
                         </div>

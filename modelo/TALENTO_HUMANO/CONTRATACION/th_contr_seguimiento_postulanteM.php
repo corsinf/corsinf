@@ -30,7 +30,6 @@ class th_contr_seguimiento_postulanteM extends BaseModel
 {
     $sql = "
         SELECT 
-            -- Datos del seguimiento
             s.th_seg_id AS _id,
             s.th_posu_id,
             s.th_etapa_id,
@@ -218,16 +217,13 @@ public function listar_seguimiento_postulante_plaza($id_plaza = '', $id_etapa = 
             ON s.th_posu_id = po.th_posu_id
         INNER JOIN th_contr_etapas_proceso e 
             ON s.th_etapa_id = e.th_etapa_id
-        -- LEFT JOIN con postulantes externos
         LEFT JOIN th_postulantes pos 
             ON po.th_postulante_id = pos.th_pos_id
-        -- LEFT JOIN con personas internas
         LEFT JOIN th_personas per 
             ON po.th_persona_id = per.th_per_id
         WHERE s.th_seg_estado = 1
     ";
 
-    // filtro por plaza -> usar la plaza de la postulación (po.th_pla_id)
     if ($id_plaza !== '' && $id_plaza !== null) {
         $idp = (int) $id_plaza;
         $sql .= " AND po.th_pla_id = {$idp}";

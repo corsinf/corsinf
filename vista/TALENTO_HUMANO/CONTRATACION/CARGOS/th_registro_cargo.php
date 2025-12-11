@@ -65,6 +65,8 @@ $(document).ready(function() {
     <?php if (isset($_GET['_id'])) { ?>
     cargar_cargo(<?= $_id ?>);
     listar_aspecto_cargo(<?= $_id ?>);
+    cargar_competencias(<?= $_id ?>);
+
     <?php } ?>
 
     cargar_selects2();
@@ -79,6 +81,9 @@ $(document).ready(function() {
         cargar_select2_url('ddl_subordinacion', url_cargos, '', '#modal_aspectos_intrinsecos');
         cargar_select2_url('ddl_supervision', url_cargos, '', '#modal_aspectos_intrinsecos');
         cargar_select2_url('ddl_comunicaciones', url_cargos, '', '#modal_aspectos_intrinsecos');
+
+        url_competenciasC = '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_competenciasC.php?buscar=true';
+        cargar_select2_url('ddl_competencias', url_competenciasC, '', '#modal_cargo_competencia');
     }
 
 
@@ -1778,7 +1783,234 @@ function abrir_modal_competencias() {
             keyboard: false
         }
     );
+
     modal.show();
+}
+
+function obtenerParametrosCargoCompetencia() {
+    return {
+        '_id': $('#txt_th_carcomp_id').val() || '',
+        'th_car_id': $('#txt_th_car_id').val() || $('#txt_th_car_id').attr('value') || '',
+        'th_comp_id': $('#ddl_competencias').val() || '',
+        'th_carcomp_nivel_requerido': $('#txt_th_carcomp_nivel_requerido').val() || '',
+        'nivel_utilizacion': $('#txt_th_carcomp_nivel_utilizacion').val() || '',
+        'nivel_contribucion': $('#txt_th_carcomp_nivel_contribucion').val() || '',
+        'nivel_habilidad': $('#txt_th_carcomp_nivel_habilidad').val() || '',
+        'nivel_maestria': $('#txt_th_carcomp_nivel_maestria').val() || '',
+        'disc_d': $('#txt_th_carcomp_disc_valor_d').val() || '',
+        'disc_i': $('#txt_th_carcomp_disc_valor_i').val() || '',
+        'disc_s': $('#txt_th_carcomp_disc_valor_s').val() || '',
+        'disc_c': $('#txt_th_carcomp_disc_valor_c').val() || '',
+        'grafica_json': null, // si generas gráfico poner aquí JSON
+        'es_critica': $('#ddl_th_carcomp_es_critica').val() === '1' ? 1 : 0,
+        'es_evaluable': $('#ddl_th_carcomp_es_evaluable').val() === '1' ? 1 : 0,
+        'metodo': $('#txt_th_carcomp_metodo_evaluacion').val().trim() || null,
+        'ponderacion': $('#txt_th_carcomp_ponderacion').val() || null,
+        'observaciones': $('#txt_th_carcomp_observaciones').val() || null,
+        'estado': 1
+    };
+}
+
+// ---------- INSERTAR ----------
+function insertar_cargo_competencia() {
+    var parametros = obtenerParametrosCargoCompetencia();
+
+    $.ajax({
+        data: {
+            parametros: parametros
+        },
+        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_competenciasC.php?insertar_editar=true',
+        type: 'post',
+        dataType: 'json',
+        success: function(response) {
+            if (response == 1 || response === true) {
+                Swal.fire('', 'Competencia creada con éxito.', 'success').then(function() {
+                    var modalEl = document.getElementById('modal_cargo_competencia');
+                    var modal = bootstrap.Modal.getInstance(modalEl);
+                    if (modal) modal.hide();
+
+                    // recargar la lista de competencias del cargo (debes tener una función listar)
+                    if (typeof listar_competencias_cargo === 'function') {
+                        listar_competencias_cargo(parametros.th_car_id);
+                    } else {
+                        // fallback: recarga la página si no existe la función
+                        location.reload();
+                    }
+                });
+            } else if (response == -2) {
+                Swal.fire('', 'Ya existe esa competencia para este cargo.', 'warning');
+            } else {
+                var msg = (typeof response === 'object' && response.msg) ? response.msg :
+                    'Error al guardar competencia.';
+                Swal.fire('', msg, 'error');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error insertar_cargo_competencia:', status, error, xhr.responseText);
+            Swal.fire('', 'Error al conectar con el servidor: ' + xhr.responseText, 'error');
+        }
+    });
+}
+
+function eliminar_cargo_competencia(id) {
+    var id = id;
+    if (!id) {
+        Swal.fire('', 'Registro inválido.', 'warning');
+        return;
+    }
+
+    Swal.fire({
+        title: '¿Eliminar competencia?',
+        text: "La competencia será desactivada (soft delete).",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                data: {
+                    id: id
+                },
+                url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_competenciasC.php?eliminar=true',
+                type: 'post',
+                dataType: 'json',
+                success: function(response) {
+                    if (response == 1 || response === true) {
+                        Swal.fire('', 'Competencia eliminada.', 'success').then(function() {
+                            var modalEl = document.getElementById(
+                                'modal_cargo_competencia');
+                            var modal = bootstrap.Modal.getInstance(modalEl);
+                            if (modal) modal.hide();
+
+                            var th_car_id = $('#txt_th_car_id').val();
+                            if (typeof listar_competencias_cargo === 'function') {
+                                listar_competencias_cargo(th_car_id);
+                            } else {
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        Swal.fire('', 'Error al eliminar.', 'error');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error eliminar_cargo_competencia:', status, error, xhr
+                        .responseText);
+                    Swal.fire('', 'Error al conectar con el servidor: ' + xhr.responseText,
+                        'error');
+                }
+            });
+        }
+    });
+}
+
+function abrir_modal_cargo_competencia_editar(competencia) {
+    limpiar_form_cargo_competencia();
+
+    $('#txt_th_carcomp_id').val(competencia.th_carcomp_id || competencia.id || '');
+    $('#txt_th_car_id').val(competencia.th_car_id || '');
+
+    if (competencia.th_comp_id && competencia.th_comp_nombre) {
+        var option = new Option(competencia.th_comp_nombre, competencia.th_comp_id, true, true);
+        $('#ddl_competencias').append(option).trigger('change');
+    } else if (competencia.th_comp_id) {
+        $('#ddl_competencias').val(competencia.th_comp_id).trigger('change');
+    }
+
+    $('#txt_th_carcomp_nivel_requerido').val(competencia.th_carcomp_nivel_requerido || '');
+    $('#txt_th_carcomp_nivel_utilizacion').val(competencia.th_carcomp_nivel_utilizacion || '');
+    $('#txt_th_carcomp_nivel_contribucion').val(competencia.th_carcomp_nivel_contribucion || '');
+    $('#txt_th_carcomp_nivel_habilidad').val(competencia.th_carcomp_nivel_habilidad || '');
+    $('#txt_th_carcomp_nivel_maestria').val(competencia.th_carcomp_nivel_maestria || '');
+
+    $('#txt_th_carcomp_disc_valor_d').val(competencia.th_carcomp_disc_valor_d || '');
+    $('#txt_th_carcomp_disc_valor_i').val(competencia.th_carcomp_disc_valor_i || '');
+    $('#txt_th_carcomp_disc_valor_s').val(competencia.th_carcomp_disc_valor_s || '');
+    $('#txt_th_carcomp_disc_valor_c').val(competencia.th_carcomp_disc_valor_c || '');
+
+    $('#ddl_th_carcomp_es_critica').val(competencia.th_carcomp_es_critica ? '1' : '0');
+    $('#ddl_th_carcomp_es_evaluable').val(competencia.th_carcomp_es_evaluable ? '1' : '0');
+    $('#txt_th_carcomp_metodo_evaluacion').val(competencia.th_carcomp_metodo_evaluacion || '');
+    $('#txt_th_carcomp_ponderacion').val(competencia.th_carcomp_ponderacion || '');
+    $('#txt_th_carcomp_observaciones').val(competencia.th_carcomp_observaciones || '');
+
+    $('#pnl_crear').hide();
+    $('#pnl_actualizar').show();
+
+    var modal = new bootstrap.Modal(document.getElementById('modal_cargo_competencia'));
+    modal.show();
+}
+
+var tbl_competencias;
+
+function cargar_competencias(id_cargo) {
+
+    id_cargo = id_cargo || '';
+
+    tbl_competencias = $('#tbl_competencias').DataTable({
+        destroy: true,
+        responsive: true,
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+        },
+        ajax: {
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_competenciasC.php?listar=true',
+            type: 'POST',
+            data: function(d) {
+                d.id = id_cargo;
+            },
+            dataSrc: ''
+        },
+        columns: [{
+                data: 'th_car_id'
+            }, // nombre th_comp.nombre
+            {
+                data: 'th_carcomp_nivel_requerido'
+            },
+            {
+                data: 'th_carcomp_ponderacion'
+            },
+            {
+                data: 'th_carcomp_es_critica',
+                render: function(v) {
+                    return v == 1 ?
+                        '<span class="badge bg-danger">Sí</span>' :
+                        '<span class="badge bg-secondary">No</span>';
+                }
+            },
+            {
+                data: null,
+                orderable: false,
+                searchable: false,
+                className: 'text-center',
+                render: function(data, type, item) {
+                    let id = item._id;
+                    return `
+                        <button class="btn btn-primary btn-sm" 
+                                onclick="abrir_modal_competencias(${id})"
+                                data-bs-toggle="tooltip" 
+                                title="Editar">
+                            <i class="bx bx-edit"></i>
+                        </button>
+
+                        <button class="btn btn-danger btn-sm" 
+                                onclick="eliminar_cargo_competencia(${id})"
+                                data-bs-toggle="tooltip" 
+                                title="Eliminar">
+                            <i class="bx bx-trash"></i>
+                        </button>
+                    `;
+                }
+            }
+        ],
+        order: [
+            [0, 'asc']
+        ],
+        drawCallback: function() {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        }
+    });
 }
 </script>
 
@@ -2016,14 +2248,16 @@ function abrir_modal_competencias() {
                                                             Estructura organizacional, jerarquía y relaciones del cargo
                                                         </small>
                                                     </div>
+                                                    <?php if (isset($_GET['_id'])) { ?>
                                                     <div class="col-md-4 text-end">
                                                         <button type="button" class="btn btn-success btn-sm shadow-sm"
                                                             onclick="abrir_modal_aspectos_intrinsecos()">
                                                             <i class="bx bx-plus-circle me-1"></i> Registrar Aspectos
                                                         </button>
                                                     </div>
+                                                    <?php } ?>
                                                 </div>
-
+                                                <?php if (isset($_GET['_id'])) { ?>
                                                 <!-- Tarjeta Principal con Organigrama -->
                                                 <div class="card border-0 shadow-sm">
                                                     <div class="card-body p-4">
@@ -2169,6 +2403,7 @@ function abrir_modal_competencias() {
 
                                                     </div>
                                                 </div>
+                                                <?php  } ?>
 
                                             </div>
                                         </section>
@@ -2180,20 +2415,18 @@ function abrir_modal_competencias() {
                                     <div class="tab-pane fade" id="secundaryprofile" role="tabpanel">
                                         <section class="content pt-0">
                                             <div class="container-fluid">
-                                                <?php if ($_id != '') { ?>
 
                                                 <h5 class="fw-bold text-primary mb-3">
                                                     <i class="bx bx-info-circle me-2"></i>Aspectos Extrínsecos del cargo
                                                 </h5>
+                                                <?php if ($_id != '') { ?>
                                                 <button type="button" class="btn btn-success"
                                                     onclick="abrir_modal_cargo_requisitos()">
                                                     <i class="bx bx-plus me-1"></i> Agregar Requisito Detalle
                                                 </button>
                                                 <?php }?>
-
-
                                                 </hr>
-
+                                                <?php if ($_id != '') { ?>
                                                 <div class="table-responsive">
                                                     <table class="table table-striped responsive" id="tbl_req_detalles"
                                                         style="width:100%">
@@ -2208,7 +2441,7 @@ function abrir_modal_competencias() {
                                                         <tbody></tbody>
                                                     </table>
                                                 </div>
-
+                                                <?php }?>
                                             </div><!-- /.container-fluid -->
                                         </section>
                                     </div>
@@ -2231,7 +2464,7 @@ function abrir_modal_competencias() {
                                                             Estado de cumplimiento de requisitos y documentación
                                                         </small>
                                                     </div>
-
+                                                    <?php if (isset($_GET['_id'])) { ?>
                                                     <div class="col-md-4 d-flex justify-content-end gap-2">
                                                         <button type="button" class="btn btn-success btn-sm shadow-sm"
                                                             onclick="abrir_modal_funciones()">
@@ -2243,7 +2476,9 @@ function abrir_modal_competencias() {
                                                             <i class="bx bx-plus-circle me-1"></i> Actualizar Compliance
                                                         </button>
                                                     </div>
+                                                    <?php } ?>
                                                 </div>
+                                                <?php if (isset($_GET['_id'])) { ?>
                                                 <!-- Tarjeta Principal de Compliance -->
                                                 <div class="card border-0 shadow-sm">
                                                     <div class="card-body p-4">
@@ -2398,9 +2633,12 @@ function abrir_modal_competencias() {
 
                                                     </div>
                                                 </div>
+                                                <?php } ?>
+
+
 
                                             </div>
-
+                                            <?php if (isset($_GET['_id'])) { ?>
                                             <div class="row mb-3 align-items-center">
                                                 <div class="col-md-8">
                                                     <h5 class="fw-bold text-primary mb-1">
@@ -2476,6 +2714,7 @@ function abrir_modal_competencias() {
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <?php } ?>
                                         </section>
                                     </div>
                                     <div class="tab-pane fade" id="competencias" role="tabpanel">
@@ -2496,7 +2735,7 @@ function abrir_modal_competencias() {
                                                             Estado de cumplimiento de habilidades y competencias
                                                         </small>
                                                     </div>
-
+                                                    <?php if (isset($_GET['_id'])) { ?>
                                                     <!-- Botonera -->
                                                     <div class="col-md-4 d-flex justify-content-end gap-2"
                                                         id="pnl_competencias_botonera">
@@ -2506,26 +2745,31 @@ function abrir_modal_competencias() {
                                                             <i class="bx bx-plus-circle me-1"></i> Competencias
                                                         </button>
                                                     </div>
+                                                    <?php } ?>
 
                                                 </div>
-
+                                                <?php if (isset($_GET['_id'])) { ?>
                                                 <!-- Aquí puedes colocar la tabla -->
                                                 <div class="row">
                                                     <div class="col-md-12">
-                                                        <table id="tbl_competencias" class="table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Competencia</th>
-                                                                    <th>Nivel Requerido</th>
-                                                                    <th>Ponderación</th>
-                                                                    <th>Crítica</th>
-                                                                    <th>Acciones</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody></tbody>
-                                                        </table>
+                                                        <div class="table-responsive">
+                                                            <table id="tbl_competencias"
+                                                                class="table table-bordered table-striped w-100">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Competencia</th>
+                                                                        <th>Nivel Requerido</th>
+                                                                        <th>Ponderación</th>
+                                                                        <th>Crítica</th>
+                                                                        <th>Acciones</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody></tbody>
+                                                            </table>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <?php } ?>
 
                                             </div>
                                         </section>
@@ -2569,7 +2813,8 @@ function abrir_modal_competencias() {
                         <label class="form-label fw-bold">
                             <i class="bx bx-target-lock text-primary me-1"></i> Competencia
                         </label>
-                        <select class="form-select select2-validation" id="ddl_th_comp_id" name="th_comp_id" required>
+                        <select class="form-select select2-validation" id="ddl_competencias" name="ddl_competencias"
+                            required>
                             <option value="" hidden selected>-- Seleccione la competencia --</option>
                         </select>
                     </div>

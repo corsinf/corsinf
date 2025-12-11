@@ -109,49 +109,41 @@ class th_contr_plazasM extends BaseModel
 public function obtener_resumen_plaza($pla_id = 0)
 {
     $pla_id = (int)$pla_id;
-    if ($pla_id <= 0) return array();
+    $sql = "SELECT
+  cp.th_pla_id,
+  cp.th_pla_titulo,
+  cp.th_pla_descripcion,
+  cp.th_pla_tipo,
+  cp.th_pla_fecha_publicacion,
+  cp.th_pla_fecha_cierre,
+  cp.th_pla_num_vacantes,
+  cp.th_pla_salario_min,
+  cp.th_pla_salario_max,
+  cp.th_pla_observaciones,
 
-    $sql = "
-    SELECT
-      p.*,
-      (SELECT
-         STUFF((
-           SELECT ', ' + ISNULL(c.th_car_nombre,'<sin nombre>')
-                        + ' x' + COALESCE(CONVERT(VARCHAR(10), pc2.th_pc_cantidad),'0')
-                        + ISNULL(' (' + CONVERT(VARCHAR(50), pc2.th_pc_salario_ofertado) + ')','')
-           FROM th_contr_plaza_cargo pc2
-           LEFT JOIN th_contr_cargos c ON c.th_car_id = pc2.th_car_id
-           WHERE pc2.th_pla_id = p.th_pla_id AND pc2.th_pc_estado = 1
-           FOR XML PATH(''), TYPE).value('.','NVARCHAR(MAX)')
-         ,1,2,'')
-      ) AS cargos_resumen,
-      (SELECT
-         STUFF((
-           SELECT ', ' + ISNULL(req.th_req_descripcion,'<sin descripcion>')
-                        + CASE WHEN req.th_req_obligatorio = 1 THEN ' (Obligatorio)' ELSE '' END
-           FROM th_contr_plaza_requisitos pr2
-           LEFT JOIN th_contr_requisitos req ON req.th_req_id = pr2.th_req_id
-           WHERE pr2.th_pla_id = p.th_pla_id
-           FOR XML PATH(''), TYPE).value('.','NVARCHAR(MAX)')
-         ,1,2,'')
-      ) AS requisitos_resumen,
-      (SELECT
-         STUFF((
-           SELECT ' -> ' + CONVERT(VARCHAR(10), et.th_etapa_orden) + '. ' + ISNULL(et.th_etapa_nombre,'<sin nombre>')
-           FROM th_contr_plaza_etapas pe2
-           LEFT JOIN th_contr_etapas_proceso et ON et.th_etapa_id = pe2.th_eta_id
-           WHERE pe2.th_pla_id = p.th_pla_id AND (pe2.th_pla_eta_estado = 1 OR pe2.th_pla_eta_estado IS NULL)
-           ORDER BY et.th_etapa_orden
-           FOR XML PATH(''), TYPE).value('.','NVARCHAR(MAX)')
-         ,1,4,'')
-      ) AS etapas_resumen
-    FROM th_contr_plazas p
-    WHERE p.th_pla_id = {$pla_id}
-      AND p.th_pla_estado = 1
-    ";
-
-    // Si tu db->datos() soporta un flag para NO transformar esquemas, úsalo:
-    // return $this->db->datos($sql, true);
+  COALESCE(c.th_car_nombre, '') + '_' + COALESCE(CONVERT(VARCHAR(20), cpc.th_pc_salario_ofertado), '') AS cargo_resumen,
+  COALESCE(STRING_AGG(
+      COALESCE(cr.th_req_Descripcion, '') + '-' + COALESCE(cr.th_req_tipo, '') + '-' + COALESCE(CONVERT(VARCHAR(10), cr.th_req_obligatorio), ''),
+      ', '
+  ), '') AS requisitos_resumen,
+  COALESCE(STRING_AGG(
+      CONVERT(VARCHAR(10), cet.th_etapa_orden) + '. ' + COALESCE(cet.th_etapa_nombre, ''),
+      '->'
+  ), '') AS etapas_resumen 
+FROM th_contr_plazas cp
+ LEFT JOIN th_contr_plaza_cargo cpc ON cp.th_pla_id = cpc.th_pla_id
+ LEFT JOIN th_contr_cargos c ON c.th_car_id = cpc.th_car_id
+ LEFT JOIN th_contr_plaza_requisitos cpr ON cp.th_pla_id = cpr.th_pla_id
+ LEFT JOIN th_contr_requisitos cr ON cpr.th_req_id = cr.th_req_id
+ LEFT JOIN th_contr_plaza_etapas cpe ON cp.th_pla_id = cpe.th_pla_id
+ LEFT JOIN th_contr_etapas_proceso cet ON cpe.th_eta_id = cet.th_etapa_id
+ WHERE cp.th_pla_id = $pla_id
+  AND cp.th_pla_estado = 1
+ GROUP BY
+  cp.th_pla_id, cp.th_pla_titulo, cp.th_pla_descripcion, cp.th_pla_tipo, cp.th_pla_num_vacantes,
+  cp.th_pla_salario_min, cp.th_pla_salario_max, cp.th_pla_observaciones, cp.th_pla_fecha_publicacion,
+  th_pla_fecha_cierre,
+  cpc.th_pc_salario_ofertado, c.th_car_nombre";
 
     return $this->db->datos($sql);
 }

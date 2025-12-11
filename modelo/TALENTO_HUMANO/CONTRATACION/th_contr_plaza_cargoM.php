@@ -34,8 +34,6 @@ class th_contr_plaza_cargoM extends BaseModel
             c.th_car_id AS cargo_th_car_id,
             c.th_car_nombre AS cargo_nombre,
             c.th_car_descripcion AS cargo_descripcion,
-            c.th_car_nivel AS cargo_nivel,
-            c.th_car_area AS cargo_area,
             c.th_car_estado AS cargo_estado,
             c.th_car_fecha_creacion AS cargo_fecha_creacion,
             c.th_car_fecha_modificacion AS cargo_fecha_modificacion,

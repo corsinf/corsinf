@@ -19,23 +19,21 @@ class th_contr_plaza_etapas_procesoM extends BaseModel
     
     public function listar_etapas_no_asignadas($pla_id)
     {
-        $pla_id = intval($pla_id);
+         $pla_id = intval($pla_id);
 
-        $sql = "
+    $sql = "
         SELECT e.*
         FROM th_contr_etapas_proceso e
+        LEFT JOIN th_contr_plaza_etapas pe
+            ON pe.th_eta_id = e.th_etapa_id
+            AND pe.th_pla_id = $pla_id
+            AND pe.th_pla_eta_estado = 1
         WHERE e.th_etapa_estado = 1
-          AND NOT EXISTS (
-              SELECT 1
-              FROM th_contr_plaza_etapas pe
-              WHERE pe.th_eta_id = e.th_etapa_id
-                AND pe.th_pla_id = {$pla_id}
-                AND pe.th_pla_eta_estado = 1
-          )
-        ORDER BY e.th_etapa_orden, e.th_etapa_nombre
-        ";
+          AND pe.th_eta_id IS NULL
+        ORDER BY e.th_etapa_orden, e.th_etapa_nombre;
+    ";
 
-        return $this->db->datos($sql);
+    return $this->db->datos($sql);
     }
 
     public function listar_etapas_por_plaza($pla_id)

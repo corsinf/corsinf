@@ -21,21 +21,21 @@ class th_contr_plaza_requisitosM extends BaseModel
 
     public function listar_requisitos_no_asignados($pla_id)
 {
+   $pla_id = intval($pla_id);
+
     $sql = "
-    SELECT r.*
-    FROM th_contr_requisitos r
-    WHERE r.th_req_estado = 1
-      AND NOT EXISTS (
-        SELECT 1
-        FROM th_contr_plaza_requisitos pr
-        WHERE pr.th_req_id = r.th_req_id
-          AND pr.th_pla_id = {$pla_id}
-          AND pr.th_car_estado = 1
-      )
-    ORDER BY r.th_req_descripcion ASC
+        SELECT r.*
+        FROM th_contr_requisitos r
+        LEFT JOIN th_contr_plaza_requisitos pr
+            ON pr.th_req_id = r.th_req_id
+            AND pr.th_pla_id = $pla_id
+            AND pr.th_car_estado = 1
+        WHERE r.th_req_estado = 1
+          AND pr.th_req_id IS NULL
+        ORDER BY r.th_req_descripcion ASC;
     ";
 
-     return $this->db->datos($sql);
+    return $this->db->datos($sql);
 }
 
 function listar_requisitos_por_plaza($pla_id)

@@ -26,26 +26,24 @@ class th_contr_union_cargo_requisito_detalleM extends BaseModel
     {
         $id = intval($th_car_req_id);
 
-        $sql = "
-            SELECT d.th_reqdet_id,
-                   d.th_reqdet_nombre,
-                   d.th_reqdet_descripcion,
-                   d.th_reqdet_tipo_dato,
-                   d.th_reqdet_obligatorio,
-                   d.th_reqdet_estado,
-                   d.th_reqdet_fecha_creacion,
-                   d.th_reqdet_fecha_modificacion
-            FROM th_contr_requisitos_detalles d
-            WHERE d.th_reqdet_estado = 1
-              AND NOT EXISTS (
-                  SELECT 1
-                  FROM th_contr_union_cargo_requisito_detalle ud
-                  WHERE ud.th_reqdet_id = d.th_reqdet_id
-                    AND ud.th_car_req_id = {$id}
-                    AND ud.th_req_reqdet_estado = 1
-              )
-            ORDER BY d.th_reqdet_nombre
-        ";
+    $sql = "
+        SELECT d.th_reqdet_id,
+               d.th_reqdet_nombre,
+               d.th_reqdet_descripcion,
+               d.th_reqdet_tipo_dato,
+               d.th_reqdet_obligatorio,
+               d.th_reqdet_estado,
+               d.th_reqdet_fecha_creacion,
+               d.th_reqdet_fecha_modificacion
+        FROM th_contr_requisitos_detalles d
+        LEFT JOIN th_contr_union_cargo_requisito_detalle ud
+            ON ud.th_reqdet_id = d.th_reqdet_id
+            AND ud.th_car_req_id = $id
+            AND ud.th_req_reqdet_estado = 1
+        WHERE d.th_reqdet_estado = 1
+          AND ud.th_reqdet_id IS NULL
+        ORDER BY d.th_reqdet_nombre;
+    ";
 
         return $this->db->datos($sql);
     }

@@ -95,70 +95,103 @@ function datos_col(id) {
     });
 }
 
-function organigrama_personas(id) {
-    $.ajax({
-        data: {
-            id: id
-        },
-        url: '../controlador/TALENTO_HUMANO/th_departamentosC.php?listar_organigrama_personas=true',
-        type: 'post',
-        dataType: 'json',
-        success: function(response) {
+// Normalizador sencillo
+function normalizarDepartamentosConPersonasSimple(data) {
+    if (!Array.isArray(data)) return [];
 
-            const datosNormalizados = normalizarDepartamentosConPersonas(response);
-            const lista = extraerCargosConPersonas(datosNormalizados);
-
-            lista.forEach(cargo => {
-
-                const card = document.querySelector(`#car_id_${cargo.id_cargo}`);
-
-                // Si no existe card en la vista, omitimos
-                if (!card) return;
-
-                if (cargo.nombre_persona) {
-                    // Tiene persona asignada
-                    card.textContent = `Persona encargada: ${cargo.nombre_persona}`;
-                    card.classList.remove("text-info", "text-danger");
-                    card.classList.add("text-dark");
-                } else {
-                    // No tiene persona asignada
-                    card.textContent = "Sin persona asignada";
-                    card.classList.remove("text-info", "text-success");
-                    card.classList.add("text-danger");
-                }
-
-            });
-        }
-    });
-}
-
-
-function normalizarDepartamentosConPersonas(data) {
     return data.map(dept => {
+        // asegurar cargos como array
+        dept.cargos = Array.isArray(dept.cargos) ? dept.cargos : [];
 
-        // --- Normalizar cargos ---
-        if (Array.isArray(dept.cargos)) {
-
-            dept.cargos = dept.cargos.map(cargo => {
-
-                // --- Normalizar personas_json ---
-                if (Array.isArray(cargo.personas_json)) {
-                    cargo.personas = cargo.personas_json;
-                    delete cargo.personas_json;
-                } else if (typeof cargo.personas_json === 'string') {
+        dept.cargos = dept.cargos.map(cargo => {
+            // asegurar persons como array
+            if (Array.isArray(cargo.personas)) {
+                // ok
+            } else if (Array.isArray(cargo.personas_json)) {
+                cargo.personas = cargo.personas_json;
+            } else if (typeof cargo.personas_json === 'string' && cargo.personas_json.trim() !== '') {
+                try {
                     cargo.personas = JSON.parse(cargo.personas_json);
-                    delete cargo.personas_json;
-                } else {
+                } catch (e) {
                     cargo.personas = [];
                 }
+            } else {
+                cargo.personas = [];
+            }
 
-                return cargo;
-            });
-        }
+            return cargo;
+        });
 
         return dept;
     });
 }
+
+// Extraer lista plana de cargos con la persona principal (simple)
+function extraerListaCargosSimple(departamentos) {
+    const lista = [];
+    if (!Array.isArray(departamentos)) return lista;
+
+    departamentos.forEach(dept => {
+        (dept.cargos || []).forEach(cargo => {
+            const id = cargo.th_car_id ?? cargo.th_carId ?? cargo.id ?? null;
+            const personas = Array.isArray(cargo.personas) ? cargo.personas : [];
+            const primera = personas.length ? personas[0] : null;
+
+            // elegir nombre a mostrar
+            let nombre = null;
+            if (primera) {
+                nombre = primera.nombre_completo ?? primera.nombres_completos ?? primera
+                    .th_per_nombres_completos ?? null;
+            }
+
+            lista.push({
+                id_cargo: id,
+                cargo_nombre: cargo.th_car_nombre ?? cargo.nombre ?? null,
+                persona_nombre: nombre,
+                personas_count: personas.length
+            });
+        });
+    });
+
+    return lista;
+}
+
+// Función que actualiza el DOM de forma simple
+function organigrama_personas(id) {
+    $.ajax({
+        url: '../controlador/TALENTO_HUMANO/th_departamentosC.php?listar_organigrama_personas=true',
+        type: 'post',
+        data: {
+            id: id
+        },
+        dataType: 'json',
+        success: function(response) {
+            const datos = normalizarDepartamentosConPersonasSimple(response || []);
+            const lista = extraerListaCargosSimple(datos);
+
+            lista.forEach(item => {
+                if (!item.id_cargo) return;
+
+                const el = document.getElementById(`car_id_${item.id_cargo}`);
+                if (!el) return;
+
+                if (item.persona_nombre) {
+                    el.textContent = `Encargado: ${item.persona_nombre}`;
+                    el.classList.remove('text-danger');
+                    el.classList.add('text-dark'); // o text-success
+                } else {
+                    el.textContent = 'Sin persona asignada';
+                    el.classList.remove('text-dark', 'text-success');
+                    el.classList.add('text-danger');
+                }
+            });
+        },
+        error: function() {
+            console.error('Error al obtener organigrama_personas');
+        }
+    });
+}
+
 
 function extraerCargosConPersonas(datos) {
     let resultado = [];

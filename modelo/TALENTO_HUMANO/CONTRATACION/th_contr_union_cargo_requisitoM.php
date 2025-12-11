@@ -25,16 +25,12 @@ class th_contr_union_cargo_requisitoM extends BaseModel
 
     $sql = "
         SELECT r.*
-        FROM th_contr_cargo_requisitos r
-        WHERE r.th_car_req_estado = 1
-          AND NOT EXISTS (
-              SELECT 1
-              FROM th_contr_union_cargo_requisito u
-              WHERE u.th_car_req_id = r.th_car_req_id
-                AND u.th_car_id = {$car_id}
-                AND u.th_carreq_estado = 1
-          )
-        ORDER BY r.th_car_req_nombre
+        FROM th_contr_cargo_requisitos r 
+        LEFT JOIN th_contr_union_cargo_requisito u  
+        ON u.th_car_req_id = r.th_car_req_id
+        AND u.th_car_id = $car_id
+		AND u.th_carreq_estado = 1
+        WHERE u.th_car_req_id IS NULL;
     ";
 
     return $this->db->datos($sql);
