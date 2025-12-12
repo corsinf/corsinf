@@ -13,10 +13,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
   $_SESSION['INICIO']['TIPO'] == 'ADMINISTRADOR'
 ) { ?>
   <script>
-    function redireccionar(url_redireccion) {
-      url_click = "inicio.php?mod=<?= $modulo_sistema ?>&acc=" + url_redireccion;
-      window.location.href = url_click;
-    }
     $(document).ready(function() {
       cargar_estadisticas_departamentos();
       cargar_empleados_sin_turno();
@@ -36,6 +32,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
       cargar_departamentos_selected();
 
     });
+
+    function redireccionar(url_redireccion) {
+      url_click = "inicio.php?mod=<?= $modulo_sistema ?>&acc=" + url_redireccion;
+      window.location.href = url_click;
+    }
 
     function cargar_resumen_asistencias() {
       $.ajax({
@@ -831,7 +832,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
               <div class="card-header">
                 <h6 class="mb-0">
                   <i class="fas fa-chart-bar me-2"></i>
-                 Control de asistencias
+                  Control de asistencias
                 </h6>
               </div>
               <div class="card-body">

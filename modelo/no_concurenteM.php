@@ -43,7 +43,9 @@ class no_concurenteM
 
 	function datos_no_concurentes($tabla)
 	{
-		$sql= "SELECT * FROM ".$tabla;
+		$sql= "SELECT COUNT(*) AS total FROM $tabla;";
+
+		// print_r($sql); exit(); die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
@@ -52,11 +54,21 @@ class no_concurenteM
 	function id_tabla_no_concurentes($tabla)
 	{
 
-		$sql2="SELECT COLUMN_NAME as 'ID'
-				FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
-				WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_NAME), 'IsPrimaryKey') = 1
-				AND TABLE_NAME = '".$tabla."'";
-		$datos2 = $this->db->datos($sql2);
+		// $sql2="SELECT COLUMN_NAME as 'ID'
+		// 		FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+		// 		WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_NAME), 'IsPrimaryKey') = 1
+		// 		AND TABLE_NAME = '".$tabla."'";
+
+		//Para que detecte los esquemas correctamente
+		$sql = "SELECT kcu.COLUMN_NAME AS ID
+				FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu
+				JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc
+					ON kcu.CONSTRAINT_NAME = tc.CONSTRAINT_NAME
+					AND kcu.CONSTRAINT_SCHEMA = tc.CONSTRAINT_SCHEMA
+				WHERE tc.CONSTRAINT_TYPE = 'PRIMARY KEY'
+				AND kcu.TABLE_NAME = '".$tabla."'";
+
+		$datos2 = $this->db->datos($sql);
 		// print_r($sql2);die();
 		return $datos2;
 	}
