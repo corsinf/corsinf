@@ -903,6 +903,7 @@ class loginC
 			 	 	 	$parametros['tipo'] = $value['tipo'];
 			 	 	 	$parametros['foto'] = $value['campo_img'];
 			 	 	 	$tabla = $value['Tabla'];
+			 	 	 	$parametros['pass'] = $this->cod_global->enciptar_clave($parametros['pass']);
 
 			 	 	 	// print_r($parametros);die();
 			 	 	 	$busqueda_tercero = $this->login->buscar_db_terceros($empresa[0]['Base_datos'],$empresa[0]['Usuario_db'],$empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db'],$parametros);
