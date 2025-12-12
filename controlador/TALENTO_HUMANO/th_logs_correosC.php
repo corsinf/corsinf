@@ -46,45 +46,152 @@ class th_logs_correosC
 
     function enviar_correo($parametros)
 {
-
-    echo "<pre>";
-    print_r($_SESSION['INICIO']["RAZON_SOCIAL"]);
-    var_dump($_SESSION);
-    echo "</pre>";
     echo "✔ La función enviar_correo() SI está entrando<br>";
 
+    $id = $parametros['_id'];
+
     $empresa   = $_SESSION['INICIO']["RAZON_SOCIAL"]; // variable empresa
-
-    $usuario   = $parametros['usuario'] ?? 'usuario.prueba';
-    $password  = $parametros['password'] ?? 'TempPass123!';
-
-    $loginUrl  = $parametros['loginUrl'] ?? 'https://app.tudominio.com/login'; // o enlace de activación con token
-    $logoUrl   = $_SESSION['INICIO']["RAZON_SOCIAL"] ?? '';
+    $loginUrl  = 'https://corsinf.com:447/corsinf/login.php'; // o enlace de activación con token
+    $logoUrl   = $_SESSION['INICIO']["LOGO"] ?? '';
     $support   = 'soporte@corsinf.com';
 
-    $htmlBody = $this->crearPlantillaCredencialesHTML($empresa, $usuario, $password, $loginUrl, $logoUrl, $support);
 
-    $to_correo     = $parametros['to'] ?? 'elvisfabian1296@gmail.com';
-    $titulo_correo = $parametros['sub'] ?? "Bienvenido a $empresa";
+    $titulo_correo =  "Bienvenido a $empresa";
+    $usuario   = 'usuario.prueba';
+    $pass_prueba  =  'TempPass123!';
+    $to_correo     =  'elvisfabian1296@gmail.com';
+
+    if($id != null){
+        $personas_correos = $this->personas->where('th_per_estado',1)->where('th_per_correo !',null)->listar();
+    }else{
+        $personas_correos = $this->personas->where('th_per_estado',1)->where('th_per_correo !',null)->where('th_per_id',$id)->listar();
+    }
 
 
-    $personas_correos = $this->personas->where('th_per_estado',1)->listar();
+   foreach ($personas_correos as $key => $value) {
 
-    return;
+    $correo = trim($value['correo']);
+    $password = trim($value['PASS']);
+    $id = $value['_id'];
 
-    return $this->email->enviar_email(
-        $to_correo,
-        $htmlBody,      // cuerpo HTML
-        $titulo_correo,
-        'soporte@corsinf.com',
-        false,
-        $empresa,       // nombre remitente (aparece como "ACME S.A.")
-        true            // $HTML = true
-        // Alternativa: si tu enviar_email acepta AltBody, adapta la clase para setear AltBody = $altBody
-    );
+
+    $htmlBody = $this->crearPlantillaCredencialesHTML($empresa, $correo, $password, $loginUrl, $logoUrl, $support);
+    
+    if (filter_var($correo, FILTER_VALIDATE_EMAIL) && !empty($correo)) {
+
+     
+        $enviado = $this->email->enviar_email(
+            $correo,
+            $htmlBody,
+            $titulo_correo,
+            'soporte@corsinf.com',
+            false,
+            $empresa,
+            true
+        ); 
+        $parametros = array(
+            'correo_destino' => $correo,
+            'asunto' => $titulo_correo,
+            'detalle' => 'Correo enviado correctamente',
+            'id_usuario' => $id ?? null,
+            'enviado' => true,  // true si se envió, false si falló
+            'estado' => 1
+        );
+        $resultado = $this->insertar_editar($parametros);
+        
+    } else {
+        $parametros = array(
+            'correo_destino' => $correo,
+            'asunto' => 'Error al enviar correo',
+            'detalle' => 'Correo con formato inválido - No enviado',
+            'id_usuario' => $id ?? null,
+            'enviado' => false,  
+            'estado' => 1
+        );
+        
+        $resultado = $this->insertar_editar($parametros);
+    }
+}
+  return true;
 }
 
-function crearPlantillaCredencialesHTML($empresa, $usuario, $password, $loginUrl = '', $logoUrl = '', $supportEmail = 'soporte@corsinf.com') {
+
+
+
+ 
+    function listar($id = '')
+    {
+        if ($id == '') {
+            $datos = $this->modelo->listar(); // lista todos
+        } else {
+            $datos = $this->modelo->where('th_log_id', $id)->listar();
+        }
+        return $datos;
+    }
+
+   
+    function insertar_editar($parametros)
+    {
+        $datos = array(
+            array('campo' => 'th_log_correo_destino', 'dato' => $parametros['correo_destino'] ?? null),
+            array('campo' => 'th_log_asunto', 'dato' => $parametros['asunto'] ?? null),
+            array('campo' => 'th_log_detalle', 'dato' => $parametros['detalle'] ?? null),
+            array('campo' => 'id_usuario', 'dato' => isset($parametros['id_usuario']) ? intval($parametros['id_usuario']) : null),
+            array('campo' => 'th_log_enviado', 'dato' => isset($parametros['enviado']) ? (bool)$parametros['enviado'] : null),
+            array('campo' => 'th_log_estado', 'dato' => isset($parametros['estado']) ? intval($parametros['estado']) : 1),
+            array('campo' => 'th_log_fecha_modificada', 'dato' => date('Y-m-d H:i:s')),
+        );
+
+       
+        if (empty($parametros['_id'])) {
+            $datos[] = array('campo' => 'th_log_fecha_creada', 'dato' => date('Y-m-d H:i:s'));
+
+            $insertId = $this->modelo->insertar_id($datos); 
+            return $insertId ?: false;
+        } else {
+            $where[0]['campo'] = 'th_log_id';
+            $where[0]['dato'] = $parametros['_id'];
+
+            $res = $this->modelo->editar($datos, $where);
+            return $res;
+        }
+    }
+
+    
+    function eliminar($id)
+    {
+        $datos = array(
+            array('campo' => 'th_log_estado', 'dato' => 0),
+            array('campo' => 'th_log_fecha_modificada', 'dato' => date('Y-m-d H:i:s')),
+        );
+
+        $where[0]['campo'] = 'th_log_id';
+        $where[0]['dato'] = $id;
+
+        $res = $this->modelo->editar($datos, $where);
+        return $res;
+    }
+
+    
+    function buscar($parametros)
+    {
+        $lista = array();
+        $query = $parametros['query'] ?? '';
+
+        // buscar por correo o asunto
+        $concat = "th_log_correo_destino, th_log_asunto";
+        $datos = $this->modelo->like($concat, $query);
+
+        foreach ($datos as $value) {
+            $text = ($value['th_log_correo_destino'] ?? '') . ' - ' . ($value['th_log_asunto'] ?? '');
+            $lista[] = array('id' => $value['th_log_id'], 'text' => $text, 'data' => $value);
+        }
+
+        return $lista;
+    }
+
+
+    function crearPlantillaCredencialesHTML($empresa, $usuario, $password, $loginUrl = '', $logoUrl = '', $supportEmail = 'soporte@corsinf.com') {
     $logoHtml = $logoUrl
         ? "<img src=\"" . htmlspecialchars($logoUrl) . "\" alt=\"" . htmlspecialchars($empresa) . " logo\" style=\"width:120px;max-width:30%;height:auto;display:block;margin:0 auto 12px;\" />"
         : "<div style=\"width:120px;height:48px;border-radius:6px;background:#0d6efd;color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-weight:700\">"
@@ -163,82 +270,6 @@ function crearPlantillaCredencialesHTML($empresa, $usuario, $password, $loginUrl
     return $html;
 }
 
-
-
- 
-    function listar($id = '')
-    {
-        if ($id == '') {
-            $datos = $this->modelo->listar(); // lista todos
-        } else {
-            $datos = $this->modelo->where('th_log_id', $id)->listar();
-        }
-        return $datos;
-    }
-
-   
-    function insertar_editar($parametros)
-    {
-        $datos = array(
-            array('campo' => 'th_log_correo_destino', 'dato' => $parametros['correo_destino'] ?? null),
-            array('campo' => 'th_log_asunto', 'dato' => $parametros['asunto'] ?? null),
-            array('campo' => 'th_log_detalle', 'dato' => $parametros['detalle'] ?? null),
-            array('campo' => 'id_usuario', 'dato' => isset($parametros['id_usuario']) ? intval($parametros['id_usuario']) : null),
-            array('campo' => 'th_log_enviado', 'dato' => isset($parametros['enviado']) ? (bool)$parametros['enviado'] : null),
-            array('campo' => 'th_log_estado', 'dato' => isset($parametros['estado']) ? intval($parametros['estado']) : 1),
-            array('campo' => 'th_log_fecha_modificada', 'dato' => date('Y-m-d H:i:s')),
-        );
-
-       
-        if (empty($parametros['_id'])) {
-            $datos[] = array('campo' => 'th_log_fecha_creada', 'dato' => date('Y-m-d H:i:s'));
-
-            $insertId = $this->modelo->insertar_id($datos); 
-            return $insertId ?: false;
-        } else {
-            $where[0]['campo'] = 'th_log_id';
-            $where[0]['dato'] = $parametros['_id'];
-
-            $res = $this->modelo->editar($datos, $where);
-            return $res;
-        }
-    }
-
-    
-    function eliminar($id)
-    {
-        $datos = array(
-            array('campo' => 'th_log_estado', 'dato' => 0),
-            array('campo' => 'th_log_fecha_modificada', 'dato' => date('Y-m-d H:i:s')),
-        );
-
-        $where[0]['campo'] = 'th_log_id';
-        $where[0]['dato'] = $id;
-
-        $res = $this->modelo->editar($datos, $where);
-        return $res;
-    }
-
-    /**
-     * Buscar para select2 (id/text)
-     * $parametros['query'] texto a buscar
-     */
-    function buscar($parametros)
-    {
-        $lista = array();
-        $query = $parametros['query'] ?? '';
-
-        // buscar por correo o asunto
-        $concat = "th_log_correo_destino, th_log_asunto";
-        $datos = $this->modelo->like($concat, $query);
-
-        foreach ($datos as $value) {
-            $text = ($value['th_log_correo_destino'] ?? '') . ' - ' . ($value['th_log_asunto'] ?? '');
-            $lista[] = array('id' => $value['th_log_id'], 'text' => $text, 'data' => $value);
-        }
-
-        return $lista;
-    }
 
     
 }
