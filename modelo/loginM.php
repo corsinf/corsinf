@@ -488,10 +488,32 @@ class loginM
 		$servidor = $empresa[0]['Ip_host'];
 		$puerto = $empresa[0]['Puerto_db'];
 
-		$sql="SELECT COLUMN_NAME as 'ID'
-				FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
-				WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_NAME), 'IsPrimaryKey') = 1
-				AND TABLE_NAME = '".$tabla."'";
+		$parts = explode('.', $tabla);
+		if (count($parts) === 2) {
+			$schema = $parts[0];
+			$table  = $parts[1];
+		} else {
+			$schema = null; // sin esquema explícito
+			$table  = $tabla;
+		}
+
+		$table_esc = addslashes($table);
+		$where_schema = $schema ? " AND kcu.TABLE_SCHEMA = '" . addslashes($schema) . "'" : "";
+
+		$sql = "SELECT kcu.COLUMN_NAME AS ID
+				FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu
+				JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc
+				ON kcu.CONSTRAINT_SCHEMA = tc.CONSTRAINT_SCHEMA
+				AND kcu.CONSTRAINT_NAME   = tc.CONSTRAINT_NAME
+				WHERE tc.CONSTRAINT_TYPE = 'PRIMARY KEY'
+				AND kcu.TABLE_NAME = '".$table_esc."'
+				".$where_schema." ORDER BY kcu.ORDINAL_POSITION;";
+
+		// $sql="SELECT COLUMN_NAME as 'ID'
+		// 		FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+		// 		WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_NAME), 'IsPrimaryKey') = 1
+		// 		AND TABLE_NAME = '".$tabla."'";
+		// print_r($sql);die();
 		$datos2 = $this->db->datos_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql);
 		return $datos2;
 	}

@@ -20,6 +20,15 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     data: null,
                     render: function(data, type, item) {
                         href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_persona_postulate&_id_per=${item.th_per_id}&_id=${item.id_comunidad}`;
+                        btns = `<a href="${href}" class="btn btn-xs btn-primary" title="CV"><i class="bx bxs-user-pin fs-6 me-0"></i></a>`;
+                        return btns;
+                    }
+                },
+
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&_id=${item.th_per_id}`;
                         return `<a href="${href}"><u>${item.primer_apellido} ${item.segundo_apellido} ${item.primer_nombre} ${item.segundo_nombre}</u></a>`;
                     }
                 },
@@ -102,19 +111,19 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 $('#txt_recuperado').val(JSON.stringify(response));
                 response.forEach(function(item, i) {
                     nombre = item.nombre;
-                    tr += "<tr><td>" + item.CardNo + "</td><td>"+nombre+"</td></tr>";
+                    tr += "<tr><td>" + item.CardNo + "</td><td>" + nombre + "</td></tr>";
                 });
 
                 $('#tbl_import').html(tr);
             },
             error: function(xhr, status, error) {
-                
+
                 $('#myModal_espera').modal('hide');
                 console.log('Status: ' + status);
                 console.log('Error: ' + error);
                 console.log('XHR Response: ' + xhr.responseText);
 
-                Swal.fire('', 'Error: ' + xhr.responseText, 'error').then(function(){
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error').then(function() {
                     $('#myModal_espera').modal('hide');
                 });
             }
@@ -145,23 +154,22 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 response.forEach(function(item, i) {
                     nombre = item.FullName;
                     card = '';
-                    if(item.CardList!='')
-                    {
+                    if (item.CardList != '') {
                         card = item.CardList.Card[0].CardNo;
                     }
-                    tr += "<tr><td>" + card + "</td><td>"+nombre+"</td></tr>";
+                    tr += "<tr><td>" + card + "</td><td>" + nombre + "</td></tr>";
                 });
 
                 $('#tbl_import').html(tr);
             },
             error: function(xhr, status, error) {
-                
+
                 $('#myModal_espera').modal('hide');
                 console.log('Status: ' + status);
                 console.log('Error: ' + error);
                 console.log('XHR Response: ' + xhr.responseText);
 
-                Swal.fire('', 'Error: ' + xhr.responseText, 'error').then(function(){
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error').then(function() {
                     $('#myModal_espera').modal('hide');
                 });
             }
@@ -248,7 +256,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                     </div>
 
                                     <button type="button" class="btn btn-primary btn-sm ms-1" onclick="import_bio()">
-                                            <i class="bx bx-import me-0 pb-1"></i> Importar desde biometrico
+                                        <i class="bx bx-import me-0 pb-1"></i> Importar desde biometrico
                                     </button>
 
                                 </div>
@@ -267,6 +275,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                     <table class="table table-striped responsive " id="tbl_personas" style="width:100%">
                                         <thead>
                                             <tr>
+                                                <th width="10%">#</th>
                                                 <th>Nombre</th>
                                                 <th>Cédula</th>
                                                 <th>Correo</th>
@@ -317,10 +326,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                         <th>Nombre</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tbl_import" >
+                                <tbody id="tbl_import">
 
                                 </tbody>
-                            </table>                            
+                            </table>
                         </div>
                     </div>
                 </div>

@@ -55,7 +55,7 @@ if (isset($_GET['_id'])) {
         // cargar_tabla();
         <?php if (isset($_GET['_id'])) { ?>
             cargar_datos_persona(<?= $_id ?>);
-            cargar_departamento(<?= $_id ?>);
+            // cargar_departamento(<?= $_id ?>);
         <?php } ?>
         cargar_selects2();
 
@@ -106,7 +106,7 @@ if (isset($_GET['_id'])) {
             dataType: 'json',
             success: function(response) {
                 if (response && response.length > 0) {
-                  cargar_turnos_horario(response[0].id_horario);
+                    cargar_turnos_horario(response[0].id_horario);
                 }
             },
             error: function(xhr, status, error) {
@@ -225,6 +225,7 @@ if (isset($_GET['_id'])) {
         };
 
         let parametros_vista_persona = parametros_persona();
+
         parametros = {
             ...parametros,
             ...parametros_vista_persona
@@ -497,16 +498,16 @@ if (isset($_GET['_id'])) {
                             <div class="tab-content py-3">
                                 <div class="tab-pane fade show active" id="datos" role="tabpanel">
 
-                                    <form id="registrar_departamento" class="modal_general_provincias">
+                                    <form id="registrar_personas" class="modal_general_provincias">
 
                                         <?php include_once('../vista/GENERAL/registrar_personas.php'); ?>
 
                                         <div class="d-flex justify-content-end pt-2">
                                             <?php if ($_id == '') { ?>
-                                                <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar_departamento();" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                                <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i> Guardar</button>
                                             <?php } else { ?>
-                                                <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar_departamento();" type="button"><i class="bx bx-save"></i> Guardar</button>
-                                                <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center" onclick="delete_datos_departamento()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
+                                                <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                                <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center" onclick="delete_datos_persona()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
                                             <?php } ?>
                                         </div>
                                     </form>
@@ -994,7 +995,7 @@ if (isset($_GET['_id'])) {
                             <button type="button" id="btn_tarjeta" class="btn btn-success btn-sm d-none" onclick="addTarjetaBio()"><i class="bx bx-sync"></i>Sincronizar Tarjeta</button>
                             <button type="button" id="btn_delete_tarjeta" class="btn btn-danger btn-sm d-none" onclick=" deteleTarjetaBio()"><i class="bx bx-sync"></i>Eliminar Tarjeta</button>
 
-                            <button type="button" id="btn_huella_all" class="btn btn-success btn-sm d-none" onclick="()"><i class="bx bx-sync"></i> Sincronizar todas las Huella</button>
+                            <button type="button" id="btn_huella_all" class="btn btn-success btn-sm d-none" onclick=""><i class="bx bx-sync"></i> Sincronizar todas las Huella</button>
                             <button type="button" id="btn_huella" class="btn btn-success btn-sm d-none" onclick="addHuellaBio()"><i class="bx bx-sync"></i> Sincronizar Huella</button>
                             <button type="button" id="btn_delete_huella" class="btn btn-danger btn-sm d-none" onclick="deteleHuella()"><i class="bx bx-sync"></i>Eliminar Huella</button>
 

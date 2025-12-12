@@ -819,7 +819,7 @@ class db
 			return $result;
 			
 		} catch (Exception $e) {
-			die(print_r(sqlsrv_errors(), true));
+			(print_r($e, true));
 		}
 
 	}
