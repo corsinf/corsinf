@@ -390,7 +390,7 @@ function limpiar_parametros_validate() {
 
                         <form id="form_justificaciones">
 
-                            <div class="mb-col">
+                            <div class="col-md-6">
                                 <label class="form-label" for="lbl_programar">Programar Horario </label>
                                 <div class="mb-col mt-2">
                                     <label for="txt_tipo_programar" class="form-label">Tipo de programación</label>
