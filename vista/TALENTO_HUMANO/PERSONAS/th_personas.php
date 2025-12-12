@@ -6,204 +6,204 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
-        tbl_personas = $('#tbl_personas').DataTable($.extend({}, configuracion_datatable('Personas', 'personas'), {
-            reponsive: true,
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+$(document).ready(function() {
+    tbl_personas = $('#tbl_personas').DataTable($.extend({}, configuracion_datatable('Personas', 'personas'), {
+        reponsive: true,
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+        },
+        ajax: {
+            url: '../controlador/TALENTO_HUMANO/th_personasC.php?listar=true',
+            dataSrc: ''
+        },
+        columns: [{
+                data: null,
+                render: function(data, type, item) {
+                    href =
+                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_persona_postulate&_id_per=${item.th_per_id}&_id=${item.id_comunidad}`;
+                    return `<a href="${href}"><u>${item.primer_apellido} ${item.segundo_apellido} ${item.primer_nombre} ${item.segundo_nombre}</u></a>`;
+                }
             },
-            ajax: {
-                url: '../controlador/TALENTO_HUMANO/th_personasC.php?listar=true',
-                dataSrc: ''
+            {
+                data: 'cedula'
             },
-            columns: [{
-                    data: null,
-                    render: function(data, type, item) {
-                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_persona_postulate&_id_per=${item.th_per_id}&_id=${item.id_comunidad}`;
-                        return `<a href="${href}"><u>${item.primer_apellido} ${item.segundo_apellido} ${item.primer_nombre} ${item.segundo_nombre}</u></a>`;
-                    }
-                },
-                {
-                    data: 'cedula'
-                },
 
-                {
-                    // data: null,
-                    // render: function(data, type, item) {
-                    //     return `<button type="button" class="btn btn-primary btn-xs" onclick=""><i class="lni lni-spinner-arrow fs-7 me-0 fw-bold"></i></button>`;
-                    // }
-                    data: 'correo'
-                },
-                {
-                    data: 'telefono_1'
-                },
-                {
-                    data: 'th_dep_nombre'
-                },
-            ],
-            order: [
-                [1, 'asc']
-            ],
-        }));
+            {
+                // data: null,
+                // render: function(data, type, item) {
+                //     return `<button type="button" class="btn btn-primary btn-xs" onclick=""><i class="lni lni-spinner-arrow fs-7 me-0 fw-bold"></i></button>`;
+                // }
+                data: 'correo'
+            },
+            {
+                data: 'telefono_1'
+            },
+            {
+                data: 'th_dep_nombre'
+            },
+        ],
+        order: [
+            [1, 'asc']
+        ],
+    }));
+});
+
+function dispositivos() {
+    $.ajax({
+        // data: {
+        //     id: id
+        // },
+        url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?listar=true',
+        type: 'post',
+        dataType: 'json',
+        success: function(response) {
+            console.log(response);
+            op = '';
+            response.forEach(function(item, i) {
+                op += '<option value="' + item._id + '">' + item.nombre + '</option>';
+            })
+            $('#ddl_dispositivos').html(op);
+
+        },
+        error: function(xhr, status, error) {
+            console.log('Status: ' + status);
+            console.log('Error: ' + error);
+            console.log('XHR Response: ' + xhr.responseText);
+
+            Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+        }
+    });
+}
+
+function import_bio() {
+    dispositivos();
+    $('#importar_device').modal('show');
+}
+
+function conectar_buscar() {
+    var parametros = {
+        'id': $('#ddl_dispositivos').val(),
+    };
+
+    $('#myModal_espera').modal('show');
+    $('#lbl_msj_espera').text("Conectando y Sincronizando");
+    $.ajax({
+        data: {
+            parametros: parametros
+        },
+        url: '../controlador/TALENTO_HUMANO/th_personasC.php?conectar_buscar=true',
+        type: 'post',
+        dataType: 'json',
+
+        success: function(response) {
+            console.log(response);
+
+            $('#myModal_espera').modal('hide');
+            tr = '';
+            $('#txt_recuperado').val(JSON.stringify(response));
+            response.forEach(function(item, i) {
+                nombre = item.nombre;
+                tr += "<tr><td>" + item.CardNo + "</td><td>" + nombre + "</td></tr>";
+            });
+
+            $('#tbl_import').html(tr);
+        },
+        error: function(xhr, status, error) {
+
+            $('#myModal_espera').modal('hide');
+            console.log('Status: ' + status);
+            console.log('Error: ' + error);
+            console.log('XHR Response: ' + xhr.responseText);
+
+            Swal.fire('', 'Error: ' + xhr.responseText, 'error').then(function() {
+                $('#myModal_espera').modal('hide');
+            });
+        }
+    });
+}
+
+function conectar_buscar_() {
+    var parametros = {
+        'id': $('#ddl_dispositivos').val(),
+    };
+
+    $('#myModal_espera').modal('show');
+    $('#lbl_msj_espera').text("Conectando y Sincronizando");
+    $.ajax({
+        data: {
+            parametros: parametros
+        },
+        url: '../controlador/TALENTO_HUMANO/th_personasC.php?conectar_buscar_=true',
+        type: 'post',
+        dataType: 'json',
+
+        success: function(response) {
+            console.log(response);
+
+            $('#myModal_espera').modal('hide');
+            tr = '';
+            $('#txt_recuperado').val(JSON.stringify(response));
+            response.forEach(function(item, i) {
+                nombre = item.FullName;
+                card = '';
+                if (item.CardList != '') {
+                    card = item.CardList.Card[0].CardNo;
+                }
+                tr += "<tr><td>" + card + "</td><td>" + nombre + "</td></tr>";
+            });
+
+            $('#tbl_import').html(tr);
+        },
+        error: function(xhr, status, error) {
+
+            $('#myModal_espera').modal('hide');
+            console.log('Status: ' + status);
+            console.log('Error: ' + error);
+            console.log('XHR Response: ' + xhr.responseText);
+
+            Swal.fire('', 'Error: ' + xhr.responseText, 'error').then(function() {
+                $('#myModal_espera').modal('hide');
+            });
+        }
+    });
+}
+
+function importar() {
+    var parametros = {
+        'datos': $('#txt_recuperado').val(),
+    };
+
+    // $('#myModal_espera').modal('show');
+    // $('#lbl_msj_espera').text("Conectando y Sincronizando");
+    $.ajax({
+        data: {
+            parametros: parametros
+        },
+        url: '../controlador/TALENTO_HUMANO/th_personasC.php?guardarImport=true',
+        type: 'post',
+        dataType: 'json',
+
+        success: function(response) {
+            if (response.msj == '') {
+                Swal.fire('Registros Importados', '', 'success');
+            } else {
+                Swal.fire('Registros Importados', response.msj, 'info');
+            }
+
+            tbl_personas.ajax.reload(null, false);
+            $('#importar_device').modal('hide');
+        },
+        error: function(xhr, status, error) {
+            console.log('Status: ' + status);
+            console.log('Error: ' + error);
+            console.log('XHR Response: ' + xhr.responseText);
+
+            Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            $('#myModal_espera').modal('hide');
+        }
     });
 
-    function dispositivos() {
-        $.ajax({
-            // data: {
-            //     id: id
-            // },
-            url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?listar=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                console.log(response);
-                op = '';
-                response.forEach(function(item, i) {
-                    op += '<option value="' + item._id + '">' + item.nombre + '</option>';
-                })
-                $('#ddl_dispositivos').html(op);
-
-            },
-            error: function(xhr, status, error) {
-                console.log('Status: ' + status);
-                console.log('Error: ' + error);
-                console.log('XHR Response: ' + xhr.responseText);
-
-                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
-            }
-        });
-    }
-
-    function import_bio() {
-        dispositivos();
-        $('#importar_device').modal('show');
-    }
-
-    function conectar_buscar() {
-        var parametros = {
-            'id': $('#ddl_dispositivos').val(),
-        };
-
-        $('#myModal_espera').modal('show');
-        $('#lbl_msj_espera').text("Conectando y Sincronizando");
-        $.ajax({
-            data: {
-                parametros: parametros
-            },
-            url: '../controlador/TALENTO_HUMANO/th_personasC.php?conectar_buscar=true',
-            type: 'post',
-            dataType: 'json',
-
-            success: function(response) {
-                console.log(response);
-
-                $('#myModal_espera').modal('hide');
-                tr = '';
-                $('#txt_recuperado').val(JSON.stringify(response));
-                response.forEach(function(item, i) {
-                    nombre = item.nombre;
-                    tr += "<tr><td>" + item.CardNo + "</td><td>"+nombre+"</td></tr>";
-                });
-
-                $('#tbl_import').html(tr);
-            },
-            error: function(xhr, status, error) {
-                
-                $('#myModal_espera').modal('hide');
-                console.log('Status: ' + status);
-                console.log('Error: ' + error);
-                console.log('XHR Response: ' + xhr.responseText);
-
-                Swal.fire('', 'Error: ' + xhr.responseText, 'error').then(function(){
-                    $('#myModal_espera').modal('hide');
-                });
-            }
-        });
-    }
-
-    function conectar_buscar_() {
-        var parametros = {
-            'id': $('#ddl_dispositivos').val(),
-        };
-
-        $('#myModal_espera').modal('show');
-        $('#lbl_msj_espera').text("Conectando y Sincronizando");
-        $.ajax({
-            data: {
-                parametros: parametros
-            },
-            url: '../controlador/TALENTO_HUMANO/th_personasC.php?conectar_buscar_=true',
-            type: 'post',
-            dataType: 'json',
-
-            success: function(response) {
-                console.log(response);
-
-                $('#myModal_espera').modal('hide');
-                tr = '';
-                $('#txt_recuperado').val(JSON.stringify(response));
-                response.forEach(function(item, i) {
-                    nombre = item.FullName;
-                    card = '';
-                    if(item.CardList!='')
-                    {
-                        card = item.CardList.Card[0].CardNo;
-                    }
-                    tr += "<tr><td>" + card + "</td><td>"+nombre+"</td></tr>";
-                });
-
-                $('#tbl_import').html(tr);
-            },
-            error: function(xhr, status, error) {
-                
-                $('#myModal_espera').modal('hide');
-                console.log('Status: ' + status);
-                console.log('Error: ' + error);
-                console.log('XHR Response: ' + xhr.responseText);
-
-                Swal.fire('', 'Error: ' + xhr.responseText, 'error').then(function(){
-                    $('#myModal_espera').modal('hide');
-                });
-            }
-        });
-    }
-
-    function importar() {
-        var parametros = {
-            'datos': $('#txt_recuperado').val(),
-        };
-
-        // $('#myModal_espera').modal('show');
-        // $('#lbl_msj_espera').text("Conectando y Sincronizando");
-        $.ajax({
-            data: {
-                parametros: parametros
-            },
-            url: '../controlador/TALENTO_HUMANO/th_personasC.php?guardarImport=true',
-            type: 'post',
-            dataType: 'json',
-
-            success: function(response) {
-                if (response.msj == '') {
-                    Swal.fire('Registros Importados', '', 'success');
-                } else {
-                    Swal.fire('Registros Importados', response.msj, 'info');
-                }
-
-                tbl_personas.ajax.reload(null, false);
-                $('#importar_device').modal('hide');
-            },
-            error: function(xhr, status, error) {
-                console.log('Status: ' + status);
-                console.log('Error: ' + error);
-                console.log('XHR Response: ' + xhr.responseText);
-
-                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
-                $('#myModal_espera').modal('hide');
-            }
-        });
-
-    }
+}
 </script>
 
 <div class="page-wrapper">
@@ -248,7 +248,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                     </div>
 
                                     <button type="button" class="btn btn-primary btn-sm ms-1" onclick="import_bio()">
-                                            <i class="bx bx-import me-0 pb-1"></i> Importar desde biometrico
+                                        <i class="bx bx-import me-0 pb-1"></i> Importar desde biometrico
                                     </button>
 
                                 </div>
@@ -289,7 +289,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     </div>
 </div>
 
-<div class="modal fade" id="importar_device" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="importar_device" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static"
+    data-bs-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -305,8 +306,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         </select>
                     </div>
                     <div class="col-sm-12 text-end">
-                        <button class="btn btn-primary btn-sm" onclick="conectar_buscar()"><i class="bx bx-sync"></i>Conectar y buscar</button>
-                        <button class="btn btn-primary btn-sm" onclick="conectar_buscar_()"><i class="bx bx-sync"></i>HIKC</button>
+                        <button class="btn btn-primary btn-sm" onclick="conectar_buscar()"><i
+                                class="bx bx-sync"></i>Conectar y buscar</button>
+                        <button class="btn btn-primary btn-sm" onclick="conectar_buscar_()"><i
+                                class="bx bx-sync"></i>HIKC</button>
                     </div>
                     <div class="col-sm-12">
                         <div class="table-responsive" style="height: 250px;">
@@ -317,10 +320,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                         <th>Nombre</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tbl_import" >
+                                <tbody id="tbl_import">
 
                                 </tbody>
-                            </table>                            
+                            </table>
                         </div>
                     </div>
                 </div>

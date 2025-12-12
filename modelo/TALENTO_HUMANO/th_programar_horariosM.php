@@ -16,9 +16,9 @@ class th_programar_horariosM extends BaseModel
         'th_pro_no_ciclo AS no_ciclo',
         'th_pro_tipo_ciclo AS tipo_ciclo',
         'th_pro_si_ciclo AS si_ciclo',
-        //'th_pro_estado AS estado',
-        //'th_pro_fecha_creacion AS fecha_creacion',
-        //'th_pro_fecha_modificacion AS fecha_modificacion',
+        'th_pro_estado AS estado',
+        'th_pro_fecha_creacion AS fecha_creacion',
+        'th_pro_fecha_modificacion AS fecha_modificacion',
     ];
 
     function listar_departamentos_horarios($id_departamento = '')
@@ -37,7 +37,7 @@ class th_programar_horariosM extends BaseModel
                 LEFT JOIN th_horarios hor ON pro_hor.th_hor_id = hor.th_hor_id
                 INNER JOIN th_departamentos dep ON pro_hor.th_dep_id = dep.th_dep_id 
                 WHERE
-                    pro_hor.th_dep_id <> 0 ";
+                    pro_hor.th_dep_id <> 0 AND th_pro_estado = 1";
 
         if ($id_departamento != '') {
             $sql .= " AND pro_hor.th_dep_id = $id_departamento;";
@@ -64,7 +64,7 @@ class th_programar_horariosM extends BaseModel
                 LEFT JOIN th_horarios hor ON pro_hor.th_hor_id = hor.th_hor_id
                 INNER JOIN th_personas per ON pro_hor.th_per_id = per.th_per_id 
                 WHERE
-                    pro_hor.th_per_id <> 0 ";
+                    pro_hor.th_per_id <> 0 AND th_pro_estado = 1";
 
         if ($id_persona != '') {
             $sql .= " AND pro_hor.th_per_id = $id_persona;";

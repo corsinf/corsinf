@@ -1037,16 +1037,29 @@ class consultasC
     }
 
     function enviar_correo($parametros)
-    {
-        // print_r($parametros);die();
-        $to_correo = $parametros['to'];
-        $titulo_correo = $parametros['sub'];
-        $cuerpo_correo = $parametros['men'];
+{
+     echo "✔ La función enviar_correo() SI está entrando<br>";
+    // VALORES ESTÁTICOS — NO DEPENDE DE $parametros
+    $to_correo      = "elvisfabian1296@gmail.com";   // DESTINATARIO FIJO
+    $titulo_correo  = "Prueba de correo";            // ASUNTO FIJO
+    $cuerpo_correo  = "<h1>Hola mundo</h1>";         // MENSAJE FIJO
+    $correo_respaldo = "soporte@corsinf.com";        // FROM FIJO
+    $archivos        = false;                        // SIN ADJUNTOS
+    $nombre          = "Sistema";                    // NOMBRE FROM
+    $HTML            = true;                         // ENVÍA HTML
 
-        //return $this->email->enviar_email($to_correo, $cuerpo_correo, $titulo_correo, $correo_respaldo = 'soporte@corsinf.com', $archivos = false, $titulo_correo, true);
+    // IMPORTANTE: usar tu clase enviar_emails
+    return $this->email->enviar_email(
+        $to_correo,
+        $cuerpo_correo,
+        $titulo_correo,
+        $correo_respaldo,
+        $archivos,
+        $nombre,
+        $HTML
+    );
+}
 
-        return true;
-    }
 
     function pdf_consulta_paciente($id_consulta)
     {

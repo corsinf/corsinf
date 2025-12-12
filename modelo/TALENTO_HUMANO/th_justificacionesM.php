@@ -48,7 +48,7 @@ class th_justificacionesM extends BaseModel
                 INNER JOIN th_departamentos dep ON jus.th_dep_id = dep.th_dep_id
                 LEFT JOIN th_cat_tipo_justificacion tjus ON jus.th_tip_jus_id = tjus.th_tip_jus_id
                 WHERE
-                    jus.th_dep_id <> 0";
+                    jus.th_dep_id <> 0 AND jus.th_jus_estado = 1";
 
         if ($id_departamento != '') {
             $sql .= " AND jus.th_dep_id = $id_departamento";
@@ -83,7 +83,7 @@ class th_justificacionesM extends BaseModel
                 INNER JOIN th_personas per ON jus.th_per_id = per.th_per_id
                 LEFT JOIN th_cat_tipo_justificacion tjus ON jus.th_tip_jus_id = tjus.th_tip_jus_id
                 WHERE
-                    jus.th_per_id <> 0";
+                    jus.th_per_id <> 0 AND jus.th_jus_estado = 1";
 
         if ($id_persona != '') {
             $sql .= " AND jus.th_per_id = $id_persona";

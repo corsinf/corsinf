@@ -44,10 +44,10 @@ class th_cat_tipo_justificacionC
     function listar($id = '')
     {
         if ($id == '') {
-            $datos = $this->modelo->listar();
+            $datos = $this->modelo->where('th_tip_jus_estado', 1)->listar();
 
         } else {
-            $datos = $this->modelo->where('th_tip_jus_id', $id)->listar();
+            $datos = $this->modelo->where('th_tip_jus_id', $id)->where('th_tip_jus_estado',1)->listar();
         }
         return $datos;
     }
@@ -62,13 +62,13 @@ class th_cat_tipo_justificacionC
         );
 
         if ($parametros['_id'] == '') {
-            if (count($this->modelo->where('th_tip_jus_nombre', $parametros['txt_nombre'])->listar()) == 0) {
+            if (count($this->modelo->where('th_tip_jus_nombre', $parametros['txt_nombre'])->where('th_tip_jus_estado', 1)->listar()) == 0) {
                 $datos = $this->modelo->insertar($datos);
             } else {
                 return -2;
             }
         } else {
-            if (count($this->modelo->where('th_tip_jus_nombre', $parametros['txt_nombre'])->where('th_tip_jus_id !', $parametros['_id'])->listar()) == 0) {
+            if (count($this->modelo->where('th_tip_jus_nombre', $parametros['txt_nombre'])->where('th_tip_jus_id !', $parametros['_id'])->where('th_tip_jus_estado', 1)->listar()) == 0) {
                 $where[0]['campo'] = 'th_tip_jus_id';
                 $where[0]['dato'] = $parametros['_id'];
                 $datos = $this->modelo->editar($datos, $where);
