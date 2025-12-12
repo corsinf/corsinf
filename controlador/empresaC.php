@@ -355,13 +355,13 @@ class empresaC
 			if($empresa[0]['Ip_host']==IP_MASTER)
 			{
 					$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$_SESSION['INICIO']['ID_EMPRESA']);
-			 		// print_r($res);die();
-		 	 		foreach ($licencias as $key => $value) {
+			 		// // print_r($res);die();
+		 	 		// foreach ($licencias as $key => $value) {
 			 		// print_r($licencias);die();
-			 				$r = $this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos']);
-			 				sleep(10);
-			 				// print_r($r);die();
-			 		}
+			 				$r = $this->cod_global->Copiar_estructura(false,$empresa[0]['Base_datos']);
+			 		// 		sleep(10);
+			 		// 		// print_r($r);die();
+			 		// }
 		 	}else{
 
 		 			$res = $this->cod_global->generar_primera_vez_terceros($empresa,$_SESSION['INICIO']['ID_EMPRESA']);
