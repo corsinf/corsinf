@@ -42,7 +42,7 @@ class ac_descargasM
 
         $sql .= " GROUP BY {$lote}
             ORDER BY numero_lote ASC;";
-
+// print_r($sql);die();
         $datos = $this->db->datos($sql, false, true);
         return $datos;
     }

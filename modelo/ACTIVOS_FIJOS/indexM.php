@@ -24,9 +24,7 @@ class indexM
                 t.DESCRIPCION,
                 t.COLOR,
                 COUNT(a.id_articulo) AS TOTAL_ARTICULOS
-            FROM 
-                ac_cat_tipo_articulo t
-            LEFT JOIN 
+            FROM ac_cat_tipo_articulo t LEFT JOIN 
                 ac_articulos a ON t.ID_TIPO_ARTICULO = a.ID_TIPO_ARTICULO
             GROUP BY 
                 t.ID_TIPO_ARTICULO,
@@ -41,10 +39,8 @@ class indexM
     function contar_custodios()
     {
         $sql =
-            "SELECT 
-                COUNT(th_per_id) AS TOTAL_CUSTODIOS
-            FROM 
-                th_personas;";
+            "SELECT COUNT(th_per_id) AS TOTAL_CUSTODIOS
+            FROM th_personas;";
 
         $datos = $this->db->datos($sql);
         return $datos;
@@ -53,10 +49,8 @@ class indexM
     function contar_localizacion()
     {
         $sql =
-            "SELECT 
-                COUNT(ID_LOCALIZACION) AS TOTAL_LOCALIZACION
-            FROM 
-                ac_localizacion;";
+            "SELECT COUNT(ID_LOCALIZACION) AS TOTAL_LOCALIZACION
+            FROM ac_localizacion;";
 
         $datos = $this->db->datos($sql);
         return $datos;

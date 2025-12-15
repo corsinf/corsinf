@@ -38,6 +38,7 @@ class loginM
 				}
 				// print_r($sql);die();
 		$datos = $this->db->datos($sql,1);
+		// print_r($datos);die();
 		return $datos;
 	}
 
@@ -78,9 +79,14 @@ class loginM
 		if(isset($parametros['Campo_Pass']))
 		{
 		    $sql.=" AND ".$parametros['Campo_Pass']."='".$parametros['pass']."'";
+		    // print_r($parametros);
+		    // print_r($sql);die();
 		}
+		// print_r($parametros);
 		// print_r($sql);
-		if($this->db->conexion_db_terceros($database,$usuario,$password,$servidor,$puerto)!=-1)
+		$dbconnection = $this->db->conexion_db_terceros($database,$usuario,$password,$servidor,$puerto);
+		// print_r($dbconnection);die();
+		if($dbconnection!=-1)
 		{
 		 	$item = $this->db->datos_db_terceros($database,$usuario,$password,$servidor,$puerto,$sql);
 		 	// print_r($item);
@@ -240,7 +246,7 @@ class loginM
 	{
 		if($_SESSION['INICIO']['TIPO']=="DBA")
 		{
-			$sql = "SELECT DISTINCT id_modulos as 'id',nombre_modulo,link,icono   
+			$sql = "SELECT DISTINCT id_modulos as 'id',nombre_modulo,link,icono,esquema   
 			FROM MODULOS_SISTEMA MS
 			INNER JOIN LICENCIAS L ON MS.id_modulos = L.Id_Modulo
 			WHERE estado ='A'";
@@ -248,7 +254,7 @@ class loginM
 			// AND DATEDIFF(DAY, GETDATE(), Fecha_exp) >= 0
 		}else
 		{
-			$sql = "SELECT DISTINCT(MS.id_modulos) as 'id', MS.nombre_modulo,MS.icono,MS.link
+			$sql = "SELECT DISTINCT(MS.id_modulos) as 'id', MS.nombre_modulo,MS.icono,MS.link,MS.esquema
 			FROM ACCESOS A 
 			INNER JOIN PAGINAS P ON A.id_paginas = P.id_paginas
 			INNER JOIN MODULOS M ON P.id_modulo = M.id_modulo
@@ -482,10 +488,32 @@ class loginM
 		$servidor = $empresa[0]['Ip_host'];
 		$puerto = $empresa[0]['Puerto_db'];
 
-		$sql="SELECT COLUMN_NAME as 'ID'
-				FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
-				WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_NAME), 'IsPrimaryKey') = 1
-				AND TABLE_NAME = '".$tabla."'";
+		$parts = explode('.', $tabla);
+		if (count($parts) === 2) {
+			$schema = $parts[0];
+			$table  = $parts[1];
+		} else {
+			$schema = null; // sin esquema explícito
+			$table  = $tabla;
+		}
+
+		$table_esc = addslashes($table);
+		$where_schema = $schema ? " AND kcu.TABLE_SCHEMA = '" . addslashes($schema) . "'" : "";
+
+		$sql = "SELECT kcu.COLUMN_NAME AS ID
+				FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu
+				JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc
+				ON kcu.CONSTRAINT_SCHEMA = tc.CONSTRAINT_SCHEMA
+				AND kcu.CONSTRAINT_NAME   = tc.CONSTRAINT_NAME
+				WHERE tc.CONSTRAINT_TYPE = 'PRIMARY KEY'
+				AND kcu.TABLE_NAME = '".$table_esc."'
+				".$where_schema." ORDER BY kcu.ORDINAL_POSITION;";
+
+		// $sql="SELECT COLUMN_NAME as 'ID'
+		// 		FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+		// 		WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_NAME), 'IsPrimaryKey') = 1
+		// 		AND TABLE_NAME = '".$tabla."'";
+		// print_r($sql);die();
 		$datos2 = $this->db->datos_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql);
 		return $datos2;
 	}

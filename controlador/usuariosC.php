@@ -599,9 +599,13 @@ class usuariosC
 				{
 					$datos[0]['pass'] = $datosNo[0]['pass'];
 					$datos[0]['usu'] = $datosNo[0]['usuario']; 
+					$campoFoto = $datosNOCon[0]['foto'];
+
+					// print_r($datosNOCon);
+					// print_r($datos);die();
 				}
 			}
-			if(!file_exists($datos[0]['foto']))
+			if(!file_exists($datos[0][$campoFoto]))
 			{
 				 $datos[0]['foto'] ='';
 			}			

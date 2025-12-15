@@ -768,11 +768,14 @@ function para_ftp($nombre,$texto)
 
 
 		 //genera tablas que comprate los diferentes modulos
+		 // ===================================================================
 		 $parametros1 = array($id_empresa
 		 							 ,$db_destino);
-		  $sql = "EXEC GenerarTablasCompartidas  @id_empresa = ?,@db_destino = ?";
-		  $this->db->ejecutar_procesos_almacenados($sql,$parametros1,false,1);
+		  //$sql = "EXEC GenerarTablasCompartidas  @id_empresa = ?,@db_destino = ?";
+		 // $this->db->ejecutar_procesos_almacenados($sql,$parametros1,false,1);
 
+		 // cambiar tablas compratidas a el esquema correcto
+// ===========================================================================================
 
 		 $db_origen = EMPRESA_MASTER;
 		 $parametros = array($db_origen,
@@ -963,26 +966,17 @@ function para_ftp($nombre,$texto)
 	}
 
 
-	function Copiar_estructura($modulo,$base,$tercero=false,$empresa=false)
+	function Copiar_estructura($modulo=false,$base,$tercero=false,$empresa=false)
 	{				
 		$db_destino = $base;
 		$db_origen = '';
 		$sp = array();
 
-		$sql = "SELECT db_referencia FROM MODULOS_SISTEMA WHERE id_modulos = '".$modulo."'";
-		$dbref = $this->db->datos($sql,1);
-		// print_r($dbref);die();
-		if(count($dbref)==0)
-		{
-			return -3;
-		}
-
-		// print_r($dbref);
-
-		$db_origen = $dbref[0]['db_referencia'];
+		$db_origen = BASE_ACTIVOS;
 		 $parametros = array(
 		    str_replace(" ","",$db_origen),
-		    str_replace(" ","",$db_destino)
+		    str_replace(" ","",$db_destino),
+		    'dbo'
 		  );
 		 if($db_origen!='')
 		 {
@@ -1007,9 +1001,13 @@ function para_ftp($nombre,$texto)
 		 		$parametrosSp = array($db_origen,
 		    								$db_destino,
 		    								'0');
-		  		$sql = "EXEC EstructuraBase @origen_bd = ?,@destino_bd = ?";
-		  		// print_r($parametros);
+		  		$sql = "EXEC sp_CopiarEstructuraBase  @BaseDatosOrigen=?,@BaseDatosDestino=?,@EsquemaExcluir=?";
 		  		$this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+		  		sleep(10);
+		  		$sql = "EXEC sp_CopiarEstructuraBaseDatos  @BaseDatosOrigen=?,@BaseDatosDestino=?";
+		  		$this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+		  		sleep(10);
+
 		  		$sql3 = "EXEC GenerarVistasBase @origen_bd = ?,@destino_bd = ?,@db_tercero = ?";
 				$this->db->ejecutar_procesos_almacenados($sql3, $parametrosSp,false,1);
 				$sql4 = "EXEC GenerarTriggersBase @origen_bd = ?,@destino_bd = ?,@db_tercero = ?";
@@ -1221,6 +1219,10 @@ function para_ftp($nombre,$texto)
 		);
 
 		return $descifrado !== false ? $descifrado : false;
+	}
+
+	function generar_clave_digitos($digitos = 7) {
+    	return str_pad(random_int(0, pow(10, $digitos) - 1), $digitos, '0', STR_PAD_LEFT);
 	}
 
 	function datos_empresa_publica($id_empresa, $datos_sql_terceros = ''){
