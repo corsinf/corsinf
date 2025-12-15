@@ -1003,6 +1003,11 @@ function para_ftp($nombre,$texto)
 		    								'0');
 		  		$sql = "EXEC sp_CopiarEstructuraBase  @BaseDatosOrigen=?,@BaseDatosDestino=?,@EsquemaExcluir=?";
 		  		$this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+		  		sleep(10);
+		  		$sql = "EXEC sp_CopiarEstructuraBaseDatos  @BaseDatosOrigen=?,@BaseDatosDestino=?";
+		  		$this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+		  		sleep(10);
+
 		  		$sql3 = "EXEC GenerarVistasBase @origen_bd = ?,@destino_bd = ?,@db_tercero = ?";
 				$this->db->ejecutar_procesos_almacenados($sql3, $parametrosSp,false,1);
 				$sql4 = "EXEC GenerarTriggersBase @origen_bd = ?,@destino_bd = ?,@db_tercero = ?";
@@ -1214,6 +1219,10 @@ function para_ftp($nombre,$texto)
 		);
 
 		return $descifrado !== false ? $descifrado : false;
+	}
+
+	function generar_clave_digitos($digitos = 7) {
+    	return str_pad(random_int(0, pow(10, $digitos) - 1), $digitos, '0', STR_PAD_LEFT);
 	}
 
 	function datos_empresa_publica($id_empresa, $datos_sql_terceros = ''){

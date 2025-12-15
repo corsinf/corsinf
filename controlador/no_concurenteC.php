@@ -1,43 +1,42 @@
-<?php 
+<?php
 include('../modelo/no_concurenteM.php');
 require_once('../db/codigos_globales.php');
 /**
  * 
  */
 $controlador = new no_concurenteC();
-if(isset($_GET['lista_no_concurente']))
-{
+if (isset($_GET['lista_no_concurente'])) {
 	echo json_encode($controlador->lista_no_concurente());
 }
-if(isset($_GET['tabla_no_concurente']))
-{
+
+if (isset($_GET['tabla_no_concurente'])) {
 	echo json_encode($controlador->tabla_no_concurente());
 }
-if(isset($_GET['campos_tabla_noconcurente']))
-{
+
+if (isset($_GET['campos_tabla_noconcurente'])) {
 	$parametros = $_POST['parametros'];
 	echo json_encode($controlador->campos_tabla_no_concurentes($parametros));
 }
-if(isset($_GET['add_no_concurente']))
-{
+
+if (isset($_GET['add_no_concurente'])) {
 	echo json_encode($controlador->add_no_concurente($_POST['parametros']));
 }
-if(isset($_GET['delete_no_concurente']))
-{
+
+if (isset($_GET['delete_no_concurente'])) {
 	echo json_encode($controlador->eliminar($_POST['parametros']));
 }
+
 
 
 class no_concurenteC
 {
 	private $modelo;
 	private $cod_global;
-	
+
 	function __construct()
 	{
 		$this->modelo = new no_concurenteM();
 		$this->cod_global = new codigos_globales();
-		
 	}
 	function lista_no_concurente()
 	{
@@ -54,51 +53,73 @@ class no_concurenteC
 	{
 		$existe = $this->modelo->existe_no_concurente($parametros['tabla']);
 
-		if(count($existe)==0)
-		{
+		if (count($existe) == 0) {
 			$id_tabla = $this->modelo->id_tabla_no_concurentes($parametros['tabla']);
-			if(!isset($id_tabla[0]['ID']) || $id_tabla[0]['ID']=='')
-			{
+			if (!isset($id_tabla[0]['ID']) || $id_tabla[0]['ID'] == '') {
 				return -4;
 			}
-			$id = $id_tabla[0]['ID'];
+			$id_tabla_noc = $id_tabla[0]['ID'];
 
 			$datos = $this->modelo->datos_no_concurentes($parametros['tabla']);
 
 			$datos = $datos[0]['total'];
-			
-			// print_r($datos); exit(); die();
 
-			if(($datos) > 0)
-			{
+			if (($datos) > 0) {
 
 				// foreach ($datos as $key => $value) {
-						$datosADD = 
-						array(
-							array('campo'=>'Tabla','dato'=>$parametros['tabla']),
-							array('campo'=>'Id_Empresa','dato'=>$_SESSION['INICIO']['ID_EMPRESA']),
-							// array('campo'=>'Id_Usuario','dato'=>$value[$id]),
-							array('campo'=>'Campo_usuario','dato'=>$parametros['usuario']),
-							array('campo'=>'Campo_pass','dato'=>$parametros['pass']),
-							array('campo'=>'tipo_perfil','dato'=>$parametros['perfil_usu']),
-							array('campo'=>'campo_img','dato'=>$parametros['foto']),
-						);
-					$this->modelo->insertar('TABLAS_NOCONCURENTE',$datosADD,1);
+				$datosADD =
+					array(
+						array('campo' => 'Tabla', 'dato' => $this->modelo->esquema_modulo($parametros['tabla'], 1)),
+						array('campo' => 'Id_Empresa', 'dato' => $_SESSION['INICIO']['ID_EMPRESA']),
+						// array('campo'=>'Id_Usuario','dato'=>$value[$id]),
+						array('campo' => 'Campo_usuario', 'dato' => $parametros['usuario']),
+						array('campo' => 'Campo_pass', 'dato' => 'PASS'),
+						array('campo' => 'tipo_perfil', 'dato' => $parametros['perfil_usu']),
+						array('campo' => 'campo_img', 'dato' => $parametros['foto']),
+					);
+				$this->modelo->insertar('TABLAS_NOCONCURENTE', $datosADD, 1);
 				// }
-			}else
-			{
+			} else {
 				return -3;
 			}
 
 			$datosUPD = array(
-					array('campo'=>'PERFIL','dato'=>2)			
+				array('campo' => 'PERFIL', 'dato' => 2)
 			);
 			$where = array(
-					array('campo'=>'1','dato'=>1)			
-			);		
-			return $this->modelo->editar($parametros['tabla'],$datosUPD ,$where,$master=false);
-		}else
-		{
+				array('campo' => '1', 'dato' => 1)
+			);
+
+			$editar_estado = $this->modelo->editar($parametros['tabla'], $datosUPD, $where, $master = false);
+
+			if ($editar_estado != 1) {
+				return -5; //Algo salio mal al actualizar los perfiles	
+			}
+
+			$datos = $this->modelo->datos_no_concurentes($parametros['tabla'], false, $id_tabla_noc);
+
+
+			$resultado = 1;
+			if ($parametros['chk_pass'] == 1) {
+				$personas = $datos;
+				$ids = [];
+				$claves = [];
+
+				foreach ($personas as $p) {
+					$id = (int)$p['th_per_id'];
+
+					$clave = $this->cod_global->generar_clave_digitos();
+					$clave_enc = $this->cod_global->enciptar_clave($clave);
+
+					$ids[] = $id;
+					$claves[$id] = $clave_enc;
+				}
+
+				$resultado = $this->modelo->actualizar_claves_merge_sin_tmp($claves);
+			}
+
+			return $resultado;
+		} else {
 			return -2;
 		}
 	}
@@ -106,13 +127,15 @@ class no_concurenteC
 	function eliminar($parametros)
 	{
 		$this->modelo->eliminar_no_concurente($parametros['tabla']);
+
 		$datosUPD = array(
-				array('campo'=>'PERFIL','dato'=>'.')	
+			array('campo' => 'PERFIL', 'dato' => '.')
 		);
 		$where = array(
-				array('campo'=>'1','dato'=>1)			
-		);		
-		return $this->modelo->editar($parametros['tabla'],$datosUPD ,$where,$master=false);
+			// array('campo' => '1', 'dato' => 1)
+		);
+
+		return $this->modelo->editar($parametros['tabla'], $datosUPD, $where, $master = false, $sin_esquema = true);
 	}
 
 	function campos_tabla_no_concurentes($parametros)
@@ -121,13 +144,10 @@ class no_concurenteC
 		$lista = array();
 		$datos = $this->modelo->campos_tabla_no_concurentes($tabla);
 		foreach ($datos as $key => $value) {
-			if($value['COLUMN_NAME']!='PERFIL')
-			{
-				$lista[] = array('campo'=>$value['COLUMN_NAME']); 
+			if ($value['COLUMN_NAME'] != 'PERFIL') {
+				$lista[] = array('campo' => $value['COLUMN_NAME']);
 			}
 		}
 		return $lista;
 	}
-	
 }
-?>
