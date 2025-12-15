@@ -1003,6 +1003,11 @@ function para_ftp($nombre,$texto)
 		    								'0');
 		  		$sql = "EXEC sp_CopiarEstructuraBase  @BaseDatosOrigen=?,@BaseDatosDestino=?,@EsquemaExcluir=?";
 		  		$this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+		  		sleep(10);
+		  		$sql = "EXEC sp_CopiarEstructuraBaseDatos  @BaseDatosOrigen=?,@BaseDatosDestino=?";
+		  		$this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+		  		sleep(10);
+
 		  		$sql3 = "EXEC GenerarVistasBase @origen_bd = ?,@destino_bd = ?,@db_tercero = ?";
 				$this->db->ejecutar_procesos_almacenados($sql3, $parametrosSp,false,1);
 				$sql4 = "EXEC GenerarTriggersBase @origen_bd = ?,@destino_bd = ?,@db_tercero = ?";
