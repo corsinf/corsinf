@@ -88,11 +88,11 @@ class th_postulantesC
         return $lista;
     }
 
-   function listarNoContratados($id, $coincidencias = false)
-{
-    $lista = $this->modelo->listarNoContratados($id);
-    return $lista;
-}
+    function listarNoContratados($id, $coincidencias = false)
+    {
+        $lista = $this->modelo->listarNoContratados($id);
+        return $lista;
+    }
 
     function insertar_editar($parametros)
     {
@@ -163,74 +163,73 @@ class th_postulantesC
     }
 
     function agregar_postulante_persona($cedula)
-{
-    try {
+    {
+        try {
 
-        // 1. Validar si ya existe en personas
-        $persona = $this->personas
-            ->where('th_per_cedula', $cedula)
-            ->where('th_per_estado', 1)
-            ->listar();
+            // 1. Validar si ya existe en personas
+            $persona = $this->personas
+                ->where('th_per_cedula', $cedula)
+                ->where('th_per_estado', 1)
+                ->listar();
 
-        if ($persona) {
-            return array("ok" => false, "msg" => "La persona ya existe en th_personas");
+            if ($persona) {
+                return array("ok" => false, "msg" => "La persona ya existe en th_personas");
+            }
+
+            // 2. Buscar postulante
+            $postulantes = $this->modelo
+                ->where('th_pos_cedula', $cedula)
+                ->where('th_pos_estado', 1)
+                ->listar();
+
+            if (!$postulantes) {
+                return array("ok" => false, "msg" => "No existe el postulante");
+            }
+
+            $p = $postulantes[0];
+
+            $datos = array(
+                array('campo' => 'th_per_primer_apellido', 'dato' => $p['th_pos_primer_apellido']),
+                array('campo' => 'th_per_segundo_apellido', 'dato' => $p['th_pos_segundo_apellido']),
+                array('campo' => 'th_per_primer_nombre', 'dato' => $p['th_pos_primer_nombre']),
+                array('campo' => 'th_per_segundo_nombre', 'dato' => $p['th_pos_segundo_nombre']),
+                array('campo' => 'th_per_cedula', 'dato' => $p['th_pos_cedula']),
+                array('campo' => 'th_per_sexo', 'dato' => $p['th_pos_sexo']),
+                array('campo' => 'th_per_fecha_nacimiento', 'dato' => $p['th_pos_fecha_nacimiento']),
+                array('campo' => 'th_per_telefono_1', 'dato' => $p['th_pos_telefono_1']),
+                array('campo' => 'th_per_telefono_2', 'dato' => $p['th_pos_telefono_2']),
+                array('campo' => 'th_per_correo', 'dato' => $p['th_pos_correo']),
+                array('campo' => 'th_per_direccion', 'dato' => $p['th_pos_direccion']),
+                array('campo' => 'th_per_estado_civil', 'dato' => $p['th_pos_estado_civil']),
+                array('campo' => 'th_prov_id', 'dato' => $p['th_prov_id']),
+                array('campo' => 'th_ciu_id', 'dato' => $p['th_ciu_id']),
+                array('campo' => 'th_parr_id', 'dato' => $p['th_parr_id']),
+                array('campo' => 'th_per_postal', 'dato' => $p['th_pos_postal']),
+                array('campo' => 'th_per_tabla_union', 'dato' => 'th_postulantes'),
+                array('campo' => 'th_per_id_comunidad', 'dato' => $p['_id']),
+            );
+
+            // 4. Insertar en personas
+            $insertado = $this->personas->insertar($datos);
+
+            $datos = array(
+                array('campo' => 'th_pos_contratado', 'dato' => 1),
+            );
+
+            $where[0]['campo'] = 'th_pos_id';
+            $where[0]['dato'] =  $p['_id'];
+
+            $datos = $this->modelo->editar($datos, $where);
+
+            return array(
+                "ok" => true,
+                "msg" => "Persona creada correctamente",
+                "persona_insertada" => $insertado
+            );
+        } catch (Exception $e) {
+            return array('error' => 'Error al agregar el postulante: ' . $e->getMessage());
         }
-
-        // 2. Buscar postulante
-        $postulantes = $this->modelo
-            ->where('th_pos_cedula', $cedula)
-            ->where('th_pos_estado', 1)
-            ->listar();
-
-        if (!$postulantes) {
-            return array("ok" => false, "msg" => "No existe el postulante");
-        }
-
-        $p = $postulantes[0];
-
-        $datos = array(
-            array('campo' => 'th_per_primer_apellido', 'dato' => $p['th_pos_primer_apellido']),
-            array('campo' => 'th_per_segundo_apellido', 'dato' => $p['th_pos_segundo_apellido']),
-            array('campo' => 'th_per_primer_nombre', 'dato' => $p['th_pos_primer_nombre']),
-            array('campo' => 'th_per_segundo_nombre', 'dato' => $p['th_pos_segundo_nombre']),
-            array('campo' => 'th_per_cedula', 'dato' => $p['th_pos_cedula']),
-            array('campo' => 'th_per_sexo', 'dato' => $p['th_pos_sexo']),
-            array('campo' => 'th_per_fecha_nacimiento', 'dato' => $p['th_pos_fecha_nacimiento']),
-            array('campo' => 'th_per_telefono_1', 'dato' => $p['th_pos_telefono_1']),
-            array('campo' => 'th_per_telefono_2', 'dato' => $p['th_pos_telefono_2']),
-            array('campo' => 'th_per_correo', 'dato' => $p['th_pos_correo']),
-            array('campo' => 'th_per_direccion', 'dato' => $p['th_pos_direccion']),
-            array('campo' => 'th_per_estado_civil', 'dato' => $p['th_pos_estado_civil']),
-            array('campo' => 'th_prov_id', 'dato' => $p['th_prov_id']),
-            array('campo' => 'th_ciu_id', 'dato' => $p['th_ciu_id']),
-            array('campo' => 'th_parr_id', 'dato' => $p['th_parr_id']),
-            array('campo' => 'th_per_postal', 'dato' => $p['th_pos_postal']),
-            array('campo' => 'th_per_tabla_union', 'dato' => 'th_postulantes'),
-            array('campo' => 'th_per_id_comunidad', 'dato' => $p['_id']),
-        );
-
-        // 4. Insertar en personas
-        $insertado = $this->personas->insertar($datos);
-
-         $datos = array(
-            array('campo' => 'th_pos_contratado', 'dato' => 1),
-        );
-
-        $where[0]['campo'] = 'th_pos_id';
-        $where[0]['dato'] =  $p['_id'];
-
-        $datos = $this->modelo->editar($datos, $where);
-
-        return array(
-            "ok" => true,
-            "msg" => "Persona creada correctamente",
-            "persona_insertada" => $insertado
-        );
-
-    } catch (Exception $e) {
-        return array('error' => 'Error al agregar el postulante: ' . $e->getMessage());
     }
-}
 
 
     function hoja_de_vida($id)

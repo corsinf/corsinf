@@ -13,15 +13,14 @@ if (isset($_GET['id'])) {
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script type="text/javascript">
-$(document).ready(function() {
+    $(document).ready(function() {
 
-    <?php if (isset($_GET['id'])) { ?>
-    cargarDatos_informacion_personal(<?= $id ?>);
-    <?php } ?>
+        <?php if (isset($_GET['id'])) { ?>
+            cargarDatos_informacion_personal(<?= $id ?>);
+        <?php } ?>
 
-});
+    });
 
-<<<<<<< HEAD
     //Información Personal
     function cargarDatos_informacion_personal(id) {
         $.ajax({
@@ -57,69 +56,36 @@ $(document).ready(function() {
                     })
                     .attr('src', response[0].th_pos_foto_url + '?' + Math.random());
 
+                //Cargar Selects de provincia-ciudad-parroquia
+                url_provinciaC = '../controlador/GENERAL/th_provinciasC.php?listar=true';
+                cargar_select2_con_id('ddl_provincias', url_provinciaC, response[0].th_prov_id,
+                    'th_prov_nombre');
+
+                url_ciudadC = '../controlador/GENERAL/th_ciudadC.php?listar=true';
+                cargar_select2_con_id('ddl_ciudad', url_ciudadC, response[0].th_ciu_id, 'th_ciu_nombre');
+
+                url_parroquiaC = '../controlador/GENERAL/th_parroquiasC.php?listar=true';
+                cargar_select2_con_id('ddl_parroquia', url_parroquiaC, response[0].th_parr_id,
+                    'th_parr_nombre');
 
 
-=======
-//Información Personal
-function cargarDatos_informacion_personal(id) {
-    $.ajax({
-        url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?listar=true',
-        type: 'post',
-        data: {
-            id: id
-        },
-        dataType: 'json',
-        success: function(response) {
-            $('#txt_primer_nombre').val(response[0].th_pos_primer_nombre);
-            $('#txt_segundo_nombre').val(response[0].th_pos_segundo_nombre);
-            $('#txt_primer_apellido').val(response[0].th_pos_primer_apellido);
-            $('#txt_segundo_apellido').val(response[0].th_pos_segundo_apellido);
-            $('#txt_fecha_nacimiento').val(response[0].th_pos_fecha_nacimiento);
-            $('#ddl_nacionalidad').val(response[0].th_pos_nacionalidad);
-            $('#txt_numero_cedula').val(response[0].th_pos_cedula);
-            $('#ddl_estado_civil').val(response[0].th_pos_estado_civil);
-            $('#ddl_sexo').val(response[0].th_pos_sexo);
-            $('#txt_telefono_1').val(response[0].th_pos_telefono_1);
-            $('#txt_telefono_2').val(response[0].th_pos_telefono_2);
-            $('#txt_correo').val(response[0].th_pos_correo);
-            $('#txt_direccion_postal').val(response[0].th_pos_postal);
-            $('#txt_direccion').val(response[0].th_pos_direccion);
-            calcular_edad('txt_edad', response[0].th_pos_fecha_nacimiento);
-            //Cargar foto
-            $('#img_postulante_inf').attr('src', response[0].th_pos_foto_url + '?' + Math.random());
->>>>>>> DEVELOPER01
+                nombres_completos = response[0].th_pos_primer_apellido + ' ' + response[0]
+                    .th_pos_segundo_apellido + ' ' + response[0].th_pos_primer_nombre + ' ' + response[0]
+                    .th_pos_segundo_nombre;
+                $('#txt_nombres_completos_v').html(nombres_completos);
+                $('#txt_fecha_nacimiento_v').html(response[0].th_pos_fecha_nacimiento);
+                $('#txt_nacionalidad_v').html(response[0].th_pos_nacionalidad);
+                $('#txt_estado_civil_v').html(response[0].th_pos_estado_civil);
+                $('#txt_numero_cedula_v').html(response[0].th_pos_cedula);
+                $('#txt_telefono_1_v').html(response[0].th_pos_telefono_1);
+                $('#txt_correo_v').html(response[0].th_pos_correo);
 
-            //Cargar Selects de provincia-ciudad-parroquia
-            url_provinciaC = '../controlador/GENERAL/th_provinciasC.php?listar=true';
-            cargar_select2_con_id('ddl_provincias', url_provinciaC, response[0].th_prov_id,
-                'th_prov_nombre');
+                //Input para todos los pos_id que se vayan a colocar en los modales
+                $('input[name="txt_postulante_id"]').val(response[0]._id);
+                $('input[name="txt_postulante_cedula"]').val(response[0].th_pos_cedula);
 
-            url_ciudadC = '../controlador/GENERAL/th_ciudadC.php?listar=true';
-            cargar_select2_con_id('ddl_ciudad', url_ciudadC, response[0].th_ciu_id, 'th_ciu_nombre');
+                //console.log(response);
 
-            url_parroquiaC = '../controlador/GENERAL/th_parroquiasC.php?listar=true';
-            cargar_select2_con_id('ddl_parroquia', url_parroquiaC, response[0].th_parr_id,
-                'th_parr_nombre');
-
-
-            nombres_completos = response[0].th_pos_primer_apellido + ' ' + response[0]
-                .th_pos_segundo_apellido + ' ' + response[0].th_pos_primer_nombre + ' ' + response[0]
-                .th_pos_segundo_nombre;
-            $('#txt_nombres_completos_v').html(nombres_completos);
-            $('#txt_fecha_nacimiento_v').html(response[0].th_pos_fecha_nacimiento);
-            $('#txt_nacionalidad_v').html(response[0].th_pos_nacionalidad);
-            $('#txt_estado_civil_v').html(response[0].th_pos_estado_civil);
-            $('#txt_numero_cedula_v').html(response[0].th_pos_cedula);
-            $('#txt_telefono_1_v').html(response[0].th_pos_telefono_1);
-            $('#txt_correo_v').html(response[0].th_pos_correo);
-
-            //Input para todos los pos_id que se vayan a colocar en los modales
-            $('input[name="txt_postulante_id"]').val(response[0]._id);
-            $('input[name="txt_postulante_cedula"]').val(response[0].th_pos_cedula);
-
-            //console.log(response);
-
-<<<<<<< HEAD
             }
         });
     }
@@ -184,99 +150,47 @@ function cargarDatos_informacion_personal(id) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
             //console.log(parametros_informacion_personal);
             insertar_informacion_personal(parametros_informacion_personal);
-=======
->>>>>>> DEVELOPER01
         }
-    });
-}
-
-function recargar_imagen(id) {
-    $.ajax({
-        url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?listar=true',
-        type: 'post',
-        data: {
-            id: id
-        },
-        dataType: 'json',
-        success: function(response) {
-            $('#img_postulante_inf').attr('src', response[0].th_pos_foto_url + '?' + Math.random());
-        }
-    });
-}
-
-function insertar_editar_informacion_personal() {
-
-    var txt_primer_nombre = $('#txt_primer_nombre').val();
-    var txt_segundo_nombre = $('#txt_segundo_nombre').val();
-    var txt_primer_apellido = $('#txt_primer_apellido').val();
-    var txt_segundo_apellido = $('#txt_segundo_apellido').val();
-    var txt_fecha_nacimiento = $('#txt_fecha_nacimiento').val();
-    var ddl_nacionalidad = $('#ddl_nacionalidad').val();
-    var txt_numero_cedula = $('#txt_numero_cedula').val();
-    var ddl_estado_civil = $('#ddl_estado_civil').val();
-    var ddl_sexo = $('#ddl_sexo').val();
-    var txt_telefono_1 = $('#txt_telefono_1').val();
-    var txt_telefono_2 = $('#txt_telefono_2').val();
-    var txt_correo = $('#txt_correo').val();
-    var ddl_provincias = $('#ddl_provincias').val();
-    var ddl_ciudad = $('#ddl_ciudad').val();
-    var ddl_parroquia = $('#ddl_parroquia').val();
-    var txt_direccion_postal = $('#txt_direccion_postal').val();
-    var txt_direccion = $('#txt_direccion').val();
-
-    var parametros_informacion_personal = {
-        '_id': '<?= $id ?>',
-        'txt_primer_nombre': txt_primer_nombre,
-        'txt_segundo_nombre': txt_segundo_nombre,
-        'txt_primer_apellido': txt_primer_apellido,
-        'txt_segundo_apellido': txt_segundo_apellido,
-        'txt_fecha_nacimiento': txt_fecha_nacimiento,
-        'ddl_nacionalidad': ddl_nacionalidad,
-        'txt_numero_cedula': txt_numero_cedula,
-        'ddl_estado_civil': ddl_estado_civil,
-        'ddl_sexo': ddl_sexo,
-        'txt_telefono_1': txt_telefono_1,
-        'txt_telefono_2': txt_telefono_2,
-        'txt_correo': txt_correo,
-        'ddl_provincias': ddl_provincias,
-        'ddl_ciudad': ddl_ciudad,
-        'ddl_parroquia': ddl_parroquia,
-        'txt_direccion_postal': txt_direccion_postal,
-        'txt_direccion': txt_direccion,
-
-    };
-
-    if ($("#form_informacion_personal").valid()) {
-        // Si es válido, puedes proceder a enviar los datos por AJAX
-        //console.log(parametros_informacion_personal);
-        insertar_informacion_personal(parametros_informacion_personal);
     }
-}
 
-function insertar_informacion_personal(parametros) {
-    $.ajax({
-        data: {
-            parametros: parametros
-        },
-        url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?insertar=true',
-        type: 'post',
-        dataType: 'json',
-
-        success: function(response) {
-            if (response == 1) {
-                Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-
-                });
-                <?php if (isset($_GET['id'])) { ?>
-                cargarDatos_informacion_personal(<?= $id ?>);
-                <?php } ?>
-                $('#modal_informacion_personal').modal('hide');
-            } else if (response == -2) {
-                Swal.fire('', 'Operación fallida', 'warning');
+    function recargar_imagen(id) {
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?listar=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#img_postulante_inf').attr('src', response[0].th_pos_foto_url + '?' + Math.random());
             }
-        }
-    });
-}
+        });
+    }
+
+    function insertar_informacion_personal(parametros) {
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?insertar=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+
+                    });
+                    <?php if (isset($_GET['id'])) { ?>
+                        cargarDatos_informacion_personal(<?= $id ?>);
+                    <?php } ?>
+                    $('#modal_informacion_personal').modal('hide');
+                } else if (response == -2) {
+                    Swal.fire('', 'Operación fallida', 'warning');
+                }
+            }
+        });
+    }
 </script>
 
 <!-- Vista de la página -->
@@ -340,12 +254,7 @@ function insertar_informacion_personal(parametros) {
                                                 <i class="bx bx-info-circle fs-5 text-primary me-2"></i>
                                                 <h6 class="fw-bold mb-0 text-primary">Información Personal</h6>
                                             </div>
-<<<<<<< HEAD
                                             <a href="#" class="text-secondary" data-bs-toggle="modal" data-bs-target="#modal_informacion_personal">
-=======
-                                            <a href="#" class="text-secondary" data-bs-toggle="modal"
-                                                data-bs-target="#modal_informacion_personal">
->>>>>>> DEVELOPER01
                                                 <i class="bx bx-pencil bx-sm"></i>
                                             </a>
                                         </div>
@@ -799,14 +708,8 @@ function insertar_informacion_personal(parametros) {
                     <div class="row mb-col">
 
                         <div class="col-md-3">
-<<<<<<< HEAD
                             <label for="txt_cedula" class="form-label form-label-sm">N° de Cédula</label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_cedula" id="txt_cedula" maxlength="10">
-=======
-                            <label for="txt_numero_cedula" class="form-label form-label-sm">N° de Cédula</label>
-                            <input type="text" class="form-control form-control-sm no_caracteres"
-                                name="txt_numero_cedula" id="txt_numero_cedula" maxlength="10">
->>>>>>> DEVELOPER01
                         </div>
                         <div class="col-md-3">
                             <label for="ddl_sexo" class="form-label form-label-sm">Sexo</label>
@@ -897,7 +800,6 @@ function insertar_informacion_personal(parametros) {
 
 
 <script>
-<<<<<<< HEAD
     //Validacion de formulario
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('txt_primer_apellido');
@@ -1001,125 +903,8 @@ function insertar_informacion_personal(parametros) {
                 ddl_estado_civil: {
                     required: "Por favor seleccione su estado civil",
                 },
-=======
-//Validacion de formulario
-$(document).ready(function() {
-    agregar_asterisco_campo_obligatorio('txt_primer_apellido');
-    agregar_asterisco_campo_obligatorio('txt_segundo_apellido');
-    agregar_asterisco_campo_obligatorio('txt_primer_nombre');
-    agregar_asterisco_campo_obligatorio('txt_segundo_nombre');
-    agregar_asterisco_campo_obligatorio('txt_numero_cedula');
-    agregar_asterisco_campo_obligatorio('ddl_sexo');
-    agregar_asterisco_campo_obligatorio('txt_fecha_nacimiento');
-    agregar_asterisco_campo_obligatorio('txt_edad');
-    agregar_asterisco_campo_obligatorio('txt_telefono_1');
-    agregar_asterisco_campo_obligatorio('txt_telefono_2');
-    agregar_asterisco_campo_obligatorio('txt_correo');
-    agregar_asterisco_campo_obligatorio('ddl_nacionalidad');
-    agregar_asterisco_campo_obligatorio('ddl_estado_civil');
-    agregar_asterisco_campo_obligatorio('ddl_provincias');
-    agregar_asterisco_campo_obligatorio('ddl_ciudad');
-    agregar_asterisco_campo_obligatorio('ddl_parroquia');
-    agregar_asterisco_campo_obligatorio('txt_codigo_postal');
-    agregar_asterisco_campo_obligatorio('txt_direccion');
-    //Validación Información Personal
-    $("#form_informacion_personal").validate({
-        rules: {
-            txt_primer_apellido: {
-                required: true,
-            },
-            txt_segundo_apellido: {
-                required: true,
->>>>>>> DEVELOPER01
-            },
-            txt_primer_nombre: {
-                required: true,
-            },
-            txt_segundo_nombre: {
-                required: true,
-            },
-            txt_numero_cedula: {
-                required: true,
-            },
-            ddl_sexo: {
-                required: true,
-            },
-            txt_fecha_nacimiento: {
-                required: true,
-            },
-            txt_edad: {
-                required: true,
-            },
-            txt_telefono_1: {
-                required: true,
-            },
-            txt_telefono_2: {
-                required: true,
-            },
-            txt_correo: {
-                required: true,
-            },
-            ddl_nacionalidad: {
-                required: true,
-            },
-            ddl_estado_civil: {
-                required: true,
-            },
-        },
-        messages: {
-            txt_primer_apellido: {
-                required: "Por favor ingrese el primer apellido",
-            },
-            txt_segundo_apellido: {
-                required: "Por favor ingrese el segundo apellido",
-            },
-            txt_primer_nombre: {
-                required: "Por favor ingrese el primer nombre",
-            },
-            txt_segundo_nombre: {
-                required: "Por favor ingrese el segundo nombre",
-            },
-            txt_numero_cedula: {
-                required: "Por favor ingresa un número de cédula",
-            },
-            ddl_sexo: {
-                required: "Por favor seleccione el sexo",
-            },
-            txt_fecha_nacimiento: {
-                required: "Por favor ingrese la fecha de nacimiento",
-            },
-            txt_edad: {
-                required: "Por favor ingrese la edad (fecha de nacimiento)",
-            },
-            txt_telefono_1: {
-                required: "Por favor ingrese el primero teléfono",
-            },
-            txt_telefono_2: {
-                required: "Por favor ingrese el segundo teléfono",
-            },
-            txt_correo: {
-                required: "Por favor ingrese un correo",
-            },
-            ddl_nacionalidad: {
-                required: "Por favor seleccione su nacionalidad",
-            },
-            ddl_estado_civil: {
-                required: "Por favor seleccione su estado civil",
-            },
-        },
-
-        highlight: function(element) {
-            // Agrega la clase 'is-invalid' al input que falla la validación
-            $(element).addClass('is-invalid');
-            $(element).removeClass('is-valid');
-        },
-        unhighlight: function(element) {
-            // Elimina la clase 'is-invalid' si la validación pasa
-            $(element).removeClass('is-invalid');
-            $(element).addClass('is-valid');
-
-        }
+            }
+        });
     });
 
-});
 </script>
