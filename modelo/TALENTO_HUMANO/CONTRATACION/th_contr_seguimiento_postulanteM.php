@@ -113,44 +113,40 @@ class th_contr_seguimiento_postulanteM extends BaseModel
 }
 
 
-public function listar_etapas_faltantes_postulantes_v3($plaza_id, $postulantes_ids = [])
+public function listar_etapas_faltantes_postulantes($plaza_id, $postulantes_ids = [])
 {
-    $plaza_id = intval($plaza_id);
-    
     if (empty($postulantes_ids)) {
         return [];
     }
-    $postulantes_union = [];
-    foreach ($postulantes_ids as $id) {
-        $postulantes_union[] = "SELECT " . intval($id) . " AS postulante_id";
-    }
-    $postulantes_query = implode(' UNION ALL ', $postulantes_union);
+
+    $plaza_id = intval($plaza_id);
+    $ids = implode(',', array_map('intval', $postulantes_ids));
 
     $sql = "
-    SELECT 
-        p.postulante_id AS th_posu_id,
-        pe.th_eta_id,
-        e.th_etapa_nombre,
-        e.th_etapa_orden
-    FROM (
-        $postulantes_query
-    ) p
-    CROSS JOIN th_contr_plaza_etapas pe
-    INNER JOIN th_contr_etapas_proceso e ON pe.th_eta_id = e.th_etapa_id
-    WHERE pe.th_pla_id = $plaza_id
-      AND pe.th_pla_eta_estado = 1
-      AND NOT EXISTS (
-        SELECT 1
-        FROM th_contr_seguimiento_postulante sp
-        WHERE sp.th_posu_id = p.postulante_id
-          AND sp.th_etapa_id = pe.th_eta_id
-          AND sp.th_seg_estado = 1
-      )
-    ORDER BY p.postulante_id, e.th_etapa_orden ASC
+        SELECT
+            p.th_posu_id,
+            e.th_etapa_id AS th_eta_id,
+            e.th_etapa_nombre,
+            e.th_etapa_orden
+        FROM th_contr_postulaciones p
+        INNER JOIN th_contr_plaza_etapas pe
+            ON pe.th_pla_id = p.th_pla_id
+            AND pe.th_pla_eta_estado = 1
+        INNER JOIN th_contr_etapas_proceso e
+            ON e.th_etapa_id = pe.th_eta_id
+        LEFT JOIN th_contr_seguimiento_postulante sp
+            ON sp.th_posu_id = p.th_posu_id
+            AND sp.th_etapa_id = e.th_etapa_id
+            AND sp.th_seg_estado = 1
+        WHERE p.th_pla_id = $plaza_id
+          AND p.th_posu_id IN ($ids)
+          AND sp.th_seg_id IS NULL
+        ORDER BY p.th_posu_id, e.th_etapa_orden
     ";
 
     return $this->db->datos($sql);
 }
+
 
 
 public function listar_seguimiento_postulante_plaza($id_plaza = '', $id_etapa = '', $id_pos = '')

@@ -120,7 +120,6 @@ class th_contr_seguimiento_postulanteC
 
   function insertar_editar($parametros)
     {
-    // Validar entrada mínima
     if (!isset($parametros['postulantes_seleccionadas']) || 
         !is_array($parametros['postulantes_seleccionadas']) || 
         count($parametros['postulantes_seleccionadas']) == 0) {
@@ -134,13 +133,11 @@ class th_contr_seguimiento_postulanteC
         return ['ok' => false, 'msg' => 'Falta th_pla_id'];
     }
 
-    // Extraer IDs de postulantes
     $postulantes_ids = array_map(function($p) {
         return is_array($p) ? intval($p['id']) : intval($p);
     }, $postulantes);
 
-    // Listar etapas faltantes usando la función optimizada (USAR v3 que es la más compatible)
-    $etapas_faltantes = $this->modelo->listar_etapas_faltantes_postulantes_v3($pla_id, $postulantes_ids);
+    $etapas_faltantes = $this->modelo->listar_etapas_faltantes_postulantes($pla_id, $postulantes_ids);
 
     if (empty($etapas_faltantes)) {
         return [
@@ -149,8 +146,6 @@ class th_contr_seguimiento_postulanteC
             'etapas_creadas' => 0
         ];
     }
-
-    // Insertar cada etapa faltante con el formato array campo/dato
     $now = date('Y-m-d H:i:s');
     $etapas_creadas = 0;
     $errores = [];

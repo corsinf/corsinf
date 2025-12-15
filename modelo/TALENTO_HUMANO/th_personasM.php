@@ -199,4 +199,32 @@ class th_personasM extends BaseModel
     return $this->db->datos($sql);
 }
 
+
+public function listar_personas_correos($id_persona = null)
+{
+    $id = ($id_persona !== '' && $id_persona !== null) ? (int)$id_persona : '';
+
+    $where_id = ($id !== '') ? "AND p.th_per_id = {$id}" : "";
+
+    $sql = "
+        SELECT
+            p.th_per_id AS th_per_id,
+            p.th_per_correo AS th_per_correo,
+            P.PASS AS PASS,
+            CONCAT(
+            ISNULL(p.th_per_primer_nombre, ''), ' ',
+            ISNULL(p.th_per_segundo_nombre, ''), ' ',
+            ISNULL(p.th_per_primer_apellido, ''), ' ',
+            ISNULL(p.th_per_segundo_apellido, '')
+            ) AS nombre_completo
+        FROM th_personas p
+        WHERE p.th_per_estado = 1
+          AND p.th_per_correo IS NOT NULL
+          {$where_id}
+    ";
+
+    return $this->db->datos($sql);
+}
+
+
 }

@@ -11,10 +11,13 @@ class th_logs_correosM extends BaseModel
         'th_log_correo_destino AS correo_destino',
         'th_log_asunto AS asunto',
         'th_log_detalle AS detalle',
-        'id_usuario AS id_usuario',
         'th_log_enviado AS enviado',
         'th_log_estado AS estado',
         'th_log_fecha_creada AS fecha_creada',
         'th_log_fecha_modificada AS fecha_modificada',
+        'id_usu_per_remitente AS id_remitente',
+        'tabla_remitente AS tabla_remitente',
+        'id_usu_per_destinatario AS id_destinatario',
+        'tabla_destinatario AS tabla_destinatario',
     ];
 }
