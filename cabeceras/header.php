@@ -28,6 +28,12 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 	$logo = $_SESSION['INICIO']['LOGO'];
 }
 
+$modulo_sistema = '';
+if(isset($_GET['mod']) && $_GET['mod'] !='')
+{
+	$modulo_sistema = $_GET['mod'];
+}
+
 ?>
 
 <!doctype html>
@@ -133,7 +139,7 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 		$(document).ready(function() {
 			$.ajaxSetup({
 		        headers: {
-		            'X-Custom-Variable': '<?php echo $_GET['mod']; ?>'
+		            'X-Custom-Variable': '<?= $modulo_sistema ?>'
 		        }
 		    });
 
