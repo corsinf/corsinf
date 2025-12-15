@@ -6,11 +6,8 @@ if (isset($_GET['_id'])) {
     $_id = $_GET['_id'];
 }
 ?>
-
-<!-- LIBRERÍAS -->
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
-
 <script type="text/javascript">
 $(document).ready(function() {
 
@@ -250,7 +247,6 @@ $(document).ready(function() {
 <div class="page-wrapper">
     <div class="page-content">
 
-        <!-- BREADCRUMB -->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
             <div class="breadcrumb-title pe-3">Seguimiento de Postulantes</div>
             <div class="ps-3">

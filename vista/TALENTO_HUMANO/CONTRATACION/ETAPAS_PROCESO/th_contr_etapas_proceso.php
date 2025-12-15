@@ -80,7 +80,6 @@ $(document).ready(function() {
 
 <div class="page-wrapper">
     <div class="page-content">
-        <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
             <div class="breadcrumb-title pe-3">Etapas del proceso</div>
             <div class="ps-3">
@@ -95,62 +94,45 @@ $(document).ready(function() {
                 </nav>
             </div>
         </div>
-        <!--end breadcrumb-->
 
         <div class="row">
             <div class="col-xl-12 mx-auto">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
-                        <div class="card-title d-flex align-items-center">
 
-                            <h5 class="mb-0 text-primary"></h5>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0 text-primary">Etapas del proceso</h5>
 
-                            <div class="row mx-0 align-items-center">
-                                <div class="col-12 d-flex align-items-center gap-2">
-                                    <h5 class="mb-0 text-primary me-3">Etapas del proceso</h5>
-
-                                    <div id="btn_nuevo">
-                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_etapa_proceso"
-                                            class="btn btn-success btn-sm">
-                                            <i class="bx bx-plus me-1"></i> Nuevo
-                                        </a>
-                                    </div>
-
-                                    <div id="btn_organizar">
-                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_organizar_etapas_proceso"
-                                            class="btn btn-outline-primary btn-sm">
-                                            <i class="bx bx-sort me-1"></i> Organizar etapas
-                                        </a>
-                                    </div>
+                            <div id="btn_nuevo">
+                                <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_etapa_proceso"
+                                    class="btn btn-success btn-sm">
+                                    <i class="bx bx-plus me-1"></i> Nuevo
+                                </a>
+                            </div>
+                        </div>
+                        <section class="content pt-2">
+                            <div class="container-fluid px-0">
+                                <div class="table-responsive">
+                                    <table class="table table-striped responsive" id="tbl_etapas" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Tipo</th>
+                                                <th>Orden</th>
+                                                <th>Obligatoria</th>
+                                                <th>Descripción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
                                 </div>
                             </div>
+                        </section>
 
-
-                        </div>
                     </div>
-                    <section class="content pt-2">
-                        <div class="container-fluid">
-                            <div class="table-responsive">
-                                <table class="table table-striped responsive " id="tbl_etapas" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Nombre</th>
-                                            <th>Tipo</th>
-                                            <th>Orden</th>
-                                            <th>Obligatoria</th>
-                                            <th>Descripción</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="">
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div><!-- /.container-fluid -->
-                    </section>
+
                 </div>
             </div>
         </div>
     </div>
-    <!--end row-->
-</div>
 </div>
