@@ -4,13 +4,10 @@ require_once(dirname(__DIR__, 2) . '/GENERAL/BaseModel.php');
 
 class th_contr_plaza_cargoM extends BaseModel
 {
-    // Nombre real de la tabla en la base de datos
     protected $tabla = 'th_contr_plaza_cargo';
 
-    // Clave primaria
     protected $primaryKey = 'th_pc_id AS _id';
-
-    // Campos que puedes insertar o actualizar (con alias)
+    
     protected $camposPermitidos = [
         'th_pla_id AS plaza_id',
         'th_car_id AS cargo_id',
@@ -23,8 +20,8 @@ class th_contr_plaza_cargoM extends BaseModel
 
 
     public function listar_plaza_cargo($id_pc = '')
-    {
-        $sql = "
+{
+    $sql = "
         SELECT
             pc.th_pc_id AS _id,
             pc.th_pla_id AS plaza_id,
@@ -34,18 +31,12 @@ class th_contr_plaza_cargoM extends BaseModel
             pc.th_pc_estado AS estado,
             pc.th_pc_fecha_creacion AS fecha_creacion,
             pc.th_pc_fecha_modificacion AS fecha_modificacion,
-
-            -- campos del cargo asociado
             c.th_car_id AS cargo_th_car_id,
             c.th_car_nombre AS cargo_nombre,
             c.th_car_descripcion AS cargo_descripcion,
-            c.th_car_nivel AS cargo_nivel,
-            c.th_car_area AS cargo_area,
             c.th_car_estado AS cargo_estado,
             c.th_car_fecha_creacion AS cargo_fecha_creacion,
             c.th_car_fecha_modificacion AS cargo_fecha_modificacion,
-
-            -- campos de la plaza asociada
             p.th_pla_id AS plaza_th_pla_id,
             p.th_pla_titulo AS plaza_titulo,
             p.th_pla_descripcion AS plaza_descripcion,
@@ -69,17 +60,18 @@ class th_contr_plaza_cargoM extends BaseModel
         INNER JOIN th_contr_cargos c ON pc.th_car_id = c.th_car_id
         INNER JOIN th_contr_plazas p ON pc.th_pla_id = p.th_pla_id
         WHERE pc.th_pc_estado = 1
-        ";
+    ";
 
-        if ($id_pc !== '') {
-            $id = (int) $id_pc;
-            $sql .= " AND pc.th_pc_id = {$id}";
-        }
-
-        $sql .= " ORDER BY pc.th_pc_fecha_creacion DESC";
-
-        $datos = $this->db->datos($sql);
-        return $datos;
+    if ($id_pc !== '') {
+        $id = (int) $id_pc;
+        $sql .= " AND pc.th_pc_id = {$id}";
     }
+
+    $sql .= " ORDER BY pc.th_pc_fecha_creacion DESC";
+
+    $datos = $this->db->datos($sql);
+    return $datos;
+}
+
 
 }

@@ -6,11 +6,10 @@ require_once(dirname(__DIR__, 3)  . '/modelo/TALENTO_HUMANO/CONTRATACION/th_cont
 $controlador = new th_contr_etapas_procesoC();
 
 if (isset($_GET['listar'])) {
-    echo json_encode($controlador->listar($_POST['id'] ?? '', $_POST['id_plaza'] ?? ''));
+    echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
 
 if (isset($_GET['organizar'])) {
-    // Recibimos 'ordenes' como JSON: [{id:..., orden:...}, ...]
     $ordenes_json = $_POST['ordenes'] ?? '';
     echo json_encode($controlador->organizar($ordenes_json));
 }
@@ -48,67 +47,49 @@ class th_contr_etapas_procesoC
         $this->modelo = new th_contr_etapas_procesoM();
     }
 
-    function listar($id = '', $id_plaza = '')
+    function listar($id = '')
     {
-        
-        $datos = $this->modelo->listar_etapa_plaza($id, $id_plaza);
+        if($id == ''){
+            $datos = $this->modelo->where('th_etapa_estado',1)->listar();
+        }else{
+             $datos = $this->modelo->where('th_etapa_id',$id)->where('th_etapa_estado',1)->listar();
+        }
         return $datos;
     }
 
     function insertar_editar($parametros)
     {
-        // Determinar id de la plaza (acepta varias keys comunes)
-        $th_pla_id = $parametros['ddl_plaza'] ?? $parametros['txt_th_pla_id'] ?? $parametros['th_pla_id'] ?? '';
 
-        // Preparar datos comunes
+        
+        $ddl_etapa_tipo = $parametros['ddl_etapa_tipo'] ?? $parametros['ddl_etapa_tipo'] ?? null;
+        
+        
         $datos = array(
-            array('campo' => 'th_pla_id', 'dato' => $th_pla_id),
             array('campo' => 'th_etapa_nombre', 'dato' => $parametros['txt_th_etapa_nombre'] ?? ''),
-            array('campo' => 'th_etapa_tipo', 'dato' => $parametros['txt_th_etapa_tipo'] ?? ''),
+            array('campo' => 'th_etapa_tipo', 'dato' => $ddl_etapa_tipo),
             array('campo' => 'th_etapa_orden', 'dato' => ($parametros['txt_th_etapa_orden'] ?? '') !== '' ? (int)$parametros['txt_th_etapa_orden'] : null),
             array('campo' => 'th_etapa_obligatoria', 'dato' => isset($parametros['chk_th_etapa_obligatoria']) ? ($parametros['chk_th_etapa_obligatoria'] ? 1 : 0) : 0),
             array('campo' => 'th_etapa_descripcion', 'dato' => $parametros['txt_th_etapa_descripcion'] ?? ''),
             array('campo' => 'th_etapa_estado', 'dato' => 1),
-            // auditoría
-            array('campo' => 'th_etapa_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
         );
 
-        // Inserción
+        // Inserción (sin validar duplicados)
         if (empty($parametros['_id'])) {
-            // Verificar que no exista otra etapa activa con el mismo nombre en la misma plaza
-            $cond = $this->modelo->where('th_etapa_nombre', $parametros['txt_th_etapa_nombre'] ?? '')->where('th_etapa_estado', 1);
-            if ($th_pla_id !== '') {
-                $cond = $cond->where('th_pla_id', $th_pla_id);
-            }
-            if (count($cond->listar()) == 0) {
-                // agregar fecha de creación
-                $datos[] = array('campo' => 'th_etapa_fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
-
-                // insertar y obtener id (si lo necesitas)
-                $id = $this->modelo->insertar_id($datos);
-
-                // devolver 1 para indicar éxito (coherente con tus respuestas JS)
-                return 1;
-            } else {
-                return -2; // nombre duplicado en la misma plaza
-            }
+            // agregar fecha de creación
+            $datos[] = array('campo' => 'th_etapa_fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
+            // insertar y obtener id
+            $id = $this->modelo->insertar_id($datos);
+            // devolver 1 si se insertó correctamente (manteniendo coherencia con tu JS)
+            return ($id) ? 1 : 0;
         } else {
-            // Edición: verificar que no exista otro registro con el mismo nombre en la misma plaza
-            $cond = $this->modelo->where('th_etapa_nombre', $parametros['txt_th_etapa_nombre'] ?? '')->where('th_etapa_id !', $parametros['_id']);
-            if ($th_pla_id !== '') {
-                $cond = $cond->where('th_pla_id', $th_pla_id);
-            }
-
-            if (count($cond->listar()) == 0) {
-                $where[0]['campo'] = 'th_etapa_id';
-                $where[0]['dato'] = $parametros['_id'];
-
-                $res = $this->modelo->editar($datos, $where);
-                return $res;
-            } else {
-                return -2; // nombre duplicado en otro registro de la misma plaza
-            }
+            // Edición: actualizar por id
+            $where[0]['campo'] = 'th_etapa_id';
+            $where[0]['dato'] = $parametros['_id'];
+            $res = $this->modelo->editar($datos, $where);
+             return ($parametros['_id']) ? 1 : 0;
         }
+        return -2;
+        
     }
 
     function eliminar($id)

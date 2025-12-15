@@ -8,6 +8,13 @@ $controlador = new th_departamentosC();
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
+if (isset($_GET['listar_organigrama'])) {
+    echo json_encode($controlador->listar_organigrama($_POST['id'] ?? ''));
+}
+
+if (isset($_GET['listar_organigrama_personas'])) {
+    echo json_encode($controlador->listar_organigrama_personas($_POST['id'] ?? ''));
+}
 
 if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
@@ -53,6 +60,20 @@ class th_departamentosC
     {
         $this->modelo = new th_departamentosM();
     }
+
+    function listar_organigrama($id = '')
+    {
+       
+        $datos = $this->modelo->obtener_departamento_completo($id);
+        return $datos;
+    }
+    function listar_organigrama_personas($id = '')
+    {
+       
+        $datos = $this->modelo->obtener_departamento_cargos_personas($id);
+        return $datos;
+    }
+
 
     function listar($id = '')
     {

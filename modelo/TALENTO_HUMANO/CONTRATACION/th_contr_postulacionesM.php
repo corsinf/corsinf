@@ -27,7 +27,6 @@ class th_contr_postulacionesM extends BaseModel
 {
     $sql = "
         SELECT
-            -- Datos de la postulación
             po.th_posu_id AS _id,
             po.th_pla_id,
             po.th_persona_id,
@@ -43,8 +42,6 @@ class th_contr_postulacionesM extends BaseModel
             po.th_posu_observaciones,
             po.th_posu_fecha_creacion,
             po.th_posu_fecha_modificacion,
-            
-            -- Datos de la persona (si existe)
             per.th_per_id AS persona_id,
             per.th_per_primer_nombre AS per_primer_nombre,
             per.th_per_segundo_nombre AS per_segundo_nombre,
@@ -57,8 +54,6 @@ class th_contr_postulacionesM extends BaseModel
             per.th_per_foto_url AS per_foto_url,
             per.th_per_id_comunidad,
             per.th_per_tabla_union,
-            
-            -- Datos del postulante (si existe)
             pos.th_pos_id AS postulante_id,
             pos.th_pos_primer_nombre AS pos_primer_nombre,
             pos.th_pos_segundo_nombre AS pos_segundo_nombre,
@@ -69,8 +64,6 @@ class th_contr_postulacionesM extends BaseModel
             pos.th_pos_telefono_1 AS pos_telefono,
             pos.th_pos_foto_url AS pos_foto_url,
             pos.th_pos_contratado,
-            
-            -- Campo calculado: nombre completo del candidato
             CASE 
                 WHEN per.th_per_id IS NOT NULL THEN 
                     COALESCE(per.th_per_nombres_completos, 
@@ -90,8 +83,6 @@ class th_contr_postulacionesM extends BaseModel
                     )
                 ELSE 'Sin nombre registrado'
             END AS nombre_completo,
-            
-            -- Campo calculado: tipo de candidato
             CASE 
                 WHEN per.th_per_id IS NOT NULL AND per.th_per_id_comunidad IS NOT NULL AND per.th_per_tabla_union IS NOT NULL THEN 'Empleado Contratado'
                 WHEN per.th_per_id IS NOT NULL THEN 'Empleado Interno'
@@ -99,33 +90,20 @@ class th_contr_postulacionesM extends BaseModel
                 WHEN pos.th_pos_id IS NOT NULL THEN 'Postulante Externo'
                 ELSE 'Desconocido'
             END AS tipo_candidato,
-            
-            -- Campo calculado: origen
             CASE 
                 WHEN per.th_per_id IS NOT NULL THEN 'Interno'
                 WHEN pos.th_pos_id IS NOT NULL THEN 'Externo'
                 ELSE 'N/A'
             END AS origen,
-            
-            -- Campo calculado: cédula (de cualquier fuente)
             COALESCE(per.th_per_cedula, pos.th_pos_cedula, 'Sin cédula') AS cedula,
-            
-            -- Campo calculado: correo (de cualquier fuente)
             COALESCE(per.th_per_correo, pos.th_pos_correo, 'Sin correo') AS correo,
-            
-            -- Campo calculado: teléfono (de cualquier fuente)
             COALESCE(per.th_per_telefono_1, pos.th_pos_telefono_1, 'Sin teléfono') AS telefono,
-            
-            -- Campo calculado: foto (de cualquier fuente)
             COALESCE(per.th_per_foto_url, pos.th_pos_foto_url, '') AS foto_url,
-            
-            -- Campo calculado: estado de contratación
             CASE 
                 WHEN per.th_per_id_comunidad IS NOT NULL AND per.th_per_tabla_union IS NOT NULL THEN 1
                 WHEN pos.th_pos_contratado = 1 THEN 1
                 ELSE 0
             END AS esta_contratado
-
         FROM th_contr_postulaciones po
         LEFT JOIN th_personas per ON po.th_persona_id = per.th_per_id
         LEFT JOIN th_postulantes pos ON po.th_postulante_id = pos.th_pos_id
@@ -142,7 +120,6 @@ function listar_postulaciones()
 {
     $sql = "
         SELECT
-            -- Datos de la postulación
             po.th_posu_id AS _id,
             po.th_pla_id,
             po.th_persona_id,
@@ -158,13 +135,9 @@ function listar_postulaciones()
             po.th_posu_observaciones,
             po.th_posu_fecha_creacion,
             po.th_posu_fecha_modificacion,
-            
-            -- Datos de la plaza
             pla.th_pla_titulo AS plaza_titulo,
             pla.th_pla_tipo AS plaza_tipo,
             pla.th_pla_id AS plaza_id,
-            
-            -- Datos de la persona (si existe)
             per.th_per_id AS persona_id,
             per.th_per_primer_nombre AS per_primer_nombre,
             per.th_per_segundo_nombre AS per_segundo_nombre,
@@ -177,8 +150,6 @@ function listar_postulaciones()
             per.th_per_foto_url AS per_foto_url,
             per.th_per_id_comunidad,
             per.th_per_tabla_union,
-            
-            -- Datos del postulante (si existe)
             pos.th_pos_id AS postulante_id,
             pos.th_pos_primer_nombre AS pos_primer_nombre,
             pos.th_pos_segundo_nombre AS pos_segundo_nombre,
@@ -189,8 +160,6 @@ function listar_postulaciones()
             pos.th_pos_telefono_1 AS pos_telefono,
             pos.th_pos_foto_url AS pos_foto_url,
             pos.th_pos_contratado,
-            
-            -- Campo calculado: nombre completo del candidato
             CASE 
                 WHEN per.th_per_id IS NOT NULL THEN 
                     COALESCE(per.th_per_nombres_completos, 
@@ -210,8 +179,6 @@ function listar_postulaciones()
                     )
                 ELSE 'Sin nombre registrado'
             END AS nombre_completo,
-            
-            -- Campo calculado: tipo de candidato
             CASE 
                 WHEN per.th_per_id IS NOT NULL AND per.th_per_id_comunidad IS NOT NULL AND per.th_per_tabla_union IS NOT NULL THEN 'Empleado Contratado'
                 WHEN per.th_per_id IS NOT NULL THEN 'Empleado Interno'
@@ -219,33 +186,20 @@ function listar_postulaciones()
                 WHEN pos.th_pos_id IS NOT NULL THEN 'Postulante Externo'
                 ELSE 'Desconocido'
             END AS tipo_candidato,
-            
-            -- Campo calculado: origen
             CASE 
                 WHEN per.th_per_id IS NOT NULL THEN 'Interno'
                 WHEN pos.th_pos_id IS NOT NULL THEN 'Externo'
                 ELSE 'N/A'
             END AS origen,
-            
-            -- Campo calculado: cédula (de cualquier fuente)
             COALESCE(per.th_per_cedula, pos.th_pos_cedula, 'Sin cédula') AS cedula,
-            
-            -- Campo calculado: correo (de cualquier fuente)
             COALESCE(per.th_per_correo, pos.th_pos_correo, 'Sin correo') AS correo,
-            
-            -- Campo calculado: teléfono (de cualquier fuente)
             COALESCE(per.th_per_telefono_1, pos.th_pos_telefono_1, 'Sin teléfono') AS telefono,
-            
-            -- Campo calculado: foto (de cualquier fuente)
             COALESCE(per.th_per_foto_url, pos.th_pos_foto_url, '') AS foto_url,
-            
-            -- Campo calculado: estado de contratación
             CASE 
                 WHEN per.th_per_id_comunidad IS NOT NULL AND per.th_per_tabla_union IS NOT NULL THEN 1
                 WHEN pos.th_pos_contratado = 1 THEN 1
                 ELSE 0
             END AS esta_contratado
-
         FROM th_contr_postulaciones po
         LEFT JOIN th_contr_plazas pla ON po.th_pla_id = pla.th_pla_id
         LEFT JOIN th_personas per ON po.th_persona_id = per.th_per_id

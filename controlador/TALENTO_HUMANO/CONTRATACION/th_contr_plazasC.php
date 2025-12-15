@@ -8,6 +8,11 @@ $controlador = new th_contr_plazasC();
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
+
+if (isset($_GET['resumen_plaza'])) {
+    echo json_encode($controlador->resumen_plaza($_POST['id'] ?? ''));
+}
+
 if (isset($_GET['listar_plaza'])) {
     echo json_encode($controlador->listar_plaza($_POST['id'] ?? ''));
 }
@@ -33,6 +38,19 @@ if (isset($_GET['buscar'])) {
     );
 
     echo json_encode($controlador->buscar($parametros));
+}
+if (isset($_GET['buscar_por_plaza'])) {
+    $query = '';
+
+    if (isset($_GET['q'])) {
+        $query = $_GET['q'];
+    }
+
+    $parametros = array(
+        'query' => $query,
+    );
+
+    echo json_encode($controlador->buscar_por_plaza($parametros));
 }
 if (isset($_GET['buscar_todas'])) {
     $query = '';
@@ -80,6 +98,14 @@ class  th_contr_plazasC
         return $datos; 
 
     }
+
+    function resumen_plaza($id = '')
+    {
+       
+        $datos = $this->modelo->obtener_resumen_plaza($id);
+        return $datos; 
+
+    }
     
 
     function insertar_editar($parametros)
@@ -98,6 +124,9 @@ class  th_contr_plazasC
         $toFloat = function ($v) { return ($v === '' || $v === null) ? null : (float)$v; };
         $toBoolInt = function ($v) { return ($v === 1 || $v === '1' || $v === true || $v === 'true') ? 1 : 0; };
 
+
+         $ddl_th_pla_responsable = $toInt($parametros['ddl_th_pla_responsable'] ?? $parametros['ddl_th_pla_responsable'] ?? null);
+
         // Preparar array de datos según convención tuya
         $datos = array(
             array('campo' => 'th_pla_titulo', 'dato' => $parametros['txt_th_pla_titulo'] ?? ''),
@@ -112,7 +141,7 @@ class  th_contr_plazasC
             array('campo' => 'th_pla_tiempo_contrato', 'dato' => $parametros['txt_th_pla_tiempo_contrato'] ?? null),
             array('campo' => 'th_pla_prioridad_interna', 'dato' => $toBoolInt($parametros['chk_th_pla_prioridad_interna'] ?? 0)),
             array('campo' => 'th_pla_requiere_documentos', 'dato' => $toBoolInt($parametros['chk_th_pla_requiere_documentos'] ?? 0)),
-            array('campo' => 'th_pla_responsable_persona_id', 'dato' => $toInt($parametros['txt_th_pla_responsable_persona_id'] ?? null)),
+            array('campo' => 'th_pla_responsable_persona_id', 'dato' => $toInt($ddl_th_pla_responsable ?? null)),
             array('campo' => 'th_pla_observaciones', 'dato' => $parametros['txt_th_pla_observaciones'] ?? null),
             array('campo' => 'th_pla_estado', 'dato' => $toBoolInt($parametros['chk_th_pla_estado'] ?? 1)),
             array('campo' => 'th_pla_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
@@ -125,14 +154,15 @@ class  th_contr_plazasC
             // insertar y obtener id
             $id = $this->modelo->insertar_id($datos);
             // devolver 1 si se insertó correctamente (manteniendo coherencia con tu JS)
-            return ($id) ? 1 : 0;
+            return ($id) ? $id : 0;
         } else {
             // Edición: actualizar por id
             $where[0]['campo'] = 'th_pla_id';
             $where[0]['dato'] = $parametros['_id'];
             $res = $this->modelo->editar($datos, $where);
-            return $res;
+             return ($parametros['_id']) ? $parametros['_id'] : 0;
         }
+        return -2;
     }
 
 
@@ -170,7 +200,7 @@ class  th_contr_plazasC
    
 
     //Para usar en select2
-    public function buscar($parametros)
+    function buscar($parametros)
 {
     $lista = [];
 
@@ -193,4 +223,39 @@ class  th_contr_plazasC
 
     return $lista;
 }
+
+
+public function buscar_por_plaza($parametros)
+{
+    $lista = [];
+
+    // texto de búsqueda (opcional)
+    $query = isset($parametros['query']) ? trim($parametros['query']) : '';
+
+    // id de la plaza (requerido)
+    $pla_id = isset($parametros['pla_id']) ? intval($parametros['pla_id']) : 0;
+    if ($pla_id <= 0) {
+        return $lista; // sin plaza no devolvemos nada
+    }
+
+    // obtener etapas asignadas a la plaza
+    $datos = $this->modelo->listar_etapas_por_plaza($pla_id);
+
+    foreach ($datos as $row) {
+        $nombre = isset($row['th_etapa_nombre']) ? $row['th_etapa_nombre'] : '';
+        $tipo   = isset($row['th_etapa_tipo']) ? $row['th_etapa_tipo'] : '';
+
+        // Si no hay query, incluimos todo; si hay, buscar en nombre o tipo (case-insensitive)
+        if ($query === '' || stripos($nombre, $query) !== false || stripos($tipo, $query) !== false) {
+            $lista[] = [
+                'id'   => $row['th_etapa_id'],
+                'text' => $nombre . ($tipo ? " ({$tipo})" : ''), // muestra nombre (y tipo opcionalmente)
+                'data' => $row
+            ];
+        }
+    }
+
+    return $lista;
+}
+
 }

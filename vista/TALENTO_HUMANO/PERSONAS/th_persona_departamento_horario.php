@@ -1,409 +1,253 @@
-<!-- CSS requerido -->
-<link href="../assets/plugins/fullcalendar/css/main.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="../assets/plugins/notifications/css/lobibox.min.css" />
 
 <style>
+.card-header-calendar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.card-header-calendar .titles {
+    text-align: center;
+    flex: 1 1 auto;
+    min-width: 220px;
+}
+
+.card-header-calendar h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e3a8a;
+    letter-spacing: 0.5px;
+}
+
+.card-header-calendar p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #475569;
+}
+
+.resumen-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.resumen-item {
+    text-align: center;
+}
+
+.resumen-item .numero {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.resumen-item .label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.info-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 1.5rem;
+}
+
+.horario-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.turno-card {
+    background: #f8f9fa;
+    border-left: 4px solid;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.turno-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.turno-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.turno-nombre {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.turno-horario {
+    font-size: 1rem;
+    color: #5a6c7d;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.color-indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+}
+
+@media (max-width: 768px) {
     .card-header-calendar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 0.75rem;
-        flex-wrap: wrap;
-    }
-
-    .card-header-calendar .titles {
-        text-align: center;
-        flex: 1 1 auto;
-        min-width: 220px;
-    }
-
-    .card-header-calendar h3 {
-        margin: 0;
-        font-size: 1.05rem;
-        font-weight: 700;
-        color: #1e3a8a;
-        letter-spacing: 0.5px;
-    }
-
-    .card-header-calendar p {
-        margin: 0;
-        font-size: 0.85rem;
-        color: #475569;
-    }
-
-    #calendar_persona {
-        max-width: 100%;
-        width: 100%;
-        margin: 0 auto;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
-        padding: 10px;
-        min-height: 650px;
-        overflow: visible;
-    }
-    
-    .fc {
-        width: 100% !important;
-    }
-    
-    .fc-view-harness {
-        height: auto !important;
-    }
-    
-    .fc .fc-view {
-        width: 100% !important;
-    }
-
-    /* Estilos para eventos compactos */
-    .fc .fc-event {
-        border: none;
-        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
-        border-radius: 6px;
-        padding: 6px 8px;
-        font-size: 0.85rem;
-        line-height: 1.3;
-    }
-
-    .fc .fc-event .fc-event-title {
-        font-weight: 700;
-        color: #ffffff;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    }
-
-    .fc .fc-event .fc-event-time {
-        font-weight: 500;
-        opacity: 0.9;
-    }
-
-    /* Estilos para fin de semana */
-    .fc .fc-day-sat,
-    .fc .fc-day-sun {
-        background-color: #f8f9fa;
-    }
-
-    .small-controls {
-        display: flex;
         gap: 0.5rem;
-        align-items: center;
-        white-space: nowrap;
+        flex-direction: column;
     }
 
-    /* Panel de turnos disponibles */
-    .turnos-disponibles {
-        background: #f8f9fa;
-        border: 2px solid #e9ecef;
-        border-radius: 8px;
-        padding: 12px;
-        margin-bottom: 20px;
+    .card-header-calendar .titles h3 {
+        font-size: 0.95rem;
     }
 
-    .turno-badge {
-        display: inline-block;
-        padding: 8px 16px;
-        border-radius: 6px;
-        color: white;
-        font-size: 0.85rem;
-        font-weight: 600;
-        margin: 4px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    .turno-header {
+        flex-direction: column;
+        align-items: flex-start;
     }
-
-    .turno-badge .turno-nombre {
-        display: block;
-        font-size: 0.9rem;
-        font-weight: 700;
-    }
-
-    .turno-badge .turno-horario {
-        display: block;
-        font-size: 0.75rem;
-        opacity: 0.9;
-        margin-top: 2px;
-    }
-
-    /* responsive */
-    @media (max-width: 768px) {
-        .card-header-calendar {
-            gap: 0.5rem;
-            flex-direction: column;
-        }
-
-        .card-header-calendar .titles h3 {
-            font-size: 0.95rem;
-        }
-    }
+}
 </style>
 
 <div class="container-fluid">
-            <div class="card-header-calendar">
-                <div style="flex: 0 0 250px;">
-                    <label for="ddl_departamentos" class="form-label fw-bold">
-                        <i class="bx bxs-building"></i> Departamento
-                    </label>
-                    <select id="ddl_departamentos" class="form-select form-select-sm">
-                        <option value="">-- Seleccione Departamento --</option>
-                    </select>
-                </div>
-                <div style="flex: 0 0 250px;">
-    <label for="ddl_tipo_horario" class="form-label fw-bold">
-        <i class="bx bx-time"></i> Tipo de Horario
-    </label>
-    <select id="ddl_tipo_horario" class="form-select form-select-sm" disabled>
-        <option value="">-- Seleccione Horario --</option>
-    </select>
-</div>
-                <div class="titles" style="flex: 1;">
-                    <h3>📅 Horarios del Personal</h3>
-                    <p id="subtitle-center">Vista de horarios asignados</p>
-                </div>
+    <div class="card-header-calendar">
+        <div style="flex: 0 0 250px;">
+            <label for="ddl_departamentos" class="form-label fw-bold">
+                <i class="bx bxs-building"></i> Departamento
+            </label>
+            <select id="ddl_departamentos" class="form-select form-select-sm">
+                <option value="">-- Seleccione Departamento --</option>
+            </select>
+        </div>
+        <div style="flex: 0 0 250px;">
+            <label for="ddl_tipo_horario" class="form-label fw-bold">
+                <i class="bx bx-time"></i> Tipo de Horario
+            </label>
+            <select id="ddl_tipo_horario" class="form-select form-select-sm" disabled>
+                <option value="">-- Seleccione Horario --</option>
+            </select>
+        </div>
+        <div class="titles" style="flex: 1;">
+            <h3>📅 Horarios del Personal</h3>
+            <p id="subtitle-center">Vista de horarios asignados</p>
+        </div>
+    </div>
+    <!-- Estado vacío -->
+    <div id="estado_vacio" class="info-card empty-state">
+        <i class="bx bx-calendar-x"></i>
+        <h5>No hay horarios seleccionados</h5>
+        <p class="text-muted">Selecciona un departamento para ver los horarios asignados</p>
+    </div>
 
-                <div class="small-controls">
+    <!-- Panel de horarios -->
+    <div id="pnl_horarios_persona" style="display:none;">
+
+        <!-- Resumen -->
+        <div class="resumen-section">
+            <div class="row">
+                <div class="col-md-4 resumen-item">
+                    <div class="numero" id="total_turnos">0</div>
+                    <div class="label">Turnos Configurados</div>
+                </div>
+                <div class="col-md-4 resumen-item">
+                    <div class="numero" id="total_dias">0</div>
+                    <div class="label">Días Laborables</div>
+                </div>
+                <div class="col-md-4 resumen-item">
+                    <div class="numero" id="total_horas">0</div>
+                    <div class="label">Horas Semanales</div>
                 </div>
             </div>
+        </div>
 
-            <!-- Panel de horarios - Se muestra cuando hay departamento seleccionado -->
-            <div id="pnl_horarios_persona" style="display:none;">
-                <!-- Turnos disponibles -->
-                <div class="turnos-disponibles" id="pnl_turnos_disponibles" style="display:none;">
-                    <h6 class="mb-2">
-                        <i class="bx bx-time-five"></i> Turnos Configurados
-                    </h6>
-                    <div id="lista_turnos_badges"></div>
-                </div>
-
-                <!-- Calendario -->
-                <div id="calendar_persona"></div>
+        <!-- Información del horario -->
+        <div class="info-card">
+            <h5 class="mb-3">
+                <i class="bx bx-info-circle"></i> Información del Horario
+            </h5>
+            <div id="info_horario_nombre" class="mb-2">
+                <strong>Horario:</strong> <span class="horario-badge bg-primary text-white">No seleccionado</span>
             </div>
-
-            <!-- Hidden input para ID -->
-            <input id="id_perdep" type="hidden" value="" />
-</div>
-
-<div class="modal fade" id="modal_programar_horarios" tabindex="-1" aria-labelledby="modal_programar_horarios_label" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal_programar_horarios_label">Programar Horario - Personas</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            <div id="info_horario_tipo" class="text-muted">
+                <i class="bx bx-tag"></i> Tipo: <span>-</span>
             </div>
-            <div class="modal-body">
-                <form id="form_programar_horarios">
+        </div>
 
-                    <div class="mb-col">
-                        <label class="form-label" for="lbl_programar">Programar Horario </label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="cbx_programar" id="cbx_programar_persona" checked>
-                            <label class="form-check-label" for="cbx_programar_persona">Personas</label>
-                        </div>
-                        <label class="error" style="display: none;" for="cbx_programar"></label>
-                    </div>
+        <!-- Turnos por día -->
+        <div class="info-card">
+            <h5 class="mb-4">
+                <i class="bx bx-calendar-week"></i> Distribución Semanal de Turnos
+            </h5>
+            <div id="lista_turnos_por_dia">
+                <!-- Aquí se cargarán los turnos -->
+            </div>
+        </div>
 
-                    <div class="row pt-3 mb-col" id="pnl_personas">
-                        <div class="col-md-8">
-                            <label for="ddl_personas" class="form-label">Personas </label>
-                            <select class="form-select form-select-sm select2-validation" id="ddl_personas" name="ddl_personas">
-                                <option selected disabled>-- Seleccione --</option>
-                            </select>
-                            <label class="error" style="display: none;" for="ddl_personas"></label>
-                        </div>
-                    </div>
-
-                    <!-- Asignar Horario -->
-                    <div class="mb-col pt-3">
-                        <label class="form-label" for="lbl_asignar_horario">Asignar Horario </label>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="cbx_horario" id="cbx_horario_con" value="1">
-                            <label class="form-check-label" for="cbx_horario_con">Con Horario </label>
-                        </div>
-
-                        <div id="pnl_horarios" style="display: none;">
-                            <div class="row mb-col">
-                                <div class="col-md-8">
-                                    <label for="ddl_horarios" class="form-label">Horarios </label>
-                                    <select class="form-select form-select-sm select2-validation" id="ddl_horarios" name="ddl_horarios">
-                                        <option selected disabled>-- Seleccione --</option>
-                                    </select>
-                                    <label class="error" style="display: none;" for="ddl_horarios"></label>
-                                </div>
-                            </div>
-
-                            <div class="form-check ms-4">
-                                <input class="form-check-input" type="radio" name="cbx_horario_detalle" id="cbx_horario_detalle_1" value="1">
-                                <label class="form-check-label" for="cbx_horario_detalle_1">Tomar en cuenta los intervalos </label>
-                            </div>
-                            <div class="form-check ms-4">
-                                <input class="form-check-input" type="radio" name="cbx_horario_detalle" id="cbx_horario_detalle_2" value="2">
-                                <label class="form-check-label" for="cbx_horario_detalle_2">Sin tomar en cuenta los intervalos </label>
-                            </div>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="cbx_horario" id="cbx_horario_sin" value="2">
-                            <label class="form-check-label" for="cbx_horario_sin">Sin Horario</label>
-                        </div>
-                        <label class="error" style="display: none;" for="cbx_horario"></label>
-
-                    </div>
-
-                    <div class="row pt-3 mb-col">
-                        <label class="form-label" for="lbl_programar">Fechas del periodo</label>
-                        <div class="col-md-4">
-                            <label for="txt_fecha_inicio" class="form-label">Fecha Inicial </label>
-                            <input type="date" class="form-control form-control-sm" id="txt_fecha_inicio" name="txt_fecha_inicio" maxlength="50">
-                        </div>
-
-                        <div class="col-md-4">
-                            <label for="txt_fecha_fin" class="form-label">Fecha Final </label>
-                            <input type="date" class="form-control form-control-sm" id="txt_fecha_fin" name="txt_fecha_fin" maxlength="50">
-                        </div>
-                    </div>
-
-                    <div class="d-flex justify-content-end pt-2">
-                        <button class="btn btn-success btn-sm px-4 m-0" id="btn_guardar_programacion" type="button"><i class="bx bx-save"></i> Guardar</button>
-                    </div>
-
-                </form>
+        <!-- Leyenda de turnos únicos -->
+        <div class="info-card">
+            <h5 class="mb-3">
+                <i class="bx bx-palette"></i> Leyenda de Turnos
+            </h5>
+            <div id="leyenda_turnos">
+                <!-- Aquí se cargarán los turnos únicos con sus colores -->
             </div>
         </div>
     </div>
+
+    <input id="id_perdep" type="hidden" value="" />
 </div>
 
-<!-- JS requerido -->
-<script src="../assets/plugins/fullcalendar/js/main.min.js"></script>
 <script src="../assets/plugins/notifications/js/lobibox.min.js"></script>
 
 <script>
-    // Variable global para el calendario
-    var calendar_persona;
-    var calendario_inicializado = false;
+// Mapeo de días
+const DIAS_SEMANA = {
+    '1': 'Domingo',
+    '2': 'Lunes',
+    '3': 'Martes',
+    '4': 'Miércoles',
+    '5': 'Jueves',
+    '6': 'Viernes',
+    '7': 'Sábado'
+};
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const calendarEl = document.getElementById('calendar_persona');
-
-        // Inicializar calendario con FullCalendar
-        calendar_persona = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'timeGridWeek',
-            initialDate: '2024-02-15', // Semana base para mostrar los turnos semanales
-            locale: 'es',
-            height: 'auto',
-            contentHeight: 'auto',
-            slotMinTime: '00:00:00',
-            slotMaxTime: '24:00:00',
-            slotDuration: '02:00:00',
-            allDaySlot: false,
-            editable: false, // Solo visualización
-            droppable: false,
-            nowIndicator: false, // No mostrar indicador de hora actual
-            headerToolbar: false, // Sin navegación de fechas (es vista semanal fija)
-
-            eventTimeFormat: {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false
-            },
-
-            dayHeaderFormat: {
-                weekday: 'long'
-            },
-
-            slotLabelFormat: {
-                hour: 'numeric',
-                minute: '2-digit',
-                omitZeroMinute: false,
-                hour12: false
-            },
-
-            // Aplicar clases especiales a fin de semana
-            dayCellClassNames: function(arg) {
-                if (arg.date.getDay() === 0 || arg.date.getDay() === 6) {
-                    return ['fc-day-weekend'];
-                }
-                return [];
-            },
-
-            // Personalizar renderizado de eventos
-            eventDidMount: function(info) {
-                const event = info.event;
-
-                // Agregar tooltip con información adicional
-                $(info.el).tooltip({
-                    title: `${event.title}\n${event.extendedProps.hora_inicio} - ${event.extendedProps.hora_fin}`,
-                    placement: 'top',
-                    trigger: 'hover'
-                });
-            },
-
-            eventContent: function(arg) {
-                const hora_inicio = arg.event.extendedProps.hora_inicio || '';
-                const hora_fin = arg.event.extendedProps.hora_fin || '';
-
-                return {
-                    html: `
-                        <div style="padding: 4px;">
-                            <div class="fc-event-time" style="font-size: 0.7rem; opacity: 0.9;">
-                                ${hora_inicio} - ${hora_fin}
-                            </div>
-                            <div class="fc-event-title" style="font-size: 0.85rem; font-weight: 700; margin-top: 2px;">
-                                ${arg.event.title}
-                            </div>
-                        </div>
-                    `
-                };
-            },
-
-            // Click en evento (opcional - solo para mostrar info)
-            eventClick: function(info) {
-                const event = info.event;
-                Swal.fire({
-                    title: event.title,
-                    html: `
-                        <div class="text-start">
-                            <p><strong>Horario:</strong> ${event.extendedProps.hora_inicio} - ${event.extendedProps.hora_fin}</p>
-                            <p><strong>Día:</strong> ${obtenerNombreDia(event.extendedProps.dia)}</p>
-                        </div>
-                    `,
-                    icon: 'info',
-                    confirmButtonText: 'Cerrar'
-                });
-            }
-        });
-
-        // NO renderizar aquí, esperar a que el tab sea visible
-    });
-
-    // CRÍTICO: Detectar cuando el tab se hace visible y entonces renderizar el calendario
-    // Esto debe agregarse en el archivo PADRE que contiene los tabs
-    $(document).on('shown.bs.tab', 'a[data-bs-toggle="tab"]', function (e) {
-        var target = $(e.target).attr("href");
-        
-        // Si el tab activo es el de departamento Y el calendario no se ha inicializado
-        if (target === '#tab_departamento' && !calendario_inicializado) {
-            setTimeout(function() {
-                if (calendar_persona) {
-                    calendar_persona.render();
-                    calendar_persona.updateSize();
-                    calendario_inicializado = true;
-                }
-            }, 100);
-        }
-        
-        // Si ya está inicializado, solo actualizar tamaño
-        if (target === '#tab_departamento' && calendario_inicializado) {
-            setTimeout(function() {
-                if (calendar_persona) {
-                    calendar_persona.updateSize();
-                }
-            }, 50);
-        }
-    });
-
-    // Función para cargar horario de la persona desde el documento principal
-   function cargar_persona_horario(id_persona) {
+function cargar_persona_horario(id_persona) {
     $.ajax({
-        data: { id: id_persona },
+        data: {
+            id: id_persona
+        },
         url: '../controlador/TALENTO_HUMANO/th_programar_horariosC.php?listar_persona_horario=true',
         type: 'post',
         dataType: 'json',
@@ -412,11 +256,9 @@
             ddlTipo.empty().append('<option value="">-- Seleccione Horario --</option>');
 
             if (response && response.length > 0) {
-                // Mostrar el select de tipo de horario si hay más de uno
                 if (response.length > 1) {
                     ddlTipo.prop('disabled', false);
 
-                    // Llenar las opciones según la fuente
                     response.forEach(item => {
                         let texto = '';
                         if (item.fuente === 'departamento') {
@@ -435,7 +277,6 @@
                         );
                     });
 
-                    // Cuando el usuario selecciona un tipo de horario
                     ddlTipo.off('change').on('change', function() {
                         const idHorario = $(this).val();
                         if (idHorario) {
@@ -443,12 +284,9 @@
                         }
                     });
 
-                    // (opcional) Selecciona el primero por defecto
                     const idHorarioInicial = response[0].id_horario;
                     ddlTipo.val(idHorarioInicial).trigger('change');
-                } 
-                else {
-                    // Solo hay un horario
+                } else {
                     ddlTipo.prop('disabled', true);
                     ddlTipo.append(
                         $('<option>', {
@@ -461,7 +299,6 @@
                     cargar_turnos_horario(response[0].id_horario);
                 }
             } else {
-                // No hay horarios disponibles
                 ddlTipo.prop('disabled', true);
                 ddlTipo.append('<option value="">-- Sin horarios --</option>');
             }
@@ -472,161 +309,143 @@
     });
 }
 
+function cargar_turnos_horario(id_horario) {
+    $.ajax({
+        url: '../controlador/TALENTO_HUMANO/th_turnos_horarioC.php?listar=true',
+        type: 'post',
+        data: {
+            id: id_horario
+        },
+        dataType: 'json',
+        success: function(response) {
+            console.log('Turnos recibidos:', response);
 
-    // Función para cargar los turnos del horario
-    function cargar_turnos_horario(id_horario) {
-        $.ajax({
-            url: '../controlador/TALENTO_HUMANO/th_turnos_horarioC.php?listar=true',
-            type: 'post',
-            data: {
-                id: id_horario
-            },
-            dataType: 'json',
-            success: function(response) {
-                console.log('Turnos recibidos:', response);
+            if (!response || response.length === 0) {
+                Swal.fire('', 'No hay turnos configurados para este horario', 'info');
+                $('#pnl_horarios_persona').hide();
+                $('#estado_vacio').show();
+                return;
+            }
 
-                // Limpiar eventos anteriores
-                calendar_persona.removeAllEvents();
+            $('#estado_vacio').hide();
+            $('#pnl_horarios_persona').show();
 
-                // Limpiar badges de turnos
-                $('#lista_turnos_badges').empty();
+            // Agrupar por día
+            const turnosPorDia = {};
+            const turnosUnicos = {};
+            let totalHoras = 0;
 
-                if (!response || response.length === 0) {
-                    Swal.fire('', 'No hay turnos configurados para este horario', 'info');
-                    $('#pnl_horarios_persona').hide();
-                    return;
+            response.forEach(function(turno) {
+                const dia = turno.dia;
+                if (!turnosPorDia[dia]) {
+                    turnosPorDia[dia] = [];
+                }
+                turnosPorDia[dia].push(turno);
+
+                // Turnos únicos para la leyenda
+                if (!turnosUnicos[turno.id_turno]) {
+                    turnosUnicos[turno.id_turno] = {
+                        nombre: turno.nombre,
+                        color: turno.color || '#2196F3',
+                        hora_entrada: turno.hora_entrada,
+                        hora_salida: turno.hora_salida
+                    };
                 }
 
-                // Mostrar el panel de horarios
-                $('#pnl_horarios_persona').show();
-                $('#pnl_turnos_disponibles').show();
+                // Calcular horas
+                let horas = (turno.hora_salida - turno.hora_entrada) / 60;
+                if (horas < 0) horas += 24;
+                totalHoras += horas;
+            });
 
-                // Objeto para agrupar turnos únicos (para los badges)
-                const turnosUnicos = {};
+            // Actualizar resumen
+            $('#total_turnos').text(Object.keys(turnosUnicos).length);
+            $('#total_dias').text(Object.keys(turnosPorDia).length);
+            $('#total_horas').text(totalHoras.toFixed(1));
 
-                // Recorrer la respuesta y agregar eventos al calendario
-                response.forEach(function(evento) {
-                    // Mapear día numérico a fecha fija de la semana
-                    let fecha_dia_estatico;
+            // Actualizar info del horario
+            $('#info_horario_nombre span').text($('#ddl_tipo_horario option:selected').text());
+            $('#info_horario_tipo span').text('Departamento');
 
-                    switch (evento.dia) {
-                        case '1':
-                            fecha_dia_estatico = '2024-02-11';
-                            break; // Domingo
-                        case '2':
-                            fecha_dia_estatico = '2024-02-12';
-                            break; // Lunes
-                        case '3':
-                            fecha_dia_estatico = '2024-02-13';
-                            break; // Martes
-                        case '4':
-                            fecha_dia_estatico = '2024-02-14';
-                            break; // Miércoles
-                        case '5':
-                            fecha_dia_estatico = '2024-02-15';
-                            break; // Jueves
-                        case '6':
-                            fecha_dia_estatico = '2024-02-16';
-                            break; // Viernes
-                        case '7':
-                            fecha_dia_estatico = '2024-02-17';
-                            break; // Sábado
-                        default:
-                            fecha_dia_estatico = '2024-02-15';
-                    }
+            // Renderizar turnos por día
+            let htmlTurnos = '';
+            const diasOrdenados = Object.keys(turnosPorDia).sort();
 
-                    const hora_inicio_str = minutos_formato_hora(evento.hora_entrada);
-                    const hora_fin_str = minutos_formato_hora(evento.hora_salida);
+            diasOrdenados.forEach(function(dia) {
+                const turnos = turnosPorDia[dia];
 
-                    // Agregar evento al calendario
-                    calendar_persona.addEvent({
-                        title: evento.nombre,
-                        start: fecha_dia_estatico + 'T' + hora_inicio_str,
-                        end: fecha_dia_estatico + 'T' + hora_fin_str,
-                        backgroundColor: evento.color || '#2196F3',
-                        borderColor: evento.color || '#2196F3',
-                        extendedProps: {
-                            id_turno_horario: evento._id,
-                            id_turno: evento.id_turno,
-                            dia: evento.dia,
-                            hora_inicio: hora_inicio_str,
-                            hora_fin: hora_fin_str
-                        }
-                    });
+                htmlTurnos += `
+                        <div class="mb-3">
+                            <h6 class="text-primary mb-2">
+                                <i class="bx bx-calendar"></i> ${DIAS_SEMANA[dia]}
+                            </h6>
+                    `;
 
-                    // Agregar a turnos únicos para los badges
-                    if (!turnosUnicos[evento.id_turno]) {
-                        turnosUnicos[evento.id_turno] = {
-                            nombre: evento.nombre,
-                            hora_entrada: hora_inicio_str,
-                            hora_salida: hora_fin_str,
-                            color: evento.color || '#2196F3'
-                        };
-                    }
+                turnos.forEach(function(turno) {
+                    const horaInicio = minutos_formato_hora(turno.hora_entrada);
+                    const horaFin = minutos_formato_hora(turno.hora_salida);
+
+                    htmlTurnos += `
+                            <div class="turno-card" style="border-left-color: ${turno.color || '#2196F3'};">
+                                <div class="turno-header">
+                                    <span class="color-indicator" style="background-color: ${turno.color || '#2196F3'};"></span>
+                                    <span class="turno-nombre">${turno.nombre}</span>
+                                </div>
+                                <div class="turno-horario">
+                                    <i class="bx bx-time"></i>
+                                    <span>${horaInicio} - ${horaFin}</span>
+                                </div>
+                            </div>
+                        `;
                 });
 
-                // Crear badges de turnos únicos
-                let badgesHTML = '';
-                Object.values(turnosUnicos).forEach(function(turno) {
-                    badgesHTML += `
-                        <div class="turno-badge" style="background-color: ${turno.color};">
-                            <span class="turno-nombre">${turno.nombre}</span>
-                            <span class="turno-horario">${turno.hora_entrada} - ${turno.hora_salida}</span>
+                htmlTurnos += '</div>';
+            });
+
+            $('#lista_turnos_por_dia').html(htmlTurnos);
+
+            // Renderizar leyenda
+            let htmlLeyenda = '<div class="row g-3">';
+            Object.values(turnosUnicos).forEach(function(turno) {
+                const horaInicio = minutos_formato_hora(turno.hora_entrada);
+                const horaFin = minutos_formato_hora(turno.hora_salida);
+
+                htmlLeyenda += `
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <span class="color-indicator" style="background-color: ${turno.color};"></span>
+                                <div>
+                                    <strong>${turno.nombre}</strong><br>
+                                    <small class="text-muted">${horaInicio} - ${horaFin}</small>
+                                </div>
+                            </div>
                         </div>
                     `;
-                });
-                $('#lista_turnos_badges').html(badgesHTML);
+            });
+            htmlLeyenda += '</div>';
 
-                // Si el calendario no está inicializado, renderizarlo
-                if (!calendario_inicializado) {
-                    setTimeout(function() {
-                        calendar_persona.render();
-                        calendario_inicializado = true;
-                        calendar_persona.updateSize();
-                    }, 200);
-                } else {
-                    // Si ya está inicializado, solo actualizar
-                    setTimeout(function() {
-                        calendar_persona.updateSize();
-                    }, 100);
-                }
+            $('#leyenda_turnos').html(htmlLeyenda);
 
-                // Notificación de éxito
-                Lobibox.notify('success', {
-                    size: 'mini',
-                    rounded: true,
-                    delayIndicator: false,
-                    sound: false,
-                    position: 'top right',
-                    msg: 'Horarios cargados correctamente'
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error('Error al cargar turnos:', error);
-                Swal.fire('', 'Error al cargar los turnos del horario', 'error');
-            }
-        });
-    }
+            // Notificación de éxito
+            Lobibox.notify('success', {
+                size: 'mini',
+                rounded: true,
+                delayIndicator: false,
+                sound: false,
+                position: 'top right',
+                msg: 'Horarios cargados correctamente'
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al cargar turnos:', error);
+            Swal.fire('', 'Error al cargar los turnos del horario', 'error');
+        }
+    });
+}
 
-    // Función auxiliar para obtener nombre del día
-    function obtenerNombreDia(numeroDia) {
-        const dias = {
-            '1': 'Domingo',
-            '2': 'Lunes',
-            '3': 'Martes',
-            '4': 'Miércoles',
-            '5': 'Jueves',
-            '6': 'Viernes',
-            '7': 'Sábado'
-        };
-        return dias[numeroDia] || 'Desconocido';
-    }
-
-    // Esta función debe estar disponible desde tu archivo de funciones generales
-    // Si no existe, aquí está la implementación
-    function minutos_formato_hora(minutos) {
-        const horas = Math.floor(minutos / 60);
-        const mins = minutos % 60;
-        return horas.toString().padStart(2, '0') + ':' + mins.toString().padStart(2, '0') + ':00';
-    }
+function minutos_formato_hora(minutos) {
+    const horas = Math.floor(minutos / 60);
+    const mins = minutos % 60;
+    return horas.toString().padStart(2, '0') + ':' + mins.toString().padStart(2, '0') + ':00';
+}
 </script>

@@ -10,7 +10,6 @@ if (isset($_GET['_id'])) {
 
 ?>
 
-<script src="../js/ACTIVOS_FIJOS/avaluos.js"></script>
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
@@ -31,42 +30,8 @@ $(document).ready(function() {
         columns: [{
                 data: null,
                 render: function(data, type, item) {
-                    // enlace al módulo de requisitos
-                    const href =
-                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_requisitos_plaza&_id=${item._id}`;
-
-                    // botón único
-                    const btn = `
-                            <a href="${href}" class="btn btn-xs btn-primary" title="Ver Requerimientos">
-                                <i class="bx bx-list-check fs-6 me-0"></i>
-                            </a>
-                        `;
-
-                    return btn;
-                }
-            },
-            {
-                data: null,
-                render: function(data, type, item) {
-                    // enlace al módulo de requisitos
-                    const href =
-                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_postulados&_id=${item._id}`;
-
-                    // botón único
-                    const btn = `
-                            <a href="${href}" class="btn btn-xs btn-primary" title="Ver Postulaciones">
-                               <i class="bx bx-briefcase fs-6 me-0" aria-hidden="true" title="Postulaciones"></i>
-                            </a>
-                        `;
-
-                    return btn;
-                }
-            },
-            {
-                data: null,
-                render: function(data, type, item) {
                     href =
-                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_plaza&_id=${item._id}`;
+                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_plaza&_id=${item._id}`;
                     return `<a href="${href}"><u>${item.th_pla_titulo}</u></a>`;
                 }
             },
@@ -126,9 +91,9 @@ $(document).ready(function() {
                             <div class="row mx-0">
 
                                 <div class="" id="btn_nuevo">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_plaza"
+                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_proceso_contratacion"
                                         type="button" class="btn btn-success btn-sm ">
-                                        <i class="bx bx-plus me-0 pb-1"></i> Nuevo
+                                        <i class="bx bx-plus me-0 pb-1"></i> Proceso Contratación
                                     </a>
                                 </div>
                             </div>
@@ -141,8 +106,6 @@ $(document).ready(function() {
                                     <table class="table table-striped responsive " id="tbl_plazas" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>Requisitos</th>
-                                                <th>Postulaciones</th>
                                                 <th>Titulo</th>
                                                 <th>Descripción</th>
                                                 <th>tipo</th>
@@ -161,49 +124,5 @@ $(document).ready(function() {
             </div>
         </div>
         <!--end row-->
-    </div>
-</div>
-
-
-<div class="modal" id="modal_blank" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static"
-    data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-
-                <div class="row">
-                    <div class="col-12">
-                        <label for="">Tipo de <label class="text-danger">*</label></label>
-                        <select name="" id="" class="form-select form-select-sm" onchange="">
-                            <option value="">Seleccione el </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row pt-3">
-                    <div class="col-12">
-                        <label for="">Blank <label class="text-danger">*</label></label>
-                        <select name="" id="" class="form-select form-select-sm">
-                            <option value="">Seleccione el </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row pt-3">
-                    <div class="col-12 text-end">
-                        <button type="button" class="btn btn-success btn-sm" onclick=""><i class="bx bx-save"></i>
-                            Agregar</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
     </div>
 </div>

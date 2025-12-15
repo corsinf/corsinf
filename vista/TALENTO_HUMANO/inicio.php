@@ -205,8 +205,17 @@ if ($_GET['acc'] == 'th_contr_plazas') {
 	include('TALENTO_HUMANO/CONTRATACION/PLAZAS/th_contr_plazas.php');
 }
 
+
 if ($_GET['acc'] == 'th_registro_plaza') {
 	include('TALENTO_HUMANO/CONTRATACION/PLAZAS/th_registro_plaza.php');
+}
+
+if ($_GET['acc'] == 'th_informacion_plaza') {
+	include('TALENTO_HUMANO/CONTRATACION/PLAZAS/th_informacion_plaza.php');
+}
+
+if ($_GET['acc'] == 'th_contr_plaza_etapas') {
+	include('TALENTO_HUMANO/CONTRATACION/PLAZAS/th_contr_plaza_etapas.php');
 }
 
 
@@ -246,11 +255,16 @@ if ($_GET['acc'] == 'th_registro_postulaciones') {
 
 
 
+if ($_GET['acc'] == 'th_contr_requisitos_plaza') {
+	include('TALENTO_HUMANO/CONTRATACION/REQUISITOS/th_contr_requisitos_plaza.php');
+}
+
 if ($_GET['acc'] == 'th_contr_requisitos') {
 	include('TALENTO_HUMANO/CONTRATACION/REQUISITOS/th_contr_requisitos.php');
 }
-if ($_GET['acc'] == 'th_contr_requisitos_plaza') {
-	include('TALENTO_HUMANO/CONTRATACION/REQUISITOS/th_contr_requisitos_plaza.php');
+
+if ($_GET['acc'] == 'th_registro_requisito') {
+	include('TALENTO_HUMANO/CONTRATACION/REQUISITOS/th_registro_requisito.php');
 }
 
 
@@ -271,4 +285,54 @@ if ($_GET['acc'] == 'th_organizar_etapas_proceso') {
 
 if ($_GET['acc'] == 'th_contr_seguimiento_postulante') {
 	include('TALENTO_HUMANO/CONTRATACION/SEGUIMIENTO_POSTULANTE/th_contr_seguimiento_postulante.php');
+}
+if ($_GET['acc'] == 'th_registrar_seguimiento_postulante') {
+	include('TALENTO_HUMANO/CONTRATACION/SEGUIMIENTO_POSTULANTE/th_registrar_seguimiento_postulante.php');
+}
+
+if ($_GET['acc'] == 'th_contr_proceso_contratacion') {
+	include('TALENTO_HUMANO/CONTRATACION/PROCESO_CONTRATACION/th_contr_proceso_contratacion.php');
+}
+
+
+
+if ($_GET['acc'] == 'th_contr_cargo_requisitos') {
+	include('TALENTO_HUMANO/CONTRATACION/CARGO_REQUISITOS/th_contr_cargo_requisitos.php');
+}
+if ($_GET['acc'] == 'th_registrar_cargo_requisitos') {
+	include('TALENTO_HUMANO/CONTRATACION/CARGO_REQUISITOS/th_registrar_cargo_requisitos.php');
+}
+
+
+if ($_GET['acc'] == 'th_contr_requisitos_detalles') {
+	include('TALENTO_HUMANO/CONTRATACION/REQUISITOS_DETALLE/th_contr_requisitos_detalles.php');
+}
+if ($_GET['acc'] == 'th_registrar_requisitos_detalles') {
+	include('TALENTO_HUMANO/CONTRATACION/REQUISITOS_DETALLE/th_registrar_requisitos_detalles.php');
+}
+
+
+if ($_GET['acc'] == 'th_contr_niveles_cargo') {
+	include('TALENTO_HUMANO/CONTRATACION/CARGO_NIVELES/th_contr_niveles_cargo.php');
+}
+
+if ($_GET['acc'] == 'th_registrar_niveles_cargo') {
+	include('TALENTO_HUMANO/CONTRATACION/CARGO_NIVELES/th_registrar_niveles_cargo.php');
+}
+
+
+if ($_GET['acc'] == 'th_servicio_catering') {
+	include('TALENTO_HUMANO/CONTRATACION/CATERING/th_servicio_catering.php');
+}
+
+
+//competencias 
+
+
+if ($_GET['acc'] == 'th_contr_competencias') {
+	include('TALENTO_HUMANO/CONTRATACION/COMPETENCIAS/th_contr_competencias.php');
+}
+
+if ($_GET['acc'] == 'th_registrar_competencia') {
+	include('TALENTO_HUMANO/CONTRATACION/COMPETENCIAS/th_registrar_competencia.php');
 }

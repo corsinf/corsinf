@@ -99,10 +99,10 @@ class th_programar_horariosC
     function eliminar($id)
     {
         $datos = array(
-            array('campo' => 'th_dep_estado', 'dato' => 0),
+            array('campo' => 'th_pro_estado', 'dato' => 0),
         );
 
-        $where[0]['campo'] = 'th_dep_id';
+        $where[0]['campo'] = 'th_pro_id';
         $where[0]['dato'] = $id;
 
         $datos = $this->modelo->editar($datos, $where);

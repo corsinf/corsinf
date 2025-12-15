@@ -7,8 +7,6 @@ if (isset($_GET['_id'])) {
 }
 
 ?>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
@@ -379,11 +377,7 @@ function cargar_requisito(id) {
 
                         <hr>
                         <!-- Si viene plaza por defecto, mostrar título readonly -->
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Plaza asociada</label>
-                            <input type="text" id="txt_th_pla_titulo" class="form-control" readonly value=""
-                                placeholder="Plaza asociada..." />
-                        </div>
+
 
                         <section class="content pt-2">
                             <div class="container-fluid">
@@ -434,8 +428,6 @@ function cargar_requisito(id) {
                 <form id="form_requisito">
 
                     <input type="hidden" id="txt_th_req_id" name="txt_th_req_id" value="" />
-                    <input type="hidden" id="txt_th_pla_id" name="txt_th_pla_id" value="" />
-
                     <!-- Sección: Tipo de Requisito -->
                     <div class="mb-4">
                         <label for="ddl_th_req_tipo" class="form-label fw-bold">
@@ -520,55 +512,3 @@ function cargar_requisito(id) {
         </div>
     </div>
 </div>
-<script>
-// Solución para el error de aria-hidden con Bootstrap modals
-$(document).ready(function() {
-
-    // ... tu código existente ...
-
-    // 🔧 FIX: Solución para el error aria-hidden
-    $('#modal_requisitos').on('show.bs.modal', function() {
-        // Remover aria-hidden del wrapper antes de abrir el modal
-        $('.wrapper').removeAttr('aria-hidden');
-    });
-
-    $('#modal_requisitos').on('shown.bs.modal', function() {
-        // Después de mostrar el modal, enfocar el primer campo
-        setTimeout(function() {
-            $('#ddl_th_req_tipo').focus();
-        }, 100);
-    });
-
-    $('#modal_requisitos').on('hidden.bs.modal', function() {
-        // Limpiar el formulario al cerrar
-        $('#form_requisito')[0].reset();
-        $('#txt_th_req_id').val('');
-        $('#ddl_th_req_tipo').val('').trigger('change');
-    });
-
-    // Prevenir que el wrapper obtenga aria-hidden
-    const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.type === 'attributes' && mutation.attributeName === 'aria-hidden') {
-                const wrapper = document.querySelector('.wrapper');
-                if (wrapper && wrapper.getAttribute('aria-hidden') === 'true') {
-                    // Si hay un modal abierto, remover aria-hidden del wrapper
-                    if (document.querySelector('.modal.show')) {
-                        wrapper.removeAttribute('aria-hidden');
-                    }
-                }
-            }
-        });
-    });
-
-    // Observar cambios en el wrapper
-    const wrapper = document.querySelector('.wrapper');
-    if (wrapper) {
-        observer.observe(wrapper, {
-            attributes: true,
-            attributeFilter: ['aria-hidden']
-        });
-    }
-
-}); // Fin document.ready
-</script>

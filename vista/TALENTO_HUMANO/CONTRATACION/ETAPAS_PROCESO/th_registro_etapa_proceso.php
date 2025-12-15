@@ -17,16 +17,7 @@ $(document).ready(function() {
     cargar_etapa(<?= $_id ?>);
     <?php } ?>
 
-    // Inicializar y cargar selects (plaza y cargo)
-    cargar_selects2();
 
-    function cargar_selects2() {
-        // Ajusta estas URLs si tus controladores difieren
-        var url_plazas = '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_plazasC.php?buscar_todas=true';
-
-        // helper que ya usas en el proyecto: cargar_select2_url(nombre_select, url)
-        cargar_select2_url('ddl_plaza', url_plazas);
-    }
 
     // Añadir asterisco a campos obligatorios
     agregar_asterisco_campo_obligatorio('txt_th_etapa_nombre');
@@ -97,13 +88,9 @@ function cargar_etapa(id) {
             var r = response[0];
 
             $('#txt_th_etapa_id').val(r._id);
-            $('#ddl_plaza').append($('<option>', {
-                value: r.plaza_id,
-                text: r.plaza_titulo,
-                selected: true
-            }));
+
             $('#txt_th_etapa_nombre').val(r.nombre || '');
-            $('#txt_th_etapa_tipo').val(r.tipo || '');
+            $('#ddl_etapa_tipo').val(r.tipo || '');
             $('#txt_th_etapa_orden').val(r.orden !== null ? r.orden : '');
             $('#quick_th_etapa_obligatoria, #chk_th_etapa_obligatoria').prop('checked', boolVal(r
                 .obligatoria));
@@ -116,16 +103,13 @@ function cargar_etapa(id) {
     });
 }
 
-
-
 // Guardar / actualizar (decide según si existe id)
 function editar_insertar_etapa() {
     var txt_th_etapa_id = $('#txt_th_etapa_id').val(); // hidden id
     var parametros = {
         '_id': txt_th_etapa_id,
-        'ddl_plaza': $('#ddl_plaza').val(),
         'txt_th_etapa_nombre': $('#txt_th_etapa_nombre').val().trim(),
-        'txt_th_etapa_tipo': $('#txt_th_etapa_tipo').val().trim(),
+        'ddl_etapa_tipo': $('#ddl_etapa_tipo').val().trim(),
         'txt_th_etapa_orden': $('#txt_th_etapa_orden').val().trim(),
         'chk_th_etapa_obligatoria': $('#chk_th_etapa_obligatoria').is(':checked') ? 1 : 0,
         'txt_th_etapa_descripcion': $('#txt_th_etapa_descripcion').val().trim()
@@ -341,14 +325,6 @@ $(document).ready(function() {
                                 </div>
                                 <div class="card-body">
                                     <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label for="ddl_plaza" class="form-label fw-bold">
-                                                <i class="bx bx-briefcase me-2 text-primary"></i> Plaza (opcional)
-                                            </label>
-                                            <select id="ddl_plaza" name="ddl_plaza" class="form-select">
-                                                <option value="">-- Seleccione plaza (opcional) --</option>
-                                            </select>
-                                        </div>
 
                                         <div class="col-md-6">
                                             <label for="txt_th_etapa_nombre" class="form-label fw-bold">
@@ -360,12 +336,51 @@ $(document).ready(function() {
                                                 autocomplete="off" required />
                                         </div>
 
-                                        <div class="col-md-4">
-                                            <label for="txt_th_etapa_tipo" class="form-label fw-bold">
+                                        <div class="col-md-6">
+                                            <label for="ddl_etapa_tipo" class="form-label fw-bold">
                                                 <i class="bx bx-tag me-2 text-info"></i> Tipo
                                             </label>
-                                            <input type="text" class="form-control" id="txt_th_etapa_tipo"
-                                                name="txt_th_etapa_tipo" placeholder="Ej: Evaluación, Entrevista" />
+                                            <select id="ddl_etapa_tipo" name="ddl_etapa_tipo" class="form-select">
+                                                <option value="">-- Seleccione --</option>
+
+                                                <!-- Etapas iniciales -->
+                                                <option value="revision_cv">Revisión de CV</option>
+                                                <option value="preseleccion">Preselección</option>
+                                                <option value="filtro_telefonico">Filtro Telefónico</option>
+
+                                                <!-- Evaluaciones -->
+                                                <option value="evaluacion">Evaluación</option>
+                                                <option value="prueba_tecnica">Prueba Técnica</option>
+                                                <option value="prueba_practica">Prueba Práctica</option>
+                                                <option value="prueba_psicometrica">Prueba Psicométrica</option>
+                                                <option value="prueba_conocimientos">Prueba de Conocimientos</option>
+                                                <option value="test_personalidad">Test de Personalidad</option>
+                                                <option value="test_habilidades_blandas">Test de Habilidades Blandas
+                                                </option>
+
+                                                <!-- Entrevistas -->
+                                                <option value="entrevista">Entrevista</option>
+                                                <option value="entrevista_tecnica">Entrevista Técnica</option>
+                                                <option value="entrevista_competencias">Entrevista de Competencias
+                                                </option>
+                                                <option value="entrevista_final">Entrevista Final</option>
+
+                                                <!-- Validaciones -->
+                                                <option value="validacion_documental">Validación Documental</option>
+                                                <option value="validacion_requisitos">Validación de Requisitos</option>
+                                                <option value="validacion_experiencia">Validación de Experiencia
+                                                </option>
+                                                <option value="validacion_referencias">Validación de Referencias
+                                                </option>
+
+                                                <!-- Etapa final -->
+                                                <option value="seleccion_final">Selección Final</option>
+                                                <option value="oferta_laboral">Oferta Laboral</option>
+                                                <option value="contratacion">Contratación</option>
+
+                                                <!-- Otros -->
+                                                <option value="otra">Otra</option>
+                                            </select>
                                         </div>
 
                                         <div class="col-md-4">

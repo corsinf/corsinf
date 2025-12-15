@@ -1,7 +1,7 @@
 <script type="text/javascript">
-    $(document).ready(function() {
+$(document).ready(function() {
 
-    });
+});
 </script>
 
 <div class="page-wrapper">
@@ -38,7 +38,8 @@
                             <div class="row mx-0">
                                 <div class="col-sm-12" id="btn_nuevo">
 
-                                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal_blank"><i class="bx bx-plus"></i> Nuevo</button>
+                                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#modal_blank"><i class="bx bx-plus"></i> Nuevo</button>
 
                                 </div>
                             </div>
@@ -75,7 +76,8 @@
 </div>
 
 
-<div class="modal" id="modal_blank" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal" id="modal_blank" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static"
+    data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
@@ -107,7 +109,8 @@
 
                 <div class="row pt-3">
                     <div class="col-12 text-end">
-                        <button type="button" class="btn btn-success btn-sm" onclick=""><i class="bx bx-save"></i> Agregar</button>
+                        <button type="button" class="btn btn-success btn-sm" onclick=""><i class="bx bx-save"></i>
+                            Agregar</button>
                     </div>
                 </div>
 

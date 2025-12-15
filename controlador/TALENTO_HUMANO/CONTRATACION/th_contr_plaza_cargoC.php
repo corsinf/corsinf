@@ -83,28 +83,15 @@ class  th_contr_plaza_cargoC
 
             $datos[] = array('campo' => 'th_pc_fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
             $id = $this->modelo->insertar_id($datos);
-            return ($id) ? 1 : 0;
+            return ($id) ? $id : 0;
         } else {
             // Edición: obtener id desde txt_th_pc_id o _id
-            $id_edit = !empty($parametros['txt_th_pc_id']) ? $parametros['txt_th_pc_id'] : $parametros['_id'];
-
-            // opcional: si cambias plaza/cargo en edición, validar duplicado en otro id
-            $exists = $this->modelo
-                ->where('th_pla_id', $th_pla_id)
-                ->where('th_car_id', $th_car_id)
-                ->where('th_pc_estado', 1)
-                ->listar();
-
-            if (count($exists) > 0) {
-                // si el único existente es el mismo id que editas, está bien
-                $solo_este = (count($exists) == 1 && $exists[0]['th_pc_id'] == $id_edit);
-                if (!$solo_este) return -2;
-            }
+            $id_edit = $parametros['txt_th_pc_id'];
 
             $where[0]['campo'] = 'th_pc_id';
             $where[0]['dato']  = $id_edit;
-            $res = $this->modelo->editar($datos, $where);
-            return $res;
+            $this->modelo->editar($datos, $where);
+            return $parametros['txt_th_pc_id'];
         }
     }
 
