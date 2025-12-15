@@ -1221,6 +1221,10 @@ function para_ftp($nombre,$texto)
 		return $descifrado !== false ? $descifrado : false;
 	}
 
+	function generar_clave_digitos($digitos = 7) {
+    	return str_pad(random_int(0, pow(10, $digitos) - 1), $digitos, '0', STR_PAD_LEFT);
+	}
+
 	function datos_empresa_publica($id_empresa, $datos_sql_terceros = ''){
 		$sql_empresa = "SELECT
 			Id_empresa,

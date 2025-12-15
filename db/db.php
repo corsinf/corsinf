@@ -343,12 +343,12 @@ class db
 		}
 	}
 
-	function update($tabla, $datos, $where, $master = false)
+	function update($tabla, $datos, $where, $master = false, $sin_esquema = false)
 	{
 		// print_r($master);die();
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
-		if(!$master){ $tabla = $this->esquema_modulo($tabla,1);	}
+		if(!$master && !$sin_esquema){ $tabla = $this->esquema_modulo($tabla,1);}
 
 		$valores = '';
 		$campos = '';
@@ -370,19 +370,21 @@ class db
 
 		$sql = substr($sql, 0, -1);
 
-		$sql .= " WHERE ";
+		if (!empty($where)) {
+			$sql .= " WHERE ";
 
-		foreach ($where as $key => $value) {
-			array_push($datos_update, $value['dato']);
-			// if (is_numeric($value['dato'])) {
-				$sql .= $value['campo'] . '= ? '; // . $value['dato'];
-			// } else {
-			// 	$sql .= $value['campo'] . '="' . $value['dato'] . '"';
-			// 	//	$valores.='"'.$value['dato'].'",';
-			// }
-			$sql .= " AND ";
-		}
-		$sql = substr($sql, 0, -5);		
+			foreach ($where as $key => $value) {
+				array_push($datos_update, $value['dato']);
+				// if (is_numeric($value['dato'])) {
+					$sql .= $value['campo'] . '= ? '; // . $value['dato'];
+				// } else {
+				// 	$sql .= $value['campo'] . '="' . $value['dato'] . '"';
+				// 	//	$valores.='"'.$value['dato'].'",';
+				// }
+				$sql .= " AND ";
+			}
+			$sql = substr($sql, 0, -5);	
+		}	
 
 		// print_r($datos_update);die();
 		// print_r($sql);die();
@@ -436,13 +438,13 @@ class db
 		return $this->sql_string($sql);
 	}
 
-	function sql_string($sql, $master = false)
+	function sql_string($sql, $master = false, $sin_esquema = false)
 	{
 
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();		
-		if(!$master){ $sql = $this->esquema_modulo($sql);	}
 		// print_r($sql);
+		if(!$master && !$sin_esquema){ $sql = $this->esquema_modulo($sql);	}
 
 		try {
 			$stmt = $conn->prepare($sql);
@@ -1139,7 +1141,7 @@ class db
 			return $result;
 			
 		} catch (Exception $e) {
-			if($error){
+			if($e){
 				die("Error: " . $e->getMessage());
 			}else{
 				die(json_encode(["error" => "Error Consulte con: soporte@corsinf.com"]));
