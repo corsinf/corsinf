@@ -62,7 +62,7 @@ class th_log_dispositivosC
         $filtrado = array_filter($lista);
 
         // print_r($filtrado);die();
-        $this->modelo->insertar_logs($filtrado);
-        return $filtrado;
+        $resp = $this->modelo->insertar_logs($filtrado);
+        return array('respuesta'=>$resp,'cantidad'=>count($filtrado));
     }
 }

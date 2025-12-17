@@ -216,22 +216,29 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             dataType: 'json',
 
             success: function(response) {
+                if(response.respuesta==1)
+                {
+                    Swal.fire("Se Guardaron "+response.cantidad+" registros","","success")
+                }else
+                {
+                    Swal.fire("No se pudo guardar","","error"),
+                }
                 // console.log(response)
-                var tr = '';
-                response.forEach(function(item,i){
-                    $('#myModal_espera').modal('hide');
-                    var linea = JSON.parse(item);
-                    tr+=`<tr>
-                            <td>`+(i+1)+`</td>
-                            <td>`+linea[0].ip+`</td>
-                            <td>`+linea[0].Puerto+`</td>
-                            <td>`+linea[0]['Card Number']+`</td>
-                            <td>`+linea[0].fecha+`</td>
-                         </tr>`;
-                    // console.log(item);
-                    // console.log(linea);
-                    $('#tbl_marcaciones').html(tr);
-                })
+                // var tr = '';
+                // response.forEach(function(item,i){
+                //     $('#myModal_espera').modal('hide');
+                //     var linea = JSON.parse(item);
+                //     tr+=`<tr>
+                //             <td>`+(i+1)+`</td>
+                //             <td>`+linea[0].ip+`</td>
+                //             <td>`+linea[0].Puerto+`</td>
+                //             <td>`+linea[0]['Card Number']+`</td>
+                //             <td>`+linea[0].fecha+`</td>
+                //          </tr>`;
+                //     // console.log(item);
+                //     // console.log(linea);
+                //     $('#tbl_marcaciones').html(tr);
+                // })
             },
             
             error: function(xhr, status, error) {
