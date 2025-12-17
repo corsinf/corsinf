@@ -176,13 +176,13 @@ class db
 	    return $rsp;
 	}
 
-	function datos($sql, $master = false, $error = false)
+	function datos($sql, $master = false, $error = false, $sin_esquema = false)
 	{
 
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
 		$result = array();
-		if(!$master)
+		if(!$master && !$sin_esquema)
 		{
 			$sql = $this->esquema_modulo($sql);
 		}

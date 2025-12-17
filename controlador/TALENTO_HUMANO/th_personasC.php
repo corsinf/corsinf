@@ -242,7 +242,7 @@ class th_personasC
         $datos = $this->modelo->listar_personas_no_asignadas($id, $coincidencias);
         return $datos;
     }
-    
+
     function listar_personas_rol()
     {
         $id = $_SESSION['INICIO']['NO_CONCURENTE'];
@@ -275,14 +275,14 @@ class th_personasC
     function conectar_buscar_($parametros)
     {
         $lista = $this->hikcentralHttp->listadoPersonas();
-        print_r(json_encode($lista,true));die();
+        print_r(json_encode($lista, true));
+        die();
         $personas = $lista['ResponseStatus']['Data']['PersonList']['Person'];
         $listaPersonas = array();
         foreach ($personas as $key => $value) {
 
             // print_r($value);die();
-            if($value['CardList']!='')
-            {
+            if ($value['CardList'] != '') {
                 $value['BaseInfo']['Email'] = $this->hikcentralHttp->decrypt_data($value['BaseInfo']['Email']);
                 $value['BaseInfo']['FamilyName'] = $this->hikcentralHttp->decrypt_data($value['BaseInfo']['FamilyName']);
                 $value['BaseInfo']['FullName'] = $this->hikcentralHttp->decrypt_data($value['BaseInfo']['FullName']);
@@ -291,7 +291,7 @@ class th_personasC
                 $value['BaseInfo']['Description'] = $this->hikcentralHttp->decrypt_data($value['BaseInfo']['Description']);
                 $value['BaseInfo']['CardList'] = $value['CardList'];
                 $value['BaseInfo']['FingerPrintList'] = $value['FingerPrintList'];
-                array_push($listaPersonas,$value['BaseInfo']);
+                array_push($listaPersonas, $value['BaseInfo']);
             }
         }
 
@@ -369,10 +369,6 @@ class th_personasC
             return ['resp' => 0, 'msj' => 'Formato de datos inválido (no es JSON de arreglo).'];
         }
 
-        // Procesamos solo filas válidas y, de paso, recolectamos nombres únicos
-        $loteValido = [];
-        $nombresUnicos = [];
-
         foreach ($filas as $fila) {
             $nombre = isset($fila['nombre']) ? trim((string)$fila['nombre']) : '';
             $cardNo = isset($fila['CardNo']) ? trim((string)$fila['CardNo']) : '';
@@ -392,27 +388,50 @@ class th_personasC
                 $where .= "+' '+th_per_segundo_nombre";
             }
 
+            // ----------------------------------------------------------------------------------------------------
+
             $this->modelo->reset();
-            $existe = $this->modelo->where('th_per_observaciones', $nombre)->listar();
+            $existeCard = $this->card->where('th_cardNo', $cardNo)->listar();
+
+            if (!is_array($existeCard) || count($existeCard) === 0) {
+                $this->modelo->reset();
+
+                $datosCard = [
+                    ['campo' => 'th_card_nombre', 'dato' => $nombre],
+                    ['campo' => 'th_cardNo', 'dato' => $cardNo],
+                ];
+
+                $okInsCard = $this->card->insertar($datosCard);
+
+                if ($okInsCard) $insertadosCard++;
+
+                else $msj .= "No se pudo insertar tarjeta con card ={$cardNo}.<br>";
+            }
+
+            // ----------------------------------------------------------------------------------------------------
+
+            $this->modelo->reset();
+            $existe = $this->modelo->where('th_per_codigo_externo_1', $nombre)->listar();
 
             if (!is_array($existe) || count($existe) === 0) {
                 $this->modelo->reset();
                 $datosPersona = [
                     ['campo' => 'th_per_primer_nombre',         'dato' => $nombre],
-                    ['campo' => 'th_per_observaciones',         'dato' => $nombre],
+                    ['campo' => 'th_per_codigo_externo_1',         'dato' => $nombre],
                     ['campo' => 'th_per_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')],
                 ];
                 $okIns = $this->modelo->insertar($datosPersona);
+
                 if ($okIns) $personasInsertadas++;
-                else $msj .= "No se pudo insertar persona con th_per_observaciones={$nombre}.<br>";
+
+                else $msj .= "No se pudo insertar persona con th_per_codigo_externo_1 ={$nombre}.<br>";
             }
-            // Si existe, no se hace nada (tal como pediste).
         }
 
-        // ============ FASE 3: Poner per_id en th_card_data por igualdad de nombre ============
+        // ============ Poner per_id en th_card_data por igualdad de nombre ============
         // Para cada registro procesado: si hay persona con th_per_observaciones == th_card_nombre, setear per_id
         $ok_sync = $this->card->sincronizar_datos_card_persona();
-        $$th_control_accesoM = $th_control_accesoM->actualizar_per_id_no_card();
+        $th_control_accesoM = $th_control_accesoM->actualizar_per_id_no_card();
 
 
         if ($msj !== '') {

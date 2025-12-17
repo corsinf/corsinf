@@ -21,13 +21,13 @@ class th_cardM  extends BaseModel
         $sql =
             "UPDATE c
                 SET c.th_per_id = p.th_per_id
-                FROM th_card_data AS c
-                JOIN th_personas AS p
-                ON LTRIM(RTRIM(p.th_per_observaciones)) = LTRIM(RTRIM(c.th_card_nombre))
+                FROM _talentoh.th_card_data AS c
+                JOIN _talentoh.th_personas AS p
+                ON LTRIM(RTRIM(p.th_per_codigo_externo_1)) = LTRIM(RTRIM(c.th_card_nombre))
                 WHERE c.th_per_id IS NULL;";
 
 
-        $datos = $this->db->sql_string($sql);
+        $datos = $this->db->sql_string($sql, false, true);
         return $datos;
     }
 }
