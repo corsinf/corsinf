@@ -61,7 +61,8 @@ class th_log_dispositivosC
         $lista = explode(';', $cadena);
         $filtrado = array_filter($lista);
 
-        return $this->modelo->insertar_logs($filtrado);
-       
+        // print_r($filtrado);die();
+        $this->modelo->insertar_logs($filtrado);
+        return $filtrado;
     }
 }
