@@ -409,11 +409,13 @@ class db
 	}
 
 
-	function delete($tabla, $datos, $master = false)
+	function delete($tabla, $datos, $master = false, $sin_esquema = false)
 	{
 
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
+
+		if(!$master && !$sin_esquema){ $tabla = $this->esquema_modulo($tabla,1);}
 
 		$valores = '';
 		$campos = '';
