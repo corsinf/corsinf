@@ -16,7 +16,7 @@ class th_log_dispositivosM extends BaseModel
     {
         $this->db->parametros_conexion();
         $conn =  $this->db->conexion();
-        $tabla_esquema = $this->db->esquema_modulo($tabla,1);
+        $tabla_esquema = $this->db->esquema_modulo("th_log_dispositivos_masivos",1);
         $sql = "INSERT INTO ".$tabla_esquema." (LOG_DEVICE, estado_procesado) VALUES (:log_device, :estado)";
         $stmt = $conn->prepare($sql);
 
