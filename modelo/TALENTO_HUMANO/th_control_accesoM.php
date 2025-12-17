@@ -72,7 +72,7 @@ class th_control_accesoM extends BaseModel
         $sql =
             "SELECT $limit
                 ca.th_acc_fecha_hora AS fecha,
-                p.th_per_observaciones AS nombre,
+                p.th_per_codigo_externo_1 AS nombre,
                 d.th_dis_nombre         AS dispositivo_nombre
             FROM th_control_acceso AS ca
             LEFT JOIN th_personas AS p

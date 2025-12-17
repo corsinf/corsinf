@@ -1,181 +1,181 @@
-[2025-12-17 16:00:07.209][INF] The COM:HCCoreBase ver is 1.0.0.1, 2018_06_01. Async:1.
-[2025-12-17 16:00:07.209][INF] The COM:Core ver is 6.1.3.5, 2019_09_26. Async:1.
-[2025-12-17 16:00:07.209][INF] This HCNetSDK ver is 6.1.3.5 Ver 2019_09_26.
-[2025-12-17 16:00:07.213][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCVoiceTalk.dll] succ
-[2025-12-17 16:00:07.213][INF] AbilityAnalyze---Init-- start
-[2025-12-17 16:00:07.213][ERR] AbilityAnalyze---open zip package error, package path C:/xampp/htdocs/corsinf/lib/SDKDevices/hikvision/HCNetSDK/LocalXml.zip
-[2025-12-17 16:00:07.213][INF] The COM:VoiceTalk ver is 6.1.3.5, 2019_09_26.
-[2025-12-17 16:00:07.214][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCGeneralCfgMgr.dll] succ
-[2025-12-17 16:00:07.214][INF] The COM:HCGeneralCfgMgr ver is 6.1.3.5, 2019_09_26.
-[2025-12-17 16:00:07.215][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCPlayBack.dll] succ
-[2025-12-17 16:00:07.215][INF] The COM:HCPlayback ver is 6.1.3.5, 2019_09_26.
-[2025-12-17 16:00:07.216][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCIndustry.dll] succ
-[2025-12-17 16:00:07.216][INF] The COM:HCIndustry ver is 6.1.3.5, 2019_09_26.
-[2025-12-17 16:00:07.217][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCDisplay.dll] succ
-[2025-12-17 16:00:07.217][INF] The COM:HCDisplay ver is 6.1.3.5, 2019_09_26.
-[2025-12-17 16:00:07.218][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCPreview.dll] succ
-[2025-12-17 16:00:07.218][INF] The COM:Preview ver is 6.1.3.5, 2019_09_26.
-[2025-12-17 16:00:07.219][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCAlarm.dll] succ
-[2025-12-17 16:00:07.219][INF] The COM:HCAlarm ver is 6.1.3.5, 2019_09_26.
-[2025-12-17 16:00:07.219][DBG] CLongConfigSessionEx::start succ [userid:0][command:2560]
-[2025-12-17 16:00:07.279][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.279][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.280][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.280][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.286][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.287][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.290][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.293][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.293][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.302][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.306][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.306][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.307][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.311][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.312][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.316][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.316][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.326][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.345][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.353][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.367][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.374][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.388][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.396][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.404][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.411][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.426][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.435][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.442][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.444][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.448][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.454][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.465][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.470][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.471][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.473][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.476][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.483][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.490][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.495][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.497][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.510][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.514][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.516][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.518][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.518][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.544][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.558][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.558][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.558][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.558][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.566][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.573][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.573][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.582][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.594][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.609][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.613][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.616][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.637][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.649][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.649][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.658][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.680][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.688][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.688][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.688][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.706][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.715][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.723][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.735][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.735][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.742][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.744][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.750][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.752][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.756][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.762][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.764][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.772][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.780][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.790][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.806][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.807][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.807][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.816][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.816][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.816][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.816][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.827][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.835][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.835][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.855][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.855][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.856][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.864][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.873][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.873][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.876][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.879][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.886][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.894][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.894][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.908][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.913][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.913][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.916][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.929][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.929][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.937][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.937][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.947][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.968][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.977][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.983][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.995][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:07.995][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.004][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.011][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.019][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.031][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.034][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.040][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.041][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.051][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.053][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.057][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.071][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.074][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.074][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.133][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.133][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.133][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.133][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.133][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.134][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.134][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.134][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.134][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.134][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.135][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.135][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.135][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.155][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.155][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.155][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.155][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.163][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.169][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.172][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.180][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.181][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.195][DBG] callback [2]data len[1300].
-[2025-12-17 16:00:08.203][DBG] callback [0]data len[4].
-[2025-12-17 16:00:08.203][DBG] callback status[1000].
-[2025-12-17 16:00:08.203][INF] [CLongLinkCtrlPrivate::RecvThreadFunc] RecvThreadFunc EXIT, this=0x56c47448, linkid=54709c74
-[2025-12-17 16:00:08.255][INF] [0]CLongConfigSession::Stop in
-[2025-12-17 16:00:08.255][INF] COM_Logout[0][1]
-[2025-12-17 16:00:08.255][DBG] CUserMgr::UnRegisterHeartProxy[0]
-[2025-12-17 16:00:08.326][INF] COM_Logout[0][1]
-[2025-12-17 16:00:08.326][INF] CTransUnitMgr::UnloadTransUnitLib
+[2025-12-17 18:21:23.050][INF] The COM:HCCoreBase ver is 1.0.0.1, 2018_06_01. Async:1.
+[2025-12-17 18:21:23.050][INF] The COM:Core ver is 6.1.3.5, 2019_09_26. Async:1.
+[2025-12-17 18:21:23.050][INF] This HCNetSDK ver is 6.1.3.5 Ver 2019_09_26.
+[2025-12-17 18:21:23.054][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCVoiceTalk.dll] succ
+[2025-12-17 18:21:23.054][INF] AbilityAnalyze---Init-- start
+[2025-12-17 18:21:23.054][ERR] AbilityAnalyze---open zip package error, package path C:/xampp/htdocs/corsinf/lib/SDKDevices/hikvision/HCNetSDK/LocalXml.zip
+[2025-12-17 18:21:23.054][INF] The COM:VoiceTalk ver is 6.1.3.5, 2019_09_26.
+[2025-12-17 18:21:23.055][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCGeneralCfgMgr.dll] succ
+[2025-12-17 18:21:23.055][INF] The COM:HCGeneralCfgMgr ver is 6.1.3.5, 2019_09_26.
+[2025-12-17 18:21:23.056][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCPlayBack.dll] succ
+[2025-12-17 18:21:23.056][INF] The COM:HCPlayback ver is 6.1.3.5, 2019_09_26.
+[2025-12-17 18:21:23.057][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCIndustry.dll] succ
+[2025-12-17 18:21:23.057][INF] The COM:HCIndustry ver is 6.1.3.5, 2019_09_26.
+[2025-12-17 18:21:23.057][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCDisplay.dll] succ
+[2025-12-17 18:21:23.057][INF] The COM:HCDisplay ver is 6.1.3.5, 2019_09_26.
+[2025-12-17 18:21:23.059][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCPreview.dll] succ
+[2025-12-17 18:21:23.059][INF] The COM:Preview ver is 6.1.3.5, 2019_09_26.
+[2025-12-17 18:21:23.059][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCAlarm.dll] succ
+[2025-12-17 18:21:23.060][INF] The COM:HCAlarm ver is 6.1.3.5, 2019_09_26.
+[2025-12-17 18:21:23.060][DBG] CLongConfigSessionEx::start succ [userid:0][command:2560]
+[2025-12-17 18:21:23.123][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.123][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.123][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.123][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.123][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.149][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.150][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.150][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.151][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.152][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.165][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.172][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.172][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.173][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.197][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.197][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.210][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.239][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.239][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.262][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.262][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.262][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.262][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.282][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.282][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.282][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.282][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.288][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.292][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.306][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.306][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.314][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.314][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.317][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.326][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.333][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.334][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.355][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.363][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.378][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.396][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.396][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.396][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.404][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.426][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.434][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.442][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.450][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.450][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.481][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.510][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.520][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.530][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.539][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.565][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.565][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.575][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.608][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.618][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.634][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.634][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.648][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.656][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.664][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.675][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.690][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.690][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.691][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.701][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.712][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.730][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.731][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.731][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.745][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.745][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.752][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.755][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.760][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.766][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.766][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.773][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.778][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.781][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.798][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.799][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.805][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.806][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.807][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.869][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.870][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.870][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.870][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.908][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.908][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.936][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.936][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.945][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.956][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.957][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.969][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.969][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:23.993][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.011][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.011][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.011][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.019][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.032][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.043][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.050][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.057][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.069][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.072][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.086][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.096][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.096][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.116][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.116][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.123][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.160][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.160][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.160][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.160][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.160][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.160][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.169][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.170][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.183][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.188][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.193][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.218][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.238][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.239][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.252][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.253][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.268][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.274][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.286][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.286][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.292][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.292][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.292][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.310][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.310][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.313][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.319][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.323][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.327][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.330][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.333][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.342][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.350][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.350][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.358][DBG] callback [2]data len[1300].
+[2025-12-17 18:21:24.358][DBG] callback [0]data len[4].
+[2025-12-17 18:21:24.358][DBG] callback status[1000].
+[2025-12-17 18:21:24.358][INF] [CLongLinkCtrlPrivate::RecvThreadFunc] RecvThreadFunc EXIT, this=0x46e84448, linkid=4494e1f4
+[2025-12-17 18:21:24.408][INF] [0]CLongConfigSession::Stop in
+[2025-12-17 18:21:24.408][INF] COM_Logout[0][1]
+[2025-12-17 18:21:24.408][DBG] CUserMgr::UnRegisterHeartProxy[0]
+[2025-12-17 18:21:24.489][INF] COM_Logout[0][1]
+[2025-12-17 18:21:24.490][INF] CTransUnitMgr::UnloadTransUnitLib

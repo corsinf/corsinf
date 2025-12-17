@@ -77,7 +77,7 @@ if (isset($_GET['_id'])) {
             }
         }
 
-        const url = '../controlador/TALENTO_HUMANO/th_control_acceso_calculosC.php?descargar_excel=true' +
+        const url = '../controlador/TALENTO_HUMANO/th_control_acceso_calculosC.php?descargar_excel_general=true' +
             '&txt_fecha_inicio=' + encodeURIComponent(txt_fecha_inicio) +
             '&txt_fecha_fin=' + encodeURIComponent(txt_fecha_fin) +
             '&tipo_busqueda=' + encodeURIComponent(tipo_busqueda) +
@@ -86,6 +86,7 @@ if (isset($_GET['_id'])) {
             '&tipo_ordenamiento=' + encodeURIComponent(tipo_ordenamiento) +
             '&_id=' + encodeURIComponent('<?= $_id ?>');
 
+        console.log(url);
         window.location.href = url;
     }
 
