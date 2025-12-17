@@ -30,6 +30,14 @@ if ($_GET['acc'] == 'th_reporte_tabla') {
 	include('TALENTO_HUMANO/REPORTES/th_reporte_tabla.php');
 }
 
+if ($_GET['acc'] == 'th_reporte_atrasos') {
+	include('TALENTO_HUMANO/REPORTES/th_reporte_atrasos.php');
+}
+
+if ($_GET['acc'] == 'th_reporte_general') {
+	include('TALENTO_HUMANO/REPORTES/th_reporte_general.php');
+}
+
 //Departamentos
 if ($_GET['acc'] == 'th_departamentos') {
 	include('TALENTO_HUMANO/DEPARTAMENTOS/th_departamentos.php');
@@ -200,7 +208,7 @@ if ($_GET['acc'] == 'th_recalcular') {
  * 
  */
 
- 
+
 if ($_GET['acc'] == 'th_contr_plazas') {
 	include('TALENTO_HUMANO/CONTRATACION/PLAZAS/th_contr_plazas.php');
 }

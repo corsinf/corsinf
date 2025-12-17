@@ -93,11 +93,11 @@ class calculo_persona
                     dep.th_dep_nombre,
                     CASE WHEN pro.th_per_id IS NOT NULL THEN 0 ELSE 1 END AS prioridad
                 FROM
-                    th_programar_horarios pro
-                    JOIN th_horarios hor ON hor.th_hor_id = pro.th_hor_id
-                    JOIN th_turnos_horario tur_hor ON tur_hor.th_hor_id = hor.th_hor_id
-                    JOIN th_turnos tur ON tur.th_tur_id = tur_hor.th_tur_id
-                    LEFT JOIN th_departamentos dep ON dep.th_dep_id = pro.th_dep_id
+                    _talentoh.th_programar_horarios pro
+                    JOIN _talentoh.th_horarios hor ON hor.th_hor_id = pro.th_hor_id
+                    JOIN _talentoh.th_turnos_horario tur_hor ON tur_hor.th_hor_id = hor.th_hor_id
+                    JOIN _talentoh.th_turnos tur ON tur.th_tur_id = tur_hor.th_tur_id
+                    LEFT JOIN _talentoh.th_departamentos dep ON dep.th_dep_id = pro.th_dep_id
                 WHERE
                     pro.th_pro_estado = 1
                     AND CAST('$fecha' AS DATE)
@@ -108,7 +108,7 @@ class calculo_persona
                         OR (
                             pro.th_per_id = 0
                             AND pro.th_dep_id IN (
-                                SELECT th_dep_id FROM th_personas_departamentos WHERE th_per_id = $th_per_id
+                                SELECT th_dep_id FROM _talentoh.th_personas_departamentos WHERE th_per_id = $th_per_id
                             )
                         )
                     )
@@ -123,9 +123,9 @@ class calculo_persona
                 pro.pro_fecha_fin
             FROM
                 prog pro
-                JOIN th_horarios hor ON hor.th_hor_id = pro.th_hor_id
-                JOIN th_turnos_horario tur_hor ON tur_hor.th_hor_id = hor.th_hor_id
-                JOIN th_turnos tur ON tur.th_tur_id = tur_hor.th_tur_id
+                JOIN _talentoh.th_horarios hor ON hor.th_hor_id = pro.th_hor_id
+                JOIN _talentoh.th_turnos_horario tur_hor ON tur_hor.th_hor_id = hor.th_hor_id
+                JOIN _talentoh.th_turnos tur ON tur.th_tur_id = tur_hor.th_tur_id
             ORDER BY
                 pro.prioridad;
             ";
@@ -145,8 +145,8 @@ class calculo_persona
                     WHEN jus.th_per_id IS NOT NULL THEN 0
                     ELSE 1
                 END AS prioridad
-            FROM th_justificaciones jus
-            JOIN th_cat_tipo_justificacion tipo ON tipo.th_tip_jus_id = jus.th_tip_jus_id
+            FROM _talentoh.th_justificaciones jus
+            JOIN _talentoh.th_cat_tipo_justificacion tipo ON tipo.th_tip_jus_id = jus.th_tip_jus_id
             WHERE jus.th_jus_estado = 1
               AND CAST('$fecha' AS DATE)
                   BETWEEN CAST(jus.th_jus_fecha_inicio AS DATE)
@@ -157,7 +157,7 @@ class calculo_persona
                         jus.th_per_id IS NULL
                     AND jus.th_dep_id IN (
                         SELECT th_dep_id
-                        FROM th_personas_departamentos
+                        FROM _talentoh.th_personas_departamentos
                         WHERE th_per_id = $th_per_id
                     )
                  )
@@ -191,7 +191,7 @@ class calculo_persona
             "SELECT TOP 1
             th_acc_fecha_hora
         FROM
-            th_control_acceso
+            _talentoh.th_control_acceso
         WHERE
             th_per_id = $th_per_id
             AND th_acc_fecha_hora BETWEEN '$inicio' AND '$fin'
@@ -249,7 +249,7 @@ class calculo_persona
 
         $sql =
             "SELECT TOP 1 th_acc_fecha_hora
-            FROM th_control_acceso
+            FROM _talentoh.th_control_acceso
             WHERE
                 th_per_id = $th_per_id
                 AND CAST(th_acc_fecha_hora AS DATE) = '$fecha'
@@ -282,7 +282,7 @@ class calculo_persona
             th_per_correo,
             th_per_id
         FROM
-            th_personas
+            _talentoh.th_personas
         WHERE
             th_per_id = $th_per_id;";
 
@@ -294,26 +294,28 @@ class calculo_persona
     {
         $sql = "
         SELECT DISTINCT per.th_per_id
-        FROM th_personas per
+        FROM _talentoh.th_personas per
         WHERE per.th_per_estado = 1
         AND EXISTS (
             SELECT 1
-            FROM th_programar_horarios pro
-            JOIN th_horarios hor ON hor.th_hor_id = pro.th_hor_id
-            JOIN th_turnos_horario tur_hor ON tur_hor.th_hor_id = hor.th_hor_id
-            JOIN th_turnos tur ON tur.th_tur_id = tur_hor.th_tur_id
+            FROM _talentoh.th_programar_horarios pro
+            JOIN _talentoh.th_horarios hor ON hor.th_hor_id = pro.th_hor_id
+            JOIN _talentoh.th_turnos_horario tur_hor ON tur_hor.th_hor_id = hor.th_hor_id
+            JOIN _talentoh.th_turnos tur ON tur.th_tur_id = tur_hor.th_tur_id
             WHERE pro.th_pro_estado = 1
             AND (
                 (pro.th_per_id = per.th_per_id)
                 OR (
                     pro.th_per_id = 0 AND pro.th_dep_id IN (
-                        SELECT th_dep_id FROM th_personas_departamentos WHERE th_per_id = per.th_per_id
+                        SELECT th_dep_id FROM _talentoh.th_personas_departamentos WHERE th_per_id = per.th_per_id
                     )
                 )
             )
             AND CAST('$fecha' AS DATE) BETWEEN CAST(pro.th_pro_fecha_inicio AS DATE) AND CAST(pro.th_pro_fecha_fin AS DATE)
         );
     ";
+
+        // print_r($sql); exit(); die();
 
         return $this->datos($sql);
     }
@@ -322,7 +324,7 @@ class calculo_persona
     {
         $sql =
             "SELECT 1
-        FROM th_control_acceso_calculos
+        FROM _talentoh.th_control_acceso_calculos
         WHERE th_asi_empleado = $th_per_id
         AND th_asi_fecha = '$fecha';";
 
@@ -336,7 +338,7 @@ class calculo_persona
             "SELECT CASE 
             WHEN EXISTS (
                 SELECT 1
-                FROM th_feriados
+                FROM _talentoh.th_feriados
                 WHERE
                     th_fer_estado = 1 AND
                     CAST('$fecha' AS DATE) BETWEEN 
@@ -1401,7 +1403,9 @@ class calculo_persona
         //     ['th_per_id' => 2]
         // ];
 
-        // print_r($personas); exit(); die();
+        // print_r($personas);
+        // exit();
+        // die();
 
         $grupos = array_chunk($personas, 100);
         $total_insertadas = 0;
@@ -1433,7 +1437,7 @@ class calculo_persona
             }
 
             if (!empty($datos_lote)) {
-                $sql_lote = $this->generar_merge_lote('th_control_acceso_calculos', $datos_lote, ['th_per_id', 'th_asi_fecha']);
+                $sql_lote = $this->generar_merge_lote('_talentoh.th_control_acceso_calculos', $datos_lote, ['th_per_id', 'th_asi_fecha']);
 
                 // print_r($sql_lote);
                 // exit();

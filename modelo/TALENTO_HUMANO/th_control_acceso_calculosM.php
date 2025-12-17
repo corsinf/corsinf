@@ -144,7 +144,6 @@ class th_control_acceso_calculosM extends BaseModel
             }
         }
 
-        
         $isTodosDepartamentos = (empty($departamento) || $departamento === 'todos');
 
         if ($tipo_ordenamiento === 'ordenado') {
@@ -166,6 +165,8 @@ class th_control_acceso_calculosM extends BaseModel
                 th_asi_fecha ASC";
             }
         }
+
+        // print_r($sql); exit(); die();
 
         $datos = $this->db->datos($sql);
         return $datos;
