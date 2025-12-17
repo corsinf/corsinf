@@ -68,12 +68,8 @@ class th_control_accesoM extends BaseModel
         
         $sql =
         "SELECT $limit
-                -- ca.th_cardNo,
                 ca.th_acc_fecha_hora AS fecha,
-                -- ca.th_per_id,
                 p.th_per_observaciones AS nombre,
-                -- ca.th_dis_id            AS th_dis_host,
-                -- ca.th_acc_puerto,
                 d.th_dis_nombre         AS dispositivo_nombre
             FROM th_control_acceso AS ca
             LEFT JOIN th_personas AS p
