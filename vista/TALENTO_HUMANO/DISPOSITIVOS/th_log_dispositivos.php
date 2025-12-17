@@ -218,10 +218,14 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             success: function(response) {
                 if(response.respuesta==1)
                 {
-                    Swal.fire("Se Guardaron "+response.cantidad+" registros","","success");
+                    Swal.fire("Se Guardaron "+response.cantidad+" registros","","success").then(function(){
+                        $('#myModal_espera').modal('hide');
+                    });
                 }else
                 {
-                    Swal.fire("No se pudo guardar","","error");
+                    Swal.fire("No se pudo guardar","","error").then(function(){
+                        $('#myModal_espera').modal('hide');
+                    });
                 }
                 // console.log(response)
                 // var tr = '';
