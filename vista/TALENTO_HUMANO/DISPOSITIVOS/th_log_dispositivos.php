@@ -228,8 +228,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                             <td>`+linea[0]['Card Number']+`</td>
                             <td>`+linea[0].fecha+`</td>
                          </tr>`;
-                    console.log(item);
-                    console.log(linea);
+                    // console.log(item);
+                    // console.log(linea);
                     $('#tbl_marcaciones').html(tr);
                 })
             },
