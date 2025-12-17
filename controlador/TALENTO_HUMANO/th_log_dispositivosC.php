@@ -60,14 +60,8 @@ class th_log_dispositivosC
         $cadena = $resp['msj'];
         $lista = explode(';', $cadena);
         $filtrado = array_filter($lista);
-        foreach ($filtrado as $key => $value) {
-            // print_r($value);die();
-             $datos = array(
-                            array('campo'=>'LOG_DEVICE','dato'=>$value),
-                            array('campo'=>'estado_procesado','dato'=>0),
-                        );
-            $this->modelo->insertar($datos);
-        }
-        return $filtrado;
+
+        return $this->modelo->insertar_logs($filtrado);
+       
     }
 }
