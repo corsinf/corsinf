@@ -48,6 +48,7 @@ class th_log_dispositivosC
 
     function Buscar_save($parametros)
     {
+        set_time_limit(0); 
          $dispositivo = $this->dispositivos->where('th_dis_id',$parametros['dispostivos'])->listar();
 
         $dllPath = $this->sdk_patch.'10 '.$dispositivo[0]['host'].' '.$dispositivo[0]['usuario'].' '.$dispositivo[0]['port'].' '.$dispositivo[0]['pass'].' '.$parametros['desde'].' '.$parametros['hasta'];

@@ -324,9 +324,7 @@ namespace CorsinfSDKHik.Funciones
         }
         private string GetStrLogTime(ref CHCNetSDK.NET_DVR_TIME time)
         {
-            string res = time.dwYear.ToString() + ":" + time.dwMonth.ToString() + ":"
-                + time.dwDay.ToString() + ":" + time.dwHour.ToString() + ":" + time.dwMinute.ToString()
-                + ":" + time.dwSecond.ToString();
+            string res = time.dwDay.ToString() +"/"+ time.dwMonth.ToString() + "/" + time.dwYear.ToString() +" " + time.dwHour.ToString() + ":" + time.dwMinute.ToString()+ ":" + time.dwSecond.ToString();
             return res;
         }
         private string ProcessMajorType(ref uint dwMajor)
