@@ -48,6 +48,7 @@ class th_log_dispositivosC
 
     function Buscar_save($parametros)
     {
+        set_time_limit(0); 
          $dispositivo = $this->dispositivos->where('th_dis_id',$parametros['dispostivos'])->listar();
 
         $dllPath = $this->sdk_patch.'10 '.$dispositivo[0]['host'].' '.$dispositivo[0]['usuario'].' '.$dispositivo[0]['port'].' '.$dispositivo[0]['pass'].' '.$parametros['desde'].' '.$parametros['hasta'];
@@ -60,14 +61,9 @@ class th_log_dispositivosC
         $cadena = $resp['msj'];
         $lista = explode(';', $cadena);
         $filtrado = array_filter($lista);
-        foreach ($filtrado as $key => $value) {
-            // print_r($value);die();
-             $datos = array(
-                            array('campo'=>'LOG_DEVICE','dato'=>$value),
-                            array('campo'=>'estado_procesado','dato'=>0),
-                        );
-            $this->modelo->insertar($datos);
-        }
-        return $filtrado;
+
+        // print_r($filtrado);die();
+        $resp = $this->modelo->insertar_logs($filtrado);
+        return array('respuesta'=>$resp,'cantidad'=>count($filtrado));
     }
 }

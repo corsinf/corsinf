@@ -361,6 +361,11 @@ class th_reportesC
             $fecha_fin = date("Y-m-d");
         }
 
+        // $parametros = $proceso->calculo_persona_control_acceso(1, $fecha_inicio);
+
+
+        // print_r($parametros); exit(); die();
+
 
         $fecha_actual = new DateTime($fecha_inicio);
         $fecha_limite = new DateTime($fecha_fin);
@@ -377,13 +382,21 @@ class th_reportesC
         $this->guardar_log($parametros, $BASEDATO);
 
 
-        // print_r($parametros);
+        print_r($parametros);
         exit();
     }
 
     function guardar_log($mensaje, $db)
     {
-        $ruta_log = __DIR__ . '/log_carga_masiva_front_' . $db . '.log';
+        // $ruta_log = __DIR__ . '/log_carga_masiva_front_' . $db . '.log';
+        $directorio_logs = dirname(__DIR__, 2) . '/logs/talento_humano';
+
+        if (!is_dir($directorio_logs)) {
+            mkdir($directorio_logs, 0775, true);
+        }
+
+        $ruta_log = $directorio_logs . '/log_carga_masiva_front_' . $db . '.log';
+
         $fecha_log = date("Y-m-d H:i:s");
 
         $entrada = "[$fecha_log] $mensaje\n";

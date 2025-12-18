@@ -49,12 +49,15 @@ class th_control_accesoM extends BaseModel
         $sql =
             "UPDATE ca
                 SET ca.th_per_id = cd.th_per_id
-            FROM th_control_acceso ca
-            JOIN th_card_data cd ON ca.th_cardNo = cd.th_cardNo;
-            -- WHERE ca.th_per_id IS NULL;
+            FROM _talentoh.th_control_acceso ca
+            JOIN _talentoh.th_card_data cd ON ca.th_cardNo = cd.th_cardNo;
             ";
 
-        $datos = $this->db->datos($sql);
+        // print_r($sql); exit(); die();
+
+        // $datos = $this->db->datos($sql, false, true, true);
+        $datos = $this->db->sql_string($sql, false, true);
+
         return $datos;
     }
 
@@ -65,15 +68,11 @@ class th_control_accesoM extends BaseModel
         if ($fecha_ini == '') {
             $limit = "TOP 1000";
         }
-        
+
         $sql =
-        "SELECT $limit
-                -- ca.th_cardNo,
+            "SELECT $limit
                 ca.th_acc_fecha_hora AS fecha,
-                -- ca.th_per_id,
-                p.th_per_observaciones AS nombre,
-                -- ca.th_dis_id            AS th_dis_host,
-                -- ca.th_acc_puerto,
+                p.th_per_codigo_externo_1 AS nombre,
                 d.th_dis_nombre         AS dispositivo_nombre
             FROM th_control_acceso AS ca
             LEFT JOIN th_personas AS p
