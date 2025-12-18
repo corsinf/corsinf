@@ -218,91 +218,95 @@ function importar() {
 </script>
 
 <script>
-var $cbx = $('#cbx_enviar_credenciales');
-var $contInputs = $('#cont_inputs_mensaje');
-var $infoCred = $('#info_credenciales');
-var $modal = $('#modal_mensaje');
-var $btnEnviar = $('#btn_enviar_mensaje');
+$(function() {
 
-function actualizarVista() {
-    if ($cbx.is(':checked')) {
-        $contInputs.hide();
-        $infoCred.show();
-    } else {
-        $contInputs.show();
-        $infoCred.hide();
-    }
-}
+    const $cbx = $('#cbx_enviar_credenciales');
+    const $contInputs = $('#cont_inputs_mensaje');
+    const $infoCred = $('#info_credenciales');
+    const $modal = $('#modal_mensaje');
+    const $btnEnviar = $('#btn_enviar_mensaje');
 
-// Inicializar vista al abrir modal
-$modal.on('show.bs.modal', function() {
-    actualizarVista();
-});
-
-$cbx.on('change', actualizarVista);
-
-// Evento del botón ENVIAR
-$btnEnviar.on('click', function() {
-    enviarMensaje();
-});
-
-function enviarMensaje() {
-
-    var enviarCred = $cbx.is(':checked');
-    var asunto = $.trim($('#txt_asunto').val() || '');
-    var descripcion = $.trim($('#txt_descripcion').val() || '');
-
-    if (enviarCred) {
-        if (asunto === '') {
-            Swal.fire('Advertencia', 'Ingresa el asunto', 'warning');
-            $('#txt_asunto').focus();
-            return;
-        }
-        if (descripcion === '') {
-            Swal.fire('Advertencia', 'Ingresa la descripción', 'warning');
-            $('#txt_descripcion').focus();
-            return;
+    function actualizarVista() {
+        if ($cbx.is(':checked')) {
+            $contInputs.hide();
+            $infoCred.show();
+        } else {
+            $contInputs.show();
+            $infoCred.hide();
         }
     }
 
-    var parametrosLogCorreos = {
-        enviar_credenciales: enviarCred ? 1 : 0,
-        asunto: asunto,
-        descripcion: descripcion,
-        per_id: ''
-    };
+    // Al abrir el modal
+    $modal.on('show.bs.modal', actualizarVista);
 
-    enviar_Mail_Persona(parametrosLogCorreos);
-    $modal.modal('hide');
-}
+    // Cambio checkbox
+    $cbx.on('change', actualizarVista);
 
-function enviar_Mail_Persona(parametrosLogCorreos) {
+    // Click botón enviar
+    $btnEnviar.on('click', enviarMensaje);
 
-    $.ajax({
-        url: '../controlador/TALENTO_HUMANO/th_logs_correosC.php?enviar_correo=true',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            parametros: parametrosLogCorreos
-        },
-        beforeSend: function() {
-            Swal.fire({
-                title: 'Enviando correos...',
-                allowOutsideClick: false,
-                didOpen: () => Swal.showLoading()
-            });
-        },
-        success: function(response) {
+    function enviarMensaje() {
 
-            if (response && response.total !== undefined) {
+        const enviarCred = $cbx.is(':checked');
+        const asunto = $.trim($('#txt_asunto').val());
+        const descripcion = $.trim($('#txt_descripcion').val());
+
+        // VALIDAR SOLO SI NO ES ENVÍO DE CREDENCIALES
+        if (!enviarCred) {
+            if (!asunto) {
+                Swal.fire('Advertencia', 'Ingresa el asunto', 'warning');
+                $('#txt_asunto').focus();
+                return;
+            }
+            if (!descripcion) {
+                Swal.fire('Advertencia', 'Ingresa la descripción', 'warning');
+                $('#txt_descripcion').focus();
+                return;
+            }
+        }
+
+        const parametrosLogCorreos = {
+            enviar_credenciales: enviarCred ? 1 : 0,
+            asunto: asunto,
+            descripcion: descripcion,
+            per_id: '<?= $_id ?? '' ?>'
+        };
+
+        enviar_Mail_Persona(parametrosLogCorreos);
+    }
+
+    function enviar_Mail_Persona(parametrosLogCorreos) {
+
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_logs_correosC.php?enviar_correo=true',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                parametros: parametrosLogCorreos
+            },
+
+            beforeSend: function() {
+                Swal.fire({
+                    title: 'Enviando correos...',
+                    allowOutsideClick: false,
+                    didOpen: () => Swal.showLoading()
+                });
+            },
+
+            success: function(response) {
+
+                if (!response || response.total === undefined) {
+                    Swal.fire('Error', 'Respuesta inválida del servidor', 'error');
+                    return;
+                }
 
                 let mensaje = `
-                        <b>Total:</b> ${response.total}<br>
-                        <b>Enviados:</b> ${response.enviados}<br>
-                        <b>Fallidos:</b> ${response.fallidos}
-                    `;
+                    <b>Total:</b> ${response.total}<br>
+                    <b>Enviados:</b> ${response.enviados}<br>
+                    <b>Fallidos:</b> ${response.fallidos}
+                `;
 
-                if (response.fallidos > 0) {
+                if (response.fallidos > 0 && response.detalle) {
                     mensaje += '<hr><b>Correos con error:</b><br>';
                     response.detalle.forEach(item => {
                         if (item.estado === 'ERROR') {
@@ -314,20 +318,21 @@ function enviar_Mail_Persona(parametrosLogCorreos) {
                 Swal.fire({
                     icon: response.fallidos > 0 ? 'warning' : 'success',
                     title: 'Resultado del envío',
-                    html: mensaje,
-                    confirmButtonText: 'Aceptar'
+                    html: mensaje
                 });
 
-            } else {
-                Swal.fire('Error', 'Respuesta inválida del servidor', 'error');
+                $modal.modal('hide');
+            },
+
+            error: function(xhr, status, error) {
+                Swal.fire('Error', 'Error en la conexión: ' + error, 'error');
             }
-        },
-        error: function(xhr, status, error) {
-            Swal.fire('Error', 'Error en la conexión: ' + error, 'error');
-        }
-    });
-}
+        });
+    }
+
+});
 </script>
+
 
 <div class="page-wrapper">
     <div class="page-content">

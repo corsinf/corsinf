@@ -312,29 +312,35 @@ class th_logs_correosC
     }
 
 
-function crearPlantillaCredencialesHTML($empresa, $usuario, $password, $nombreCompleto = '', $loginUrl = '', $logoUrl = '', $supportEmail = 'soporte@corsinf.com', $fecha_solicitud = '') {
-    
+function crearPlantillaCredencialesHTML(
+    $empresa,
+    $usuario,
+    $password,
+    $nombreCompleto = '',
+    $loginUrl = '',
+    $logoUrl = '',
+    $supportEmail = 'soporte@corsinf.com',
+    $fecha_solicitud = ''
+) {
+
     if (empty($fecha_solicitud)) {
         date_default_timezone_set('America/Guayaquil');
         $fecha_solicitud = date('d/m/Y H:i');
     }
-    
-    // Logo elegante y profesional
-    $logoHtml = $logoUrl
-        ? "<img src=\"" . htmlspecialchars($logoUrl) . "\" alt=\"" . htmlspecialchars($empresa) . " logo\" style=\"width:180px;max-width:45%;height:auto;display:block;margin:0 auto 20px;\" />"
-        : "<div style=\"width:120px;height:50px;border-radius:6px;background:#2c3e50;color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-weight:600;font-size:22px;letter-spacing:1.5px;\">"
-          . mb_substr(htmlspecialchars($empresa), 0, 2) . "</div>";
 
-    // Botón elegante y profesional
+    $logoHtml = $logoUrl
+        ? "<img src=\"" . htmlspecialchars($logoUrl) . "\" alt=\"" . htmlspecialchars($empresa) . " logo\" style=\"width:160px;max-width:45%;height:auto;display:block;margin:0 auto 12px;\" />"
+        : "<div style=\"width:110px;height:46px;border-radius:6px;background:#2c3e50;color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-weight:600;font-size:20px;letter-spacing:1.2px;\">"
+            . mb_substr(htmlspecialchars($empresa), 0, 2) . "</div>";
+
     $btn = $loginUrl
-        ? "<a href=\"" . htmlspecialchars($loginUrl) . "\" target=\"_blank\" style=\"display:inline-block;padding:14px 40px;border-radius:6px;background:#2c3e50;color:#ffffff;text-decoration:none;font-weight:600;font-size:15px;letter-spacing:0.5px;box-shadow:0 2px 4px rgba(44,62,80,0.2);transition:all 0.3s;\">Acceder</a>"
+        ? "<a href=\"" . htmlspecialchars($loginUrl) . "\" target=\"_blank\" style=\"display:inline-block;padding:12px 32px;border-radius:6px;background:#2c3e50;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;box-shadow:0 2px 4px rgba(44,62,80,0.2);\">Acceder</a>"
         : "";
 
-    // Saludo personalizado
-    $saludo = $nombreCompleto 
-        ? "<div style=\"background:#f8f9fa;border-left:4px solid #2c3e50;padding:18px 45px;margin-bottom:30px;\">
-             <p style=\"margin:0;color:#5a6c7d;font-size:14px;font-weight:400;\">Estimado/a</p>
-             <p style=\"margin:4px 0 0;color:#2c3e50;font-size:18px;font-weight:600;letter-spacing:0.3px;\">" . htmlspecialchars($nombreCompleto) . "</p>
+    $saludo = $nombreCompleto
+        ? "<div style=\"background:#f8f9fa;border-left:4px solid #2c3e50;padding:14px 30px;margin-bottom:18px;\">
+                <p style=\"margin:0;color:#5a6c7d;font-size:13px;\">Estimado/a</p>
+                <p style=\"margin:4px 0 0;color:#2c3e50;font-size:17px;font-weight:600;\">" . htmlspecialchars($nombreCompleto) . "</p>
            </div>"
         : "";
 
@@ -342,120 +348,97 @@ function crearPlantillaCredencialesHTML($empresa, $usuario, $password, $nombreCo
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Credenciales de Acceso - ' . htmlspecialchars($empresa) . '</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Credenciales de Acceso</title>
 </head>
-<body style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, \'Helvetica Neue\', Arial, sans-serif; margin:0; padding:0; background:#f5f5f5;">
-  <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
-    <tr>
-      <td align="center" style="padding:40px 20px;">
-        <table width="600" cellpadding="0" cellspacing="0" role="presentation" style="background:#ffffff;border-radius:2px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
-          
-          <!-- Header -->
-          <tr>
-            <td style="padding:45px 40px 40px;text-align:center;background:#2c3e50;">
-              ' . $logoHtml . '
-              <h1 style="margin:0 0 8px;font-size:24px;color:#ffffff;font-weight:600;letter-spacing:0.8px;">' . htmlspecialchars($empresa) . '</h1>
-              <p style="margin:0;color:rgba(255,255,255,0.9);font-size:14px;font-weight:400;letter-spacing:0.3px;">Talento Humano</p>
-            </td>
-          </tr>
 
-          <!-- Contenido -->
-          <tr>
-            <td style="padding:45px 45px 40px;">
-              
-              ' . $saludo . '
-              
-              <h2 style="margin:0 0 25px;font-size:20px;color:#2c3e50;font-weight:600;letter-spacing:0.3px;">Credenciales de Acceso</h2>
-              
-              <p style="margin:0 0 30px;color:#5a6c7d;font-size:15px;line-height:1.7;">
-                Se han generado tus credenciales para acceder al sistema. Por tu seguridad, te recomendamos cambiar la contraseña después del primer inicio de sesión.
-              </p>
+<body style="font-family:Segoe UI,Roboto,Arial,sans-serif;margin:0;background:#f5f5f5;">
+<table width="100%" cellpadding="0" cellspacing="0">
+<tr>
+<td align="center" style="padding:25px 15px;">
 
-              <!-- Credenciales -->
-              <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fa;border:1px solid #e1e5e9;border-radius:6px;margin-bottom:30px;">
-                <tr>
-                  <td style="padding:28px 30px;">
-                    
-                    <table width="100%" cellpadding="0" cellspacing="0">
-                      <tr>
-                        <td style="padding-bottom:20px;">
-                          <p style="margin:0 0 8px;font-size:11px;color:#6c757d;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Usuario</p>
-                          <p style="margin:0;font-size:16px;color:#2c3e50;font-weight:600;letter-spacing:0.2px;">' . htmlspecialchars($usuario) . '</p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-bottom:20px;border-top:1px solid #dee2e6;padding-top:20px;">
-                          <p style="margin:0 0 8px;font-size:11px;color:#6c757d;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Contraseña</p>
-                          <p style="margin:0;font-size:16px;color:#2c3e50;font-weight:600;font-family:\'Courier New\', monospace;letter-spacing:0.5px;">' . htmlspecialchars($password) . '</p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="border-top:1px solid #dee2e6;padding-top:20px;">
-                          <p style="margin:0 0 8px;font-size:11px;color:#6c757d;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Fecha de Solicitud</p>
-                          <p style="margin:0;font-size:14px;color:#5a6c7d;font-weight:500;">' . htmlspecialchars($fecha_solicitud) . '</p>
-                        </td>
-                      </tr>
-                    </table>
-                    
-                  </td>
-                </tr>
-              </table>
+<table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
 
-              ' . ($btn ? '<div style="text-align:center;margin-bottom:30px;">' . $btn . '</div>' : '') . '
+<tr>
+<td style="padding:30px 30px 26px;text-align:center;background:#2c3e50;">
+' . $logoHtml . '
+<h1 style="margin:0;font-size:22px;color:#ffffff;font-weight:600;">' . htmlspecialchars($empresa) . '</h1>
+<p style="margin:4px 0 0;color:#ecf0f1;font-size:13px;">Talento Humano</p>
+</td>
+</tr>
 
-              ' . ($loginUrl ? '
-              <div style="background:#fff9e6;border-left:4px solid #ffc107;padding:16px 22px;margin-bottom:30px;border-radius:2px;">
-                <p style="margin:0 0 8px;color:#856404;font-size:12px;font-weight:600;letter-spacing:0.3px;">Enlace de Acceso</p>
-                <p style="margin:0;color:#856404;font-size:13px;word-break:break-all;font-family:\'Courier New\', monospace;line-height:1.5;">' . htmlspecialchars($loginUrl) . '</p>
-              </div>
-              ' : '') . '
+<tr>
+<td style="padding:30px 35px;">
 
-              <!-- Recomendaciones de seguridad -->
-              <div style="background:#fff5f5;border-left:4px solid #dc3545;padding:16px 22px;margin-bottom:30px;border-radius:2px;">
-                <p style="margin:0 0 12px;color:#721c24;font-size:12px;font-weight:600;letter-spacing:0.3px;">Recomendaciones de Seguridad</p>
-                <ul style="margin:0;padding-left:20px;color:#721c24;font-size:13px;line-height:1.8;">
-                  <li style="margin-bottom:6px;">Cambia tu contraseña al iniciar sesión por primera vez</li>
-                  <li style="margin-bottom:6px;">No compartas tus credenciales con terceros</li>
-                  <li>Cierra sesión al finalizar</li>
-                </ul>
-              </div>
+' . $saludo . '
 
-              <hr style="border:none;border-top:1px solid #e9ecef;margin:30px 0;">
+<h2 style="margin:0 0 15px;font-size:18px;color:#2c3e50;">Credenciales de Acceso</h2>
 
-              <p style="margin:0;color:#6c757d;font-size:13px;line-height:1.6;text-align:center;">
-                ¿Necesitas ayuda? Comunícate con nosotros<br>
-                <a href="mailto:' . htmlspecialchars($supportEmail) . '" style="color:#2c3e50;text-decoration:none;font-weight:600;">' . htmlspecialchars($supportEmail) . '</a>
-              </p>
-            </td>
-          </tr>
+<p style="margin:0 0 18px;color:#5a6c7d;font-size:14px;line-height:1.6;">
+Se han generado sus credenciales para acceder al sistema. Por seguridad, cambie su contraseña en el primer inicio de sesión.
+</p>
 
-          <!-- Footer -->
-          <tr>
-            <td style="padding:20px 40px;background:#f8f9fa;text-align:center;border-top:1px solid #e9ecef;">
-              <p style="margin:0 0 5px;color:#6c757d;font-size:12px;font-weight:500;">
-                ' . date('Y') . ' APUDATA. Todos los derechos reservados.
-              </p>
-              <p style="margin:0;color:#adb5bd;font-size:11px;">
-                Este mensaje contiene información confidencial.
-              </p>
-            </td>
-          </tr>
-        </table>
+<table width="100%" style="background:#f8f9fa;border:1px solid #e1e5e9;border-radius:6px;margin-bottom:18px;">
+<tr>
+<td style="padding:18px 22px;">
 
-        <p style="margin:18px 0 0;color:#6c757d;font-size:11px;max-width:600px;text-align:center;">
-          Este es un correo automático. Por favor no responder.
-        </p>
-      </td>
-    </tr>
-  </table>
+<p style="margin:0 0 4px;font-size:11px;color:#6c757d;font-weight:600;">USUARIO</p>
+<p style="margin:0 0 12px;font-size:15px;font-weight:600;color:#2c3e50;">' . htmlspecialchars($usuario) . '</p>
+
+<hr style="border:none;border-top:1px solid #dee2e6;margin:12px 0;">
+
+<p style="margin:0 0 4px;font-size:11px;color:#6c757d;font-weight:600;">CONTRASEÑA</p>
+<p style="margin:0 0 12px;font-size:15px;font-weight:600;font-family:Courier New,monospace;color:#2c3e50;">' . htmlspecialchars($password) . '</p>
+
+<hr style="border:none;border-top:1px solid #dee2e6;margin:12px 0;">
+
+<p style="margin:0 0 4px;font-size:11px;color:#6c757d;font-weight:600;">FECHA</p>
+<p style="margin:0;font-size:13px;color:#5a6c7d;">' . htmlspecialchars($fecha_solicitud) . '</p>
+
+</td>
+</tr>
+</table>
+
+' . ($btn ? '<div style="text-align:center;margin-bottom:18px;">' . $btn . '</div>' : '') . '
+
+<div style="background:#fff5f5;border-left:4px solid #dc3545;padding:12px 18px;margin-bottom:18px;">
+<p style="margin:0 0 6px;font-size:12px;font-weight:600;color:#721c24;">Recomendaciones de Seguridad</p>
+<ul style="margin:0;padding-left:18px;font-size:12px;color:#721c24;line-height:1.6;">
+<li>Cambie su contraseña al primer ingreso</li>
+<li>No comparta sus credenciales</li>
+<li>Cierre sesión al finalizar</li>
+</ul>
+</div>
+
+<hr style="border:none;border-top:1px solid #e9ecef;margin:20px 0;">
+
+<p style="margin:0;text-align:center;font-size:12px;color:#6c757d;">
+Soporte: <a href="mailto:' . htmlspecialchars($supportEmail) . '" style="color:#2c3e50;font-weight:600;">' . htmlspecialchars($supportEmail) . '</a>
+</p>
+
+</td>
+</tr>
+
+<tr>
+<td style="padding:14px 30px;background:#f8f9fa;text-align:center;border-top:1px solid #e9ecef;">
+<p style="margin:0;font-size:11px;color:#6c757d;">' . date('Y') . ' APUDATA. Todos los derechos reservados.</p>
+</td>
+</tr>
+
+</table>
+
+<p style="margin:12px 0 0;font-size:11px;color:#6c757d;text-align:center;">Correo automático, no responder.</p>
+
+</td>
+</tr>
+</table>
 </body>
-</html>
-    ';
+</html>';
 
     return $html;
 }
+
 
 
 function crearPlantillaMensajeHTML(
