@@ -14,6 +14,7 @@ class th_control_accesoM extends BaseModel
         'th_acc_tipo_registro',
         'th_acc_hora',
         'th_acc_fecha_hora',
+        'th_acc_tipo_origen',
         'th_acc_fecha_creacion',
         'th_acc_fecha_modificacion'
     ];
@@ -23,7 +24,7 @@ class th_control_accesoM extends BaseModel
         // Construir la parte JOIN de la consulta
         $this->join('th_card_data', 'th_card_data.th_cardNo = th_control_acceso.th_cardNo');
         $this->join('th_personas', 'th_personas.th_per_id = th_control_acceso.th_per_id');
-        $datos = $this->listar();
+        $datos = $this->where('th_acc_tipo_origen', 'BIO')->listar(10, true);
         return $datos;
     }
     function buscarAccesoPorPersonaYFecha($idPersona, $fecha)
