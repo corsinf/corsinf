@@ -133,4 +133,38 @@ class th_justificacionesM extends BaseModel
         $datos = $this->db->datos($sql);
         return $datos;
     }
+
+
+    function existe_justificacion_en_rango(
+    $fecha_inicio,
+    $fecha_fin,
+    $id_departamento = null,
+    $id_persona = null,
+    $id_justificacion_excluir = null
+) {
+    $sql = "SELECT COUNT(*) AS total
+            FROM th_justificaciones
+            WHERE th_jus_estado = 1
+            AND th_jus_fecha_inicio <= '$fecha_fin'
+            AND th_jus_fecha_fin >= '$fecha_inicio'";
+
+    // Validar por departamento
+    if (!empty($id_departamento)) {
+        $sql .= " AND th_dep_id = $id_departamento";
+    }
+
+    // Validar por persona
+    if (!empty($id_persona)) {
+        $sql .= " AND th_per_id = $id_persona";
+    }
+
+    // Excluir la justificación actual (para edición)
+    if (!empty($id_justificacion_excluir)) {
+        $sql .= " AND th_jus_id <> $id_justificacion_excluir";
+    }
+
+    $resultado = $this->db->datos($sql);
+    return ($resultado[0]['total'] > 0);
+}
+
 }

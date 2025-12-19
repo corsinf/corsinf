@@ -32,7 +32,7 @@ class th_personas_departamentosM extends BaseModel
                 th_personas_departamentos per_dep
                 INNER JOIN th_personas per ON per_dep.th_per_id = per.th_per_id 
                 WHERE
-                per_dep.th_dep_id = '$id_departamento';";
+                per_dep.th_dep_id = '$id_departamento' AND per.th_per_estado = 1;";
 
             $datos = $this->db->datos($sql);
             return $datos;
@@ -60,7 +60,7 @@ class th_personas_departamentosM extends BaseModel
                     per.th_per_id NOT IN (
                         SELECT th_per_id
                         FROM _talentoh.th_personas_departamentos
-                    );";
+                    ) AND per.th_per_estado = 1;" ;
 
             $datos = $this->db->datos($sql, false, false, true);
             return $datos;
@@ -102,4 +102,24 @@ class th_personas_departamentosM extends BaseModel
 
         return null;
     }
+
+
+    public function obtener_correo_y_password($id_usuario)
+{
+    $id_usuario = intval($id_usuario);
+
+    $sql = "
+        SELECT
+            email,
+            password
+        FROM USUARIOS
+        WHERE id_usuarios = $id_usuario
+        AND estado = 'A'
+    ";
+
+    $resultado = $this->db->datos($sql);
+
+   return $resultado;
+}
+
 }

@@ -2,6 +2,8 @@
 date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_personas_departamentosM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_personasM.php');
+require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 
 $controlador = new th_personas_departamentosC();
 
@@ -10,9 +12,10 @@ if (isset($_GET['listar'])) {
 }
 if (isset($_GET['verificar'])) {
     $password = $_POST['password'] ?? '';
+    $per_id = $_POST['id'] ?? '';
 
     // Llama a tu función (asumiendo que $controlador ya está instanciado)
-    $controlador->validar_correo($password);
+     echo json_encode($controlador->validar_correo($password,$per_id));
     // No pongas nada más aquí porque validar_correo() ya hace exit
 }
 
@@ -70,26 +73,48 @@ if (isset($_GET['listar_personas_modal'])) {
 class th_personas_departamentosC
 {
     private $modelo;
-
+    private $codigo_globales;
+    private $th_personas;
 
     function __construct()
     {
         $this->modelo = new th_personas_departamentosM();
+         $this->codigo_globales = new codigos_globales();
+         $this->th_personas = new th_personasM();
     }
 
-    function validar_correo($password)
+    function validar_correo($password_validar, $id)
     {
 
         $email = $_SESSION['INICIO']['EMAIL'];
+        $id_usuario = $_SESSION['INICIO']['ID_USUARIO'];
+
+        $usuario = $this->modelo->obtener_correo_y_password($id_usuario);
 
 
-        header('Content-Type: application/json');
-        echo json_encode([
-            'valido' => true,
-            'session' => $_SESSION['INICIO']['EMAIL'],
-            'password_recibido' => $password
-        ]);
-        exit; // IMPORTANTE: Detiene toda ejecución
+        $password = $this->codigo_globales->desenciptar_clave(trim($usuario[0]['password'] ?? ''));
+
+       
+
+        if($password_validar == $password ){
+       
+        $datos = array(
+            array('campo' => 'th_per_estado', 'dato' => 0),
+        );
+
+        $where[0]['campo'] = 'th_per_id';
+        $where[0]['dato'] = $id;
+
+        $datos = $this->th_personas->editar($datos, $where);
+        return 1;
+
+        }else{
+             
+            return -3;
+
+        }
+
+       
     }
 
     function listar($id = '')

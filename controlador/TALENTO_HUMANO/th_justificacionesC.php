@@ -71,6 +71,11 @@ class th_justificacionesC
             $txt_horas_totales =  $this->hora_a_minutos($parametros['txt_horas_totales']);
         }
 
+        $datos = $this->modelo->existe_justificacion_en_rango($txt_fecha_inicio,$txt_fecha_fin,$parametros['ddl_departamentos'] = null,$parametros['ddl_personas'] = null,$parametros['_id'] = null);
+        if($datos > 0){
+            return -3;
+        }
+
 
         $datos = array(
             array('campo' => 'th_jus_fecha_inicio', 'dato' =>  $txt_fecha_inicio),

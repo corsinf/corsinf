@@ -347,29 +347,47 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
     }
 
     function validar_Hora_Suple_Fuera_De_Horario() {
+
         let horaEntrada = $('#txt_hora_entrada').val();
         let horaSalida = $('#txt_hora_salida').val();
         let horaSupleInicio = $('#txt_hora_suple_inicio').val();
+        let horaSupleFinal = $('#txt_hora_suple_final').val();
 
-        if (!horaEntrada || !horaSalida || !horaSupleInicio) {
-            return; // Si falta alguno, no validar aún
+        // Validar que existan los valores necesarios
+        if (!horaEntrada || !horaSalida || !horaSupleInicio || !horaSupleFinal) {
+            return;
         }
+
         const entradaMin = hora_a_minutos(horaEntrada);
         const salidaMin = hora_a_minutos(horaSalida);
-        const supleMin = hora_a_minutos(horaSupleInicio);
+        const supleMinInicio = hora_a_minutos(horaSupleInicio);
+        const supleMinFinal = hora_a_minutos(horaSupleFinal);
 
-        if (supleMin >= entradaMin && supleMin <= salidaMin) {
+        if (supleMinInicio > supleMinFinal) {
             mostrarAlerta(
                 'error',
-                'Hora suple inválida',
-                `❌ La hora suplementaria de inicio (${horaSupleInicio}) no puede estar dentro del horario laboral (${horaEntrada} - ${horaSalida}).`
+                'Hora suplementaria inválida',
+                `La hora de inicio (${horaSupleInicio}) no puede ser mayor a la final (${horaSupleFinal}).`
             );
             $('#txt_hora_suple_inicio').val('');
             $('#btn_crear_editar_turno').prop('disabled', true);
-        } else {
-            $('#btn_crear_editar_turno').prop('disabled', false);
+            return;
         }
+
+        if (supleMinInicio >= entradaMin && supleMinInicio <= salidaMin) {
+            mostrarAlerta(
+                'error',
+                'Hora suplementaria inválida',
+                `La hora suplementaria (${horaSupleInicio}) no puede estar dentro del horario laboral (${horaEntrada} - ${horaSalida}).`
+            );
+            $('#txt_hora_suple_inicio').val('');
+            $('#btn_crear_editar_turno').prop('disabled', true);
+            return;
+        }
+
+        $('#btn_crear_editar_turno').prop('disabled', false);
     }
+
 
     function verificar_descanso() {
         let horaEntrada = $('#txt_checkin_registro_fin').val();
