@@ -94,7 +94,8 @@ if (isset($_GET['_id'])) {
         console.log(parametros);
 
         if (parametros == 1) {
-            let hoy = new Date().toISOString().split('T')[0];
+            let fecha_hoy = new Date();
+            hoy = fecha_formateada(fecha_hoy);
             parametros = {
                 'txt_fecha_inicio': hoy,
                 'txt_fecha_fin': hoy,
