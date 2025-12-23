@@ -86,35 +86,17 @@ class th_personasC
             array('campo' => 'th_ciu_id', 'dato' => !empty($parametros['ddl_ciudad']) ? $parametros['ddl_ciudad'] : null),
             array('campo' => 'th_parr_id', 'dato' => !empty($parametros['ddl_parroquia']) ? $parametros['ddl_parroquia'] : null),
             
-            // Información laboral
-            array('campo' => 'th_car_id', 'dato' => !empty($parametros['ddl_cargo']) ? $parametros['ddl_cargo'] : null),
-            array('campo' => 'th_per_fecha_ingreso', 'dato' => $txt_fecha_ingreso),
-            array('campo' => 'th_per_anios_trabajo', 'dato' => !empty($parametros['txt_anios_trabajo']) ? $parametros['txt_anios_trabajo'] : null),
-            array('campo' => 'th_per_seccion', 'dato' => !empty($parametros['txt_seccion']) ? $parametros['txt_seccion'] : null),
-            array('campo' => 'th_per_remuneracion', 'dato' => !empty($parametros['txt_remuneracion']) ? $parametros['txt_remuneracion'] : null),
-            
             // Información adicional
             array('campo' => 'th_per_tipo_sangre', 'dato' => !empty($parametros['ddl_tipo_sangre']) ? $parametros['ddl_tipo_sangre'] : null),
             array('campo' => 'th_per_observaciones', 'dato' => trim($parametros['txt_observaciones'] ?? '')),
             
-            // Campos de diversidad (CORREGIR: son ddl_ no txt_)
-            array('campo' => 'th_per_etnia', 'dato' => !empty($parametros['ddl_etnia']) ? $parametros['ddl_etnia'] : null),
-            array('campo' => 'th_per_orientacion', 'dato' => !empty($parametros['ddl_orientacion']) ? $parametros['ddl_orientacion'] : null),
-            array('campo' => 'th_per_religion', 'dato' => !empty($parametros['ddl_religion']) ? $parametros['ddl_religion'] : null),
-            
-            // Información sobre discapacidad
-            array('campo' => 'th_per_tipo_discapacidad', 'dato' => !empty($parametros['ddl_tipo_discapacidad']) ? $parametros['ddl_tipo_discapacidad'] : null),
-            array('campo' => 'th_per_porcentaje_discapacidad', 'dato' => !empty($parametros['txt_porcentaje_discapacidad']) ? $parametros['txt_porcentaje_discapacidad'] : null),
-            array('campo' => 'th_per_escala_discapacidad', 'dato' => !empty($parametros['ddl_escala_discapacidad']) ? $parametros['ddl_escala_discapacidad'] : null),
-            
-            // Vehículo
-            array('campo' => 'th_per_clase_auto', 'dato' => !empty($parametros['ddl_clase_auto']) ? $parametros['ddl_clase_auto'] : null),
-            array('campo' => 'th_per_placa_original', 'dato' => !empty($parametros['txt_placa_original']) ? $parametros['txt_placa_original'] : null),
-            array('campo' => 'th_per_placa_sintesis', 'dato' => !empty($parametros['txt_placa_sintesis']) ? $parametros['txt_placa_sintesis'] : null),
-            
-            // Comisión
-            array('campo' => 'th_per_comision_asuntos_sociales', 'dato' => !empty($parametros['txt_comision_asuntos_sociales']) ? $parametros['txt_comision_asuntos_sociales'] : null),
-            
+            array('campo' => 'id_etnia', 'dato' => !empty($parametros['ddl_etnia']) ? $parametros['ddl_etnia'] : null),
+            array('campo' => 'id_orientacion_sexual', 'dato' => !empty($parametros['ddl_religion']) ? $parametros['ddl_religion'] : null),
+            array('campo' => 'id_identidad_genero', 'dato' => !empty($parametros['ddl_orientacion_sexual']) ? $parametros['ddl_orientacion_sexual'] : null),
+            array('campo' => 'id_religion', 'dato' => !empty($parametros['ddl_identidad_genero']) ? $parametros['ddl_identidad_genero'] : null),
+            array('campo' => 'th_per_correo_personal_1', 'dato' => !empty($parametros['txt_per_correo_personal_1']) ? $parametros['txt_per_correo_personal_1'] : null),
+            array('campo' => 'th_per_correo_personal_2', 'dato' => !empty($parametros['txt_per_correo_personal_2']) ? $parametros['txt_per_correo_personal_2'] : null),
+
             // Metadata
             array('campo' => 'th_per_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
             array('campo' => 'th_per_estado', 'dato' => '1'), // 1 = Activo

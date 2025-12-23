@@ -200,6 +200,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                            <i class='bx bx-file'></i> Descargar Nómina
                                         </button>
 
+                                         <a href="javascript:void(0)" class="btn btn-success btn-sm"
+                                            data-bs-toggle="modal" data-bs-target="#modal_mensaje">
+                                            <i class="bx bx-envelope me-1"></i> Enviar Mensaje
+                                        </a>
+
 
                                     </div>
                                 </div>

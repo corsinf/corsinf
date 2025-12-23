@@ -55,7 +55,7 @@ if (isset($_GET['_id'])) {
         // cargar_tabla();
         <?php if (isset($_GET['_id'])) { ?>
             cargar_datos_persona(<?= $_id ?>);
-            // cargar_departamento(<?= $_id ?>);
+            cargar_departamento(<?= $_id ?>);
         <?php } ?>
         cargar_selects2();
 
@@ -96,128 +96,22 @@ if (isset($_GET['_id'])) {
         });
     }
 
-    function cargar_persona_horario(id_persona) {
-        $.ajax({
-            data: {
-                id: id_persona
-            },
-            url: '../controlador/TALENTO_HUMANO/th_programar_horariosC.php?listar_persona_horario=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                if (response && response.length > 0) {
-                    cargar_turnos_horario(response[0].id_horario);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error al cargar departamento:', error);
-            }
-        });
-    }
-
-
-    function cargar_turnos_horario(id_horario) {
-
-        $.ajax({
-            url: '../controlador/TALENTO_HUMANO/th_turnos_horarioC.php?listar=true',
-            type: 'post',
-            data: {
-                id: id_horario,
-            },
-            dataType: 'json',
-
-            success: function(response) {
-
-                calendar.removeAllEvents();
-                // Recorrer la respuesta y agregar eventos al arreglo events
-                response.forEach(function(evento) {
-                    //console.log(evento);
-
-                    if (evento.dia == '1') {
-                        fecha_dia_estatico = '2024-02-11';
-                    } else if (evento.dia == '2') {
-                        fecha_dia_estatico = '2024-02-12';
-                    } else if (evento.dia == '3') {
-                        fecha_dia_estatico = '2024-02-13';
-                    } else if (evento.dia == '4') {
-                        fecha_dia_estatico = '2024-02-14';
-                    } else if (evento.dia == '5') {
-                        fecha_dia_estatico = '2024-02-15';
-                    } else if (evento.dia == '6') {
-                        fecha_dia_estatico = '2024-02-16';
-                    } else if (evento.dia == '7') {
-                        fecha_dia_estatico = '2024-02-17';
-                    }
-
-                    calendar.addEvent({
-                        //id: evento.id_turno,
-                        title: (evento.nombre),
-                        start: fecha_dia_estatico + 'T' + minutos_formato_hora(evento
-                            .hora_entrada),
-                        end: fecha_dia_estatico + 'T' + minutos_formato_hora(evento
-                            .hora_salida),
-                        extendedProps: {
-                            id_turno_horario: evento._id,
-                            id_turno: evento.id_turno,
-                        },
-
-                        color: evento.color
-
-                    });
-                });
-                // Renderizar el calendario después de agregar los eventos
-                calendar.render();
-
-            }
-        });
-
-    }
-
-    // ---- 1A: Insertar/Actualizar varias personas (reutiliza tu endpoint actual) ----
-    function insertar_persona_departamento() {
-        var deptId = $('#ddl_departamentos').val();
-        var perdepId = $('#id_perdep').val();
-
-        if (!deptId) {
-            Swal.fire('', 'Seleccione un departamento', 'warning');
-            return;
-        }
-
-        var parametros = {
-            '_id': perdepId || '', // th_perdep_id para edición
-            'id_persona': PERSON_ID, // th_per_id
-            'id_departamento': deptId, // th_dep_id
-            'txt_visitor': $('#txt_visitor').val() || ''
-        };
-
-        $.ajax({
-            url: '../controlador/TALENTO_HUMANO/th_personas_departamentosC.php?insertar_editar_persona=true',
-            type: 'post',
-            dataType: 'json',
-            data: {
-                parametros: parametros
-            },
-            success: function(response) {
-                if (response == 1) {
-                    Swal.fire('', 'Operación realizada con éxito.', 'success').then(() => {
-                        location.reload(); // O redirigir según necesites
-                    });
-                } else if (response == -2) {
-                    Swal.fire('', 'Esta persona ya está asignada a este departamento', 'warning');
-                } else {
-                    Swal.fire('', 'Error en la operación', 'error');
-                }
-            },
-            error: function(xhr, status, error) {
-                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
-            }
-        });
-    }
-
     function cargar_selects2() {
 
         url_departamentosC = '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true';
         cargar_select2_url('ddl_departamentos', url_departamentosC);
+
+        url_etniaC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_etniaC.php?buscar=true';
+        cargar_select2_url('ddl_etnia', url_etniaC);
+
+        url_religionC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_religionC.php?buscar=true';
+        cargar_select2_url('ddl_religion', url_religionC);
+
+        url_orientacion_sexualC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_orientacion_sexualC.php?buscar=true';
+        cargar_select2_url('ddl_orientacion_sexual', url_orientacion_sexualC);
+
+        url_identidad_generoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_identidad_generoC.php?buscar=true';
+        cargar_select2_url('ddl_identidad_genero', url_identidad_generoC);
 
     }
 
@@ -540,7 +434,66 @@ if (isset($_GET['_id'])) {
 </script>
 
 <script>
-    //Departamentos
+    function cargar_departamento(id) {
+        $.ajax({
+            data: {
+                id: id
+            },
+            url: '../controlador/TALENTO_HUMANO/th_personasC.php?listar_persona_departamento=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if (response && response.length > 0) {
+                    $('#id_perdep').val(response[0]._id_perdep);
+                    $('#ddl_departamentos').append($('<option>', {
+                        value: response[0].id_departamento,
+                        text: response[0].nombre_departamento,
+                        selected: true
+                    }));
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error al cargar departamento:', error);
+            }
+        });
+    }
+
+    function insertar_persona_departamento() {
+        const deptId = $('#ddl_departamentos').val();
+        const perdepId = $('#id_perdep').val();
+
+        if (!deptId) {
+            Swal.fire('', 'Seleccione un departamento', 'warning');
+            return;
+        }
+
+        const parametros = {
+            '_id': perdepId || '',
+            'id_persona': '<?= $_id ?>',
+            'id_departamento': deptId,
+            'txt_visitor': $('#txt_visitor').val() || ''
+        };
+
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_personas_departamentosC.php?insertar_editar_persona=true',
+            type: 'post',
+            dataType: 'json',
+            data: {
+                parametros: parametros
+            },
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operación realizada con éxito.', 'success').then(() => {
+                        location.reload();
+                    });
+                } else if (response == -2) {
+                    Swal.fire('', 'Esta persona ya está asignada a este departamento', 'warning');
+                } else {
+                    Swal.fire('', 'Error en la operación', 'error');
+                }
+            }
+        });
+    }
 </script>
 
 <div class="page-wrapper">
@@ -572,54 +525,94 @@ if (isset($_GET['_id'])) {
                     <div class="card-body p-5">
                         <div class="card-title align-items-center">
                             <div class="row">
-                                <div class="col-12">
 
-                                    <h5 class="mb-0 text-primary">
-                                        <i class="bx bxs-user me-1 font-22 text-primary"></i>
-                                        <?php
-                                        if ($_id == '') {
-                                            echo 'Registrar Persona';
-                                        } else {
-                                            echo 'Modificar Persona';
-                                        }
-                                        ?>
-                                    </h5>
+
+
+                                <ul class="nav nav-tabs nav-primary" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#tab_personas">
+                                            Personas
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#persona_departamento">
+                                            Departamento
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content py-3">
+                                    <div class="tab-pane fade show active" id="tab_personas">
+                                        <div class="col-12">
+
+                                            <h5 class="mb-0 text-primary">
+                                                <i class="bx bxs-user me-1 font-22 text-primary"></i>
+                                                <?php
+                                                if ($_id == '') {
+                                                    echo 'Registrar Persona';
+                                                } else {
+                                                    echo 'Modificar Persona';
+                                                }
+                                                ?>
+                                            </h5>
+                                        </div>
+                                        <hr>
+                                        <div class="col-12">
+                                            <button onclick="regresar_boton_persona();"
+                                                class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i>
+                                                Regresar</button>
+                                            <button class="btn btn-primary btn-sm" onclick="modalBiometria()"><i
+                                                    class="bx bx-sync"></i>Biometria</button>
+                                            <a href="javascript:void(0)" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modal_mensaje">
+                                                <i class="bx bx-envelope"></i> Enviar Mensaje
+                                            </a>
+                                            <!-- <button class="btn btn-primary btn-sm" onclick="syncronizarPersona()"><i class="bx bx-sync"></i>Syncronizar persona en biometrico</button>                                     -->
+                                        </div>
+                                        <div class="pt-2">
+                                            <form id="registrar_personas" class="modal_general_provincias">
+                                                <?php include_once('../vista/GENERAL/registrar_personas.php'); ?>
+
+                                                <div class="d-flex justify-content-end pt-2">
+                                                    <?php if ($_id == '') { ?>
+                                                        <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center"
+                                                            onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i>
+                                                            Guardar</button>
+                                                    <?php } else { ?>
+                                                        <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center"
+                                                            onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i>
+                                                            Guardar</button>
+                                                        <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center"
+                                                            onclick="delete_datos_persona()" type="button"><i class="bx bx-trash"></i>
+                                                            Eliminar</button>
+                                                    <?php } ?>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
-                                <hr>
-                                <div class="col-12">
-                                    <button onclick="regresar_boton_persona();"
-                                        class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i>
-                                        Regresar</button>
-                                    <button class="btn btn-primary btn-sm" onclick="modalBiometria()"><i
-                                            class="bx bx-sync"></i>Biometria</button>
-                                    <a href="javascript:void(0)" class="btn btn-success btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#modal_mensaje">
-                                        <i class="bx bx-envelope"></i> Enviar Mensaje
-                                    </a>
-                                    <!-- <button class="btn btn-primary btn-sm" onclick="syncronizarPersona()"><i class="bx bx-sync"></i>Syncronizar persona en biometrico</button>                                     -->
+                                <div class="tab-pane fade" id="persona_departamento">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input id="id_perdep" type="hidden" value="" />
+                                            <label for="ddl_departamentos" class="form-label fw-bold">
+                                                <i class="bx bxs-building"></i> Departamento
+                                            </label>
+
+                                            <select id="ddl_departamentos" class="form-select form-select-sm">
+                                                <option value="">-- Seleccione Departamento --</option>
+                                            </select>
+
+                                            <button
+                                                class="btn btn-primary btn-sm px-4 mt-2 d-flex align-items-center"
+                                                onclick="insertar_persona_departamento();"
+                                                type="button">
+                                                <i class="bx bx-save me-1"></i> Guardar
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
+
                             </div>
-                        </div>
-
-                        <div class="pt-2">
-                            <form id="registrar_personas" class="modal_general_provincias">
-                                <?php include_once('../vista/GENERAL/registrar_personas.php'); ?>
-
-                                <div class="d-flex justify-content-end pt-2">
-                                    <?php if ($_id == '') { ?>
-                                        <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center"
-                                            onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i>
-                                            Guardar</button>
-                                    <?php } else { ?>
-                                        <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center"
-                                            onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i>
-                                            Guardar</button>
-                                        <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center"
-                                            onclick="delete_datos_persona()" type="button"><i class="bx bx-trash"></i>
-                                            Eliminar</button>
-                                    <?php } ?>
-                                </div>
-                            </form>
                         </div>
                     </div>
                 </div>

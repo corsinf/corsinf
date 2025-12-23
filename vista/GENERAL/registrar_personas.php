@@ -39,7 +39,28 @@
                     cargar_select2_con_id('ddl_parroquia', url_parroquiaC, response[0].id_parroquia, 'th_parr_nombre');
                 }
 
-
+                $('#ddl_etnia').append($('<option>', {
+                    value:  response[0].id_etnia,
+                    text:  response[0].descripcion_etnia,
+                    selected: true
+                }));
+                 $('#ddl_religion').append($('<option>', {
+                    value:  response[0].id_religion,
+                    text:  response[0].descripcion_religion,
+                    selected: true
+                }));
+                $('#ddl_identidad_genero').append($('<option>', {
+                    value:  response[0].id_identidad_genero,
+                    text:  response[0].descripcion_identidad_genero,
+                    selected: true
+                }));
+                $('#ddl_orientacion_sexual').append($('<option>', {
+                    value:  response[0].id_orientacion_sexual,
+                    text:  response[0].descripcion_orientacion_sexual,
+                    selected: true
+                }));
+                $('#txt_per_correo_personal_1').val(response[0].correo_personal_1);
+                $('#txt_per_correo_personal_2').val(response[0].correo_personal_2);
             },
         });
     }
@@ -52,7 +73,7 @@
             'txt_segundo_apellido': $('#txt_segundo_apellido').val(),
             'txt_fecha_nacimiento': $('#txt_fecha_nacimiento').val(),
             'ddl_nacionalidad': $('#ddl_nacionalidad').val(),
-            'txt_cedula': $('#txt_cedula').val(),
+            'txt_cedula_persona': $('#txt_cedula').val(),
             'ddl_estado_civil': $('#ddl_estado_civil').val(),
             'ddl_sexo': $('#ddl_sexo').val(),
             'txt_telefono_1': $('#txt_telefono_1').val(),
@@ -65,6 +86,12 @@
             'txt_direccion': $('#txt_direccion').val(),
             'txt_observaciones': $('#txt_observaciones').val(),
             'ddl_tipo_sangre': $('#ddl_tipo_sangre').val(),
+            'ddl_etnia': $('#ddl_etnia').val(),
+            'ddl_religion': $('#ddl_religion').val(),
+            'ddl_orientacion_sexual': $('#ddl_orientacion_sexual').val(),
+            'ddl_identidad_genero': $('#ddl_identidad_genero').val(),
+            'txt_per_correo_personal_1': $('#txt_per_correo_personal_1').val(),
+            'txt_per_correo_personal_2': $('#txt_per_correo_personal_2').val(),
         };
     }
 
@@ -218,6 +245,42 @@
     <div class="col-md-12">
         <label for="txt_observaciones" class="form-label form-label-sm">Observaciones </label>
         <input type="text" class="form-control form-control-sm" name="txt_observaciones" id="txt_observaciones" maxlength="200">
+    </div>
+</div>
+<div class="row mb-col">
+    <div class="col-md-3">
+        <label for="ddl_etnia" class="form-label form-label-sm">Etnía </label>
+        <select class="form-select form-select-sm select2-validation" id="ddl_etnia" name="ddl_etnia" maxlenght="5000">
+        </select>
+        <label class="error" style="display: none;" for="ddl_etnia"></label>
+    </div>
+    <div class="col-md-3">
+        <label for="ddl_orientacion_sexual" class="form-label form-label-sm">Orientación Sexual </label>
+        <select class="form-select form-select-sm select2-validation" id="ddl_orientacion_sexual" name="ddl_orientacion_sexual" maxlenght="5000">
+        </select>
+        <label class="error" style="display: none;" for="ddl_orientacion_sexual"></label>
+    </div>
+    <div class="col-md-3">
+        <label for="ddl_religion" class="form-label form-label-sm">Religión </label>
+        <select class="form-select form-select-sm select2-validation" id="ddl_religion" name="ddl_religion" maxlenght="5000">
+        </select>
+        <label class="error" style="display: none;" for="ddl_religion"></label>
+    </div>
+    <div class="col-md-3">
+        <label for="ddl_identidad_genero" class="form-label form-label-sm">Identidad Genero</label>
+        <select class="form-select form-select-sm select2-validation" id="ddl_identidad_genero" name="ddl_identidad_genero" maxlenght="5000">
+        </select>
+        <label class="error" style="display: none;" for="ddl_identidad_genero"></label>
+    </div>
+</div>
+<div class="row mb-col">
+    <div class="col-md-6">
+        <label for="txt_per_correo_personal_1" class="form-label form-label-sm">Otro Correo Electrónico</label>
+        <input type="email" class="form-control form-control-sm" name="txt_per_correo_personal_1" id="txt_per_correo_personal_1" value="" maxlength="100">
+    </div>
+    <div class="col-md-6">
+        <label for="txt_per_correo_personal_2" class="form-label form-label-sm">Otro Correo Electrónico 2</label>
+        <input type="email" class="form-control form-control-sm" name="txt_per_correo_personal_2" id="txt_per_correo_personal_2" value="" maxlength="100">
     </div>
 </div>
 

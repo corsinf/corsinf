@@ -48,7 +48,12 @@ class th_personasM extends BaseModel
         'th_per_codigo_externo_1 AS codigo_externo_1',
         'th_per_codigo_externo_2 AS codigo_externo_2',
         'th_per_codigo_externo_3 AS codigo_externo_3',
-        // 'th_car_id AS id_car',
+        'id_etnia',
+        'id_orientacion_sexual',
+        'id_identidad_genero',
+        'id_religion',
+        'th_per_correo_personal_1',
+        'th_per_correo_personal_2',
         // 'th_per_etnia AS etnia',
         // 'th_per_orientacion AS orientacion',
         // 'th_per_religion AS religion',
@@ -65,7 +70,7 @@ class th_personasM extends BaseModel
         // 'th_per_comision_asuntos_sociales AS comision_asuntos_sociales',
     ];
 
-    public function obtener_persona_con_nombres($th_per_id = null)
+    public function  obtener_persona_con_nombres($th_per_id = null)
     {
         // Condición base: solo activos
         $condicion = "p.th_per_estado = 1";
@@ -113,7 +118,16 @@ class th_personasM extends BaseModel
                 prov.th_prov_nombre                  AS th_prov_nombre,
                 ciu.th_ciu_nombre                    AS th_ciu_nombre,
                 parr.th_parr_nombre                  AS th_parr_nombre,
-
+                p.id_etnia,
+                p.id_orientacion_sexual,
+                p.id_identidad_genero,
+                p.id_religion,
+                p.th_per_correo_personal_1             AS correo_personal_1,
+                p.th_per_correo_personal_2             AS correo_personal_2,
+                et.descripcion                       AS descripcion_etnia,
+                ori_sex.descripcion                  AS descripcion_orientacion_sexual,
+                rel.descripcion                      AS descripcion_religion,
+                ide_gen.descripcion                  AS descripcion_identidad_genero,
                 RTRIM(
                     CONCAT(
                         COALESCE(p.th_per_primer_apellido, ''), ' ',
@@ -129,6 +143,14 @@ class th_personasM extends BaseModel
                 ON p.th_ciu_id = ciu.th_ciu_id
             LEFT JOIN th_parroquias parr
                 ON p.th_parr_id = parr.th_parr_id
+            LEFT JOIN th_cat_etnia et
+                ON p.id_etnia = et.id_etnia
+            LEFT JOIN th_cat_orientacion_sexual ori_sex
+                ON p.id_orientacion_sexual = ori_sex.id_orientacion_sexual
+            LEFT JOIN th_cat_religion rel
+                ON p.id_religion = rel.id_religion
+            LEFT JOIN th_cat_identidad_genero ide_gen
+                ON p.id_identidad_genero = ide_gen.id_identidad_genero
             WHERE {$condicion}
             ORDER BY p.th_per_primer_apellido, p.th_per_primer_nombre;";
 
