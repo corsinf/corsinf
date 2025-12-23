@@ -375,16 +375,6 @@ if (isset($_GET['id'])) {
                                         </div>
                                     </a>
                                 </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#successcontact" role="tab"
-                                        aria-selected="false" tabindex="-1">
-                                        <div class="d-flex align-items-center">
-                                            <div class="tab-icon"><i class="bx bxs-user-check font-18 me-1"></i>
-                                            </div>
-                                            <div class="tab-title">Estado del Empleado</div>
-                                        </div>
-                                    </a>
-                                </li>
                             </ul>
                             <div class="tab-content pt-3">
                                 <!-- Primera Sección, Historial Laboral -->
@@ -624,35 +614,6 @@ if (isset($_GET['id'])) {
                                                 <hr class="my-0">
 
                                                 <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_aptitudes.php'); ?>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Cuarta Sección, Estado del Empleado -->
-                                <div class="tab-pane fade" id="successcontact" role="tabpanel">
-                                    <div class="card">
-                                        <div class="d-flex flex-column mx-4">
-                                            <div class="card-body">
-                                                <div class="mb-2">
-                                                    <div class="row">
-                                                        <div class="col-6 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Estado laboral:</h6>
-                                                        </div>
-                                                        <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#"
-                                                                class="text-success icon-hover d-flex align-items-center"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#modal_estado_laboral">
-                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span>Agregar</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr>
-
-                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_estado_laboral.php'); ?>
 
                                             </div>
                                         </div>
