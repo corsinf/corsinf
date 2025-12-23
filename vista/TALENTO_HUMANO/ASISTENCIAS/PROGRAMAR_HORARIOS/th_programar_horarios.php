@@ -21,7 +21,7 @@ $(document).ready(function() {
                 data: null,
                 render: function(data, type, item) {
                     href =
-                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_programar_horarios&_id=${item._id}`;
+                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_programar_horarios&_id=${item._id}&tipo=departamento`;
                     return `<a href="${href}"><u>${item.nombre_departamento}</u></a>`;
                 }
             },
@@ -62,7 +62,7 @@ $(document).ready(function() {
                 data: null,
                 render: function(data, type, item) {
                     href =
-                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_programar_horarios&_id=${item._id}`;
+                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_programar_horarios&_id=${item._id}&tipo=persona`;
                     return `<a href="${href}"><u>${item.nombre_persona}</u></a>`;
                 }
             },

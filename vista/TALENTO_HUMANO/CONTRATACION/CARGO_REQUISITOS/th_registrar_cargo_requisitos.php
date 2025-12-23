@@ -31,7 +31,7 @@ function guardar_actualizar() {
             if (r == 1) {
                 Swal.fire("", "Registrado correctamente", "success")
                     .then(() => location.href =
-                        "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_cargo_requisitos"
+                        "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_cargos"
                     );
             } else if (r == -2) {
                 Swal.fire("Error", "Nombre ya existe", "warning");
@@ -57,7 +57,7 @@ function eliminar_requisito() {
             if (response == 1) {
                 Swal.fire('Eliminado!', 'Registro eliminado.', 'success').then(function() {
                     location.href =
-                        '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_cargo_requisitos';
+                        '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_cargos';
                 });
             } else {
                 Swal.fire('', response.msg || 'No se pudo eliminar.', 'error');
@@ -329,7 +329,7 @@ $(document).ready(function() {
 
                     <div class="row m-2">
                         <div class="col-sm-12">
-                            <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_cargo_requisitos"
+                            <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_cargos"
                                 class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i>
                                 Regresar</a>
                         </div>

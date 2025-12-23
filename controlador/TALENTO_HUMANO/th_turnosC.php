@@ -134,13 +134,16 @@ class th_turnosC
         );
 
         if ($parametros['_id'] == '') {
-            if (count($this->modelo->where('th_tur_nombre', $parametros['txt_nombre'])->listar()) == 0) {
+            if (count($this->modelo->where('th_tur_nombre', $parametros['txt_nombre'])
+                ->where('th_tur_estado', 1)->listar()) == 0) {
                 $datos = $this->modelo->insertar($datos);
             } else {
                 return -2;
             }
         } else {
-            if (count($this->modelo->where('th_tur_nombre', $parametros['txt_nombre'])->where('th_tur_id !', $parametros['_id'])->listar()) == 0) {
+            if (count($this->modelo->where('th_tur_nombre', $parametros['txt_nombre'])
+                ->where('th_tur_id !', $parametros['_id'])
+               ->where('th_tur_estado', 1)->listar()) == 0) {
                 $where[0]['campo'] = 'th_tur_id';
                 $where[0]['dato'] = $parametros['_id'];
                 $datos = $this->modelo->editar($datos, $where);

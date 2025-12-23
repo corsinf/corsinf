@@ -17,30 +17,29 @@ if (isset($_GET['tipo'])) {
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+$(document).ready(function () {
 
     let tipo = "<?= $tipo ?>";
 
     if (tipo === "persona") {
         // mostrar panel personas
-        document.getElementById("pnl_personas").style.display = "block";
-        document.getElementById("pnl_departamentos").style.display = "none";
+        $("#pnl_personas").show();
+        $("#pnl_departamentos").hide();
 
         // marcar radio
-        document.getElementById("cbx_programar_persona").checked = true;
-
+        $("#cbx_programar_persona").prop("checked", true);
     }
 
     if (tipo === "departamento") {
-        document.getElementById("pnl_personas").style.display = "none";
-        document.getElementById("pnl_departamentos").style.display = "block";
+        $("#pnl_personas").hide();
+        $("#pnl_departamentos").show();
 
-        document.getElementById("cbx_programar_departamento").checked = true;
-
+        $("#cbx_programar_departamento").prop("checked", true);
     }
 
 });
 </script>
+
 
 
 <script type="text/javascript">
@@ -264,8 +263,10 @@ $(document).ready(function() {
         }
     });
 
-    //Validacion para las fechas
     $("input[name='txt_fecha_fin']").on("blur", function() {
+        if (!verificar_fecha_inicio_fecha_fin('txt_fecha_inicio', 'txt_fecha_fin')) return;
+    });
+    $("input[name='txt_fecha_inicio']").on("blur", function() {
         if (!verificar_fecha_inicio_fecha_fin('txt_fecha_inicio', 'txt_fecha_fin')) return;
     });
 
