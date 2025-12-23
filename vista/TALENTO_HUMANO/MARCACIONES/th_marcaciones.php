@@ -14,24 +14,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     function cargar_tabla() {
         tabla = $('#txt_tabla').val();
 
-        txt_fecha_inicio_temp = $('#txt_fecha_inicio').val();
-        txt_fecha_fin_temp = $('#txt_fecha_fin').val();
+        txt_fecha_inicio = $('#txt_fecha_inicio').val();
+        txt_fecha_fin = $('#txt_fecha_fin').val();
 
-        var fecha_Hoy = new Date();
-        var formato_Fecha = fecha_Hoy.getFullYear() + '-' + (fecha_Hoy.getMonth() + 1) + '-' + fecha_Hoy.getDate();
-
-
-        txt_fecha_inicio = '';
-        txt_fecha_fin = '';
-        if (txt_fecha_inicio_temp == '' && txt_fecha_fin_temp == '') {
-            txt_fecha_inicio = formato_Fecha;
-            txt_fecha_fin = formato_Fecha;
-        } else {
-            txt_fecha_inicio = txt_fecha_inicio_temp;
-            txt_fecha_fin = txt_fecha_fin_temp;
-        }
-
-        tbl_marcaciones = $('#tbl_marcaciones').DataTable($.extend({}, configuracion_datatable('Marcaciones', 'feriados'), {
+        tbl_marcaciones = $('#tbl_marcaciones').DataTable($.extend({}, configuracion_datatable('Marcaciones', 'Marcaciones'), {
             reponsive: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
@@ -47,9 +33,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 },
                 dataSrc: ''
             },
-
-
-
             columns: [
 
                 {
