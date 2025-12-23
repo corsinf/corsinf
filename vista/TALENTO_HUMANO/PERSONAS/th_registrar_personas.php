@@ -10,528 +10,537 @@ if (isset($_GET['_id'])) {
 
 ?>
 <script>
-// Creamos la variable JS con el valor obtenido en PHP
-const PERSON_ID = '<?= $_id ?>';
+    // Creamos la variable JS con el valor obtenido en PHP
+    const PERSON_ID = '<?= $_id ?>';
 </script>
 
 
 <style>
-.custom-file-upload {
-    display: inline-block;
-    padding: 8px 15px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-    font-size: 14px;
-    border: none;
-    transition: background-color 0.3s ease;
-}
+    .custom-file-upload {
+        display: inline-block;
+        padding: 8px 15px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        font-size: 14px;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
 
-.custom-file-upload:hover {
-    background-color: #0056b3;
-}
+    .custom-file-upload:hover {
+        background-color: #0056b3;
+    }
 
-input[type="file"] {
-    display: none;
-}
+    input[type="file"] {
+        display: none;
+    }
 
-#file-name {
-    margin-left: 10px;
-    font-style: italic;
-}
+    #file-name {
+        margin-left: 10px;
+        font-style: italic;
+    }
 </style>
 
 <script>
-var PersonaId = '<?php echo $_id; ?>'
+    var PersonaId = '<?php echo $_id; ?>'
 </script>
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <script src="../js/RECURSOS_HUMANOS/biometria.js"></script>
 
 <script type="text/javascript">
-$(document).ready(function() {
-    dispositivos();
-    // cargar_tabla();
-    <?php if (isset($_GET['_id'])) { ?>
-    cargar_datos_persona(<?= $_id ?>);
-    // cargar_departamento(<?= $_id ?>);
-    <?php } ?>
-    cargar_selects2();
+    $(document).ready(function() {
+        dispositivos();
+        // cargar_tabla();
+        <?php if (isset($_GET['_id'])) { ?>
+            cargar_datos_persona(<?= $_id ?>);
+            // cargar_departamento(<?= $_id ?>);
+        <?php } ?>
+        cargar_selects2();
 
-});
-
-function cargar_departamento(id) {
-    $.ajax({
-        data: {
-            id: id
-        },
-        url: '../controlador/TALENTO_HUMANO/th_personasC.php?listar_persona_departamento=true',
-        type: 'post',
-        dataType: 'json',
-        success: function(response) {
-            if (response && response.length > 0) {
-                // Cargar el _id_perdep en el campo oculto para edición
-                $('#id_perdep').val(response[0]._id_perdep);
-
-                // Cargar el departamento seleccionado
-                $('#ddl_departamentos').append($('<option>', {
-                    value: response[0].id_departamento,
-                    text: response[0].nombre_departamento,
-                    selected: true
-                }));
-
-                if (response[0].id_departamento == 0) {
-                    cargar_persona_horario(response[0].id_persona);
-                    $('#pnl_horarios_persona').hide();
-                } else {
-                    cargar_persona_horario(response[0].id_persona);
-                    $('#pnl_horarios_persona').show();
-                }
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('Error al cargar departamento:', error);
-        }
-    });
-}
-
-function cargar_persona_horario(id_persona) {
-    $.ajax({
-        data: {
-            id: id_persona
-        },
-        url: '../controlador/TALENTO_HUMANO/th_programar_horariosC.php?listar_persona_horario=true',
-        type: 'post',
-        dataType: 'json',
-        success: function(response) {
-            if (response && response.length > 0) {
-                cargar_turnos_horario(response[0].id_horario);
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('Error al cargar departamento:', error);
-        }
-    });
-}
-
-
-function cargar_turnos_horario(id_horario) {
-
-    $.ajax({
-        url: '../controlador/TALENTO_HUMANO/th_turnos_horarioC.php?listar=true',
-        type: 'post',
-        data: {
-            id: id_horario,
-        },
-        dataType: 'json',
-
-        success: function(response) {
-
-            calendar.removeAllEvents();
-            // Recorrer la respuesta y agregar eventos al arreglo events
-            response.forEach(function(evento) {
-                //console.log(evento);
-
-                if (evento.dia == '1') {
-                    fecha_dia_estatico = '2024-02-11';
-                } else if (evento.dia == '2') {
-                    fecha_dia_estatico = '2024-02-12';
-                } else if (evento.dia == '3') {
-                    fecha_dia_estatico = '2024-02-13';
-                } else if (evento.dia == '4') {
-                    fecha_dia_estatico = '2024-02-14';
-                } else if (evento.dia == '5') {
-                    fecha_dia_estatico = '2024-02-15';
-                } else if (evento.dia == '6') {
-                    fecha_dia_estatico = '2024-02-16';
-                } else if (evento.dia == '7') {
-                    fecha_dia_estatico = '2024-02-17';
-                }
-
-                calendar.addEvent({
-                    //id: evento.id_turno,
-                    title: (evento.nombre),
-                    start: fecha_dia_estatico + 'T' + minutos_formato_hora(evento
-                        .hora_entrada),
-                    end: fecha_dia_estatico + 'T' + minutos_formato_hora(evento
-                        .hora_salida),
-                    extendedProps: {
-                        id_turno_horario: evento._id,
-                        id_turno: evento.id_turno,
-                    },
-
-                    color: evento.color
-
-                });
-            });
-            // Renderizar el calendario después de agregar los eventos
-            calendar.render();
-
-        }
     });
 
-}
-
-// ---- 1A: Insertar/Actualizar varias personas (reutiliza tu endpoint actual) ----
-function insertar_persona_departamento() {
-    var deptId = $('#ddl_departamentos').val();
-    var perdepId = $('#id_perdep').val();
-
-    if (!deptId) {
-        Swal.fire('', 'Seleccione un departamento', 'warning');
-        return;
-    }
-
-    var parametros = {
-        '_id': perdepId || '', // th_perdep_id para edición
-        'id_persona': PERSON_ID, // th_per_id
-        'id_departamento': deptId, // th_dep_id
-        'txt_visitor': $('#txt_visitor').val() || ''
-    };
-
-    $.ajax({
-        url: '../controlador/TALENTO_HUMANO/th_personas_departamentosC.php?insertar_editar_persona=true',
-        type: 'post',
-        dataType: 'json',
-        data: {
-            parametros: parametros
-        },
-        success: function(response) {
-            if (response == 1) {
-                Swal.fire('', 'Operación realizada con éxito.', 'success').then(() => {
-                    location.reload(); // O redirigir según necesites
-                });
-            } else if (response == -2) {
-                Swal.fire('', 'Esta persona ya está asignada a este departamento', 'warning');
-            } else {
-                Swal.fire('', 'Error en la operación', 'error');
-            }
-        },
-        error: function(xhr, status, error) {
-            Swal.fire('', 'Error: ' + xhr.responseText, 'error');
-        }
-    });
-}
-
-function cargar_selects2() {
-
-    url_departamentosC = '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true';
-    cargar_select2_url('ddl_departamentos', url_departamentosC);
-
-}
-
-function insertar_editar_persona() {
-    let parametros = {
-        '_id': '<?= $_id ?>',
-    };
-
-    let parametros_vista_persona = parametros_persona();
-
-    parametros = {
-        ...parametros,
-        ...parametros_vista_persona
-    };
-
-    if ($("#registrar_personas").valid()) {
-        // Si es válido, puedes proceder a enviar los datos por AJAX
-        insertar(parametros);
-    }
-}
-
-function insertar(parametros) {
-    $.ajax({
-        data: {
-            parametros: parametros
-        },
-        url: '../controlador/GENERAL/th_personasC.php?insertar=true',
-        type: 'post',
-        dataType: 'json',
-
-        success: function(response) {
-            if (response == 1) {
-                Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                    location.href =
-                        '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=<?= $redireccionar_vista ?>';
-                });
-            } else if (response == -2) {
-                //Swal.fire('', 'Operación fallida', 'warning');
-                $(txt_cedula).addClass('is-invalid');
-                $('#error_txt_cedula').text('La cédula ya está en uso.');
-            }
-        },
-
-        error: function(xhr, status, error) {
-            console.log('Status: ' + status);
-            console.log('Error: ' + error);
-            console.log('XHR Response: ' + xhr.responseText);
-
-            Swal.fire('', 'Error: ' + xhr.responseText, 'error');
-        }
-    });
-
-    $('#txt_cedula').on('input', function() {
-        $('#error_txt_cedula').text('');
-    });
-}
-</script>
-
-<script>
-/**
- * Script para manejar los dispositivos biométricos y la captura de huellas dactilares.
- */
-
-function cambiar(finger) {
-    $('.btn-outline-primary').removeClass('active');
-    $('#img_palma').attr('src', '../img/de_sistema/palma' + finger + '.gif');
-    $('#btn_finger_' + finger).addClass('active');
-    $('#txt_dedo_num').val(finger);
-}
-
-
-function dispositivos() {
-    $.ajax({
-        // data: {
-        //     id: id
-        // },
-        url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?listar=true',
-        type: 'post',
-        dataType: 'json',
-        success: function(response) {
-            console.log(response);
-            op = '';
-            response.forEach(function(item, i) {
-                op += '<option value="' + item._id + '">' + item.nombre + '</option>';
-            })
-            $('#ddl_dispositivos').html(op);
-
-        },
-        error: function(xhr, status, error) {
-            console.log('Status: ' + status);
-            console.log('Error: ' + error);
-            console.log('XHR Response: ' + xhr.responseText);
-
-            Swal.fire('', 'Error: ' + xhr.responseText, 'error');
-        }
-    });
-}
-
-
-function eliminarfinger(id) {
-    Swal.fire({
-        title: 'Eliminar Registro?',
-        text: "Esta seguro de eliminar este registro?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si'
-    }).then((result) => {
-        if (result.value) {
-            eliminarFing(id);
-        }
-    })
-}
-
-function eliminarFing(id) {
-    $.ajax({
-        data: {
-            id: id
-        },
-        url: '../controlador/TALENTO_HUMANO/th_personasC.php?eliminarFing=true',
-        type: 'post',
-        dataType: 'json',
-        success: function(response) {
-            if (response == 1) {
-                Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-                    tbl_dispositivos.ajax.reload(null, false);
-                });
-            }
-        }
-    });
-}
-
-
-function cargar_tabla() {
-    tbl_dispositivos = $('#tbl_bio_finger').DataTable($.extend({}, {
-        reponsive: true,
-        searching: false, // Desactiva el buscador
-        paging: false, // Desactiva la paginación
-        info: false, // Opcional: Desactiva la información (ej. "Mostrando 1 a 10 de 100 registros")
-
-        language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-        },
-        ajax: {
-            type: 'POST',
-            url: '../controlador/TALENTO_HUMANO/th_personasC.php?registros_biometria=true',
-            data: function(d) {
-
-                var parametros = {
-                    id: '<?php echo $_id; ?>', // Parámetro personalizado
-                };
-                return {
-                    parametros: parametros
-                };
-            },
-            dataSrc: ''
-        },
-        columns: [{
-                data: 'detalle'
-            },
-            {
-                data: null,
-                render: function(data, type, item) {
-                    return `<button type="button" class="btn btn-danger btn-xs" onclick="eliminarfinger('${item.id}')"><i class="bx bx-trash fs-7 me-0 fw-bold"></i></button>`;
-                }
-            },
-
-        ],
-        order: [
-            [1, 'asc']
-        ],
-    }));
-}
-
-function modalBiometria() {
-    $('#modalBiometria').modal('show');
-}
-
-function syncronizarPersonaBio() {
-    if ($('#txt_CardNumero').val() == '') {
-        Swal.fire("Debe tener numero de tarjea en biometria", "", "info");
-        return false;
-    }
-    id = '<?= $_id ?>';
-    parametros = {
-        'id': id,
-        'device': $('#ddl_dispositivosSync').val(),
-        'card': $('#txt_CardNumero').val(),
-    }
-    $.ajax({
-        data: {
-            parametros: parametros
-        },
-        url: '../controlador/TALENTO_HUMANO/th_personasC.php?syncronizarPersona=true',
-        type: 'post',
-        dataType: 'json',
-        success: function(response) {
-            Swal.fire('', response.msj, 'success')
-        }
-    });
-
-}
-</script>
-<script>
-$(function() {
-    var $cbx = $('#cbx_enviar_credenciales');
-    var $contInputs = $('#cont_inputs_mensaje');
-    var $infoCred = $('#info_credenciales');
-    var $modal = $('#modal_mensaje');
-
-
-    function actualizarVista() {
-        if ($cbx.length && $cbx.is(':checked')) {
-            $contInputs.hide();
-            $infoCred.show();
-        } else {
-            $contInputs.show();
-            $infoCred.hide();
-        }
-    }
-
-
-    // Al mostrar el modal, inicializamos la vista
-    $modal.on('show.bs.modal', function() {
-        actualizarVista();
-    });
-    $cbx.on('change', actualizarVista);
-    window.enviarMensaje = function() {
-        var enviarCred = $cbx.is(':checked');
-        var asunto = $.trim($('#txt_asunto').val() || '');
-        var descripcion = $.trim($('#txt_descripcion').val() || '');
-        if (!enviarCred) {
-            if (asunto === '') {
-                alert('Ingresa el asunto.');
-                $('#txt_asunto').focus();
-                return;
-            }
-            if (descripcion === '') {
-                alert('Ingresa la descripción.');
-                $('#txt_descripcion').focus();
-                return;
-            }
-        }
-        var parametrosLogCorreos = {
-            enviar_credenciales: enviarCred ? 1 : 0,
-            asunto: asunto,
-            descripcion: descripcion,
-            per_id: '<?= $_id ? $_id : '' ?>'
-        };
-        enviar_Mail_Persona(parametrosLogCorreos);
-        $modal.modal('hide');
-    };
-
-
-    function enviar_Mail_Persona(parametrosLogCorreos) {
-
+    function cargar_departamento(id) {
         $.ajax({
             data: {
-                parametros: parametrosLogCorreos
+                id: id
             },
-            url: '../controlador/TALENTO_HUMANO/th_logs_correosC.php?enviar_correo=true',
+            url: '../controlador/TALENTO_HUMANO/th_personasC.php?listar_persona_departamento=true',
             type: 'post',
             dataType: 'json',
-            beforeSend: function() {
-                Swal.fire({
-                    title: 'Guardando...',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
+            success: function(response) {
+                if (response && response.length > 0) {
+                    // Cargar el _id_perdep en el campo oculto para edición
+                    $('#id_perdep').val(response[0]._id_perdep);
+
+                    // Cargar el departamento seleccionado
+                    $('#ddl_departamentos').append($('<option>', {
+                        value: response[0].id_departamento,
+                        text: response[0].nombre_departamento,
+                        selected: true
+                    }));
+
+                    if (response[0].id_departamento == 0) {
+                        cargar_persona_horario(response[0].id_persona);
+                        $('#pnl_horarios_persona').hide();
+                    } else {
+                        cargar_persona_horario(response[0].id_persona);
+                        $('#pnl_horarios_persona').show();
                     }
-                });
+                }
             },
+            error: function(xhr, status, error) {
+                console.error('Error al cargar departamento:', error);
+            }
+        });
+    }
+
+    function cargar_persona_horario(id_persona) {
+        $.ajax({
+            data: {
+                id: id_persona
+            },
+            url: '../controlador/TALENTO_HUMANO/th_programar_horariosC.php?listar_persona_horario=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if (response && response.length > 0) {
+                    cargar_turnos_horario(response[0].id_horario);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error al cargar departamento:', error);
+            }
+        });
+    }
+
+
+    function cargar_turnos_horario(id_horario) {
+
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_turnos_horarioC.php?listar=true',
+            type: 'post',
+            data: {
+                id: id_horario,
+            },
+            dataType: 'json',
+
             success: function(response) {
 
-                if (response && response.total !== undefined) {
+                calendar.removeAllEvents();
+                // Recorrer la respuesta y agregar eventos al arreglo events
+                response.forEach(function(evento) {
+                    //console.log(evento);
 
-                    let mensaje = `
+                    if (evento.dia == '1') {
+                        fecha_dia_estatico = '2024-02-11';
+                    } else if (evento.dia == '2') {
+                        fecha_dia_estatico = '2024-02-12';
+                    } else if (evento.dia == '3') {
+                        fecha_dia_estatico = '2024-02-13';
+                    } else if (evento.dia == '4') {
+                        fecha_dia_estatico = '2024-02-14';
+                    } else if (evento.dia == '5') {
+                        fecha_dia_estatico = '2024-02-15';
+                    } else if (evento.dia == '6') {
+                        fecha_dia_estatico = '2024-02-16';
+                    } else if (evento.dia == '7') {
+                        fecha_dia_estatico = '2024-02-17';
+                    }
+
+                    calendar.addEvent({
+                        //id: evento.id_turno,
+                        title: (evento.nombre),
+                        start: fecha_dia_estatico + 'T' + minutos_formato_hora(evento
+                            .hora_entrada),
+                        end: fecha_dia_estatico + 'T' + minutos_formato_hora(evento
+                            .hora_salida),
+                        extendedProps: {
+                            id_turno_horario: evento._id,
+                            id_turno: evento.id_turno,
+                        },
+
+                        color: evento.color
+
+                    });
+                });
+                // Renderizar el calendario después de agregar los eventos
+                calendar.render();
+
+            }
+        });
+
+    }
+
+    // ---- 1A: Insertar/Actualizar varias personas (reutiliza tu endpoint actual) ----
+    function insertar_persona_departamento() {
+        var deptId = $('#ddl_departamentos').val();
+        var perdepId = $('#id_perdep').val();
+
+        if (!deptId) {
+            Swal.fire('', 'Seleccione un departamento', 'warning');
+            return;
+        }
+
+        var parametros = {
+            '_id': perdepId || '', // th_perdep_id para edición
+            'id_persona': PERSON_ID, // th_per_id
+            'id_departamento': deptId, // th_dep_id
+            'txt_visitor': $('#txt_visitor').val() || ''
+        };
+
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_personas_departamentosC.php?insertar_editar_persona=true',
+            type: 'post',
+            dataType: 'json',
+            data: {
+                parametros: parametros
+            },
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operación realizada con éxito.', 'success').then(() => {
+                        location.reload(); // O redirigir según necesites
+                    });
+                } else if (response == -2) {
+                    Swal.fire('', 'Esta persona ya está asignada a este departamento', 'warning');
+                } else {
+                    Swal.fire('', 'Error en la operación', 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
+    }
+
+    function cargar_selects2() {
+
+        url_departamentosC = '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true';
+        cargar_select2_url('ddl_departamentos', url_departamentosC);
+
+    }
+
+    function insertar_editar_persona() {
+        let parametros = {
+            '_id': '<?= $_id ?>',
+        };
+
+        let parametros_vista_persona = parametros_persona();
+
+        parametros = {
+            ...parametros,
+            ...parametros_vista_persona
+        };
+
+        if ($("#registrar_personas").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            insertar(parametros);
+        }
+    }
+
+    function insertar(parametros) {
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/GENERAL/th_personasC.php?insertar=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+                        location.href =
+                            '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=<?= $redireccionar_vista ?>';
+                    });
+                } else if (response == -2) {
+                    //Swal.fire('', 'Operación fallida', 'warning');
+                    $(txt_cedula).addClass('is-invalid');
+                    $('#error_txt_cedula').text('La cédula ya está en uso.');
+                }
+            },
+
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
+
+        $('#txt_cedula').on('input', function() {
+            $('#error_txt_cedula').text('');
+        });
+    }
+
+    function regresar_boton_persona() {
+        window.history.back();
+    }
+</script>
+
+<script>
+    /**
+     * Script para manejar los dispositivos biométricos y la captura de huellas dactilares.
+     */
+
+    function cambiar(finger) {
+        $('.btn-outline-primary').removeClass('active');
+        $('#img_palma').attr('src', '../img/de_sistema/palma' + finger + '.gif');
+        $('#btn_finger_' + finger).addClass('active');
+        $('#txt_dedo_num').val(finger);
+    }
+
+
+    function dispositivos() {
+        $.ajax({
+            // data: {
+            //     id: id
+            // },
+            url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                op = '';
+                response.forEach(function(item, i) {
+                    op += '<option value="' + item._id + '">' + item.nombre + '</option>';
+                })
+                $('#ddl_dispositivos').html(op);
+
+            },
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
+    }
+
+
+    function eliminarfinger(id) {
+        Swal.fire({
+            title: 'Eliminar Registro?',
+            text: "Esta seguro de eliminar este registro?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si'
+        }).then((result) => {
+            if (result.value) {
+                eliminarFing(id);
+            }
+        })
+    }
+
+    function eliminarFing(id) {
+        $.ajax({
+            data: {
+                id: id
+            },
+            url: '../controlador/TALENTO_HUMANO/th_personasC.php?eliminarFing=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
+                        tbl_dispositivos.ajax.reload(null, false);
+                    });
+                }
+            }
+        });
+    }
+
+
+    function cargar_tabla() {
+        tbl_dispositivos = $('#tbl_bio_finger').DataTable($.extend({}, {
+            reponsive: true,
+            searching: false, // Desactiva el buscador
+            paging: false, // Desactiva la paginación
+            info: false, // Opcional: Desactiva la información (ej. "Mostrando 1 a 10 de 100 registros")
+
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            },
+            ajax: {
+                type: 'POST',
+                url: '../controlador/TALENTO_HUMANO/th_personasC.php?registros_biometria=true',
+                data: function(d) {
+
+                    var parametros = {
+                        id: '<?php echo $_id; ?>', // Parámetro personalizado
+                    };
+                    return {
+                        parametros: parametros
+                    };
+                },
+                dataSrc: ''
+            },
+            columns: [{
+                    data: 'detalle'
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        return `<button type="button" class="btn btn-danger btn-xs" onclick="eliminarfinger('${item.id}')"><i class="bx bx-trash fs-7 me-0 fw-bold"></i></button>`;
+                    }
+                },
+
+            ],
+            order: [
+                [1, 'asc']
+            ],
+        }));
+    }
+
+    function modalBiometria() {
+        $('#modalBiometria').modal('show');
+    }
+
+    function syncronizarPersonaBio() {
+        if ($('#txt_CardNumero').val() == '') {
+            Swal.fire("Debe tener numero de tarjea en biometria", "", "info");
+            return false;
+        }
+        id = '<?= $_id ?>';
+        parametros = {
+            'id': id,
+            'device': $('#ddl_dispositivosSync').val(),
+            'card': $('#txt_CardNumero').val(),
+        }
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/TALENTO_HUMANO/th_personasC.php?syncronizarPersona=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                Swal.fire('', response.msj, 'success')
+            }
+        });
+
+    }
+</script>
+
+<script>
+    $(function() {
+        var $cbx = $('#cbx_enviar_credenciales');
+        var $contInputs = $('#cont_inputs_mensaje');
+        var $infoCred = $('#info_credenciales');
+        var $modal = $('#modal_mensaje');
+
+
+        function actualizarVista() {
+            if ($cbx.length && $cbx.is(':checked')) {
+                $contInputs.hide();
+                $infoCred.show();
+            } else {
+                $contInputs.show();
+                $infoCred.hide();
+            }
+        }
+
+
+        // Al mostrar el modal, inicializamos la vista
+        $modal.on('show.bs.modal', function() {
+            actualizarVista();
+        });
+        $cbx.on('change', actualizarVista);
+        window.enviarMensaje = function() {
+            var enviarCred = $cbx.is(':checked');
+            var asunto = $.trim($('#txt_asunto').val() || '');
+            var descripcion = $.trim($('#txt_descripcion').val() || '');
+            if (!enviarCred) {
+                if (asunto === '') {
+                    alert('Ingresa el asunto.');
+                    $('#txt_asunto').focus();
+                    return;
+                }
+                if (descripcion === '') {
+                    alert('Ingresa la descripción.');
+                    $('#txt_descripcion').focus();
+                    return;
+                }
+            }
+            var parametrosLogCorreos = {
+                enviar_credenciales: enviarCred ? 1 : 0,
+                asunto: asunto,
+                descripcion: descripcion,
+                per_id: '<?= $_id ? $_id : '' ?>'
+            };
+            enviar_Mail_Persona(parametrosLogCorreos);
+            $modal.modal('hide');
+        };
+
+
+        function enviar_Mail_Persona(parametrosLogCorreos) {
+
+            $.ajax({
+                data: {
+                    parametros: parametrosLogCorreos
+                },
+                url: '../controlador/TALENTO_HUMANO/th_logs_correosC.php?enviar_correo=true',
+                type: 'post',
+                dataType: 'json',
+                beforeSend: function() {
+                    Swal.fire({
+                        title: 'Guardando...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                },
+                success: function(response) {
+
+                    if (response && response.total !== undefined) {
+
+                        let mensaje = `
             <b>Total:</b> ${response.total}<br>
             <b>Enviados:</b> ${response.enviados}<br>
             <b>Fallidos:</b> ${response.fallidos}
         `;
 
-                    // Si quieres mostrar el detalle de fallidos
-                    if (response.fallidos > 0) {
-                        mensaje += '<hr><b>Correos con error:</b><br>';
+                        // Si quieres mostrar el detalle de fallidos
+                        if (response.fallidos > 0) {
+                            mensaje += '<hr><b>Correos con error:</b><br>';
 
-                        response.detalle.forEach(item => {
-                            if (item.estado === 'ERROR') {
-                                mensaje += `• ${item.correo}<br>`;
-                            }
+                            response.detalle.forEach(item => {
+                                if (item.estado === 'ERROR') {
+                                    mensaje += `• ${item.correo}<br>`;
+                                }
+                            });
+                        }
+
+                        Swal.fire({
+                            icon: response.fallidos > 0 ? 'warning' : 'success',
+                            title: 'Resultado del envío',
+                            html: mensaje,
+                            confirmButtonText: 'Aceptar'
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Respuesta inválida del servidor'
                         });
                     }
-
-                    Swal.fire({
-                        icon: response.fallidos > 0 ? 'warning' : 'success',
-                        title: 'Resultado del envío',
-                        html: mensaje,
-                        confirmButtonText: 'Aceptar'
-                    })
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Respuesta inválida del servidor'
-                    });
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire('Error', 'Error en la conexión: ' + error, 'error');
                 }
-            },
-            error: function(xhr, status, error) {
-                Swal.fire('Error', 'Error en la conexión: ' + error, 'error');
-            }
-        });
-    }
-});
+            });
+        }
+    });
+</script>
+
+<script>
+    //Departamentos
 </script>
 
 <div class="page-wrapper">
@@ -578,9 +587,9 @@ $(function() {
                                 </div>
                                 <hr>
                                 <div class="col-12">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_personas"
+                                    <button onclick="regresar_boton_persona();"
                                         class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i>
-                                        Regresar</a>
+                                        Regresar</button>
                                     <button class="btn btn-primary btn-sm" onclick="modalBiometria()"><i
                                             class="bx bx-sync"></i>Biometria</button>
                                     <a href="javascript:void(0)" class="btn btn-success btn-sm" data-bs-toggle="modal"
@@ -598,16 +607,16 @@ $(function() {
 
                                 <div class="d-flex justify-content-end pt-2">
                                     <?php if ($_id == '') { ?>
-                                    <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center"
-                                        onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i>
-                                        Guardar</button>
+                                        <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center"
+                                            onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i>
+                                            Guardar</button>
                                     <?php } else { ?>
-                                    <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center"
-                                        onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i>
-                                        Guardar</button>
-                                    <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center"
-                                        onclick="delete_datos_persona()" type="button"><i class="bx bx-trash"></i>
-                                        Eliminar</button>
+                                        <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center"
+                                            onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i>
+                                            Guardar</button>
+                                        <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center"
+                                            onclick="delete_datos_persona()" type="button"><i class="bx bx-trash"></i>
+                                            Eliminar</button>
                                     <?php } ?>
                                 </div>
                             </form>
@@ -774,162 +783,162 @@ $(function() {
     </div>
 
     <script>
-    $(document).ready(function() {
+        $(document).ready(function() {
 
-        //Para validar los select2
-        $(".select2-validation").on("select2:select", function(e) {
-            unhighlight_select(this);
-        });
+            //Para validar los select2
+            $(".select2-validation").on("select2:select", function(e) {
+                unhighlight_select(this);
+            });
 
-        //* Validacion de formulario
-        $("#registrar_personas").validate({
-            rules: {
-                txt_primer_apellido: {
-                    required: true,
+            //* Validacion de formulario
+            $("#registrar_personas").validate({
+                rules: {
+                    txt_primer_apellido: {
+                        required: true,
+                    },
+                    txt_segundo_apellido: {
+                        // required: true,
+                    },
+                    txt_primer_nombre: {
+                        required: true,
+                    },
+                    txt_segundo_nombre: {
+                        // required: true,
+                    },
+                    txt_cedula: {
+                        required: true,
+                    },
+                    ddl_sexo: {
+                        required: true,
+                    },
+                    txt_fecha_nacimiento: {
+                        required: true,
+                    },
+                    txt_edad: {
+                        //required: true,
+                    },
+                    txt_telefono_1: {
+                        required: true,
+                    },
+                    txt_telefono_2: {
+                        //required: true,
+                    },
+                    txt_correo: {
+                        required: true,
+                    },
+                    ddl_nacionalidad: {
+                        //required: true,
+                    },
+                    ddl_estado_civil: {
+                        //required: true,
+                    },
+                    ddl_provincias: {
+                        required: true,
+                    },
+                    ddl_ciudad: {
+                        required: true,
+                    },
+                    ddl_parroquia: {
+                        //required: true,
+                    },
+                    txt_codigo_postal: {
+                        required: true,
+                    },
+                    txt_direccion: {
+                        //required: true,
+                    },
                 },
-                txt_segundo_apellido: {
-                    // required: true,
+                messages: {
+                    txt_primer_apellido: {
+                        required: "Por favor ingrese el primer apellido",
+                    },
+                    txt_segundo_apellido: {
+                        required: "Por favor ingrese el segundo apellido",
+                    },
+                    txt_primer_nombre: {
+                        required: "Por favor ingrese el primer nombre",
+                    },
+                    txt_segundo_nombre: {
+                        required: "Por favor ingrese el segundo nombre",
+                    },
+                    txt_cedula: {
+                        required: "Por favor ingresa un número de cédula",
+                    },
+                    ddl_sexo: {
+                        required: "Por favor seleccione el sexo",
+                    },
+                    txt_fecha_nacimiento: {
+                        required: "Por favor ingrese la fecha de nacimiento",
+                    },
+                    txt_edad: {
+                        required: "Por favor ingrese la edad (fecha de nacimiento)",
+                    },
+                    txt_telefono_1: {
+                        required: "Por favor ingrese un número de teléfono",
+                    },
+                    txt_telefono_2: {
+                        required: "Por favor ingrese un número de teléfono",
+                    },
+                    txt_correo: {
+                        required: "Por favor ingrese un correo electrónico",
+                    },
+                    ddl_nacionalidad: {
+                        required: "Por favor seleccione una nacionalidad",
+                    },
+                    ddl_estado_civil: {
+                        required: "Por favor seleccione un estado civil",
+                    },
+                    ddl_provincias: {
+                        required: "Por favor seleccione una provincia",
+                    },
+                    ddl_ciudad: {
+                        required: "Por favor seleccione una ciudad",
+                    },
+                    ddl_parroquia: {
+                        required: "Por favor seleccione una parroquia",
+                    },
+                    txt_codigo_postal: {
+                        required: "Por favor ingrese una dirección postal",
+                    },
+                    txt_direccion: {
+                        required: "Por favor ingrese una dirección",
+                    },
                 },
-                txt_primer_nombre: {
-                    required: true,
-                },
-                txt_segundo_nombre: {
-                    // required: true,
-                },
-                txt_cedula: {
-                    required: true,
-                },
-                ddl_sexo: {
-                    required: true,
-                },
-                txt_fecha_nacimiento: {
-                    required: true,
-                },
-                txt_edad: {
-                    //required: true,
-                },
-                txt_telefono_1: {
-                    required: true,
-                },
-                txt_telefono_2: {
-                    //required: true,
-                },
-                txt_correo: {
-                    required: true,
-                },
-                ddl_nacionalidad: {
-                    //required: true,
-                },
-                ddl_estado_civil: {
-                    //required: true,
-                },
-                ddl_provincias: {
-                    required: true,
-                },
-                ddl_ciudad: {
-                    required: true,
-                },
-                ddl_parroquia: {
-                    //required: true,
-                },
-                txt_codigo_postal: {
-                    required: true,
-                },
-                txt_direccion: {
-                    //required: true,
-                },
-            },
-            messages: {
-                txt_primer_apellido: {
-                    required: "Por favor ingrese el primer apellido",
-                },
-                txt_segundo_apellido: {
-                    required: "Por favor ingrese el segundo apellido",
-                },
-                txt_primer_nombre: {
-                    required: "Por favor ingrese el primer nombre",
-                },
-                txt_segundo_nombre: {
-                    required: "Por favor ingrese el segundo nombre",
-                },
-                txt_cedula: {
-                    required: "Por favor ingresa un número de cédula",
-                },
-                ddl_sexo: {
-                    required: "Por favor seleccione el sexo",
-                },
-                txt_fecha_nacimiento: {
-                    required: "Por favor ingrese la fecha de nacimiento",
-                },
-                txt_edad: {
-                    required: "Por favor ingrese la edad (fecha de nacimiento)",
-                },
-                txt_telefono_1: {
-                    required: "Por favor ingrese un número de teléfono",
-                },
-                txt_telefono_2: {
-                    required: "Por favor ingrese un número de teléfono",
-                },
-                txt_correo: {
-                    required: "Por favor ingrese un correo electrónico",
-                },
-                ddl_nacionalidad: {
-                    required: "Por favor seleccione una nacionalidad",
-                },
-                ddl_estado_civil: {
-                    required: "Por favor seleccione un estado civil",
-                },
-                ddl_provincias: {
-                    required: "Por favor seleccione una provincia",
-                },
-                ddl_ciudad: {
-                    required: "Por favor seleccione una ciudad",
-                },
-                ddl_parroquia: {
-                    required: "Por favor seleccione una parroquia",
-                },
-                txt_codigo_postal: {
-                    required: "Por favor ingrese una dirección postal",
-                },
-                txt_direccion: {
-                    required: "Por favor ingrese una dirección",
-                },
-            },
-            highlight: function(element) {
-                let $element = $(element);
+                highlight: function(element) {
+                    let $element = $(element);
 
-                if ($element.hasClass("select2-hidden-accessible")) {
-                    // Elimina la clase 'is-invalid' y agrega 'is-valid' al contenedor correcto de select2
-                    $element.next(".select2-container").find(".select2-selection").removeClass(
-                        "is-valid").addClass("is-invalid");
-                } else if ($element.is(':radio')) {
-                    // Si es un radio button, aplicar la clase al grupo de radios (al contenedor padre si existe)
-                    $('input[name="' + $element.attr("name") + '"]').addClass("is-invalid")
-                        .removeClass("is-valid");
-                } else {
-                    // Elimina la clase 'is-invalid' y agrega 'is-valid' al input normal
-                    $element.removeClass("is-valid").addClass("is-invalid");
+                    if ($element.hasClass("select2-hidden-accessible")) {
+                        // Elimina la clase 'is-invalid' y agrega 'is-valid' al contenedor correcto de select2
+                        $element.next(".select2-container").find(".select2-selection").removeClass(
+                            "is-valid").addClass("is-invalid");
+                    } else if ($element.is(':radio')) {
+                        // Si es un radio button, aplicar la clase al grupo de radios (al contenedor padre si existe)
+                        $('input[name="' + $element.attr("name") + '"]').addClass("is-invalid")
+                            .removeClass("is-valid");
+                    } else {
+                        // Elimina la clase 'is-invalid' y agrega 'is-valid' al input normal
+                        $element.removeClass("is-valid").addClass("is-invalid");
+                    }
+                },
+
+                unhighlight: function(element) {
+                    let $element = $(element);
+
+                    if ($element.hasClass("select2-hidden-accessible")) {
+                        // Para Select2, elimina 'is-invalid' y agrega 'is-valid' en el contenedor adecuado
+                        $element.next(".select2-container").find(".select2-selection").removeClass(
+                            "is-invalid").addClass("is-valid");
+                    } else if ($element.is(':radio')) {
+                        // Si es un radio button, marcar todo el grupo como válido
+                        $('input[name="' + $element.attr("name") + '"]').removeClass("is-invalid")
+                            .addClass("is-valid");
+                    } else {
+                        // Para otros elementos normales
+                        $element.removeClass("is-invalid").addClass("is-valid");
+                    }
                 }
-            },
-
-            unhighlight: function(element) {
-                let $element = $(element);
-
-                if ($element.hasClass("select2-hidden-accessible")) {
-                    // Para Select2, elimina 'is-invalid' y agrega 'is-valid' en el contenedor adecuado
-                    $element.next(".select2-container").find(".select2-selection").removeClass(
-                        "is-invalid").addClass("is-valid");
-                } else if ($element.is(':radio')) {
-                    // Si es un radio button, marcar todo el grupo como válido
-                    $('input[name="' + $element.attr("name") + '"]').removeClass("is-invalid")
-                        .addClass("is-valid");
-                } else {
-                    // Para otros elementos normales
-                    $element.removeClass("is-invalid").addClass("is-valid");
-                }
-            }
+            });
         });
-    });
     </script>
     <div class="modal fade" id="modal_mensaje" tabindex="-1" aria-labelledby="modal_mensaje_label" aria-hidden="true">
         <div class="modal-dialog modal-lg">

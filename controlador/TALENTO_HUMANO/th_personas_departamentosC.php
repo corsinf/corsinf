@@ -2,7 +2,6 @@
 date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_personas_departamentosM.php');
-require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_personasM.php');
 require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 
 $controlador = new th_personas_departamentosC();
@@ -15,7 +14,7 @@ if (isset($_GET['verificar'])) {
     $per_id = $_POST['id'] ?? '';
 
     // Llama a tu función (asumiendo que $controlador ya está instanciado)
-     echo json_encode($controlador->validar_correo($password,$per_id));
+    echo json_encode($controlador->validar_correo($password, $per_id));
     // No pongas nada más aquí porque validar_correo() ya hace exit
 }
 
@@ -74,13 +73,11 @@ class th_personas_departamentosC
 {
     private $modelo;
     private $codigo_globales;
-    private $th_personas;
 
     function __construct()
     {
         $this->modelo = new th_personas_departamentosM();
-         $this->codigo_globales = new codigos_globales();
-         $this->th_personas = new th_personasM();
+        $this->codigo_globales = new codigos_globales();
     }
 
     function validar_correo($password_validar, $id)
@@ -94,38 +91,32 @@ class th_personas_departamentosC
 
         $password = $this->codigo_globales->desenciptar_clave(trim($usuario[0]['password'] ?? ''));
 
-       
 
-        if($password_validar == $password ){
-       
-        $datos = array(
-            array('campo' => 'th_per_estado', 'dato' => 0),
-        );
 
-        $where[0]['campo'] = 'th_per_id';
-        $where[0]['dato'] = $id;
+        if ($password_validar == $password) {
 
-        $datos = $this->th_personas->editar($datos, $where);
-        return 1;
+            $where = array(
+                array('campo' => 'th_per_id', 'dato' => $id),
+            );
 
-        }else{
-             
+            $datos = $this->modelo->eliminar($where);
+            return $datos;
+        } else {
+
             return -3;
-
         }
-
-       
     }
 
     function listar($id = '')
     {
         if ($id == '') {
-            //$datos = $this->modelo->where('th_dep_estado', 1)->listar();
+            $datos = $this->modelo->listar_personas_departamentos($id);
         } else {
             //Busqueda por departamento
             $datos = $this->modelo->listar_personas_departamentos($id);
-            return $datos;
         }
+
+        return $datos;
     }
 
     function listar_personas_modal($id_departamento = '')

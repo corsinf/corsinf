@@ -16,28 +16,33 @@ class th_personas_departamentosM extends BaseModel
 
     function listar_personas_departamentos($id_departamento)
     {
-        if ($id_departamento != '' && $id_departamento != null) {
-            $sql =
-                "SELECT
+        $sql =
+            "SELECT
                     per_dep.th_perdep_id AS _id,
                     per.th_per_id AS id_persona,
+                    per.th_per_id_comunidad AS id_comunidad,
                     per.th_per_primer_apellido AS primer_apellido,
                     per.th_per_segundo_apellido AS segundo_apellido,
                     per.th_per_primer_nombre AS primer_nombre,
                     per.th_per_segundo_nombre AS segundo_nombre,
                     per.th_per_cedula AS cedula,
                     per.th_per_telefono_1 AS telefono_1,
-                    per.th_per_correo AS correo
+                    per.th_per_correo AS correo,
+                    dep.th_dep_nombre AS nombre_departamento
                 FROM
                 th_personas_departamentos per_dep
                 INNER JOIN th_personas per ON per_dep.th_per_id = per.th_per_id 
-                WHERE
-                per_dep.th_dep_id = '$id_departamento' AND per.th_per_estado = 1;";
+                INNER JOIN th_departamentos dep ON per_dep.th_dep_id = dep.th_dep_id
+                WHERE per.th_per_estado = 1 ";
 
-            $datos = $this->db->datos($sql);
-            return $datos;
+        if ($id_departamento != '' && $id_departamento != null) {
+            $sql .= " AND per_dep.th_dep_id = '$id_departamento'";
         }
-        return null;
+
+        $sql .= ";";
+
+        $datos = $this->db->datos($sql);
+        return $datos;
     }
 
     //Sirve para listar al gruepo de personas que no estan en el departamento
@@ -60,7 +65,7 @@ class th_personas_departamentosM extends BaseModel
                     per.th_per_id NOT IN (
                         SELECT th_per_id
                         FROM _talentoh.th_personas_departamentos
-                    ) AND per.th_per_estado = 1;" ;
+                    ) AND per.th_per_estado = 1;";
 
             $datos = $this->db->datos($sql, false, false, true);
             return $datos;
@@ -105,10 +110,10 @@ class th_personas_departamentosM extends BaseModel
 
 
     public function obtener_correo_y_password($id_usuario)
-{
-    $id_usuario = intval($id_usuario);
+    {
+        $id_usuario = intval($id_usuario);
 
-    $sql = "
+        $sql = "
         SELECT
             email,
             password
@@ -117,9 +122,8 @@ class th_personas_departamentosM extends BaseModel
         AND estado = 'A'
     ";
 
-    $resultado = $this->db->datos($sql);
+        $resultado = $this->db->datos($sql);
 
-   return $resultado;
-}
-
+        return $resultado;
+    }
 }

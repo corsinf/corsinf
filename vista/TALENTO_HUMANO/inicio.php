@@ -52,6 +52,10 @@ if ($_GET['acc'] == 'th_personas') {
 	include('TALENTO_HUMANO/PERSONAS/th_personas.php');
 }
 
+if ($_GET['acc'] == 'th_personas_nomina') {
+	include('TALENTO_HUMANO/PERSONAS/th_personas_nomina.php');
+}
+
 if ($_GET['acc'] == 'th_registrar_personas') {
 	include('TALENTO_HUMANO/PERSONAS/th_registrar_personas.php');
 }
