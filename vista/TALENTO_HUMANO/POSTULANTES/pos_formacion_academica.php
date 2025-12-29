@@ -279,6 +279,28 @@
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_titulo_obtenido" id="txt_titulo_obtenido" maxlength="100">
                         </div>
                     </div>
+                    <div class="row mb-col">
+                        <div class="col-md-6">
+                            <label for="ddl_nivel_academico" class="form-label form-label-sm">
+                                Nivel Académico
+                            </label>
+                            <select class="form-select form-select-sm mb-2"
+                                name="ddl_nivel_academico"
+                                id="ddl_nivel_academico">
+                                <option value="">-- Seleccione --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="txt_th_fora_registro_senescyt" class="form-label form-label-sm">
+                                Registro SENESCYT
+                            </label>
+                            <input type="text"
+                                class="form-control form-control-sm mb-2"
+                                name="txt_th_fora_registro_senescyt"
+                                id="txt_th_fora_registro_senescyt"
+                                placeholder="Ej: 1234567890">
+                        </div>
+                    </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
@@ -304,28 +326,7 @@
                         </div>
                     </div>
 
-                    <div class="row mb-col">
-                        <div class="col-md-6">
-                            <label for="ddl_nivel_academico" class="form-label form-label-sm">
-                                Nivel Académico
-                            </label>
-                            <select class="form-select form-select-sm mb-2"
-                                name="ddl_nivel_academico"
-                                id="ddl_nivel_academico">
-                                <option value="">-- Seleccione --</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="txt_th_fora_registro_senescyt" class="form-label form-label-sm">
-                                Registro SENESCYT
-                            </label>
-                            <input type="text"
-                                class="form-control form-control-sm mb-2"
-                                name="txt_th_fora_registro_senescyt"
-                                id="txt_th_fora_registro_senescyt"
-                                placeholder="Ej: 1234567890">
-                        </div>
-                    </div>
+                    
 
                 </div>
 

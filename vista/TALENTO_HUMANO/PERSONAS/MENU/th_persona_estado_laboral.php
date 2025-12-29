@@ -19,6 +19,10 @@ if (isset($_GET['id'])) {
         let entity_type = <?= json_encode($entity_type) ?>;
 
         cargar_datos_estado_laboral(entity_id);
+        
+        // Cargar catálogos
+        cargar_cargos();
+        cargar_secciones();
 
     });
 
@@ -47,15 +51,54 @@ if (isset($_GET['id'])) {
             dataType: 'json',
             success: function(response) {
                 $('#ddl_estado_laboral').val(response[0].th_est_estado_laboral);
+                $('#ddl_cargo').val(response[0].id_cargo);
+                $('#ddl_seccion').val(response[0].id_seccion);
                 $('#txt_fecha_contratacion_estado').val(response[0].th_est_fecha_contratacion);
                 $('#txt_fecha_salida_estado').val(response[0].th_est_fecha_salida);
                 $('#txt_experiencia_estado_id').val(response[0]._id);
+                
+                // Deshabilitar fechas si es Freelancer o Autónomo
+                ocultar_opciones_estado();
+            }
+        });
+    }
+
+    // Cargar catálogo de cargos
+    function cargar_cargos() {
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_cargosC.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                $('#ddl_cargo').empty();
+                $('#ddl_cargo').append('<option selected disabled value="">-- Seleccione un Cargo --</option>');
+                response.forEach(function(item) {
+                    $('#ddl_cargo').append('<option value="' + item._id + '">' + item.th_cat_car_descripcion + '</option>');
+                });
+            }
+        });
+    }
+
+    // Cargar catálogo de secciones
+    function cargar_secciones() {
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_seccionesC.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                $('#ddl_seccion').empty();
+                $('#ddl_seccion').append('<option selected disabled value="">-- Seleccione una Sección --</option>');
+                response.forEach(function(item) {
+                    $('#ddl_seccion').append('<option value="' + item._id + '">' + item.th_cat_sec_descripcion + '</option>');
+                });
             }
         });
     }
 
     function insertar_editar_estado_laboral() {
         var ddl_estado_laboral = $('#ddl_estado_laboral').val();
+        var ddl_cargo = $('#ddl_cargo').val();
+        var ddl_seccion = $('#ddl_seccion').val();
         var txt_fecha_contratacion_estado = $('#txt_fecha_contratacion_estado').val();
         var txt_fecha_salida_estado = $('#txt_fecha_salida_estado').val();
         var id_postulante = $('#txt_postulante_id').val();
@@ -64,13 +107,15 @@ if (isset($_GET['id'])) {
         var parametros_estado_laboral = {
             'id_postulante': id_postulante,
             'ddl_estado_laboral': ddl_estado_laboral,
+            'ddl_cargo': ddl_cargo,
+            'ddl_seccion': ddl_seccion,
             'txt_fecha_contratacion_estado': txt_fecha_contratacion_estado,
             'txt_fecha_salida_estado': txt_fecha_salida_estado,
             '_id': txt_experiencia_estado_id,
         }
+        
         if ($("#form_estado_laboral").valid()) {
-            // Si es válido, puedes proceder a enviar los datos por AJAX
-            //console.log(parametros_estado_laboral);
+            // Si es válido, proceder a enviar los datos por AJAX
             insertar_estado_laboral(parametros_estado_laboral);
         }
     }
@@ -86,7 +131,7 @@ if (isset($_GET['id'])) {
 
             success: function(response) {
                 if (response == 1) {
-                    Swal.fire('', 'Operacion realizada con exito.', 'success');
+                    Swal.fire('', 'Operación realizada con éxito.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
                         cargar_datos_estado_laboral(entity_id);
                         limpiar_campos_estado_laboral_modal();
@@ -105,9 +150,12 @@ if (isset($_GET['id'])) {
 
         $('#txt_fecha_contratacion_estado').prop('disabled', false);
         $('#txt_fecha_salida_estado').prop('disabled', false);
+        
         if (valor_seleccionado === "Freelancer" || valor_seleccionado === "Autonomo") {
             $('#txt_fecha_contratacion_estado').prop('disabled', true);
             $('#txt_fecha_salida_estado').prop('disabled', true);
+            $('#txt_fecha_contratacion_estado').val('');
+            $('#txt_fecha_salida_estado').val('');
         }
     }
 
@@ -115,41 +163,26 @@ if (isset($_GET['id'])) {
         cargar_datos_modal_estado_laboral(id);
         $('#modal_estado_laboral').modal('show');
         $('#lbl_titulo_estado_laboral').html('Editar Estado Laboral');
-        $('#btn_guardar_estado_laboral').html('<i class="bx bx-save"></i>Editar');
+        $('#btn_guardar_estado_laboral').html('<i class="bx bx-save"></i> Editar');
         $('#btn_eliminar_estado_laboral').show();
-
     }
 
     function delete_datos_estado_laboral() {
-        //Para revisar y enviar el dato como parametro 
         id = $('#txt_experiencia_estado_id').val();
         Swal.fire({
-            title: 'Eliminar Registro?',
-            text: "Esta seguro de eliminar este registro?",
+            title: '¿Eliminar Registro?',
+            text: "¿Esta seguro de eliminar este registro?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si',
+            confirmButtonText: 'Sí',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
                 eliminar_estado_laboral(id);
             }
         })
-    }
-
-    function verificar_fechas_contratacion() {
-
-        console.log("desde la funcion");
-
-        $("input[name='txt_fecha_contratacion_estado']").on("blur", function() {
-            if (!verificar_fecha_inicio_fecha_fin('txt_fecha_contratacion_estado', 'txt_fecha_salida_estado')) return;
-        });
-        $("input[name='txt_fecha_salida_estado']").on("blur", function() {
-            if (!verificar_fecha_inicio_fecha_fin('txt_fecha_contratacion_estado', 'txt_fecha_salida_estado')) return;
-        });
-
     }
 
     function eliminar_estado_laboral(id) {
@@ -177,146 +210,53 @@ if (isset($_GET['id'])) {
         $('#form_estado_laboral').validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
         $('#ddl_estado_laboral').val('');
+        $('#ddl_cargo').val('');
+        $('#ddl_seccion').val('');
         $('#txt_fecha_contratacion_estado').val('');
         $('#txt_fecha_salida_estado').val('');
         $('#txt_experiencia_estado_id').val('');
+        $('#cbx_fecha_salida_estado').prop('checked', false);
+        
+        // Habilitar campos de fecha
+        $('#txt_fecha_contratacion_estado').prop('disabled', false);
+        $('#txt_fecha_salida_estado').prop('disabled', false);
+        
         //Cambiar texto
         $('#lbl_titulo_estado_laboral').html('Agregar Estado Laboral');
-        $('#btn_guardar_estado_laboral').html('<i class="bx bx-save"></i>Agregar');
+        $('#btn_guardar_estado_laboral').html('<i class="bx bx-save"></i> Agregar');
         $('#btn_eliminar_estado_laboral').hide();
     }
 
     function validar_fechas_est_lab() {
         var fecha_inicio = $('#txt_fecha_contratacion_estado').val();
         var fecha_final = $('#txt_fecha_salida_estado').val();
-        var hoy = new Date();
-        var fecha_actual = hoy.toISOString().split('T')[0];
-        //* Validar que la fecha final no sea menor a la fecha de inicio
-        if (fecha_inicio && fecha_final) {
-            if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "La fecha final no puede ser menor a la fecha de inicio.",
-                });
-                $('.form-control').removeClass('is-valid is-invalid');
-                $('#txt_fecha_salida_estado').val('');
-                $('#cbx_fecha_salida_estado').prop('checked', false);
-                $('#txt_fecha_salida_estado').prop('disabled', false);
-            }
-            if (Date.parse(fecha_inicio) > Date.parse(fecha_final)) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "La fecha de inicio no puede ser mayor a la fecha final.",
-                });
-                $('.form-control').removeClass('is-valid is-invalid');
-                $('#txt_fecha_contratacion_estado').val('');
-                $('#cbx_fecha_salida_estado').prop('checked', false);
-                $('#txt_fecha_salida_estado').prop('disabled', false);
-            }
+        var estado = $('#ddl_estado_laboral').val();
+        
+        // No validar si es Freelancer o Autónomo
+        if (estado === "Freelancer" || estado === "Autonomo") {
+            return true;
         }
+        
+        // Validar que ambas fechas existan
+        if (!fecha_inicio || !fecha_final) {
+            return true; // La validación de campos requeridos se encargará
+        }
+        
+        // Validar que la fecha final no sea menor a la fecha de inicio
+        if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "La fecha de salida no puede ser menor a la fecha de contratación.",
+            });
+            $('.form-control').removeClass('is-valid is-invalid');
+            $('#txt_fecha_salida_estado').val('');
+            $('#cbx_fecha_salida_estado').prop('checked', false);
+            return false;
+        }
+        
+        return true;
     }
-</script>
-
-<div id="pnl_estado_laboral">
-</div>
-
-<!-- Modal para agregar estado laboral-->
-<div class="modal" id="modal_estado_laboral" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_estado_laboral">Agregar Estado Laboral</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_estado_laboral_modal()"></button>
-            </div>
-            <!-- Modal body -->
-            <form id="form_estado_laboral">
-                <input type="hidden" name="txt_experiencia_estado_id" id="txt_experiencia_estado_id">
-                <div class="modal-body">
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado laboral:</label>
-                            <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" onchange="ocultar_opciones_estado();" required>
-                                <option selected disabled value="">-- Selecciona un Estado Laboral --</option>
-                                <option value="Activo">Activo</option>
-                                <option value="Inactivo">Inactivo</option>
-                                <option value="Prueba">En prueba</option>
-                                <option value="Pasante">Pasante</option>
-                                <option value="Freelancer">Freelancer</option>
-                                <option value="Autonomo">Autónomo</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_fecha_contratacion_estado" class="form-label form-label-sm">Fecha de contratación</label>
-                            <input type="date" class="form-control form-control-sm" name="txt_fecha_contratacion_estado" id="txt_fecha_contratacion_estado" onchange="verificar_fechas_contratacion();">
-                        </div>
-                    </div>
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida</label>
-                            <input type="date" class="form-control form-control-sm" name="txt_fecha_salida_estado" id="txt_fecha_salida_estado" onchange="verificar_fechas_contratacion();">
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_estado_laboral" onclick="validar_fechas_est_lab(); insertar_editar_estado_laboral();"><i class="bx bx-save"></i>Agregar</button>
-                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_estado_laboral" onclick="delete_datos_estado_laboral();"><i class="bx bx-trash"></i>Eliminar</button>
-                </div>
-
-            </form>
-        </div>
-    </div>
-</div>
-
-<script>
-    $(document).ready(function() {
-        agregar_asterisco_campo_obligatorio('ddl_estado_laboral');
-        agregar_asterisco_campo_obligatorio('txt_fecha_contratacion_estado');
-        agregar_asterisco_campo_obligatorio('txt_fecha_salida_estado');
-
-        //Validación Estado Laboral
-        $("#form_estado_laboral").validate({
-            rules: {
-                ddl_estado_laboral: {
-                    required: true,
-                },
-                txt_fecha_contratacion_estado: {
-                    required: true,
-                },
-                txt_fecha_salida_estado: {
-                    required: true,
-                },
-            },
-            messages: {
-                ddl_estado_laboral: {
-                    required: "Por favor seleccione su estado laboral",
-                },
-                txt_fecha_contratacion_estado: {
-                    required: "Por favor ingrese la fecha de su contratación",
-                },
-                txt_fecha_salida_estado: {
-                    required: "Por favor ingrese la fecha de su salida",
-                },
-            },
-
-            highlight: function(element) {
-                // Agrega la clase 'is-invalid' al input que falla la validación
-                $(element).addClass('is-invalid');
-                $(element).removeClass('is-valid');
-            },
-            unhighlight: function(element) {
-                // Elimina la clase 'is-invalid' si la validación pasa
-                $(element).removeClass('is-invalid');
-                $(element).addClass('is-valid');
-
-            }
-        });
-    })
 
     function checkbox_actualidad_est_lab() {
         if ($('#cbx_fecha_salida_estado').is(':checked')) {
@@ -325,12 +265,8 @@ if (isset($_GET['id'])) {
             var mes = String(hoy.getMonth() + 1).padStart(2, '0');
             var year = hoy.getFullYear();
 
-            txt_fecha_contratacion_estado
-            txt_fecha_salida_estado
-
             var fecha_actual = year + '-' + mes + '-' + dia;
             $('#txt_fecha_salida_estado').val(fecha_actual);
-            txt_fecha_salida_estado
             $('#txt_fecha_salida_estado').prop('disabled', true);
             $('#txt_fecha_salida_estado').rules("remove", "required");
 
@@ -349,11 +285,154 @@ if (isset($_GET['id'])) {
                 required: true
             });
             $('#txt_fecha_salida_estado').removeClass('is-valid');
-            $('#form_experiencia_laboral').validate().resetForm();
-            $('.form-control').removeClass('is-valid is-invalid');
         }
 
         // Validar fechas
         validar_fechas_est_lab();
     }
+</script>
+
+<div id="pnl_estado_laboral">
+</div>
+
+<!-- Modal para agregar estado laboral-->
+<div class="modal" id="modal_estado_laboral" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_estado_laboral">Agregar Estado Laboral</small></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_estado_laboral_modal()"></button>
+            </div>
+            
+            <!-- Modal body -->
+            <form id="form_estado_laboral">
+                <input type="hidden" name="txt_experiencia_estado_id" id="txt_experiencia_estado_id">
+                <div class="modal-body">
+                    
+                    <div class="row mb-col">
+                        <div class="col-md-6">
+                            <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado laboral:</label>
+                            <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" onchange="ocultar_opciones_estado();" required>
+                                <option selected disabled value="">-- Seleccione un Estado Laboral --</option>
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
+                                <option value="Prueba">En prueba</option>
+                                <option value="Pasante">Pasante</option>
+                                <option value="Freelancer">Freelancer</option>
+                                <option value="Autonomo">Autónomo</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="ddl_cargo" class="form-label form-label-sm">Cargo:</label>
+                            <select class="form-select form-select-sm" id="ddl_cargo" name="ddl_cargo" required>
+                                <option selected disabled value="">-- Seleccione un Cargo --</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="ddl_seccion" class="form-label form-label-sm">Sección:</label>
+                            <select class="form-select form-select-sm" id="ddl_seccion" name="ddl_seccion" required>
+                                <option selected disabled value="">-- Seleccione una Sección --</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-col">
+                        <div class="col-md-6">
+                            <label for="txt_fecha_contratacion_estado" class="form-label form-label-sm">Fecha de contratación:</label>
+                            <input type="date" class="form-control form-control-sm" name="txt_fecha_contratacion_estado" id="txt_fecha_contratacion_estado" onchange="validar_fechas_est_lab();">
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida:</label>
+                            <div class="input-group input-group-sm">
+                                <input type="date" class="form-control form-control-sm" name="txt_fecha_salida_estado" id="txt_fecha_salida_estado" onchange="validar_fechas_est_lab();">
+                                <div class="input-group-text">
+                                    <input class="form-check-input mt-0" type="checkbox" id="cbx_fecha_salida_estado" onchange="checkbox_actualidad_est_lab();" title="Marcar si trabaja actualmente">
+                                    <label class="form-check-label ms-1" for="cbx_fecha_salida_estado" style="font-size: 0.8rem;">Actual</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_estado_laboral" onclick="if(validar_fechas_est_lab()) { insertar_editar_estado_laboral(); }"><i class="bx bx-save"></i> Agregar</button>
+                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_estado_laboral" onclick="delete_datos_estado_laboral();"><i class="bx bx-trash"></i> Eliminar</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        agregar_asterisco_campo_obligatorio('ddl_estado_laboral');
+        agregar_asterisco_campo_obligatorio('ddl_cargo');
+        agregar_asterisco_campo_obligatorio('ddl_seccion');
+        agregar_asterisco_campo_obligatorio('txt_fecha_contratacion_estado');
+        agregar_asterisco_campo_obligatorio('txt_fecha_salida_estado');
+
+        //Validación Estado Laboral
+        $("#form_estado_laboral").validate({
+            rules: {
+                ddl_estado_laboral: {
+                    required: true,
+                },
+                ddl_cargo: {
+                    required: true,
+                },
+                ddl_seccion: {
+                    required: true,
+                },
+                txt_fecha_contratacion_estado: {
+                    required: function() {
+                        var estado = $('#ddl_estado_laboral').val();
+                        return estado !== "Freelancer" && estado !== "Autonomo";
+                    }
+                },
+                txt_fecha_salida_estado: {
+                    required: function() {
+                        var estado = $('#ddl_estado_laboral').val();
+                        return estado !== "Freelancer" && estado !== "Autonomo";
+                    }
+                },
+            },
+            messages: {
+                ddl_estado_laboral: {
+                    required: "Por favor seleccione el estado laboral",
+                },
+                ddl_cargo: {
+                    required: "Por favor seleccione un cargo",
+                },
+                ddl_seccion: {
+                    required: "Por favor seleccione una sección",
+                },
+                txt_fecha_contratacion_estado: {
+                    required: "Por favor ingrese la fecha de contratación",
+                },
+                txt_fecha_salida_estado: {
+                    required: "Por favor ingrese la fecha de salida",
+                },
+            },
+
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+            }
+        });
+    })
 </script>

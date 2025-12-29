@@ -93,8 +93,6 @@
             type="button">
             <i class="bx bx-save me-1"></i> Guardar
         </button>
-
-         <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/th_persona_departamento_horario.php'); ?>
-        
     </div>
+    <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/th_persona_departamento_horario.php'); ?>
 </div>

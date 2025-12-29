@@ -69,35 +69,60 @@
         margin-bottom: 0.5rem;
     }
 
-    .turno-card {
+    /* MEJORA: Grid para los turnos */
+    .turnos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .dia-container {
         background: #f8f9fa;
-        border-left: 4px solid;
+        border-radius: 12px;
         padding: 1rem;
+        border: 1px solid #e9ecef;
+    }
+
+    .dia-container h6 {
         margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .turno-card {
+        background: white;
+        border-left: 4px solid;
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
         border-radius: 8px;
         transition: transform 0.2s, box-shadow 0.2s;
     }
 
+    .turno-card:last-child {
+        margin-bottom: 0;
+    }
+
     .turno-card:hover {
-        transform: translateX(5px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     .turno-header {
         display: flex;
         align-items: center;
-        gap: 1rem;
-        margin-bottom: 0.5rem;
+        gap: 0.5rem;
+        margin-bottom: 0.25rem;
     }
 
     .turno-nombre {
-        font-size: 1.1rem;
+        font-size: 0.95rem;
         font-weight: 700;
         color: #2c3e50;
     }
 
     .turno-horario {
-        font-size: 1rem;
+        font-size: 0.85rem;
         color: #5a6c7d;
         display: flex;
         align-items: center;
@@ -105,11 +130,11 @@
     }
 
     .color-indicator {
-        width: 20px;
-        height: 20px;
+        width: 16px;
+        height: 16px;
         border-radius: 4px;
         display: inline-block;
-        margin-right: 0.5rem;
+        flex-shrink: 0;
     }
 
     .empty-state {
@@ -124,19 +149,40 @@
         opacity: 0.3;
     }
 
+    /* MEJORA: Grid para la leyenda */
+    .leyenda-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .leyenda-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        transition: transform 0.2s;
+    }
+
+    .leyenda-item:hover {
+        transform: translateX(5px);
+        background: #e9ecef;
+    }
+
     @media (max-width: 768px) {
         .card-header-calendar {
             gap: 0.5rem;
             flex-direction: column;
         }
 
-        .card-header-calendar .titles h3 {
-            font-size: 0.95rem;
+        .turnos-grid {
+            grid-template-columns: 1fr;
         }
 
-        .turno-header {
-            flex-direction: column;
-            align-items: flex-start;
+        .leyenda-grid {
+            grid-template-columns: 1fr;
         }
     }
 </style>
@@ -155,6 +201,7 @@
         <p id="subtitle-center">Vista de horarios asignados</p>
     </div>
 </div>
+
 <!-- Estado vacío -->
 <div id="estado_vacio" class="info-card empty-state">
     <i class="bx bx-calendar-x"></i>
@@ -183,38 +230,48 @@
         </div>
     </div>
 
-    <!-- Información del horario -->
-    <div class="info-card">
-        <h5 class="mb-3">
-            <i class="bx bx-info-circle"></i> Información del Horario
-        </h5>
-        <div id="info_horario_nombre" class="mb-2">
-            <strong>Horario:</strong> <span class="horario-badge bg-primary text-white">No seleccionado</span>
+
+    <div class="row">
+        <!-- Columna izquierda: Información del Horario -->
+        <div class="col-md-6">
+            <div class="info-card h-100">
+                <h5 class="mb-3">
+                    <i class="bx bx-info-circle"></i> Información del Horario
+                </h5>
+                <div id="info_horario_nombre" class="mb-2">
+                    <strong>Horario:</strong> <span class="horario-badge bg-primary text-white">No seleccionado</span>
+                </div>
+                <div id="info_horario_tipo" class="text-muted">
+                    <i class="bx bx-tag"></i> Tipo: <span>-</span>
+                </div>
+            </div>
         </div>
-        <div id="info_horario_tipo" class="text-muted">
-            <i class="bx bx-tag"></i> Tipo: <span>-</span>
+
+        <!-- Columna derecha: Leyenda de Turnos -->
+        <div class="col-md-6">
+            <div class="info-card h-100">
+                <h5 class="mb-3">
+                    <i class="bx bx-palette"></i> Leyenda de Turnos
+                </h5>
+                <div id="leyenda_turnos" class="leyenda-grid">
+                    <!-- Aquí se cargarán los turnos únicos con sus colores -->
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Turnos por día -->
+    <!-- Turnos por día - MEJORADO CON GRID -->
     <div class="info-card">
         <h5 class="mb-4">
             <i class="bx bx-calendar-week"></i> Distribución Semanal de Turnos
         </h5>
-        <div id="lista_turnos_por_dia">
-            <!-- Aquí se cargarán los turnos -->
+        <div id="lista_turnos_por_dia" class="turnos-grid">
+            <!-- Aquí se cargarán los turnos en grid -->
         </div>
     </div>
 
-    <!-- Leyenda de turnos únicos -->
-    <div class="info-card">
-        <h5 class="mb-3">
-            <i class="bx bx-palette"></i> Leyenda de Turnos
-        </h5>
-        <div id="leyenda_turnos">
-            <!-- Aquí se cargarán los turnos únicos con sus colores -->
-        </div>
-    </div>
+    <!-- Leyenda de turnos únicos - MEJORADO CON GRID -->
+
 </div>
 
 <input id="id_perdep" type="hidden" value="" />
@@ -291,6 +348,8 @@
                 } else {
                     ddlTipo.prop('disabled', true);
                     ddlTipo.append('<option value="">-- Sin horarios --</option>');
+                    $('#pnl_horarios_persona').hide();
+                    $('#estado_vacio').show();
                 }
             },
             error: function(xhr, status, error) {
@@ -355,9 +414,16 @@
 
                 // Actualizar info del horario
                 $('#info_horario_nombre span').text($('#ddl_tipo_horario option:selected').text());
-                $('#info_horario_tipo span').text('Departamento');
 
-                // Renderizar turnos por día
+                // Detectar tipo basado en el texto del select
+                const textoHorario = $('#ddl_tipo_horario option:selected').text();
+                let tipoHorario = 'Personal';
+                if (textoHorario.includes('Departamento')) {
+                    tipoHorario = 'Departamento';
+                }
+                $('#info_horario_tipo span').text(tipoHorario);
+
+                // Renderizar turnos por día EN GRID
                 let htmlTurnos = '';
                 const diasOrdenados = Object.keys(turnosPorDia).sort();
 
@@ -365,7 +431,7 @@
                     const turnos = turnosPorDia[dia];
 
                     htmlTurnos += `
-                        <div class="mb-3">
+                        <div class="dia-container">
                             <h6 class="text-primary mb-2">
                                 <i class="bx bx-calendar"></i> ${DIAS_SEMANA[dia]}
                             </h6>
@@ -394,25 +460,22 @@
 
                 $('#lista_turnos_por_dia').html(htmlTurnos);
 
-                // Renderizar leyenda
-                let htmlLeyenda = '<div class="row g-3">';
+                // Renderizar leyenda EN GRID
+                let htmlLeyenda = '';
                 Object.values(turnosUnicos).forEach(function(turno) {
                     const horaInicio = minutos_formato_hora(turno.hora_entrada);
                     const horaFin = minutos_formato_hora(turno.hora_salida);
 
                     htmlLeyenda += `
-                        <div class="col-md-6">
-                            <div class="d-flex align-items-center">
-                                <span class="color-indicator" style="background-color: ${turno.color};"></span>
-                                <div>
-                                    <strong>${turno.nombre}</strong><br>
-                                    <small class="text-muted">${horaInicio} - ${horaFin}</small>
-                                </div>
+                        <div class="leyenda-item">
+                            <span class="color-indicator" style="background-color: ${turno.color};"></span>
+                            <div>
+                                <strong>${turno.nombre}</strong><br>
+                                <small class="text-muted">${horaInicio} - ${horaFin}</small>
                             </div>
                         </div>
                     `;
                 });
-                htmlLeyenda += '</div>';
 
                 $('#leyenda_turnos').html(htmlLeyenda);
 
