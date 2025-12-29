@@ -1,20 +1,6 @@
-<?php
-$entity_id = '';
-$entity_type = ''; // 'postulante' o 'persona'
-if (isset($_GET['id'])) {
-    $entity_id = $_GET['id'];
-    $entity_type = 'postulante';
-} elseif (isset($_GET['_id'])) {
-    $entity_id = $_GET['_id'];
-    $entity_type = 'persona';
-}
-?>
-
 <script>
     $(document).ready(function() {
-        let entity_id = <?= json_encode($entity_id) ?>;
-        let entity_type = <?= json_encode($entity_type) ?>;
-        cargar_datos_vehiculos(entity_id);
+        cargar_datos_vehiculos(<?= $_id ?>);
         cargar_selects_vehiculos();
     });
 
@@ -88,7 +74,7 @@ if (isset($_GET['id'])) {
                 if (response == 1) {
                     Swal.fire('', 'Operación realizada con éxito.', 'success');
                     $('#modal_agregar_vehiculo').modal('hide');
-                    cargar_datos_vehiculos(<?=$entity_id?>);
+                    cargar_datos_vehiculos(<?= $_id  ?>);
                     limpiar_campos_vehiculo_modal();
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
@@ -136,7 +122,7 @@ if (isset($_GET['id'])) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
                     <?php if (isset($_GET['_id']) || isset($_GET['id'])) { ?>
-                        cargar_datos_vehiculos(entity_id);
+                        cargar_datos_vehiculos(<?= $_id ?>);
                         limpiar_campos_vehiculo_modal();
                     <?php } ?>
                     $('#modal_agregar_vehiculo').modal('hide');

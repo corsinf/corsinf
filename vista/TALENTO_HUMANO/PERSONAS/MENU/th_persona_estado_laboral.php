@@ -1,24 +1,7 @@
-<?php
-
-$entity_id = '';
-$entity_type = ''; // 'postulante' o 'persona'
-if (isset($_GET['id'])) {
-    $entity_id = $_GET['id'];
-    $entity_type = 'postulante';
-} elseif (isset($_GET['_id'])) {
-    $entity_id = $_GET['_id'];
-    $entity_type = 'persona';
-}
-
-?>
-
 <script>
     $(document).ready(function() {
 
-        let entity_id = <?= json_encode($entity_id) ?>;
-        let entity_type = <?= json_encode($entity_type) ?>;
-
-        cargar_datos_estado_laboral(entity_id);
+        cargar_datos_estado_laboral(<?= $_id ?>);
         
         // Cargar catálogos
         cargar_cargos();
@@ -133,7 +116,7 @@ if (isset($_GET['id'])) {
                 if (response == 1) {
                     Swal.fire('', 'Operación realizada con éxito.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_estado_laboral(entity_id);
+                        cargar_datos_estado_laboral(<?= $_id ?>);
                         limpiar_campos_estado_laboral_modal();
                     <?php } ?>
                     $('#modal_estado_laboral').modal('hide');
@@ -197,7 +180,7 @@ if (isset($_GET['id'])) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_estado_laboral(entity_id);
+                        cargar_datos_estado_laboral(<?= $_id ?>);
                         limpiar_campos_estado_laboral_modal();
                     <?php } ?>
                     $('#modal_estado_laboral').modal('hide');
