@@ -9,6 +9,7 @@ $controlador = new th_personas_departamentosC();
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
+
 if (isset($_GET['verificar'])) {
     $password = $_POST['password'] ?? '';
     $per_id = $_POST['id'] ?? '';
@@ -21,7 +22,6 @@ if (isset($_GET['verificar'])) {
 if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
-// th_personas_departamentosC.php
 
 // Para mover una o varias personas
 if (isset($_GET['mover_varios'])) {
@@ -53,9 +53,6 @@ if (isset($_GET['mover_varios'])) {
     exit;
 }
 
-
-
-// Mantén tu función original para otros usos
 if (isset($_GET['insertar_editar_persona'])) {
     echo json_encode($controlador->insertar_editar_persona_departamento($_POST['parametros']));
 }
@@ -67,6 +64,7 @@ if (isset($_GET['eliminar'])) {
 if (isset($_GET['listar_personas_modal'])) {
     echo json_encode($controlador->listar_personas_modal($_POST['id']));
 }
+
 
 
 class th_personas_departamentosC

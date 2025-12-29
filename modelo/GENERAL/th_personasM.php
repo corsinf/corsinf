@@ -40,7 +40,7 @@ class th_personasM extends BaseModel
         'th_per_fecha_creacion AS fecha_creacion',
         'th_per_fecha_modificacion AS fecha_modificacion',
         'PERFIL',
-        'PASS',
+        // 'PASS',
         'th_per_codigo_sap AS codigo_sap',
         'th_per_unidad_org_sap AS unidad_org_sap',
         'th_per_tipo_sangre AS tipo_sangre',

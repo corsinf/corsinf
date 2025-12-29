@@ -1,27 +1,6 @@
 <script>
-    <?php
-
-$entity_id = '';
-$entity_type = ''; // 'postulante' o 'persona'
-if (isset($_GET['id'])) {
-    $entity_id = $_GET['id'];
-    $entity_type = 'postulante';
-} elseif (isset($_GET['_id'])) {
-    $entity_id = $_GET['_id'];
-    $entity_type = 'persona';
-}
-
-?>
-
-
     $(document).ready(function() {
-
-        let entity_id = <?= json_encode($entity_id) ?>;
-        let entity_type = <?= json_encode($entity_type) ?>;
-        
-            cargar_datos_experiencia_laboral(entity_id);
-        
-
+        cargar_datos_experiencia_laboral(<?= $id ?>);
     });
 
     //Experiencia Laboral
@@ -124,7 +103,7 @@ if (isset($_GET['id'])) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_experiencia_laboral(entity_id);
+                        cargar_datos_experiencia_laboral(<?= $id ?>);
                         limpiar_campos_experiencia_laboral_modal();
                     <?php } ?>
                     $('#modal_agregar_experiencia').modal('hide');
@@ -177,7 +156,7 @@ if (isset($_GET['id'])) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_experiencia_laboral(entity_id);
+                        cargar_datos_experiencia_laboral(<?= $id ?>);
                         limpiar_campos_experiencia_laboral_modal();
                     <?php } ?>
                     $('#modal_agregar_experiencia').modal('hide');
@@ -420,13 +399,13 @@ if (isset($_GET['id'])) {
             $('.form-control').removeClass('is-valid is-invalid');
         }
 
-         $("input[name='txt_fecha_contratacion_estado']").on("blur", function() {
+        $("input[name='txt_fecha_contratacion_estado']").on("blur", function() {
             if (!verificar_fecha_inicio_fecha_fin('txt_fecha_inicio_laboral', 'txt_fecha_final_laboral')) return;
         });
         $("input[name='txt_fecha_inicio_laboral']").on("blur", function() {
             if (!verificar_fecha_inicio_fecha_fin('txt_fecha_inicio_laboral', 'txt_fecha_final_laboral')) return;
         });
 
-        
+
     }
 </script>

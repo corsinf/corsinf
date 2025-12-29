@@ -6,7 +6,7 @@ require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/th_personasM.php');
 $controlador = new th_postulantesC();
 
 if (isset($_GET['listar'])) {
-    echo json_encode($controlador->listar($_POST['id']));
+    echo json_encode($controlador->listar($_POST['id'], $_POST['id_persona'] ?? ''));
 }
 
 if (isset($_GET['listar_todo'])) {
@@ -49,37 +49,20 @@ class th_postulantesC
         $this->personas = new th_personasM();
     }
 
-    function listar($id)
+    function listar($id, $id_persona = '')
     {
+        if ($id == 'postulante') {
+            //Solucion con procedure para redirigir a el postulante
+        }
+
+
         if ($id == '') {
             $datos = $this->modelo->where('th_pos_estado', 1)->where('th_pos_contratado', 0)->listar();
         } else {
-            $datos = $this->modelo->where('th_pos_id', $id)->where('th_pos_contratado', 0)->listar();
+            $datos = $this->modelo->where('th_pos_id', $id)->listar();
         }
-
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_pos_estado', 1)->where('th_pos_contratado', 0)->listar();
-
-        $texto = '';
-        foreach ($datos as $key => $value) {
-            $texto .=
-                <<<HTML
-                            <div class="row mb-3">
-                                <div class="col-10">
-                                    <a href="#" onclick="definir_ruta_iframe_cambiar_foto('{$value['th_pos_foto_url']}');">Ver foto</a>
-                                </div>
-                                <div class="col-2 d-flex justify-content-end align-items-center">
-                                    <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_cambiar_foto('{$value['_id']}')">
-                                        <i class="text-dark bx bx-pencil bx-sm"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        HTML;
-        }
-
 
         return $datos;
-        // $datos = $this->modelo->where('th_pos_id', $id)->listar($id);
-        // return $datos;
     }
 
     function listar_todo()
