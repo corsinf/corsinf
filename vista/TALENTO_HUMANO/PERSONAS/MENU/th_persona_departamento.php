@@ -24,10 +24,10 @@
                     }));
 
                     if (response[0].id_departamento == 0) {
-                        // cargar_persona_horario(response[0].id_persona);
+                        cargar_persona_horario(response[0].id_persona);
                         $('#pnl_horarios_persona').hide();
                     } else {
-                        // cargar_persona_horario(response[0].id_persona);
+                        cargar_persona_horario(response[0].id_persona);
                         $('#pnl_horarios_persona').show();
                     }
                 }
@@ -77,7 +77,7 @@
 </script>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 mb-2">
         <input id="id_perdep" type="hidden" value="" />
         <label for="ddl_departamentos" class="form-label fw-bold">
             <i class="bx bxs-building"></i> Departamento
@@ -93,6 +93,8 @@
             type="button">
             <i class="bx bx-save me-1"></i> Guardar
         </button>
+
+         <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/th_persona_departamento_horario.php'); ?>
         
     </div>
 </div>

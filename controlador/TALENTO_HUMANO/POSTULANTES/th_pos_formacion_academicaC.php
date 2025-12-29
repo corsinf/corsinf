@@ -67,7 +67,7 @@ class th_pos_formacion_academicaC
         if ($id == '') {
             $datos = $this->modelo->where('th_fora_estado', 1)->listar();
         } else {
-            $datos = $this->modelo->where('th_fora_id', $id)->listar();
+            $datos = $this->modelo->listar_formacion_academica_con_nivel($id);
         }
         return $datos;
     }
@@ -80,7 +80,8 @@ class th_pos_formacion_academicaC
             array('campo' => 'th_fora_fecha_inicio_formacion', 'dato' => $parametros['txt_fecha_inicio_academico']),
             array('campo' => 'th_fora_fecha_fin_formacion', 'dato' => $parametros['txt_fecha_final_academico']),
             array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']),
-
+            array('campo' => 'th_fora_registro_senescyt', 'dato' => $parametros['txt_fora_registro_senescyt']),
+            array('campo' => 'id_nivel_academico', 'dato' => $parametros['ddl_nivel_academico']),
         );
 
         if ($parametros['_id'] == '') {
