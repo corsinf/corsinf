@@ -468,13 +468,13 @@ if (isset($_GET['_id'])) {
                                                 <div class="mb-2">
                                                     <div class="row">
                                                         <div class="col-6 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Estado laboral:</h6>
+                                                            <h6 class="mb-0 fw-bold text-primary">Vehiculos:</h6>
                                                         </div>
                                                         <div class="col-6 d-flex justify-content-end">
                                                             <a href="#"
                                                                 class="text-success icon-hover d-flex align-items-center"
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#modal_estado_laboral">
+                                                                data-bs-target="#modal_agregar_vehiculo">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar</span>
                                                             </a>
@@ -484,7 +484,7 @@ if (isset($_GET['_id'])) {
 
                                                 <hr>
 
-                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_estado_laboral.php'); ?>
+                                                <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_vehiculo.php'); ?>
 
                                             </div>
                                         </div>
