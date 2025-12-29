@@ -1,5 +1,4 @@
-<script>
- <?php
+<?php
 
 $entity_id = '';
 $entity_type = ''; // 'postulante' o 'persona'
@@ -13,14 +12,14 @@ if (isset($_GET['id'])) {
 
 ?>
 
-
+<script>
     $(document).ready(function() {
 
         let entity_id = <?= json_encode($entity_id) ?>;
         let entity_type = <?= json_encode($entity_type) ?>;
-       
-            cargar_datos_estado_laboral(entity_id);
-       
+
+        cargar_datos_estado_laboral(entity_id);
+
     });
 
     //Estado Laboral
