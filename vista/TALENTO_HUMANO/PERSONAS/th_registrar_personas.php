@@ -103,10 +103,6 @@ if (isset($_GET['_id'])) {
             $('#error_txt_cedula').text('');
         });
     }
-
-    function regresar_boton_persona() {
-        window.history.back();
-    }
 </script>
 
 <script>
@@ -302,7 +298,7 @@ if (isset($_GET['_id'])) {
             </div>
             <div class="row m-2">
                 <div class="col-sm-12">
-                    <button onclick="regresar_boton_persona();"
+                    <button onclick="boton_regresar_js();"
                         class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i>
                         Regresar</button>
                 </div>
