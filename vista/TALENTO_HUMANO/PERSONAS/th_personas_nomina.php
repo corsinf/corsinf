@@ -57,114 +57,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     });
 </script>
 
-<script>
-     $(function() {
-    var $cbx = $('#cbx_enviar_credenciales');
-    var $contInputs = $('#cont_inputs_mensaje');
-    var $infoCred = $('#info_credenciales');
-    var $modal = $('#modal_mensaje');
-    var $btnEnviar = $('#btn_enviar_mensaje');
-
-    function actualizarVista() {
-        if ($cbx.is(':checked')) {
-            $contInputs.hide();
-            $infoCred.show();
-        } else {
-            $contInputs.show();
-            $infoCred.hide();
-        }
-    }
-
-        window.enviarMensaje = function() {
-
-        var enviarCred = $cbx.is(':checked');
-        var asunto = $.trim($('#txt_asunto').val() || '');
-        var descripcion = $.trim($('#txt_descripcion').val() || '');
-
-        if (enviarCred) {
-            if (asunto === '') {
-                Swal.fire('Advertencia', 'Ingresa el asunto', 'warning');
-                $('#txt_asunto').focus();
-                return;
-            }
-            if (descripcion === '') {
-                Swal.fire('Advertencia', 'Ingresa la descripción', 'warning');
-                $('#txt_descripcion').focus();
-                return;
-            }
-        }
-
-        console.log(enviarCred);
-        
-        
-
-        var parametrosLogCorreos = {
-            enviar_credenciales: enviarCred ? 1 : 0,
-            asunto: asunto,
-            descripcion: descripcion,
-            per_id: '',
-            personas: 'nomina'
-        };
 
 
-
-        enviar_Mail_Persona(parametrosLogCorreos);
-        $modal.modal('hide');
-    }
-
-    function enviar_Mail_Persona(parametrosLogCorreos) {
-
-        $.ajax({
-            url: '../controlador/TALENTO_HUMANO/th_logs_correosC.php?enviar_correo=true',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                parametros: parametrosLogCorreos
-            },
-            beforeSend: function() {
-                Swal.fire({
-                    title: 'Enviando correos...',
-                    allowOutsideClick: false,
-                    didOpen: () => Swal.showLoading()
-                });
-            },
-            success: function(response) {
-
-                if (response && response.total !== undefined) {
-
-                    let mensaje = `
-                        <b>Total:</b> ${response.total}<br>
-                        <b>Enviados:</b> ${response.enviados}<br>
-                        <b>Fallidos:</b> ${response.fallidos}
-                    `;
-
-                    if (response.fallidos > 0) {
-                        mensaje += '<hr><b>Correos con error:</b><br>';
-                        response.detalle.forEach(item => {
-                            if (item.estado === 'ERROR') {
-                                mensaje += `• ${item.correo}<br>`;
-                            }
-                        });
-                    }
-
-                    Swal.fire({
-                        icon: response.fallidos > 0 ? 'warning' : 'success',
-                        title: 'Resultado del envío',
-                        html: mensaje,
-                        confirmButtonText: 'Aceptar'
-                    });
-
-                } else {
-                    Swal.fire('Error', 'Respuesta inválida del servidor', 'error');
-                }
-            },
-            error: function(xhr, status, error) {
-                Swal.fire('Error', 'Error en la conexión: ' + error, 'error');
-            }
-        });
-    }
-     });
-</script>
 
 <div class="page-wrapper">
     <div class="page-content">
@@ -206,7 +100,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
                                         <button class="btn btn-success btn-sm"
                                             data-bs-toggle="modal" data-bs-target="#modal_mensaje" disabled>
-                                           <i class='bx bx-file'></i> Descargar Nómina
+                                            <i class='bx bx-file'></i> Descargar Nómina
                                         </button>
 
                                     </div>
@@ -258,13 +152,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             </div>
             <form id="form_mensaje" onsubmit="return false;">
                 <div class="modal-body">
-
-
                     <div class="form-check mb-3">
                         <input class="form-check-input" type="checkbox" value="1" id="cbx_enviar_credenciales" checked>
                         <label class="form-check-label" for="cbx_enviar_credenciales">Enviar credenciales</label>
                     </div>
-
 
                     <!-- Contenedor de inputs que se muestran cuando NO está marcado 'Enviar credenciales' -->
                     <div id="cont_inputs_mensaje" style="display: none;">
@@ -280,20 +171,116 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         </div>
                     </div>
 
-
                     <!-- Mensaje informativo opcional -->
                     <div id="info_credenciales" class="small text-muted" style="display: block;">
                         Se enviarán las credenciales almacenadas para todas las personas.
                     </div>
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" id="btn_enviar_mensaje" class="btn btn-primary"
-                        onclick="enviarMensaje()">Enviar</button>
+                    <button type="button" id="btn_enviar_mensaje" class="btn btn-primary">
+                        Enviar
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+$(document).ready(function() {
+    var $cbx = $('#cbx_enviar_credenciales');
+    var $contInputs = $('#cont_inputs_mensaje');
+    var $infoCred = $('#info_credenciales');
+    var $modal = $('#modal_mensaje_personas');
+    
+    // Variable PHP convertida a JavaScript al inicio
+    var perId = '<?= isset($_id) ? $_id : "" ?>';
+
+    function actualizarVista() {
+        if ($cbx.is(':checked')) {
+            $contInputs.hide();
+            $infoCred.show();
+        } else {
+            $contInputs.show();
+            $infoCred.hide();
+        }
+    }
+
+    // Al abrir modal - resetear el formulario
+    $modal.on('show.bs.modal', function() {
+        // Resetear checkbox a marcado
+        $cbx.prop('checked', true);
+        // Limpiar campos
+        $('#txt_asunto').val('');
+        $('#txt_descripcion').val('');
+        // Actualizar vista
+        actualizarVista();
+    });
+
+    // Cambio checkbox
+    $cbx.on('change', function() {
+        actualizarVista();
+    });
+
+    // Click botón enviar
+    $('#btn_enviar_mensaje').on('click', function() {
+        enviarMensaje();
+    });
+
+    function enviarMensaje() {
+        var enviarCred = $cbx.is(':checked');
+        var asunto = $.trim($('#txt_asunto').val() || '');
+        var descripcion = $.trim($('#txt_descripcion').val() || '');
+
+        // Validación solo si NO se envían credenciales
+        if (!enviarCred) {
+            if (asunto === '') {
+                Swal.fire('Advertencia', 'Ingresa el asunto', 'warning');
+                return;
+            }
+            if (descripcion === '') {
+                Swal.fire('Advertencia', 'Ingresa la descripción', 'warning');
+                return;
+            }
+        }
+
+        var parametrosLogCorreos = {
+            enviar_credenciales: enviarCred ? 1 : 0,
+            asunto: asunto,
+            descripcion: descripcion,
+            per_id: perId,
+            personas: 'nomina'
+        };
+
+        enviar_Mail_Persona(parametrosLogCorreos);
+        $modal.modal('hide');
+    }
+
+    function enviar_Mail_Persona(parametrosLogCorreos) {
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_logs_correosC.php?enviar_correo=true',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                parametros: parametrosLogCorreos
+            },
+            beforeSend: function() {
+                Swal.fire({
+                    title: 'Enviando correos...',
+                    allowOutsideClick: false,
+                    didOpen: () => Swal.showLoading()
+                });
+            },
+            success: function(response) {
+                Swal.fire('OK', 'Proceso terminado', 'success');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                console.error('Response:', xhr.responseText);
+                Swal.fire('Error', 'Error en la conexión', 'error');
+            }
+        });
+    }
+});
+</script>
