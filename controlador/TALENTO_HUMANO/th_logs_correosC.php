@@ -84,7 +84,8 @@ class th_logs_correosC
            $personas_correos =  $this->personas->listar_personas_departamentos($id);
         }else
         {
-            $personas_correos = $this->personas->listar_personas_correos($id);
+            // $personas_correos = $this->personas->listar_personas_correos($id); //No se usa para personas es solo nomina
+            $personas_correos = [];
         }
 
         if (empty($personas_correos)) {

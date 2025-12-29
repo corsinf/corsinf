@@ -28,6 +28,7 @@ class th_personas_departamentosM extends BaseModel
                     per.th_per_cedula AS cedula,
                     per.th_per_telefono_1 AS telefono_1,
                     per.th_per_correo AS correo,
+                    per.th_pos_id AS _id_postulante,
                     dep.th_dep_nombre AS nombre_departamento
                 FROM
                 th_personas_departamentos per_dep
