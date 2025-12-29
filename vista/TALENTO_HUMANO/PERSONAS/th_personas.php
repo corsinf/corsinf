@@ -270,7 +270,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             enviar_credenciales: enviarCred ? 1 : 0,
             asunto: asunto,
             descripcion: descripcion,
-            per_id: ''
+            per_id: '',
+            personas: 'general'
         };
 
         enviar_Mail_Persona(parametrosLogCorreos);

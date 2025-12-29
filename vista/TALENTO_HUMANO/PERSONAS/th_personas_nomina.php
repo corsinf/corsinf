@@ -58,6 +58,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 </script>
 
 <script>
+     $(function() {
     var $cbx = $('#cbx_enviar_credenciales');
     var $contInputs = $('#cont_inputs_mensaje');
     var $infoCred = $('#info_credenciales');
@@ -74,7 +75,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         }
     }
 
-    function enviarMensaje() {
+        window.enviarMensaje = function() {
 
         var enviarCred = $cbx.is(':checked');
         var asunto = $.trim($('#txt_asunto').val() || '');
@@ -93,12 +94,19 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             }
         }
 
+        console.log(enviarCred);
+        
+        
+
         var parametrosLogCorreos = {
             enviar_credenciales: enviarCred ? 1 : 0,
             asunto: asunto,
             descripcion: descripcion,
-            per_id: ''
+            per_id: '',
+            personas: 'nomina'
         };
+
+
 
         enviar_Mail_Persona(parametrosLogCorreos);
         $modal.modal('hide');
@@ -155,6 +163,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             }
         });
     }
+     });
 </script>
 
 <div class="page-wrapper">
@@ -191,7 +200,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                     <div class="d-flex flex-wrap align-items-center gap-2" id="btn_nuevo">
 
                                         <a href="javascript:void(0)" class="btn btn-success btn-sm"
-                                            data-bs-toggle="modal" data-bs-target="#modal_mensaje">
+                                            data-bs-toggle="modal" data-bs-target="#modal_mensaje_personas">
                                             <i class="bx bx-envelope me-1"></i> Enviar Mensaje | Credenciales
                                         </a>
 
@@ -199,12 +208,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                             data-bs-toggle="modal" data-bs-target="#modal_mensaje" disabled>
                                            <i class='bx bx-file'></i> Descargar Nómina
                                         </button>
-
-                                         <a href="javascript:void(0)" class="btn btn-success btn-sm"
-                                            data-bs-toggle="modal" data-bs-target="#modal_mensaje">
-                                            <i class="bx bx-envelope me-1"></i> Enviar Mensaje
-                                        </a>
-
 
                                     </div>
                                 </div>
@@ -246,7 +249,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     </div>
 </div>
 
-<div class="modal fade" id="modal_mensaje" tabindex="-1" aria-labelledby="modal_mensaje_label" aria-hidden="true">
+<div class="modal fade" id="modal_mensaje_personas" tabindex="-1" aria-labelledby="modal_mensaje_label" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">

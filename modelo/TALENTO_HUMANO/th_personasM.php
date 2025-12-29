@@ -226,5 +226,35 @@ public function listar_personas_correos($id_persona = null)
     return $this->db->datos($sql);
 }
 
+function listar_personas_departamentos($id_departamento)
+    {
+        $sql =
+            "SELECT
+                    p.th_per_id AS th_per_id,
+                    p.th_per_correo AS th_per_correo,
+                    P.PASS AS PASS,
+                    CONCAT(
+                    ISNULL(p.th_per_primer_nombre, ''), ' ',
+                    ISNULL(p.th_per_segundo_nombre, ''), ' ',
+                    ISNULL(p.th_per_primer_apellido, ''), ' ',
+                    ISNULL(p.th_per_segundo_apellido, '')
+                    ) AS nombre_completo,
+                    dep.th_dep_nombre AS nombre_departamento
+                FROM
+                th_personas_departamentos per_dep
+                INNER JOIN th_personas p ON per_dep.th_per_id = p.th_per_id 
+                INNER JOIN th_departamentos dep ON per_dep.th_dep_id = dep.th_dep_id
+                WHERE p.th_per_estado = 1 ";
+
+        if ($id_departamento != '' && $id_departamento != null) {
+            $sql .= " AND per_dep.th_dep_id = '$id_departamento'";
+        }
+
+        $sql .= ";";
+
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
+
 
 }

@@ -346,7 +346,7 @@ if (isset($_GET['_id'])) {
         });
         $cbx.on('change', actualizarVista);
         window.enviarMensaje = function() {
-            var enviarCred = $cbx.is(':checked');
+            var enviarCred = $('#cbx_enviar_credenciales').is(':checked');
             var asunto = $.trim($('#txt_asunto').val() || '');
             var descripcion = $.trim($('#txt_descripcion').val() || '');
             if (!enviarCred) {
@@ -365,7 +365,8 @@ if (isset($_GET['_id'])) {
                 enviar_credenciales: enviarCred ? 1 : 0,
                 asunto: asunto,
                 descripcion: descripcion,
-                per_id: '<?= $_id ? $_id : '' ?>'
+                per_id: '<?= $_id ? $_id : '' ?>',
+                personas: 'general'
             };
             enviar_Mail_Persona(parametrosLogCorreos);
             $modal.modal('hide');
@@ -434,29 +435,6 @@ if (isset($_GET['_id'])) {
 </script>
 
 <script>
-    function cargar_departamento(id) {
-        $.ajax({
-            data: {
-                id: id
-            },
-            url: '../controlador/TALENTO_HUMANO/th_personasC.php?listar_persona_departamento=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                if (response && response.length > 0) {
-                    $('#id_perdep').val(response[0]._id_perdep);
-                    $('#ddl_departamentos').append($('<option>', {
-                        value: response[0].id_departamento,
-                        text: response[0].nombre_departamento,
-                        selected: true
-                    }));
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error al cargar departamento:', error);
-            }
-        });
-    }
 
     function insertar_persona_departamento() {
         const deptId = $('#ddl_departamentos').val();

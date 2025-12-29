@@ -75,9 +75,18 @@ class th_logs_correosC
     $id = $parametros['per_id']; 
     $loginUrl = 'https://corsinf.com:447/corsinf/login.php';
     $logoUrl  = 'https://corsinf.com:447/corsinf/img/Firmas/banner_2.jpg';
+
+    print_r($parametros);
+    return;
     
     try {
-        $personas_correos = $this->personas->listar_personas_correos($id);
+
+        if($parametros['personas'] == 'nomina'){
+           $personas_correos =  $this->personas->listar_personas_departamentos($id);
+        }else
+        {
+            $personas_correos = $this->personas->listar_personas_correos($id);
+        }
         
         if (empty($personas_correos)) {
             return [
@@ -98,8 +107,7 @@ class th_logs_correosC
 
             $id_destinatario = $value['th_per_id'] ?? null;
             
-            // Determinar asunto y cuerpo según el tipo de envío
-            if ($parametros['enviar_credenciales'] == 0) {
+            if ($parametros['enviar_credenciales'] == 1) {
                 $asunto = $parametros['asunto'] ?? 'Notificación';
                 $descripcion = $parametros['descripcion'] ?? '';
                 $titulo_correo = $asunto;
@@ -124,6 +132,8 @@ class th_logs_correosC
                     $logoUrl, 
                     $support
                 );
+
+                
             }
 
             // Validar correo
