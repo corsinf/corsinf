@@ -20,10 +20,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             columns: [{
                     data: null,
                     render: function(data, type, item) {
-                        href =
-                            `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_persona_postulate&_id_per=${item.id_persona}&_id=${item.id_comunidad}`;
-                        btns =
-                            `<a href="${href}" class="btn btn-xs btn-primary" title="CV"><i class="bx bxs-user-pin fs-6 me-0"></i></a>`;
+                        href_1 = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_persona_postulate&_id_per=${item.id_persona}&_id=${item.id_comunidad}`;
+                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_personal&id=${item._id_postulante ?? 'postulante'}&id_persona=${item.id_persona}`;
+                        btns = `<a href="${href_1}" class="btn btn-xs btn-danger me-1" title="CV"><i class="bx bxs-user-pin fs-6 me-0"></i></a>`;
+                        btns += `<a href="${href}" class="btn btn-xs btn-primary" title="CV"><i class="bx bxs-user-pin fs-6 me-0"></i></a>`;
+
                         return btns;
                     }
                 },
@@ -95,7 +96,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
                                         <a href="javascript:void(0)" class="btn btn-success btn-sm"
                                             data-bs-toggle="modal" data-bs-target="#modal_mensaje_personas">
-                                            <i class="bx bx-envelope me-1"></i> Enviar Mensaje | Credenciales
+                                            <i class="bx bx-envelope me-1"></i> Enviar Mensaje
                                         </a>
 
                                         <button class="btn btn-success btn-sm"
@@ -188,99 +189,99 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 </div>
 
 <script>
-$(document).ready(function() {
-    var $cbx = $('#cbx_enviar_credenciales');
-    var $contInputs = $('#cont_inputs_mensaje');
-    var $infoCred = $('#info_credenciales');
-    var $modal = $('#modal_mensaje_personas');
-    
-    // Variable PHP convertida a JavaScript al inicio
-    var perId = '<?= isset($_id) ? $_id : "" ?>';
+    $(document).ready(function() {
+        var $cbx = $('#cbx_enviar_credenciales');
+        var $contInputs = $('#cont_inputs_mensaje');
+        var $infoCred = $('#info_credenciales');
+        var $modal = $('#modal_mensaje_personas');
 
-    function actualizarVista() {
-        if ($cbx.is(':checked')) {
-            $contInputs.hide();
-            $infoCred.show();
-        } else {
-            $contInputs.show();
-            $infoCred.hide();
-        }
-    }
+        // Variable PHP convertida a JavaScript al inicio
+        var perId = '<?= isset($_id) ? $_id : "" ?>';
 
-    // Al abrir modal - resetear el formulario
-    $modal.on('show.bs.modal', function() {
-        // Resetear checkbox a marcado
-        $cbx.prop('checked', true);
-        // Limpiar campos
-        $('#txt_asunto').val('');
-        $('#txt_descripcion').val('');
-        // Actualizar vista
-        actualizarVista();
-    });
-
-    // Cambio checkbox
-    $cbx.on('change', function() {
-        actualizarVista();
-    });
-
-    // Click botón enviar
-    $('#btn_enviar_mensaje').on('click', function() {
-        enviarMensaje();
-    });
-
-    function enviarMensaje() {
-        var enviarCred = $cbx.is(':checked');
-        var asunto = $.trim($('#txt_asunto').val() || '');
-        var descripcion = $.trim($('#txt_descripcion').val() || '');
-
-        // Validación solo si NO se envían credenciales
-        if (!enviarCred) {
-            if (asunto === '') {
-                Swal.fire('Advertencia', 'Ingresa el asunto', 'warning');
-                return;
-            }
-            if (descripcion === '') {
-                Swal.fire('Advertencia', 'Ingresa la descripción', 'warning');
-                return;
+        function actualizarVista() {
+            if ($cbx.is(':checked')) {
+                $contInputs.hide();
+                $infoCred.show();
+            } else {
+                $contInputs.show();
+                $infoCred.hide();
             }
         }
 
-        var parametrosLogCorreos = {
-            enviar_credenciales: enviarCred ? 1 : 0,
-            asunto: asunto,
-            descripcion: descripcion,
-            per_id: perId,
-            personas: 'nomina'
-        };
-
-        enviar_Mail_Persona(parametrosLogCorreos);
-        $modal.modal('hide');
-    }
-
-    function enviar_Mail_Persona(parametrosLogCorreos) {
-        $.ajax({
-            url: '../controlador/TALENTO_HUMANO/th_logs_correosC.php?enviar_correo=true',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                parametros: parametrosLogCorreos
-            },
-            beforeSend: function() {
-                Swal.fire({
-                    title: 'Enviando correos...',
-                    allowOutsideClick: false,
-                    didOpen: () => Swal.showLoading()
-                });
-            },
-            success: function(response) {
-                Swal.fire('OK', 'Proceso terminado', 'success');
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                console.error('Response:', xhr.responseText);
-                Swal.fire('Error', 'Error en la conexión', 'error');
-            }
+        // Al abrir modal - resetear el formulario
+        $modal.on('show.bs.modal', function() {
+            // Resetear checkbox a marcado
+            $cbx.prop('checked', true);
+            // Limpiar campos
+            $('#txt_asunto').val('');
+            $('#txt_descripcion').val('');
+            // Actualizar vista
+            actualizarVista();
         });
-    }
-});
+
+        // Cambio checkbox
+        $cbx.on('change', function() {
+            actualizarVista();
+        });
+
+        // Click botón enviar
+        $('#btn_enviar_mensaje').on('click', function() {
+            enviarMensaje();
+        });
+
+        function enviarMensaje() {
+            var enviarCred = $cbx.is(':checked');
+            var asunto = $.trim($('#txt_asunto').val() || '');
+            var descripcion = $.trim($('#txt_descripcion').val() || '');
+
+            // Validación solo si NO se envían credenciales
+            if (!enviarCred) {
+                if (asunto === '') {
+                    Swal.fire('Advertencia', 'Ingresa el asunto', 'warning');
+                    return;
+                }
+                if (descripcion === '') {
+                    Swal.fire('Advertencia', 'Ingresa la descripción', 'warning');
+                    return;
+                }
+            }
+
+            var parametrosLogCorreos = {
+                enviar_credenciales: enviarCred ? 1 : 0,
+                asunto: asunto,
+                descripcion: descripcion,
+                per_id: perId,
+                personas: 'nomina'
+            };
+
+            enviar_Mail_Persona(parametrosLogCorreos);
+            $modal.modal('hide');
+        }
+
+        function enviar_Mail_Persona(parametrosLogCorreos) {
+            $.ajax({
+                url: '../controlador/TALENTO_HUMANO/th_logs_correosC.php?enviar_correo=true',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    parametros: parametrosLogCorreos
+                },
+                beforeSend: function() {
+                    Swal.fire({
+                        title: 'Enviando correos...',
+                        allowOutsideClick: false,
+                        didOpen: () => Swal.showLoading()
+                    });
+                },
+                success: function(response) {
+                    Swal.fire('OK', 'Proceso terminado', 'success');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    console.error('Response:', xhr.responseText);
+                    Swal.fire('Error', 'Error en la conexión', 'error');
+                }
+            });
+        }
+    });
 </script>

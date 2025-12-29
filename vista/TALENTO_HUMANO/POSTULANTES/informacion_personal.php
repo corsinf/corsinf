@@ -3,11 +3,16 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 
 $id = '';
+$id_persona = '';
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 }
-//prueba
+
+if (isset($_GET['id_persona'])) {
+    $id_persona = $_GET['id_persona'];
+}
+
 ?>
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
@@ -16,18 +21,19 @@ if (isset($_GET['id'])) {
     $(document).ready(function() {
 
         <?php if (isset($_GET['id'])) { ?>
-            cargarDatos_informacion_personal(<?= $id ?>);
+            cargarDatos_informacion_personal(<?= $id ?>, <?= $id_persona ?>);
         <?php } ?>
 
     });
 
     //Información Personal
-    function cargarDatos_informacion_personal(id) {
+    function cargarDatos_informacion_personal(id, id_persona = '') {
         $.ajax({
             url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?listar=true',
             type: 'post',
             data: {
-                id: id
+                id: id,
+                id_persona: id_persona
             },
             dataType: 'json',
             success: function(response) {
@@ -210,9 +216,7 @@ if (isset($_GET['id'])) {
             </div>
             <div class="row m-2">
                 <div class="col-sm-12">
-                    <a href="../vista/inicio.php?mod=1010&acc=th_postulantes"
-                        class="btn btn-outline-dark btn-sm d-flex align-items-center"><i class="bx bx-arrow-back"></i>
-                        Postulantes</a>
+                    <button onclick="boton_regresar_js();" class="btn btn-outline-dark btn-sm d-flex align-items-center"><i class="bx bx-arrow-back"></i>Regresar</button>
                 </div>
             </div>
         </div>
@@ -867,5 +871,4 @@ if (isset($_GET['id'])) {
             }
         });
     });
-
 </script>

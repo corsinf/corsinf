@@ -300,6 +300,11 @@ function verificar_fecha_inicio_fecha_fin(input_name_fi, input_name_ff) {
     }
 }
 
+//Para regresar a la pagina anterior
+function boton_regresar_js() {
+    window.history.back();
+}
+
 /**
  * 
  * Datatable

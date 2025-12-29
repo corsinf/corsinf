@@ -40,23 +40,23 @@
                 }
 
                 $('#ddl_etnia').append($('<option>', {
-                    value:  response[0].id_etnia,
-                    text:  response[0].descripcion_etnia,
+                    value: response[0].id_etnia,
+                    text: response[0].descripcion_etnia,
                     selected: true
                 }));
-                 $('#ddl_religion').append($('<option>', {
-                    value:  response[0].id_religion,
-                    text:  response[0].descripcion_religion,
+                $('#ddl_religion').append($('<option>', {
+                    value: response[0].id_religion,
+                    text: response[0].descripcion_religion,
                     selected: true
                 }));
                 $('#ddl_identidad_genero').append($('<option>', {
-                    value:  response[0].id_identidad_genero,
-                    text:  response[0].descripcion_identidad_genero,
+                    value: response[0].id_identidad_genero,
+                    text: response[0].descripcion_identidad_genero,
                     selected: true
                 }));
                 $('#ddl_orientacion_sexual').append($('<option>', {
-                    value:  response[0].id_orientacion_sexual,
-                    text:  response[0].descripcion_orientacion_sexual,
+                    value: response[0].id_orientacion_sexual,
+                    text: response[0].descripcion_orientacion_sexual,
                     selected: true
                 }));
                 $('#txt_per_correo_personal_1').val(response[0].correo_personal_1);
@@ -247,6 +247,7 @@
         <input type="text" class="form-control form-control-sm" name="txt_observaciones" id="txt_observaciones" maxlength="200">
     </div>
 </div>
+
 <div class="row mb-col">
     <div class="col-md-3">
         <label for="ddl_etnia" class="form-label form-label-sm">Etnía </label>
@@ -273,13 +274,14 @@
         <label class="error" style="display: none;" for="ddl_identidad_genero"></label>
     </div>
 </div>
+
 <div class="row mb-col">
     <div class="col-md-6">
-        <label for="txt_per_correo_personal_1" class="form-label form-label-sm">Otro Correo Electrónico</label>
+        <label for="txt_per_correo_personal_1" class="form-label form-label-sm">Correo Personal</label>
         <input type="email" class="form-control form-control-sm" name="txt_per_correo_personal_1" id="txt_per_correo_personal_1" value="" maxlength="100">
     </div>
     <div class="col-md-6">
-        <label for="txt_per_correo_personal_2" class="form-label form-label-sm">Otro Correo Electrónico 2</label>
+        <label for="txt_per_correo_personal_2" class="form-label form-label-sm">Correo Personal Alternativo</label>
         <input type="email" class="form-control form-control-sm" name="txt_per_correo_personal_2" id="txt_per_correo_personal_2" value="" maxlength="100">
     </div>
 </div>
