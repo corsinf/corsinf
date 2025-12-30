@@ -21,7 +21,7 @@ if (isset($_GET['id_persona'])) {
     $(document).ready(function() {
 
         <?php if (isset($_GET['id'])) { ?>
-            cargarDatos_informacion_personal(<?= $id ?>, <?= $id_persona ?>);
+            cargarDatos_informacion_personal('<?= $id ?>', '<?= $id_persona ?>');
         <?php } ?>
 
     });
@@ -37,6 +37,18 @@ if (isset($_GET['id_persona'])) {
             },
             dataType: 'json',
             success: function(response) {
+
+                if (response.recargar == 1 && response.id_postulante) {
+                    let nueva_Url = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_personal&id=${response.id_postulante}&id_persona=<?= $id_persona ?>`;
+
+                    // Cambia la URL sin recargar
+                    window.history.replaceState(null, '', nueva_Url);
+
+                    // Recarga real solo una vez
+                    location.reload();
+                    return;
+                }
+
                 $('#txt_primer_nombre').val(response[0].th_pos_primer_nombre);
                 $('#txt_segundo_nombre').val(response[0].th_pos_segundo_nombre);
                 $('#txt_primer_apellido').val(response[0].th_pos_primer_apellido);
@@ -258,9 +270,17 @@ if (isset($_GET['id_persona'])) {
                                                 <i class="bx bx-info-circle fs-5 text-primary me-2"></i>
                                                 <h6 class="fw-bold mb-0 text-primary">Información Personal</h6>
                                             </div>
-                                            <a href="#" class="text-secondary" data-bs-toggle="modal" data-bs-target="#modal_informacion_personal">
-                                                <i class="bx bx-pencil bx-sm"></i>
-                                            </a>
+
+                                            <?php if (isset($_GET['id_persona'])) { ?>
+                                                <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&_id=<?= $id_persona ?>&id_postulante=<?= $id ?>"
+                                                    class="text-success" title="Editar persona"><i class="bx bx-pencil bx-sm"></i>
+                                                </a>
+
+                                            <?php } else { ?>
+                                                <a href="#" class="text-secondary" data-bs-toggle="modal" data-bs-target="#modal_informacion_personal">
+                                                    <i class="bx bx-pencil bx-sm"></i>
+                                                </a>
+                                            <?php } ?>
                                         </div>
 
                                         <div class="d-flex flex-column gap-3">

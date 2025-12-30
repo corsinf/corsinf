@@ -52,9 +52,12 @@ class th_postulantesC
     function listar($id, $id_persona = '')
     {
         if ($id == 'postulante') {
-            //Solucion con procedure para redirigir a el postulante
+            $datos = $this->modelo->vincular_persona_postulante($id_persona);
+
+            return array('id_postulante' => $datos[0]['th_pos_id'], 'recargar' => 1);
         }
 
+        // print_r($datos[0]['th_pos_id']); exit(); die();
 
         if ($id == '') {
             $datos = $this->modelo->where('th_pos_estado', 1)->where('th_pos_contratado', 0)->listar();

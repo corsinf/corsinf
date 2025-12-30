@@ -53,11 +53,11 @@ class th_postulantesM extends BaseModel
         return $datos;
     }
 
-   public function listarNoContratados($id_plaza = '')
-{
-    $id_plaza = intval($id_plaza);
+    public function listarNoContratados($id_plaza = '')
+    {
+        $id_plaza = intval($id_plaza);
 
-    $sql = "
+        $sql = "
         SELECT DISTINCT
             t.th_pos_id AS _id,
             t.th_pos_primer_nombre AS primer_nombre,
@@ -100,9 +100,21 @@ class th_postulantesM extends BaseModel
             primer_nombre
     ";
 
-    return $this->db->datos($sql);
-}
+        return $this->db->datos($sql);
+    }
 
+    public function vincular_persona_postulante($id_persona)
+    {
+        // print_r($id_persona);
+        // die();
 
+        $sql = "DECLARE @th_pos_id INT;
+                    EXEC _talentoh.SP_VINCULAR_PERSONA_POSTULANTE
+                    @p_th_per_id = $id_persona,
+                    @o_th_pos_id = @th_pos_id OUTPUT;
 
+                SELECT @th_pos_id AS th_pos_id;";
+
+        return $this->db->datos($sql);
+    }
 }
