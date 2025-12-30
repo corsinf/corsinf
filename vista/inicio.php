@@ -130,7 +130,7 @@ if ($_GET['acc'] == 'con_pacientes') {
 }
 
 if ($_GET['acc'] == 'politicas_datos') {
-	include('FIRMADOR/Politicas/politicas_datos.php');
+	include('GENERAL/Politicas/politicas_datos.php');
 }
 
 //Eliminar
