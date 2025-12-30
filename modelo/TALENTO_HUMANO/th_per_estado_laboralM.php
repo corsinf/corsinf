@@ -29,14 +29,15 @@ class th_per_estado_laboralM extends BaseModel
                     el.th_est_estado_laboral,
                     el.th_est_fecha_contratacion,
                     el.th_est_fecha_salida,
-                    c.th_cat_car_descripcion AS cargo_descripcion,
-                    s.th_cat_sec_descripcion AS seccion_descripcion
+                    c.descripcion AS cargo_descripcion,
+                    c.nombre AS cargo_nombre,
+                    s.descripcion AS seccion_descripcion
                 FROM 
-                    _talentoh.th_per_estado_laboral el
+                    th_per_estado_laboral el
                 LEFT JOIN 
-                    _talentoh.th_cat_cargos c ON el.id_cargo = c.th_cat_car_id
+                    th_cat_cargo c ON el.id_cargo = c.id_cargo
                 LEFT JOIN 
-                    _talentoh.th_cat_secciones s ON el.id_seccion = s.th_cat_sec_id
+                    th_cat_seccion s ON el.id_seccion = s.id_seccion
                 WHERE 
                     el.th_per_id = '$id'
                     AND el.th_est_estado = 1
@@ -48,19 +49,32 @@ class th_per_estado_laboralM extends BaseModel
 
     public function listar_estado_laboral_por_id($id)
     {
-        $sql = "SELECT 
-                    th_est_id AS _id,
-                    th_per_id,
-                    id_cargo,
-                    id_seccion,
-                    th_est_estado_laboral,
-                    th_est_fecha_contratacion,
-                    th_est_fecha_salida
-                FROM 
-                    _talentoh.th_per_estado_laboral
-                WHERE 
-                    th_est_id = '$id'
-                    AND th_est_estado = 1";
+        $id = intval($id);
+
+        $sql = "
+        SELECT 
+            el.th_est_id AS _id,
+            el.th_per_id,
+            el.id_cargo,
+            el.id_seccion,
+            el.th_est_estado_laboral,
+            el.th_est_fecha_contratacion,
+            el.th_est_fecha_salida,
+
+            c.id_cargo,
+            c.nombre AS cargo_nombre,
+            c.descripcion AS cargo_descripcion,
+
+            s.id_seccion,
+            s.descripcion AS seccion_descripcion
+        FROM th_per_estado_laboral el
+        LEFT JOIN th_cat_cargo c 
+            ON el.id_cargo = c.id_cargo
+        LEFT JOIN th_cat_seccion s 
+            ON el.id_seccion = s.id_seccion
+        WHERE el.th_est_id = $id
+          AND el.th_est_estado = 1
+    ";
 
         return $this->db->datos($sql);
     }

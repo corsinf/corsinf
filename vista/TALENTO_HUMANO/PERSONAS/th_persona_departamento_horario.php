@@ -1,277 +1,369 @@
 <link rel="stylesheet" href="../assets/plugins/notifications/css/lobibox.min.css" />
 
 <style>
-    .card-header-calendar {
+    .horarios-container {
+        padding: 1rem;
+    }
+
+    .header-section {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 1rem;
-        margin-bottom: 0.75rem;
-        flex-wrap: wrap;
-    }
-
-    .card-header-calendar .titles {
-        text-align: center;
-        flex: 1 1 auto;
-        min-width: 220px;
-    }
-
-    .card-header-calendar h3 {
-        margin: 0;
-        font-size: 1.05rem;
-        font-weight: 700;
-        color: #1e3a8a;
-        letter-spacing: 0.5px;
-    }
-
-    .card-header-calendar p {
-        margin: 0;
-        font-size: 0.85rem;
-        color: #475569;
-    }
-
-    .resumen-section {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 1.5rem;
-        border-radius: 12px;
         margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .header-left h5 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #0d47a1;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .header-right h5 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #0d47a1;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .select-wrapper {
+        margin-top: 0.5rem;
+    }
+
+    .select-wrapper select {
+        min-width: 250px;
+    }
+
+    /* Resumen con fondo azul */
+    .resumen-bar {
+        background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+        color: white;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
     }
 
     .resumen-item {
         text-align: center;
+        flex: 1;
+        min-width: 100px;
     }
 
     .resumen-item .numero {
         font-size: 2rem;
         font-weight: 700;
+        line-height: 1;
     }
 
     .resumen-item .label {
-        font-size: 0.9rem;
-        opacity: 0.9;
+        font-size: 0.85rem;
+        opacity: 0.95;
+        margin-top: 0.25rem;
     }
 
-    .info-card {
-        background: white;
-        border-radius: 12px;
-        padding: 1.5rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    /* Info del horario */
+    .info-horario {
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
         margin-bottom: 1.5rem;
+        border-left: 4px solid #0d47a1;
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-item strong {
+        color: #0d47a1;
     }
 
     .horario-badge {
         display: inline-block;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
+        padding: 0.35rem 1rem;
+        border-radius: 6px;
         font-weight: 600;
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
+        background: #0d47a1;
+        color: white;
     }
 
-    /* MEJORA: Grid para los turnos */
-    .turnos-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 1rem;
+    /* Leyenda */
+    .leyenda-section {
         margin-bottom: 1.5rem;
     }
 
-    .dia-container {
-        background: #f8f9fa;
-        border-radius: 12px;
-        padding: 1rem;
-        border: 1px solid #e9ecef;
-    }
-
-    .dia-container h6 {
-        margin-bottom: 1rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 2px solid #dee2e6;
-    }
-
-    .turno-card {
-        background: white;
-        border-left: 4px solid;
-        padding: 0.75rem;
-        margin-bottom: 0.75rem;
-        border-radius: 8px;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .turno-card:last-child {
-        margin-bottom: 0;
-    }
-
-    .turno-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .turno-header {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.25rem;
-    }
-
-    .turno-nombre {
+    .leyenda-title {
         font-size: 0.95rem;
         font-weight: 700;
-        color: #2c3e50;
-    }
-
-    .turno-horario {
-        font-size: 0.85rem;
-        color: #5a6c7d;
+        color: #0d47a1;
+        margin-bottom: 0.75rem;
         display: flex;
         align-items: center;
         gap: 0.5rem;
     }
 
-    .color-indicator {
-        width: 16px;
-        height: 16px;
-        border-radius: 4px;
-        display: inline-block;
-        flex-shrink: 0;
-    }
-
-    .empty-state {
-        text-align: center;
-        padding: 3rem;
-        color: #6c757d;
-    }
-
-    .empty-state i {
-        font-size: 4rem;
-        margin-bottom: 1rem;
-        opacity: 0.3;
-    }
-
-    /* MEJORA: Grid para la leyenda */
-    .leyenda-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    .leyenda-list {
+        display: flex;
+        flex-wrap: wrap;
         gap: 1rem;
     }
 
     .leyenda-item {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        padding: 0.75rem;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
         background: #f8f9fa;
-        border-radius: 8px;
-        transition: transform 0.2s;
+        border-radius: 6px;
+        transition: all 0.2s;
     }
 
     .leyenda-item:hover {
-        transform: translateX(5px);
         background: #e9ecef;
+        transform: translateX(3px);
+    }
+
+    .color-box {
+        width: 16px;
+        height: 16px;
+        border-radius: 3px;
+        flex-shrink: 0;
+    }
+
+    .leyenda-content {
+        font-size: 0.85rem;
+    }
+
+    .leyenda-content strong {
+        display: block;
+        color: #2c3e50;
+    }
+
+    .leyenda-content small {
+        color: #6c757d;
+    }
+
+    /* Distribución semanal */
+    .distribucion-section {
+        margin-bottom: 1rem;
+    }
+
+    .distribucion-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #0d47a1;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .dias-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+    }
+
+    .dia-box {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 1rem;
+        border: 1px solid #e9ecef;
+    }
+
+    .dia-header {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #0d47a1;
+        padding-bottom: 0.5rem;
+        margin-bottom: 0.75rem;
+        border-bottom: 2px solid #0d47a1;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .turno-item {
+        background: white;
+        border-left: 4px solid #0d47a1;
+        padding: 0.75rem;
+        margin-bottom: 0.5rem;
+        border-radius: 6px;
+        transition: all 0.2s;
+    }
+
+    .turno-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .turno-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .turno-nombre {
+        font-weight: 700;
+        color: #2c3e50;
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .turno-horario {
+        font-size: 0.85rem;
+        color: #6c757d;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Estado vacío */
+    .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: #6c757d;
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        opacity: 0.3;
+        margin-bottom: 1rem;
+    }
+
+    .empty-state h6 {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-state p {
+        font-size: 0.9rem;
+        margin: 0;
     }
 
     @media (max-width: 768px) {
-        .card-header-calendar {
-            gap: 0.5rem;
+        .header-section {
             flex-direction: column;
+            align-items: stretch;
         }
 
-        .turnos-grid {
+        .select-wrapper select {
+            width: 100%;
+        }
+
+        .dias-grid {
             grid-template-columns: 1fr;
         }
 
-        .leyenda-grid {
-            grid-template-columns: 1fr;
+        .leyenda-list {
+            flex-direction: column;
         }
     }
 </style>
 
-<div class="card-header-calendar">
-    <div style="flex: 0 0 250px;">
-        <label for="ddl_tipo_horario" class="form-label fw-bold">
-            <i class="bx bx-time"></i> Tipo de Horario
-        </label>
-        <select id="ddl_tipo_horario" class="form-select form-select-sm" disabled>
-            <option value="">-- Seleccione Horario --</option>
-        </select>
+<div class="horarios-container">
+    <!-- Header -->
+    <div class="header-section">
+        <div class="header-left">
+            <h5><i class="bx bx-time"></i> Horarios Disponibles</h5>
+            <div class="select-wrapper">
+                <select id="ddl_tipo_horario" class="form-select form-select-sm" disabled>
+                    <option value="">-- Seleccione Horario --</option>
+                </select>
+            </div>
+        </div>
+        <div class="header-right">
+            <h5><i class="bx bx-calendar"></i> Horarios del Personal</h5>
+        </div>
     </div>
-    <div class="titles" style="flex: 1;">
-        <h3>📅 Horarios del Personal</h3>
-        <p id="subtitle-center">Vista de horarios asignados</p>
+
+    <!-- Estado vacío -->
+    <div id="estado_vacio" class="empty-state">
+        <i class="bx bx-calendar-x"></i>
+        <h6>No hay horarios seleccionados</h6>
+        <p>Selecciona un departamento para ver los horarios</p>
     </div>
-</div>
 
-<!-- Estado vacío -->
-<div id="estado_vacio" class="info-card empty-state">
-    <i class="bx bx-calendar-x"></i>
-    <h5>No hay horarios seleccionados</h5>
-    <p class="text-muted">Selecciona un departamento para ver los horarios asignados</p>
-</div>
-
-<!-- Panel de horarios -->
-<div id="pnl_horarios_persona" style="display:none;">
-
-    <!-- Resumen -->
-    <div class="resumen-section">
-        <div class="row">
-            <div class="col-md-4 resumen-item">
+    <!-- Contenido principal -->
+    <div id="pnl_horarios_persona" style="display:none;">
+        
+        <!-- Resumen -->
+        <div class="resumen-bar">
+            <div class="resumen-item">
                 <div class="numero" id="total_turnos">0</div>
-                <div class="label">Turnos Configurados</div>
+                <div class="label">Turnos</div>
             </div>
-            <div class="col-md-4 resumen-item">
+            <div class="resumen-item">
                 <div class="numero" id="total_dias">0</div>
-                <div class="label">Días Laborables</div>
+                <div class="label">Días</div>
             </div>
-            <div class="col-md-4 resumen-item">
+            <div class="resumen-item">
                 <div class="numero" id="total_horas">0</div>
-                <div class="label">Horas Semanales</div>
+                <div class="label">Horas/Sem</div>
             </div>
         </div>
-    </div>
 
-
-    <div class="row">
-        <!-- Columna izquierda: Información del Horario -->
-        <div class="col-md-6">
-            <div class="info-card h-100">
-                <h5 class="mb-3">
-                    <i class="bx bx-info-circle"></i> Información del Horario
-                </h5>
-                <div id="info_horario_nombre" class="mb-2">
-                    <strong>Horario:</strong> <span class="horario-badge bg-primary text-white">No seleccionado</span>
+        <!-- Info del horario -->
+        <div class="info-horario">
+            <div class="info-row">
+                <div class="info-item">
+                    <strong>Horario:</strong>
+                    <span id="info_horario_nombre" class="horario-badge">No seleccionado</span>
                 </div>
-                <div id="info_horario_tipo" class="text-muted">
-                    <i class="bx bx-tag"></i> Tipo: <span>-</span>
+                <div class="info-item">
+                    <i class="bx bx-tag"></i>
+                    <span>Tipo:</span>
+                    <strong id="info_horario_tipo">-</strong>
                 </div>
             </div>
         </div>
 
-        <!-- Columna derecha: Leyenda de Turnos -->
-        <div class="col-md-6">
-            <div class="info-card h-100">
-                <h5 class="mb-3">
-                    <i class="bx bx-palette"></i> Leyenda de Turnos
-                </h5>
-                <div id="leyenda_turnos" class="leyenda-grid">
-                    <!-- Aquí se cargarán los turnos únicos con sus colores -->
-                </div>
+        <!-- Leyenda -->
+        <div class="leyenda-section">
+            <div class="leyenda-title">
+                <i class="bx bx-palette"></i> Leyenda de Turnos
+            </div>
+            <div id="leyenda_turnos" class="leyenda-list">
+                <!-- Leyenda dinámica -->
             </div>
         </div>
-    </div>
 
-    <!-- Turnos por día - MEJORADO CON GRID -->
-    <div class="info-card">
-        <h5 class="mb-4">
-            <i class="bx bx-calendar-week"></i> Distribución Semanal de Turnos
-        </h5>
-        <div id="lista_turnos_por_dia" class="turnos-grid">
-            <!-- Aquí se cargarán los turnos en grid -->
+        <!-- Distribución semanal -->
+        <div class="distribucion-section">
+            <div class="distribucion-title">
+                <i class="bx bx-calendar-week"></i> Distribución Semanal
+            </div>
+            <div id="lista_turnos_por_dia" class="dias-grid">
+                <!-- Días dinámicos -->
+            </div>
         </div>
+
     </div>
-
-    <!-- Leyenda de turnos únicos - MEJORADO CON GRID -->
-
 </div>
 
 <input id="id_perdep" type="hidden" value="" />
@@ -279,7 +371,6 @@
 <script src="../assets/plugins/notifications/js/lobibox.min.js"></script>
 
 <script>
-    // Mapeo de días
     const DIAS_SEMANA = {
         '1': 'Domingo',
         '2': 'Lunes',
@@ -367,8 +458,6 @@
             },
             dataType: 'json',
             success: function(response) {
-                console.log('Turnos recibidos:', response);
-
                 if (!response || response.length === 0) {
                     Swal.fire('', 'No hay turnos configurados para este horario', 'info');
                     $('#pnl_horarios_persona').hide();
@@ -379,7 +468,6 @@
                 $('#estado_vacio').hide();
                 $('#pnl_horarios_persona').show();
 
-                // Agrupar por día
                 const turnosPorDia = {};
                 const turnosUnicos = {};
                 let totalHoras = 0;
@@ -391,61 +479,74 @@
                     }
                     turnosPorDia[dia].push(turno);
 
-                    // Turnos únicos para la leyenda
                     if (!turnosUnicos[turno.id_turno]) {
                         turnosUnicos[turno.id_turno] = {
                             nombre: turno.nombre,
-                            color: turno.color || '#2196F3',
+                            color: turno.color || '#0d47a1',
                             hora_entrada: turno.hora_entrada,
                             hora_salida: turno.hora_salida
                         };
                     }
 
-                    // Calcular horas
                     let horas = (turno.hora_salida - turno.hora_entrada) / 60;
                     if (horas < 0) horas += 24;
                     totalHoras += horas;
                 });
 
-                // Actualizar resumen
                 $('#total_turnos').text(Object.keys(turnosUnicos).length);
                 $('#total_dias').text(Object.keys(turnosPorDia).length);
                 $('#total_horas').text(totalHoras.toFixed(1));
 
-                // Actualizar info del horario
-                $('#info_horario_nombre span').text($('#ddl_tipo_horario option:selected').text());
+                $('#info_horario_nombre').text($('#ddl_tipo_horario option:selected').text());
 
-                // Detectar tipo basado en el texto del select
                 const textoHorario = $('#ddl_tipo_horario option:selected').text();
                 let tipoHorario = 'Personal';
                 if (textoHorario.includes('Departamento')) {
                     tipoHorario = 'Departamento';
                 }
-                $('#info_horario_tipo span').text(tipoHorario);
+                $('#info_horario_tipo').text(tipoHorario);
 
-                // Renderizar turnos por día EN GRID
-                let htmlTurnos = '';
+                // Renderizar leyenda
+                let htmlLeyenda = '';
+                Object.values(turnosUnicos).forEach(function(turno) {
+                    const horaInicio = minutos_formato_hora(turno.hora_entrada);
+                    const horaFin = minutos_formato_hora(turno.hora_salida);
+
+                    htmlLeyenda += `
+                        <div class="leyenda-item">
+                            <span class="color-box" style="background-color: ${turno.color};"></span>
+                            <div class="leyenda-content">
+                                <strong>${turno.nombre}</strong>
+                                <small>${horaInicio} - ${horaFin}</small>
+                            </div>
+                        </div>
+                    `;
+                });
+                $('#leyenda_turnos').html(htmlLeyenda);
+
+                // Renderizar días
+                let htmlDias = '';
                 const diasOrdenados = Object.keys(turnosPorDia).sort();
 
                 diasOrdenados.forEach(function(dia) {
                     const turnos = turnosPorDia[dia];
 
-                    htmlTurnos += `
-                        <div class="dia-container">
-                            <h6 class="text-primary mb-2">
+                    htmlDias += `
+                        <div class="dia-box">
+                            <div class="dia-header">
                                 <i class="bx bx-calendar"></i> ${DIAS_SEMANA[dia]}
-                            </h6>
+                            </div>
                     `;
 
                     turnos.forEach(function(turno) {
                         const horaInicio = minutos_formato_hora(turno.hora_entrada);
                         const horaFin = minutos_formato_hora(turno.hora_salida);
 
-                        htmlTurnos += `
-                            <div class="turno-card" style="border-left-color: ${turno.color || '#2196F3'};">
-                                <div class="turno-header">
-                                    <span class="color-indicator" style="background-color: ${turno.color || '#2196F3'};"></span>
-                                    <span class="turno-nombre">${turno.nombre}</span>
+                        htmlDias += `
+                            <div class="turno-item" style="border-left-color: ${turno.color || '#0d47a1'};">
+                                <div class="turno-nombre">
+                                    <span class="color-box" style="background-color: ${turno.color || '#0d47a1'};"></span>
+                                    ${turno.nombre}
                                 </div>
                                 <div class="turno-horario">
                                     <i class="bx bx-time"></i>
@@ -455,31 +556,11 @@
                         `;
                     });
 
-                    htmlTurnos += '</div>';
+                    htmlDias += '</div>';
                 });
 
-                $('#lista_turnos_por_dia').html(htmlTurnos);
+                $('#lista_turnos_por_dia').html(htmlDias);
 
-                // Renderizar leyenda EN GRID
-                let htmlLeyenda = '';
-                Object.values(turnosUnicos).forEach(function(turno) {
-                    const horaInicio = minutos_formato_hora(turno.hora_entrada);
-                    const horaFin = minutos_formato_hora(turno.hora_salida);
-
-                    htmlLeyenda += `
-                        <div class="leyenda-item">
-                            <span class="color-indicator" style="background-color: ${turno.color};"></span>
-                            <div>
-                                <strong>${turno.nombre}</strong><br>
-                                <small class="text-muted">${horaInicio} - ${horaFin}</small>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                $('#leyenda_turnos').html(htmlLeyenda);
-
-                // Notificación de éxito
                 Lobibox.notify('success', {
                     size: 'mini',
                     rounded: true,

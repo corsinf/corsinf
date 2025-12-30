@@ -360,9 +360,17 @@ if (isset($_GET['id_postulante'])) {
                                         </div>
                                     </a>
                                 </li>
-
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tab_nomina" role="tab"
+                                        aria-selected="true">
+                                        <div class="d-flex align-items-center">
+                                            <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
+                                            </div>
+                                            <div class="tab-title">Nómina</div>
+                                        </div>
+                                    </a>
+                                </li>
                             </ul>
-
                             <div class="tab-content pt-3">
                                 <!-- Primera Sección, Informacion de la persona -->
                                 <div class="tab-pane fade show active" id="tab_persona" role="tabpanel">
@@ -492,6 +500,32 @@ if (isset($_GET['id_postulante'])) {
 
                                                 <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_vehiculo.php'); ?>
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="tab_nomina" role="tabpanel">
+                                    <div class="card">
+                                        <div class="d-flex flex-column mx-4">
+                                            <div class="card-body">
+                                                <div class="mb-2">
+                                                    <div class="row">
+                                                        <div class="col-6 d-flex align-items-center">
+                                                            <h6 class="mb-0 fw-bold text-primary">Nómina:</h6>
+                                                        </div>
+                                                        <div class="col-6 d-flex justify-content-end">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal_agregar_nomina">
+                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                                                <span>Agregar</span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_nomina.php'); ?>
                                             </div>
                                         </div>
                                     </div>

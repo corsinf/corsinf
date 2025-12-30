@@ -28,16 +28,14 @@ class th_per_estado_laboralC
         $this->modelo = new th_per_estado_laboralM();
     }
 
-    // Función para listar los estados laborales de la persona
     function listar($id)
     {
         $datos = $this->modelo->listar_estado_laboral_por_persona($id);
 
         $texto = '';
         foreach ($datos as $key => $value) {
-            // Obtener datos del estado laboral
             $estado_laboral = isset($value['th_est_estado_laboral']) ? $value['th_est_estado_laboral'] : 'N/A';
-            $cargo = isset($value['cargo_descripcion']) ? $value['cargo_descripcion'] : 'N/A';
+            $cargo = isset($value['cargo_nombre']) ? $value['cargo_nombre'] : 'N/A';
             $seccion = isset($value['seccion_descripcion']) ? $value['seccion_descripcion'] : 'N/A';
             $fecha_contratacion = isset($value['th_est_fecha_contratacion']) && $value['th_est_fecha_contratacion'] 
                 ? date('d/m/Y', strtotime($value['th_est_fecha_contratacion'])) 
@@ -46,7 +44,6 @@ class th_per_estado_laboralC
                 ? date('d/m/Y', strtotime($value['th_est_fecha_salida'])) 
                 : 'N/A';
 
-            // Determinar el color del badge según el estado
             $badge_class = '';
             switch ($estado_laboral) {
                 case 'Activo':
@@ -101,7 +98,6 @@ class th_per_estado_laboralC
         return $texto;
     }
 
-    // Buscando registros por id del estado laboral
     function listar_modal($id)
     {
         $datos = $this->modelo->listar_estado_laboral_por_id($id);
@@ -111,7 +107,7 @@ class th_per_estado_laboralC
     function insertar_editar($parametros)
     {
         $datos = array(
-            array('campo' => 'th_per_id', 'dato' => $parametros['id_postulante']),
+            array('campo' => 'th_per_id', 'dato' => $parametros['per_id']),
             array('campo' => 'id_cargo', 'dato' => $parametros['ddl_cargo']),
             array('campo' => 'id_seccion', 'dato' => $parametros['ddl_seccion']),
             array('campo' => 'th_est_estado_laboral', 'dato' => $parametros['ddl_estado_laboral']),
