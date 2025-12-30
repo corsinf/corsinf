@@ -62,7 +62,7 @@ class th_postulantesC
         if ($id == '') {
             $datos = $this->modelo->where('th_pos_estado', 1)->where('th_pos_contratado', 0)->listar();
         } else {
-            $datos = $this->modelo->where('th_pos_id', $id)->listar();
+            $datos = $this->modelo->obtener_postulante_por_id($id);
         }
 
         return $datos;
@@ -101,6 +101,13 @@ class th_postulantesC
             array('campo' => 'th_pos_telefono_1', 'dato' => $parametros['txt_telefono_1']),
             array('campo' => 'th_pos_telefono_2', 'dato' => $parametros['txt_telefono_2']),
             array('campo' => 'th_pos_correo', 'dato' => $parametros['txt_correo']),
+
+            array('campo' => 'id_etnia', 'dato' => !empty($parametros['ddl_etnia']) ? $parametros['ddl_etnia'] : null),
+            array('campo' => 'id_orientacion_sexual', 'dato' => !empty($parametros['ddl_religion']) ? $parametros['ddl_religion'] : null),
+            array('campo' => 'id_identidad_genero', 'dato' => !empty($parametros['ddl_orientacion_sexual']) ? $parametros['ddl_orientacion_sexual'] : null),
+            array('campo' => 'id_religion', 'dato' => !empty($parametros['ddl_identidad_genero']) ? $parametros['ddl_identidad_genero'] : null),
+            array('campo' => 'th_pos_correo_personal_1', 'dato' => !empty($parametros['txt_per_correo_personal_1']) ? $parametros['txt_per_correo_personal_1'] : null),
+            array('campo' => 'th_pos_correo_personal_2', 'dato' => !empty($parametros['txt_per_correo_personal_2']) ? $parametros['txt_per_correo_personal_2'] : null),
         );
 
         if ($parametros['_id'] == '') {

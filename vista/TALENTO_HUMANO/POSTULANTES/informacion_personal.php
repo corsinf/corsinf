@@ -13,7 +13,15 @@ if (isset($_GET['id_persona'])) {
     $id_persona = $_GET['id_persona'];
 }
 
+$_id = '';
+
+if (isset($_GET['id'])) {
+    $_id = $_GET['id'];
+}
+
+
 ?>
+<!--
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
@@ -211,6 +219,7 @@ if (isset($_GET['id_persona'])) {
     }
 </script>
 
+-->
 <!-- Vista de la página -->
 <div class="page-wrapper">
     <div class="page-content">
@@ -664,121 +673,9 @@ if (isset($_GET['id_persona'])) {
 
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <!-- Modal body -->
-            <form id="form_informacion_personal">
-                <div class="modal-body">
-                    <div class="row mb-col">
-                        <div class="col-md-3">
-                            <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido</label>
-                            <input type="text" class="form-control form-control-sm no_caracteres"
-                                name="txt_primer_apellido" id="txt_primer_apellido" maxlength="50">
-                        </div>
-                        <div class="col-md-3">
-                            <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido</label>
-                            <input type="text" class="form-control form-control-sm no_caracteres"
-                                name="txt_segundo_apellido" id="txt_segundo_apellido" maxlength="50">
-                        </div>
-                        <div class="col-md-3">
-                            <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre</label>
-                            <input type="text" class="form-control form-control-sm no_caracteres"
-                                name="txt_primer_nombre" id="txt_primer_nombre" maxlength="50">
-                        </div>
-                        <div class="col-md-3">
-                            <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre</label>
-                            <input type="text" class="form-control form-control-sm no_caracteres"
-                                name="txt_segundo_nombre" id="txt_segundo_nombre" maxlength="50">
-                        </div>
-                    </div>
-
-                    <div class="row mb-col">
-
-                        <div class="col-md-3">
-                            <label for="txt_cedula" class="form-label form-label-sm">N° de Cédula</label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_cedula" id="txt_cedula" maxlength="10">
-                        </div>
-                        <div class="col-md-3">
-                            <label for="ddl_sexo" class="form-label form-label-sm">Sexo</label>
-                            <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo">
-                                <option selected disabled value="">-- Selecciona una opción --</option>
-                                <option value="Masculino">Masculino</option>
-                                <option value="Femenino">Femenino</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de
-                                nacimiento</label>
-                            <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento"
-                                id="txt_fecha_nacimiento">
-                        </div>
-                        <div class="col-md-3">
-                            <label for="txt_edad" class="form-label form-label-sm">Edad </label>
-                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_edad"
-                                id="txt_edad" readonly>
-                        </div>
-                    </div>
-
-                    <div class="row mb-col">
-                        <div class="col-md-4">
-                            <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 </label>
-                            <input type="text" class="form-control form-control-sm solo_numeros_int"
-                                name="txt_telefono_1" id="txt_telefono_1" value="" maxlength="12" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 </label>
-                            <input type="text" class="form-control form-control-sm solo_numeros_int"
-                                name="txt_telefono_2" id="txt_telefono_2" value="" maxlength="12">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico </label>
-                            <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo"
-                                value="" maxlength="100">
-                        </div>
-                    </div>
-
-                    <div class="row mb-col">
-                        <div class="col-md-6">
-                            <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad</label>
-                            <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
-                                <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
-                                <option value="Ecuatoriano">Ecuatoriano</option>
-                                <option value="Colombiano">Colombiano</option>
-                                <option value="Peruano">Peruano</option>
-                                <option value="Venezolano">Venezolano</option>
-                                <option value="Paraguayo">Paraguayo</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil</label>
-                            <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
-                                <option selected disabled value="">-- Selecciona un Estado Civil --</option>
-                                <option value="Soltero">Soltero/a</option>
-                                <option value="Casado">Casado/a</option>
-                                <option value="Divorciado">Divorciado/a</option>
-                                <option value="Viudo">Viudo/a</option>
-                                <option value="Union">Unión de hecho</option>
-                            </select>
-                        </div>
-                    </div>
-
-
-                    <?php include_once('../vista/GENERAL/provincias_ciudades_parroquias.php'); ?>
-
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_direccion" class="form-label form-label-sm">Dirección </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_direccion"
-                                id="txt_direccion">
-                        </div>
-                    </div>
-
-                </div>
-
-
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_personal"
-                        onclick="insertar_editar_informacion_personal();">Guardar</button>
-                </div>
-            </form>
+            <div class="modal-body px-4 py-3">
+                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_formulario_registro.php'); ?>
+            </div>
         </div>
     </div>
 </div>

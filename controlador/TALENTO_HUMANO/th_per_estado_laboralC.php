@@ -37,12 +37,20 @@ class th_per_estado_laboralC
             $estado_laboral = isset($value['th_est_estado_laboral']) ? $value['th_est_estado_laboral'] : 'N/A';
             $cargo = isset($value['cargo_nombre']) ? $value['cargo_nombre'] : 'N/A';
             $seccion = isset($value['seccion_descripcion']) ? $value['seccion_descripcion'] : 'N/A';
-            $fecha_contratacion = isset($value['th_est_fecha_contratacion']) && $value['th_est_fecha_contratacion'] 
-                ? date('d/m/Y', strtotime($value['th_est_fecha_contratacion'])) 
+            $fecha_contratacion = isset($value['th_est_fecha_contratacion']) && $value['th_est_fecha_contratacion']
+                ? date('d/m/Y', strtotime($value['th_est_fecha_contratacion']))
                 : 'N/A';
-            $fecha_salida = isset($value['th_est_fecha_salida']) && $value['th_est_fecha_salida']
-                ? date('d/m/Y', strtotime($value['th_est_fecha_salida'])) 
-                : 'N/A';
+            $fecha_salida = 'Indefinido';
+
+            if (!empty($value['th_est_fecha_salida'])) {
+                $fecha = date('Y-m-d', strtotime($value['th_est_fecha_salida']));
+
+                if ($fecha !== '1900-01-01') {
+                    $fecha_salida = date('d/m/Y', strtotime($value['th_est_fecha_salida']));
+                }
+            }
+
+
 
             $badge_class = '';
             switch ($estado_laboral) {
@@ -94,7 +102,7 @@ class th_per_estado_laboralC
         if (empty($datos)) {
             $texto = '<div class="alert alert-info">No hay registros de estado laboral.</div>';
         }
-        
+
         return $texto;
     }
 
