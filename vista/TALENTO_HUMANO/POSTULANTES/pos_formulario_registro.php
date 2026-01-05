@@ -1,3 +1,11 @@
+<?php
+$redireccionar_vista = 'th_postulantes';
+if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
+    $redireccionar_vista = 'th_personas_nomina';
+}
+
+?>
+
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
@@ -5,7 +13,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         <?php if (isset($_GET['id'])) { ?>
-            cargarDatos(<?= $_id ?>);
+            cargarDatos(<?= $id ?>);
         <?php } ?>
         cargar_selects2();
     })
@@ -36,6 +44,18 @@
             },
             dataType: 'json',
             success: function(response) {
+
+                if (response.recargar == 1 && response.id_postulante) {
+                    let nueva_Url = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_personal&id=${response.id_postulante}&id_persona=<?= $id_persona ?>`;
+
+                    // Cambia la URL sin recargar
+                    window.history.replaceState(null, '', nueva_Url);
+
+                    // Recarga real solo una vez
+                    location.reload();
+                    return;
+                }
+
                 $('#txt_primer_nombre').val(response[0].th_pos_primer_nombre);
                 $('#txt_segundo_nombre').val(response[0].th_pos_segundo_nombre);
                 $('#txt_primer_apellido').val(response[0].th_pos_primer_apellido);
@@ -93,6 +113,10 @@
                 $('#txt_numero_cedula_v').html(response[0].th_pos_cedula);
                 $('#txt_telefono_1_v').html(response[0].th_pos_telefono_1);
                 $('#txt_correo_v').html(response[0].th_pos_correo);
+
+                // //Input para todos los pos_id que se vayan a colocar en los modales
+                // $('input[name="txt_postulante_id"]').val(response[0]._id);
+                // $('input[name="txt_postulante_cedula"]').val(response[0].th_pos_cedula);
             },
 
             error: function(xhr, status, error) {
@@ -105,7 +129,7 @@
         });
     }
 
-    function insertar_editar() {
+    function insertar_editar(redireccionar_vista = 'th_postulantes') {
 
         var txt_primer_nombre = $('#txt_primer_nombre').val();
         var txt_segundo_nombre = $('#txt_segundo_nombre').val();
@@ -132,7 +156,7 @@
         var txt_per_correo_personal_2 = $('#txt_per_correo_personal_2').val();
 
         var parametros = {
-            '_id': '<?= $_id ?>',
+            '_id': '<?= $id ?>',
             'txt_primer_nombre': txt_primer_nombre,
             'txt_segundo_nombre': txt_segundo_nombre,
             'txt_primer_apellido': txt_primer_apellido,
@@ -159,14 +183,14 @@
 
         };
 
-        if ($("#th_registrar_postulantes").valid()) {
+        if ($("#form_registrar_postulantes").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
             //.log(parametros);
-            insertar(parametros);
+            insertar(parametros, redireccionar_vista);
         }
     }
 
-    function insertar(parametros) {
+    function insertar(parametros, redireccionar_vista) {
         $.ajax({
             data: {
                 parametros: parametros
@@ -177,8 +201,12 @@
 
             success: function(response) {
                 if (response == 1) {
+                    if(redireccionar_vista == 'th_informacion_personal'){
+                        redireccionar_vista = 'th_informacion_personal' + '&id=<?= $id ?>';
+                    }
+
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_postulantes';
+                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=' + redireccionar_vista;
                     });
                 } else if (response == -2) {
                     $(txt_cedula).addClass('is-invalid');
@@ -201,7 +229,7 @@
     }
 
     function delete_datos() {
-        var id = '<?php echo $_id; ?>';
+        var id = '<?php echo $id; ?>';
         Swal.fire({
             title: 'Eliminar Registro?',
             text: "Esta seguro de eliminar este registro?",
@@ -245,7 +273,7 @@
     }
 </script>
 
-<form id="th_registrar_postulantes" class="modal_general_provincias">
+<form id="form_registrar_postulantes" class="modal_general_provincias">
     <div class="row mb-col pt-3">
         <div class="col-md-3">
             <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido </label>
@@ -376,15 +404,6 @@
             <label for="txt_per_correo_personal_2" class="form-label form-label-sm">Correo Personal Alternativo</label>
             <input type="email" class="form-control form-control-sm" name="txt_per_correo_personal_2" id="txt_per_correo_personal_2" value="" maxlength="100">
         </div>
-    </div>
-
-    <div class="d-flex justify-content-end pt-2">
-        <?php if ($_id == '') { ?>
-            <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar();" type="button"><i class="bx bx-save"></i> Guardar</button>
-        <?php } else { ?>
-            <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar();" type="button"><i class="bx bx-save"></i> Guardar</button>
-            <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
-        <?php } ?>
     </div>
 
 </form>

@@ -13,15 +13,8 @@ if (isset($_GET['id_persona'])) {
     $id_persona = $_GET['id_persona'];
 }
 
-$_id = '';
-
-if (isset($_GET['id'])) {
-    $_id = $_GET['id'];
-}
-
-
 ?>
-<!--
+
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
@@ -57,59 +50,6 @@ if (isset($_GET['id'])) {
                     return;
                 }
 
-                $('#txt_primer_nombre').val(response[0].th_pos_primer_nombre);
-                $('#txt_segundo_nombre').val(response[0].th_pos_segundo_nombre);
-                $('#txt_primer_apellido').val(response[0].th_pos_primer_apellido);
-                $('#txt_segundo_apellido').val(response[0].th_pos_segundo_apellido);
-                $('#txt_fecha_nacimiento').val(response[0].th_pos_fecha_nacimiento);
-                $('#ddl_nacionalidad').val(response[0].th_pos_nacionalidad);
-                $('#txt_cedula').val(response[0].th_pos_cedula);
-                $('#ddl_estado_civil').val(response[0].th_pos_estado_civil);
-                $('#ddl_sexo').val(response[0].th_pos_sexo);
-                $('#txt_telefono_1').val(response[0].th_pos_telefono_1);
-                $('#txt_telefono_2').val(response[0].th_pos_telefono_2);
-                $('#txt_correo').val(response[0].th_pos_correo);
-                $('#txt_codigo_postal').val(response[0].th_pos_postal);
-                $('#txt_direccion').val(response[0].th_pos_direccion);
-                calcular_edad('txt_edad', response[0].th_pos_fecha_nacimiento);
-                //Cargar foto
-                // $('#img_postulante_inf').attr('src', response[0].th_pos_foto_url + '?' + Math.random());
-                $('#img_postulante_inf')
-                    .off('error') // limpiar por si acaso
-                    .one('error', function() {
-                        console.log("Error 404");
-                        $(this).attr('src', '../img/sin_imagen.jpg');
-                    })
-                    .attr('src', response[0].th_pos_foto_url + '?' + Math.random());
-
-                //Cargar Selects de provincia-ciudad-parroquia
-                url_provinciaC = '../controlador/GENERAL/th_provinciasC.php?listar=true';
-                cargar_select2_con_id('ddl_provincias', url_provinciaC, response[0].th_prov_id,
-                    'th_prov_nombre');
-
-                url_ciudadC = '../controlador/GENERAL/th_ciudadC.php?listar=true';
-                cargar_select2_con_id('ddl_ciudad', url_ciudadC, response[0].th_ciu_id, 'th_ciu_nombre');
-
-                url_parroquiaC = '../controlador/GENERAL/th_parroquiasC.php?listar=true';
-                cargar_select2_con_id('ddl_parroquia', url_parroquiaC, response[0].th_parr_id,
-                    'th_parr_nombre');
-
-
-                nombres_completos = response[0].th_pos_primer_apellido + ' ' + response[0]
-                    .th_pos_segundo_apellido + ' ' + response[0].th_pos_primer_nombre + ' ' + response[0]
-                    .th_pos_segundo_nombre;
-                $('#txt_nombres_completos_v').html(nombres_completos);
-                $('#txt_fecha_nacimiento_v').html(response[0].th_pos_fecha_nacimiento);
-                $('#txt_nacionalidad_v').html(response[0].th_pos_nacionalidad);
-                $('#txt_estado_civil_v').html(response[0].th_pos_estado_civil);
-                $('#txt_numero_cedula_v').html(response[0].th_pos_cedula);
-                $('#txt_telefono_1_v').html(response[0].th_pos_telefono_1);
-                $('#txt_correo_v').html(response[0].th_pos_correo);
-
-                //Input para todos los pos_id que se vayan a colocar en los modales
-                $('input[name="txt_postulante_id"]').val(response[0]._id);
-                $('input[name="txt_postulante_cedula"]').val(response[0].th_pos_cedula);
-
                 //console.log(response);
 
             }
@@ -129,97 +69,9 @@ if (isset($_GET['id'])) {
             }
         });
     }
-
-    function insertar_editar_informacion_personal() {
-
-        var txt_primer_nombre = $('#txt_primer_nombre').val();
-        var txt_segundo_nombre = $('#txt_segundo_nombre').val();
-        var txt_primer_apellido = $('#txt_primer_apellido').val();
-        var txt_segundo_apellido = $('#txt_segundo_apellido').val();
-        var txt_fecha_nacimiento = $('#txt_fecha_nacimiento').val();
-        var ddl_nacionalidad = $('#ddl_nacionalidad').val();
-        var txt_cedula = $('#txt_cedula').val();
-        var ddl_estado_civil = $('#ddl_estado_civil').val();
-        var ddl_sexo = $('#ddl_sexo').val();
-        var txt_telefono_1 = $('#txt_telefono_1').val();
-        var txt_telefono_2 = $('#txt_telefono_2').val();
-        var txt_correo = $('#txt_correo').val();
-        var ddl_provincias = $('#ddl_provincias').val();
-        var ddl_ciudad = $('#ddl_ciudad').val();
-        var ddl_parroquia = $('#ddl_parroquia').val();
-        var txt_codigo_postal = $('#txt_codigo_postal').val();
-        var txt_direccion = $('#txt_direccion').val();
-
-        var parametros_informacion_personal = {
-            '_id': '<?= $id ?>',
-            'txt_primer_nombre': txt_primer_nombre,
-            'txt_segundo_nombre': txt_segundo_nombre,
-            'txt_primer_apellido': txt_primer_apellido,
-            'txt_segundo_apellido': txt_segundo_apellido,
-            'txt_fecha_nacimiento': txt_fecha_nacimiento,
-            'ddl_nacionalidad': ddl_nacionalidad,
-            'txt_cedula': txt_cedula,
-            'ddl_estado_civil': ddl_estado_civil,
-            'ddl_sexo': ddl_sexo,
-            'txt_telefono_1': txt_telefono_1,
-            'txt_telefono_2': txt_telefono_2,
-            'txt_correo': txt_correo,
-            'ddl_provincias': ddl_provincias,
-            'ddl_ciudad': ddl_ciudad,
-            'ddl_parroquia': ddl_parroquia,
-            'txt_codigo_postal': txt_codigo_postal,
-            'txt_direccion': txt_direccion,
-
-        };
-
-        if ($("#form_informacion_personal").valid()) {
-            // Si es válido, puedes proceder a enviar los datos por AJAX
-            //console.log(parametros_informacion_personal);
-            insertar_informacion_personal(parametros_informacion_personal);
-        }
-    }
-
-    function recargar_imagen(id) {
-        $.ajax({
-            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?listar=true',
-            type: 'post',
-            data: {
-                id: id
-            },
-            dataType: 'json',
-            success: function(response) {
-                $('#img_postulante_inf').attr('src', response[0].th_pos_foto_url + '?' + Math.random());
-            }
-        });
-    }
-
-    function insertar_informacion_personal(parametros) {
-        $.ajax({
-            data: {
-                parametros: parametros
-            },
-            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?insertar=true',
-            type: 'post',
-            dataType: 'json',
-
-            success: function(response) {
-                if (response == 1) {
-                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-
-                    });
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargarDatos_informacion_personal(<?= $id ?>);
-                    <?php } ?>
-                    $('#modal_informacion_personal').modal('hide');
-                } else if (response == -2) {
-                    Swal.fire('', 'Operación fallida', 'warning');
-                }
-            }
-        });
-    }
 </script>
 
--->
+
 <!-- Vista de la página -->
 <div class="page-wrapper">
     <div class="page-content">
@@ -675,6 +527,15 @@ if (isset($_GET['id'])) {
             </div>
             <div class="modal-body px-4 py-3">
                 <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_formulario_registro.php'); ?>
+
+                <div class="d-flex justify-content-end pt-2">
+                    <?php if ($id == '') { ?>
+                        <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar('th_informacion_personal');" type="button"><i class="bx bx-save"></i> Guardar</button>
+                    <?php } else { ?>
+                        <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar('th_informacion_personal');" type="button"><i class="bx bx-save"></i> Guardar</button>
+                        <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
+                    <?php } ?>
+                </div>
             </div>
         </div>
     </div>
