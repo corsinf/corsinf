@@ -158,19 +158,34 @@ class th_personasM extends BaseModel
 
         return $datos;
     }
-}
 
-        // p.th_per_etnia                       AS etnia,
-        // p.th_per_orientacion                 AS orientacion,
-        // p.th_per_religion                    AS religion,
-        // p.th_per_tipo_discapacidad           AS tipo_discapacidad,
-        // p.th_per_porcentaje_discapacidad     AS porcentaje_discapacidad,
-        // p.th_per_escala_discapacidad         AS escala_discapacidad,
-        // p.th_per_clase_auto                  AS clase_auto,
-        // p.th_per_placa_original              AS placa_original,
-        // p.th_per_placa_sintesis              AS placa_sintesis,
-        // p.th_per_comision_asuntos_sociales   AS comision_asuntos_sociales,
-        // p.th_per_remuneracion                AS remuneracion,
-        // p.th_per_fecha_ingreso               AS fecha_ingreso,
-        // p.th_per_anios_trabajo               AS anios_trabajo,
-        // p.th_per_seccion                     AS seccion,
+    public function  obtener_per_estado_clave($th_per_id = null)
+    {
+        // Condición base: solo activos
+        $condicion = "p.th_per_estado = 1";
+        if (!empty($th_per_id)) {
+            $id = intval($th_per_id);
+            $condicion .= " AND p.th_per_id = {$id}";
+        }
+
+        $sql =
+            "SELECT
+                p.th_per_id                          AS th_per_id,
+                p.th_per_primer_nombre               AS primer_nombre,
+                p.th_per_segundo_nombre              AS segundo_nombre,
+                p.th_per_primer_apellido             AS primer_apellido,
+                p.th_per_segundo_apellido            AS segundo_apellido,
+                p.th_per_cedula                      AS cedula,
+                p.th_per_correo                      AS correo,
+                p.th_per_estado                      AS estado,
+                p.PERFIL                             AS PERFIL,
+                p.POLITICAS_ACEPTACION               AS POLITICAS_ACEPTACION,
+                p.th_pos_id                          AS id_postulante
+            FROM th_personas p
+            WHERE {$condicion};";
+
+        $datos = $this->db->datos($sql);
+
+        return $datos;
+    }
+}

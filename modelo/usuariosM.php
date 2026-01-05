@@ -45,19 +45,15 @@ class usuariosM
 
 	}
 
-	function updateEmpresa($tabla,$datos,$where)
+	function updateEmpresa($tabla, $datos, $where)
 	{
-		$datos = $this->db->update($tabla,$datos,$where);
-		if($datos==1)
-		{
+		$datos = $this->db->update($tabla, $datos, $where, false, true);
+		if ($datos == 1) {
 			return 1;
-		}else
-		{
+		} else {
 			return -1;
 		}
-
 	}
-
 	
 	function eliminar_permisos($id)
 	{
@@ -278,53 +274,74 @@ foto,link_fb,link_gmail,link_ins,link_tw,link_web";
 
 	function credenciales_no_concurentes_campos()
 	{
-		$tipo= $_SESSION['INICIO']['PERFIL'];
-		$tabla= $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
-		$campo= $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
+		$tipo = $_SESSION['INICIO']['PERFIL'];
+		$tabla = $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
+		$campo = $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
 		$empresa = $_SESSION['INICIO']['ID_EMPRESA'];
 
 
-		$sql = "SELECT Campo_Usuario as 'usu',Campo_pass as 'pass',campo_img as 'foto'
-		FROM TABLAS_NOCONCURENTE
-		WHERE Tabla = '".$tabla."'
-		AND Id_Empresa = '".$empresa."'
-		AND tipo_perfil = '".$tipo."'";
-		$datos = $this->db->datos($sql,1);
+		$sql =
+			"SELECT 
+				Campo_Usuario as 'usu', 
+				Campo_pass as 'pass',
+				campo_img as 'foto',
+				campo_politicas as 'politicas'
+			FROM TABLAS_NOCONCURENTE
+			WHERE Tabla = '" . $tabla . "'
+				AND Id_Empresa = '" . $empresa . "'
+				AND tipo_perfil = '" . $tipo . "'";
+		$datos = $this->db->datos($sql, 1);
 		// print_r($datos);die();
 		return $datos;
 	}
-	function credenciales_no_concurentes_datos($campo_usu,$campo_pass)
+
+	function credenciales_no_concurentes_datos($campo_usu, $campo_pass)
 	{
-		$usuario= $_SESSION['INICIO']['NO_CONCURENTE'];
-		$tabla= $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
-		$campo= $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
+		$usuario = $_SESSION['INICIO']['NO_CONCURENTE'];
+		$tabla = $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
+		$campo = $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
 		$empresa = $_SESSION['INICIO']['ID_EMPRESA'];
 
-		$sql = "SELECT ".$campo_usu." as usuario ,".$campo_pass." as 'pass'
-		FROM ".$tabla."
-		WHERE ".$_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID']." = '".$usuario."'";
+		$sql = "SELECT " . $campo_usu . " as usuario ," . $campo_pass . " as 'pass'
+		FROM " . $tabla . "
+		WHERE " . $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'] . " = '" . $usuario . "'";
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
 
 	function no_concurente_data()
 	{
-		$usuario= $_SESSION['INICIO']['NO_CONCURENTE'];
-		$tabla= $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
-		$campo= $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
+		$usuario = $_SESSION['INICIO']['NO_CONCURENTE'];
+		$tabla = $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
+		$campo = $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
 
-		 $parametros = array(
-		    $usuario,
-		    $tabla,
-		    $campo,
-		  );
-		 
-		  $sql = "EXEC BuscarDatosNoconcurente @id_usuario = ?, @tabla = ?, @campowhere = ?";
+		// print_r($tabla); exit(); die();
 
-		  $datos = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros, $master = false);
-		  $datos[0]['tabla'] = $tabla;
+		if ($tabla === '_talentoh.th_personas') {
 
-		  return $datos;
+			$sql = "SELECT
+						th_per_id                AS id,
+						th_per_cedula            AS ci,
+						th_per_primer_nombre     AS nombre,
+						th_per_segundo_nombre    AS nombre2,
+						th_per_primer_apellido   AS apellido,
+						th_per_segundo_apellido  AS apellido2,
+						th_per_sexo              AS sexo,
+						th_per_fecha_nacimiento  AS fechaN,
+						th_per_correo            AS email,
+						th_per_telefono_1        AS telefono,
+						th_per_foto_url          AS foto,
+						PERFIL                   AS usu,
+						PASS                     AS pass,
+						th_per_tabla      		 AS tabla
+					FROM $tabla
+					WHERE $campo = $usuario;";
+
+			return $this->db->datos($sql, false, false, true);
+		}
+
+		// $sql = "SELECT * FROM $tabla WHERE $campo = $usuario";
+		// return $this->db->datos($sql);
 	}
 
 
