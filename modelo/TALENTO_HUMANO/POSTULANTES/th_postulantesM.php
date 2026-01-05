@@ -119,17 +119,16 @@ class th_postulantesM extends BaseModel
     }
 
     public function obtener_postulante_por_id($th_pos_id = null)
-{
-    // Condición base: solo postulantes activos
-    $condicion = "pos.th_pos_estado = 1";
+    {
+        // Condición base: solo postulantes activos
+        $condicion = "pos.th_pos_estado = 1";
 
-    if (!empty($th_pos_id)) {
-        $id = intval($th_pos_id);
-        $condicion .= " AND pos.th_pos_id = {$id}";
-    }
+        if (!empty($th_pos_id)) {
+            $id = intval($th_pos_id);
+            $condicion .= " AND pos.th_pos_id = {$id}";
+        }
 
-    $sql = "
-        SELECT
+        $sql = "SELECT
             pos.th_pos_id,
             pos.th_pos_primer_nombre,
             pos.th_pos_segundo_nombre,
@@ -200,10 +199,8 @@ class th_postulantesM extends BaseModel
         LEFT JOIN th_cat_identidad_genero ide_gen
             ON pos.id_identidad_genero = ide_gen.id_identidad_genero
         WHERE {$condicion}
-        ORDER BY pos.th_pos_primer_apellido, pos.th_pos_primer_nombre
-    ";
+        ORDER BY pos.th_pos_primer_apellido, pos.th_pos_primer_nombre";
 
-    return $this->db->datos($sql);
-}
-
+        return $this->db->datos($sql);
+    }
 }

@@ -115,8 +115,8 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
                 $('#txt_correo_v').html(response[0].th_pos_correo);
 
                 // //Input para todos los pos_id que se vayan a colocar en los modales
-                // $('input[name="txt_postulante_id"]').val(response[0]._id);
-                // $('input[name="txt_postulante_cedula"]').val(response[0].th_pos_cedula);
+                $('input[name="txt_postulante_id"]').val(response[0].th_pos_id);
+                $('input[name="txt_postulante_cedula"]').val(response[0].th_pos_cedula);
             },
 
             error: function(xhr, status, error) {
