@@ -369,3 +369,7 @@ if ($_GET['acc'] == 'th_registrar_aprobacion_solicitudes') {
 if ($_GET['acc'] == 'th_solicitudes_personas') {
 	include('TALENTO_HUMANO/SOLICITUD_MEDICO/th_solicitudes_personas.php');
 }
+
+if ($_GET['acc'] == 'th_comision') {
+	include('TALENTO_HUMANO/COMISION/th_comision.php');
+}
