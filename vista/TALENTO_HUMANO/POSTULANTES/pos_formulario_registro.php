@@ -68,7 +68,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
                 $('#txt_telefono_1').val(response[0].th_pos_telefono_1);
                 $('#txt_telefono_2').val(response[0].th_pos_telefono_2);
                 $('#txt_correo').val(response[0].th_pos_correo);
-                $('#txt_direccion_postal').val(response[0].th_pos_postal);
+                $('#txt_codigo_postal').val(response[0].th_pos_postal);
                 $('#txt_direccion').val(response[0].th_pos_direccion);
 
                 calcular_edad('txt_edad', response[0].th_pos_fecha_nacimiento);
