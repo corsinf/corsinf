@@ -14,6 +14,10 @@ if (isset($_GET['id_postulante'])) {
     $redireccionar_vista = "th_informacion_personal&id=$id_postulante&id_persona=$_id";
 }
 
+if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
+    $redireccionar_vista = 'th_personas_nomina';
+}
+
 ?>
 
 <script>

@@ -60,9 +60,6 @@ if ($_GET['acc'] == 'th_registrar_personas') {
 	include('TALENTO_HUMANO/PERSONAS/th_registrar_personas.php');
 }
 
-if ($_GET['acc'] == 'th_registrar_persona_postulate') {
-	include('TALENTO_HUMANO/PERSONAS/th_registrar_persona_postulate.php');
-}
 //Asistencias
 //Turnos
 if ($_GET['acc'] == 'th_registrar_turnos') {
