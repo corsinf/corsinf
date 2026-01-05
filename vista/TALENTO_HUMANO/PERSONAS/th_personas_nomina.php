@@ -19,10 +19,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             columns: [{
                     data: null,
                     render: function(data, type, item) {
-                        href_1 = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_persona_postulate&_id_per=${item.id_persona}&_id=${item.id_comunidad}`;
                         href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_personal&id=${item._id_postulante ?? 'postulante'}&id_persona=${item.id_persona}`;
-                        btns = `<a href="${href_1}" class="btn btn-xs btn-danger me-1" title="CV"><i class="bx bxs-user-pin fs-6 me-0"></i></a>`;
-                        btns += `<a href="${href}" class="btn btn-xs btn-primary" title="CV"><i class="bx bxs-user-pin fs-6 me-0"></i></a>`;
+                        btns = `<a href="${href}" class="btn btn-xs btn-primary" title="CV"><i class="bx bxs-user-pin fs-6 me-0"></i></a>`;
 
                         return btns;
                     }
