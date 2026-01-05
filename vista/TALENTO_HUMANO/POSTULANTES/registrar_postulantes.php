@@ -15,6 +15,14 @@ if (isset($_GET['id_persona'])) {
 
 ?>
 
+<script>
+    $(document).ready(function() {
+        <?php if (isset($_GET['id'])) { ?>
+            cargarDatos('<?= $id ?>');
+        <?php } ?>
+    })
+</script>
+
 <div class="page-wrapper">
     <div class="page-content">
         <!--breadcrumb-->
@@ -64,7 +72,7 @@ if (isset($_GET['id_persona'])) {
                                 <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
                             <?php } ?>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>

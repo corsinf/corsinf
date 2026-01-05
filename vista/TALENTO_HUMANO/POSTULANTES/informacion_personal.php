@@ -15,38 +15,17 @@ if (isset($_GET['id_persona'])) {
 
 ?>
 
-<!-- Modal para la informacion personal -->
-<div class="modal modal_general" id="modal_informacion_personal" tabindex="-1" aria-modal="true" role="dialog"
-    data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold">Información Personal</small></h5>
-
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body px-4 py-3">
-                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_formulario_registro.php'); ?>
-
-                <div class="d-flex justify-content-end pt-2">
-                    <?php if ($id == '') { ?>
-                        <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar('th_informacion_personal');" type="button"><i class="bx bx-save"></i> Guardar</button>
-                    <?php } else { ?>
-                        <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar('th_informacion_personal');" type="button"><i class="bx bx-save"></i> Guardar</button>
-                        <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
-                    <?php } ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
-<script type="text/javascript">
+<script>
+    $(document).ready(function() {
+        <?php if (isset($_GET['id'])) { ?>
+            cargarDatos('<?= $id ?>', '<?= $id_persona ?>');
+        <?php } ?>
+    })
+
+
     function recargar_imagen(id) {
         $.ajax({
             url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?listar=true',
@@ -539,6 +518,34 @@ if (isset($_GET['id_persona'])) {
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para la informacion personal -->
+<div class="modal modal_general" id="modal_informacion_personal" tabindex="-1" aria-modal="true" role="dialog"
+    data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5><small class="text-body-secondary fw-bold">Información Personal</small></h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body px-4 py-3">
+                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_formulario_registro.php'); ?>
+
+                <div class="d-flex justify-content-end pt-2">
+                    <?php if ($id == '') { ?>
+                        <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar('th_informacion_personal');" type="button"><i class="bx bx-save"></i> Guardar</button>
+                    <?php } else { ?>
+                        <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar('th_informacion_personal');" type="button"><i class="bx bx-save"></i> Guardar</button>
+                        <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
+                    <?php } ?>
                 </div>
             </div>
         </div>

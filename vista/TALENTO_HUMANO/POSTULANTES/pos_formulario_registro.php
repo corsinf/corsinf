@@ -12,9 +12,6 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
 
 <script type="text/javascript">
     $(document).ready(function() {
-        <?php if (isset($_GET['id'])) { ?>
-            cargarDatos(<?= $id ?>);
-        <?php } ?>
         cargar_selects2();
     })
 
@@ -35,12 +32,13 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
     }
 
 
-    function cargarDatos(id) {
+    function cargarDatos(id, id_persona) {
         $.ajax({
             url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?listar=true',
             type: 'post',
             data: {
-                id: id
+                id: id,
+                id_persona: id_persona
             },
             dataType: 'json',
             success: function(response) {
