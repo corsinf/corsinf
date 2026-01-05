@@ -539,6 +539,43 @@ if (isset($_GET['mod']) && $_GET['mod'] != '') {
 			iniciar_sesion();
 		}
 	</script>
+
+
+	<?php
+	$acc = isset($_GET['acc']) ? $_GET['acc'] : '';
+	?>
+
+	<?php if (
+		(isset($_SESSION['INICIO']['NO_CONCURENTE_POLITICAS']) &&
+		$_SESSION['INICIO']['NO_CONCURENTE_POLITICAS'] == 0 &&
+		$acc !== 'perfil') && $acc !== 'politicas_datos'
+	) { ?>
+
+		<script>
+			$(document).ready(function() {
+				cambiar_contrasena();
+			});
+
+			function cambiar_contrasena() {
+				Swal.fire({
+					title: 'Cambio de Contraseña Requerido',
+					text: 'Por seguridad, debes cambiar tu contraseña ahora.',
+					icon: 'warning',
+					allowOutsideClick: false,
+					allowEscapeKey: false,
+					showCancelButton: false,
+					confirmButtonText: 'Cambiar Contraseña'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						window.location.href = '../vista/inicio.php?acc=perfil';
+					}
+				});
+			}
+		</script>
+
+	<?php } ?>
+
+
 </head>
 
 <body>

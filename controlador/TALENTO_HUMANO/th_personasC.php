@@ -199,6 +199,7 @@ class th_personasC
     private $sdk_patch;
     private $empresa;
     private $hikcentralHttp;
+    private $biometria;
 
     function __construct()
     {
@@ -231,6 +232,7 @@ class th_personasC
         }
         return $datos;
     }
+    
     function listar_persona_departamento($id = '')
     {
         $datos = $this->personas_departamentos->listar_buscar_persona_departamento($id);
