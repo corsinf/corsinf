@@ -8,6 +8,14 @@
             },
             dataType: 'json',
             success: function(response) {
+                $('#img_persona_inf')
+                    .off('error') // limpiar por si acaso
+                    .one('error', function() {
+                        console.log("Error 404");
+                        $(this).attr('src', '../img/sin_imagen.jpg');
+                    })
+                    .attr('src', response[0].foto_url + '?' + Math.random());
+
                 $('#txt_primer_nombre').val(response[0].primer_nombre);
                 $('#txt_segundo_nombre').val(response[0].segundo_nombre);
                 $('#txt_primer_apellido').val(response[0].primer_apellido);
@@ -61,6 +69,11 @@
                 }));
                 $('#txt_per_correo_personal_1').val(response[0].correo_personal_1);
                 $('#txt_per_correo_personal_2').val(response[0].correo_personal_2);
+
+                //Para cargar la seccion de th_per_cambiar_foto
+                $('#img_persona_inf_modal').attr('src', response[0].foto_url || '../img/sin_imagen.jpg');
+                $('#txt_cedula_foto').val(response[0].cedula);
+                $('#txt_persona_id_foto').val(response[0].th_per_id);
             },
         });
     }
@@ -134,159 +147,185 @@
 
 <!-- Atributos de una persona para que se pueda reutilizar en cualquier parte del sistema -->
 
-<div class="row mb-col pt-3">
-    <div class="col-md-3">
-        <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido </label>
-        <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno" maxlength="50" required>
-    </div>
-    <div class="col-md-3">
-        <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido </label>
-        <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno" maxlength="50">
-    </div>
-    <div class="col-md-3">
-        <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre </label>
-        <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre" maxlength="50" required>
-    </div>
-    <div class="col-md-3">
-        <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre </label>
-        <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre" maxlength="50">
+<div class="container-fluid pt-3">
+    <div class="row">
+        <div class="col-md-3 text-center border-end">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <label class="form-label d-block"><strong>Fotografía del Usuario</strong></label>
+
+                    <div class="text-center">
+                        <div class="position-relative">
+
+                            <div class="widget-user-image text-center">
+                                <img class="rounded-circle p-1 bg-primary" src="../img/sin_imagen.jpg" class="img-fluid"
+                                    id="img_persona_inf" alt="Imagen Perfil Persona" width="110"
+                                    height="110" />
+                            </div>
+
+                            <div>
+                                <a href="#" class="d-flex justify-content-center" data-bs-toggle="modal"
+                                    data-bs-target="#modal_agregar_cambiar_foto_persona"
+                                    onclick="abrir_modal_cambiar_foto_persona('<?= $_id ?>');">
+                                    <i class='bx bxs-camera bx-sm'></i>
+                                </a>
+                                <small class="text-muted">Formatos: JPG, PNG. Máx 2MB</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-header bg-light text-primary"><strong><i class="fas fa-user"></i> Datos de Identidad</strong></div>
+                <div class="card-body">
+                    <div class="row mb-col">
+                        <div class="col-md-3">
+                            <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido </label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Apellido paterno" maxlength="50">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido </label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Apellido materno" maxlength="50">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre </label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Primer nombre" maxlength="50">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre </label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Segundo nombre" maxlength="50">
+                        </div>
+                    </div>
+
+                    <div class="row mb-col">
+                        <div class="col-md-3">
+                            <label for="txt_cedula" class="form-label form-label-sm">Cédula de Identidad </label>
+                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_cedula" id="txt_cedula" maxlength="10">
+                            <span id="error_txt_cedula" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="ddl_sexo" class="form-label form-label-sm">Sexo </label>
+                            <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo">
+                                <option selected disabled value="">Seleccione...</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento </label>
+                            <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento" onblur="calcular_edad('txt_edad', this.value); verificar_fecha_actual('txt_fecha_nacimiento', this.value, 'txt_edad');">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="txt_edad" class="form-label form-label-sm">Edad </label>
+                            <input type="text" class="form-control form-control-sm bg-light" name="txt_edad" id="txt_edad" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-header bg-light text-primary"><strong><i class="fas fa-info-circle"></i> Información Socio-Demográfica</strong></div>
+                <div class="card-body">
+                    <div class="row mb-col">
+                        <div class="col-md-4">
+                            <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad </label>
+                            <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
+                                <option selected disabled value="">Seleccione...</option>
+                                <option value="Ecuatoriano">Ecuatoriano</option>
+                                <option value="Colombiano">Colombiano</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil </label>
+                            <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
+                                <option selected disabled value="">Seleccione...</option>
+                                <option value="Soltero/a">Soltero/a</option>
+                                <option value="Casado/a">Casado/a</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="ddl_tipo_sangre" class="form-label form-label-sm">Tipo Sangre </label>
+                            <select class="form-select form-select-sm" id="ddl_tipo_sangre" name="ddl_tipo_sangre">
+                                <option selected disabled value="">Seleccione...</option>
+                                <option value="O+">O+</option>
+                                <option value="A+">A+</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-col">
+                        <div class="col-md-3">
+                            <label for="ddl_etnia" class="form-label form-label-sm">Etnía </label>
+                            <select class="form-select form-select-sm select2-validation" id="ddl_etnia" name="ddl_etnia"></select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="ddl_orientacion_sexual" class="form-label form-label-sm">Orientación Sexual </label>
+                            <select class="form-select form-select-sm select2-validation" id="ddl_orientacion_sexual" name="ddl_orientacion_sexual"></select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="ddl_religion" class="form-label form-label-sm">Religión </label>
+                            <select class="form-select form-select-sm select2-validation" id="ddl_religion" name="ddl_religion"></select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="ddl_identidad_genero" class="form-label form-label-sm">Identidad Genero </label>
+                            <select class="form-select form-select-sm select2-validation" id="ddl_identidad_genero" name="ddl_identidad_genero"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-header bg-light text-primary"><strong><i class="fas fa-map-marker-alt"></i> Ubicación y Contacto</strong></div>
+                <div class="card-body">
+                    <?php include_once('../vista/GENERAL/provincias_ciudades_parroquias.php'); ?>
+
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_direccion" class="form-label form-label-sm">Dirección Exacta </label>
+                            <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" maxlength="200">
+                        </div>
+                    </div>
+
+                    <div class="row mb-col">
+                        <div class="col-md-3">
+                            <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono Principal </label>
+                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_1" id="txt_telefono_1" maxlength="12">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono Alternativo </label>
+                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_2" id="txt_telefono_2" maxlength="12">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="txt_correo" class="form-label form-label-sm">Correo Institucional </label>
+                            <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" maxlength="100">
+                        </div>
+                    </div>
+
+                    <div class="row mb-col">
+                        <div class="col-md-6">
+                            <label for="txt_per_correo_personal_1" class="form-label form-label-sm">Correo Personal </label>
+                            <input type="email" class="form-control form-control-sm" name="txt_per_correo_personal_1" id="txt_per_correo_personal_1" maxlength="100">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="txt_per_correo_personal_2" class="form-label form-label-sm">Correo Personal Alternativo </label>
+                            <input type="email" class="form-control form-control-sm" name="txt_per_correo_personal_2" id="txt_per_correo_personal_2" maxlength="100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-body">
+                    <label for="txt_observaciones" class="form-label form-label-sm">Observaciones Adicionales </label>
+                    <textarea class="form-control form-control-sm" name="txt_observaciones" id="txt_observaciones" rows="2" maxlength="200"></textarea>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
-<div class="row mb-col">
-    <div class="col-md-3">
-        <label for="txt_cedula" class="form-label form-label-sm">Cédula de Identidad </label>
-        <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_cedula" id="txt_cedula" placeholder="Digite su número de cédula" maxlength="10" required>
-        <span id="error_txt_cedula" class="text-danger"></span>
-    </div>
-    <div class="col-md-3">
-        <label for="ddl_sexo" class="form-label form-label-sm">Sexo </label>
-        <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo" required>
-            <option selected disabled value="">-- Selecciona una opción --</option>
-            <option value="Masculino">Masculino</option>
-            <option value="Femenino">Femenino</option>
-        </select>
-    </div>
-    <div class="col-md-3">
-        <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento </label>
-        <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento" onblur="calcular_edad('txt_edad', this.value); verificar_fecha_actual('txt_fecha_nacimiento', this.value, 'txt_edad');" required>
-    </div>
-    <div class="col-md-3">
-        <label for="txt_edad" class="form-label form-label-sm">Edad </label>
-        <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_edad" id="txt_edad" readonly>
-    </div>
-</div>
-
-<div class="row mb-col">
-    <div class="col-md-4">
-        <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 </label>
-        <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_1" id="txt_telefono_1" value="" maxlength="12">
-    </div>
-    <div class="col-md-4">
-        <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 </label>
-        <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_2" id="txt_telefono_2" value="" maxlength="12">
-    </div>
-    <div class="col-md-4">
-        <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico </label>
-        <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" maxlength="100">
-    </div>
-</div>
-
-<div class="row mb-col">
-    <div class="col-md-5">
-        <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad </label>
-        <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
-            <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
-            <option value="Ecuatoriano">Ecuatoriano</option>
-            <option value="Colombiano">Colombiano</option>
-            <option value="Peruano">Peruano</option>
-            <option value="Venezolano">Venezolano</option>
-            <option value="Paraguayo">Paraguayo</option>
-        </select>
-    </div>
-    <div class="col-md-4">
-        <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil</label>
-        <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
-            <option selected disabled value="">-- Selecciona un Estado Civil --</option>
-            <option value="Soltero/a">Soltero/a</option>
-            <option value="Casado/a">Casado/a</option>
-            <option value="Divorciado/a">Divorciado/a</option>
-            <option value="Viudo/a">Viudo/a</option>
-            <option value="Unión de hecho">Unión de hecho</option>
-        </select>
-    </div>
-    <div class="col-md-3">
-        <label for="ddl_tipo_sangre" class="form-label form-label-sm">Tipo Sangre </label>
-        <select class="form-select form-select-sm" id="ddl_tipo_sangre" name="ddl_tipo_sangre" required>
-            <option selected disabled value="">-- Selecciona una opción --</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-        </select>
-    </div>
-</div>
-
-<!-- Vista de provincias reutilizada -->
-<?php include_once('../vista/GENERAL/provincias_ciudades_parroquias.php'); ?>
-
-<div class="row mb-col">
-    <div class="col-md-12">
-        <label for="txt_direccion" class="form-label form-label-sm">Dirección </label>
-        <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" maxlength="200">
-    </div>
-</div>
-
-<div class="row mb-col">
-    <div class="col-md-12">
-        <label for="txt_observaciones" class="form-label form-label-sm">Observaciones </label>
-        <input type="text" class="form-control form-control-sm" name="txt_observaciones" id="txt_observaciones" maxlength="200">
-    </div>
-</div>
-
-<div class="row mb-col">
-    <div class="col-md-3">
-        <label for="ddl_etnia" class="form-label form-label-sm">Etnía </label>
-        <select class="form-select form-select-sm select2-validation" id="ddl_etnia" name="ddl_etnia" maxlenght="5000">
-        </select>
-        <label class="error" style="display: none;" for="ddl_etnia"></label>
-    </div>
-    <div class="col-md-3">
-        <label for="ddl_orientacion_sexual" class="form-label form-label-sm">Orientación Sexual </label>
-        <select class="form-select form-select-sm select2-validation" id="ddl_orientacion_sexual" name="ddl_orientacion_sexual" maxlenght="5000">
-        </select>
-        <label class="error" style="display: none;" for="ddl_orientacion_sexual"></label>
-    </div>
-    <div class="col-md-3">
-        <label for="ddl_religion" class="form-label form-label-sm">Religión </label>
-        <select class="form-select form-select-sm select2-validation" id="ddl_religion" name="ddl_religion" maxlenght="5000">
-        </select>
-        <label class="error" style="display: none;" for="ddl_religion"></label>
-    </div>
-    <div class="col-md-3">
-        <label for="ddl_identidad_genero" class="form-label form-label-sm">Identidad Genero</label>
-        <select class="form-select form-select-sm select2-validation" id="ddl_identidad_genero" name="ddl_identidad_genero" maxlenght="5000">
-        </select>
-        <label class="error" style="display: none;" for="ddl_identidad_genero"></label>
-    </div>
-</div>
-
-<div class="row mb-col">
-    <div class="col-md-6">
-        <label for="txt_per_correo_personal_1" class="form-label form-label-sm">Correo Personal</label>
-        <input type="email" class="form-control form-control-sm" name="txt_per_correo_personal_1" id="txt_per_correo_personal_1" value="" maxlength="100">
-    </div>
-    <div class="col-md-6">
-        <label for="txt_per_correo_personal_2" class="form-label form-label-sm">Correo Personal Alternativo</label>
-        <input type="email" class="form-control form-control-sm" name="txt_per_correo_personal_2" id="txt_per_correo_personal_2" value="" maxlength="100">
-    </div>
-</div>
-
-
 
 <script>
     $(document).ready(function() {
@@ -297,7 +336,7 @@
         agregar_asterisco_campo_obligatorio('txt_cedula');
         agregar_asterisco_campo_obligatorio('ddl_sexo');
         agregar_asterisco_campo_obligatorio('txt_fecha_nacimiento');
-        agregar_asterisco_campo_obligatorio('txt_edad');
+        // agregar_asterisco_campo_obligatorio('txt_edad');
         agregar_asterisco_campo_obligatorio('txt_telefono_1');
         agregar_asterisco_campo_obligatorio('txt_correo');
         agregar_asterisco_campo_obligatorio('ddl_provincias');

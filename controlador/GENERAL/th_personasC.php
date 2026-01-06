@@ -171,13 +171,12 @@ class th_personasC
 
 
         return array('POLITICAS_ACEPTACION' => $datos[0]['POLITICAS_ACEPTACION'], 'id_postulante' => $datos[0]['id_postulante']);
-
     }
 
     //Para colocar una imagen a una persona existente
     function insertar_imagen($file, $parametros)
     {
-        $id_persona = $parametros['txt_persona_id'];
+        $id_persona = $parametros['txt_persona_id_foto'];
 
         if ($id_persona != '') {
             if ($file['txt_copia_cambiar_foto']['tmp_name'] != '' && $file['txt_copia_cambiar_foto']['tmp_name'] != null) {
@@ -190,61 +189,73 @@ class th_personasC
 
     private function guardar_archivo($file, $post, $id_insertar_editar)
     {
-        // Obtener el ID de la empresa desde la sesión
         $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
-
-        // Definir la ruta donde se guardarán las imágenes
         $ruta = dirname(__DIR__, 2) . '/REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/';
-        $ruta .= $post['txt_cedula'] . '/' . 'FOTO_PERFIL/';
+        $ruta .= $post['txt_cedula_foto'] . '/' . 'FOTO_PERFIL/';
 
-        // Verificar si la carpeta existe, si no, crearla
         if (!file_exists($ruta)) {
             mkdir($ruta, 0777, true);
         }
 
-        // Validar formato de la imagen
         if ($this->validar_formato($file) === 1) {
-
-            // Obtener la ubicación temporal del archivo cargado
             $uploadfile_temporal = $file['txt_copia_cambiar_foto']['tmp_name'];
-            // Obtener la extensión del archivo
-            $extension = pathinfo($file['txt_copia_cambiar_foto']['name'], PATHINFO_EXTENSION);
 
-            // Crear un nuevo nombre para la imagen
-            $nombre = 'foto_perfil_' . $id_insertar_editar . '.' . $extension;
+            // Cambiamos la extensión a .webp
+            $nombre = 'foto_perfil_' . $id_insertar_editar . '.webp';
             $nuevo_nom = $ruta . $nombre;
 
-            // Ruta que se almacenará en la base de datos
-            $nombre_ruta = '../REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/' . $post['txt_cedula'] . '/' . 'FOTO_PERFIL/';
-            $nombre_ruta .= $nombre;
+            // Ruta para la base de datos
+            $nombre_ruta = '../REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/' . $post['txt_cedula_foto'] . '/' . 'FOTO_PERFIL/' . $nombre;
 
-            // Verificar si el archivo ha sido cargado correctamente
             if (is_uploaded_file($uploadfile_temporal)) {
-                // Mover el archivo de su ubicación temporal al destino final
-                if (move_uploaded_file($uploadfile_temporal, $nuevo_nom)) {
+                // --- INICIO CONVERSIÓN A WEBP ---
+                $info = getimagesize($uploadfile_temporal);
+                $mime = $info['mime'];
 
-                    // Datos para actualizar la URL de la foto en la base de datos
+                // Crear recurso de imagen según el tipo original
+                switch ($mime) {
+                    case 'image/jpeg':
+                    case 'image/jpg':
+                        $imagen_original = imagecreatefromjpeg($uploadfile_temporal);
+                        break;
+                    case 'image/png':
+                        $imagen_original = imagecreatefrompng($uploadfile_temporal);
+                        // Preservar transparencia si es necesario
+                        imagepalettetotruecolor($imagen_original);
+                        imagealphablending($imagen_original, true);
+                        imagesavealpha($imagen_original, true);
+                        break;
+                    case 'image/gif':
+                        $imagen_original = imagecreatefromgif($uploadfile_temporal);
+                        break;
+                    default:
+                        return -1;
+                }
+
+                // Guardar como WebP (Calidad 80 es ideal para equilibrio peso/calidad)
+                // imagewebp(recurso, destino, calidad)
+                if (imagewebp($imagen_original, $nuevo_nom, 80)) {
+                    imagedestroy($imagen_original); // Liberar memoria
+
                     $datos = array(
                         array('campo' => 'th_per_foto_url', 'dato' => $nombre_ruta),
                     );
 
-                    // Condición para identificar la persona que se debe actualizar
                     $where = array(
                         array('campo' => 'th_per_id', 'dato' => $id_insertar_editar),
                     );
 
-                    // Ejecutar la actualización en la base de datos
                     $base = $this->modelo->editar($datos, $where);
-
                     return $base == 1 ? 1 : -1;
                 } else {
                     return -1;
                 }
+                // --- FIN CONVERSIÓN ---
             } else {
                 return -1;
             }
         } else {
-            return -2; // Formato inválido
+            return -2;
         }
     }
 

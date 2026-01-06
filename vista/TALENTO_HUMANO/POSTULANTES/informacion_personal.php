@@ -84,13 +84,16 @@ if (isset($_GET['id_persona'])) {
                                                     alt="Imagen Perfil Postulante" width="110" height="110" />
                                             </div>
 
-                                            <div>
-                                                <a href="#" class="d-flex justify-content-center" data-bs-toggle="modal"
-                                                    data-bs-target="#modal_agregar_cambiar_foto"
-                                                    onclick="abrir_modal_cambiar_foto('<?= $id ?>');">
-                                                    <i class='bx bxs-camera bx-sm'></i>
-                                                </a>
-                                            </div>
+                                            <?php if (isset($_GET['id_persona'])) { ?>
+                                            <?php } else { ?>
+                                                <div>
+                                                    <a href="#" class="d-flex justify-content-center" data-bs-toggle="modal"
+                                                        data-bs-target="#modal_agregar_cambiar_foto"
+                                                        onclick="abrir_modal_cambiar_foto('<?= $id ?>');">
+                                                        <i class='bx bxs-camera bx-sm'></i>
+                                                    </a>
+                                                </div>
+                                            <?php } ?>
                                         </div>
                                     </div>
 

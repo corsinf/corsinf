@@ -103,6 +103,15 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
                 $('#txt_per_correo_personal_1').val(response[0].th_pos_correo_personal_1);
                 $('#txt_per_correo_personal_2').val(response[0].th_pos_correo_personal_2);
 
+                //Cargar foto
+                // $('#img_postulante_inf').attr('src', response[0].th_pos_foto_url + '?' + Math.random());
+                $('#img_postulante_inf')
+                    .off('error') // limpiar por si acaso
+                    .one('error', function() {
+                        console.log("Error 404");
+                        $(this).attr('src', '../img/sin_imagen.jpg');
+                    })
+                    .attr('src', response[0].th_pos_foto_url + '?' + Math.random());
 
                 $('#txt_nombres_completos_v').html(response[0].nombres_completos);
                 $('#txt_fecha_nacimiento_v').html(response[0].th_pos_fecha_nacimiento);
@@ -199,7 +208,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
 
             success: function(response) {
                 if (response == 1) {
-                    if(redireccionar_vista == 'th_informacion_personal'){
+                    if (redireccionar_vista == 'th_informacion_personal') {
                         redireccionar_vista = 'th_informacion_personal' + '&id=<?= $id ?>';
                     }
 

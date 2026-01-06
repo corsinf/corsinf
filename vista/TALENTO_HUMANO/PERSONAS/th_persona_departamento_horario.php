@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="../assets/plugins/notifications/css/lobibox.min.css" />
+<!-- <link rel="stylesheet" href="../assets/plugins/notifications/css/lobibox.min.css" /> -->
 
 <style>
     .horarios-container {
@@ -368,7 +368,7 @@
 
 <input id="id_perdep" type="hidden" value="" />
 
-<script src="../assets/plugins/notifications/js/lobibox.min.js"></script>
+<!-- <script src="../assets/plugins/notifications/js/lobibox.min.js"></script> -->
 
 <script>
     const DIAS_SEMANA = {
@@ -561,14 +561,14 @@
 
                 $('#lista_turnos_por_dia').html(htmlDias);
 
-                Lobibox.notify('success', {
-                    size: 'mini',
-                    rounded: true,
-                    delayIndicator: false,
-                    sound: false,
-                    position: 'top right',
-                    msg: 'Horarios cargados correctamente'
-                });
+                // Lobibox.notify('success', {
+                //     size: 'mini',
+                //     rounded: true,
+                //     delayIndicator: false,
+                //     sound: false,
+                //     position: 'top right',
+                //     msg: 'Horarios cargados correctamente'
+                // });
             },
             error: function(xhr, status, error) {
                 console.error('Error al cargar turnos:', error);
