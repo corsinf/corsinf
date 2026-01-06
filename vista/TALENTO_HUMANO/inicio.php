@@ -367,9 +367,30 @@ if ($_GET['acc'] == 'th_solicitudes_personas') {
 	include('TALENTO_HUMANO/SOLICITUD_MEDICO/th_solicitudes_personas.php');
 }
 
+/**
+ * 
+ * Comision
+ * 
+ */
+
 if ($_GET['acc'] == 'th_comision') {
 	include('TALENTO_HUMANO/COMISION/th_comision.php');
 }
+
 if ($_GET['acc'] == 'th_registrar_comision') {
 	include('TALENTO_HUMANO/COMISION/th_registrar_comision.php');
+}
+
+/**
+ * 
+ * Reglamento
+ * 
+ */
+
+if ($_GET['acc'] == 'th_proteccion_datos') {
+	include('TALENTO_HUMANO/PROTECCION_DATOS/th_proteccion_datos.php');
+}
+
+if ($_GET['acc'] == 'th_ley_violeta') {
+	include('TALENTO_HUMANO/PROTECCION_DATOS/th_ley_violeta.php');
 }
