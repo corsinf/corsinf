@@ -32,33 +32,60 @@ class th_pos_formacion_academicaC
     //Funcion para listar la formacion academica del postulante
     function listar($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_fora_estado', 1)->orderBy('th_fora_titulo_obtenido','ASC')->listar();
+        $datos = $this->modelo->listar_formacion_academica_con_nivel_id($id);
 
         $texto = '';
-        foreach ($datos as $key => $value) {
-            //Formato de fechas de formacion academica
-            $fecha_inicio_estudio = date('d/m/Y', strtotime($value['th_fora_fecha_inicio_formacion']));
-            $fecha_fin_estudio = $value['th_fora_fecha_fin_formacion'] == '' ? 'Actualidad' : date('d/m/Y', strtotime($value['th_fora_fecha_fin_formacion']));
+        foreach ($datos as $value) {
 
-            $texto .=
-                <<<HTML
-                    <div class="row mb-col">
-                        <div class="col-10">
-                            <h6 class="fw-bold">{$value['th_fora_titulo_obtenido']}</h6>
-                            <p class="m-0">{$value['th_fora_institución']}</p>
-                            <p class="m-0">{$fecha_inicio_estudio} - {$fecha_fin_estudio}</p>
-                        </div>
-                        <div class="col-2 d-flex justify-content-end align-items-start">
-                            <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_formacion_academica({$value['_id']});">
-                                <i class="text-dark bx bx-pencil bx-sm"></i>
-                            </button>
-                        </div>
-                    </div>
-                HTML;
+            $fecha_inicio_estudio = !empty($value['th_fora_fecha_inicio_formacion'])
+                ? date('d/m/Y', strtotime($value['th_fora_fecha_inicio_formacion']))
+                : '';
+
+            $fecha_fin_estudio = empty($value['th_fora_fecha_fin_formacion'])
+                ? 'Actualidad'
+                : date('d/m/Y', strtotime($value['th_fora_fecha_fin_formacion']));
+
+            $nivel = !empty($value['nivel_academico_descripcion'])
+                ? $value['nivel_academico_descripcion']
+                : 'No especificado';
+
+            $senescyt = !empty($value['th_fora_registro_senescyt'])
+                ? " | SENESCYT: {$value['th_fora_registro_senescyt']}"
+                : '';
+
+            $texto .= <<<HTML
+            <div class="row mb-col">
+                <div class="col-10">
+                    <h6 class="fw-bold mb-1">
+                        {$value['th_fora_titulo_obtenido']}
+                    </h6>
+
+                    <p class="m-0 text-muted">
+                        {$value['th_fora_institución']}
+                    </p>
+
+                    <p class="m-0">
+                        <strong>Nivel:</strong> {$nivel}
+                    </p>
+
+                    <p class="m-0">
+                        {$fecha_inicio_estudio} - {$fecha_fin_estudio}{$senescyt}
+                    </p>
+                </div>
+
+                <div class="col-2 d-flex justify-content-end align-items-start">
+                    <button class="btn icon-hover"
+                        onclick="abrir_modal_formacion_academica({$value['_id']});">
+                        <i class="text-dark bx bx-pencil bx-sm"></i>
+                    </button>
+                </div>
+            </div>
+        HTML;
         }
-        
+
         return $texto;
     }
+
 
     //Buscando registros por id de la formacion academica
     function listar_modal($id)

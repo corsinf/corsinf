@@ -370,3 +370,6 @@ if ($_GET['acc'] == 'th_solicitudes_personas') {
 if ($_GET['acc'] == 'th_comision') {
 	include('TALENTO_HUMANO/COMISION/th_comision.php');
 }
+if ($_GET['acc'] == 'th_registrar_comision') {
+	include('TALENTO_HUMANO/COMISION/th_registrar_comision.php');
+}
