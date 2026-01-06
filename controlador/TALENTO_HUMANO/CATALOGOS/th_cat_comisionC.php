@@ -83,7 +83,7 @@ class  th_cat_comisionC
     function listar_comisiones($id = '')
     {
         if ($id == '') {
-            $datos = $this->modelo->where('estado', 1)->listar();
+            $datos = $this->modelo->listar_comisiones_contar_personas();
         } else {
             $datos = $this->modelo->where('estado', 1)->where('id_comision', $id)->listar();
         }

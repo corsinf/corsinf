@@ -24,6 +24,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 }
             }, {
                 data: 'codigo'
+            }, {
+                data: 'total_personas'
             } ],
             order: [
                 [1, 'asc']
@@ -93,6 +95,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                             <tr>
                                                 <th>Comision</th>
                                                 <th>Codigo</th>
+                                                <th>Total personas</th>
                                             </tr>
                                         </thead>
                                         <tbody class="">
