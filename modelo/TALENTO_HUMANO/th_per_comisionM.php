@@ -59,4 +59,70 @@ class th_per_comisionM extends BaseModel
 
         return $this->db->datos($sql);
     }
+
+    function listar_personas_comisiones($id_comision = '')
+    {
+        $sql = "
+        SELECT
+            per_com.th_per_com_id AS _id,
+            per.th_per_id AS id_persona,
+            per.th_per_id_comunidad AS id_comunidad,
+            per.th_per_primer_apellido AS primer_apellido,
+            per.th_per_segundo_apellido AS segundo_apellido,
+            per.th_per_primer_nombre AS primer_nombre,
+            per.th_per_segundo_nombre AS segundo_nombre,
+            per.th_per_cedula AS cedula,
+            per.th_per_telefono_1 AS telefono_1,
+            per.th_per_correo AS correo,
+            per.th_pos_id AS _id_postulante,
+            com.nombre AS nombre_comision
+        FROM th_per_comision per_com
+        INNER JOIN th_personas per 
+            ON per_com.th_per_id = per.th_per_id
+        INNER JOIN th_cat_comision com 
+            ON per_com.id_comision = com.id_comision
+        WHERE per.th_per_estado = 1
+          AND per_com.th_per_com_estado = 1
+    ";
+
+        if ($id_comision !== '' && $id_comision !== null) {
+            $sql .= " AND per_com.id_comision = '$id_comision'";
+        }
+
+        $sql .= ";";
+
+        return $this->db->datos($sql);
+    }
+
+
+    function listar_personas_modal_comision($id_comision)
+    {
+        if (!empty($id_comision)) {
+
+            $sql = "
+            SELECT DISTINCT
+                per.th_per_id AS _id,
+                per.th_per_primer_apellido AS primer_apellido,
+                per.th_per_segundo_apellido AS segundo_apellido,
+                per.th_per_primer_nombre AS primer_nombre,
+                per.th_per_segundo_nombre AS segundo_nombre,
+                per.th_per_cedula AS cedula,
+                per.th_per_telefono_1 AS telefono_1,
+                per.th_per_correo AS correo
+            FROM _talentoh.th_personas per
+            INNER JOIN _talentoh.th_personas_departamentos pd
+                ON pd.th_per_id = per.th_per_id
+            WHERE
+                per.th_per_estado = 1
+                AND per.th_per_id NOT IN (
+                    SELECT th_per_id
+                    FROM _talentoh.th_per_comision
+                );
+        ";
+
+            return $this->db->datos($sql, false, false, true);
+        }
+
+        return null;
+    }
 }

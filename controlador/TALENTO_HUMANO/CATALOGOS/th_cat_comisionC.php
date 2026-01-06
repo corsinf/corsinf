@@ -9,6 +9,14 @@ if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
 
+if (isset($_GET['listar_comisiones'])) {
+    echo json_encode($controlador->listar_comisiones($_POST['id'] ?? ''));
+}
+
+if (isset($_GET['insertar'])) {
+    echo json_encode($controlador->insertar_editar($_POST['parametros']));
+}
+
 if (isset($_GET['buscar'])) {
     $query = '';
 
@@ -23,6 +31,10 @@ if (isset($_GET['buscar'])) {
     echo json_encode($controlador->buscar($parametros));
 }
 
+if (isset($_GET['eliminar'])) {
+    echo json_encode($controlador->eliminar($_POST['id']));
+}
+
 class  th_cat_comisionC
 {
     private $modelo;
@@ -32,12 +44,67 @@ class  th_cat_comisionC
         $this->modelo = new th_cat_comisionM();
     }
 
+
+    function insertar_editar($parametros)
+    {
+        $datos = [
+            ['campo' => 'codigo', 'dato' => $parametros['txt_codigo']],
+            ['campo' => 'nombre', 'dato' => $parametros['txt_nombre']],
+            ['campo' => 'descripcion', 'dato' => $parametros['txt_descripcion']],
+        ];
+
+        // INSERTAR
+        if (empty($parametros['_id'])) {
+            $datos[] = [
+                'campo' => 'fecha_creacion',
+                'dato'  => date('Y-m-d H:i:s')
+            ];
+
+            return $this->modelo->insertar($datos);
+        }
+
+        // EDITAR
+        $where[] = [
+            'campo' => 'id_comision',
+            'dato'  => $parametros['_id']
+        ];
+
+        return $this->modelo->editar($datos, $where);
+    }
+
+
     function listar($id = '')
     {
-        $datos = $this->modelo->where('',$id)->listar();
-        return $datos; 
-
+        $datos = $this->modelo->where('', $id)->listar();
+        return $datos;
     }
+
+
+    function listar_comisiones($id = '')
+    {
+        if ($id == '') {
+            $datos = $this->modelo->where('estado', 1)->listar();
+        } else {
+            $datos = $this->modelo->where('estado', 1)->where('id_comision', $id)->listar();
+        }
+        return $datos;
+    }
+
+
+    function eliminar($id)
+    {
+
+        $datos = array(
+            array('campo' => 'estado', 'dato' => 0),
+        );
+
+        $where[0]['campo'] = 'id_comision';
+        $where[0]['dato'] = $id;
+
+        $datos = $this->modelo->editar($datos, $where);
+        return $datos;
+    }
+
 
     function buscar($parametros)
     {
@@ -51,6 +118,5 @@ class  th_cat_comisionC
         }
 
         return $lista;
-       
     }
 }
