@@ -23,7 +23,7 @@
 
         var txt_nombre_contacto_emergencia = $('#txt_nombre_contacto_emergencia').val();
         var txt_telefono_contacto_emergencia = $('#txt_telefono_contacto_emergencia').val();
-        var txt_id_postulante = <?= $id ?>;
+        var txt_id_postulante = '<?= $id ?>';
         var txt_id_contacto_emergencia = $('#txt_id_contacto_emergencia').val();
         var parametros_contacto_emergencia = {
             '_id': txt_id_contacto_emergencia,

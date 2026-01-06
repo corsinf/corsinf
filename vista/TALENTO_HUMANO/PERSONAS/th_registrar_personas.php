@@ -406,18 +406,20 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
 
                                                 <hr>
 
-                                                <div class="col-12">
-                                                    <button class="btn btn-primary btn-sm" onclick="modalBiometria()"><i
-                                                            class="bx bx-sync"></i>Biometria</button>
-                                                    <a href="javascript:void(0)" class="btn btn-success btn-sm" data-bs-toggle="modal"
-                                                        data-bs-target="#modal_mensaje">
-                                                        <i class="bx bx-envelope"></i> Enviar Mensaje
-                                                    </a>
-                                                    <!-- Todo lo relacionado con Biometria -->
-                                                    <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_biometrico.php'); ?>
+                                                <?php if ($_SESSION['INICIO']['TIPO'] != "PERSONAS") { ?>
+                                                    <div class="col-12">
+                                                        <button class="btn btn-primary btn-sm" onclick="modalBiometria()"><i
+                                                                class="bx bx-sync"></i>Biometria</button>
+                                                        <a href="javascript:void(0)" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                                            data-bs-target="#modal_mensaje">
+                                                            <i class="bx bx-envelope"></i> Enviar Mensaje
+                                                        </a>
+                                                        <!-- Todo lo relacionado con Biometria -->
+                                                        <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_biometrico.php'); ?>
 
-                                                    <!-- <button class="btn btn-primary btn-sm" onclick="syncronizarPersona()"><i class="bx bx-sync"></i>Syncronizar persona en biometrico</button>                                     -->
-                                                </div>
+                                                        <!-- <button class="btn btn-primary btn-sm" onclick="syncronizarPersona()"><i class="bx bx-sync"></i>Syncronizar persona en biometrico</button>                                     -->
+                                                    </div>
+                                                <?php } ?>
 
                                                 <div class="pt-2">
                                                     <form id="registrar_personas" class="modal_general_provincias">

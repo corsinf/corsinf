@@ -1,6 +1,7 @@
 <script>
     $(document).ready(function() {
         cargar_datos_experiencia_laboral(<?= $id ?>);
+        console.log('Cargando experiencia laboral del postulante ID: <?= $id ?>');
     });
 
     //Experiencia Laboral
@@ -69,7 +70,7 @@
         }
 
         var txt_responsabilidades_logros = $('#txt_responsabilidades_logros').val();
-        var txt_id_postulante = $('#txt_postulante_id').val();
+        var txt_id_postulante = '<?= $id ?>';
         var txt_id_experiencia_laboral = $('#txt_experiencia_id').val();
 
         var parametros_experiencia_laboral = {
