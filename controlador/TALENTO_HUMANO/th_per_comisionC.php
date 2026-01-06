@@ -257,7 +257,7 @@ class th_per_comisionC
 
         foreach ($ids_personas as $item) {
 
-            $per_com = isset($item['percom']) ? trim($item['percom']) : '';
+            $per_com = isset($item['per_com']) ? trim($item['per_com']) : '';
             $person  = isset($item['person']) ? trim($item['person']) : '';
 
             try {

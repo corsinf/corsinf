@@ -99,6 +99,8 @@ class th_per_comisionM extends BaseModel
     {
         if (!empty($id_comision)) {
 
+            $id_comision = intval($id_comision);
+
             $sql = "
             SELECT DISTINCT
                 per.th_per_id AS _id,
@@ -115,8 +117,10 @@ class th_per_comisionM extends BaseModel
             WHERE
                 per.th_per_estado = 1
                 AND per.th_per_id NOT IN (
-                    SELECT th_per_id
-                    FROM _talentoh.th_per_comision
+                    SELECT pc.th_per_id
+                    FROM _talentoh.th_per_comision pc
+                    WHERE pc.id_comision = $id_comision
+                      AND pc.th_per_com_estado = 1
                 );
         ";
 
