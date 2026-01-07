@@ -1,7 +1,7 @@
 <script>
     $(document).ready(function() {
 
-        cargar_datos_discapacidad('<?= $id ?>');
+        cargar_datos_discapacidad('<?= $id_postulante ?>');
         cargar_selects_discapacidad();
 
     });
@@ -50,7 +50,7 @@
     function insertar_editar_discapacidad() {
 
         let parametros = {
-            pos_id: '<?= $id ?>',
+            pos_id: '<?= $id_postulante ?>',
             ddl_discapacidad: $('#ddl_discapacidad').val(),
             txt_porcentaje: $('#txt_porcentaje').val(),
             txt_escala: $('#txt_escala').val(),
@@ -74,7 +74,7 @@
                 if (response == 1) {
                     Swal.fire('', 'Operación realizada con éxito.', 'success');
                     $('#modal_agregar_discapacidad').modal('hide');
-                    cargar_datos_discapacidad(<?= $id ?>);
+                    cargar_datos_discapacidad(<?= $id_postulante ?>);
                     limpiar_campos_discapacidad();
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
@@ -128,7 +128,7 @@
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro eliminado.', 'success');
                     $('#modal_agregar_discapacidad').modal('hide');
-                    cargar_datos_discapacidad('<?= $id ?>');
+                    cargar_datos_discapacidad('<?= $id_postulante ?>');
                 }
             }
         });

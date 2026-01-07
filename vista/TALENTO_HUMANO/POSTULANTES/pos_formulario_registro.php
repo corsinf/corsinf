@@ -163,7 +163,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
         var txt_per_correo_personal_2 = $('#txt_per_correo_personal_2').val();
 
         var parametros = {
-            '_id': '<?= $id ?>',
+            '_id': '<?= $id_postulante ?>',
             'txt_primer_nombre': txt_primer_nombre,
             'txt_segundo_nombre': txt_segundo_nombre,
             'txt_primer_apellido': txt_primer_apellido,
@@ -209,7 +209,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
             success: function(response) {
                 if (response == 1) {
                     if (redireccionar_vista == 'th_informacion_personal') {
-                        redireccionar_vista = 'th_informacion_personal' + '&id=<?= $id ?>';
+                        redireccionar_vista = 'th_informacion_personal' + '&id=<?= $id_postulante ?>';
                     }
 
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
@@ -236,7 +236,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
     }
 
     function delete_datos() {
-        var id = '<?php echo $id; ?>';
+        var id = '<?php echo $id_postulante; ?>';
         Swal.fire({
             title: 'Eliminar Registro?',
             text: "Esta seguro de eliminar este registro?",

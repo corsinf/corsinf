@@ -2,11 +2,11 @@
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 
-$id = '';
+$id_postulante = '';
 $id_persona = '';
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+if (isset($_GET['id_postulante'])) {
+    $id_postulante = $_GET['id_postulante'];
 }
 
 if (isset($_GET['id_persona'])) {
@@ -20,8 +20,8 @@ if (isset($_GET['id_persona'])) {
 
 <script>
     $(document).ready(function() {
-        <?php if (isset($_GET['id'])) { ?>
-            cargarDatos('<?= $id ?>', '<?= $id_persona ?>');
+        <?php if (isset($_GET['id_postulante'])) { ?>
+            cargarDatos('<?= $id_postulante ?>', '<?= $id_persona ?>');
         <?php } ?>
     })
 
@@ -89,7 +89,7 @@ if (isset($_GET['id_persona'])) {
                                                 <div>
                                                     <a href="#" class="d-flex justify-content-center" data-bs-toggle="modal"
                                                         data-bs-target="#modal_agregar_cambiar_foto"
-                                                        onclick="abrir_modal_cambiar_foto('<?= $id ?>');">
+                                                        onclick="abrir_modal_cambiar_foto('<?= $id_postulante ?>');">
                                                         <i class='bx bxs-camera bx-sm'></i>
                                                     </a>
                                                 </div>
@@ -106,7 +106,7 @@ if (isset($_GET['id_persona'])) {
                                             </div>
 
                                             <?php if (isset($_GET['id_persona'])) { ?>
-                                                <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&_id=<?= $id_persona ?>&id_postulante=<?= $id ?>"
+                                                <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&id_persona=<?= $id_persona ?>&id_postulante=<?= $id_postulante ?>"
                                                     class="text-success" title="Editar persona"><i class="bx bx-pencil bx-sm"></i>
                                                 </a>
 
@@ -203,321 +203,14 @@ if (isset($_GET['id_persona'])) {
                         <div class="card-body">
                             <!-- Nav Cards -->
                             <ul class="nav nav-tabs nav-success" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#tab_experiencia" role="tab"
-                                        aria-selected="true">
-                                        <div class="d-flex align-items-center">
-                                            <div class="tab-icon"><i class="bx bxs-briefcase font-18 me-1"></i>
-                                            </div>
-                                            <div class="tab-title">Experiencia</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#successdocs" role="tab"
-                                        aria-selected="true">
-                                        <div class="d-flex align-items-center">
-                                            <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
-                                            </div>
-                                            <div class="tab-title">Documentos</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#successprofile" role="tab"
-                                        aria-selected="false" tabindex="-1">
-                                        <div class="d-flex align-items-center">
-                                            <div class="tab-icon"><i class="bx bx-brain font-18 me-1"></i>
-                                            </div>
-                                            <div class="tab-title">Habilidades</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#tab_discapacidad" role="tab"
-                                        aria-selected="false" tabindex="-1">
-                                        <div class="d-flex align-items-center">
-                                            <div class="tab-icon"><i class="bx bx-brain font-18 me-1"></i>
-                                            </div>
-                                            <div class="tab-title">Discapacidad</div>
-                                        </div>
-                                    </a>
-                                </li>
+
+                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_all_tab.php'); ?>
+
                             </ul>
                             <div class="tab-content pt-3">
-                                <!-- Primera Sección, Historial Laboral -->
-                                <div class="tab-pane fade show active" id="tab_experiencia" role="tabpanel">
-                                    <div class="card">
-                                        <div class="d-flex flex-column mx-4">
-                                            <!-- Experiencia Previa -->
-                                            <div class="card-body">
-                                                <div class="mb-2">
-                                                    <div class="row">
-                                                        <div class="col-9 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Experiencia Previa:
-                                                            </h6>
-                                                        </div>
 
-                                                        <div class="col-3 d-flex justify-content-end">
-                                                            <a href="#"
-                                                                class="text-success icon-hover d-flex align-items-center"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#modal_agregar_experiencia">
-                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span>Agregar</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr>
+                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_all_tab_pane.php'); ?>
 
-                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_experiencia_previa.php'); ?>
-
-                                            </div>
-                                            <!-- Formación Académica -->
-                                            <div class="card-body">
-                                                <div class="mb-2">
-                                                    <div class="row">
-                                                        <div class="col-9 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Formación Académica:
-                                                            </h6>
-                                                        </div>
-                                                        <div class="col-3 d-flex justify-content-end">
-                                                            <a href="#"
-                                                                class="text-success icon-hover d-flex align-items-center"
-                                                                id="btn_modal_agregar_formacion_academica"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#modal_agregar_formacion">
-                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span>Agregar</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr>
-
-                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_formacion_academica.php'); ?>
-
-                                            </div>
-                                            <!-- Certificaciones y capacitación -->
-                                            <div class="card-body">
-                                                <div class="mb-2">
-                                                    <div class="row">
-                                                        <div class="col-9 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Certificación y/o
-                                                                Capacitación:</h6>
-                                                        </div>
-                                                        <div class="col-3 d-flex justify-content-end">
-                                                            <a href="#"
-                                                                class="text-success icon-hover d-flex align-items-center"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#modal_agregar_certificaciones">
-                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span>Agregar</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr>
-
-                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_certificaciones_capacitaciones.php'); ?>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Segunda Sección, Documentos relevantes -->
-                                <div class="tab-pane fade" id="successdocs" role="tabpanel">
-                                    <div class="card">
-                                        <div class="d-flex flex-column mx-4">
-                                            <!-- Documento de Identidad -->
-                                            <div class="card-body">
-                                                <div class="mb-2">
-                                                    <div class="row">
-                                                        <div class="col-7 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Documento de
-                                                                Identidad:</h6>
-                                                        </div>
-                                                        <div
-                                                            class="col-5 d-flex justify-content-end align-items-center">
-                                                            <a href="#"
-                                                                class="text-success icon-hover d-flex align-items-center"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#modal_agregar_documentos_identidad">
-                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span class="">Agregar</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr class="my-0 mb-3">
-
-                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_documento_identidad.php'); ?>
-
-                                            </div>
-                                            <!-- Contratos de Trabajo -->
-                                            <div class="card-body">
-                                                <div class="mb-2">
-                                                    <div class="row">
-                                                        <div class="col-7 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Contratos de Trabajo:
-                                                            </h6>
-                                                        </div>
-                                                        <div
-                                                            class="col-5 d-flex justify-content-end align-items-center">
-                                                            <a href="#"
-                                                                class="text-success icon-hover d-flex align-items-center"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#modal_agregar_contratos">
-                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span class="">Agregar</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr class="my-0 mb-3">
-
-                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_contratos_trabajo.php'); ?>
-
-                                            </div>
-                                            <!-- Certificado Médicos -->
-                                            <div class="card-body my-0">
-                                                <div class="mb-2">
-                                                    <div class="row">
-                                                        <div class="col-7 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Certificados Médicos:
-                                                            </h6>
-                                                        </div>
-                                                        <div
-                                                            class="col-5 d-flex justify-content-end align-items-center">
-                                                            <a href="#"
-                                                                class="text-success icon-hover d-flex align-items-center"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#modal_agregar_certificados_medicos">
-                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span class="">Agregar</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr class="my-0 mb-3">
-
-                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_certificado_medico.php'); ?>
-
-                                            </div>
-                                            <!-- Referencias Laborales -->
-                                            <div class="card-body">
-                                                <div class="mb-2">
-                                                    <div class="row">
-                                                        <div class="col-7 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Referencias laborales:
-                                                            </h6>
-                                                        </div>
-                                                        <div
-                                                            class="col-5 d-flex justify-content-end align-items-center">
-                                                            <a href="#"
-                                                                class="text-success icon-hover d-flex align-items-center"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#modal_agregar_referencia_laboral">
-                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span class="">Agregar</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr class="my-0 mb-3">
-
-                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_referencias_laborales.php'); ?>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Tercera Sección, Idiomas y aptitudes -->
-                                <div class="tab-pane fade" id="successprofile" role="tabpanel">
-                                    <div class="card">
-                                        <div class="d-flex flex-column mx-4">
-                                            <!-- Idiomas -->
-                                            <div class="card-body">
-                                                <div class="mb-1">
-                                                    <div class="row">
-                                                        <div class="col-6 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Idiomas</h6>
-                                                        </div>
-                                                        <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#"
-                                                                class="text-success icon-hover d-flex align-items-center"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#modal_agregar_idioma">
-                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span>Agregar</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr class="my-0">
-
-                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_idiomas.php'); ?>
-
-                                            </div>
-                                            <!-- Aptitudes -->
-                                            <div class="card-body">
-                                                <div class="mb-1">
-                                                    <div class="row">
-                                                        <div class="col-6 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Aptitudes</h6>
-                                                        </div>
-                                                        <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#"
-                                                                class="text-success icon-hover d-flex align-items-center"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#modal_agregar_aptitudes"
-                                                                onclick="activar_select2();">
-                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span>Agregar</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr class="my-0">
-
-                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_aptitudes.php'); ?>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="tab-pane fade" id="tab_discapacidad" role="tabpanel">
-                                    <div class="card">
-                                        <div class="d-flex flex-column mx-4">
-                                            <div class="card-body">
-
-                                                <div class="mb-2">
-                                                    <div class="row">
-                                                        <div class="col-6 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Discapacidad:</h6>
-                                                        </div>
-
-                                                        <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#"
-                                                                class="text-success icon-hover d-flex align-items-center"
-                                                                onclick="abrir_modal_discapacidad('');">
-                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span>Agregar</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <hr>
-
-                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_discapacidad.php'); ?>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -543,7 +236,7 @@ if (isset($_GET['id_persona'])) {
                 <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_formulario_registro.php'); ?>
 
                 <div class="d-flex justify-content-end pt-2">
-                    <?php if ($id == '') { ?>
+                    <?php if ($id_postulante == '') { ?>
                         <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar('th_informacion_personal');" type="button"><i class="bx bx-save"></i> Guardar</button>
                     <?php } else { ?>
                         <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar('th_informacion_personal');" type="button"><i class="bx bx-save"></i> Guardar</button>

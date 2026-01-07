@@ -1,7 +1,9 @@
+<!-- Vista dada de baja no se utiliza 07/01/2026 -->
+
 <script>
     $(document).ready(function() {
         <?php if (isset($_GET['id'])) { ?>
-            //cargarDatos_informacion_adicional(<?= $id ?>);
+            //cargarDatos_informacion_adicional(<?= $id_postulante ?>);
         <?php } ?>
     });
 
@@ -72,7 +74,7 @@
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {});
                     <?php if (isset($_GET['id'])) { ?>
-                        cargarDatos_informacion_adicional(<?= $id ?>);
+                        cargarDatos_informacion_adicional(<?= $id_postulante ?>);
                     <?php } ?>
                     limpiar_validaciones_informacion_adicional();
                     $('#modal_informacion_adicional').modal('hide');

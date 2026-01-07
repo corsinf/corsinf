@@ -2,11 +2,11 @@
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 
-$id = '';
+$id_postulante = '';
 $id_persona = '';
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+if (isset($_GET['id_postulante'])) {
+    $id_postulante = $_GET['id_postulante'];
 }
 
 if (isset($_GET['id_persona'])) {
@@ -17,8 +17,8 @@ if (isset($_GET['id_persona'])) {
 
 <script>
     $(document).ready(function() {
-        <?php if (isset($_GET['id'])) { ?>
-            cargarDatos('<?= $id ?>');
+        <?php if (isset($_GET['id_postulante'])) { ?>
+            cargarDatos('<?= $id_postulante ?>');
         <?php } ?>
     })
 </script>
@@ -48,7 +48,7 @@ if (isset($_GET['id_persona'])) {
                             </div>
                             <h5 class="mb-0 text-primary">
                                 <?php
-                                if ($id == '') {
+                                if ($id_postulante == '') {
                                     echo 'Registrar Postulante';
                                 } else {
                                     echo 'Modificar Postulante';
@@ -65,7 +65,7 @@ if (isset($_GET['id_persona'])) {
                         <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_formulario_registro.php'); ?>
 
                         <div class="d-flex justify-content-end pt-2">
-                            <?php if ($id == '') { ?>
+                            <?php if ($id_postulante == '') { ?>
                                 <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar();" type="button"><i class="bx bx-save"></i> Guardar</button>
                             <?php } else { ?>
                                 <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar();" type="button"><i class="bx bx-save"></i> Guardar</button>

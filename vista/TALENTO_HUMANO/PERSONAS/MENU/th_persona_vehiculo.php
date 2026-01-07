@@ -1,6 +1,6 @@
 <script>
     $(document).ready(function() {
-        cargar_datos_vehiculos(<?= $_id ?>);
+        cargar_datos_vehiculos(<?= $id_persona ?>);
         cargar_selects_vehiculos();
     });
 
@@ -47,7 +47,7 @@
     function insertar_editar_vehiculo() {
         var txt_placa_original = $('#txt_placa_original').val();
         var ddl_tipo_vehiculo = $('#ddl_tipo_vehiculo').val();
-        var txt_id_persona = '<?= $_id ?>';
+        var txt_id_persona = '<?= $id_persona ?>';
         var txt_id_vehiculo = $('#txt_vehiculo_id').val();
 
         var parametros_vehiculo = {
@@ -74,7 +74,7 @@
                 if (response == 1) {
                     Swal.fire('', 'Operación realizada con éxito.', 'success');
                     $('#modal_agregar_vehiculo').modal('hide');
-                    cargar_datos_vehiculos(<?= $_id  ?>);
+                    cargar_datos_vehiculos(<?= $id_persona  ?>);
                     limpiar_campos_vehiculo_modal();
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
@@ -121,10 +121,8 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
-                    <?php if (isset($_GET['_id']) || isset($_GET['id'])) { ?>
-                        cargar_datos_vehiculos(<?= $_id ?>);
-                        limpiar_campos_vehiculo_modal();
-                    <?php } ?>
+                    cargar_datos_vehiculos(<?= $id_persona ?>);
+                    limpiar_campos_vehiculo_modal();
                     $('#modal_agregar_vehiculo').modal('hide');
                 }
             }

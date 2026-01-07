@@ -1,6 +1,6 @@
 <script>
     $(document).ready(function() {
-        cargar_datos_formacion_academica(<?= $id ?>);
+        cargar_datos_formacion_academica(<?= $id_postulante ?>);
         cargar_selects2();
 
         function cargar_selects2() {
@@ -106,10 +106,8 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_formacion_academica(<?= $id ?>);
-                        limpiar_campos_formacion_academica_modal();
-                    <?php } ?>
+                    cargar_datos_formacion_academica('<?= $id_postulante ?>');
+                    limpiar_campos_formacion_academica_modal();
                     $('#modal_agregar_formacion').modal('hide');
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
@@ -157,10 +155,8 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_formacion_academica(<?= $id ?>);
-                        limpiar_campos_formacion_academica_modal();
-                    <?php } ?>
+                    cargar_datos_formacion_academica('<?= $id_postulante ?>');
+                    limpiar_campos_formacion_academica_modal();
                     $('#modal_agregar_formacion').modal('hide');
                 }
             }

@@ -1,6 +1,6 @@
 <script>
     $(document).ready(function() {
-        cargar_datos_referencias_laborales(<?= $id ?>);
+        cargar_datos_referencias_laborales(<?= $id_postulante ?>);
     });
 
     //Formación Académica
@@ -88,9 +88,7 @@
                         });
                     } else if (response == 1) {
                         Swal.fire('', 'Operación realizada con éxito.', 'success');
-                        <?php if (isset($_GET['id'])) { ?>
-                            cargar_datos_referencias_laborales(<?= $id ?>);
-                        <?php } ?>
+                        cargar_datos_referencias_laborales('<?= $id_postulante ?>');
                         limpiar_parametros_referencias_laborales();
                         $('#modal_agregar_referencia_laboral').modal('hide');
                     }
@@ -137,9 +135,7 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_referencias_laborales(<?= $id ?>);
-                    <?php } ?>
+                    cargar_datos_referencias_laborales('<?= $id_postulante ?>');
                     limpiar_parametros_referencias_laborales();
                     $('#modal_agregar_referencia_laboral').modal('hide');
                 }

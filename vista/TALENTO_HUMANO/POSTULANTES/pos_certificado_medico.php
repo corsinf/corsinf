@@ -1,6 +1,6 @@
 <script>
     $(document).ready(function() {
-        cargar_datos_cerficados_medicos(<?= $id ?>);
+        cargar_datos_cerficados_medicos(<?= $id_postulante ?>);
     });
 
     //Certificados Médicos
@@ -83,9 +83,7 @@
                         });
                     } else if (response == 1) {
                         Swal.fire('', 'Operación realizada con éxito.', 'success');
-                        <?php if (isset($_GET['id'])) { ?>
-                            cargar_datos_cerficados_medicos(<?= $id ?>);
-                        <?php } ?>
+                        cargar_datos_cerficados_medicos('<?= $id_postulante ?>');
                         limpiar_parametros_certificados_medicos();
                         $('#modal_agregar_certificados_medicos').modal('hide');
                     }
@@ -132,9 +130,7 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_cerficados_medicos(<?= $id ?>);
-                    <?php } ?>
+                    cargar_datos_cerficados_medicos('<?= $id_postulante ?>');
                     limpiar_parametros_certificados_medicos();
                     $('#modal_agregar_certificados_medicos').modal('hide');
                 }

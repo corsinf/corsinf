@@ -56,8 +56,8 @@
                         });
                     } else if (response == 1) {
                         Swal.fire('', 'Operación realizada con éxito.', 'success');
-                        <?php if (isset($_GET['_id'])) { ?>
-                            recargar_imagen_persona('<?= $_id ?>');
+                        <?php if (isset($_GET['id_persona'])) { ?>
+                            recargar_imagen_persona('<?= $id_persona ?>');
                         <?php } ?>
                         limpiar_parametros_cambiar_foto_persona();
                         $('#modal_agregar_cambiar_foto_persona').modal('hide');

@@ -19,18 +19,25 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             columns: [{
                     data: null,
                     render: function(data, type, item) {
-                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_personal&id=${item._id_postulante ?? 'postulante'}&id_persona=${item.id_persona}`;
-                        btns = `<a href="${href}" class="btn btn-xs btn-primary" title="CV"><i class="bx bxs-user-pin fs-6 me-0"></i></a>`;
+                        // href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_personal&id_postulante=${item._id_postulante ?? 'postulante'}&id_persona=${item.id_persona}`;
+                        // btns = `<a href="${href}" class="btn btn-xs btn-primary" title="CV"><i class="bx bxs-user-pin fs-6 me-0"></i></a>`;
 
-                        return btns;
+                        // return btns;
+
+                        return fecha_formateada(item.fecha_creacion);
                     }
                 },
 
                 {
                     data: null,
                     render: function(data, type, item) {
-                        href =
-                            `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&id_persona=${item.id_persona}&_origen=nomina&_persona_nomina=true`;
+                        id_postulante = 'postulante';
+
+                        if (item._id_postulante != null && item._id_postulante != '') {
+                            id_postulante = item._id_postulante;
+                        }
+
+                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&id_persona=${item.id_persona}&id_postulante=${id_postulante}&_origen=nomina&_persona_nomina=true`;
                         return `<a href="${href}"><u>${item.primer_apellido} ${item.segundo_apellido} ${item.primer_nombre} ${item.segundo_nombre}</u></a>`;
                     }
                 },

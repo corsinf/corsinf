@@ -1,7 +1,7 @@
 <script>
     $(document).ready(function() {
 
-        cargar_datos_comision(<?= $_id ?>);
+        cargar_datos_comision(<?= $id_persona ?>);
         cargar_selects_comision();
 
     });
@@ -45,7 +45,7 @@
     function insertar_editar_comision() {
 
         let parametros = {
-            per_id: '<?= $_id ?>',
+            per_id: '<?= $id_persona ?>',
             ddl_comision: $('#ddl_comision').val(),
             _id: $('#txt_comision_id').val()
         };
@@ -65,7 +65,7 @@
                 if (response == 1) {
                     Swal.fire('', 'Operación realizada con éxito.', 'success');
                     $('#modal_agregar_comision').modal('hide');
-                    cargar_datos_comision(<?= $_id ?>);
+                    cargar_datos_comision(<?= $id_persona ?>);
                     limpiar_campos_comision_modal();
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
@@ -117,7 +117,7 @@
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro eliminado.', 'success');
                     $('#modal_agregar_comision').modal('hide');
-                    cargar_datos_comision(<?= $_id ?>);
+                    cargar_datos_comision(<?= $id_persona ?>);
                     limpiar_campos_comision_modal();
                 }
             }

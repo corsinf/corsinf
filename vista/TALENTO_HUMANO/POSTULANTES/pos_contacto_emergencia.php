@@ -1,6 +1,6 @@
 <script>
     $(document).ready(function() {
-        cargar_datos_contactos_emergencia(<?= $id ?>);
+        cargar_datos_contactos_emergencia(<?= $id_postulante ?>);
     });
 
     //Formación Académica
@@ -23,7 +23,7 @@
 
         var txt_nombre_contacto_emergencia = $('#txt_nombre_contacto_emergencia').val();
         var txt_telefono_contacto_emergencia = $('#txt_telefono_contacto_emergencia').val();
-        var txt_id_postulante = '<?= $id ?>';
+        var txt_id_postulante = '<?= $id_postulante ?>';
         var txt_id_contacto_emergencia = $('#txt_id_contacto_emergencia').val();
         var parametros_contacto_emergencia = {
             '_id': txt_id_contacto_emergencia,
@@ -50,9 +50,7 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_contactos_emergencia(<?= $id ?>);
-                    <?php } ?>
+                    cargar_datos_contactos_emergencia('<?= $id_postulante ?>');
                     limpiar_campos_contacto_emergencia_modal();
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
@@ -95,9 +93,7 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_contactos_emergencia(<?= $id ?>);
-                    <?php } ?>
+                    cargar_datos_contactos_emergencia('<?= $id_postulante ?>');
                     limpiar_campos_contacto_emergencia_modal();
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
@@ -143,9 +139,7 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_contactos_emergencia(<?= $id ?>);
-                    <?php } ?>
+                    cargar_datos_contactos_emergencia('<?= $id_postulante ?>');
                     limpiar_campos_contacto_emergencia_modal();
                 }
             }

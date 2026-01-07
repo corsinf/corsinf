@@ -1,8 +1,4 @@
 <script>
-    $(document).ready(function() {
-        dispositivos();
-    });
-
     function cargar_departamento(id) {
         $.ajax({
             data: {
@@ -49,7 +45,7 @@
 
         const parametros = {
             '_id': perdepId || '',
-            'id_persona': '<?= $_id ?>',
+            'id_persona': '<?= $id_persona ?>',
             'id_departamento': deptId,
             'txt_visitor': $('#txt_visitor').val() || ''
         };

@@ -1,7 +1,7 @@
 <script>
     $(document).ready(function() {
-        cargar_datos_experiencia_laboral(<?= $id ?>);
-        console.log('Cargando experiencia laboral del postulante ID: <?= $id ?>');
+        cargar_datos_experiencia_laboral(<?= $id_postulante ?>);
+        // console.log('Cargando experiencia laboral del postulante ID: <?= $id_postulante ?>');
     });
 
     //Experiencia Laboral
@@ -71,7 +71,7 @@
         }
 
         var txt_responsabilidades_logros = $('#txt_responsabilidades_logros').val();
-        var txt_id_postulante = '<?= $id ?>';
+        var txt_id_postulante = '<?= $id_postulante ?>';
         var txt_id_experiencia_laboral = $('#txt_experiencia_id').val();
         var txt_sueldo = $('#txt_sueldo').val();
 
@@ -106,10 +106,8 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_experiencia_laboral(<?= $id ?>);
-                        limpiar_campos_experiencia_laboral_modal();
-                    <?php } ?>
+                    cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
+                    limpiar_campos_experiencia_laboral_modal();
                     $('#modal_agregar_experiencia').modal('hide');
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
@@ -159,10 +157,8 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_experiencia_laboral(<?= $id ?>);
-                        limpiar_campos_experiencia_laboral_modal();
-                    <?php } ?>
+                    cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
+                    limpiar_campos_experiencia_laboral_modal();
                     $('#modal_agregar_experiencia').modal('hide');
                 }
             }

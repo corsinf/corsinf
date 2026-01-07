@@ -11,7 +11,7 @@ if (isset($_GET['id_persona'])) {
 $id_postulante = '';
 if (isset($_GET['id_postulante'])) {
     $id_postulante = $_GET['id_postulante'];
-    $redireccionar_vista = "th_informacion_personal&id=$id_postulante&id_persona=$id_persona";
+    $redireccionar_vista = "th_informacion_personal&id_postulante=$id_postulante&id_persona=$id_persona";
 }
 
 if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
@@ -28,6 +28,53 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <script src="../js/RECURSOS_HUMANOS/biometria.js"></script>
+
+<script>
+    // Postulante agregar en caso de que no este
+
+    $(document).ready(function() {
+        <?php if (isset($_GET['id_postulante'])) { ?>
+            recargar_persona_postulante('<?= $id_postulante ?>', '<?= $id_persona ?>');
+        <?php } ?>
+    })
+
+    function recargar_persona_postulante(id, id_persona) {
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?listar=true',
+            type: 'post',
+            data: {
+                id: id,
+                id_persona: id_persona
+            },
+            dataType: 'json',
+            success: function(response) {
+
+                if (response.recargar == 1 && response.id_postulante) {
+                    let nueva_Url = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&id_persona=<?= $id_persona ?>&id_postulante=${response.id_postulante}&_origen=nomina&_persona_nomina=true`;
+
+                    // Cambia la URL sin recargar
+                    window.history.replaceState(null, '', nueva_Url);
+
+                    // Recarga real solo una vez
+                    location.reload();
+                    return;
+                }
+
+                // //Input para todos los pos_id que se vayan a colocar en los modales
+                $('input[name="txt_postulante_id"]').val(response[0].th_pos_id);
+                $('input[name="txt_postulante_cedula"]').val(response[0].th_pos_cedula);
+            },
+
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
+    }
+</script>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -229,69 +276,6 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
     });
 </script>
 
-<script>
-    function cargar_departamento(id) {
-        $.ajax({
-            data: {
-                id: id
-            },
-            url: '../controlador/TALENTO_HUMANO/th_personasC.php?listar_persona_departamento=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                if (response && response.length > 0) {
-                    $('#id_perdep').val(response[0]._id_perdep);
-                    $('#ddl_departamentos').append($('<option>', {
-                        value: response[0].id_departamento,
-                        text: response[0].nombre_departamento,
-                        selected: true
-                    }));
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error al cargar departamento:', error);
-            }
-        });
-    }
-
-    function insertar_persona_departamento() {
-        const deptId = $('#ddl_departamentos').val();
-        const perdepId = $('#id_perdep').val();
-
-        if (!deptId) {
-            Swal.fire('', 'Seleccione un departamento', 'warning');
-            return;
-        }
-
-        const parametros = {
-            '_id': perdepId || '',
-            'id_persona': '<?= $id_persona ?>',
-            'id_departamento': deptId,
-            'txt_visitor': $('#txt_visitor').val() || ''
-        };
-
-        $.ajax({
-            url: '../controlador/TALENTO_HUMANO/th_personas_departamentosC.php?insertar_editar_persona=true',
-            type: 'post',
-            dataType: 'json',
-            data: {
-                parametros: parametros
-            },
-            success: function(response) {
-                if (response == 1) {
-                    Swal.fire('', 'Operación realizada con éxito.', 'success').then(() => {
-                        location.reload();
-                    });
-                } else if (response == -2) {
-                    Swal.fire('', 'Esta persona ya está asignada a este departamento', 'warning');
-                } else {
-                    Swal.fire('', 'Error en la operación', 'error');
-                }
-            }
-        });
-    }
-</script>
-
 <div class="page-wrapper">
     <div class="page-content">
         <!--breadcrumb-->
@@ -324,8 +308,8 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                         <div class="card-body">
                             <!-- Nav Cards -->
                             <ul class="nav nav-tabs nav-success" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#tab_persona" role="tab"
+                                <li class="nav-item border" role="presentation">
+                                    <a class="nav-link border-dark rounded-0 active" data-bs-toggle="tab" href="#tab_persona" role="tab"
                                         aria-selected="true">
                                         <div class="d-flex align-items-center">
                                             <div class="tab-icon"><i class="bx bxs-briefcase font-18 me-1"></i>
@@ -336,8 +320,8 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                 </li>
 
                                 <?php if (isset($_GET['_persona_nomina']) && $_GET['_persona_nomina'] == 'true') { ?>
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link" data-bs-toggle="tab" href="#tab_departamento" role="tab"
+                                    <li class="nav-item border" role="presentation">
+                                        <a class="nav-link border-dark rounded-0" data-bs-toggle="tab" href="#tab_departamento" role="tab"
                                             aria-selected="true">
                                             <div class="d-flex align-items-center">
                                                 <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
@@ -346,8 +330,8 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                             </div>
                                         </a>
                                     </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link" data-bs-toggle="tab" href="#tab_estado_laboral" role="tab"
+                                    <li class="nav-item border" role="presentation">
+                                        <a class="nav-link border-dark rounded-0" data-bs-toggle="tab" href="#tab_estado_laboral" role="tab"
                                             aria-selected="true">
                                             <div class="d-flex align-items-center">
                                                 <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
@@ -356,8 +340,8 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                             </div>
                                         </a>
                                     </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link" data-bs-toggle="tab" href="#tab_vehiculos" role="tab"
+                                    <li class="nav-item border" role="presentation">
+                                        <a class="nav-link border-dark rounded-0" data-bs-toggle="tab" href="#tab_vehiculos" role="tab"
                                             aria-selected="true">
                                             <div class="d-flex align-items-center">
                                                 <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
@@ -366,8 +350,8 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                             </div>
                                         </a>
                                     </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link" data-bs-toggle="tab" href="#tab_nomina" role="tab"
+                                    <li class="nav-item border" role="presentation">
+                                        <a class="nav-link border-dark rounded-0" data-bs-toggle="tab" href="#tab_nomina" role="tab"
                                             aria-selected="true">
                                             <div class="d-flex align-items-center">
                                                 <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
@@ -376,8 +360,8 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                             </div>
                                         </a>
                                     </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link" data-bs-toggle="tab" href="#tab_comision" role="tab"
+                                    <li class="nav-item border" role="presentation">
+                                        <a class="nav-link border-dark rounded-0" data-bs-toggle="tab" href="#tab_comision" role="tab"
                                             aria-selected="true">
                                             <div class="d-flex align-items-center">
                                                 <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
@@ -386,6 +370,11 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                             </div>
                                         </a>
                                     </li>
+
+                                    <?php if (isset($_GET['id_postulante']) && $_GET['id_postulante'] != null) { ?>
+                                        <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_all_tab.php'); ?>
+                                    <?php } ?>
+
                                 <?php } ?>
 
 
@@ -483,7 +472,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                                             <div class="col-6 d-flex align-items-center">
                                                                 <h6 class="mb-0 fw-bold text-primary">Estado laboral:</h6>
                                                             </div>
-                                                            <div class="col-6 d-flex justify-content-end">
+                                                            <div id="pnl_crear_estado_laboral" class="col-6 d-flex justify-content-end">
                                                                 <a href="#"
                                                                     class="text-success icon-hover d-flex align-items-center"
                                                                     data-bs-toggle="modal"
@@ -532,6 +521,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="tab-pane fade" id="tab_nomina" role="tabpanel">
                                         <div class="card">
                                             <div class="d-flex flex-column mx-4">
@@ -589,8 +579,13 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                             </div>
                                         </div>
                                     </div>
-
+                                    
+                                    <?php if (isset($_GET['id_postulante']) && $_GET['id_postulante'] != null) { ?>
+                                        <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_all_tab_pane.php'); ?>
+                                    <?php } ?>
                                 <?php } ?>
+
+
 
                             </div>
                         </div>

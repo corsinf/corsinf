@@ -1,7 +1,7 @@
 <script>
     $(document).ready(function() {
 
-        cargar_datos_nomina(<?= $_id ?>);
+        cargar_datos_nomina(<?= $id_persona ?>);
 
         cargar_selects_nomina();
 
@@ -54,7 +54,7 @@
         var txt_remuneracion = $('#txt_remuneracion').val();
         var txt_fecha_ini = $('#txt_fecha_ini').val();
         var txt_fecha_fin = $('#txt_fecha_fin').val();
-        var per_id = '<?= $_id ?>';
+        var per_id = '<?= $id_persona ?>';
         var txt_nomina_id = $('#txt_nomina_id').val();
 
         var parametros_nomina = {
@@ -84,7 +84,7 @@
                 if (response == 1) {
                     Swal.fire('', 'Operación realizada con éxito.', 'success');
                     $('#modal_agregar_nomina').modal('hide');
-                    cargar_datos_nomina(<?= $_id ?>);
+                    cargar_datos_nomina(<?= $id_persona ?>);
                     limpiar_campos_nomina_modal();
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
@@ -139,7 +139,7 @@
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
                     $('#modal_agregar_nomina').modal('hide');
-                    cargar_datos_nomina(<?= $_id ?>);
+                    cargar_datos_nomina(<?= $id_persona ?>);
                     limpiar_campos_nomina_modal();
                 }
             }

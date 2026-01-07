@@ -1,6 +1,6 @@
 <script>
     $(document).ready(function() {
-        cargar_datos_idiomas(<?= $id ?>);
+        cargar_datos_idiomas(<?= $id_postulante ?>);
     });
 
     //Idiomas
@@ -72,10 +72,8 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_idiomas(<?= $id ?>);
-                        limpiar_campos_idiomas_modal();
-                    <?php } ?>
+                    cargar_datos_idiomas('<?= $id_postulante ?>');
+                    limpiar_campos_idiomas_modal();
                     $('#modal_agregar_idioma').modal('hide');
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
@@ -122,7 +120,7 @@
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_idiomas(<?= $id ?>);
+                        cargar_datos_idiomas(<?= $id_postulante ?>);
                         limpiar_campos_idiomas_modal();
                     <?php } ?>
                     $('#modal_agregar_idioma').modal('hide');

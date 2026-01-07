@@ -1,6 +1,6 @@
 <script>
     $(document).ready(function() {
-        cargar_datos_estado_laboral(<?= $_id ?>);
+        cargar_datos_estado_laboral(<?= $id_persona ?>);
         cargar_selects();
     });
 
@@ -93,7 +93,7 @@
         // Si el checkbox está marcado, enviar null
         var txt_fecha_salida_estado = $('#cbx_fecha_salida_estado').is(':checked') ? null : $('#txt_fecha_salida_estado').val();
 
-        var per_id = '<?= $_id ?>';
+        var per_id = '<?= $id_persona ?>';
         var txt_experiencia_estado_id = $('#txt_experiencia_estado_id').val();
         var parametros_estado_laboral = {
             'per_id': per_id,
@@ -121,7 +121,7 @@
                 if (response == 1) {
                     Swal.fire('', 'Operación realizada con éxito.', 'success');
                     $('#modal_estado_laboral').modal('hide');
-                    cargar_datos_estado_laboral(<?= $_id ?>);
+                    cargar_datos_estado_laboral(<?= $id_persona ?>);
                     limpiar_campos_estado_laboral_modal();
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
@@ -181,7 +181,7 @@
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
                     $('#modal_estado_laboral').modal('hide');
-                    cargar_datos_estado_laboral(<?= $_id ?>);
+                    cargar_datos_estado_laboral(<?= $id_persona ?>);
                     limpiar_campos_estado_laboral_modal();
                 }
             }
@@ -273,11 +273,9 @@
                             <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" onchange="ocultar_opciones_estado();" required>
                                 <option selected disabled value="">-- Seleccione un Estado Laboral --</option>
                                 <option value="Activo">Activo</option>
-                                <option value="Inactivo">Inactivo</option>
                                 <option value="Prueba">En prueba</option>
                                 <option value="Pasante">Pasante</option>
                                 <option value="Freelancer">Freelancer</option>
-                                <option value="Autonomo">Autónomo</option>
                             </select>
                         </div>
                         <div class="col-md-6">

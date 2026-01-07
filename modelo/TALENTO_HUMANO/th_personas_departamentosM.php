@@ -29,7 +29,8 @@ class th_personas_departamentosM extends BaseModel
                     per.th_per_telefono_1 AS telefono_1,
                     per.th_per_correo AS correo,
                     per.th_pos_id AS _id_postulante,
-                    dep.th_dep_nombre AS nombre_departamento
+                    dep.th_dep_nombre AS nombre_departamento,
+                    per.th_per_fecha_creacion AS fecha_creacion
                 FROM
                 th_personas_departamentos per_dep
                 INNER JOIN th_personas per ON per_dep.th_per_id = per.th_per_id 
