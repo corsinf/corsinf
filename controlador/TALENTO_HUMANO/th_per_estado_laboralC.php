@@ -103,7 +103,10 @@ class th_per_estado_laboralC
             $texto = '<div class="alert alert-info">No hay registros de estado laboral.</div>';
         }
 
-        return $texto;
+        return [
+            'html' => $texto,
+            'tiene_registros' => !empty($datos)
+        ];
     }
 
     function listar_modal($id)

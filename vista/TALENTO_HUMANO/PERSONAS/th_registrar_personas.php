@@ -474,7 +474,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                                         <div class="col-6 d-flex align-items-center">
                                                             <h6 class="mb-0 fw-bold text-primary">Estado laboral:</h6>
                                                         </div>
-                                                        <div class="col-6 d-flex justify-content-end">
+                                                        <div id="pnl_crear_estado_laboral" class="col-6 d-flex justify-content-end">
                                                             <a href="#"
                                                                 class="text-success icon-hover d-flex align-items-center"
                                                                 data-bs-toggle="modal"

@@ -41,12 +41,15 @@ class th_pos_experiencia_laboralC
             $fecha_inicio_experiencia = date('d/m/Y', strtotime($value['th_expl_fecha_inicio_experiencia']));
             //$fecha_fin_experiencia = $value['th_expl_fecha_fin_experiencia'] == '' ? 'Actualidad' : date('d/m/Y', strtotime($value['th_expl_fecha_fin_experiencia']));
             $fecha_fin_experiencia = $value['th_expl_cbx_fecha_fin_experiencia'] == 1 ? 'Actualidad' : date('d/m/Y', strtotime($value['th_expl_fecha_fin_experiencia']));
+
+           $sueldo_actual = number_format($value['th_expl_sueldo'], 2, '.', ',');
             $texto .=
                 <<<HTML
                     <div class="row mb-col">
                         <div class="col-10">
                             <h6 class="fw-bold">{$value['th_expl_nombre_empresa']}</h6>
                             <p class="m-0">{$value['th_expl_cargos_ocupados']}</p>
+                            <p class="m-0">{$sueldo_actual}</p>
                             <p class="m-0">{$fecha_inicio_experiencia} - {$fecha_fin_experiencia}</p>
                             <p class="m-0">{$value['th_expl_responsabilidades_logros']}</p>
                         </div>
@@ -83,6 +86,7 @@ class th_pos_experiencia_laboralC
             array('campo' => 'th_expl_fecha_fin_experiencia', 'dato' => $parametros['txt_fecha_final_laboral']),
             array('campo' => 'th_expl_cbx_fecha_fin_experiencia', 'dato' => $parametros['cbx_fecha_final_laboral']),
             array('campo' => 'th_expl_responsabilidades_logros', 'dato' => $parametros['txt_responsabilidades_logros']),
+            array('campo' => 'th_expl_sueldo', 'dato' => $parametros['txt_sueldo']),
             array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']),
 
         );

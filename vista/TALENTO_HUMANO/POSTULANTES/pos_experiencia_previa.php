@@ -52,6 +52,7 @@
 
                 $('#txt_responsabilidades_logros').val(response[0].th_expl_responsabilidades_logros);
                 $('#txt_experiencia_id').val(response[0]._id);
+                $('#txt_sueldo').val(response[0].th_expl_sueldo);
             }
         });
     }
@@ -72,6 +73,7 @@
         var txt_responsabilidades_logros = $('#txt_responsabilidades_logros').val();
         var txt_id_postulante = '<?= $id ?>';
         var txt_id_experiencia_laboral = $('#txt_experiencia_id').val();
+        var txt_sueldo = $('#txt_sueldo').val();
 
         var parametros_experiencia_laboral = {
             '_id': txt_id_experiencia_laboral,
@@ -82,6 +84,7 @@
             'txt_fecha_final_laboral': txt_fecha_final_laboral,
             'cbx_fecha_final_laboral': cbx_fecha_final_laboral,
             'txt_responsabilidades_logros': txt_responsabilidades_logros,
+            'txt_sueldo': txt_sueldo,
         }
 
         if ($("#form_experiencia_laboral").valid()) {
@@ -177,6 +180,7 @@
         $('#cbx_fecha_final_laboral').prop('checked', false);
         $('#txt_responsabilidades_logros').val('');
         $('#txt_experiencia_id').val('')
+        $('#txt_sueldo').val('')
         //Cambiar texto
         $('#lbl_titulo_experiencia_laboral').html('Agregar Experiencia Laboral');
         $('#btn_guardar_experiencia').html('<i class="bx bx-save"></i>Agregar');
@@ -268,6 +272,21 @@
                         <div class="col-md-12">
                             <label for="txt_cargos_ocupados" class="form-label form-label-sm">Cargos Ocupados </label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_cargos_ocupados" id="txt_cargos_ocupados" maxlength="100">
+                        </div>
+                    </div>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_sueldo" class="form-label form-label-sm">
+                                Sueldo
+                            </label>
+                            <input
+                                type="number"
+                                class="form-control form-control-sm"
+                                name="txt_sueldo"
+                                id="txt_sueldo"
+                                step="0.01"
+                                min="0"
+                                >
                         </div>
                     </div>
 

@@ -1,153 +1,215 @@
-<style>
-    /* Bloqueo visual del contenido */
-    .demo-locked {
-        filter: blur(2px) grayscale(35%);
-        pointer-events: none;
-        user-select: none;
+<?php
+$modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
+
+?>
+
+<script src="../lib/jquery_validation/jquery.validate.js"></script>
+<script src="../js/GENERAL/operaciones_generales.js"></script>
+<script type="text/javascript">
+    var tbl_protecion_datos;
+    $(document).ready(function() {
+
+        tbl_protecion_datos = $('#tbl_protecion_datos').DataTable($.extend({}, configuracion_datatable('Codigo', 'Nombre'), {
+            reponsive: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            },
+            ajax: {
+                url: '../controlador/TALENTO_HUMANO/th_proteccion_datos_personaC.php?listar=true',
+                dataSrc: ''
+            },
+            columns: [{
+                data: null,
+                render: function(data, type, item) {
+                    href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_comision&_id=${item._id}`;
+                    return `<a href="${href}"><u>${item.nombre_completo}</u></a>`;
+                }
+            }, {
+                data: 'th_prod_rol'
+            }, {
+                data: null,
+                orderable: false,
+                className: 'text-center',
+                render: function(data, type, item) {
+                    return `
+                        <div class="d-flex justify-content-center gap-1">
+                            <button type="button" class="btn btn-danger btn-xs" onclick="delete_datos_persona_proteccion('${item._id}')">
+                                <i class="bx bx-trash fs-7 fw-bold"></i>
+                            </button>
+                        </div>
+                    `;
+                }
+            }],
+            order: [
+                [1, 'asc']
+            ]
+        }));
+
+        cargar_selects2();
+
+        function cargar_selects2() {
+            url_personasC = '../controlador/TALENTO_HUMANO/th_personasC.php?buscar=true';
+            cargar_select2_url('ddl_personas', url_personasC, '', '#modal_registrar_persona');
+        }
+
+    });
+
+    function delete_datos_persona_proteccion(id) {
+        Swal.fire({
+            title: 'Eliminar Registro',
+            text: '¿Está seguro de eliminar este registro?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    url: '../controlador/TALENTO_HUMANO/th_proteccion_datos_personaC.php?eliminar=true',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        id: id
+                    },
+                    success: function(resp) {
+
+                        if (resp == 1 || resp.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Eliminado',
+                                text: 'El registro fue eliminado correctamente.',
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+
+                            if (typeof tbl_protecion_datos !== 'undefined') {
+                                tbl_protecion_datos.ajax.reload(null, false);
+                            }
+
+                        } else {
+                            Swal.fire('', 'No se pudo eliminar el registro.', 'error');
+                        }
+                    },
+                    error: function() {
+                        Swal.fire('', 'Error en el servidor.', 'error');
+                    }
+                });
+            }
+        });
     }
 
-    /* Tarjeta elegante estilo “demo” */
-    .demo-card {
-        border-radius: 1rem;
-        background: #121317;
-        color: #e9ecef;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+
+    function insertar_editar_proteccion_datos() {
+
+        var ddl_personas = $('#ddl_personas').val() || '';;
+        var ddl_rol = $('#ddl_rol').val() || '';
+        var th_prod_id = $('#txt_th_prod_id').val() || '';
+
+        var parametros_proteccion = {
+            '_id': th_prod_id,
+            'th_per_id': ddl_personas,
+            'th_prod_rol': ddl_rol
+        };
+
+        if ($("#form_proteccion_datos").valid()) {
+            insertar_proteccion_datos(parametros_proteccion);
+        }
     }
 
-    .demo-ribbon {
-        position: absolute;
-        top: 14px;
-        right: -44px;
-        transform: rotate(35deg);
-        background: linear-gradient(90deg, #dc3545, #ff6b6b);
-        color: #fff;
-        padding: 6px 70px;
-        font-weight: 700;
-        letter-spacing: .05em;
-        box-shadow: 0 4px 12px rgba(220, 53, 69, .35);
-        border-radius: .25rem;
-        font-size: .8rem;
-    }
+    function insertar_proteccion_datos(parametros) {
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/TALENTO_HUMANO/th_proteccion_datos_personaC.php?insertar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
 
-    .demo-svg {
-        width: 108px;
-        height: 108px;
+                if (response == 1 || response == 2) {
+                    Swal.fire('', 'Operación realizada con éxito.', 'success');
+                    $('#modal_registrar_persona').modal('hide');
+                    tbl_protecion_datos.ajax.reload(null, false);
+                    limpiar_campos_proteccion_datos();
+                } else if (response == -3) {
+                    Swal.fire('', 'Operación fallida rol asignado', 'warning');
+                } else {
+                    Swal.fire('', 'Operación fallida', 'warning');
+                }
+            }
+        });
     }
-
-    .badge-soft {
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        color: #dee2e6;
-    }
-
-    .btn-outline-light:hover {
-        color: #000;
-    }
-</style>
+</script>
 
 <div class="page-wrapper">
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">PROXIMAMENTE</div>
+            <div class="breadcrumb-title pe-3">Protección de datos</div>
+            <?php
+            // print_r($_SESSION['INICIO']);die();
+
+            ?>
             <div class="ps-3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
-                        <li class="breadcrumb-item"><a href="#"><i class="bx bx-home-alt"></i></a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Vista bloqueada (PROXIMAMENTE)</li>
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Lista de Personas
+                        </li>
                     </ol>
                 </nav>
             </div>
         </div>
         <!--end breadcrumb-->
 
-        <!-- Tarjeta PROXIMAMENTE -->
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-10">
-                <div class="position-relative demo-card p-4 p-md-5 mb-4">
-                    <span class="demo-ribbon">PROXIMAMENTE</span>
-
-                    <div class="text-center d-flex flex-column align-items-center gap-3">
-                        <!-- Candado SVG -->
-                        <svg class="demo-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="url(#g1)" stroke-width="1.6" stroke-linecap="round" />
-                            <rect x="4" y="10" width="16" height="10" rx="2.5" stroke="url(#g2)" stroke-width="1.6" />
-                            <circle cx="12" cy="15" r="1.7" fill="#e9ecef" />
-                            <path d="M12 16.7v2" stroke="#e9ecef" stroke-width="1.6" stroke-linecap="round" />
-                            <defs>
-                                <linearGradient id="g1" x1="7" y1="7" x2="17" y2="7">
-                                    <stop stop-color="#0d6efd" />
-                                    <stop offset="1" stop-color="#20c997" />
-                                </linearGradient>
-                                <linearGradient id="g2" x1="4" y1="10" x2="20" y2="20">
-                                    <stop stop-color="#6f42c1" />
-                                    <stop offset="1" stop-color="#dc3545" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
-
-                        <div>
-                            <h2 class="h4 h-md-3 mb-2">Esta vista no está disponible</h2>
-                            <p class="mb-0 text-secondary">
-                                Para proteger datos reales y operaciones sensibles, el acceso está temporalmente restringido.
-                            </p>
-                        </div>
-
-                        <div class="d-flex flex-wrap gap-2 justify-content-center">
-                            <span class="badge rounded-pill badge-soft px-3 py-2"><i class="bx bx-shield-quarter me-1"></i> Seguridad</span>
-                            <span class="badge rounded-pill badge-soft px-3 py-2"><i class="bx bx-lock-alt me-1"></i> Datos protegidos</span>
-                        </div>
-
-                        <div class="d-flex gap-2 flex-wrap justify-content-center">
-                            <button type="button" class="btn btn-primary" disabled>
-                                <i class="bx bx-lock-alt me-1"></i>
-                            </button>
-                            <a class="btn btn-outline-light" href="">
-                                <i class="bx bx-arrow-back me-1"></i> Volver al inicio
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Contenido real (bloqueado visualmente) -->
         <div class="row">
             <div class="col-xl-12 mx-auto">
-                <div class="card border-top border-0 border-4 border-primary demo-locked">
+                <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
-                        <div class="card-title d-flex align-items-center">
-                            <h5 class="mb-0 text-primary">Ley Violeta</h5>
-                            <div class="row mx-0 ms-auto">
-                                <div class="col-sm-12" id="btn_nuevo">
-                                    <button type="button" class="btn btn-success btn-sm" disabled>
-                                        <i class="bx bx-plus"></i> Nuevo
-                                    </button>
+
+                        <div class="row">
+
+                            <div class="col-12 col-md-6">
+                                <div class="card-title d-flex align-items-center">
+
+                                    <div id="btn_nuevo">
+                                        <button type="button"
+                                            class="btn btn-success btn-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modal_registrar_persona">
+                                            <i class="bx bx-plus me-0 pb-1"></i> Nuevo
+                                        </button>
+                                    </div>
+
                                 </div>
                             </div>
+
+                            <div class="col-12 col-md-6 text-md-end text-start">
+                                <div id="contenedor_botones"></div>
+                            </div>
+
                         </div>
 
-                        <section class="content pt-2">
+                        <hr>
+
+                        <section class="content pt-0">
                             <div class="container-fluid">
+
                                 <div class="table-responsive">
-                                    <table class="table table-striped" id="tbl_blank" style="width:100%">
-                                        <thead class="table-dark">
+                                    <table class="table table-striped responsive " id="tbl_protecion_datos" style="width:100%">
+                                        <thead>
                                             <tr>
-                                                <th>Fecha</th>
-                                                <th>Descripción</th>
-                                                <th>RFID</th>
-                                                <th>Stock</th>
-                                                <th>Inv</th>
-                                                <th width="10px">Acción</th>
+                                                <th>Persona</th>
+                                                <th>Rol</th>
+                                                <th>Acciones</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td colspan="6" class="text-center text-muted py-4">
-                                                    Contenido oculto
-                                                </td>
-                                            </tr>
+                                        <tbody class="">
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -160,3 +222,104 @@
         <!--end row-->
     </div>
 </div>
+
+
+<div class="modal fade" id="modal_registrar_persona" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header text-white">
+                <h5 class="modal-title">
+                    <i class="bx bx-user-plus me-1"></i> Registrar Protección de datos
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="form_proteccion_datos">
+                    <div class="col-md-12">
+                        <label for="ddl_personas" class="form-label">Personas</label>
+                        <select class="form-select form-select-sm select2-validation"
+                            id="ddl_personas"
+                            name="ddl_personas">
+                            <option selected disabled>-- Seleccione --</option>
+                        </select>
+                        <label class="error" style="display: none;" for="ddl_personas"></label>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label for="ddl_rol" class="form-label">Rol</label>
+                        <select class="form-select form-select-sm"
+                            id="ddl_rol"
+                            name="ddl_rol">
+                            <option selected disabled>-- Seleccione --</option>
+                            <option value="RESPONSABLE DE TRATAMIENTO">RESPONSABLE DE TRATAMIENTO</option>
+                            <option value="ENCARGADO DE TRATAMIENTO">ENCARGADO DE TRATAMIENTO</option>
+                            <option value="DELEGADO DE PROTECCIÓN DE DATOS PERSONALES">
+                                DELEGADO DE PROTECCIÓN DE DATOS PERSONALES
+                            </option>
+                        </select>
+                        <label class="error" style="display: none;" for="ddl_rol"></label>
+                    </div>
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success btn-sm" onclick="insertar_editar_proteccion_datos()">
+                    <i class="bx bx-save"></i> Guardar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+
+        // Asteriscos campos obligatorios
+        agregar_asterisco_campo_obligatorio('ddl_personas');
+        agregar_asterisco_campo_obligatorio('ddl_rol');
+
+        // Validación Protección de Datos
+        $("#form_proteccion_datos").validate({
+            rules: {
+                ddl_personas: {
+                    required: true
+                },
+                ddl_rol: {
+                    required: true
+                }
+            },
+            messages: {
+                ddl_personas: {
+                    required: "Por favor seleccione una persona"
+                },
+                ddl_rol: {
+                    required: "Por favor seleccione un rol"
+                }
+            },
+
+            highlight: function(element) {
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+            },
+
+            errorPlacement: function(error, element) {
+                // Para select2
+                if (element.hasClass('select2-validation')) {
+                    error.insertAfter(element.next('.select2'));
+                } else {
+                    error.insertAfter(element);
+                }
+            }
+        });
+
+    });
+</script>
