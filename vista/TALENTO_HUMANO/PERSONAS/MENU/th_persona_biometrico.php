@@ -90,7 +90,7 @@
                 data: function(d) {
 
                     var parametros = {
-                        id: '<?php echo $_id; ?>', // Parámetro personalizado
+                        id: '<?php echo $id_persona; ?>', // Parámetro personalizado
                     };
                     return {
                         parametros: parametros
@@ -124,7 +124,7 @@
             Swal.fire("Debe tener numero de tarjea en biometria", "", "info");
             return false;
         }
-        id = '<?= $_id ?>';
+        id = '<?= $id_persona ?>';
         parametros = {
             'id': id,
             'device': $('#ddl_dispositivosSync').val(),

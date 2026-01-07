@@ -30,7 +30,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     data: null,
                     render: function(data, type, item) {
                         href =
-                            `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&_id=${item.id_persona}&_origen=nomina`;
+                            `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&id_persona=${item.id_persona}&_origen=nomina&_persona_nomina=true`;
                         return `<a href="${href}"><u>${item.primer_apellido} ${item.segundo_apellido} ${item.primer_nombre} ${item.segundo_nombre}</u></a>`;
                     }
                 },
@@ -193,7 +193,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         var $modal = $('#modal_mensaje_personas');
 
         // Variable PHP convertida a JavaScript al inicio
-        var perId = '<?= isset($_id) ? $_id : "" ?>';
+        var perId = '<?= isset($id_persona) ? $id_persona : "" ?>';
 
         function actualizarVista() {
             if ($cbx.is(':checked')) {

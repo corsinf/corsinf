@@ -109,7 +109,7 @@
     }
 
     function delete_datos_persona() {
-        var id = '<?= $_id; ?>';
+        var id = '<?= $id_persona; ?>';
         Swal.fire({
             title: 'Eliminar Registro?',
             text: "Esta seguro de eliminar este registro?",
@@ -166,7 +166,7 @@
                             <div>
                                 <a href="#" class="d-flex justify-content-center" data-bs-toggle="modal"
                                     data-bs-target="#modal_agregar_cambiar_foto_persona"
-                                    onclick="abrir_modal_cambiar_foto_persona('<?= $_id ?>');">
+                                    onclick="abrir_modal_cambiar_foto_persona('<?= $id_persona ?>');">
                                     <i class='bx bxs-camera bx-sm'></i>
                                 </a>
                                 <small class="text-muted">Formatos: JPG, PNG. Máx 2MB</small>

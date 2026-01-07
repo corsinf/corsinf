@@ -2,16 +2,16 @@
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 $redireccionar_vista = 'th_personas';
 
-$_id = '';
+$id_persona = '';
 
-if (isset($_GET['_id'])) {
-    $_id = $_GET['_id'];
+if (isset($_GET['id_persona'])) {
+    $id_persona = $_GET['id_persona'];
 }
 
 $id_postulante = '';
 if (isset($_GET['id_postulante'])) {
     $id_postulante = $_GET['id_postulante'];
-    $redireccionar_vista = "th_informacion_personal&id=$id_postulante&id_persona=$_id";
+    $redireccionar_vista = "th_informacion_personal&id=$id_postulante&id_persona=$id_persona";
 }
 
 if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
@@ -22,7 +22,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
 
 <script>
     //Se lo utiliza para la seccion de biometria
-    var PersonaId = '<?php echo $_id; ?>'
+    var PersonaId = '<?php echo $id_persona; ?>'
 </script>
 
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
@@ -33,9 +33,9 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
     $(document).ready(function() {
         dispositivos();
         // cargar_tabla();
-        <?php if (isset($_GET['_id'])) { ?>
-            cargar_datos_persona(<?= $_id ?>);
-            cargar_departamento(<?= $_id ?>);
+        <?php if (isset($_GET['id_persona'])) { ?>
+            cargar_datos_persona(<?= $id_persona ?>);
+            cargar_departamento(<?= $id_persona ?>);
         <?php } ?>
         cargar_selects2();
 
@@ -62,7 +62,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
 
     function insertar_editar_persona() {
         let parametros = {
-            '_id': '<?= $_id ?>',
+            '_id': '<?= $id_persona ?>',
         };
 
         let parametros_vista_persona = parametros_persona();
@@ -160,7 +160,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                 enviar_credenciales: enviarCred ? 1 : 0,
                 asunto: asunto,
                 descripcion: descripcion,
-                per_id: '<?= $_id ? $_id : '' ?>',
+                per_id: '<?= $id_persona ? $id_persona : '' ?>',
                 personas: 'general'
             };
             enviar_Mail_Persona(parametrosLogCorreos);
@@ -265,7 +265,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
 
         const parametros = {
             '_id': perdepId || '',
-            'id_persona': '<?= $_id ?>',
+            'id_persona': '<?= $id_persona ?>',
             'id_departamento': deptId,
             'txt_visitor': $('#txt_visitor').val() || ''
         };
@@ -334,56 +334,63 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                         </div>
                                     </a>
                                 </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#tab_departamento" role="tab"
-                                        aria-selected="true">
-                                        <div class="d-flex align-items-center">
-                                            <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
+
+                                <?php if (isset($_GET['_persona_nomina']) && $_GET['_persona_nomina'] == 'true') { ?>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#tab_departamento" role="tab"
+                                            aria-selected="true">
+                                            <div class="d-flex align-items-center">
+                                                <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
+                                                </div>
+                                                <div class="tab-title">Departamento</div>
                                             </div>
-                                            <div class="tab-title">Departamento</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#tab_estado_laboral" role="tab"
-                                        aria-selected="true">
-                                        <div class="d-flex align-items-center">
-                                            <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#tab_estado_laboral" role="tab"
+                                            aria-selected="true">
+                                            <div class="d-flex align-items-center">
+                                                <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
+                                                </div>
+                                                <div class="tab-title">Estado Laboral</div>
                                             </div>
-                                            <div class="tab-title">Estado Laboral</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#tab_vehiculos" role="tab"
-                                        aria-selected="true">
-                                        <div class="d-flex align-items-center">
-                                            <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#tab_vehiculos" role="tab"
+                                            aria-selected="true">
+                                            <div class="d-flex align-items-center">
+                                                <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
+                                                </div>
+                                                <div class="tab-title">Vehículos</div>
                                             </div>
-                                            <div class="tab-title">Vehículos</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#tab_nomina" role="tab"
-                                        aria-selected="true">
-                                        <div class="d-flex align-items-center">
-                                            <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#tab_nomina" role="tab"
+                                            aria-selected="true">
+                                            <div class="d-flex align-items-center">
+                                                <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
+                                                </div>
+                                                <div class="tab-title">Nómina</div>
                                             </div>
-                                            <div class="tab-title">Nómina</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#tab_comision" role="tab"
-                                        aria-selected="true">
-                                        <div class="d-flex align-items-center">
-                                            <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#tab_comision" role="tab"
+                                            aria-selected="true">
+                                            <div class="d-flex align-items-center">
+                                                <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
+                                                </div>
+                                                <div class="tab-title">Comisión</div>
                                             </div>
-                                            <div class="tab-title">Comisión</div>
-                                        </div>
-                                    </a>
-                                </li>
+                                        </a>
+                                    </li>
+                                <?php } ?>
+
+
+
+
                             </ul>
                             <div class="tab-content pt-3">
                                 <!-- Primera Sección, Informacion de la persona -->
@@ -395,7 +402,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                                     <h5 class="mb-0 text-primary">
                                                         <i class="bx bxs-user me-1 font-22 text-primary"></i>
                                                         <?php
-                                                        if ($_id == '') {
+                                                        if ($id_persona == '') {
                                                             echo 'Registrar Persona';
                                                         } else {
                                                             echo 'Modificar Persona';
@@ -428,7 +435,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                                         <?php include_once('../vista/GENERAL/registrar_personas.php'); ?>
 
                                                         <div class="d-flex justify-content-end pt-2">
-                                                            <?php if ($_id == '') { ?>
+                                                            <?php if ($id_persona == '') { ?>
                                                                 <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center"
                                                                     onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i>
                                                                     Guardar</button>
@@ -449,137 +456,142 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                     </div>
                                 </div>
 
-                                <!-- Segunda Sección, Departamentos -->
-                                <div class="tab-pane fade" id="tab_departamento" role="tabpanel">
-                                    <div class="card">
-                                        <div class="d-flex flex-column mx-4">
-                                            <!-- Documento de Identidad -->
-                                            <div class="card-body">
-                                                <div class="mb-2">
-                                                    <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_departamento.php'); ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <?php if (isset($_GET['_persona_nomina']) && $_GET['_persona_nomina'] == 'true') { ?>
 
-                                <!-- Tercera Sección, Estado Labaral -->
-                                <div class="tab-pane fade" id="tab_estado_laboral" role="tabpanel">
-                                    <div class="card">
-                                        <div class="d-flex flex-column mx-4">
-                                            <!-- Idiomas -->
-                                            <div class="card-body">
-                                                <div class="mb-2">
-                                                    <div class="row">
-                                                        <div class="col-6 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Estado laboral:</h6>
-                                                        </div>
-                                                        <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#"
-                                                                class="text-success icon-hover d-flex align-items-center"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#modal_estado_laboral">
-                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span>Agregar</span>
-                                                            </a>
-                                                        </div>
+                                    <!-- Segunda Sección, Departamentos -->
+                                    <div class="tab-pane fade" id="tab_departamento" role="tabpanel">
+                                        <div class="card">
+                                            <div class="d-flex flex-column mx-4">
+                                                <!-- Documento de Identidad -->
+                                                <div class="card-body">
+                                                    <div class="mb-2">
+                                                        <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_departamento.php'); ?>
                                                     </div>
                                                 </div>
-
-                                                <hr>
-                                                <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_estado_laboral.php'); ?>
                                             </div>
-
                                         </div>
                                     </div>
-                                </div>
-                                <!-- Cuarta Sección, Vehiculos -->
-                                <div class="tab-pane fade" id="tab_vehiculos" role="tabpanel">
-                                    <div class="card">
-                                        <div class="d-flex flex-column mx-4">
-                                            <div class="card-body">
-                                                <div class="mb-2">
-                                                    <div class="row">
-                                                        <div class="col-6 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Vehiculos:</h6>
-                                                        </div>
-                                                        <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#"
-                                                                class="text-success icon-hover d-flex align-items-center"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#modal_agregar_vehiculo">
-                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span>Agregar</span>
-                                                            </a>
+
+                                    <!-- Tercera Sección, Estado Labaral -->
+                                    <div class="tab-pane fade" id="tab_estado_laboral" role="tabpanel">
+                                        <div class="card">
+                                            <div class="d-flex flex-column mx-4">
+                                                <!-- Idiomas -->
+                                                <div class="card-body">
+                                                    <div class="mb-2">
+                                                        <div class="row">
+                                                            <div class="col-6 d-flex align-items-center">
+                                                                <h6 class="mb-0 fw-bold text-primary">Estado laboral:</h6>
+                                                            </div>
+                                                            <div class="col-6 d-flex justify-content-end">
+                                                                <a href="#"
+                                                                    class="text-success icon-hover d-flex align-items-center"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#modal_estado_laboral">
+                                                                    <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                                                    <span>Agregar</span>
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </div>
+
+                                                    <hr>
+                                                    <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_estado_laboral.php'); ?>
                                                 </div>
-
-                                                <hr>
-
-                                                <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_vehiculo.php'); ?>
 
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="tab-pane fade" id="tab_nomina" role="tabpanel">
-                                    <div class="card">
-                                        <div class="d-flex flex-column mx-4">
-                                            <div class="card-body">
-                                                <div class="mb-2">
-                                                    <div class="row">
-                                                        <div class="col-6 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Nómina:</h6>
-                                                        </div>
-                                                        <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#"
-                                                                class="text-success icon-hover d-flex align-items-center"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#modal_agregar_nomina">
-                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span>Agregar</span>
-                                                            </a>
+                                    <!-- Cuarta Sección, Vehiculos -->
+                                    <div class="tab-pane fade" id="tab_vehiculos" role="tabpanel">
+                                        <div class="card">
+                                            <div class="d-flex flex-column mx-4">
+                                                <div class="card-body">
+                                                    <div class="mb-2">
+                                                        <div class="row">
+                                                            <div class="col-6 d-flex align-items-center">
+                                                                <h6 class="mb-0 fw-bold text-primary">Vehiculos:</h6>
+                                                            </div>
+                                                            <div class="col-6 d-flex justify-content-end">
+                                                                <a href="#"
+                                                                    class="text-success icon-hover d-flex align-items-center"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#modal_agregar_vehiculo">
+                                                                    <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                                                    <span>Agregar</span>
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </div>
+
+                                                    <hr>
+
+                                                    <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_vehiculo.php'); ?>
+
                                                 </div>
-                                                <hr>
-                                                <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_nomina.php'); ?>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="tab-pane fade" id="tab_comision" role="tabpanel">
-                                    <div class="card">
-                                        <div class="d-flex flex-column mx-4">
-                                            <div class="card-body">
-
-                                                <div class="mb-2">
-                                                    <div class="row">
-                                                        <div class="col-6 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Comisiones:</h6>
-                                                        </div>
-
-                                                        <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#"
-                                                                class="text-success icon-hover d-flex align-items-center"
-                                                                onclick="abrir_modal_comision('');">
-                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span>Agregar</span>
-                                                            </a>
+                                    <div class="tab-pane fade" id="tab_nomina" role="tabpanel">
+                                        <div class="card">
+                                            <div class="d-flex flex-column mx-4">
+                                                <div class="card-body">
+                                                    <div class="mb-2">
+                                                        <div class="row">
+                                                            <div class="col-6 d-flex align-items-center">
+                                                                <h6 class="mb-0 fw-bold text-primary">Nómina:</h6>
+                                                            </div>
+                                                            <div class="col-6 d-flex justify-content-end">
+                                                                <a href="#"
+                                                                    class="text-success icon-hover d-flex align-items-center"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#modal_agregar_nomina">
+                                                                    <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                                                    <span>Agregar</span>
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                    <hr>
+                                                    <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_nomina.php'); ?>
                                                 </div>
-
-                                                <hr>
-
-                                                <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_comision.php'); ?>
-
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+
+                                    <div class="tab-pane fade" id="tab_comision" role="tabpanel">
+                                        <div class="card">
+                                            <div class="d-flex flex-column mx-4">
+                                                <div class="card-body">
+
+                                                    <div class="mb-2">
+                                                        <div class="row">
+                                                            <div class="col-6 d-flex align-items-center">
+                                                                <h6 class="mb-0 fw-bold text-primary">Comisiones:</h6>
+                                                            </div>
+
+                                                            <div class="col-6 d-flex justify-content-end">
+                                                                <a href="#"
+                                                                    class="text-success icon-hover d-flex align-items-center"
+                                                                    onclick="abrir_modal_comision('');">
+                                                                    <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                                                    <span>Agregar</span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <hr>
+
+                                                    <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_comision.php'); ?>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                <?php } ?>
+
                             </div>
                         </div>
                     </div>
