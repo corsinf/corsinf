@@ -17,5 +17,6 @@ class th_pos_experiencia_laboralM extends BaseModel
         'th_expl_estado',
         'th_expl_fecha_creacion',
         'th_expl_fecha_modificacion',
+        'th_expl_sueldo',
     ];
 }

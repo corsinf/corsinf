@@ -457,7 +457,6 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                 </div>
 
                                 <?php if (isset($_GET['_persona_nomina']) && $_GET['_persona_nomina'] == 'true') { ?>
-
                                     <!-- Segunda Sección, Departamentos -->
                                     <div class="tab-pane fade" id="tab_departamento" role="tabpanel">
                                         <div class="card">
@@ -470,6 +469,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
 
                                     <!-- Tercera Sección, Estado Labaral -->

@@ -20,7 +20,17 @@
             },
             dataType: 'json',
             success: function(response) {
-                $('#pnl_estado_laboral').html(response);
+                $('#pnl_estado_laboral').html(response.html);
+                console.log(
+                    'Existe botón:',
+                    $('#pnl_crear_estado_laboral').length
+                );
+
+                if (response.tiene_registros) {
+                    $('#pnl_crear_estado_laboral').addClass('d-none');
+                } else {
+                    $('#pnl_crear_estado_laboral').removeClass('d-none');
+                }
             }
         });
     }

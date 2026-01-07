@@ -248,7 +248,7 @@
         </div>
     </div>
 </div>
-
+<!--
 <script>
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('ddl_seleccionar_aptitud_blanda');
@@ -287,3 +287,4 @@
         });
     })
 </script>
+-->
