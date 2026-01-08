@@ -6,9 +6,9 @@ $NO_CONCURENTE_CAMPO_ID = $_SESSION['INICIO']['NO_CONCURENTE'];
 
 $link_edicion = "#";
 if ($NO_CONCURENTE_TABLA == "_talentoh.th_personas") {
-    $link_edicion = "../vista/inicio.php?mod=" . $modulo_sistema . "&acc=th_informacion_personal&id=postulante&id_persona=" . $NO_CONCURENTE_CAMPO_ID;
+    $link_edicion = "../vista/inicio.php?mod=$modulo_sistema&acc=th_registrar_personas&id_persona=$NO_CONCURENTE_CAMPO_ID&id_postulante=postulante&_origen=nomina&_persona_nomina=true";
 } else if ($NO_CONCURENTE_TABLA == "_talentoh.th_postulantes") {
-    $link_edicion = "../vista/inicio.php?mod=" . $modulo_sistema . "&acc=th_informacion_personal&id=" . $NO_CONCURENTE_CAMPO_ID;
+    $link_edicion = "../vista/inicio.php?mod=" . $modulo_sistema . "&acc=th_informacion_personal&id_postulante=" . $NO_CONCURENTE_CAMPO_ID;
 }
 
 ?>

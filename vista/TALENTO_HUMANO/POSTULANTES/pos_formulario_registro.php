@@ -44,7 +44,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
             success: function(response) {
 
                 if (response.recargar == 1 && response.id_postulante) {
-                    let nueva_Url = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_personal&id=${response.id_postulante}&id_persona=<?= $id_persona ?>`;
+                    let nueva_Url = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_personal&id_postulante=${response.id_postulante}&id_persona=<?= $id_persona ?>`;
 
                     // Cambia la URL sin recargar
                     window.history.replaceState(null, '', nueva_Url);

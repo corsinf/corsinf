@@ -20,7 +20,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     data: null,
                     render: function(data, type, item) {
                         href =
-                            `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_personal&id=${item._id}`;
+                            `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_personal&id_postulante=${item._id}`;
 
                         btns =
                             `<a href="${href}" class="btn btn-xs btn-primary" title="CV Postulante"><i class="bx bxs-user-pin fs-6 me-0"></i></a>`;
