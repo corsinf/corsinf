@@ -68,6 +68,41 @@ class th_pos_discapacidadC
 
     function guardar($parametros)
     {
+        $this->modelo->reset();
+
+        $existe = $this->modelo
+            ->where('th_pos_id', $parametros['pos_id'])
+            ->where('id_discapacidad', $parametros['ddl_discapacidad'])
+            ->listar();
+
+        if ($parametros['_id'] == '') {
+
+            if (count($existe) > 0) {
+                return -2;
+            }
+
+            $datos = [
+                ['campo' => 'th_pos_id', 'dato' => $parametros['pos_id']],
+                ['campo' => 'id_discapacidad', 'dato' => $parametros['ddl_discapacidad']],
+                ['campo' => 'th_pos_dis_porcentaje', 'dato' => $parametros['txt_porcentaje']],
+                ['campo' => 'th_pos_dis_escala', 'dato' => $parametros['txt_escala']],
+            ];
+
+            return $this->modelo->insertar($datos);
+        }
+
+        $this->modelo->reset();
+
+        $existe = $this->modelo
+            ->where('th_pos_id', $parametros['pos_id'])
+            ->where('id_discapacidad', $parametros['ddl_discapacidad'])
+            ->where('th_pos_dis_id !', $parametros['_id'])
+            ->listar();
+
+        if (count($existe) > 0) {
+            return -2;
+        }
+
         $datos = [
             ['campo' => 'th_pos_id', 'dato' => $parametros['pos_id']],
             ['campo' => 'id_discapacidad', 'dato' => $parametros['ddl_discapacidad']],
@@ -75,17 +110,14 @@ class th_pos_discapacidadC
             ['campo' => 'th_pos_dis_escala', 'dato' => $parametros['txt_escala']],
         ];
 
-        if ($parametros['_id'] == '') {
-            return $this->modelo->insertar($datos);
-        }
-
         $where[] = [
             'campo' => 'th_pos_dis_id',
-            'dato' => $parametros['_id']
+            'dato'  => $parametros['_id']
         ];
 
         return $this->modelo->editar($datos, $where);
     }
+
 
     function eliminar($id)
     {

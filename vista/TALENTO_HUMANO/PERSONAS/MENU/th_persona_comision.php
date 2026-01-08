@@ -15,7 +15,9 @@
         $.ajax({
             url: '../controlador/TALENTO_HUMANO/th_per_comisionC.php?listar=true',
             type: 'post',
-            data: { id: id },
+            data: {
+                id: id
+            },
             dataType: 'json',
             success: function(response) {
                 $('#pnl_comision').html(response);
@@ -27,7 +29,9 @@
         $.ajax({
             url: '../controlador/TALENTO_HUMANO/th_per_comisionC.php?listar_modal=true',
             type: 'post',
-            data: { id: id },
+            data: {
+                id: id
+            },
             dataType: 'json',
             success: function(response) {
 
@@ -57,7 +61,9 @@
 
     function insertar_comision(parametros) {
         $.ajax({
-            data: { parametros: parametros },
+            data: {
+                parametros: parametros
+            },
             url: '../controlador/TALENTO_HUMANO/th_per_comisionC.php?insertar=true',
             type: 'post',
             dataType: 'json',
@@ -67,8 +73,19 @@
                     $('#modal_agregar_comision').modal('hide');
                     cargar_datos_comision(<?= $id_persona ?>);
                     limpiar_campos_comision_modal();
+                } else if (response == -2) {
+                    Swal.fire(
+                        'Atención',
+                        'La persona ya está asignada a esta comisión.',
+                        'warning'
+                    );
                 } else {
-                    Swal.fire('', 'Operación fallida', 'warning');
+
+                    Swal.fire(
+                        'Error',
+                        'No se pudo realizar la operación.',
+                        'error'
+                    );
                 }
             }
         });
@@ -109,7 +126,9 @@
 
     function eliminar_comision(id) {
         $.ajax({
-            data: { id: id },
+            data: {
+                id: id
+            },
             url: '../controlador/TALENTO_HUMANO/th_per_comisionC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
@@ -146,7 +165,7 @@
                     </small>
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        onclick="limpiar_campos_comision_modal()"></button>
+                    onclick="limpiar_campos_comision_modal()"></button>
             </div>
 
             <form id="form_comision">
@@ -165,15 +184,15 @@
 
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm px-4 m-1"
-                            id="btn_guardar_comision"
-                            onclick="insertar_editar_comision();">
+                        id="btn_guardar_comision"
+                        onclick="insertar_editar_comision();">
                         <i class="bx bx-save"></i> Agregar
                     </button>
 
                     <button type="button" style="display:none;"
-                            class="btn btn-danger btn-sm px-4 m-1"
-                            id="btn_eliminar_comision"
-                            onclick="delete_datos_comision();">
+                        class="btn btn-danger btn-sm px-4 m-1"
+                        id="btn_eliminar_comision"
+                        onclick="delete_datos_comision();">
                         <i class="bx bx-trash"></i> Eliminar
                     </button>
                 </div>

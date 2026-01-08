@@ -1,28 +1,25 @@
 <?php
 
-require_once(dirname(__DIR__, 2) . '/GENERAL/BaseModel.php');
+require_once(dirname(__DIR__, 1) . '/GENERAL/BaseModel.php');
 
-class th_pos_experiencia_laboralM extends BaseModel
+class th_per_informacion_adicionalM extends BaseModel
 {
-    protected $tabla = 'th_pos_experiencia_laboral';
-    protected $primaryKey = 'th_expl_id AS _id';
+    protected $tabla = 'th_per_informacion_adicional';
+    protected $primaryKey = 'th_inf_adi_id AS _id';
 
     protected $camposPermitidos = [
-        'th_expl_nombre_empresa',
-        'th_expl_cargos_ocupados',
-        'th_expl_fecha_inicio_experiencia',
-        'th_expl_fecha_fin_experiencia',
-        'th_expl_cbx_fecha_fin_experiencia',
-        'th_expl_responsabilidades_logros',
-        'th_expl_estado',
-        'th_expl_fecha_creacion',
-        'th_expl_fecha_modificacion',
-        'th_expl_sueldo',
+        'th_inf_adi_id AS th_inf_adi_id',
+        'th_per_id AS th_per_id',
+        'th_inf_adi_tiempo_trabajo AS tiempo_trabajo',
+        'th_inf_adi_remuneracion_promedio AS remuneracion_promedio',
+        'th_inf_adi_estado AS estado',
+        'th_inf_adi_fecha_creacion AS fecha_creacion',
+        'th_inf_adi_fecha_modificacion AS fecha_modificacion',
     ];
 
     function listar_experiencia_laboral_postulante($th_pos_id)
-    {
-        $sql = "
+{
+    $sql = "
         SELECT
             expl.th_expl_id,
             expl.th_pos_id,
@@ -40,6 +37,7 @@ class th_pos_experiencia_laboralM extends BaseModel
         WHERE expl.th_pos_id = '$th_pos_id'
     ";
 
-        return $this->db->datos($sql);
-    }
+    return $this->db->datos($sql);
+}
+
 }

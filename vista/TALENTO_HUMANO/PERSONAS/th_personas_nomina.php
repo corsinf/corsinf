@@ -5,46 +5,46 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <script type="text/javascript">
+    let id_departamento = '';
+    let tbl_personas;
+
     $(document).ready(function() {
+
         tbl_personas = $('#tbl_personas').DataTable({
-            reponsive: true,
+            responsive: true,
             stateSave: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/th_personas_departamentosC.php?listar=true',
+                type: 'POST',
+                data: function(d) {
+                    d.id = id_departamento;
+                },
                 dataSrc: ''
             },
             columns: [{
                     data: null,
                     render: function(data, type, item) {
-                        // href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_personal&id_postulante=${item._id_postulante ?? 'postulante'}&id_persona=${item.id_persona}`;
-                        // btns = `<a href="${href}" class="btn btn-xs btn-primary" title="CV"><i class="bx bxs-user-pin fs-6 me-0"></i></a>`;
-
-                        // return btns;
-
                         return fecha_formateada(item.fecha_creacion);
                     }
                 },
-
                 {
                     data: null,
                     render: function(data, type, item) {
-                        id_postulante = 'postulante';
+                        let id_postulante = item._id_postulante ?? 'postulante';
 
-                        if (item._id_postulante != null && item._id_postulante != '') {
-                            id_postulante = item._id_postulante;
-                        }
+                        let href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&id_persona=${item.id_persona}&id_postulante=${id_postulante}&_origen=nomina&_persona_nomina=true`;
 
-                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&id_persona=${item.id_persona}&id_postulante=${id_postulante}&_origen=nomina&_persona_nomina=true`;
-                        return `<a href="${href}"><u>${item.primer_apellido} ${item.segundo_apellido} ${item.primer_nombre} ${item.segundo_nombre}</u></a>`;
+                        return `<a href="${href}">
+                        <u>${item.primer_apellido} ${item.segundo_apellido} ${item.primer_nombre} ${item.segundo_nombre}</u>
+                    </a>`;
                     }
                 },
                 {
                     data: 'cedula'
                 },
-
                 {
                     data: 'correo'
                 },
@@ -53,12 +53,24 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 },
                 {
                     data: 'nombre_departamento'
-                },
+                }
             ],
             order: [
                 [1, 'asc']
-            ],
+            ]
         });
+        $('#ddl_departamentos').on('change', function() {
+            id_departamento = $(this).val();
+            tbl_personas.ajax.reload();
+        });
+
+        cargar_selects2();
+
+        function cargar_selects2() {
+            let url_departamentosC = '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true';
+            cargar_select2_url('ddl_departamentos', url_departamentosC);
+        }
+
     });
 </script>
 
@@ -94,24 +106,40 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     <div class="card-body p-5">
 
                         <div class="row">
-                            <div class="col-12 col-md-6">
+                            <div class="col-12">
                                 <div class="card-title">
-                                    <div class="d-flex flex-wrap align-items-center gap-2" id="btn_nuevo">
+                                    <div class="d-flex align-items-end gap-3 flex-wrap" id="btn_nuevo">
 
-                                        <a href="javascript:void(0)" class="btn btn-success btn-sm"
-                                            data-bs-toggle="modal" data-bs-target="#modal_mensaje_personas">
+                                        <a href="javascript:void(0)"
+                                            class="btn btn-success"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modal_mensaje_personas">
                                             <i class="bx bx-envelope me-1"></i> Enviar Mensaje
                                         </a>
 
-                                        <button class="btn btn-success btn-sm"
-                                            data-bs-toggle="modal" data-bs-target="#modal_mensaje" disabled>
-                                            <i class='bx bx-file'></i> Descargar Nómina
+                                        <button class="btn btn-success"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modal_mensaje"
+                                            disabled>
+                                            <i class='bx bx-file me-1'></i> Descargar Nómina
                                         </button>
+
+                                        <div class="d-flex flex-column" style="min-width: 260px;">
+                                            <label for="ddl_departamentos" class="form-label mb-1">
+                                                Departamentos
+                                            </label>
+                                            <select class="form-select select2-validation"
+                                                id="ddl_departamentos"
+                                                name="ddl_departamentos">
+                                                <option selected disabled>-- Seleccione --</option>
+                                            </select>
+                                            <label class="error d-none" for="ddl_departamentos"></label>
+                                        </div>
 
                                     </div>
                                 </div>
-
                             </div>
+
                             <div class="col-12 col-md-6 text-md-end text-start">
                                 <div id="contenedor_botones"></div>
                             </div>

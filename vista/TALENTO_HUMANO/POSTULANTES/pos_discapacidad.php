@@ -71,17 +71,42 @@
             },
             dataType: 'json',
             success: function(response) {
+
                 if (response == 1) {
+
                     Swal.fire('', 'Operación realizada con éxito.', 'success');
+
                     $('#modal_agregar_discapacidad').modal('hide');
                     cargar_datos_discapacidad(<?= $id_postulante ?>);
                     limpiar_campos_discapacidad();
+
+                } else if (response == -2) {
+
+                    Swal.fire(
+                        'Atención',
+                        'La discapacidad ya fue registrada para este postulante.',
+                        'warning'
+                    );
+
                 } else {
-                    Swal.fire('', 'Operación fallida', 'warning');
+
+                    Swal.fire(
+                        'Error',
+                        'No se pudo realizar la operación.',
+                        'error'
+                    );
                 }
+            },
+            error: function() {
+                Swal.fire(
+                    'Error',
+                    'Error en el servidor.',
+                    'error'
+                );
             }
         });
     }
+
 
     function abrir_modal_discapacidad(id = '') {
 

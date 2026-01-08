@@ -223,14 +223,46 @@ class th_per_comisionC
 
     function insertar_editar($parametros)
     {
-        $datos = [
-            ['campo' => 'th_per_id', 'dato' => $parametros['per_id']],
-            ['campo' => 'id_comision', 'dato' => $parametros['ddl_comision']]
-        ];
+        $this->modelo->reset();
+
+        $existe = $this->modelo
+            ->where('th_per_id', $parametros['per_id'])
+            ->where('id_comision', $parametros['ddl_comision'])
+            ->where('th_per_com_estado', 1)
+            ->listar();
 
         if ($parametros['_id'] == '') {
+
+            if (count($existe) > 0) {
+                return -2;
+            }
+
+            $datos = [
+                ['campo' => 'th_per_id', 'dato' => $parametros['per_id']],
+                ['campo' => 'id_comision', 'dato' => $parametros['ddl_comision']]
+            ];
+
             return $this->modelo->insertar($datos);
         }
+
+        $this->modelo->reset();
+
+        $existe = $this->modelo
+            ->where('th_per_id', $parametros['per_id'])
+            ->where('id_comision', $parametros['ddl_comision'])
+            ->where('th_per_com_estado', 1)
+            ->where('th_per_com_id !', $parametros['_id'])
+            ->listar();
+
+        if (count($existe) > 0) {
+            return -2;
+        }
+
+        $datos = [
+            ['campo' => 'th_per_id', 'dato' => $parametros['per_id']],
+            ['campo' => 'id_comision', 'dato' => $parametros['ddl_comision']],
+            ['campo' => 'th_per_com_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')]
+        ];
 
         $where[] = [
             'campo' => 'th_per_com_id',
@@ -239,6 +271,7 @@ class th_per_comisionC
 
         return $this->modelo->editar($datos, $where);
     }
+
 
     function eliminar($id)
     {
