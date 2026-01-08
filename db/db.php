@@ -393,6 +393,18 @@ class db
 			$stmt = $conn->prepare($sql);
     		$stmt->execute($datos_update);
     		$conn=null;
+
+			// Guardar log UPDATE 
+			$this->guardar_log_auditoria(
+				'UPDATE',
+				$tabla,
+				'',
+				$datos = null,
+				$registro_id = null,
+				$descripcion = null,
+				$menu = null,
+			);
+
     		return 1;
 			
 		} catch (Exception $e) {
@@ -1151,4 +1163,57 @@ class db
 		}
 
 	}
+
+	public function guardar_log_auditoria(
+		$accion,
+		$tabla_afectada,
+		$datos_antes = null,
+		$datos_despues = null,
+		$registro_id = null,
+		$descripcion = null,
+		$menu = null,
+	) {
+		$usuario_id = (isset($_SESSION['INICIO']['ID_USUARIO']))
+			? $_SESSION['INICIO']['ID_USUARIO']
+			: null;
+
+		$usuario_nombre = (isset($_SESSION['INICIO']['USUARIO']))
+			? $_SESSION['INICIO']['USUARIO']
+			: 'ADMINISTRADOR';
+
+		$usuario_no_concurrente = (isset($_SESSION['INICIO']['NO_CONCURENTE']))
+			? $_SESSION['INICIO']['NO_CONCURENTE']
+			: 'ADMINISTRADOR';
+
+		$modulo = (isset($_SESSION['INICIO']['MODULO_SISTEMA_NOMBRE']))
+			? $_SESSION['INICIO']['MODULO_SISTEMA_NOMBRE']
+			: 'SISTEMA';
+
+		$datos_insert = [
+			['campo' => 'usuario_id', 'dato' => $usuario_id],
+			['campo' => 'usuario_nombre', 'dato' => $usuario_nombre],
+			['campo' => 'usuario_no_concurrente', 'dato' => $usuario_no_concurrente],
+
+			['campo' => 'accion', 'dato' => $accion],
+			['campo' => 'descripcion', 'dato' => $descripcion],
+
+			['campo' => 'modulo', 'dato' => $modulo],
+			['campo' => 'menu', 'dato' => $menu],
+			['campo' => 'controlador', 'dato' => $_SERVER['PHP_SELF'] ?? null],
+			['campo' => 'metodo', 'dato' => $_SERVER['REQUEST_METHOD'] ?? null],
+			['campo' => 'url_solicitud', 'dato' => ($_SERVER['REQUEST_URI'] ?? null)],
+
+			['campo' => 'tabla_afectada', 'dato' => $tabla_afectada],
+			['campo' => 'registro_id', 'dato' => $registro_id],
+
+			['campo' => 'datos_antes', 'dato' => $datos_antes ? json_encode($datos_antes) : null],
+			['campo' => 'datos_despues', 'dato' => $datos_despues ? json_encode($datos_despues) : null],
+
+			['campo' => 'ip_address', 'dato' => $_SERVER['REMOTE_ADDR'] ?? null],
+			['campo' => 'user_agent', 'dato' => $_SERVER['HTTP_USER_AGENT'] ?? null],
+		];
+
+		return $this->inserts('LOGS_AUDITORIA', $datos_insert);
+	}
+
 }
