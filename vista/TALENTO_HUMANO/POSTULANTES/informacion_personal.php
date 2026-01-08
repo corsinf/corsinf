@@ -159,43 +159,33 @@ if (isset($_GET['id_persona'])) {
                                 </div>
                             </div>
                         </div>
-                        <div class="card">
-                            <!-- Información Adicional y Contacto de Emergencia -->
-                            <div class="card-body">
-                                <div class="align-items-center">
-                                    <div class="mt-3">
-                                        <!-- <div class="row">
-                                            <div class="col-10">
-                                                <h5 class="fw-bold text-primary">Información Adicional</h5>
-                                            </div>
-                                            <div class="col-2">
-                                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal_informacion_adicional">
-                                                    <i class='text-dark bx bx-pencil bx-sm'></i></a>
-                                            </div>
-                                        </div>
-                                        <hr /> -->
+                        <?php /*
+<div class="card">
+    <!-- Información Adicional y Contacto de Emergencia -->
+    <div class="card-body">
+        <div class="align-items-center">
+            <div class="mt-3">
 
-                                        <!-- Queda en espera este parte del modulo -->
-                                        <?php //include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_informacion_adicional.php'); 
-                                        ?>
+                <div class="row">
+                    <div class="col-10">
+                        <h5 class="fw-bold text-primary">Contacto de Emergencia</h5>
+                    </div>
+                    <div class="col-2">
+                        <a href="#" class="text-dark icon-hover" data-bs-toggle="modal"
+                            data-bs-target="#modal_contacto_emergencia">
+                            <i class='bx bx-show bx-sm'></i>
+                        </a>
+                    </div>
+                </div>
 
-                                        <div class="row">
-                                            <div class="col-10">
-                                                <h5 class="fw-bold text-primary">Contacto de Emergencia</h5>
-                                            </div>
-                                            <div class="col-2">
-                                                <a href="#" class="text-dark icon-hover" data-bs-toggle="modal"
-                                                    data-bs-target="#modal_contacto_emergencia">
-                                                    <i class='bx bx-show bx-sm'></i></a>
-                                            </div>
-                                        </div>
+                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_contacto_emergencia.php'); ?>
 
-                                        <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_contacto_emergencia.php'); ?>
+            </div>
+        </div>
+    </div>
+</div>
+*/ ?>
 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Cards de la derecha -->

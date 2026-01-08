@@ -109,6 +109,7 @@
                     cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
                     limpiar_campos_experiencia_laboral_modal();
                     $('#modal_agregar_experiencia').modal('hide');
+                    cargar_datos_info_adicional(<?= $id_postulante ?>);
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
                 }
@@ -149,7 +150,8 @@
     function eliminar_experiencia_laboral(id) {
         $.ajax({
             data: {
-                id: id
+                id: id,
+                id_postulante: <?= $id_postulante ?>
             },
             url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_experiencia_laboralC.php?eliminar=true',
             type: 'post',
@@ -160,6 +162,7 @@
                     cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
                     limpiar_campos_experiencia_laboral_modal();
                     $('#modal_agregar_experiencia').modal('hide');
+                    cargar_datos_info_adicional(<?= $id_postulante ?>);
                 }
             }
         });

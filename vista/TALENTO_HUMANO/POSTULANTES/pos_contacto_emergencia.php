@@ -13,7 +13,7 @@
             },
             dataType: 'json',
             success: function(response) {
-                $('#tbl_contacto_emergencia').html(response);
+                $('#pnl_pos_contacto_emergencia').html(response);
             }
         });
     }
@@ -194,6 +194,7 @@
                 </form>
 
                 <hr>
+                <!--
 
                 <div class="table-responsive">
                     <form id='form_contacto_emergencia_1'>
@@ -211,6 +212,7 @@
                         </table>
                     </form>
                 </div>
+-->
             </div>
         </div>
     </div>

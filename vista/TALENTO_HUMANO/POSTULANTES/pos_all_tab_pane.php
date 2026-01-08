@@ -278,3 +278,40 @@
          </div>
      </div>
  </div>
+
+ <div class="tab-pane fade" id="tab_contactos_emergencia" role="tabpanel">
+     <div class="card">
+         <div class="d-flex flex-column mx-4">
+             <div class="card-body">
+
+                 <div class="mb-2">
+                     <div class="row">
+                         <div class="col-6 d-flex align-items-center">
+                             <h6 class="mb-0 fw-bold text-primary">Contactos de emergencia:</h6>
+                         </div>
+
+                         <div class="col-6 d-flex justify-content-end">
+                             <a href="javascript:void(0)"
+                                 class="text-success icon-hover d-flex align-items-center"
+                                 data-bs-toggle="modal"
+                                 data-bs-target="#modal_contacto_emergencia">
+
+                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                 <span>Agregar</span>
+                             </a>
+                         </div>
+
+                     </div>
+                 </div>
+
+                 <hr>
+                 <div id="pnl_pos_contacto_emergencia">
+
+                 </div>
+
+                 <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_contacto_emergencia.php'); ?>
+
+             </div>
+         </div>
+     </div>
+ </div>

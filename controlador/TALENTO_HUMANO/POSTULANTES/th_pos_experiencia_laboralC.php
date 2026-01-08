@@ -17,7 +17,7 @@ if (isset($_GET['insertar'])) {
 }
 
 if (isset($_GET['eliminar'])) {
-    echo json_encode($controlador->eliminar($_POST['id']));
+    echo json_encode($controlador->eliminar($_POST['id'] ?? '', $_POST['id_postulante'] ?? '' ));
 }
 
 
@@ -132,19 +132,50 @@ class th_pos_experiencia_laboralC
         return $datos;
     }
 
-    function eliminar($id)
+    function eliminar($id, $id_postulante)
     {
-        $datos = array(
-            array('campo' => 'th_expl_estado', 'dato' => 0),
-        );
+        $datos = [
+            ['campo' => 'th_expl_estado', 'dato' => 0],
+        ];
 
         $where[0]['campo'] = 'th_expl_id';
-        $where[0]['dato'] = strval($id);
+        $where[0]['dato']  = strval($id);
 
-        $datos = $this->modelo->editar($datos, $where);
+        $this->modelo->editar($datos, $where);
 
-        return $datos;
+        $experiencias = $this->modelo
+            ->listar_experiencia_laboral_postulante($id_postulante);
+
+        $resultado = $this->calcular_experiencia_y_remuneracion($experiencias);
+
+        $texto = $resultado['resumen_general']['tiempo_total']['texto'];
+        $promedio = number_format(
+            $resultado['resumen_general']['remuneracion_promedio'],
+            2
+        );
+
+        $encontrado = $this->th_per_informacion_adicional
+            ->where('th_per_id', $id_postulante)
+            ->listar();
+
+        $datos_inf = [
+            ['campo' => 'th_inf_adi_tiempo_trabajo', 'dato' => $texto],
+            ['campo' => 'th_inf_adi_remuneracion_promedio', 'dato' => $promedio],
+            ['campo' => 'th_inf_adi_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')],
+        ];
+
+        if (empty($encontrado)) {
+            $datos_inf[] = ['campo' => 'th_per_id', 'dato' => $id_postulante];
+            $this->th_per_informacion_adicional->insertar($datos_inf);
+        } else {
+            $whereInf[0]['campo'] = 'th_inf_adi_id';
+            $whereInf[0]['dato']  = $encontrado[0]['th_inf_adi_id'];
+            $this->th_per_informacion_adicional->editar($datos_inf, $whereInf);
+        }
+
+        return 1;
     }
+
 
     function calcular_experiencia_y_remuneracion($experiencias)
     {

@@ -38,6 +38,7 @@ class th_pos_experiencia_laboralM extends BaseModel
             expl.th_expl_sueldo
         FROM th_pos_experiencia_laboral expl
         WHERE expl.th_pos_id = '$th_pos_id'
+        AND expl.th_expl_estado = 1
     ";
 
         return $this->db->datos($sql);

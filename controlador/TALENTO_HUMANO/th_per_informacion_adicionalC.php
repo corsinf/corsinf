@@ -27,20 +27,51 @@ class th_per_informacion_adicionalC
         $this->modelo = new th_per_informacion_adicionalM();
     }
 
-
-    function listar($id = '')
+    function listar($id)
     {
-        if ($id == '') {
-            $datos = $this->modelo
-                ->where('th_inf_adi_estado', 1)
-                ->listar();
-        } else {
-            $datos = $this->modelo
-                ->where('th_inf_adi_id', $id)
-                ->listar();
+        $datos = $this->modelo
+            ->where('th_per_id', $id)
+            ->where('th_inf_adi_estado', 1)
+            ->listar();
+
+        $texto = '';
+
+        foreach ($datos as $value) {
+
+            $tiempo = !empty($value['tiempo_trabajo'])
+                ? $value['tiempo_trabajo']
+                : 'No registrado';
+
+            $remuneracion = !empty($value['remuneracion_promedio'])
+                ? '$ ' . number_format($value['remuneracion_promedio'], 2)
+                : 'No registrado';
+
+            $texto .= <<<HTML
+            <div class="row align-items-center mb-2">
+                <div class="col-10">
+                    <p class="m-0">
+                        <strong>Tiempo de trabajo:</strong> {$tiempo}
+                    </p>
+                    <p class="m-0">
+                        <strong>Remuneración promedio:</strong> {$remuneracion}
+                    </p>
+                </div>
+            </div>
+            <hr>
+        HTML;
         }
-        return $datos;
+
+        if (empty($datos)) {
+            $texto = '
+            <div class="alert alert-info mb-0">
+                No hay información adicional registrada.
+            </div>';
+        }
+
+        return $texto;
     }
+
+
 
     function insertar_editar($parametros)
     {
