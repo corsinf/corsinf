@@ -97,7 +97,7 @@
         limpiar_campos_parientes_modal(); // Primero limpia
         cargar_datos_modal_parientes(id); // Luego carga los datos
         $('#modal_parientes').modal('show');
-        $('#lbl_titulo_parientes').html('Editar Pariente');
+        $('#lbl_titulo_parientes').html('Editar Referencia Personal');
         $('#btn_guardar_parientes').html('<i class="bx bx-save"></i> Editar');
         $('#btn_eliminar_parientes').show(); // Muestra el botón eliminar
     }
@@ -105,7 +105,7 @@
     function abrir_modal_nuevo_pariente() {
         limpiar_campos_parientes_modal();
         $('#modal_parientes').modal('show');
-        $('#lbl_titulo_parientes').html('Agregar Pariente');
+        $('#lbl_titulo_parientes').html('Agregar Referencia Personal');
         $('#btn_guardar_parientes').html('<i class="bx bx-save"></i> Agregar');
         $('#btn_eliminar_parientes').hide(); // Oculta el botón eliminar
     }
@@ -154,7 +154,7 @@
         $('#txt_nombres_pariente').val('');
         $('#txt_apellidos_pariente').val('');
         $('#txt_pariente_id').val('');
-        $('#lbl_titulo_parientes').html('Agregar Pariente');
+        $('#lbl_titulo_parientes').html('Agregar Referencia Personal');
         $('#btn_guardar_parientes').html('<i class="bx bx-save"></i> Agregar');
         $('#btn_eliminar_parientes').hide();
     }
@@ -163,12 +163,12 @@
 <div id="pnl_parientes">
 </div>
 
-<!-- Modal Parientes -->
+<!-- Modal Referencias Personales -->
 <div class="modal" id="modal_parientes" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_parientes">Agregar Pariente</small></h5>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_parientes">Agregar Referencia Personal</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_parientes_modal()"></button>
             </div>
             <form id="form_parientes">

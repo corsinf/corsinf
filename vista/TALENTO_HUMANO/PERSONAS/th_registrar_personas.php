@@ -421,7 +421,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                             <a class="nav-link border border-primary rounded-3 shadow-sm px-3 py-2" data-bs-toggle="tab" href="#tab_parientes" role="tab">
                                                 <div class="d-flex align-items-center gap-2">
                                                     <i class="bx bxs-group text-primary" style="font-size: 0.875rem;"></i>
-                                                    <span class="fw-semibold text-primary" style="font-size: 0.875rem;">Parientes</span>
+                                                    <span class="fw-semibold text-primary" style="font-size: 0.875rem;">Referencias Personales</span>
                                                 </div>
                                             </a>
                                         </li>
@@ -649,7 +649,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                                     <div class="mb-2">
                                                         <div class="row">
                                                             <div class="col-6 d-flex align-items-center">
-                                                                <h6 class="mb-0 fw-bold text-primary">Parentesco:</h6>
+                                                                <h6 class="mb-0 fw-bold text-primary">Referencias Personales:</h6>
                                                             </div>
 
                                                             <div class="col-6 d-flex justify-content-end">
