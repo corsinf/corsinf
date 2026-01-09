@@ -292,6 +292,42 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
     }
 </style>
 
+<style>
+    /* Estilo para el scroll horizontal */
+    .tabs-container {
+        scrollbar-width: thin;
+        scrollbar-color: #0d6efd #f1f1f1;
+    }
+
+    .tabs-container::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .tabs-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .tabs-container::-webkit-scrollbar-thumb {
+        background: #0d6efd;
+        border-radius: 10px;
+    }
+
+    .tabs-container::-webkit-scrollbar-thumb:hover {
+        background: #0a58ca;
+    }
+
+    /* Optimización de tabs */
+    .nav-link {
+        white-space: nowrap;
+        transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+        transform: translateY(-2px);
+    }
+</style>
+
 <div class="page-wrapper">
     <div class="page-content">
         <!--breadcrumb-->
@@ -323,86 +359,89 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                     <div class="">
                         <div class="card-body">
                             <!-- Nav Cards -->
-                            <ul class="nav nav-pills nav-success d-flex flex-wrap gap-2 mb-3" role="tablist" style="border-bottom: none;">
-
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link border border-primary rounded-3 shadow-sm px-4 py-3 active" data-bs-toggle="tab" href="#tab_persona" role="tab" aria-selected="true">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <i class="bx bxs-user fs-5 text-primary"></i>
-                                            <span class="fw-semibold text-primary">Información</span>
-                                        </div>
-                                    </a>
-                                </li>
-
-                                <?php if (isset($_GET['_persona_nomina']) && $_GET['_persona_nomina'] == 'true') { ?>
-
+                            <div class="tabs-container mb-3" style="overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;">
+                                <ul class="nav nav-pills nav-success d-flex flex-nowrap gap-2 p-2" role="tablist" style="border-bottom: none; min-width: max-content;">
                                     <li class="nav-item" role="presentation">
-                                        <a class="nav-link border border-primary rounded-3 shadow-sm px-4 py-3" data-bs-toggle="tab" href="#tab_departamento" role="tab">
+                                        <a class="nav-link border border-primary rounded-3 shadow-sm px-3 py-2 active" data-bs-toggle="tab" href="#tab_persona" role="tab" aria-selected="true">
                                             <div class="d-flex align-items-center gap-2">
-                                                <i class="bx bxs-building fs-5 text-primary"></i>
-                                                <span class="fw-semibold text-primary">Departamento</span>
+                                                <i class="bx bxs-user text-primary" style="font-size: 0.875rem;"></i>
+                                                <span class="fw-semibold text-primary" style="font-size: 0.875rem;">Información</span>
                                             </div>
                                         </a>
                                     </li>
 
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link border border-primary rounded-3 shadow-sm px-4 py-3" data-bs-toggle="tab" href="#tab_estado_laboral" role="tab">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="bx bxs-briefcase-alt-2 fs-5 text-primary"></i>
-                                                <span class="fw-semibold text-primary">Estado Laboral</span>
-                                            </div>
-                                        </a>
-                                    </li>
+                                    <?php if (isset($_GET['_persona_nomina']) && $_GET['_persona_nomina'] == 'true') { ?>
 
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link border border-primary rounded-3 shadow-sm px-4 py-3" data-bs-toggle="tab" href="#tab_vehiculos" role="tab">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="bx bxs-car fs-5 text-primary"></i>
-                                                <span class="fw-semibold text-primary">Vehículos</span>
-                                            </div>
-                                        </a>
-                                    </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link border border-primary rounded-3 shadow-sm px-3 py-2" data-bs-toggle="tab" href="#tab_departamento" role="tab">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <i class="bx bxs-building text-primary" style="font-size: 0.875rem;"></i>
+                                                    <span class="fw-semibold text-primary" style="font-size: 0.875rem;">Departamento</span>
+                                                </div>
+                                            </a>
+                                        </li>
 
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link border border-primary rounded-3 shadow-sm px-4 py-3" data-bs-toggle="tab" href="#tab_nomina" role="tab">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="bx bxs-dollar-circle fs-5 text-primary"></i>
-                                                <span class="fw-semibold text-primary">Nómina</span>
-                                            </div>
-                                        </a>
-                                    </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link border border-primary rounded-3 shadow-sm px-3 py-2" data-bs-toggle="tab" href="#tab_estado_laboral" role="tab">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <i class="bx bxs-briefcase-alt-2 text-primary" style="font-size: 0.875rem;"></i>
+                                                    <span class="fw-semibold text-primary" style="font-size: 0.875rem;">Estado Laboral</span>
+                                                </div>
+                                            </a>
+                                        </li>
 
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link border border-primary rounded-3 shadow-sm px-4 py-3" data-bs-toggle="tab" href="#tab_comision" role="tab">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="bx bxs-wallet fs-5 text-primary"></i>
-                                                <span class="fw-semibold text-primary">Comisión</span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link border border-primary rounded-3 shadow-sm px-4 py-3" data-bs-toggle="tab" href="#tab_parientes" role="tab">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="bx bxs-wallet fs-5 text-primary"></i>
-                                                <span class="fw-semibold text-primary">Parentesco</span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link border border-primary rounded-3 shadow-sm px-4 py-3" data-bs-toggle="tab" href="#tab_informacion_adicional" role="tab">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="bx bxs-wallet fs-5 text-primary"></i>
-                                                <span class="fw-semibold text-primary">Información Adicional</span>
-                                            </div>
-                                        </a>
-                                    </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link border border-primary rounded-3 shadow-sm px-3 py-2" data-bs-toggle="tab" href="#tab_vehiculos" role="tab">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <i class="bx bxs-car text-primary" style="font-size: 0.875rem;"></i>
+                                                    <span class="fw-semibold text-primary" style="font-size: 0.875rem;">Vehículos</span>
+                                                </div>
+                                            </a>
+                                        </li>
 
-                                    <?php if (isset($_GET['id_postulante']) && $_GET['id_postulante'] != null) {
-                                        include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_all_tab.php');
-                                    } ?>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link border border-primary rounded-3 shadow-sm px-3 py-2" data-bs-toggle="tab" href="#tab_nomina" role="tab">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <i class="bx bxs-dollar-circle text-primary" style="font-size: 0.875rem;"></i>
+                                                    <span class="fw-semibold text-primary" style="font-size: 0.875rem;">Nómina</span>
+                                                </div>
+                                            </a>
+                                        </li>
 
-                                <?php } ?>
-                            </ul>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link border border-primary rounded-3 shadow-sm px-3 py-2" data-bs-toggle="tab" href="#tab_comision" role="tab">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <i class="bx bxs-wallet text-primary" style="font-size: 0.875rem;"></i>
+                                                    <span class="fw-semibold text-primary" style="font-size: 0.875rem;">Comisión</span>
+                                                </div>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link border border-primary rounded-3 shadow-sm px-3 py-2" data-bs-toggle="tab" href="#tab_parientes" role="tab">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <i class="bx bxs-group text-primary" style="font-size: 0.875rem;"></i>
+                                                    <span class="fw-semibold text-primary" style="font-size: 0.875rem;">Parientes</span>
+                                                </div>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link border border-primary rounded-3 shadow-sm px-3 py-2" data-bs-toggle="tab" href="#tab_informacion_adicional" role="tab">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <i class="bx bxs-info-circle text-primary" style="font-size: 0.875rem;"></i>
+                                                    <span class="fw-semibold text-primary" style="font-size: 0.875rem;">Información Adicional</span>
+                                                </div>
+                                            </a>
+                                        </li>
+
+                                        <?php if (isset($_GET['id_postulante']) && $_GET['id_postulante'] != null) {
+                                            include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_all_tab.php');
+                                        } ?>
+
+                                    <?php } ?>
+                                </ul>
+                            </div>
                             <div class="tab-content pt-3">
                                 <!-- Primera Sección, Informacion de la persona -->
                                 <div class="tab-pane fade show active" id="tab_persona" role="tabpanel">
