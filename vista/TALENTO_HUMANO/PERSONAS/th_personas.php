@@ -20,12 +20,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             columns: [{
                     data: null,
                     render: function(data, type, item) {
-                        return fecha_formateada(item.fecha_creacion);
-                    }
-                },
-                {
-                    data: null,
-                    render: function(data, type, item) {
                         href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&id_persona=${item.th_per_id}`;
 
                         if (item.th_dep_nombre != null && item.th_dep_nombre != '') {
@@ -51,6 +45,12 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 },
                 {
                     data: 'th_dep_nombre'
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        return fecha_formateada(item.fecha_creacion);
+                    }
                 },
             ],
             order: [
@@ -394,12 +394,12 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                     <table class="table table-striped responsive " id="tbl_personas" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>Fecha Creación</th>
                                                 <th>Nombre</th>
                                                 <th>Cédula</th>
                                                 <th>Correo</th>
                                                 <th>Teléfono</th>
                                                 <th>Departamento</th>
+                                                <th width="10%">Fecha Ingreso</th>
                                             </tr>
                                         </thead>
                                         <tbody>

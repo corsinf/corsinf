@@ -27,12 +27,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             columns: [{
                     data: null,
                     render: function(data, type, item) {
-                        return fecha_formateada(item.fecha_creacion);
-                    }
-                },
-                {
-                    data: null,
-                    render: function(data, type, item) {
                         let id_postulante = item._id_postulante ?? 'postulante';
 
                         let href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&id_persona=${item.id_persona}&id_postulante=${id_postulante}&_origen=nomina&_persona_nomina=true`;
@@ -53,7 +47,13 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 },
                 {
                     data: 'nombre_departamento'
-                }
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        return fecha_formateada(item.fecha_creacion);
+                    }
+                },
             ],
             order: [
                 [1, 'asc']
@@ -153,12 +153,12 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                     <table class="table table-striped responsive " id="tbl_personas" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th width="10%">#</th>
                                                 <th>Nombre</th>
                                                 <th>Cédula</th>
                                                 <th>Correo</th>
                                                 <th>Teléfono</th>
                                                 <th>Departamento</th>
+                                                <th width="10%">Fecha Ingreso</th>
                                             </tr>
                                         </thead>
                                         <tbody>
