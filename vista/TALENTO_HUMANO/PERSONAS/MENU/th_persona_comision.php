@@ -151,6 +151,12 @@
         $('#lbl_titulo_comision').html('Agregar Comisión');
         $('#btn_guardar_comision').html('<i class="bx bx-save"></i> Agregar');
         $('#btn_eliminar_comision').hide();
+
+        // Inicializar select2
+        // $('#ddl_comision').select2({
+        //     placeholder: '-- Seleccione --',
+        //     allowClear: true
+        // });
     }
 </script>
 <div id="pnl_comision"></div>

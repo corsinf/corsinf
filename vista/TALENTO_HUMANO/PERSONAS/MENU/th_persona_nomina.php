@@ -6,7 +6,31 @@
  * @warning No modificar este archivo. Para cambios, referirse a la nueva implementación.
  */
 
+
+// Tabla
+// CREATE TABLE [_talentoh].[th_per_nomina] (
+//   [th_per_nom_id] int  IDENTITY(1,1) NOT NULL,
+//   [id_nomina] int  NULL,
+//   [th_per_id] int  NULL,
+//   [th_per_nom_remuneracion] decimal(10,2)  NULL,
+//   [th_per_nom_fecha_ini] date  NULL,
+//   [th_per_nom_fecha_fin] date  NULL,
+//   [th_per_nom_estado] smallint DEFAULT 1 NULL,
+//   [th_per_nom_fecha_creacion] datetime2(7) DEFAULT getdate() NULL,
+//   [th_per_nom_fecha_modificacion] datetime2(7)  NULL,
+//   CONSTRAINT [PK__th_per_n__AFA1BE88E5D9FA20] PRIMARY KEY CLUSTERED ([th_per_nom_id])
+// WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+// ON [PRIMARY]
+// )  
+// ON [PRIMARY]
+// GO
+
+// ALTER TABLE [_talentoh].[th_per_nomina] SET (LOCK_ESCALATION = TABLE)
+
+
 ?>
+
+
 
 <!-- Colocar en la vista vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_nomina.php -->
 <li class="nav-item" role="presentation">

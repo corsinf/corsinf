@@ -52,9 +52,9 @@ class th_per_informacion_adicionalC
                     <p class="m-0">
                         <strong>Tiempo de trabajo:</strong> {$tiempo}
                     </p>
-                    <p class="m-0">
+                    <!-- <p class="m-0">
                         <strong>Remuneración promedio:</strong> {$remuneracion}
-                    </p>
+                    </p> -->
                 </div>
             </div>
             <hr>

@@ -6,6 +6,23 @@
  * @warning No modificar este archivo. Para cambios, referirse a la nueva implementación.
  */
 
+
+//Tabla
+// CREATE TABLE [_talentoh].[th_pos_contacto_emergencia] (
+//   [th_coem_id] int  IDENTITY(1,1) NOT NULL,
+//   [th_pos_id] int  NULL,
+//   [th_coem_nombre_emergencia] varchar(100) COLLATE Modern_Spanish_CI_AS  NULL,
+//   [th_coem_telefono_emergencia] varchar(15) COLLATE Modern_Spanish_CI_AS  NULL,
+//   [th_coem_fecha_creacion] datetime DEFAULT getdate() NULL,
+//   CONSTRAINT [PK__th_pos_c__3DB70A1706CE7753] PRIMARY KEY CLUSTERED ([th_coem_id])
+// WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+// ON [PRIMARY]
+// )  
+// ON [PRIMARY]
+// GO
+
+// ALTER TABLE [_talentoh].[th_pos_contacto_emergencia] SET (LOCK_ESCALATION = TABLE)
+
 ?>
 
 <!-- Colocar en la vista pos_all_tab.php -->
