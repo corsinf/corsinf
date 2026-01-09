@@ -44,15 +44,6 @@
      </a>
  </li>
 
- <li class="nav-item me-2" role="presentation">
-     <a class="nav-link border border-info rounded-3 shadow-sm px-3 py-2"
-         data-bs-toggle="tab" href="#tab_contactos_emergencia" role="tab">
-         <div class="d-flex align-items-center gap-2">
-             <i class="bx bxs-phone text-info" style="font-size: 0.875rem;"></i>
-             <span class="fw-semibold text-info" style="font-size: 0.875rem;">Contactos de Emergencia</span>
-         </div>
-     </a>
- </li>
 
  <style>
      .tab-personalizado {

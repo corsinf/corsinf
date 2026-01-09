@@ -400,15 +400,6 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                         </li>
 
                                         <li class="nav-item" role="presentation">
-                                            <a class="nav-link border border-primary rounded-3 shadow-sm px-3 py-2" data-bs-toggle="tab" href="#tab_nomina" role="tab">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <i class="bx bxs-dollar-circle text-primary" style="font-size: 0.875rem;"></i>
-                                                    <span class="fw-semibold text-primary" style="font-size: 0.875rem;">Nómina</span>
-                                                </div>
-                                            </a>
-                                        </li>
-
-                                        <li class="nav-item" role="presentation">
                                             <a class="nav-link border border-primary rounded-3 shadow-sm px-3 py-2" data-bs-toggle="tab" href="#tab_comision" role="tab">
                                                 <div class="d-flex align-items-center gap-2">
                                                     <i class="bx bxs-wallet text-primary" style="font-size: 0.875rem;"></i>
@@ -578,33 +569,6 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
 
                                                     <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_vehiculo.php'); ?>
 
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="tab-pane fade" id="tab_nomina" role="tabpanel">
-                                        <div class="card">
-                                            <div class="d-flex flex-column mx-4">
-                                                <div class="card-body">
-                                                    <div class="mb-2">
-                                                        <div class="row">
-                                                            <div class="col-6 d-flex align-items-center">
-                                                                <h6 class="mb-0 fw-bold text-primary">Nómina:</h6>
-                                                            </div>
-                                                            <div class="col-6 d-flex justify-content-end">
-                                                                <a href="#"
-                                                                    class="text-success icon-hover d-flex align-items-center"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#modal_agregar_nomina">
-                                                                    <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                    <span>Agregar</span>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <hr>
-                                                    <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_nomina.php'); ?>
                                                 </div>
                                             </div>
                                         </div>

@@ -1,3 +1,62 @@
+<?php
+
+/**
+ * @deprecated Archivo dado de baja el 09/01/2025.
+ * @note Este archivo se mantiene como respaldo, pero ya no se utilizará en producción.
+ * @warning No modificar este archivo. Para cambios, referirse a la nueva implementación.
+ */
+
+?>
+
+<!-- Colocar en la vista pos_all_tab.php -->
+ <li class="nav-item me-2" role="presentation">
+     <a class="nav-link border border-info rounded-3 shadow-sm px-3 py-2"
+         data-bs-toggle="tab" href="#tab_contactos_emergencia" role="tab">
+         <div class="d-flex align-items-center gap-2">
+             <i class="bx bxs-phone text-info" style="font-size: 0.875rem;"></i>
+             <span class="fw-semibold text-info" style="font-size: 0.875rem;">Contactos de Emergencia</span>
+         </div>
+     </a>
+ </li>
+
+<!-- Colocar en la vista pos_all_tab_pane.php -->
+ <div class="tab-pane fade" id="tab_contactos_emergencia" role="tabpanel">
+     <div class="card">
+         <div class="d-flex flex-column mx-4">
+             <div class="card-body">
+
+                 <div class="mb-2">
+                     <div class="row">
+                         <div class="col-6 d-flex align-items-center">
+                             <h6 class="mb-0 fw-bold text-primary">Contactos de emergencia:</h6>
+                         </div>
+
+                         <div class="col-6 d-flex justify-content-end">
+                             <a href="javascript:void(0)"
+                                 class="text-success icon-hover d-flex align-items-center"
+                                 data-bs-toggle="modal"
+                                 data-bs-target="#modal_contacto_emergencia">
+
+                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                 <span>Agregar</span>
+                             </a>
+                         </div>
+
+                     </div>
+                 </div>
+
+                 <hr>
+                 <div id="pnl_pos_contacto_emergencia">
+
+                 </div>
+
+                 <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_contacto_emergencia.php'); ?>
+
+             </div>
+         </div>
+     </div>
+
+
 <script>
     $(document).ready(function() {
         cargar_datos_contactos_emergencia(<?= $id_postulante ?>);
