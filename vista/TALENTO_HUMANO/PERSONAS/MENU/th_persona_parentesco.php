@@ -40,16 +40,45 @@
                     }));
                     $('#txt_nombres_pariente').val(response[0].nombres);
                     $('#txt_apellidos_pariente').val(response[0].apellidos);
+                    $('#txt_telefono_pariente').val(response[0].numero_telefono);
+                    $('#txt_fecha_nacimiento_pariente').val(response[0].fecha_nacimiento);
+                    $('#chk_contacto_emergencia').prop('checked', response[0].contacto_emergencia == 1);
                     $('#txt_pariente_id').val(response[0]._id);
+                    
+                    // Calcular edad si hay fecha de nacimiento
+                    if (response[0].fecha_nacimiento) {
+                        calcular_edad_pariente();
+                    }
                 }
             }
         });
+    }
+
+    function calcular_edad_pariente() {
+        var fecha_nacimiento = $('#txt_fecha_nacimiento_pariente').val();
+        if (fecha_nacimiento) {
+            var hoy = new Date();
+            var nacimiento = new Date(fecha_nacimiento);
+            var edad = hoy.getFullYear() - nacimiento.getFullYear();
+            var mes = hoy.getMonth() - nacimiento.getMonth();
+            
+            if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
+                edad--;
+            }
+            
+            $('#txt_edad_pariente').val(edad >= 0 ? edad : 0);
+        } else {
+            $('#txt_edad_pariente').val('');
+        }
     }
 
     function insertar_editar_parientes() {
         var ddl_parentesco = $('#ddl_parentesco').val();
         var txt_nombres_pariente = $('#txt_nombres_pariente').val();
         var txt_apellidos_pariente = $('#txt_apellidos_pariente').val();
+        var txt_telefono_pariente = $('#txt_telefono_pariente').val();
+        var txt_fecha_nacimiento_pariente = $('#txt_fecha_nacimiento_pariente').val();
+        var chk_contacto_emergencia = $('#chk_contacto_emergencia').is(':checked') ? 1 : 0;
         var per_id = '<?= $id_persona ?>';
         var txt_pariente_id = $('#txt_pariente_id').val();
 
@@ -58,6 +87,9 @@
             'ddl_parentesco': ddl_parentesco,
             'txt_nombres': txt_nombres_pariente,
             'txt_apellidos': txt_apellidos_pariente,
+            'txt_telefono': txt_telefono_pariente,
+            'txt_fecha_nacimiento': txt_fecha_nacimiento_pariente,
+            'chk_contacto_emergencia': chk_contacto_emergencia,
             '_id': txt_pariente_id,
         }
 
@@ -80,10 +112,8 @@
                     $('#modal_parientes').modal('hide');
                     cargar_datos_parientes(<?= $id_persona ?>);
                     limpiar_campos_parientes_modal();
-                } else if (response == -4) {
-                    Swal.fire('', 'Ya existe un esposo/cónyuge registrado. Solo se permite uno.', 'warning');
-                } else if (response == -5) {
-                    Swal.fire('', 'Ya existen 2 padres registrados. Solo se permiten 2 padres.', 'warning');
+                } else if (response == -2) {
+                    Swal.fire('', 'Ya se alcanzó el límite permitido para este tipo de parentesco.', 'warning');
                 } else if (response == -3) {
                     Swal.fire('', 'Parentesco no válido.', 'warning');
                 } else {
@@ -94,12 +124,12 @@
     }
 
     function abrir_modal_pariente(id) {
-        limpiar_campos_parientes_modal(); // Primero limpia
-        cargar_datos_modal_parientes(id); // Luego carga los datos
+        limpiar_campos_parientes_modal();
+        cargar_datos_modal_parientes(id);
         $('#modal_parientes').modal('show');
         $('#lbl_titulo_parientes').html('Editar Referencia Personal');
         $('#btn_guardar_parientes').html('<i class="bx bx-save"></i> Editar');
-        $('#btn_eliminar_parientes').show(); // Muestra el botón eliminar
+        $('#btn_eliminar_parientes').show();
     }
 
     function abrir_modal_nuevo_pariente() {
@@ -107,7 +137,7 @@
         $('#modal_parientes').modal('show');
         $('#lbl_titulo_parientes').html('Agregar Referencia Personal');
         $('#btn_guardar_parientes').html('<i class="bx bx-save"></i> Agregar');
-        $('#btn_eliminar_parientes').hide(); // Oculta el botón eliminar
+        $('#btn_eliminar_parientes').hide();
     }
 
     function delete_datos_parientes() {
@@ -153,6 +183,10 @@
         $('#ddl_parentesco').val('').trigger('change');
         $('#txt_nombres_pariente').val('');
         $('#txt_apellidos_pariente').val('');
+        $('#txt_telefono_pariente').val('');
+        $('#txt_fecha_nacimiento_pariente').val('');
+        $('#txt_edad_pariente').val('');
+        $('#chk_contacto_emergencia').prop('checked', false);
         $('#txt_pariente_id').val('');
         $('#lbl_titulo_parientes').html('Agregar Referencia Personal');
         $('#btn_guardar_parientes').html('<i class="bx bx-save"></i> Agregar');
@@ -190,6 +224,30 @@
                         <div class="col-md-6">
                             <label for="txt_apellidos_pariente" class="form-label form-label-sm">Apellidos:</label>
                             <input type="text" class="form-control form-control-sm" name="txt_apellidos_pariente" id="txt_apellidos_pariente" required>
+                        </div>
+                    </div>
+                    <div class="row mb-col">
+                        <div class="col-md-6">
+                            <label for="txt_telefono_pariente" class="form-label form-label-sm">Número de Teléfono:</label>
+                            <input type="text" class="form-control form-control-sm" name="txt_telefono_pariente" id="txt_telefono_pariente">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="txt_fecha_nacimiento_pariente" class="form-label form-label-sm">Fecha de Nacimiento:</label>
+                            <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento_pariente" id="txt_fecha_nacimiento_pariente" onchange="calcular_edad_pariente()">
+                        </div>
+                    </div>
+                    <div class="row mb-col">
+                        <div class="col-md-6">
+                            <label for="txt_edad_pariente" class="form-label form-label-sm">Edad:</label>
+                            <input type="number" class="form-control form-control-sm" name="txt_edad_pariente" id="txt_edad_pariente" readonly>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="chk_contacto_emergencia" name="chk_contacto_emergencia">
+                                <label class="form-check-label" for="chk_contacto_emergencia">
+                                    Contacto de Emergencia
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>

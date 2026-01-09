@@ -11,6 +11,7 @@ class th_cat_parentescoM extends BaseModel
         'id_parentesco AS id_parentesco',
         'descripcion AS descripcion',
         'estado AS estado',
+        'cantidad AS cantidad',
         'fecha_creacion AS fecha_creacion'
     ];
 }

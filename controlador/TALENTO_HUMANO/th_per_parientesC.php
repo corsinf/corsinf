@@ -34,11 +34,24 @@ class th_per_parientesC
         $texto = '';
 
         foreach ($datos as $value) {
+            $contacto_emergencia = $value['contacto_emergencia'] == 1 ? '<span class="badge bg-danger ms-2">Contacto Emergencia</span>' : '';
+            $edad = '';
+
+            if (!empty($value['fecha_nacimiento'])) {
+                $fecha_nac = new DateTime($value['fecha_nacimiento']);
+                $hoy = new DateTime();
+                $edad_calculada = $hoy->diff($fecha_nac)->y;
+                $edad = " ({$edad_calculada} años)";
+            }
+
+            $telefono = !empty($value['numero_telefono']) ? "<p class='m-0'><strong>Teléfono:</strong> {$value['numero_telefono']}</p>" : '';
+
             $texto .= <<<HTML
                 <div class="row mb-col">
                     <div class="col-10">
-                        <p class="m-0"><strong>Parentesco:</strong> {$value['parentesco_nombre']}</p>
-                        <p class="m-0"><strong>Nombre:</strong> {$value['nombres']} {$value['apellidos']}</p>
+                        <p class="m-0"><strong>Parentesco:</strong> {$value['parentesco_nombre']} {$contacto_emergencia}</p>
+                        <p class="m-0"><strong>Nombre:</strong> {$value['nombres']} {$value['apellidos']}{$edad}</p>
+                        {$telefono}
                     </div>
                     <div class="col-2 d-flex justify-content-end">
                         <button class="btn icon-hover" onclick="abrir_modal_pariente('{$value['_id']}');">
@@ -68,101 +81,61 @@ class th_per_parientesC
         $per_id = $parametros['per_id'];
         $id_registro = $parametros['_id'];
 
-        // Validar límites según tipo de parentesco
-        $validacion = $this->validar_limites_parentesco($id_parentesco, $per_id, $id_registro);
-        
-        if ($validacion !== true) {
-            return $validacion; // Retorna código de error
-        }
 
         $datos = [
             ['campo' => 'th_per_id', 'dato' => $per_id],
             ['campo' => 'id_parentesco', 'dato' => $id_parentesco],
             ['campo' => 'th_ppa_nombres', 'dato' => $parametros['txt_nombres']],
-            ['campo' => 'th_ppa_apellidos', 'dato' => $parametros['txt_apellidos']]
+            ['campo' => 'th_ppa_apellidos', 'dato' => $parametros['txt_apellidos']],
+            ['campo' => 'th_ppa_numero_telefono', 'dato' => $parametros['txt_telefono']],
+            ['campo' => 'th_ppa_fecha_nacimiento', 'dato' => $parametros['txt_fecha_nacimiento']],
+            ['campo' => 'th_ppa_contacto_emergencia', 'dato' => $parametros['chk_contacto_emergencia']]
         ];
 
         if ($id_registro == '') {
-            // INSERTAR
+            $parentesco = $this->modelo->where('th_per_id', $per_id)->where('id_parentesco', $id_parentesco)->listar();
+
+            $info_parentesco = $this->modelo->obtener_info_parentesco($id_parentesco);
+
+            $total = count($parentesco);
+
+            if ($info_parentesco[0]['cantidad'] == '1') {
+                if ($total == 1) {
+                    return -2;
+                }
+            } else if ($info_parentesco[0]['cantidad'] == '2') {
+                if ($total == 2) {
+                    return -2;
+                }
+            }
             $datos[] = ['campo' => 'th_ppa_fecha_creacion', 'dato' => date('Y-m-d H:i:s')];
             return $this->modelo->insertar($datos);
         } else {
-            // EDITAR
-            $datos[] = ['campo' => 'th_ppa_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')];
-            
-            $where[0]['campo'] = 'th_ppa_id';
-            $where[0]['dato'] = $id_registro;
-            
-            return $this->modelo->editar($datos, $where);
-        }
-    }
-
-    function validar_limites_parentesco($id_parentesco, $per_id, $id_registro_actual = '')
-    {
-        $parentesco_info = $this->modelo->obtener_parentesco_por_id($id_parentesco);
-        
-        if (empty($parentesco_info)) {
-            return -3; // Parentesco no válido
-        }
-
-        $nombre_parentesco = strtolower($parentesco_info[0]['parentesco_nombre']);
-
-        $this->modelo->reset();
-        $query = $this->modelo
-            ->where('th_per_id', $per_id)
+            $parentesco = $this->modelo->where('th_per_id', $per_id)
             ->where('id_parentesco', $id_parentesco)
-            ->where('th_ppa_estado', 1);
+            ->where('th_ppa_id!', $parametros['_id'])
+            ->listar();
 
-        if ($id_registro_actual != '') {
-            $query = $query->where('th_ppa_id !', $id_registro_actual);
-        }
+            $info_parentesco = $this->modelo->obtener_info_parentesco($id_parentesco);
 
-        $existentes = $query->listar();
-        $cantidad_existente = count($existentes);
+            $total = count($parentesco);
 
-        if (stripos($nombre_parentesco, 'espos') !== false || 
-            stripos($nombre_parentesco, 'cónyuge') !== false ||
-            stripos($nombre_parentesco, 'conyugue') !== false) {
-            
-            if ($cantidad_existente >= 1) {
-                return -4; // Ya existe un esposo/cónyuge
-            }
-        }
-
-        // Padre/Madre: máximo 2 en total
-        if (stripos($nombre_parentesco, 'padre') !== false || 
-            stripos($nombre_parentesco, 'madre') !== false) {
-            
-            // Contar todos los padres (padre y madre)
-            $this->modelo->reset();
-            $query_padres = $this->modelo
-                ->where('th_per_id', $per_id)
-                ->where('th_ppa_estado', 1);
-
-            if ($id_registro_actual != '') {
-                $query_padres = $query_padres->where('th_ppa_id !', $id_registro_actual);
-            }
-
-            $todos_parientes = $query_padres->listar();
-            
-            $contador_padres = 0;
-            foreach ($todos_parientes as $pariente) {
-                $parentesco_actual = $this->modelo->obtener_parentesco_por_id($pariente['id_parentesco']);
-                if (!empty($parentesco_actual)) {
-                    $nombre_par = strtolower($parentesco_actual[0]['parentesco_nombre']);
-                    if (stripos($nombre_par, 'padre') !== false || stripos($nombre_par, 'madre') !== false) {
-                        $contador_padres++;
-                    }
+            if ($info_parentesco[0]['cantidad'] == '1') {
+                if ($total == 1) {
+                    return -2;
+                }
+            } else if ($info_parentesco[0]['cantidad'] == '2') {
+                if ($total == 2) {
+                    return -2;
                 }
             }
+            $datos[] = ['campo' => 'th_ppa_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')];
 
-            if ($contador_padres >= 2) {
-                return -5; // Ya existen 2 padres
-            }
+            $where[0]['campo'] = 'th_ppa_id';
+            $where[0]['dato'] = $id_registro;
+
+            return $this->modelo->editar($datos, $where);
         }
-
-        
-        return true;
     }
 
     function eliminar($id)

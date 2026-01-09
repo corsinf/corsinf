@@ -6,23 +6,22 @@ class th_per_parientesM extends BaseModel
 {
     protected $tabla = 'th_per_parientes';
 
-    // Primary Key
     protected $primaryKey = 'th_ppa_id AS _id';
 
-    // Campos permitidos (con alias)
     protected $camposPermitidos = [
         'th_per_id AS th_per_id',
         'id_parentesco AS id_parentesco',
         'th_ppa_nombres AS nombres',
         'th_ppa_apellidos AS apellidos',
+        'th_ppa_numero_telefono AS numero_telefono',
+        'th_ppa_contacto_emergencia AS contacto_emergencia',
+        'th_ppa_fecha_nacimiento AS fecha_nacimiento',
         'th_ppa_estado AS estado',
         'th_ppa_fecha_creacion AS fecha_creacion',
         'th_ppa_fecha_modificacion AS fecha_modificacion'
     ];
 
-    /**
-     * Listar parientes de una persona
-     */
+   
     public function listar_parientes_por_persona($id)
     {
         $id = intval($id);
@@ -34,7 +33,11 @@ class th_per_parientesM extends BaseModel
                 pp.id_parentesco,
                 pp.th_ppa_nombres AS nombres,
                 pp.th_ppa_apellidos AS apellidos,
+                pp.th_ppa_numero_telefono AS numero_telefono,
+                pp.th_ppa_fecha_nacimiento AS fecha_nacimiento,
+                pp.th_ppa_contacto_emergencia AS contacto_emergencia,
                 p.descripcion AS parentesco_nombre,
+                p.cantidad AS parentesco_cantidad,
                 pp.th_ppa_fecha_creacion AS fecha_creacion
             FROM th_per_parientes pp
             LEFT JOIN th_cat_parentesco p 
@@ -47,6 +50,7 @@ class th_per_parientesM extends BaseModel
         return $this->db->datos($sql);
     }
 
+  
     public function listar_pariente_por_id($id)
     {
         $id = intval($id);
@@ -58,7 +62,11 @@ class th_per_parientesM extends BaseModel
                 pp.id_parentesco,
                 pp.th_ppa_nombres AS nombres,
                 pp.th_ppa_apellidos AS apellidos,
-                p.descripcion AS parentesco_nombre
+                pp.th_ppa_numero_telefono AS numero_telefono,
+                pp.th_ppa_fecha_nacimiento AS fecha_nacimiento,
+                pp.th_ppa_contacto_emergencia AS contacto_emergencia,
+                p.descripcion AS parentesco_nombre,
+                p.cantidad AS parentesco_cantidad
             FROM th_per_parientes pp
             LEFT JOIN th_cat_parentesco p 
                 ON pp.id_parentesco = p.id_parentesco
@@ -69,20 +77,39 @@ class th_per_parientesM extends BaseModel
         return $this->db->datos($sql);
     }
 
-   
-    public function obtener_parentesco_por_id($id_parentesco)
+    /**
+     * Obtener información del parentesco
+     */
+    public function obtener_info_parentesco($id_parentesco)
     {
         $id_parentesco = intval($id_parentesco);
 
         $sql = "
             SELECT 
                 id_parentesco,
-                descripcion AS parentesco_nombre
+                descripcion,
+                cantidad
             FROM th_cat_parentesco
             WHERE id_parentesco = $id_parentesco
               AND estado = 1
         ";
 
         return $this->db->datos($sql);
+    }
+
+    public function contar_parientes_por_tipo($per_id, $id_parentesco)
+    {
+        $per_id = intval($per_id);
+        $id_parentesco = intval($id_parentesco);
+
+        $sql = "
+            SELECT COUNT(*) as total 
+            FROM th_per_parientes 
+            WHERE th_per_id = $per_id 
+              AND id_parentesco = $id_parentesco 
+              AND th_ppa_estado = 1
+        ";
+
+        $resultado = $this->db->datos($sql);
     }
 }

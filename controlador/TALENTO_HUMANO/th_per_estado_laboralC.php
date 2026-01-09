@@ -37,21 +37,36 @@ class th_per_estado_laboralC
             $estado_laboral = isset($value['th_est_estado_laboral']) ? $value['th_est_estado_laboral'] : 'N/A';
             $cargo = isset($value['cargo_nombre']) ? $value['cargo_nombre'] : 'N/A';
             $seccion = isset($value['seccion_descripcion']) ? $value['seccion_descripcion'] : 'N/A';
+            
+            // Remuneración
+            $remuneracion = '';
+            if (!empty($value['th_est_remuneracion'])) {
+                $remuneracion = '<p class="m-0"><strong>Remuneración:</strong> $' . number_format($value['th_est_remuneracion'], 2) . '</p>';
+            }
+            
+            // Fecha de contratación
             $fecha_contratacion = isset($value['th_est_fecha_contratacion']) && $value['th_est_fecha_contratacion']
                 ? date('d/m/Y', strtotime($value['th_est_fecha_contratacion']))
                 : 'N/A';
+            
+            // Fecha de salida
             $fecha_salida = 'Indefinido';
-
             if (!empty($value['th_est_fecha_salida'])) {
                 $fecha = date('Y-m-d', strtotime($value['th_est_fecha_salida']));
-
                 if ($fecha !== '1900-01-01') {
                     $fecha_salida = date('d/m/Y', strtotime($value['th_est_fecha_salida']));
                 }
             }
 
+            // Badge según el check
+            $tipo_badge = '';
+            if ($value['th_est_check_estado_laboral'] == 1) {
+                $tipo_badge = '<span class="badge bg-info ms-2">RECATEGORIZACIÓN</span>';
+            } else {
+                $tipo_badge = '<span class="badge bg-danger ms-2">DADO DE BAJA</span>';
+            }
 
-
+            // Badge del estado laboral
             $badge_class = '';
             switch ($estado_laboral) {
                 case 'Activo':
@@ -76,27 +91,28 @@ class th_per_estado_laboralC
                     $badge_class = 'bg-secondary';
             }
 
-            $texto .=
-                <<<HTML
-                    <div class="row mb-col">
-                        <div class="col-10">
-                            <div class="d-flex align-items-center mb-2">
-                                <h6 class="fw-bold mb-0 me-2">Estado:</h6>
-                                <span class="badge {$badge_class}">{$estado_laboral}</span>
-                            </div>
-                            <p class="m-0"><strong>Cargo:</strong> {$cargo}</p>
-                            <p class="m-0"><strong>Sección:</strong> {$seccion}</p>
-                            <p class="m-0"><strong>Fecha de Contratación:</strong> {$fecha_contratacion}</p>
-                            <p class="m-0"><strong>Fecha de Salida:</strong> {$fecha_salida}</p>
+            $texto .= <<<HTML
+                <div class="row mb-col">
+                    <div class="col-10">
+                        <div class="d-flex align-items-center mb-2">
+                            <h6 class="fw-bold mb-0 me-2">Estado:</h6>
+                            <span class="badge {$badge_class}">{$estado_laboral}</span>
+                            {$tipo_badge}
                         </div>
-                        <div class="col-2 d-flex justify-content-end align-items-start">
-                            <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_estado_laboral('{$value['_id']}');">
-                                <i class="text-dark bx bx-pencil bx-sm"></i>
-                            </button>
-                        </div>
+                        <p class="m-0"><strong>Cargo:</strong> {$cargo}</p>
+                        <p class="m-0"><strong>Sección:</strong> {$seccion}</p>
+                        {$remuneracion}
+                        <p class="m-0"><strong>Fecha de Contratación:</strong> {$fecha_contratacion}</p>
+                        <p class="m-0"><strong>Fecha de Salida:</strong> {$fecha_salida}</p>
                     </div>
-                    <hr>
-                HTML;
+                    <div class="col-2 d-flex justify-content-end align-items-start">
+                        <button class="btn icon-hover" onclick="abrir_modal_estado_laboral('{$value['_id']}');">
+                            <i class="text-dark bx bx-pencil bx-sm"></i>
+                        </button>
+                    </div>
+                </div>
+                <hr>
+            HTML;
         }
 
         if (empty($datos)) {
@@ -122,32 +138,39 @@ class th_per_estado_laboralC
             array('campo' => 'id_cargo', 'dato' => $parametros['ddl_cargo']),
             array('campo' => 'id_seccion', 'dato' => $parametros['ddl_seccion']),
             array('campo' => 'th_est_estado_laboral', 'dato' => $parametros['ddl_estado_laboral']),
+            array('campo' => 'th_est_remuneracion', 'dato' => $parametros['txt_remuneracion']),
+            array('campo' => 'th_est_check_estado_laboral', 'dato' => $parametros['chk_tipo_cambio']),
             array('campo' => 'th_est_fecha_contratacion', 'dato' => $parametros['txt_fecha_contratacion_estado']),
             array('campo' => 'th_est_fecha_salida', 'dato' => $parametros['txt_fecha_salida_estado']),
         );
 
         if ($parametros['_id'] == '') {
-            $datos = $this->modelo->insertar($datos);
+            // INSERTAR
+            $datos[] = array('campo' => 'th_est_fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
+            $resultado = $this->modelo->insertar($datos);
         } else {
+            // EDITAR
+            $datos[] = array('campo' => 'th_est_fecha_modificacion', 'dato' => date('Y-m-d H:i:s'));
             $where[0]['campo'] = 'th_est_id';
             $where[0]['dato'] = $parametros['_id'];
-            $datos = $this->modelo->editar($datos, $where);
+            $resultado = $this->modelo->editar($datos, $where);
         }
 
-        return $datos;
+        return $resultado;
     }
 
     function eliminar($id)
     {
         $datos = array(
             array('campo' => 'th_est_estado', 'dato' => 0),
+            array('campo' => 'th_est_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
         );
 
         $where[0]['campo'] = 'th_est_id';
         $where[0]['dato'] = strval($id);
 
-        $datos = $this->modelo->editar($datos, $where);
+        $resultado = $this->modelo->editar($datos, $where);
 
-        return $datos;
+        return $resultado;
     }
 }
