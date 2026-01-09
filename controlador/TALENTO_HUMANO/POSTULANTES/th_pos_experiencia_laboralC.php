@@ -17,7 +17,7 @@ if (isset($_GET['insertar'])) {
 }
 
 if (isset($_GET['eliminar'])) {
-    echo json_encode($controlador->eliminar($_POST['id'] ?? '', $_POST['id_postulante'] ?? '' ));
+    echo json_encode($controlador->eliminar($_POST['id'] ?? '', $_POST['id_postulante'] ?? ''));
 }
 
 
@@ -108,8 +108,10 @@ class th_pos_experiencia_laboralC
 
         $texto = $resultado['resumen_general']['tiempo_total']['texto'];
 
-        $promedio =  number_format($resultado['resumen_general']['remuneracion_promedio'], 2);
-
+        $promedio = round(
+            (float)$resultado['resumen_general']['remuneracion_promedio'],
+            2
+        );
         $encontrado =  $this->th_per_informacion_adicional
             ->where('th_per_id', $parametros['txt_id_postulante'])
             ->listar();
