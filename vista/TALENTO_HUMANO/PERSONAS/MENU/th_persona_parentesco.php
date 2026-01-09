@@ -32,14 +32,16 @@
             },
             dataType: 'json',
             success: function(response) {
-                $('#ddl_parentesco').append($('<option>', {
-                    value: response[0].id_parentesco,
-                    text: response[0].parentesco_nombre,
-                    selected: true
-                }));
-                $('#txt_nombres_pariente').val(response[0].nombres);
-                $('#txt_apellidos_pariente').val(response[0].apellidos);
-                $('#txt_pariente_id').val(response[0]._id);
+                if (response && response.length > 0) {
+                    $('#ddl_parentesco').append($('<option>', {
+                        value: response[0].id_parentesco,
+                        text: response[0].parentesco_nombre,
+                        selected: true
+                    }));
+                    $('#txt_nombres_pariente').val(response[0].nombres);
+                    $('#txt_apellidos_pariente').val(response[0].apellidos);
+                    $('#txt_pariente_id').val(response[0]._id);
+                }
             }
         });
     }
@@ -92,16 +94,20 @@
     }
 
     function abrir_modal_pariente(id) {
-        cargar_datos_modal_parientes(id);
+        limpiar_campos_parientes_modal(); // Primero limpia
+        cargar_datos_modal_parientes(id); // Luego carga los datos
         $('#modal_parientes').modal('show');
         $('#lbl_titulo_parientes').html('Editar Pariente');
         $('#btn_guardar_parientes').html('<i class="bx bx-save"></i> Editar');
-        $('#btn_eliminar_parientes').show();
+        $('#btn_eliminar_parientes').show(); // Muestra el botón eliminar
     }
 
     function abrir_modal_nuevo_pariente() {
         limpiar_campos_parientes_modal();
         $('#modal_parientes').modal('show');
+        $('#lbl_titulo_parientes').html('Agregar Pariente');
+        $('#btn_guardar_parientes').html('<i class="bx bx-save"></i> Agregar');
+        $('#btn_eliminar_parientes').hide(); // Oculta el botón eliminar
     }
 
     function delete_datos_parientes() {
