@@ -151,8 +151,8 @@ class th_pos_experiencia_laboralC
         $resultado = $this->calcular_experiencia_y_remuneracion($experiencias);
 
         $texto = $resultado['resumen_general']['tiempo_total']['texto'];
-        $promedio = number_format(
-            $resultado['resumen_general']['remuneracion_promedio'],
+        $promedio = round(
+            (float)$resultado['resumen_general']['remuneracion_promedio'],
             2
         );
 
