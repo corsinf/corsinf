@@ -12,6 +12,7 @@ class th_cat_parentescoM extends BaseModel
         'descripcion AS descripcion',
         'estado AS estado',
         'cantidad AS cantidad',
-        'fecha_creacion AS fecha_creacion'
+        'fecha_creacion AS fecha_creacion',
+        'requiere_fec_nac AS requiere_fec_nac'
     ];
 }

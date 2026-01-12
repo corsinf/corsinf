@@ -37,17 +37,71 @@
                         value: response[0].id_parentesco,
                         text: response[0].parentesco_nombre,
                         selected: true
-                    }));
+                    })).trigger('change');
+
                     $('#txt_nombres_pariente').val(response[0].nombres);
                     $('#txt_apellidos_pariente').val(response[0].apellidos);
                     $('#txt_telefono_pariente').val(response[0].numero_telefono);
                     $('#txt_fecha_nacimiento_pariente').val(response[0].fecha_nacimiento);
                     $('#chk_contacto_emergencia').prop('checked', response[0].contacto_emergencia == 1);
                     $('#txt_pariente_id').val(response[0]._id);
-                    
-                    // Calcular edad si hay fecha de nacimiento
-                    if (response[0].fecha_nacimiento) {
+
+                    if (
+                        response[0].fecha_nacimiento &&
+                        response[0].fecha_nacimiento !== '1900-01-01' &&
+                        response[0].fecha_nacimiento !== '1900-01-01 00:00:00'
+                    ) {
+                        $('#txt_fecha_nacimiento_pariente').val(response[0].fecha_nacimiento);
                         calcular_edad_pariente();
+                    } else {
+                        $('#txt_fecha_nacimiento_pariente').val('');
+                        $('#txt_edad_pariente').val(''); // si tienes input de edad
+                    }
+
+                }
+            }
+        });
+    }
+
+    function validar_parentesco_seleccionado() {
+        var id_parentesco = $('#ddl_parentesco').val();
+
+        if (!id_parentesco) {
+            return;
+        }
+
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_per_parientesC.php?obtener_info_parentesco=true',
+            type: 'post',
+            data: {
+                id_parentesco: id_parentesco
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response && response.length > 0) {
+                    var requiere_fec_nac = response[0].requiere_fec_nac;
+
+                    if (requiere_fec_nac == 1) {
+                        // Hacer obligatoria la fecha de nacimiento
+                        $('#txt_fecha_nacimiento_pariente').rules('add', {
+                            required: true,
+                            messages: {
+                                required: "La fecha de nacimiento es obligatoria para este parentesco"
+                            }
+                        });
+                        $('#lbl_fecha_nacimiento_pariente').addClass('campo-obligatorio');
+
+                        // Agregar asterisco si no existe
+                        if ($('#lbl_fecha_nacimiento_pariente .text-danger').length == 0) {
+                            $('#lbl_fecha_nacimiento_pariente').append(' <span class="text-danger">*</span>');
+                        }
+                    } else {
+                        // Hacer opcional la fecha de nacimiento
+                        $('#txt_fecha_nacimiento_pariente').rules('remove', 'required');
+                        $('#lbl_fecha_nacimiento_pariente').removeClass('campo-obligatorio');
+
+                        // Remover asterisco
+                        $('#lbl_fecha_nacimiento_pariente .text-danger').remove();
                     }
                 }
             }
@@ -61,11 +115,11 @@
             var nacimiento = new Date(fecha_nacimiento);
             var edad = hoy.getFullYear() - nacimiento.getFullYear();
             var mes = hoy.getMonth() - nacimiento.getMonth();
-            
+
             if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
                 edad--;
             }
-            
+
             $('#txt_edad_pariente').val(edad >= 0 ? edad : 0);
         } else {
             $('#txt_edad_pariente').val('');
@@ -114,8 +168,10 @@
                     limpiar_campos_parientes_modal();
                 } else if (response == -2) {
                     Swal.fire('', 'Ya se alcanzó el límite permitido para este tipo de parentesco.', 'warning');
-                } else if (response == -3) {
+                } else if (response == -4) {
                     Swal.fire('', 'Parentesco no válido.', 'warning');
+                } else if (response == -3) {
+                    Swal.fire('', 'La fecha de nacimiento es obligatoria para este tipo de parentesco.', 'warning');
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
                 }
@@ -191,6 +247,11 @@
         $('#lbl_titulo_parientes').html('Agregar Referencia Personal');
         $('#btn_guardar_parientes').html('<i class="bx bx-save"></i> Agregar');
         $('#btn_eliminar_parientes').hide();
+
+        // Remover validación dinámica y asterisco
+        $('#txt_fecha_nacimiento_pariente').rules('remove', 'required');
+        $('#lbl_fecha_nacimiento_pariente').removeClass('campo-obligatorio');
+        $('#lbl_fecha_nacimiento_pariente .text-danger').remove();
     }
 </script>
 
@@ -209,11 +270,15 @@
                 <input type="hidden" name="txt_pariente_id" id="txt_pariente_id">
                 <div class="modal-body">
                     <div class="row mb-col">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label for="ddl_parentesco" class="form-label form-label-sm">Parentesco:</label>
-                            <select class="form-select form-select-sm" id="ddl_parentesco" name="ddl_parentesco" required>
+                            <select class="form-select form-select-sm" id="ddl_parentesco" name="ddl_parentesco" onchange="validar_parentesco_seleccionado()" required>
                                 <option selected disabled value="">-- Seleccione un Parentesco --</option>
                             </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="txt_telefono_pariente" class="form-label form-label-sm">Número de Teléfono:</label>
+                            <input type="text" class="form-control form-control-sm" name="txt_telefono_pariente" id="txt_telefono_pariente">
                         </div>
                     </div>
                     <div class="row mb-col">
@@ -228,26 +293,29 @@
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-6">
-                            <label for="txt_telefono_pariente" class="form-label form-label-sm">Número de Teléfono:</label>
-                            <input type="text" class="form-control form-control-sm" name="txt_telefono_pariente" id="txt_telefono_pariente">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="txt_fecha_nacimiento_pariente" class="form-label form-label-sm">Fecha de Nacimiento:</label>
+                            <label for="txt_fecha_nacimiento_pariente" class="form-label form-label-sm" id="lbl_fecha_nacimiento_pariente">Fecha de Nacimiento:</label>
                             <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento_pariente" id="txt_fecha_nacimiento_pariente" onchange="calcular_edad_pariente()">
                         </div>
-                    </div>
-                    <div class="row mb-col">
                         <div class="col-md-6">
                             <label for="txt_edad_pariente" class="form-label form-label-sm">Edad:</label>
                             <input type="number" class="form-control form-control-sm" name="txt_edad_pariente" id="txt_edad_pariente" readonly>
                         </div>
-                        <div class="col-md-6 d-flex align-items-end">
+                    </div>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="chk_contacto_emergencia" name="chk_contacto_emergencia">
+                                <input class="form-check-input" type="checkbox"
+                                    id="chk_contacto_emergencia"
+                                    name="chk_contacto_emergencia">
+
                                 <label class="form-check-label" for="chk_contacto_emergencia">
                                     Contacto de Emergencia
                                 </label>
                             </div>
+
+                            <span class="form-text text-muted ms-4">
+                                Este pariente será utilizado como contacto en caso de una emergencia.
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -277,6 +345,7 @@
                 txt_apellidos_pariente: {
                     required: true,
                 },
+                // La fecha de nacimiento se validará dinámicamente
             },
             messages: {
                 ddl_parentesco: {

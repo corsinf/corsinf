@@ -37,12 +37,19 @@ class th_per_parientesC
             $contacto_emergencia = $value['contacto_emergencia'] == 1 ? '<span class="badge bg-danger ms-2">Contacto Emergencia</span>' : '';
             $edad = '';
 
-            if (!empty($value['fecha_nacimiento'])) {
+            $edad = '';
+
+            if (
+                !empty($value['fecha_nacimiento']) &&
+                $value['fecha_nacimiento'] !== '1900-01-01' &&
+                $value['fecha_nacimiento'] !== '1900-01-01 00:00:00'
+            ) {
                 $fecha_nac = new DateTime($value['fecha_nacimiento']);
                 $hoy = new DateTime();
                 $edad_calculada = $hoy->diff($fecha_nac)->y;
                 $edad = " ({$edad_calculada} años)";
             }
+
 
             $telefono = !empty($value['numero_telefono']) ? "<p class='m-0'><strong>Teléfono:</strong> {$value['numero_telefono']}</p>" : '';
 
@@ -80,7 +87,19 @@ class th_per_parientesC
         $id_parentesco = $parametros['ddl_parentesco'];
         $per_id = $parametros['per_id'];
         $id_registro = $parametros['_id'];
+        $fecha_nacimiento = $parametros['txt_fecha_nacimiento'];
 
+        $info_parentesco = $this->modelo->obtener_info_parentesco($id_parentesco);
+
+        if (empty($info_parentesco)) {
+            return -1;
+        }
+
+        $config = $info_parentesco[0];
+
+        if ($config['requiere_fec_nac'] == 1 && empty($fecha_nacimiento)) {
+            return -3;
+        }
 
         $datos = [
             ['campo' => 'th_per_id', 'dato' => $per_id],
@@ -88,49 +107,33 @@ class th_per_parientesC
             ['campo' => 'th_ppa_nombres', 'dato' => $parametros['txt_nombres']],
             ['campo' => 'th_ppa_apellidos', 'dato' => $parametros['txt_apellidos']],
             ['campo' => 'th_ppa_numero_telefono', 'dato' => $parametros['txt_telefono']],
-            ['campo' => 'th_ppa_fecha_nacimiento', 'dato' => $parametros['txt_fecha_nacimiento']],
+            ['campo' => 'th_ppa_fecha_nacimiento', 'dato' => $fecha_nacimiento],
             ['campo' => 'th_ppa_contacto_emergencia', 'dato' => $parametros['chk_contacto_emergencia']]
         ];
 
         if ($id_registro == '') {
-            $parentesco = $this->modelo->where('th_per_id', $per_id)->where('id_parentesco', $id_parentesco)->listar();
+            $total_existente = $this->modelo->contar_parientes_por_tipo($per_id, $id_parentesco);
 
-            $info_parentesco = $this->modelo->obtener_info_parentesco($id_parentesco);
-
-            $total = count($parentesco);
-
-            if ($info_parentesco[0]['cantidad'] == '1') {
-                if ($total == 1) {
-                    return -2;
-                }
-            } else if ($info_parentesco[0]['cantidad'] == '2') {
-                if ($total == 2) {
-                    return -2;
-                }
+            if ($config['cantidad'] > 0 && $total_existente >= $config['cantidad']) {
+                return -2;
             }
+
             $datos[] = ['campo' => 'th_ppa_fecha_creacion', 'dato' => date('Y-m-d H:i:s')];
             return $this->modelo->insertar($datos);
         } else {
-            $parentesco = $this->modelo->where('th_per_id', $per_id)
-            ->where('id_parentesco', $id_parentesco)
-            ->where('th_ppa_id!', $parametros['_id'])
-            ->listar();
+            // Editar: Validar cantidad máxima excluyendo el actual
+            $parentesco_otros = $this->modelo->where('th_per_id', $per_id)
+                ->where('id_parentesco', $id_parentesco)
+                ->where('th_ppa_id!', $id_registro)
+                ->listar();
 
-            $info_parentesco = $this->modelo->obtener_info_parentesco($id_parentesco);
+            $total_otros = count($parentesco_otros);
 
-            $total = count($parentesco);
-
-            if ($info_parentesco[0]['cantidad'] == '1') {
-                if ($total == 1) {
-                    return -2;
-                }
-            } else if ($info_parentesco[0]['cantidad'] == '2') {
-                if ($total == 2) {
-                    return -2;
-                }
+            if ($config['cantidad'] > 0 && $total_otros >= $config['cantidad']) {
+                return -2;
             }
-            $datos[] = ['campo' => 'th_ppa_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')];
 
+            $datos[] = ['campo' => 'th_ppa_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')];
             $where[0]['campo'] = 'th_ppa_id';
             $where[0]['dato'] = $id_registro;
 

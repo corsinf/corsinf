@@ -5,6 +5,8 @@
     });
 
     function cargar_selects() {
+        url_estado_laboralC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_estado_laboralC.php?buscar=true';
+        cargar_select2_url('ddl_estado_laboral', url_estado_laboralC, '', '#modal_estado_laboral');
         url_cargoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_cargoC.php?buscar=true';
         cargar_select2_url('ddl_cargo', url_cargoC, '', '#modal_estado_laboral');
         url_seccionC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_seccionC.php?buscar=true';
@@ -23,7 +25,6 @@
             dataType: 'json',
             success: function(response) {
                 $('#pnl_estado_laboral').html(response.html);
-                console.log('Existe botón:', $('#pnl_crear_estado_laboral').length);
 
                 if (response.tiene_registros) {
                     $('#pnl_crear_estado_laboral').addClass('d-none');
@@ -43,23 +44,45 @@
             },
             dataType: 'json',
             success: function(response) {
-                $('#ddl_estado_laboral').val(response[0].th_est_estado_laboral);
+                $('#ddl_estado_laboral').append($('<option>', {
+                    value: response[0].id_estado_laboral,
+                    text: response[0].estado_laboral_descripcion,
+                    selected: true
+                }));
+
+                // Cargar cargo
                 $('#ddl_cargo').append($('<option>', {
                     value: response[0].id_cargo,
                     text: response[0].cargo_nombre,
                     selected: true
                 }));
+
+                // Cargar sección
                 $('#ddl_seccion').append($('<option>', {
                     value: response[0].id_seccion,
                     text: response[0].seccion_descripcion,
                     selected: true
                 }));
+
+                // Cargar nómina
+                if (response[0].id_nomina) {
+                    $('#ddl_nomina').append($('<option>', {
+                        value: response[0].id_nomina,
+                        text: response[0].nomina_nombre,
+                        selected: true
+                    }));
+                }
+
                 $('#txt_remuneracion').val(response[0].th_est_remuneracion);
                 $('#txt_fecha_contratacion_estado').val(response[0].th_est_fecha_contratacion);
 
-                // Cargar el checkbox de tipo de cambio
-                var check_estado = response[0].th_est_check_estado_laboral;
-                $('#chk_tipo_cambio').prop('checked', check_estado == 1);
+                // Cargar el radio button de tipo de cambio
+                var tipo_cambio = response[0].th_est_check_estado_laboral;
+                if (tipo_cambio == 1) {
+                    $('#radio_recategorizacion').prop('checked', true);
+                } else {
+                    $('#radio_baja').prop('checked', true);
+                }
 
                 // Verificar si la fecha de salida es NULL, vacía o 01/01/1900
                 var fechaSalida = response[0].th_est_fecha_salida;
@@ -84,11 +107,12 @@
         var ddl_estado_laboral = $('#ddl_estado_laboral').val();
         var ddl_cargo = $('#ddl_cargo').val();
         var ddl_seccion = $('#ddl_seccion').val();
+        var ddl_nomina = $('#ddl_nomina').val();
         var txt_remuneracion = $('#txt_remuneracion').val();
         var txt_fecha_contratacion_estado = $('#txt_fecha_contratacion_estado').val();
 
-        // Obtener el valor del checkbox: 1 = RECATEGORIZACIÓN, 0 = DADO DE BAJA
-        var chk_tipo_cambio = $('#chk_tipo_cambio').is(':checked') ? 1 : 0;
+        // Obtener el valor del radio button: 1 = RECATEGORIZACIÓN, 0 = DADO DE BAJA
+        var tipo_cambio = $('input[name="tipo_cambio"]:checked').val() === 'recategorizacion' ? 1 : 0;
 
         // Si el checkbox está marcado, enviar null
         var txt_fecha_salida_estado = $('#cbx_fecha_salida_estado').is(':checked') ? null : $('#txt_fecha_salida_estado').val();
@@ -101,8 +125,9 @@
             'ddl_estado_laboral': ddl_estado_laboral,
             'ddl_cargo': ddl_cargo,
             'ddl_seccion': ddl_seccion,
+            'ddl_nomina': ddl_nomina,
             'txt_remuneracion': txt_remuneracion,
-            'chk_tipo_cambio': chk_tipo_cambio,
+            'tipo_cambio': tipo_cambio,
             'txt_fecha_contratacion_estado': txt_fecha_contratacion_estado,
             'txt_fecha_salida_estado': txt_fecha_salida_estado,
             '_id': txt_experiencia_estado_id,
@@ -135,11 +160,11 @@
     }
 
     function ocultar_opciones_estado() {
-        var select_opciones_estado = $('#ddl_estado_laboral').val();
-        var valor_seleccionado = select_opciones_estado;
+        var select_opciones_estado = $('#ddl_estado_laboral option:selected').text();
         $('#txt_fecha_contratacion_estado').prop('disabled', false);
         $('#txt_fecha_salida_estado').prop('disabled', false);
-        if (valor_seleccionado === "Freelancer" || valor_seleccionado === "Autonomo") {
+
+        if (select_opciones_estado === "Freelancer" || select_opciones_estado === "Autonomo") {
             $('#txt_fecha_contratacion_estado').prop('disabled', true);
             $('#txt_fecha_salida_estado').prop('disabled', true);
             $('#txt_fecha_contratacion_estado').val('');
@@ -196,15 +221,16 @@
     function limpiar_campos_estado_laboral_modal() {
         $('#form_estado_laboral').validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
-        $('#ddl_estado_laboral').val('');
+        $('#ddl_estado_laboral').val('').trigger('change');
         $('#ddl_cargo').val('').trigger('change');
         $('#ddl_seccion').val('').trigger('change');
+        $('#ddl_nomina').val('').trigger('change');
         $('#txt_remuneracion').val('');
         $('#txt_fecha_contratacion_estado').val('');
         $('#txt_fecha_salida_estado').val('');
         $('#txt_experiencia_estado_id').val('');
         $('#cbx_fecha_salida_estado').prop('checked', false);
-        $('#chk_tipo_cambio').prop('checked', false);
+        $('#radio_baja').prop('checked', true);
         $('#txt_fecha_contratacion_estado').prop('disabled', false);
         $('#txt_fecha_salida_estado').prop('disabled', false);
         $('#lbl_titulo_estado_laboral').html('Agregar Estado Laboral');
@@ -215,7 +241,7 @@
     function validar_fechas_est_lab() {
         var fecha_inicio = $('#txt_fecha_contratacion_estado').val();
         var fecha_final = $('#txt_fecha_salida_estado').val();
-        var estado = $('#ddl_estado_laboral').val();
+        var estado = $('#ddl_estado_laboral option:selected').text();
 
         // No validar si el checkbox está marcado (indefinido)
         if ($('#cbx_fecha_salida_estado').is(':checked')) {
@@ -225,9 +251,11 @@
         if (estado === "Freelancer" || estado === "Autonomo") {
             return true;
         }
+
         if (!fecha_inicio || !fecha_final) {
             return true;
         }
+
         if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
             Swal.fire({
                 icon: "error",
@@ -273,13 +301,9 @@
                 <div class="modal-body">
                     <div class="row mb-col">
                         <div class="col-md-6">
-                            <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado laboral:</label>
-                            <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" onchange="ocultar_opciones_estado();" required>
-                                <option selected disabled value="">-- Seleccione un Estado Laboral --</option>
-                                <option value="Activo">Activo</option>
-                                <option value="Prueba">En prueba</option>
-                                <option value="Pasante">Pasante</option>
-                                <option value="Freelancer">Freelancer</option>
+                            <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado Laboral:</label>
+                            <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" onchange="ocultar_opciones_estado()" required>
+                                <option selected disabled value="">-- Seleccione un Estado --</option>
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -304,17 +328,9 @@
                         </div>
                     </div>
                     <div class="row mb-col">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label for="txt_remuneracion" class="form-label form-label-sm">Remuneración:</label>
                             <input type="number" step="0.01" class="form-control form-control-sm" name="txt_remuneracion" id="txt_remuneracion" placeholder="0.00">
-                        </div>
-                        <div class="col-md-6 d-flex align-items-end">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="chk_tipo_cambio" name="chk_tipo_cambio">
-                                <label class="form-check-label" for="chk_tipo_cambio">
-                                    Marcar si es Recategorización (sino será Dado de Baja)
-                                </label>
-                            </div>
                         </div>
                     </div>
                     <div class="row mb-col">
@@ -329,6 +345,25 @@
                                 <div class="input-group-text">
                                     <input class="form-check-input mt-0" type="checkbox" id="cbx_fecha_salida_estado" onchange="checkbox_actualidad_est_lab();" title="Marcar si el periodo es indefinido">
                                     <label class="form-check-label ms-1" for="cbx_fecha_salida_estado" style="font-size: 0.8rem;">Indefinido</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label class="form-label form-label-sm">Tipo de cambio:</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="tipo_cambio" id="radio_baja" value="baja" checked>
+                                    <label class="form-check-label" for="radio_baja">
+                                        DADO DE BAJA
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="tipo_cambio" id="radio_recategorizacion" value="recategorizacion">
+                                    <label class="form-check-label" for="radio_recategorizacion">
+                                        RECATEGORIZACIÓN
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -348,6 +383,7 @@
         agregar_asterisco_campo_obligatorio('ddl_estado_laboral');
         agregar_asterisco_campo_obligatorio('ddl_cargo');
         agregar_asterisco_campo_obligatorio('ddl_seccion');
+        agregar_asterisco_campo_obligatorio('ddl_nomina');
         agregar_asterisco_campo_obligatorio('txt_fecha_contratacion_estado');
         agregar_asterisco_campo_obligatorio('txt_fecha_salida_estado');
 
@@ -362,15 +398,18 @@
                 ddl_seccion: {
                     required: true,
                 },
+                ddl_nomina: {
+                    required: true,
+                },
                 txt_fecha_contratacion_estado: {
                     required: function() {
-                        var estado = $('#ddl_estado_laboral').val();
+                        var estado = $('#ddl_estado_laboral option:selected').text();
                         return estado !== "Freelancer" && estado !== "Autonomo";
                     }
                 },
                 txt_fecha_salida_estado: {
                     required: function() {
-                        var estado = $('#ddl_estado_laboral').val();
+                        var estado = $('#ddl_estado_laboral option:selected').text();
                         return estado !== "Freelancer" && estado !== "Autonomo" && !$('#cbx_fecha_salida_estado').is(':checked');
                     }
                 },
@@ -384,6 +423,9 @@
                 },
                 ddl_seccion: {
                     required: "Por favor seleccione una sección",
+                },
+                ddl_nomina: {
+                    required: "Por favor seleccione una nómina",
                 },
                 txt_fecha_contratacion_estado: {
                     required: "Por favor ingrese la fecha de contratación",

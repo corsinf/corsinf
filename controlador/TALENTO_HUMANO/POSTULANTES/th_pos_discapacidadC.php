@@ -44,7 +44,7 @@ class th_pos_discapacidadC
                 <div class="col-10">
                     <p class="m-0"><strong>Discapacidad:</strong> {$value['discapacidad']}</p>
                     <p class="m-0"><strong>Porcentaje:</strong> {$value['th_pos_dis_porcentaje']}%</p>
-                    <p class="m-0"><strong>Escala:</strong> {$value['th_pos_dis_escala']}</p>
+                    <p class="m-0"><strong>Escala:</strong> {$value['escala_discapacidad']}</p>
                 </div>
                 <div class="col-2 d-flex justify-content-end">
                     <button class="btn icon-hover"
@@ -68,54 +68,42 @@ class th_pos_discapacidadC
 
     function guardar($parametros)
     {
+        $id_postulante = $parametros['pos_id'];
+        $id_discapacidad = $parametros['ddl_discapacidad'];
+        $id_escala = $parametros['ddl_discapacidad_escala'];
+        $id_registro = $parametros['_id'];
+
         $this->modelo->reset();
+        $this->modelo->where('th_pos_id', $id_postulante)
+            ->where('id_discapacidad', $id_discapacidad)
+            ->where('id_escala_dis', $id_escala);
 
-        $existe = $this->modelo
-            ->where('th_pos_id', $parametros['pos_id'])
-            ->where('id_discapacidad', $parametros['ddl_discapacidad'])
-            ->listar();
-
-        if ($parametros['_id'] == '') {
-
-            if (count($existe) > 0) {
-                return -2;
-            }
-
-            $datos = [
-                ['campo' => 'th_pos_id', 'dato' => $parametros['pos_id']],
-                ['campo' => 'id_discapacidad', 'dato' => $parametros['ddl_discapacidad']],
-                ['campo' => 'th_pos_dis_porcentaje', 'dato' => $parametros['txt_porcentaje']],
-                ['campo' => 'th_pos_dis_escala', 'dato' => $parametros['txt_escala']],
-            ];
-
-            return $this->modelo->insertar($datos);
+        if ($id_registro != '') {
+            $this->modelo->where('th_pos_dis_id !', $id_registro);
         }
 
-        $this->modelo->reset();
-
-        $existe = $this->modelo
-            ->where('th_pos_id', $parametros['pos_id'])
-            ->where('id_discapacidad', $parametros['ddl_discapacidad'])
-            ->where('th_pos_dis_id !', $parametros['_id'])
-            ->listar();
+        $existe = $this->modelo->listar();
 
         if (count($existe) > 0) {
             return -2;
         }
 
         $datos = [
-            ['campo' => 'th_pos_id', 'dato' => $parametros['pos_id']],
-            ['campo' => 'id_discapacidad', 'dato' => $parametros['ddl_discapacidad']],
+            ['campo' => 'th_pos_id', 'dato' => $id_postulante],
+            ['campo' => 'id_discapacidad', 'dato' => $id_discapacidad],
+            ['campo' => 'id_escala_dis', 'dato' => $id_escala],
             ['campo' => 'th_pos_dis_porcentaje', 'dato' => $parametros['txt_porcentaje']],
-            ['campo' => 'th_pos_dis_escala', 'dato' => $parametros['txt_escala']],
         ];
 
-        $where[] = [
-            'campo' => 'th_pos_dis_id',
-            'dato'  => $parametros['_id']
-        ];
-
-        return $this->modelo->editar($datos, $where);
+        if ($id_registro == '') {
+            return $this->modelo->insertar($datos);
+        } else {
+            $where[] = [
+                'campo' => 'th_pos_dis_id',
+                'dato'  => $id_registro
+            ];
+            return $this->modelo->editar($datos, $where);
+        }
     }
 
 

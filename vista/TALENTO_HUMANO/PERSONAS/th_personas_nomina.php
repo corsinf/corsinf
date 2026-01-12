@@ -132,7 +132,9 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                                 id="ddl_departamentos"
                                                 name="ddl_departamentos">
                                                 <option selected disabled>-- Seleccione --</option>
+                                                  <option value="">Todos</option>
                                             </select>
+                                            
                                             <label class="error d-none" for="ddl_departamentos"></label>
                                         </div>
 

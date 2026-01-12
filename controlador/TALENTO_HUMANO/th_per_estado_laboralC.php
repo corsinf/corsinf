@@ -1,4 +1,5 @@
 <?php
+// Ajusta la ruta según tu estructura de carpetas
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_per_estado_laboralM.php');
 
 $controlador = new th_per_estado_laboralC();
@@ -31,43 +32,35 @@ class th_per_estado_laboralC
     function listar($id)
     {
         $datos = $this->modelo->listar_estado_laboral_por_persona($id);
-
         $texto = '';
+
         foreach ($datos as $key => $value) {
-            $estado_laboral = isset($value['th_est_estado_laboral']) ? $value['th_est_estado_laboral'] : 'N/A';
-            $cargo = isset($value['cargo_nombre']) ? $value['cargo_nombre'] : 'N/A';
-            $seccion = isset($value['seccion_descripcion']) ? $value['seccion_descripcion'] : 'N/A';
-            
-            // Remuneración
-            $remuneracion = '';
-            if (!empty($value['th_est_remuneracion'])) {
-                $remuneracion = '<p class="m-0"><strong>Remuneración:</strong> $' . number_format($value['th_est_remuneracion'], 2) . '</p>';
-            }
-            
-            // Fecha de contratación
-            $fecha_contratacion = isset($value['th_est_fecha_contratacion']) && $value['th_est_fecha_contratacion']
+            $estado_laboral = $value['estado_laboral_descripcion'] ?? 'N/A';
+            $cargo = $value['cargo_nombre'] ?? 'N/A';
+            $seccion = $value['seccion_descripcion'] ?? 'N/A';
+            $nomina = $value['nomina_nombre'] ?? 'N/A';
+
+            // Remuneración formateada
+            $remuneracion = !empty($value['th_est_remuneracion'])
+                ? '<p class="mb-1"><strong>Remuneración:</strong> $' . number_format($value['th_est_remuneracion'], 2) . '</p>'
+                : '';
+
+            // Fechas
+            $fecha_contratacion = !empty($value['th_est_fecha_contratacion'])
                 ? date('d/m/Y', strtotime($value['th_est_fecha_contratacion']))
                 : 'N/A';
-            
-            // Fecha de salida
+
             $fecha_salida = 'Indefinido';
-            if (!empty($value['th_est_fecha_salida'])) {
-                $fecha = date('Y-m-d', strtotime($value['th_est_fecha_salida']));
-                if ($fecha !== '1900-01-01') {
-                    $fecha_salida = date('d/m/Y', strtotime($value['th_est_fecha_salida']));
-                }
+            if (!empty($value['th_est_fecha_salida']) && $value['th_est_fecha_salida'] !== '1900-01-01') {
+                $fecha_salida = date('d/m/Y', strtotime($value['th_est_fecha_salida']));
             }
 
-            // Badge según el check
-            $tipo_badge = '';
-            if ($value['th_est_check_estado_laboral'] == 1) {
-                $tipo_badge = '<span class="badge bg-info ms-2">RECATEGORIZACIÓN</span>';
-            } else {
-                $tipo_badge = '<span class="badge bg-danger ms-2">DADO DE BAJA</span>';
-            }
+            // Badge Tipo de Cambio (Radio Button logic)
+            $badge_tipo_class = ($value['th_est_check_estado_laboral'] == 1) ? 'bg-info' : 'bg-warning text-dark';
+            $tipo_badge_text = ($value['th_est_check_estado_laboral'] == 1) ? 'RECATEGORIZACIÓN' : 'DADO DE BAJA';
 
-            // Badge del estado laboral
-            $badge_class = '';
+            // Badge Estado dinámico
+            $badge_class = 'bg-secondary';
             switch ($estado_laboral) {
                 case 'Activo':
                     $badge_class = 'bg-success';
@@ -76,47 +69,37 @@ class th_per_estado_laboralC
                     $badge_class = 'bg-danger';
                     break;
                 case 'Prueba':
-                    $badge_class = 'bg-warning';
+                    $badge_class = 'bg-warning text-dark';
                     break;
-                case 'Pasante':
-                    $badge_class = 'bg-info';
-                    break;
-                case 'Freelancer':
-                    $badge_class = 'bg-primary';
-                    break;
-                case 'Autonomo':
-                    $badge_class = 'bg-secondary';
-                    break;
-                default:
-                    $badge_class = 'bg-secondary';
             }
 
             $texto .= <<<HTML
-                <div class="row mb-col">
-                    <div class="col-10">
-                        <div class="d-flex align-items-center mb-2">
-                            <h6 class="fw-bold mb-0 me-2">Estado:</h6>
+       <div class="row mb-col">
+                    <div class="col-10" style="cursor: pointer;" onclick="abrir_modal_estado_laboral('{$value['_id']}')">
+                        <div class="mb-2">
                             <span class="badge {$badge_class}">{$estado_laboral}</span>
-                            {$tipo_badge}
                         </div>
-                        <p class="m-0"><strong>Cargo:</strong> {$cargo}</p>
-                        <p class="m-0"><strong>Sección:</strong> {$seccion}</p>
+                        <p class="mb-1"><strong>Cargo:</strong> {$cargo}</p>
+                        <p class="mb-1"><strong>Sección:</strong> {$seccion}</p>
+                        <p class="mb-1"><strong>Nómina:</strong> {$nomina}</p>
                         {$remuneracion}
-                        <p class="m-0"><strong>Fecha de Contratación:</strong> {$fecha_contratacion}</p>
-                        <p class="m-0"><strong>Fecha de Salida:</strong> {$fecha_salida}</p>
+                        <div class="d-flex gap-3 small text-muted mt-2">
+                            <span><i class="bx bx-calendar"></i> Inicia: {$fecha_contratacion}</span>
+                            <span><i class="bx bx-calendar-x"></i> Fin: {$fecha_salida}</span>
+                        </div>
                     </div>
-                    <div class="col-2 d-flex justify-content-end align-items-start">
-                        <button class="btn icon-hover" onclick="abrir_modal_estado_laboral('{$value['_id']}');">
-                            <i class="text-dark bx bx-pencil bx-sm"></i>
+                    
+                    <div class="col-2 text-end">
+                        <button class="btn btn-sm btn-light border icon-hover" title="Editar Registro" onclick="abrir_modal_estado_laboral('{$value['_id']}')">
+                            <i class="bx bx-pencil fs-5 text-dark"></i>
                         </button>
                     </div>
-                </div>
-                <hr>
-            HTML;
+        </div>
+HTML;
         }
 
         if (empty($datos)) {
-            $texto = '<div class="alert alert-info">No hay registros de estado laboral.</div>';
+            $texto = '<div class="alert alert-info text-center">No hay registros de estado laboral.</div>';
         }
 
         return [
@@ -137,9 +120,10 @@ class th_per_estado_laboralC
             array('campo' => 'th_per_id', 'dato' => $parametros['per_id']),
             array('campo' => 'id_cargo', 'dato' => $parametros['ddl_cargo']),
             array('campo' => 'id_seccion', 'dato' => $parametros['ddl_seccion']),
-            array('campo' => 'th_est_estado_laboral', 'dato' => $parametros['ddl_estado_laboral']),
+            array('campo' => 'id_nomina', 'dato' => $parametros['ddl_nomina']),
+            array('campo' => 'id_estado_laboral', 'dato' => $parametros['ddl_estado_laboral']),
             array('campo' => 'th_est_remuneracion', 'dato' => $parametros['txt_remuneracion']),
-            array('campo' => 'th_est_check_estado_laboral', 'dato' => $parametros['chk_tipo_cambio']),
+            array('campo' => 'th_est_check_estado_laboral', 'dato' => $parametros['tipo_cambio']), // Ahora viene del radio button
             array('campo' => 'th_est_fecha_contratacion', 'dato' => $parametros['txt_fecha_contratacion_estado']),
             array('campo' => 'th_est_fecha_salida', 'dato' => $parametros['txt_fecha_salida_estado']),
         );
@@ -168,7 +152,6 @@ class th_per_estado_laboralC
 
         $where[0]['campo'] = 'th_est_id';
         $where[0]['dato'] = strval($id);
-
         $resultado = $this->modelo->editar($datos, $where);
 
         return $resultado;

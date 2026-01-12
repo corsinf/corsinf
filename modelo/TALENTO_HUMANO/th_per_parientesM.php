@@ -38,6 +38,7 @@ class th_per_parientesM extends BaseModel
                 pp.th_ppa_contacto_emergencia AS contacto_emergencia,
                 p.descripcion AS parentesco_nombre,
                 p.cantidad AS parentesco_cantidad,
+                p.requiere_fec_nac,
                 pp.th_ppa_fecha_creacion AS fecha_creacion
             FROM th_per_parientes pp
             LEFT JOIN th_cat_parentesco p 
@@ -66,7 +67,8 @@ class th_per_parientesM extends BaseModel
                 pp.th_ppa_fecha_nacimiento AS fecha_nacimiento,
                 pp.th_ppa_contacto_emergencia AS contacto_emergencia,
                 p.descripcion AS parentesco_nombre,
-                p.cantidad AS parentesco_cantidad
+                p.cantidad AS parentesco_cantidad,
+                p.requiere_fec_nac
             FROM th_per_parientes pp
             LEFT JOIN th_cat_parentesco p 
                 ON pp.id_parentesco = p.id_parentesco
@@ -88,7 +90,8 @@ class th_per_parientesM extends BaseModel
             SELECT 
                 id_parentesco,
                 descripcion,
-                cantidad
+                cantidad,
+                requiere_fec_nac
             FROM th_cat_parentesco
             WHERE id_parentesco = $id_parentesco
               AND estado = 1

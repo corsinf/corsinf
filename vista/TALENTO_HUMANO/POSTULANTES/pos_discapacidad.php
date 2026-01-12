@@ -3,12 +3,51 @@
 
         cargar_datos_discapacidad('<?= $id_postulante ?>');
         cargar_selects_discapacidad();
-
+        $('#ddl_discapacidad').on('change', function() {
+            let id_discapacidad = $(this).val();
+            cargar_discapacidad_escalas(id_discapacidad);
+        });
     });
 
     function cargar_selects_discapacidad() {
         let url = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_discapacidadC.php?buscar=true';
         cargar_select2_url('ddl_discapacidad', url, '', '#modal_agregar_discapacidad');
+    }
+
+    function cargar_discapacidad_escalas(id_discapacidad) {
+        // Si select2 ya está inicializado, destruirlo
+        if ($('#ddl_discapacidad_escala').hasClass("select2-hidden-accessible")) {
+            $('#ddl_discapacidad_escala').select2('destroy');
+        }
+
+        $('#ddl_discapacidad_escala').select2({
+            dropdownParent: $('#modal_agregar_discapacidad'),
+            ajax: {
+                url: '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_discapacidad_escalaC.php?buscar_discapacidad_escala=true',
+                dataType: 'json',
+                data: function(params) {
+                    return {
+                        q: params.term,
+                        id_discapacidad: id_discapacidad
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: data
+                    };
+                }
+            },
+            minimumInputLength: 0,
+            placeholder: "Seleccione un requisito",
+            language: {
+                noResults: function() {
+                    return "No hay requisitos disponibles para asignar";
+                },
+                searching: function() {
+                    return "Buscando...";
+                }
+            }
+        });
     }
 
     function cargar_datos_discapacidad(id) {
@@ -40,9 +79,16 @@
                     text: response[0].discapacidad,
                     selected: true
                 }));
+                $('#ddl_discapacidad_escala').append($('<option>', {
+                    value: response[0].id_escala_dis,
+                    text: response[0].escala_discapacidad,
+                    selected: true
+                }));
                 $('#txt_porcentaje').val(response[0].th_pos_dis_porcentaje);
                 $('#txt_escala').val(response[0].th_pos_dis_escala);
                 $('#txt_discapacidad_id').val(response[0]._id);
+
+                cargar_discapacidad_escalas(response[0].id_discapacidad);
             }
         });
     }
@@ -52,6 +98,7 @@
         let parametros = {
             pos_id: '<?= $id_postulante ?>',
             ddl_discapacidad: $('#ddl_discapacidad').val(),
+            ddl_discapacidad_escala: $('#ddl_discapacidad_escala').val(),
             txt_porcentaje: $('#txt_porcentaje').val(),
             txt_escala: $('#txt_escala').val(),
             _id: $('#txt_discapacidad_id').val()
@@ -162,7 +209,8 @@
     function limpiar_campos_discapacidad() {
         $('#form_discapacidad').validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
-        $('#ddl_discapacidad').val('');
+        $('#ddl_discapacidad_escala').val('').trigger('change');
+        $('#ddl_discapacidad').val('').trigger('change');
         $('#txt_porcentaje').val('');
         $('#txt_escala').val('');
         $('#txt_discapacidad_id').val('');
@@ -203,8 +251,9 @@
 
                         <div class="col-md-6">
                             <label class="form-label form-label-sm">Escala</label>
-                            <input type="text" class="form-control form-control-sm text-uppercase"
-                                id="txt_escala" maxlength="50">
+                            <select class="form-select form-select-sm" id="ddl_discapacidad_escala" required>
+                                <option value="">-- Seleccione --</option>
+                            </select>
                         </div>
                     </div>
 
@@ -240,6 +289,9 @@
                 ddl_discapacidad: {
                     required: true
                 },
+                ddl_discapacidad_escala: {
+                    required: true
+                },
                 txt_porcentaje: {
                     required: true,
                     number: true,
@@ -250,6 +302,9 @@
             messages: {
                 ddl_discapacidad: {
                     required: "Seleccione una discapacidad"
+                },
+                ddl_discapacidad_escala: {
+                    required: "Seleccione una discapacidad escalada"
                 },
                 txt_porcentaje: {
                     required: "Ingrese el porcentaje",
