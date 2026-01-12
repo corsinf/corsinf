@@ -23,7 +23,9 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&id_persona=${item.th_per_id}`;
 
                         if (item.th_dep_nombre != null && item.th_dep_nombre != '') {
-                            href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&id_persona=${item.th_per_id}&_persona_nomina=true`;
+                            let id_postulante = item._id_postulante ?? 'postulante';
+
+                            href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&id_persona=${item.th_per_id}&id_postulante=${id_postulante}&_origen=nomina&_persona_nomina=true`;
                         }
 
                         return `<a href="${href}"><u>${item.primer_apellido} ${item.segundo_apellido} ${item.primer_nombre} ${item.segundo_nombre}</u></a>`;
