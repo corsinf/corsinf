@@ -146,17 +146,12 @@
     function limpiar_campos_comision_modal() {
         $('#form_comision').validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
-        $('#ddl_comision').val('');
         $('#txt_comision_id').val('');
         $('#lbl_titulo_comision').html('Agregar Comisión');
         $('#btn_guardar_comision').html('<i class="bx bx-save"></i> Agregar');
         $('#btn_eliminar_comision').hide();
 
-        // Inicializar select2
-        // $('#ddl_comision').select2({
-        //     placeholder: '-- Seleccione --',
-        //     allowClear: true
-        // });
+        $('#ddl_comision').val(null).trigger('change');
     }
 </script>
 <div id="pnl_comision"></div>
