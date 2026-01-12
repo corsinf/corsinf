@@ -262,20 +262,37 @@ class db
 		try {
 			$stmt->execute($valores);
 			$conn = null;
+
+			// Guardar log INSERT 
+			$this->guardar_log_auditoria(
+				'INSERT',
+				$tabla,
+				$datos,
+			);
+
 			return 1;
-			
 		} catch (Exception $e) {
 			echo "Error:<br>";
 			echo "SQL: <pre>" . htmlspecialchars($sql) . "</pre><br>";
 			echo "Detalles del error:<br>";
 			echo "<pre>";
-			echo($e);
+			echo ($e);
 			echo "</pre>";
 			$conn = null;
 
+			// Guardar log INSERT 
+			$this->guardar_log_auditoria(
+				'INSERT',
+				$tabla,
+				$sql,
+				$datos_despues = null,
+				$registro_id = null,
+				$e,
+				$menu = null,
+			);
+
 			return -1;
 		}
-		
 	}
 
 	function validarFecha($fecha) 
@@ -384,37 +401,43 @@ class db
 				$sql .= " AND ";
 			}
 			$sql = substr($sql, 0, -5);	
-		}	
+		}
 
 		// print_r($datos_update);die();
 		// print_r($sql);die();
 
 		try {
 			$stmt = $conn->prepare($sql);
-    		$stmt->execute($datos_update);
-    		$conn=null;
+			$stmt->execute($datos_update);
+			$conn = null;
 
 			// Guardar log UPDATE 
 			$this->guardar_log_auditoria(
 				'UPDATE',
 				$tabla,
-				'',
-				$datos = null,
-				$registro_id = null,
-				$descripcion = null,
-				$menu = null,
+				$datos,
 			);
 
-    		return 1;
-			
+			return 1;
 		} catch (Exception $e) {
 			echo "Error:<br>";
 			echo "SQL: <pre>" . htmlspecialchars($sql) . "</pre><br>";
 			echo "Detalles del error:<br>";
 			echo "<pre>";
-			echo($e);
+			echo ($e);
 			echo "</pre>";
-			
+
+			// Guardar log UPDATE 
+			$this->guardar_log_auditoria(
+				'UPDATE',
+				$tabla,
+				$sql,
+				$datos = null,
+				$registro_id = null,
+				$descripcion = $e,
+				$menu = null,
+			);
+
 			return -1;
 		}
 			
@@ -448,7 +471,15 @@ class db
 
 			$sql = substr($sql, 0, -5);
 		}
-		// print_r($sql);	die();			
+		// print_r($sql);	die();	
+
+		// Guardar log DELETE 
+		$this->guardar_log_auditoria(
+			'DELETE',
+			$tabla,
+			$datos,
+		);
+
 		return $this->sql_string($sql);
 	}
 
@@ -1164,6 +1195,48 @@ class db
 
 	}
 
+	private function insert_log_auditoria($tabla, array $datos)
+	{
+		try {
+			$this->parametros_conexion(false);
+			$conn = $this->conexion();
+
+			$campos = [];
+			$placeholders = [];
+			$valores = [];
+
+			foreach ($datos as $item) {
+				$campos[] = $item['campo'];
+
+				if ($this->validarFecha($item['dato']) === 'date') {
+					$placeholders[] = 'CAST(? AS DATE)';
+				} else {
+					$placeholders[] = '?';
+				}
+
+				$valores[] = $item['dato'];
+			}
+
+			$sql = sprintf(
+				'INSERT INTO %s (%s) VALUES (%s)',
+				$tabla,
+				implode(',', $campos),
+				implode(',', $placeholders)
+			);
+
+			$stmt = $conn->prepare($sql);
+			$stmt->execute($valores);
+
+			$conn = null;
+		} catch (Throwable $e) {
+			// IMPORTANTE:
+			// no echo
+			// no return
+			// opcional: error_log($e->getMessage());
+		}
+	}
+
+
 	public function guardar_log_auditoria(
 		$accion,
 		$tabla_afectada,
@@ -1213,7 +1286,7 @@ class db
 			['campo' => 'user_agent', 'dato' => $_SERVER['HTTP_USER_AGENT'] ?? null],
 		];
 
-		return $this->inserts('LOGS_AUDITORIA', $datos_insert);
+		$this->insert_log_auditoria('LOGS_AUDITORIA', $datos_insert);
 	}
 
 }

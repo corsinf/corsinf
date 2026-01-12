@@ -1055,7 +1055,13 @@ class loginC
 				$_SESSION["INICIO"]['RUTA_IMG_RELATIVA'] = $empresa[0]['ruta_img_relativa'];
 				$_SESSION["INICIO"]['RUTA_IMG_COMPARTIDA'] = $empresa[0]['ruta_img_compartida'];
 
-				// $this->login->ejecutarAuditoria($empresa[0]['Base_datos'], $empresa[0]['Usuario_db'], $empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db']);
+			// $this->login->ejecutarAuditoria($empresa[0]['Base_datos'], $empresa[0]['Usuario_db'], $empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db']);
+
+			$this->login->login_log_acceso(
+				// Guardar log LOGIN 
+				'LOGIN',
+				'LOGIN',
+			);
 
 				return 1;
 		}
@@ -1280,6 +1286,13 @@ class loginC
 	{
 		// session_start();
 		session_destroy();
+
+		$this->login->login_log_acceso(
+			// Guardar log LOGOUT 
+			'LOGOUT',
+			'LOGOUT',
+		);
+
 		return 1;
 
 	}
