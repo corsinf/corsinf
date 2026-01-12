@@ -133,6 +133,7 @@ class th_personasM extends BaseModel
                     d.th_dep_id,
                     d.th_dep_nombre,
                     p.th_per_fecha_creacion AS fecha_creacion,
+                    p.th_pos_id AS _id_postulante,
                     CASE 
                         WHEN d.th_dep_nombre IS NULL THEN 'Sin departamento'
                         ELSE d.th_dep_nombre 
