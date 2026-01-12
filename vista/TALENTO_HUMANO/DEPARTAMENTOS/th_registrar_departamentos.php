@@ -478,10 +478,10 @@ function cargar_personas_departamentos() {
                     return `
                         <div class="d-flex justify-content-center gap-1">
                             <button type="button" class="btn btn-warning btn-xs" onclick="editar_datos_personas_departamentos('${item._id}','${item.id_persona}')">
-                                <i class="bx bx-edit fs-7 fw-bold"></i>
+                                <i class="bx bx-edit fs-7 me-0 fw-bold"></i>
                             </button>
                             <button type="button" class="btn btn-danger btn-xs" onclick="delete_datos_personas_departamentos('${item.id_persona}')">
-                                <i class="bx bx-trash fs-7 fw-bold"></i>
+                                <i class="bx bx-trash fs-7 me-0 fw-bold"></i>
                             </button>
                         </div>
                     `;

@@ -545,7 +545,29 @@ class loginM
 	{
 		$sql5 = "EXEC CrearTriggerAuditoria;";
 		$this->db->ejecutar_sp_db_terceros($Base_datos,'sa','Tango456',$Ip_host,$Puerto_db,$sql5,false,false);
-	}	
+	}
+
+	function login_log_acceso(
+				$accion,
+		$tabla_afectada,
+		$datos_antes = null,
+		$datos_despues = null,
+		$registro_id = null,
+		$descripcion = null,
+		$menu = null,
+	)
+	{
+		// Guardar log INSERT 
+		$this->db->guardar_log_auditoria(
+			$accion,
+			$tabla_afectada,
+			$datos_antes,
+			$datos_despues,
+			$registro_id,
+			$descripcion,
+			$menu,
+		);
+	}
 
 }
 ?>
