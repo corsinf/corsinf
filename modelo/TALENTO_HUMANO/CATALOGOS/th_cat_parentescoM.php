@@ -49,7 +49,7 @@ class th_cat_parentescoM extends BaseModel
                 OR
                 COUNT(pp.th_ppa_id) < CAST(p.cantidad AS INT)
             )
-        ORDER BY p.descripcion ASC
+        ORDER BY p.id_parentesco ASC
     ";
 
         return $this->db->datos($sql);

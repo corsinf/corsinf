@@ -370,6 +370,10 @@
         agregar_asterisco_campo_obligatorio('ddl_parentesco');
         agregar_asterisco_campo_obligatorio('txt_nombres_pariente');
         agregar_asterisco_campo_obligatorio('txt_apellidos_pariente');
+        agregar_asterisco_campo_obligatorio('txt_telefono_pariente');
+        agregar_asterisco_campo_obligatorio('txt_fecha_nacimiento_pariente');
+        agregar_asterisco_campo_obligatorio('txt_edad_pariente');
+        agregar_asterisco_campo_obligatorio('chk_contacto_emergencia');
 
         $("#form_parientes").validate({
             rules: {

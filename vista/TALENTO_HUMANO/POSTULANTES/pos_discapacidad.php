@@ -235,7 +235,7 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label class="form-label form-label-sm">Discapacidad</label>
+                            <label for="ddl_discapacidad" class="form-label form-label-sm">Discapacidad</label>
                             <select class="form-select form-select-sm" id="ddl_discapacidad" required>
                                 <option value="">-- Seleccione --</option>
                             </select>
@@ -244,13 +244,13 @@
 
                     <div class="row mb-col">
                         <div class="col-md-6">
-                            <label class="form-label form-label-sm">Porcentaje</label>
+                            <label for="txt_porcentaje" class="form-label form-label-sm">Porcentaje</label>
                             <input type="number" class="form-control form-control-sm"
                                 id="txt_porcentaje" min="0" max="100" required>
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label form-label-sm">Escala</label>
+                            <label for="ddl_discapacidad_escala" class="form-label form-label-sm">Escala</label>
                             <select class="form-select form-select-sm" id="ddl_discapacidad_escala" required>
                                 <option value="">-- Seleccione --</option>
                             </select>
@@ -282,6 +282,7 @@
     $(document).ready(function() {
 
         agregar_asterisco_campo_obligatorio('ddl_discapacidad');
+        agregar_asterisco_campo_obligatorio('ddl_discapacidad_escala');
         agregar_asterisco_campo_obligatorio('txt_porcentaje');
 
         $("#form_discapacidad").validate({

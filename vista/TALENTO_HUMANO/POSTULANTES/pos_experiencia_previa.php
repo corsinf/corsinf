@@ -359,6 +359,9 @@
         agregar_asterisco_campo_obligatorio('txt_fecha_inicio_laboral');
         agregar_asterisco_campo_obligatorio('txt_fecha_final_laboral');
         agregar_asterisco_campo_obligatorio('txt_responsabilidades_logros');
+        agregar_asterisco_campo_obligatorio('txt_sueldo');
+        agregar_asterisco_campo_obligatorio('txt_sueldo');
+        agregar_asterisco_campo_obligatorio('txt_sueldo');
 
         //! Validación Experiencia Laboral
         $("#form_experiencia_laboral").validate({
