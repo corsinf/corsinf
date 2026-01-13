@@ -74,6 +74,11 @@
                 $('#img_persona_inf_modal').attr('src', response[0].foto_url || '../img/sin_imagen.jpg');
                 $('#txt_cedula_foto').val(response[0].cedula);
                 $('#txt_persona_id_foto').val(response[0].th_per_id);
+
+                $('#lbl_nombre_completo_perfil').text(response[0].nombres_completos);
+                $('#lbl_cedula_perfil').text(response[0].cedula);
+
+
             },
         });
     }

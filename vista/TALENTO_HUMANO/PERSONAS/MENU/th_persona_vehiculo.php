@@ -256,3 +256,74 @@
         });
     });
 </script>
+
+<style>
+    /* Tarjeta estilo "List Item" */
+    .custom-card-compact {
+        border-radius: 10px;
+        transition: all 0.2s ease;
+        background: #ffffff;
+        border: 1px solid #edf2f7 !important;
+    }
+    
+    .custom-card-compact:hover {
+        border-color: #cbd5e0 !important;
+        background: #f8fafc;
+    }
+
+    /* Icono pequeño */
+    .mini-status-icon {
+        width: 32px;
+        height: 32px;
+        min-width: 32px; /* Evita que se encoja */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+    }
+    .bg-primary-soft { background-color: #eef2ff; }
+
+    /* Estilo de Placas tipo etiqueta */
+    .badge-plate {
+        font-family: 'Monaco', 'Consolas', monospace;
+        font-size: 0.7rem;
+        padding: 2px 6px;
+        background: #f1f5f9;
+        color: #475569;
+        border-radius: 4px;
+        font-weight: 600;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .badge-plate-alt {
+        font-family: 'Monaco', 'Consolas', monospace;
+        font-size: 0.7rem;
+        padding: 2px 6px;
+        background: #ffffff;
+        color: #94a3b8;
+        border-radius: 4px;
+        border: 1px dashed #cbd5e0;
+    }
+
+    /* Botón de edición minimalista */
+    .btn-edit-minimal {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border-radius: 50%;
+        border: none;
+        background: transparent;
+        color: #64748b;
+        transition: all 0.2s;
+    }
+
+    .btn-edit-minimal:hover {
+        background: #e2e8f0;
+        color: #1e293b;
+        transform: rotate(15deg);
+    }
+</style>

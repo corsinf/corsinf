@@ -40,7 +40,7 @@ class th_per_vehiculosC
                 </div>';
         }
 
-        $texto = '<div class="row g-3">';
+        $texto = '<div class="row">';
 
         foreach ($datos as $key => $value) {
             $tipo_vehiculo = isset($value['tipo_vehiculo_descripcion']) ? $value['tipo_vehiculo_descripcion'] : 'N/A';
@@ -56,39 +56,31 @@ class th_per_vehiculosC
             }
 
             $texto .= <<<HTML
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card border-0 shadow-sm h-100 hover-card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div class="d-flex align-items-center">
-                                <div class="icon-box me-3">
-                                    <i class="bx {$icono} bx-md text-primary"></i>
-                                </div>
-                                <div>
-                                    <h6 class="mb-0 fw-bold text-dark">{$tipo_vehiculo}</h6>
-                                </div>
-                            </div>
-                            <button class="btn btn-sm btn-light rounded-circle p-2 btn-edit" 
-                                    onclick="abrir_modal_vehiculo({$value['_id']});"
-                                    title="Editar vehículo">
-                                <i class="bx bx-pencil"></i>
-                            </button>
-                        </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-col">
+                <div class="card border-0 shadow-sm custom-card-compact">
+                    <div class="card-body p-2 d-flex align-items-center justify-content-between">
                         
-                        <div class="vehicle-details">
-                            <div class="detail-item mb-2">
-                                <span class="detail-label">
-                                    <i class="bx bx-id-card me-2"></i>Placa Original:
-                                </span>
-                                <span class="detail-value badge bg-light text-dark">{$placa_original}</span>
+                        <div class="d-flex align-items-center flex-grow-1 overflow-hidden">
+                            <div class="mini-status-icon bg-primary-soft text-primary me-2">
+                                <i class="bx {$icono} fs-5"></i>
                             </div>
-                            <div class="detail-item">
-                                <span class="detail-label">
-                                    <i class="bx bx-card me-2"></i>Placa Síntesis:
-                                </span>
-                                <span class="detail-value badge bg-light text-dark">{$placa_sintesis}</span>
+                            <div class="text-truncate">
+                                <h6 class="mb-0 fw-bold text-dark lh-1" style="font-size: 0.85rem;">
+                                    {$tipo_vehiculo}
+                                </h6>
+                                <div class="d-flex align-items-center mt-1">
+                                    <span class="badge-plate me-1" title="Original">{$placa_original}</span>
+                                    <span class="badge-plate-alt" title="Síntesis">{$placa_sintesis}</span>
+                                </div>
                             </div>
                         </div>
+
+                        <button class="btn btn-edit-minimal ms-2" 
+                                onclick="abrir_modal_vehiculo({$value['_id']});"
+                                title="Editar vehículo">
+                            <i class="bx bx-pencil"></i>
+                        </button>
+                        
                     </div>
                 </div>
             </div>

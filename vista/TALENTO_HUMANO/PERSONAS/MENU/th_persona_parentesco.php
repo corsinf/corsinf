@@ -308,33 +308,33 @@
                 <div class="modal-body">
                     <div class="row mb-col">
                         <div class="col-md-6">
-                            <label for="ddl_parentesco" class="form-label form-label-sm">Parentesco:</label>
+                            <label for="ddl_parentesco" class="form-label form-label-sm">Parentesco </label>
                             <select class="form-select form-select-sm" id="ddl_parentesco" name="ddl_parentesco" onchange="validar_parentesco_seleccionado()" required>
                                 <option selected disabled value="">-- Seleccione un Parentesco --</option>
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="txt_telefono_pariente" class="form-label form-label-sm">Número de Teléfono:</label>
+                            <label for="txt_telefono_pariente" class="form-label form-label-sm">Número de Teléfono </label>
                             <input type="text" class="form-control form-control-sm" name="txt_telefono_pariente" id="txt_telefono_pariente">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-6">
-                            <label for="txt_nombres_pariente" class="form-label form-label-sm">Nombres:</label>
+                            <label for="txt_nombres_pariente" class="form-label form-label-sm">Nombres </label>
                             <input type="text" class="form-control form-control-sm" name="txt_nombres_pariente" id="txt_nombres_pariente" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="txt_apellidos_pariente" class="form-label form-label-sm">Apellidos:</label>
+                            <label for="txt_apellidos_pariente" class="form-label form-label-sm">Apellidos </label>
                             <input type="text" class="form-control form-control-sm" name="txt_apellidos_pariente" id="txt_apellidos_pariente" required>
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-6">
-                            <label for="txt_fecha_nacimiento_pariente" class="form-label form-label-sm" id="lbl_fecha_nacimiento_pariente">Fecha de Nacimiento:</label>
+                            <label for="txt_fecha_nacimiento_pariente" class="form-label form-label-sm" id="lbl_fecha_nacimiento_pariente">Fecha de Nacimiento </label>
                             <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento_pariente" id="txt_fecha_nacimiento_pariente" onchange="calcular_edad_pariente()">
                         </div>
                         <div class="col-md-6">
-                            <label for="txt_edad_pariente" class="form-label form-label-sm">Edad:</label>
+                            <label for="txt_edad_pariente" class="form-label form-label-sm">Edad </label>
                             <input type="number" class="form-control form-control-sm" name="txt_edad_pariente" id="txt_edad_pariente" readonly>
                         </div>
                     </div>
@@ -417,3 +417,54 @@
         });
     })
 </script>
+
+<style>
+    /* Estilo para el botón de llamada de emergencia */
+    .btn-call-emergency {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background-color: #ffeded;
+        color: #dc3545;
+        border: none;
+        transition: all 0.2s ease;
+    }
+
+    .btn-call-emergency:hover {
+        background-color: #dc3545;
+        color: white;
+        transform: scale(1.1);
+    }
+
+    /* Ajuste para el botón de editar */
+    .btn-edit-minimal {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        color: #64748b;
+        background: transparent;
+        border: none;
+    }
+
+    .btn-edit-minimal:hover {
+        background-color: #f1f5f9;
+        color: #0f172a;
+    }
+
+    /* Avatar más pequeño para ahorrar espacio */
+    .avatar-mini {
+        width: 34px;
+        height: 34px;
+        font-size: 1rem;
+    }
+
+    .item-pariente:hover {
+        background-color: #fcfcfc;
+    }
+</style>

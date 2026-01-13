@@ -334,14 +334,10 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                                 </button>
                                             </div>
 
-                                            <?php if (isset($_GET['_persona_nomina']) && $_GET['_persona_nomina'] == 'true'): ?>
-                                                <div class="mt-3">
-                                                    <span class="badge bg-primary-subtle text-primary rounded-pill px-4 py-2 fs-6 shadow-sm border border-primary-subtle">
-                                                        <i class='bx bxs-badge-check me-1'></i> Empleado
-                                                    </span>
-                                                </div>
-                                            <?php endif; ?>
-
+                                            <div class="mt-2 text-center">
+                                                <div class="fw-bold" id="lbl_nombre_completo_perfil">---</div>
+                                                <div class="text-secondary small" id="lbl_cedula_perfil">---</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

@@ -34,40 +34,66 @@ class th_per_parientesC
         $texto = '';
 
         foreach ($datos as $value) {
-            $contacto_emergencia = $value['contacto_emergencia'] == 1 ? '<span class="badge bg-danger ms-2">Contacto Emergencia</span>' : '';
-            $edad = '';
+            // Es de emergencia?
+            $es_emergencia = ($value['contacto_emergencia'] == 1);
 
-            $edad = '';
+            $badge_emergencia = $es_emergencia
+                ? '<span class="badge rounded-pill bg-danger-subtle text-danger border border-danger-subtle ms-1" style="font-size: 0.6rem;">S.O.S</span>'
+                : '';
 
-            if (
-                !empty($value['fecha_nacimiento']) &&
-                $value['fecha_nacimiento'] !== '1900-01-01' &&
-                $value['fecha_nacimiento'] !== '1900-01-01 00:00:00'
-            ) {
-                $fecha_nac = new DateTime($value['fecha_nacimiento']);
-                $hoy = new DateTime();
-                $edad_calculada = $hoy->diff($fecha_nac)->y;
-                $edad = " ({$edad_calculada} años)";
+            // Lógica de teléfono y botón de llamada
+            $telefono_limpio = preg_replace('/[^0-9+]/', '', $value['numero_telefono']); // Limpia espacios/guiones para el enlace tel:
+            $btn_llamar = '';
+
+            if ($es_emergencia && !empty($telefono_limpio)) {
+                $btn_llamar = <<<HTML
+                                    <a href="tel:{$telefono_limpio}" class="btn btn-sm btn-call-emergency me-1" title="Llamar ahora">
+                                        <i class="bx bxs-phone-call"></i>
+                                    </a>
+                                HTML;
             }
 
-
-            $telefono = !empty($value['numero_telefono']) ? "<p class='m-0'><strong>Teléfono:</strong> {$value['numero_telefono']}</p>" : '';
+            // Edad (Simplificada)
+            $edad_texto = '';
+            if (!empty($value['fecha_nacimiento']) && !str_contains($value['fecha_nacimiento'], '1900-01-01')) {
+                $fecha_nac = new DateTime($value['fecha_nacimiento']);
+                $hoy = new DateTime();
+                $edad_texto = " <span class='text-muted fw-normal small'>({$hoy->diff($fecha_nac)->y} años)</span>";
+            }
 
             $texto .= <<<HTML
-                <div class="row mb-col">
-                    <div class="col-10">
-                        <p class="m-0"><strong>Parentesco:</strong> {$value['parentesco_nombre']} {$contacto_emergencia}</p>
-                        <p class="m-0"><strong>Nombre:</strong> {$value['nombres']} {$value['apellidos']}{$edad}</p>
-                        {$telefono}
-                    </div>
-                    <div class="col-2 d-flex justify-content-end">
-                        <button class="btn icon-hover" onclick="abrir_modal_pariente('{$value['_id']}');">
-                            <i class="bx bx-pencil bx-sm text-dark"></i>
-                        </button>
-                    </div>
-                </div>
-                <hr>
-            HTML;
+                            <div class="row align-items-center py-2 border-bottom g-0 item-pariente">
+                                <div class="col-auto me-2">
+                                    <div class="avatar-mini bg-light rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bx bx-user text-secondary"></i>
+                                    </div>
+                                </div>
+
+                                <div class="col overflow-hidden">
+                                    <div class="d-flex align-items-center mb-0">
+                                        <span class="fw-bold text-dark text-truncate small">
+                                            {$value['nombres']} {$value['apellidos']}
+                                        </span>
+                                        {$badge_emergencia}
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <small class="text-primary fw-semibold" style="font-size: 0.7rem; text-uppercase;">
+                                            {$value['parentesco_nombre']}
+                                        </small>
+                                        <small class="text-muted" style="font-size: 0.75rem;">{$value['numero_telefono']}{$edad_texto}</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-auto d-flex align-items-center">
+                                    {$btn_llamar}
+                                    <button class="btn btn-sm btn-edit-minimal" 
+                                            onclick="abrir_modal_pariente('{$value['_id']}');"
+                                            title="Editar">
+                                        <i class="bx bx-pencil"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        HTML;
         }
 
         if (empty($datos)) {
