@@ -10,7 +10,7 @@ if ($_GET['acc'] == 'perfil') {
 	}
 }
 if ($_GET['acc'] == 'descargas') {
-	include('ACTIVOS/descargas.php');
+	include('GENERAL/DESCARGAS/descargas.php');
 }
 
 if ($_GET['acc'] == 'pagina_error') {
