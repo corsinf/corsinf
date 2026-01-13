@@ -77,6 +77,8 @@ if (isset($_GET['_id'])) {
                     //Swal.fire('', 'El nombre del dispositivo ya está en uso', 'warning');
                     $(txt_nombre).addClass('is-invalid');
                     $('#error_txt_nombre').text('El nombre ya está en uso.');
+                } else if (response == -3) {
+                    Swal.fire('', 'Las fechas ya son utilizadas en otro feriado', 'warning');
                 }
             },
 

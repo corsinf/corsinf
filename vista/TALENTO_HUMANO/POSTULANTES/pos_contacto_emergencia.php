@@ -1,23 +1,82 @@
+<?php
+
+/**
+ * @deprecated Archivo dado de baja el 09/01/2025.
+ * @note Este archivo se mantiene como respaldo, pero ya no se utilizará en producción.
+ * @warning No modificar este archivo. Para cambios, referirse a la nueva implementación.
+ */
+
+
+//Tabla
+// CREATE TABLE [_talentoh].[th_pos_contacto_emergencia] (
+//   [th_coem_id] int  IDENTITY(1,1) NOT NULL,
+//   [th_pos_id] int  NULL,
+//   [th_coem_nombre_emergencia] varchar(100) COLLATE Modern_Spanish_CI_AS  NULL,
+//   [th_coem_telefono_emergencia] varchar(15) COLLATE Modern_Spanish_CI_AS  NULL,
+//   [th_coem_fecha_creacion] datetime DEFAULT getdate() NULL,
+//   CONSTRAINT [PK__th_pos_c__3DB70A1706CE7753] PRIMARY KEY CLUSTERED ([th_coem_id])
+// WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+// ON [PRIMARY]
+// )  
+// ON [PRIMARY]
+// GO
+
+// ALTER TABLE [_talentoh].[th_pos_contacto_emergencia] SET (LOCK_ESCALATION = TABLE)
+
+?>
+
+<!-- Colocar en la vista pos_all_tab.php -->
+ <li class="nav-item me-2" role="presentation">
+     <a class="nav-link border border-info rounded-3 shadow-sm px-3 py-2"
+         data-bs-toggle="tab" href="#tab_contactos_emergencia" role="tab">
+         <div class="d-flex align-items-center gap-2">
+             <i class="bx bxs-phone text-info" style="font-size: 0.875rem;"></i>
+             <span class="fw-semibold text-info" style="font-size: 0.875rem;">Contactos de Emergencia</span>
+         </div>
+     </a>
+ </li>
+
+<!-- Colocar en la vista pos_all_tab_pane.php -->
+ <div class="tab-pane fade" id="tab_contactos_emergencia" role="tabpanel">
+     <div class="card">
+         <div class="d-flex flex-column mx-4">
+             <div class="card-body">
+
+                 <div class="mb-2">
+                     <div class="row">
+                         <div class="col-6 d-flex align-items-center">
+                             <h6 class="mb-0 fw-bold text-primary">Contactos de emergencia:</h6>
+                         </div>
+
+                         <div class="col-6 d-flex justify-content-end">
+                             <a href="javascript:void(0)"
+                                 class="text-success icon-hover d-flex align-items-center"
+                                 data-bs-toggle="modal"
+                                 data-bs-target="#modal_contacto_emergencia">
+
+                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                 <span>Agregar</span>
+                             </a>
+                         </div>
+
+                     </div>
+                 </div>
+
+                 <hr>
+                 <div id="pnl_pos_contacto_emergencia">
+
+                 </div>
+
+                 <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_contacto_emergencia.php'); ?>
+
+             </div>
+         </div>
+     </div>
+
+
 <script>
-    <?php
-
-    $entity_id = '';
-    $entity_type = ''; // 'postulante' o 'persona'
-    if (isset($_GET['id'])) {
-        $entity_id = $_GET['id'];
-        $entity_type = 'postulante';
-    } elseif (isset($_GET['_id'])) {
-        $entity_id = $_GET['_id'];
-        $entity_type = 'persona';
-    }
-
-    ?>
-
-    let entity_id = <?= json_encode($entity_id) ?>;
-    let entity_type = <?= json_encode($entity_type) ?>;
-
     $(document).ready(function() {
-        cargar_datos_contactos_emergencia(entity_id);
+        cargar_datos_contactos_emergencia(<?= $id_postulante ?>);
     });
 
     //Formación Académica
@@ -30,7 +89,7 @@
             },
             dataType: 'json',
             success: function(response) {
-                $('#tbl_contacto_emergencia').html(response);
+                $('#pnl_pos_contacto_emergencia').html(response);
             }
         });
     }
@@ -40,7 +99,7 @@
 
         var txt_nombre_contacto_emergencia = $('#txt_nombre_contacto_emergencia').val();
         var txt_telefono_contacto_emergencia = $('#txt_telefono_contacto_emergencia').val();
-        var txt_id_postulante = entity_id;
+        var txt_id_postulante = '<?= $id_postulante ?>';
         var txt_id_contacto_emergencia = $('#txt_id_contacto_emergencia').val();
         var parametros_contacto_emergencia = {
             '_id': txt_id_contacto_emergencia,
@@ -67,9 +126,7 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_contactos_emergencia(entity_id);
-                    <?php } ?>
+                    cargar_datos_contactos_emergencia('<?= $id_postulante ?>');
                     limpiar_campos_contacto_emergencia_modal();
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
@@ -112,9 +169,7 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_contactos_emergencia(entity_id);
-                    <?php } ?>
+                    cargar_datos_contactos_emergencia('<?= $id_postulante ?>');
                     limpiar_campos_contacto_emergencia_modal();
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
@@ -160,9 +215,7 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_contactos_emergencia(entity_id);
-                    <?php } ?>
+                    cargar_datos_contactos_emergencia('<?= $id_postulante ?>');
                     limpiar_campos_contacto_emergencia_modal();
                 }
             }
@@ -217,6 +270,7 @@
                 </form>
 
                 <hr>
+                <!--
 
                 <div class="table-responsive">
                     <form id='form_contacto_emergencia_1'>
@@ -234,6 +288,7 @@
                         </table>
                     </form>
                 </div>
+-->
             </div>
         </div>
     </div>

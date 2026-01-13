@@ -51,6 +51,11 @@ class th_detectar_dispositivosC
 {
 	
 	 private $modelo;
+	 private $sdk_patch;
+	 private $modelo_dispositivos;
+	 private $modelo_personas;
+	 private $modelo_biometria;
+	 private $control_acceso;
 
     function __construct()
     {
@@ -340,7 +345,7 @@ class th_detectar_dispositivosC
     {
 		// Comando para eliminar el proceso por PID
 
-		print_r(PID);die();
+		print_r('PID');die();
 		$command = "taskkill /IM dotnet.exe /F";
 
 		// Ejecutar el comando

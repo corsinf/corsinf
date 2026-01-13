@@ -19,22 +19,27 @@ class th_departamentosM extends BaseModel
     ];
 
     function listar_departamentos_contar_personas()
-    {
-        $sql =
-            "SELECT
-                dep.th_dep_id AS _id,
-                dep.th_dep_nombre AS nombre,
-                COUNT ( per_dep.th_per_id ) AS total_personas 
-            FROM th_departamentos dep
-            LEFT JOIN th_personas_departamentos per_dep ON per_dep.th_dep_id = dep.th_dep_id 
-            WHERE dep.th_dep_estado = 1 
-            GROUP BY
+{
+    $sql = "
+        SELECT
+            dep.th_dep_id AS _id,
+            dep.th_dep_nombre AS nombre,
+            COUNT(per.th_per_id) AS total_personas
+        FROM th_departamentos dep
+        LEFT JOIN th_personas_departamentos per_dep
+            ON per_dep.th_dep_id = dep.th_dep_id
+        LEFT JOIN th_personas per
+            ON per.th_per_id = per_dep.th_per_id
+            AND per.th_per_estado = 1
+        WHERE dep.th_dep_estado = 1
+        GROUP BY
             dep.th_dep_id,
-            dep.th_dep_nombre;";
+            dep.th_dep_nombre
+    ";
 
-        $datos = $this->db->datos($sql);
-        return $datos;
-    }
+    return $this->db->datos($sql);
+}
+
 
 
 public function obtener_departamento_completo($dep_id)

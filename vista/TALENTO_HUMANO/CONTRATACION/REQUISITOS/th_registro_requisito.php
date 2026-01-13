@@ -83,7 +83,7 @@ $(document).ready(function() {
                     Swal.fire('', 'Requisito creado con éxito.', 'success').then(function() {
                         // volver a la lista de requisitos de la plaza (o recargar)
                         window.location.href =
-                            '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_requisitos';
+                            '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_plazas';
 
                     });
                 } else {
@@ -110,7 +110,7 @@ $(document).ready(function() {
                 if (res == 1) {
                     Swal.fire('', 'Requisito actualizado con éxito.', 'success').then(function() {
                         window.location.href =
-                            '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_requisitos';
+                            '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_plazas';
                     });
                 } else {
                     Swal.fire('', res.msg || 'Error al actualizar requisito.', 'error');
@@ -153,7 +153,7 @@ $(document).ready(function() {
                             Swal.fire('Eliminado!', 'Requisito eliminado.', 'success').then(
                                 function() {
                                     window.location.href =
-                                        '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_requisitos';
+                                        '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_plazas';
                                 });
                         } else {
                             Swal.fire('', res.msg || 'No se pudo eliminar.', 'error');
@@ -304,7 +304,7 @@ function cargar_requisito(id) {
 
                             <div class="row m-2">
                                 <div class="col-sm-12">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_requisitos"
+                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_plazas"
                                         class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i>
                                         Regresar</a>
                                 </div>

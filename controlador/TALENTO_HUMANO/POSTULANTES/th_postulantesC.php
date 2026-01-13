@@ -6,7 +6,7 @@ require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/th_personasM.php');
 $controlador = new th_postulantesC();
 
 if (isset($_GET['listar'])) {
-    echo json_encode($controlador->listar($_POST['id']));
+    echo json_encode($controlador->listar($_POST['id'], $_POST['id_persona'] ?? ''));
 }
 
 if (isset($_GET['listar_todo'])) {
@@ -49,37 +49,23 @@ class th_postulantesC
         $this->personas = new th_personasM();
     }
 
-    function listar($id)
+    function listar($id, $id_persona = '')
     {
+        if ($id == 'postulante') {
+            $datos = $this->modelo->vincular_persona_postulante($id_persona);
+
+            return array('id_postulante' => $datos[0]['th_pos_id'], 'recargar' => 1);
+        }
+
+        // print_r($datos[0]['th_pos_id']); exit(); die();
+
         if ($id == '') {
             $datos = $this->modelo->where('th_pos_estado', 1)->where('th_pos_contratado', 0)->listar();
         } else {
-            $datos = $this->modelo->where('th_pos_id', $id)->where('th_pos_contratado', 0)->listar();
+            $datos = $this->modelo->obtener_postulante_por_id($id);
         }
-
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_pos_estado', 1)->where('th_pos_contratado', 0)->listar();
-
-        $texto = '';
-        foreach ($datos as $key => $value) {
-            $texto .=
-                <<<HTML
-                            <div class="row mb-3">
-                                <div class="col-10">
-                                    <a href="#" onclick="definir_ruta_iframe_cambiar_foto('{$value['th_pos_foto_url']}');">Ver foto</a>
-                                </div>
-                                <div class="col-2 d-flex justify-content-end align-items-center">
-                                    <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_cambiar_foto('{$value['_id']}')">
-                                        <i class="text-dark bx bx-pencil bx-sm"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        HTML;
-        }
-
 
         return $datos;
-        // $datos = $this->modelo->where('th_pos_id', $id)->listar($id);
-        // return $datos;
     }
 
     function listar_todo()
@@ -115,6 +101,13 @@ class th_postulantesC
             array('campo' => 'th_pos_telefono_1', 'dato' => $parametros['txt_telefono_1']),
             array('campo' => 'th_pos_telefono_2', 'dato' => $parametros['txt_telefono_2']),
             array('campo' => 'th_pos_correo', 'dato' => $parametros['txt_correo']),
+
+            array('campo' => 'id_etnia', 'dato' => !empty($parametros['ddl_etnia']) ? $parametros['ddl_etnia'] : null),
+            array('campo' => 'id_religion', 'dato' => !empty($parametros['ddl_religion']) ? $parametros['ddl_religion'] : null),
+            array('campo' => 'id_orientacion_sexual', 'dato' => !empty($parametros['ddl_orientacion_sexual']) ? $parametros['ddl_orientacion_sexual'] : null),
+            array('campo' => 'id_identidad_genero', 'dato' => !empty($parametros['ddl_identidad_genero']) ? $parametros['ddl_identidad_genero'] : null),
+            array('campo' => 'th_pos_correo_personal_1', 'dato' => !empty($parametros['txt_per_correo_personal_1']) ? $parametros['txt_per_correo_personal_1'] : null),
+            array('campo' => 'th_pos_correo_personal_2', 'dato' => !empty($parametros['txt_per_correo_personal_2']) ? $parametros['txt_per_correo_personal_2'] : null),
         );
 
         if ($parametros['_id'] == '') {
@@ -440,61 +433,74 @@ class th_postulantesC
         $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
 
         // Definir la ruta donde se guardarán las imágenes
-        $ruta = dirname(__DIR__, 3) . '/REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/'; // Ruta base
-        $ruta .= $post['txt_postulante_cedula'] . '/' . 'FOTO_PERFIL/'; // Ruta completa del postulante
+        $ruta = dirname(__DIR__, 3) . '/REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/';
+        $ruta .= $post['txt_postulante_cedula'] . '/' . 'FOTO_PERFIL/';
 
         // Verificar si la carpeta existe, si no, crearla
         if (!file_exists($ruta)) {
             mkdir($ruta, 0777, true);
         }
 
-        // Validar si el archivo tiene el formato correcto (usando la función que debes tener implementada)
-
+        // Validar formato
         if ($this->validar_formato($file) === 1) {
 
-            // Obtener la ubicación temporal del archivo cargado
             $uploadfile_temporal = $file['txt_copia_cambiar_foto']['tmp_name'];
-            // Obtener la extensión del archivo de la imagen
-            $extension = pathinfo($file['txt_copia_cambiar_foto']['name'], PATHINFO_EXTENSION);
 
-            // Crear un nuevo nombre para la imagen
-            $nombre = 'foto_perfil_' . $id_insertar_editar . '.' . $extension;
-            $nuevo_nom = $ruta . $nombre; // Nombre completo con la ruta donde se guardará la imagen
+            // Forzamos la extensión a .webp para que el navegador la reconozca correctamente
+            $nombre = 'foto_perfil_' . $id_insertar_editar . '.webp';
+            $nuevo_nom = $ruta . $nombre;
 
-            // Ruta final que se almacenará en la base de datos
-            $nombre_ruta = '../REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/' . $post['txt_postulante_cedula'] . '/' . 'FOTO_PERFIL/';
-            $nombre_ruta .= $nombre; // Ruta completa en el repositorio
+            // Ruta final para la base de datos
+            $nombre_ruta = '../REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/' . $post['txt_postulante_cedula'] . '/' . 'FOTO_PERFIL/' . $nombre;
 
-            // Verificar si el archivo ha sido cargado correctamente
             if (is_uploaded_file($uploadfile_temporal)) {
-                // Mover el archivo de su ubicación temporal al destino final
-                if (move_uploaded_file($uploadfile_temporal, $nuevo_nom)) {
 
-                    // Datos para actualizar la URL de la foto en la base de datos
+                // --- PROCESAMIENTO Y CONVERSIÓN A WEBP ---
+                $info = getimagesize($uploadfile_temporal);
+                $mime = $info['mime'];
+
+                // Crear el recurso de imagen según el tipo original
+                switch ($mime) {
+                    case 'image/jpeg':
+                    case 'image/jpg':
+                        $img = imagecreatefromjpeg($uploadfile_temporal);
+                        break;
+                    case 'image/png':
+                        $img = imagecreatefrompng($uploadfile_temporal);
+                        // Mantener posibles transparencias convirtiendo a color real
+                        imagepalettetotruecolor($img);
+                        imagealphablending($img, true);
+                        imagesavealpha($img, true);
+                        break;
+                    case 'image/gif':
+                        $img = imagecreatefromgif($uploadfile_temporal);
+                        break;
+                    default:
+                        return -1; // Tipo no soportado internamente
+                }
+
+                // Guardar como WebP con calidad 80 | min 70
+                if (imagewebp($img, $nuevo_nom, 80)) {
+                    imagedestroy($img); // Liberar memoria del servidor
+
+                    // Datos para actualizar en la base de datos
                     $datos = array(
                         array('campo' => 'th_pos_foto_url', 'dato' => $nombre_ruta),
                     );
 
-                    // Condición para identificar el postulante que se debe actualizar
                     $where = array(
                         array('campo' => 'th_pos_id', 'dato' => $id_insertar_editar),
                     );
 
-                    // Ejecutar la actualización en la base de datos
                     $base = $this->modelo->editar($datos, $where);
-
-                    // Si la actualización fue exitosa, retornar 1
                     return $base == 1 ? 1 : -1;
                 } else {
-                    // Si ocurre un error al mover el archivo, retornar -1
-                    return -1;
+                    return -1; // Falló la creación del WebP
                 }
             } else {
-                // Si el archivo no ha sido cargado correctamente, retornar -1
                 return -1;
             }
         } else {
-            // Si el formato de la imagen es inválido, retornar -2
             return -2;
         }
     }

@@ -31,36 +31,76 @@ class th_pos_contacto_emergenciaC
         $datos = $this->modelo->where('th_pos_id', $id)->listar();
 
         $tr = '';
-        foreach ($datos as $key => $value) {
-            $tr .=
-                <<<HTML
-                    <tr>
-                        <td>
-                            <input type="text" id="txt_id_contacto_emergencia_{$value['_id']}" value="{$value['_id']}" style="display:none;">
-                            <span id="span_nombre_{$value['_id']}">{$value['th_coem_nombre_emergencia']}</span>
-                            <input type="text" class="form-control form-control-sm" id="txt_nombre_contacto_emergencia_{$value['_id']}" value="{$value['th_coem_nombre_emergencia']}" style="display:none;" required maxlength="100">
-                        </td>
-                        <td>
-                            <span id="span_telefono_{$value['_id']}">{$value['th_coem_telefono_emergencia']}</span>
-                            <input type="text" class="form-control form-control-sm" id="txt_telefono_contacto_emergencia_{$value['_id']}" value="{$value['th_coem_telefono_emergencia']}" style="display:none;" required maxlength="15">
-                        </td>
-                        <td>
-                            <button type="button" id="btn_editar_{$value['_id']}" class="btn btn-xs btn-success" onclick="mostrar_contacto_emergencia({$value['_id']});">
-                                <i class="text-white bx bx-pencil bx-xs me-0"></i>
-                            </button>
-                            <button type="button" id="btn_guardar_{$value['_id']}" class="btn btn-xs btn-success" onclick="guardar_cambios_contacto_emergencia({$value['_id']});" style="display:none;">
-                                <i class="text-white bx bx-check bx-xs me-0"></i>
-                            </button>
-                            <button type="button" class="btn btn-xs btn-danger" onclick="delete_datos_contacto_emergencia({$value['_id']});">
-                                <i class="text-white bx bx-trash bx-xs me-0"></i>
-                            </button>
-                        </td>
-                    </tr>
-                HTML;
+        foreach ($datos as $value) {
+
+            $tr .= <<<HTML
+        <tr>
+            <!-- NOMBRE -->
+            <td class="align-middle px-2 py-2">
+                <input type="hidden"
+                    id="txt_id_contacto_emergencia_{$value['_id']}"
+                    value="{$value['_id']}">
+
+                <span id="span_nombre_{$value['_id']}" class="d-block">
+                    {$value['th_coem_nombre_emergencia']}
+                </span>
+
+                <input type="text"
+                    class="form-control form-control-sm w-100 mt-1"
+                    id="txt_nombre_contacto_emergencia_{$value['_id']}"
+                    value="{$value['th_coem_nombre_emergencia']}"
+                    style="display:none;"
+                    required maxlength="100">
+            </td>
+
+            <!-- TELÉFONO -->
+            <td class="align-middle px-2 py-2">
+                <span id="span_telefono_{$value['_id']}" class="d-block">
+                    {$value['th_coem_telefono_emergencia']}
+                </span>
+
+                <input type="text"
+                    class="form-control form-control-sm w-100 mt-1"
+                    id="txt_telefono_contacto_emergencia_{$value['_id']}"
+                    value="{$value['th_coem_telefono_emergencia']}"
+                    style="display:none;"
+                    required maxlength="15">
+            </td>
+
+            <!-- ACCIONES -->
+            <td class="align-middle px-2 py-2 text-center">
+                <div class="d-flex justify-content-center gap-1">
+
+                    <button type="button"
+                        id="btn_editar_{$value['_id']}"
+                        class="btn btn-sm btn-success"
+                        onclick="mostrar_contacto_emergencia({$value['_id']});">
+                        <i class="bx bx-pencil"></i>
+                    </button>
+
+                    <button type="button"
+                        id="btn_guardar_{$value['_id']}"
+                        class="btn btn-sm btn-primary"
+                        onclick="guardar_cambios_contacto_emergencia({$value['_id']});"
+                        style="display:none;">
+                        <i class="bx bx-check"></i>
+                    </button>
+
+                    <button type="button"
+                        class="btn btn-sm btn-danger"
+                        onclick="delete_datos_contacto_emergencia({$value['_id']});">
+                        <i class="bx bx-trash"></i>
+                    </button>
+
+                </div>
+            </td>
+        </tr>
+        HTML;
         }
-        
+
         return $tr;
     }
+
 
 
     function insertar_editar($parametros)

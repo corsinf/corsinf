@@ -53,11 +53,11 @@ class th_postulantesM extends BaseModel
         return $datos;
     }
 
-   public function listarNoContratados($id_plaza = '')
-{
-    $id_plaza = intval($id_plaza);
+    public function listarNoContratados($id_plaza = '')
+    {
+        $id_plaza = intval($id_plaza);
 
-    $sql = "
+        $sql = "
         SELECT DISTINCT
             t.th_pos_id AS _id,
             t.th_pos_primer_nombre AS primer_nombre,
@@ -100,9 +100,107 @@ class th_postulantesM extends BaseModel
             primer_nombre
     ";
 
-    return $this->db->datos($sql);
-}
+        return $this->db->datos($sql);
+    }
 
+    public function vincular_persona_postulante($id_persona)
+    {
+        // print_r($id_persona);
+        // die();
 
+        $sql = "DECLARE @th_pos_id INT;
+                    EXEC _talentoh.SP_VINCULAR_PERSONA_POSTULANTE
+                    @p_th_per_id = $id_persona,
+                    @o_th_pos_id = @th_pos_id OUTPUT;
 
+                SELECT @th_pos_id AS th_pos_id;";
+
+        return $this->db->datos($sql);
+    }
+
+    public function obtener_postulante_por_id($th_pos_id = null)
+    {
+        // Condición base: solo postulantes activos
+        $condicion = "pos.th_pos_estado = 1";
+
+        if (!empty($th_pos_id)) {
+            $id = intval($th_pos_id);
+            $condicion .= " AND pos.th_pos_id = {$id}";
+        }
+
+        $sql = "SELECT
+            pos.th_pos_id,
+            pos.th_pos_primer_nombre,
+            pos.th_pos_segundo_nombre,
+            pos.th_pos_primer_apellido,
+            pos.th_pos_segundo_apellido,
+            pos.th_pos_cedula,
+            pos.th_pos_sexo,
+            pos.th_pos_fecha_nacimiento,
+            pos.th_pos_nacionalidad,
+            pos.th_pos_estado_civil,
+            pos.th_pos_telefono_1,
+            pos.th_pos_telefono_2,
+            pos.th_pos_correo,
+            pos.th_pos_correo_personal_1,
+            pos.th_pos_correo_personal_2,
+            pos.th_pos_direccion,
+            pos.th_pos_postal,
+            pos.th_pos_observaciones,
+            pos.th_pos_tipo_sangre,
+            pos.th_pos_foto_url,
+            pos.th_pos_contratado,
+            pos.th_pos_tabla,
+            pos.PERFIL,
+
+            pos.th_prov_id,
+            pos.th_ciu_id,
+            pos.th_parr_id,
+
+            prov.th_prov_nombre,
+            ciu.th_ciu_nombre,
+            parr.th_parr_nombre,
+
+            pos.id_etnia,
+            pos.id_orientacion_sexual,
+            pos.id_identidad_genero,
+            pos.id_religion,
+
+            et.descripcion                       AS descripcion_etnia,
+            ori_sex.descripcion                  AS descripcion_orientacion_sexual,
+            rel.descripcion                      AS descripcion_religion,
+            ide_gen.descripcion                  AS descripcion_identidad_genero,
+
+            RTRIM(
+                CONCAT(
+                    COALESCE(pos.th_pos_primer_apellido, ''), ' ',
+                    COALESCE(pos.th_pos_segundo_apellido, ''), ' ',
+                    COALESCE(pos.th_pos_primer_nombre, ''), ' ',
+                    COALESCE(pos.th_pos_segundo_nombre, '')
+                )
+            ) nombres_completos,
+
+            pos.th_pos_fecha_creacion,
+            pos.th_pos_fecha_modificacion
+
+        FROM th_postulantes pos
+        LEFT JOIN th_provincias prov
+            ON pos.th_prov_id = prov.th_prov_id
+        LEFT JOIN th_ciudad ciu
+            ON pos.th_ciu_id = ciu.th_ciu_id
+        LEFT JOIN th_parroquias parr
+            ON pos.th_parr_id = parr.th_parr_id
+        LEFT JOIN th_cat_etnia et
+            ON pos.id_etnia = et.id_etnia
+        LEFT JOIN th_cat_orientacion_sexual ori_sex
+            ON pos.id_orientacion_sexual = ori_sex.id_orientacion_sexual
+        LEFT JOIN th_cat_religion rel
+            ON pos.id_religion = rel.id_religion
+        LEFT JOIN th_cat_identidad_genero ide_gen
+            ON pos.id_identidad_genero = ide_gen.id_identidad_genero
+        WHERE {$condicion}
+        ORDER BY pos.th_pos_primer_apellido, pos.th_pos_primer_nombre";
+
+        return $this->db->datos($sql);
+    }
 }

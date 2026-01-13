@@ -2,6 +2,16 @@
 
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
 
+$NO_CONCURENTE_TABLA = $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
+$NO_CONCURENTE_CAMPO_ID = $_SESSION['INICIO']['NO_CONCURENTE'];
+
+$link_edicion = "#";
+if ($NO_CONCURENTE_TABLA == "_talentoh.th_personas") {
+    $link_edicion = "../vista/inicio.php?mod=$modulo_sistema&acc=th_registrar_personas&id_persona=$NO_CONCURENTE_CAMPO_ID&id_postulante=postulante&_origen=nomina&_persona_nomina=true";
+} else if ($NO_CONCURENTE_TABLA == "_talentoh.th_postulantes") {
+    $link_edicion = "../vista/inicio.php?mod=" . $modulo_sistema . "&acc=th_informacion_personal&id_postulante=" . $NO_CONCURENTE_CAMPO_ID;
+}
+
 ?>
 
 <script src="../js/GENERAL/operaciones_generales.js"></script>
@@ -12,6 +22,14 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
 ) {
 } else { ?>
     <script>
+        // Cargar notificaciones automáticamente al cargar la página
+        $(document).ready(function() {
+            notificacionesAsistencia();
+
+            // Opcional: Recargar cada 5 minutos
+            setInterval(notificacionesAsistencia, 300000);
+        });
+
         function redireccionar(url_redireccion) {
             url_click = "inicio.php?mod=<?= $modulo_sistema ?>&acc=" + url_redireccion;
             window.location.href = url_click;
@@ -301,14 +319,41 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
                 }
             });
         }
+    </script>
 
-        // Cargar notificaciones automáticamente al cargar la página
+    <script>
         $(document).ready(function() {
-            notificacionesAsistencia();
-
-            // Opcional: Recargar cada 5 minutos
-            setInterval(notificacionesAsistencia, 300000);
+            cargarDatos('<?= $_SESSION['INICIO']['ID_USUARIO']; ?>');
         });
+
+        function cargarDatos(id) {
+
+            var parametros = {
+                'id': id,
+                'query': '',
+            }
+
+            // console.log(parametros);
+            $.ajax({
+                data: {
+                    parametros: parametros
+                },
+                url: '../controlador/usuariosC.php?datos_usuarios=true',
+                type: 'post',
+                dataType: 'json',
+
+                success: function(response) {
+                    // alert('Función cargarDatos deshabilitada temporalmente.');  
+
+                    $('#lbl_ci').text(response[0].ci);
+                    $('#lbl_nombre').text(response[0].nombre + " " + response[0].apellido);
+
+                    if (response[0].foto != '') {
+                        $('#img_perfil').attr("src", response[0].foto + '?' + Math.random())
+                    }
+                }
+            });
+        }
     </script>
 <?php } ?>
 
@@ -318,6 +363,35 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
     $_SESSION['INICIO']['TIPO'] == 'ADMINISTRADOR'
 ) {
 } else { ?>
+
+    <div class="row">
+        <div class="col-12">
+            <h6 class="mb-0 text-uppercase">Información Personal</h6>
+            <hr>
+
+            <div class="row row-cols-1 row-cols-lg-2">
+                <div class="col">
+                    <div class="card radius-15 card-user-profile shadow-sm border-0">
+                        <div class="card-body text-center p-4">
+                            <div class="position-relative d-inline-block mb-3">
+                                <img src="../img/sin_imagen.jpg" id="img_perfil" width="115" height="115" class="rounded-circle p-1 border " alt="img_perfil">
+                            </div>
+
+                            <h5 class="mb-1 fw-bold" id="lbl_nombre">Pauline I. Bird</h5>
+                            <p class="text-muted mb-3" id="lbl_ci">Web Developer</p>
+
+                            <div class="d-grid">
+                                <a href="<?= $link_edicion ?>" class="btn btn-primary radius-15 px-4">
+                                    <i class="bx bx-edit-alt me-1"></i>Editar Perfil
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="col-12 mb-4">
         <div class="alerts-sidebar">
             <h6 class="mb-0 text-uppercase">Notificaciones de Asistencia</h6>
@@ -327,4 +401,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
             </div>
         </div>
     </div>
+
+
+
+
 <?php } ?>

@@ -1,219 +1,198 @@
 <script>
-<?php
-
-$entity_id = '';
-$entity_type = ''; // 'postulante' o 'persona'
-if (isset($_GET['id'])) {
-    $entity_id = $_GET['id'];
-    $entity_type = 'postulante';
-} elseif (isset($_GET['_id'])) {
-    $entity_id = $_GET['_id'];
-    $entity_type = 'persona';
-}
-
-?>
-
-
-let entity_id = <?= json_encode($entity_id) ?>;
-let entity_type = <?= json_encode($entity_type) ?>;
-
-$(document).ready(function() {
-    cargar_datos_idiomas(entity_id);
-
-});
-
-//Idiomas
-function cargar_datos_idiomas(id) {
-    $.ajax({
-        url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_idiomasC.php?listar=true',
-        type: 'post',
-        data: {
-            id: id
-        },
-        dataType: 'json',
-        success: function(response) {
-            $('#pnl_idioma').html(response);
-        }
+    $(document).ready(function() {
+        cargar_datos_idiomas(<?= $id_postulante ?>);
     });
-}
 
-function cargar_datos_modal_idiomas(id) {
-    $.ajax({
-        url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_idiomasC.php?listar_modal=true',
-        type: 'post',
-        data: {
-            id: id
-        },
-        dataType: 'json',
-        success: function(response) {
-            $('#ddl_seleccionar_idioma').val(response[0].th_idi_nombre_idioma);
-            $('#ddl_dominio_idioma').val(response[0].th_idi_nivel);
-            $('#txt_institucion_1').val(response[0].th_idi_institucion);
-            $('#txt_fecha_inicio_idioma').val(response[0].th_idi_fecha_inicio_idioma);
-            $('#txt_fecha_fin_idioma').val(response[0].th_idi_fecha_fin_idioma);
-            $('#txt_idiomas_id').val(response[0]._id);
+    //Idiomas
+    function cargar_datos_idiomas(id) {
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_idiomasC.php?listar=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#pnl_idioma').html(response);
+            }
+        });
+    }
 
+    function cargar_datos_modal_idiomas(id) {
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_idiomasC.php?listar_modal=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#ddl_seleccionar_idioma').val(response[0].th_idi_nombre_idioma);
+                $('#ddl_dominio_idioma').val(response[0].th_idi_nivel);
+                $('#txt_institucion_1').val(response[0].th_idi_institucion);
+                $('#txt_fecha_inicio_idioma').val(response[0].th_idi_fecha_inicio_idioma);
+                $('#txt_fecha_fin_idioma').val(response[0].th_idi_fecha_fin_idioma);
+                $('#txt_idiomas_id').val(response[0]._id);
+
+            }
+        });
+    }
+
+    function insertar_editar_idiomas() {
+        var ddl_seleccionar_idioma = $('#ddl_seleccionar_idioma').val();
+        var ddl_dominio_idioma = $('#ddl_dominio_idioma').val();
+        var txt_institucion_1 = $('#txt_institucion_1').val();
+        var txt_fecha_inicio_idioma = $('#txt_fecha_inicio_idioma').val();
+        var txt_fecha_fin_idioma = $('#txt_fecha_fin_idioma').val();
+        var id_postulante = $('#txt_postulante_id').val();
+        var txt_idi_idiomas_id = $('#txt_idiomas_id').val();
+        var parametros_idiomas = {
+            'id_postulante': id_postulante,
+            'ddl_seleccionar_idioma': ddl_seleccionar_idioma,
+            'ddl_dominio_idioma': ddl_dominio_idioma,
+            'txt_institucion_1': txt_institucion_1,
+            'txt_fecha_inicio_idioma': txt_fecha_inicio_idioma,
+            'txt_fecha_fin_idioma': txt_fecha_fin_idioma,
+            '_id': txt_idi_idiomas_id
         }
-    });
-}
-
-function insertar_editar_idiomas() {
-    var ddl_seleccionar_idioma = $('#ddl_seleccionar_idioma').val();
-    var ddl_dominio_idioma = $('#ddl_dominio_idioma').val();
-    var txt_institucion_1 = $('#txt_institucion_1').val();
-    var txt_fecha_inicio_idioma = $('#txt_fecha_inicio_idioma').val();
-    var txt_fecha_fin_idioma = $('#txt_fecha_fin_idioma').val();
-    var id_postulante = $('#txt_postulante_id').val();
-    var txt_idi_idiomas_id = $('#txt_idiomas_id').val();
-    var parametros_idiomas = {
-        'id_postulante': id_postulante,
-        'ddl_seleccionar_idioma': ddl_seleccionar_idioma,
-        'ddl_dominio_idioma': ddl_dominio_idioma,
-        'txt_institucion_1': txt_institucion_1,
-        'txt_fecha_inicio_idioma': txt_fecha_inicio_idioma,
-        'txt_fecha_fin_idioma': txt_fecha_fin_idioma,
-        '_id': txt_idi_idiomas_id
+        if ($("#form_agregar_idioma").valid()) {
+            insertar_idiomas(parametros_idiomas);
+        }
     }
-    if ($("#form_agregar_idioma").valid()) {
-        insertar_idiomas(parametros_idiomas);
+
+    function insertar_idiomas(parametros) {
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_idiomasC.php?insertar=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operacion realizada con exito.', 'success');
+                    cargar_datos_idiomas('<?= $id_postulante ?>');
+                    limpiar_campos_idiomas_modal();
+                    $('#modal_agregar_idioma').modal('hide');
+                } else {
+                    Swal.fire('', 'Operación fallida', 'warning');
+                }
+            }
+        });
     }
-}
 
-function insertar_idiomas(parametros) {
-    $.ajax({
-        data: {
-            parametros: parametros
-        },
-        url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_idiomasC.php?insertar=true',
-        type: 'post',
-        dataType: 'json',
+    function abrir_modal_idiomas(id) {
+        cargar_datos_modal_idiomas(id);
+        $('#modal_agregar_idioma').modal('show');
+        $('#lbl_nombre_idioma').html('Editar Idioma');
+        $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Editar');
+        $('#btn_eliminar_idiomas').show();
+    }
 
-        success: function(response) {
-            if (response == 1) {
-                Swal.fire('', 'Operacion realizada con exito.', 'success');
-                <?php if (isset($_GET['id'])) { ?>
-                cargar_datos_idiomas(entity_id);
-                limpiar_campos_idiomas_modal();
-                <?php } ?>
-                $('#modal_agregar_idioma').modal('hide');
-            } else {
-                Swal.fire('', 'Operación fallida', 'warning');
+    function borrar_datos_idioma() {
+        id = $('#txt_idiomas_id').val();
+        Swal.fire({
+            title: 'Eliminar Registro?',
+            text: "Esta seguro de eliminar este registro?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.value) {
+                eliminar_idioma(id);
+            }
+        })
+    }
+
+    function eliminar_idioma(id) {
+        $.ajax({
+            data: {
+                id: id
+            },
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_idiomasC.php?eliminar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
+                    <?php if (isset($_GET['id'])) { ?>
+                        cargar_datos_idiomas(<?= $id_postulante ?>);
+                        limpiar_campos_idiomas_modal();
+                    <?php } ?>
+                    $('#modal_agregar_idioma').modal('hide');
+                }
+            }
+        });
+    }
+
+    function limpiar_campos_idiomas_modal() {
+        $('#form_agregar_idioma').validate().resetForm();
+        $('.form-control, .form-select').removeClass('is-valid is-invalid');
+        $('#ddl_seleccionar_idioma').val('');
+        $('#ddl_dominio_idioma').val('');
+        $('#txt_institucion_1').val('');
+        $('#txt_fecha_inicio_idioma').val('');
+        $('#txt_fecha_fin_idioma').val('');
+        $('#txt_idiomas_id').val('');
+        //Cambiar texto
+        $('#lbl_nombre_idioma').html('Agregar Idioma');
+        $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Agregar');
+        $('#btn_eliminar_idiomas').hide();
+    }
+
+    //Funcion para validar las fechas de ingreso
+    function validar_fechas_idioma() {
+        var fecha_inicio = $('#txt_fecha_inicio_idioma').val();
+        var fecha_final = $('#txt_fecha_fin_idioma').val();
+        var hoy = new Date();
+        var fecha_actual = hoy.toISOString().split('T')[0];
+
+        //Funcion para validar que la fecha final no sea menor a la fecha de inicio
+        if (fecha_inicio && fecha_final) {
+            if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "La fecha final no puede ser menor a la fecha de inicio.",
+                });
+                reiniciar_campos_fecha('#txt_fecha_fin_idioma');
+                return;
             }
         }
-    });
-}
 
-function abrir_modal_idiomas(id) {
-    cargar_datos_modal_idiomas(id);
-    $('#modal_agregar_idioma').modal('show');
-    $('#lbl_nombre_idioma').html('Editar Idioma');
-    $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Editar');
-    $('#btn_eliminar_idiomas').show();
-}
-
-function borrar_datos_idioma() {
-    id = $('#txt_idiomas_id').val();
-    Swal.fire({
-        title: 'Eliminar Registro?',
-        text: "Esta seguro de eliminar este registro?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.value) {
-            eliminar_idioma(id);
-        }
-    })
-}
-
-function eliminar_idioma(id) {
-    $.ajax({
-        data: {
-            id: id
-        },
-        url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_idiomasC.php?eliminar=true',
-        type: 'post',
-        dataType: 'json',
-        success: function(response) {
-            if (response == 1) {
-                Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
-                <?php if (isset($_GET['id'])) { ?>
-                cargar_datos_idiomas(entity_id);
-                limpiar_campos_idiomas_modal();
-                <?php } ?>
-                $('#modal_agregar_idioma').modal('hide');
-            }
-        }
-    });
-}
-
-function limpiar_campos_idiomas_modal() {
-    $('#form_agregar_idioma').validate().resetForm();
-    $('.form-control, .form-select').removeClass('is-valid is-invalid');
-    $('#ddl_seleccionar_idioma').val('');
-    $('#ddl_dominio_idioma').val('');
-    $('#txt_institucion_1').val('');
-    $('#txt_fecha_inicio_idioma').val('');
-    $('#txt_fecha_fin_idioma').val('');
-    $('#txt_idiomas_id').val('');
-    //Cambiar texto
-    $('#lbl_nombre_idioma').html('Agregar Idioma');
-    $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Agregar');
-    $('#btn_eliminar_idiomas').hide();
-}
-
-//Funcion para validar las fechas de ingreso
-function validar_fechas_idioma() {
-    var fecha_inicio = $('#txt_fecha_inicio_idioma').val();
-    var fecha_final = $('#txt_fecha_fin_idioma').val();
-    var hoy = new Date();
-    var fecha_actual = hoy.toISOString().split('T')[0];
-
-    //Funcion para validar que la fecha final no sea menor a la fecha de inicio
-    if (fecha_inicio && fecha_final) {
-        if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
+        // Validar que la fecha de inicio no sea mayor a la fecha actual
+        if (fecha_inicio && Date.parse(fecha_inicio) > Date.parse(fecha_actual)) {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: "La fecha final no puede ser menor a la fecha de inicio.",
+                text: "La fecha de inicio no puede ser mayor a la fecha actual.",
+            });
+            reiniciar_campos_fecha('#txt_fecha_inicio_idioma');
+            return;
+        }
+
+        // Validar que la fecha final no sea mayor a la fecha actual
+        if (fecha_final && Date.parse(fecha_final) > Date.parse(fecha_actual)) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "La fecha final no puede ser mayor a la fecha actual.",
             });
             reiniciar_campos_fecha('#txt_fecha_fin_idioma');
             return;
         }
-    }
 
-    // Validar que la fecha de inicio no sea mayor a la fecha actual
-    if (fecha_inicio && Date.parse(fecha_inicio) > Date.parse(fecha_actual)) {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "La fecha de inicio no puede ser mayor a la fecha actual.",
-        });
-        reiniciar_campos_fecha('#txt_fecha_inicio_idioma');
-        return;
+        //Función para reiniciar campos
+        function reiniciar_campos_fecha(campo) {
+            $(campo).val('');
+            $(campo).removeClass('is-valid is-invalid');
+            $('.form-control').removeClass('is-valid is-invalid');
+        }
     }
-
-    // Validar que la fecha final no sea mayor a la fecha actual
-    if (fecha_final && Date.parse(fecha_final) > Date.parse(fecha_actual)) {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "La fecha final no puede ser mayor a la fecha actual.",
-        });
-        reiniciar_campos_fecha('#txt_fecha_fin_idioma');
-        return;
-    }
-
-    //Función para reiniciar campos
-    function reiniciar_campos_fecha(campo) {
-        $(campo).val('');
-        $(campo).removeClass('is-valid is-invalid');
-        $('.form-control').removeClass('is-valid is-invalid');
-    }
-}
 </script>
 
 <div id="pnl_idioma">
@@ -309,96 +288,96 @@ function validar_fechas_idioma() {
 
 
 <script>
-$(document).ready(function() {
+    $(document).ready(function() {
 
-    agregar_asterisco_campo_obligatorio('ddl_seleccionar_idioma');
-    agregar_asterisco_campo_obligatorio('ddl_dominio_idioma');
-    agregar_asterisco_campo_obligatorio('txt_institucion_1');
-    agregar_asterisco_campo_obligatorio('txt_fecha_inicio_idioma');
-    agregar_asterisco_campo_obligatorio('txt_fecha_fin_idioma');
-    //Validación Idiomas
-    $("#form_agregar_idioma").validate({
-        rules: {
-            ddl_seleccionar_idioma: {
-                required: true,
+        agregar_asterisco_campo_obligatorio('ddl_seleccionar_idioma');
+        agregar_asterisco_campo_obligatorio('ddl_dominio_idioma');
+        agregar_asterisco_campo_obligatorio('txt_institucion_1');
+        agregar_asterisco_campo_obligatorio('txt_fecha_inicio_idioma');
+        agregar_asterisco_campo_obligatorio('txt_fecha_fin_idioma');
+        //Validación Idiomas
+        $("#form_agregar_idioma").validate({
+            rules: {
+                ddl_seleccionar_idioma: {
+                    required: true,
+                },
+                ddl_dominio_idioma: {
+                    required: true,
+                },
+                txt_institucion_1: {
+                    required: true,
+                },
+                txt_fecha_inicio_idioma: {
+                    required: true,
+                },
+                txt_fecha_fin_idioma: {
+                    required: true,
+                },
             },
-            ddl_dominio_idioma: {
-                required: true,
+            messages: {
+                ddl_seleccionar_idioma: {
+                    required: "Por favor seleccione un idioma",
+                },
+                ddl_dominio_idioma: {
+                    required: "Por favor seleccione su dominio con el idioma",
+                },
+                txt_institucion_1: {
+                    required: "Por favor escriba la institución donde recibió su certificado",
+                },
+                txt_fecha_inicio_idioma: {
+                    required: "Por favor escriba la fecha de inicio de estudios",
+                },
+                txt_fecha_fin_idioma: {
+                    required: "Por favor escriba la fecha de fin de los estudios",
+                },
             },
-            txt_institucion_1: {
-                required: true,
-            },
-            txt_fecha_inicio_idioma: {
-                required: true,
-            },
-            txt_fecha_fin_idioma: {
-                required: true,
-            },
-        },
-        messages: {
-            ddl_seleccionar_idioma: {
-                required: "Por favor seleccione un idioma",
-            },
-            ddl_dominio_idioma: {
-                required: "Por favor seleccione su dominio con el idioma",
-            },
-            txt_institucion_1: {
-                required: "Por favor escriba la institución donde recibió su certificado",
-            },
-            txt_fecha_inicio_idioma: {
-                required: "Por favor escriba la fecha de inicio de estudios",
-            },
-            txt_fecha_fin_idioma: {
-                required: "Por favor escriba la fecha de fin de los estudios",
-            },
-        },
 
-        highlight: function(element) {
-            // Agrega la clase 'is-invalid' al input que falla la validación
-            $(element).addClass('is-invalid');
-            $(element).removeClass('is-valid');
-        },
-        unhighlight: function(element) {
-            // Elimina la clase 'is-invalid' si la validación pasa
-            $(element).removeClass('is-invalid');
-            $(element).addClass('is-valid');
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
 
-        }
-    });
-})
-
-function txt_fecha_fin_idioma_1() {
-    if ($('#txt_fecha_fin_idioma').is(':checked')) {
-        var hoy = new Date();
-        var dia = String(hoy.getDate()).padStart(2, '0');
-        var mes = String(hoy.getMonth() + 1).padStart(2, '0');
-        var year = hoy.getFullYear();
-        var fecha_actual = year + '-' + mes + '-' + dia;
-
-        // Configurar automáticamente la fecha final como "hoy"
-        $('#txt_fecha_fin_idioma').val(fecha_actual);
-        $('#txt_fecha_fin_idioma').prop('disabled', true);
-        $('#txt_fecha_fin_idioma').rules("remove", "required");
-
-        // Agregar clase 'is-valid' para mostrar el campo como válido
-        $('#txt_fecha_fin_idioma').addClass('is-valid');
-        $('#txt_fecha_fin_idioma').removeClass('is-invalid');
-
-    } else {
-        if ($('#txt_fecha_fin_idioma').prop('disabled')) {
-            $('#txt_fecha_fin_idioma').val('');
-        }
-
-        $('#txt_fecha_fin_idioma').prop('disabled', false);
-        $('#txt_fecha_fin_idioma').rules("add", {
-            required: true
+            }
         });
-        $('#txt_fecha_fin_idioma').removeClass('is-valid');
-        $('#form_agregar_idioma').validate().resetForm();
-        $('.form-control').removeClass('is-valid is-invalid');
-    }
+    })
 
-    // Validar las fechas (llama a tu función de validación)
-    validar_fechas_idioma();
-}
+    function txt_fecha_fin_idioma_1() {
+        if ($('#txt_fecha_fin_idioma').is(':checked')) {
+            var hoy = new Date();
+            var dia = String(hoy.getDate()).padStart(2, '0');
+            var mes = String(hoy.getMonth() + 1).padStart(2, '0');
+            var year = hoy.getFullYear();
+            var fecha_actual = year + '-' + mes + '-' + dia;
+
+            // Configurar automáticamente la fecha final como "hoy"
+            $('#txt_fecha_fin_idioma').val(fecha_actual);
+            $('#txt_fecha_fin_idioma').prop('disabled', true);
+            $('#txt_fecha_fin_idioma').rules("remove", "required");
+
+            // Agregar clase 'is-valid' para mostrar el campo como válido
+            $('#txt_fecha_fin_idioma').addClass('is-valid');
+            $('#txt_fecha_fin_idioma').removeClass('is-invalid');
+
+        } else {
+            if ($('#txt_fecha_fin_idioma').prop('disabled')) {
+                $('#txt_fecha_fin_idioma').val('');
+            }
+
+            $('#txt_fecha_fin_idioma').prop('disabled', false);
+            $('#txt_fecha_fin_idioma').rules("add", {
+                required: true
+            });
+            $('#txt_fecha_fin_idioma').removeClass('is-valid');
+            $('#form_agregar_idioma').validate().resetForm();
+            $('.form-control').removeClass('is-valid is-invalid');
+        }
+
+        // Validar las fechas (llama a tu función de validación)
+        validar_fechas_idioma();
+    }
 </script>

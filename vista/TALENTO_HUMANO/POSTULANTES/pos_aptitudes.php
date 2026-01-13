@@ -1,33 +1,14 @@
 <script>
-    <?php
-
-$entity_id = '';
-$entity_type = ''; // 'postulante' o 'persona'
-if (isset($_GET['id'])) {
-    $entity_id = $_GET['id'];
-    $entity_type = 'postulante';
-} elseif (isset($_GET['_id'])) {
-    $entity_id = $_GET['_id'];
-    $entity_type = 'persona';
-}
-
-?>
-
     $(document).ready(function() {
-        
-       let entity_id = <?= json_encode($entity_id) ?>;
-        let entity_type = <?= json_encode($entity_type) ?>;
-            cargar_datos_aptitudes_tecnicas(entity_id);
-            cargar_datos_aptitudes_blandas(entity_id);
+        cargar_datos_aptitudes_tecnicas(<?= $id_postulante ?>);
+        cargar_datos_aptitudes_blandas(<?= $id_postulante ?>);
 
     });
 
     function activar_select2() {
 
-          let entity_id = <?= json_encode($entity_id) ?>;
-        let entity_type = <?= json_encode($entity_type) ?>;
-        lista_aptitudes_tecnicas_postulante(entity_id);
-        lista_aptitudes_blandas_postulante(entity_id);
+        lista_aptitudes_tecnicas_postulante(<?= $id_postulante ?>);
+        lista_aptitudes_blandas_postulante(<?= $id_postulante ?>);
 
         $('#ddl_seleccionar_aptitud_blanda').select2({
             placeholder: ' Selecciona una opción',
@@ -128,7 +109,7 @@ if (isset($_GET['id'])) {
     }
 
     function insertar_editar_aptitudes() {
-        var txt_id_postulante =$('#txt_postulante_id').val();
+        var txt_id_postulante = $('#txt_postulante_id').val();
 
         var aptitudes_tecnicas = $('#ddl_seleccionar_aptitud_tecnica').val() || [];
         var aptitudes_blandas = $('#ddl_seleccionar_aptitud_blanda').val() || [];
@@ -162,10 +143,8 @@ if (isset($_GET['id'])) {
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_aptitudes_tecnicas(entity_id);
-                        cargar_datos_aptitudes_blandas(entity_id);
-                    <?php } ?>
+                    cargar_datos_aptitudes_tecnicas('<?= $id_postulante ?>');
+                    cargar_datos_aptitudes_blandas('<?= $id_postulante ?>');
                     limpiar_campos_aptitudes_modal();
                     $('#modal_agregar_aptitudes').modal('hide');
                 } else {
@@ -203,10 +182,8 @@ if (isset($_GET['id'])) {
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_aptitudes_tecnicas(entity_id);
-                        cargar_datos_aptitudes_blandas(entity_id);
-                    <?php } ?>
+                    cargar_datos_aptitudes_tecnicas('<?= $id_postulante ?>');
+                    cargar_datos_aptitudes_blandas('<?= $id_postulante ?>');
                     limpiar_campos_aptitudes_modal();
                 }
             }
@@ -237,7 +214,7 @@ if (isset($_GET['id'])) {
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold">Agregar Aptitudes</small></h5>                
+                <h5><small class="text-body-secondary fw-bold">Agregar Aptitudes</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_aptitudes_modal();"></button>
             </div>
             <!-- Modal body -->
@@ -261,13 +238,13 @@ if (isset($_GET['id'])) {
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
-                    <button  class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" id="btn_guardar_aptitudes" onclick="insertar_editar_aptitudes();" type="button"><i class="bx bx-save"></i>Guardar Aptitudes</button>
+                    <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" id="btn_guardar_aptitudes" onclick="insertar_editar_aptitudes();" type="button"><i class="bx bx-save"></i>Guardar Aptitudes</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
+<!--
 <script>
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('ddl_seleccionar_aptitud_blanda');
@@ -306,3 +283,4 @@ if (isset($_GET['id'])) {
         });
     })
 </script>
+-->

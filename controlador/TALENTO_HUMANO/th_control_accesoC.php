@@ -25,8 +25,9 @@ class th_control_accesoC
         if ($fecha_ini == '') {
             $datos = $this->modelo->listar_personalizado();
         } else {
-            $datos = $this->modelo->listar_personalizado($fecha_final, $fecha_final);
+            $datos = $this->modelo->listar_personalizado($fecha_ini, $fecha_final);
         }
+        
         return $datos;
     }
 }

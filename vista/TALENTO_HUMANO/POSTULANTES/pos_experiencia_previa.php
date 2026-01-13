@@ -1,27 +1,7 @@
 <script>
-    <?php
-
-$entity_id = '';
-$entity_type = ''; // 'postulante' o 'persona'
-if (isset($_GET['id'])) {
-    $entity_id = $_GET['id'];
-    $entity_type = 'postulante';
-} elseif (isset($_GET['_id'])) {
-    $entity_id = $_GET['_id'];
-    $entity_type = 'persona';
-}
-
-?>
-
-
     $(document).ready(function() {
-
-        let entity_id = <?= json_encode($entity_id) ?>;
-        let entity_type = <?= json_encode($entity_type) ?>;
-        
-            cargar_datos_experiencia_laboral(entity_id);
-        
-
+        cargar_datos_experiencia_laboral(<?= $id_postulante ?>);
+        // console.log('Cargando experiencia laboral del postulante ID: <?= $id_postulante ?>');
     });
 
     //Experiencia Laboral
@@ -72,6 +52,7 @@ if (isset($_GET['id'])) {
 
                 $('#txt_responsabilidades_logros').val(response[0].th_expl_responsabilidades_logros);
                 $('#txt_experiencia_id').val(response[0]._id);
+                $('#txt_sueldo').val(response[0].th_expl_sueldo);
             }
         });
     }
@@ -90,8 +71,9 @@ if (isset($_GET['id'])) {
         }
 
         var txt_responsabilidades_logros = $('#txt_responsabilidades_logros').val();
-        var txt_id_postulante = $('#txt_postulante_id').val();
+        var txt_id_postulante = '<?= $id_postulante ?>';
         var txt_id_experiencia_laboral = $('#txt_experiencia_id').val();
+        var txt_sueldo = $('#txt_sueldo').val();
 
         var parametros_experiencia_laboral = {
             '_id': txt_id_experiencia_laboral,
@@ -102,6 +84,7 @@ if (isset($_GET['id'])) {
             'txt_fecha_final_laboral': txt_fecha_final_laboral,
             'cbx_fecha_final_laboral': cbx_fecha_final_laboral,
             'txt_responsabilidades_logros': txt_responsabilidades_logros,
+            'txt_sueldo': txt_sueldo,
         }
 
         if ($("#form_experiencia_laboral").valid()) {
@@ -123,11 +106,10 @@ if (isset($_GET['id'])) {
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_experiencia_laboral(entity_id);
-                        limpiar_campos_experiencia_laboral_modal();
-                    <?php } ?>
+                    cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
+                    limpiar_campos_experiencia_laboral_modal();
                     $('#modal_agregar_experiencia').modal('hide');
+                    cargar_datos_info_adicional(<?= $id_postulante ?>);
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
                 }
@@ -168,7 +150,8 @@ if (isset($_GET['id'])) {
     function eliminar_experiencia_laboral(id) {
         $.ajax({
             data: {
-                id: id
+                id: id,
+                id_postulante: <?= $id_postulante ?>
             },
             url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_experiencia_laboralC.php?eliminar=true',
             type: 'post',
@@ -176,11 +159,10 @@ if (isset($_GET['id'])) {
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_experiencia_laboral(entity_id);
-                        limpiar_campos_experiencia_laboral_modal();
-                    <?php } ?>
+                    cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
+                    limpiar_campos_experiencia_laboral_modal();
                     $('#modal_agregar_experiencia').modal('hide');
+                    cargar_datos_info_adicional(<?= $id_postulante ?>);
                 }
             }
         });
@@ -197,6 +179,7 @@ if (isset($_GET['id'])) {
         $('#cbx_fecha_final_laboral').prop('checked', false);
         $('#txt_responsabilidades_logros').val('');
         $('#txt_experiencia_id').val('')
+        $('#txt_sueldo').val('')
         //Cambiar texto
         $('#lbl_titulo_experiencia_laboral').html('Agregar Experiencia Laboral');
         $('#btn_guardar_experiencia').html('<i class="bx bx-save"></i>Agregar');
@@ -260,6 +243,30 @@ if (isset($_GET['id'])) {
     }
 </script>
 
+<script>
+    $(document).ready(function() {
+        cargar_datos_info_adicional(<?= $id_postulante ?>);
+    });
+
+    function cargar_datos_info_adicional(id) {
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_per_informacion_adicionalC.php?listar=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#pnl_informacion_adicional').html(response);
+            }
+        });
+    }
+</script>
+
+
+<div id="pnl_informacion_adicional">
+</div>
+
 <div id="pnl_experiencia_laboral">
 </div>
 
@@ -288,6 +295,20 @@ if (isset($_GET['id'])) {
                         <div class="col-md-12">
                             <label for="txt_cargos_ocupados" class="form-label form-label-sm">Cargos Ocupados </label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_cargos_ocupados" id="txt_cargos_ocupados" maxlength="100">
+                        </div>
+                    </div>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_sueldo" class="form-label form-label-sm">
+                                Sueldo
+                            </label>
+                            <input
+                                type="number"
+                                class="form-control form-control-sm"
+                                name="txt_sueldo"
+                                id="txt_sueldo"
+                                step="0.01"
+                                min="0">
                         </div>
                     </div>
 
@@ -420,13 +441,13 @@ if (isset($_GET['id'])) {
             $('.form-control').removeClass('is-valid is-invalid');
         }
 
-         $("input[name='txt_fecha_contratacion_estado']").on("blur", function() {
+        $("input[name='txt_fecha_contratacion_estado']").on("blur", function() {
             if (!verificar_fecha_inicio_fecha_fin('txt_fecha_inicio_laboral', 'txt_fecha_final_laboral')) return;
         });
         $("input[name='txt_fecha_inicio_laboral']").on("blur", function() {
             if (!verificar_fecha_inicio_fecha_fin('txt_fecha_inicio_laboral', 'txt_fecha_final_laboral')) return;
         });
 
-        
+
     }
 </script>

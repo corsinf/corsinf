@@ -29,8 +29,7 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 }
 
 $modulo_sistema = '';
-if(isset($_GET['mod']) && $_GET['mod'] !='')
-{
+if (isset($_GET['mod']) && $_GET['mod'] != '') {
 	$modulo_sistema = $_GET['mod'];
 }
 
@@ -138,10 +137,10 @@ if(isset($_GET['mod']) && $_GET['mod'] !='')
 		//menu_lateral();
 		$(document).ready(function() {
 			$.ajaxSetup({
-		        headers: {
-		            'X-Custom-Variable': '<?= $modulo_sistema ?>'
-		        }
-		    });
+				headers: {
+					'X-Custom-Variable': '<?= $modulo_sistema ?>'
+				}
+			});
 
 			restriccion();
 			//notificaciones();
@@ -217,50 +216,50 @@ if(isset($_GET['mod']) && $_GET['mod'] !='')
 			});
 		}
 
-		function mi_licencias(id)
-		  {
-		    var parametros = {
-		      'id':id
-		    }
-		    $.ajax({
-		          data:  {parametros,parametros},
-		          url:   '../controlador/nueva_empresaC.php?detalle_licencias=true',
-		          type: 'POST',         
-		            dataType:'json',
-		          success: function(response) {
-		            console.log(response)
-		            var tbl = '<thead><th>Licencia</th><th>Fecha Inicio</th><th>Fecha Fin</th><th>Modulo</th><th>Num Usuarios</th><th>Estado</th></thead>';
-		            response.forEach(function(item,i){
-		                tbl+=`<tr><td>`+item.Codigo_licencia+`</td>
-		                          <td>`+item.Fecha_ini+`</td>
-		                          <td>`+item.Fecha_exp+`</td>
-		                          <td>`+item.nombre_modulo+`</td>
-		                          <td>`+item.Numero_maquinas+`</td>
+		function mi_licencias(id) {
+			var parametros = {
+				'id': id
+			}
+			$.ajax({
+				data: {
+					parametros,
+					parametros
+				},
+				url: '../controlador/nueva_empresaC.php?detalle_licencias=true',
+				type: 'POST',
+				dataType: 'json',
+				success: function(response) {
+					console.log(response)
+					var tbl = '<thead><th>Licencia</th><th>Fecha Inicio</th><th>Fecha Fin</th><th>Modulo</th><th>Num Usuarios</th><th>Estado</th></thead>';
+					response.forEach(function(item, i) {
+						tbl += `<tr><td>` + item.Codigo_licencia + `</td>
+		                          <td>` + item.Fecha_ini + `</td>
+		                          <td>` + item.Fecha_exp + `</td>
+		                          <td>` + item.nombre_modulo + `</td>
+		                          <td>` + item.Numero_maquinas + `</td>
 		                          <td>`
-		                          if(item.registrado=='0')
-		                          {
-		                              tbl+=`<div class="d-flex align-items-center text-danger"> <i class="bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1"></i>
+						if (item.registrado == '0') {
+							tbl += `<div class="d-flex align-items-center text-danger"> <i class="bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1"></i>
 		                                    <span>Pendiente de activacion</span>`;
-		                          }else
-		                          {
-		                               tbl+=`<div class="d-flex align-items-center text-success"> <i class="bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1"></i>
+						} else {
+							tbl += `<div class="d-flex align-items-center text-success"> <i class="bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1"></i>
 		                                    <span>Activo</span>`;
-		                          }
+						}
 
-		                        tbl+=`</td>
+						tbl += `</td>
 		                      </div>
 		                </tr>`
-		            })
+					})
 
-		            $('#tbl_detalles').html(tbl);  
-		            $('#myModal_detalles').modal('show');        
-		          },
-		          error: function(error) {
-		              console.error('Error al enviar datos:', error);
-		              // Puedes manejar los errores aquí
-		          }
-		      });
-		  }
+					$('#tbl_detalles').html(tbl);
+					$('#myModal_detalles').modal('show');
+				},
+				error: function(error) {
+					console.error('Error al enviar datos:', error);
+					// Puedes manejar los errores aquí
+				}
+			});
+		}
 
 		function menu_lateral() {
 			$.ajax({
@@ -328,22 +327,20 @@ if(isset($_GET['mod']) && $_GET['mod'] !='')
 				dataType: 'json',
 				success: function(response) {
 					console.log(response);
-					if(response.length>0)
-					{
+					if (response.length > 0) {
 						html = '';
-						response.forEach(function(item,i){
-							html+=item.draw;
+						response.forEach(function(item, i) {
+							html += item.draw;
 						})
 
 						$('#pnl_acceso_rapido_modulo').html(html);
 
-					}else
-					{
+					} else {
 						Swal.fire('', 'Su perfil no esta asignado a ningun modulo.', 'error').then(function() {
 							window.location.href = "../login.php";
 						});
 					}
-					
+
 				}
 			});
 		}
@@ -542,6 +539,43 @@ if(isset($_GET['mod']) && $_GET['mod'] !='')
 			iniciar_sesion();
 		}
 	</script>
+
+
+	<?php
+	$acc = isset($_GET['acc']) ? $_GET['acc'] : '';
+	?>
+
+	<?php if (
+		(isset($_SESSION['INICIO']['NO_CONCURENTE_POLITICAS']) &&
+		$_SESSION['INICIO']['NO_CONCURENTE_POLITICAS'] == 0 &&
+		$acc !== 'perfil') && $acc !== 'politicas_datos'
+	) { ?>
+
+		<script>
+			$(document).ready(function() {
+				cambiar_contrasena();
+			});
+
+			function cambiar_contrasena() {
+				Swal.fire({
+					title: 'Cambio de Contraseña Requerido',
+					text: 'Por seguridad, debes cambiar tu contraseña ahora.',
+					icon: 'warning',
+					allowOutsideClick: false,
+					allowEscapeKey: false,
+					showCancelButton: false,
+					confirmButtonText: 'Cambiar Contraseña'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						window.location.href = '../vista/inicio.php?acc=perfil';
+					}
+				});
+			}
+		</script>
+
+	<?php } ?>
+
+
 </head>
 
 <body>
@@ -1019,7 +1053,7 @@ if(isset($_GET['mod']) && $_GET['mod'] !='')
 							</li>
 							<li onclick="$('#myModal_acerca_de').modal('show')"><a class="dropdown-item" href="#"><i class='bx bx-info-circle'></i><span>Acerca de</span></a>
 							</li>
-							<li onclick="mi_licencias('<?php echo $_SESSION['INICIO']['ID_EMPRESA'];?>')"><a class="dropdown-item" href="#"><i class='bx bxs-key'></i><span>Mi Licencia</span></a>
+							<li onclick="mi_licencias('<?php echo $_SESSION['INICIO']['ID_EMPRESA']; ?>')"><a class="dropdown-item" href="#"><i class='bx bxs-key'></i><span>Mi Licencia</span></a>
 							</li>
 							<li>
 								<div class="dropdown-divider mb-0"></div>

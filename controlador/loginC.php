@@ -194,6 +194,7 @@ class loginC
 			 	 	 	$parametros['Campo_Usuario'] = $value['Campo_usuario'];
 			 	 	 	$Campo_Pass = $value['Campo_pass'];
 			 	 	 	$parametros['tabla'] = $value['Tabla'];
+			 	 	 	$parametros['politicas'] = $value['campo_politicas'];
 			 	 	 	// print_r($empresa);
 
 			 // print_r($lista_empresas);die();
@@ -334,6 +335,8 @@ class loginC
 			 	 	 	$parametros['Campo_Usuario'] = $value['Campo_usuario'];
 			 	 	 	$Campo_Pass = $value['Campo_pass'];
 			 	 	 	$parametros['tabla'] = $value['Tabla'];
+			 	 	 	$parametros['politicas'] = $value['campo_politicas'];
+
 			 	 	 	// print_r($empresa);die();
 			 	 	 	if(count($empresa)>0)
 			 	 	 	{
@@ -471,6 +474,8 @@ class loginC
 			 	 	 	$parametros['Campo_Usuario'] = $value['Campo_usuario'];
 			 	 	 	$Campo_Pass = $value['Campo_pass'];
 			 	 	 	$parametros['tabla'] = $value['Tabla'];
+			 	 	 	$parametros['politicas'] = $value['campo_politicas'];
+
 			 	 	 	// print_r($empresa);die();
 			 	 	 	if(count($empresa)>0)
 			 	 	 	{
@@ -633,6 +638,8 @@ class loginC
 			 	 	 	$parametros['Campo_Usuario'] = $value['Campo_usuario'];
 			 	 	 	$Campo_Pass = $value['Campo_pass'];
 			 	 	 	$parametros['tabla'] = $value['Tabla'];
+			 	 	 	$parametros['politicas'] = $value['campo_politicas'];
+
 			 	 	 	// print_r($empresa);die();
 			 	 	 	if(count($empresa)>0)
 			 	 	 	{
@@ -869,6 +876,7 @@ class loginC
 				$_SESSION["INICIO"]['FOTO'] = $datos[0]['foto'];
 				$_SESSION["INICIO"]['NO_CONCURENTE'] = '';
 				$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] ='';
+				$_SESSION["INICIO"]['NO_CONCURENTE_POLITICAS'] ='';
 				$_SESSION["INICIO"]['NO_CONCURENTE_TABLA_ID'] ='';
 				$_SESSION["INICIO"]['NO_CONCURENTE_TABLA'] ='';
 				$_SESSION["INICIO"]['MODULO_SISTEMA_ANT'] ='';
@@ -902,6 +910,8 @@ class loginC
 			 	 	 	$parametros['perfil'] = $value['tipo_perfil'];
 			 	 	 	$parametros['tipo'] = $value['tipo'];
 			 	 	 	$parametros['foto'] = $value['campo_img'];
+			 	 	 	$parametros['politicas'] = $value['campo_politicas'];
+
 			 	 	 	$tabla = $value['Tabla'];
 			 	 	 	$parametros['pass'] = $this->cod_global->enciptar_clave($parametros['pass']);
 
@@ -944,6 +954,7 @@ class loginC
 						}
 						$_SESSION["INICIO"]['NO_CONCURENTE'] = $busqueda_tercero[0][$id[0]['ID']] ;
 						$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] =$parametros['email'];
+						$_SESSION["INICIO"]['NO_CONCURENTE_POLITICAS'] = $busqueda_tercero[0][$parametros['politicas']];
 						$_SESSION["INICIO"]['NO_CONCURENTE_TABLA_ID'] =$id[0]['ID'];
 						$_SESSION["INICIO"]['NO_CONCURENTE_TABLA'] =$tabla;
 						$_SESSION["INICIO"]['NO_CONCURENTE_CAMPO_IMG'] =$parametros['foto'];
@@ -1044,7 +1055,13 @@ class loginC
 				$_SESSION["INICIO"]['RUTA_IMG_RELATIVA'] = $empresa[0]['ruta_img_relativa'];
 				$_SESSION["INICIO"]['RUTA_IMG_COMPARTIDA'] = $empresa[0]['ruta_img_compartida'];
 
-				// $this->login->ejecutarAuditoria($empresa[0]['Base_datos'], $empresa[0]['Usuario_db'], $empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db']);
+			// $this->login->ejecutarAuditoria($empresa[0]['Base_datos'], $empresa[0]['Usuario_db'], $empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db']);
+
+			$this->login->login_log_acceso(
+				// Guardar log LOGIN 
+				'LOGIN',
+				'LOGIN',
+			);
 
 				return 1;
 		}
@@ -1178,6 +1195,7 @@ class loginC
 				$_SESSION["INICIO"]['FOTO'] = $datos[0]['foto'];
 				$_SESSION["INICIO"]['NO_CONCURENTE'] = '';
 				$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] ='';
+				$_SESSION["INICIO"]['NO_CONCURENTE_POLITICAS'] ='';
 				$_SESSION["INICIO"]['NO_CONCURENTE_TABLA_ID'] ='';
 				$_SESSION["INICIO"]['NO_CONCURENTE_TABLA'] ='';
 				$_SESSION["INICIO"]['MODULO_SISTEMA_ANT'] ='';
@@ -1210,6 +1228,8 @@ class loginC
 			 	 	 	$parametros['perfil'] = $value['tipo_perfil'];
 			 	 	 	$parametros['tipo'] = $value['tipo'];
 			 	 	 	$parametros['foto'] = $value['campo_img'];
+			 	 	 	$parametros['politicas'] = $value['campo_politicas'];
+
 			 	 	 	$tabla = $value['Tabla'];
 			 	 	 	$busqueda_tercero = $this->login->buscar_db_terceros($empresa[0]['Base_datos'],$empresa[0]['Usuario_db'],$empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db'],$parametros);
 			 	 	 	if(count($busqueda_tercero)>0)
@@ -1246,6 +1266,7 @@ class loginC
 					}
 					$_SESSION["INICIO"]['NO_CONCURENTE'] = $busqueda_tercero[0][$id[0]['ID']] ;
 					$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] =$parametros['email'];
+					$_SESSION["INICIO"]['NO_CONCURENTE_POLITICAS'] =$busqueda_tercero[0][$parametros['politicas']];
 					$_SESSION["INICIO"]['NO_CONCURENTE_TABLA_ID'] =$id[0]['ID'];
 					$_SESSION["INICIO"]['NO_CONCURENTE_TABLA'] =$tabla;
 					$_SESSION["INICIO"]['NO_CONCURENTE_CAMPO_IMG'] =$parametros['foto'];
@@ -1265,6 +1286,13 @@ class loginC
 	{
 		// session_start();
 		session_destroy();
+
+		$this->login->login_log_acceso(
+			// Guardar log LOGOUT 
+			'LOGOUT',
+			'LOGOUT',
+		);
+
 		return 1;
 
 	}

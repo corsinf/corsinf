@@ -73,9 +73,7 @@
                         });
                     } else if (response == 1) {
                         Swal.fire('', 'Operación realizada con éxito.', 'success');
-                        <?php if (isset($_GET['id'])) { ?>
-                            recargar_imagen('<?= $id ?>');
-                        <?php } ?>
+                        recargar_imagen('<?= $id_postulante ?>');
                         limpiar_parametros_cambiar_foto();
                         $('#modal_agregar_cambiar_foto').modal('hide');
                     }
@@ -123,9 +121,7 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        recargar_imagen('<?= $id ?>');
-                    <?php } ?>
+                    recargar_imagen('<?= $id_postulante ?>');
                     limpiar_parametros_cambiar_foto();
                     $('#modal_agregar_cambiar_foto').modal('hide');
                 }

@@ -1,28 +1,15 @@
 <script>
-    <?php
-
-$entity_id = '';
-$entity_type = ''; // 'postulante' o 'persona'
-if (isset($_GET['id'])) {
-    $entity_id = $_GET['id'];
-    $entity_type = 'postulante';
-} elseif (isset($_GET['_id'])) {
-    $entity_id = $_GET['_id'];
-    $entity_type = 'persona';
-}
-
-?>
-
-
     $(document).ready(function() {
+        cargar_datos_formacion_academica(<?= $id_postulante ?>);
+        cargar_selects2();
 
-        let entity_id = <?= json_encode($entity_id) ?>;
-        let entity_type = <?= json_encode($entity_type) ?>;
-       
-            cargar_datos_formacion_academica(entity_id);
-        
-
+        function cargar_selects2() {
+            url_nivelAcademicoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_pos_nivel_academicoC.php?buscar=true';
+            cargar_select2_url('ddl_nivel_academico', url_nivelAcademicoC, '', '#modal_agregar_formacion');
+        }
     });
+
+
 
     //Formación Académica
     function cargar_datos_formacion_academica(id) {
@@ -51,6 +38,12 @@ if (isset($_GET['id'])) {
                 $('#txt_titulo_obtenido').val(response[0].th_fora_titulo_obtenido);
                 $('#txt_institucion').val(response[0].th_fora_institución);
                 $('#txt_fecha_inicio_academico').val(response[0].th_fora_fecha_inicio_formacion);
+                $('#txt_th_fora_registro_senescyt').val(response[0].th_fora_registro_senescyt);
+                $('#ddl_nivel_academico').append($('<option>', {
+                    value: response[0].id_nivel_academico,
+                    text: response[0].nivel_academico_descripcion,
+                    selected: true
+                }));
 
                 var fecha_fin = response[0].th_fora_fecha_fin_formacion;
                 if (fecha_fin === '') {
@@ -82,6 +75,9 @@ if (isset($_GET['id'])) {
         var txt_id_postulante = $('#txt_postulante_id').val();
         var txt_id_formacion_academica = $('#txt_formacion_id').val();
 
+        var txt_th_fora_registro_senescyt = $('#txt_th_fora_registro_senescyt').val();
+        var ddl_nivel_academico = $('#ddl_nivel_academico').val();
+
         var parametros_formacion_academica = {
             '_id': txt_id_formacion_academica,
             'txt_id_postulante': txt_id_postulante,
@@ -89,6 +85,8 @@ if (isset($_GET['id'])) {
             'txt_institucion': txt_institucion,
             'txt_fecha_inicio_academico': txt_fecha_inicio_academico,
             'txt_fecha_final_academico': txt_fecha_final_academico,
+            'txt_fora_registro_senescyt': txt_th_fora_registro_senescyt,
+            'ddl_nivel_academico': ddl_nivel_academico,
         }
 
         if ($("#form_formacion_academica").valid()) {
@@ -108,10 +106,8 @@ if (isset($_GET['id'])) {
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_formacion_academica(entity_id);
-                        limpiar_campos_formacion_academica_modal();
-                    <?php } ?>
+                    cargar_datos_formacion_academica('<?= $id_postulante ?>');
+                    limpiar_campos_formacion_academica_modal();
                     $('#modal_agregar_formacion').modal('hide');
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
@@ -159,10 +155,8 @@ if (isset($_GET['id'])) {
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_formacion_academica(entity_id);
-                        limpiar_campos_formacion_academica_modal();
-                    <?php } ?>
+                    cargar_datos_formacion_academica('<?= $id_postulante ?>');
+                    limpiar_campos_formacion_academica_modal();
                     $('#modal_agregar_formacion').modal('hide');
                 }
             }
@@ -265,6 +259,28 @@ if (isset($_GET['id'])) {
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_titulo_obtenido" id="txt_titulo_obtenido" maxlength="100">
                         </div>
                     </div>
+                    <div class="row mb-col">
+                        <div class="col-md-6">
+                            <label for="ddl_nivel_academico" class="form-label form-label-sm">
+                                Nivel Académico
+                            </label>
+                            <select class="form-select form-select-sm mb-2"
+                                name="ddl_nivel_academico"
+                                id="ddl_nivel_academico">
+                                <option value="">-- Seleccione --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="txt_th_fora_registro_senescyt" class="form-label form-label-sm">
+                                Registro SENESCYT
+                            </label>
+                            <input type="text"
+                                class="form-control form-control-sm mb-2"
+                                name="txt_th_fora_registro_senescyt"
+                                id="txt_th_fora_registro_senescyt"
+                                placeholder="Ej: 1234567890">
+                        </div>
+                    </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
@@ -289,6 +305,8 @@ if (isset($_GET['id'])) {
                             <label for="cbx_fecha_final_academico" class="form-label form-label-sm">Actualidad</label>
                         </div>
                     </div>
+
+
 
                 </div>
 

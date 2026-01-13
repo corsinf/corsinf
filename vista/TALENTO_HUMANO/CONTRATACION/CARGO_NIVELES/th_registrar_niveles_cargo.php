@@ -79,7 +79,7 @@ function guardar_actualizar_nivel() {
             if (res == 1) {
                 Swal.fire('', 'Nivel guardado correctamente.', 'success').then(function() {
                     window.location.href =
-                        "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_niveles_cargo";
+                        "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_cargos";
                 });
             } else if (res == -2) {
                 Swal.fire('Atención', 'Ya existe un nivel con ese nombre.', 'warning');
@@ -122,7 +122,7 @@ function eliminar_nivel() {
                         Swal.fire('Eliminado', 'Nivel eliminado correctamente.', 'success').then(
                             function() {
                                 window.location.href =
-                                    "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_niveles_cargo";
+                                    "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_cargos";
                             });
                     } else {
                         Swal.fire('Error', res.msg || 'No se pudo eliminar.', 'error');
@@ -153,7 +153,7 @@ function eliminar_nivel() {
                     </div>
 
                     <div>
-                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_niveles_cargo"
+                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_cargos"
                             class="btn btn-outline-dark btn-sm">
                             <i class="bx bx-arrow-back"></i> Regresar
                         </a>

@@ -571,7 +571,7 @@ class usuariosC
 		}
 	}
 
- //  	function categorias($query)
+	//  	function categorias($query)
 	// {
 	// 	$datos = $this->modelo->categorias($query);
 	// 	$cta = array();
@@ -582,42 +582,39 @@ class usuariosC
 	// }
 	function usuario_datos($parametros)
 	{
-		if($_SESSION['INICIO']['NO_CONCURENTE']=='')
-		{
-			$datos  = $this->modelo->lista_usuarios($parametros['id'],$parametros['query']);	
+		if ($_SESSION['INICIO']['NO_CONCURENTE'] == '') {
+			$datos  = $this->modelo->lista_usuarios($parametros['id'], $parametros['query']);
 			$accesos = $this->modelo->acceso_usuario_empresa_rol($parametros['id']);
 			$datos[0]['tipo'] = $accesos;
-		}else
-		{
+		} else {
 			$datos  = $this->modelo->no_concurente_data();
+			// print_r($datos);
 			$datosNOCon = $this->modelo->credenciales_no_concurentes_campos();
-			// print_r($datosNOCon);die();
-			if(count($datosNOCon)>0)
-			{
-				$datosNo = $this->modelo->credenciales_no_concurentes_datos($datosNOCon[0]['usu'],$datosNOCon[0]['pass']);
-				if(count($datosNo)>0)
-				{
+			// print_r($datosNOCon); exit(); die();
+
+			if (count($datosNOCon) > 0) {
+				$datosNo = $this->modelo->credenciales_no_concurentes_datos($datosNOCon[0]['usu'], $datosNOCon[0]['pass']);
+				if (count($datosNo) > 0) {
 					$datos[0]['pass'] = $datosNo[0]['pass'];
-					$datos[0]['usu'] = $datosNo[0]['usuario']; 
+					$datos[0]['usu'] = $datosNo[0]['usuario'];
 					$campoFoto = $datosNOCon[0]['foto'];
 
 					// print_r($datosNOCon);
 					// print_r($datos);die();
 				}
 			}
-			if(!file_exists($datos[0][$campoFoto]))
-			{
-				 $datos[0]['foto'] ='';
-			}			
+
+			if (!file_exists($datos[0]['foto'])) {
+				$datos[0]['foto'] = '';
+			}
 		}
-		if($datos[0]['pass']!='')
-		{
-			$datos[0]['pass'] = $this->pagina->desenciptar_clave($datos[0]['pass']);
+
+		if ($datos[0]['pass'] != '') {
+			// $datos[0]['pass'] = $this->pagina->desenciptar_clave($datos[0]['pass']);
 		}
 
 		// print_r($datos);die();
 		return $datos;
-
 	}
 
 	function validar_registro($parametros)
@@ -914,30 +911,49 @@ class usuariosC
   	}
   }
 
-  function guardar_credencial($parametros)
-  {
+	function guardar_credencial($parametros)
+	{
+		$usuario = $_SESSION['INICIO']['NO_CONCURENTE'];
+		$tabla = $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
+		$campo = $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
 
-  	$usuario= $_SESSION['INICIO']['NO_CONCURENTE'];
-		$tabla= $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
-		$campo= $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
+		$campos = $this->modelo->credenciales_no_concurentes_campos();
+		$datos = [];
+		$politica = [];
+		$password = [];
 
-  	$campos = $this->modelo->credenciales_no_concurentes_campos();
-  	if(count($campos)>0)
-  	{
-  		$datos[0]['campo'] = $campos[0]['pass'];
-  		$datos[0]['dato'] = $this->pagina->enciptar_clave($parametros['pass']);
-  	}
+		if (count($campos) > 0) {
+			if ($parametros['politicas'] == 1) {
+
+				$politica = [
+					[
+						'campo' => $campos[0]['politicas'],
+						'dato'  => 1
+					],
+				];
+
+				$_SESSION["INICIO"]['NO_CONCURENTE_POLITICAS'] = 1;
+			}
+
+			if ($parametros['cambio_clave'] == 0) {
+				$password = [
+					[
+						'campo' => $campos[0]['pass'],
+						'dato'  => $this->pagina->enciptar_clave($parametros['pass'])
+					],
+				];
+			}
+		}
+
+		$datos = array_merge($politica, $password);
 
 		$where[0]['campo'] = $campo;
 		$where[0]['dato'] = $usuario;
-		if(count( $datos))
-		{
-  		return  $this->modelo->updateEmpresa($tabla,$datos,$where);
-  	}else{
-  		return -2;
-  	}
-  }
-
-
+		if (count($datos)) {
+			return  $this->modelo->updateEmpresa($tabla, $datos, $where);
+		} else {
+			return -2;
+		}
+	}
 }
 ?>

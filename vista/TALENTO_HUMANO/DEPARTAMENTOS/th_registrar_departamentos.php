@@ -478,10 +478,10 @@ function cargar_personas_departamentos() {
                     return `
                         <div class="d-flex justify-content-center gap-1">
                             <button type="button" class="btn btn-warning btn-xs" onclick="editar_datos_personas_departamentos('${item._id}','${item.id_persona}')">
-                                <i class="bx bx-edit fs-7 fw-bold"></i>
+                                <i class="bx bx-edit fs-7 me-0 fw-bold"></i>
                             </button>
-                            <button type="button" class="btn btn-danger btn-xs" onclick="delete_datos_personas_departamentos('${item._id}')">
-                                <i class="bx bx-trash fs-7 fw-bold"></i>
+                            <button type="button" class="btn btn-danger btn-xs" onclick="delete_datos_personas_departamentos('${item.id_persona}')">
+                                <i class="bx bx-trash fs-7 me-0 fw-bold"></i>
                             </button>
                         </div>
                     `;
@@ -678,87 +678,79 @@ function delete_datos_personas_departamentos(id) {
     Swal.fire({
         title: 'Eliminar Registro',
         html: `
-            <p>Está seguro de eliminar este registro?</p>
+            <p>¿Está seguro de eliminar este registro?</p>
             <div class="mt-3 text-start">
-                <label for="txt_pass_eliminar" class="form-label fw-bold">Contraseña de seguridad:</label>
-                <input type="password" id="txt_pass_eliminar" class="swal2-input" placeholder="Ingrese su contraseña" autocomplete="off">
+                <label class="form-label fw-bold">Contraseña de seguridad:</label>
+                <input type="password" id="txt_pass_eliminar"
+                       class="swal2-input"
+                       placeholder="Ingrese su contraseña"
+                       autocomplete="off">
             </div>
         `,
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Eliminar',
+        confirmButtonText: 'Validar',
         cancelButtonText: 'Cancelar',
         focusConfirm: false,
+
         preConfirm: () => {
-            const pass = Swal.getPopup().querySelector('#txt_pass_eliminar').value.trim();
+            const pass = $('#txt_pass_eliminar').val().trim();
+
             if (!pass) {
                 Swal.showValidationMessage('Debe ingresar la contraseña');
                 return false;
             }
 
-            // Retornamos la promesa AJAX
             return $.ajax({
                 url: '../controlador/TALENTO_HUMANO/th_personas_departamentosC.php?verificar=true',
                 type: 'POST',
                 dataType: 'json',
                 data: {
-                    password: pass
+                    password: pass,
+                    id: id
                 }
-            }).then(function(response) {
-                console.log('Respuesta del servidor:', response); // Para depurar
+            }).then(response => {
 
-                if (!response || !response.valido) {
+                if (response == 1) {
+                    return true; // ✔ éxito
+                }
+
+                if (response == -3) {
                     Swal.showValidationMessage('Contraseña incorrecta');
                     return false;
                 }
-                return pass;
-            }).catch(function(error) {
-                console.error('Error completo:', error);
-                console.log('Response Text:', error.responseText);
-                Swal.showValidationMessage('Error al validar la contraseña. Intente de nuevo.');
+
+                Swal.showValidationMessage('Error inesperado');
+                return false;
+
+            }).catch(() => {
+                Swal.showValidationMessage('Error al validar la contraseña');
                 return false;
             });
         }
-    }).then((result) => {
-        // Este then() es del Swal.fire(), no del AJAX
+    }).then(result => {
+
         if (result.isConfirmed) {
-            console.log('Contraseña validada correctamente');
-            // Aquí eliminas el registro
-            // eliminar_personas_departamentos(id);
-            Swal.fire('Eliminado!', 'El registro ha sido eliminado.', 'success');
-        }
-    });
-}
 
-
-function eliminar_personas_departamentos(id) {
-    $.ajax({
-        data: {
-            id: id
-        },
-        url: '../controlador/TALENTO_HUMANO/th_personas_departamentosC.php?eliminar=true',
-        type: 'post',
-        dataType: 'json',
-        success: function(response) {
-            if (response == 1) {
-                Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-                    tbl_departamento_personas.ajax.reload();
-                    if ($.fn.DataTable.isDataTable('#tbl_personas')) {
-                        tbl_personas.ajax.reload();
-                    }
-                });
+            Swal.fire({
+                icon: 'success',
+                title: 'Validación correcta',
+                text: 'La contraseña es correcta.',
+                timer: 1800,
+                showConfirmButton: false
+            });
+            tbl_departamento_personas.ajax.reload(); 
+            if ($.fn.DataTable.isDataTable('#tbl_personas')) { 
+                tbl_personas.ajax.reload(); 
             }
+
         }
+
     });
 }
 
-/**
- * 
- * Acerca de la relacion personas_departamentos en modal
- * 
- */
+
+
 
 let personas_seleccionadas = []; //Array de personas seleccionadas
 function cargar_personas() {
@@ -985,16 +977,6 @@ function abrir_modal_personas() {
                                             <div class="tab-icon"><i class='bx bx-home font-18 me-1'></i>
                                             </div>
                                             <div class="tab-title">Jerarquia Departamento</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#successPostulacion" role="tab"
-                                        aria-selected="false">
-                                        <div class="d-flex align-items-center">
-                                            <div class="tab-icon"><i class='bx bx-home font-18 me-1'></i>
-                                            </div>
-                                            <div class="tab-title">Postulación de Trabajo</div>
                                         </div>
                                     </a>
                                 </li>

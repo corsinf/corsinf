@@ -14,6 +14,7 @@ class th_control_accesoM extends BaseModel
         'th_acc_tipo_registro',
         'th_acc_hora',
         'th_acc_fecha_hora',
+        'th_acc_tipo_origen',
         'th_acc_fecha_creacion',
         'th_acc_fecha_modificacion'
     ];
@@ -23,7 +24,7 @@ class th_control_accesoM extends BaseModel
         // Construir la parte JOIN de la consulta
         $this->join('th_card_data', 'th_card_data.th_cardNo = th_control_acceso.th_cardNo');
         $this->join('th_personas', 'th_personas.th_per_id = th_control_acceso.th_per_id');
-        $datos = $this->listar();
+        $datos = $this->where('th_acc_tipo_origen', 'BIO')->listar(10, true);
         return $datos;
     }
     function buscarAccesoPorPersonaYFecha($idPersona, $fecha)
@@ -49,12 +50,15 @@ class th_control_accesoM extends BaseModel
         $sql =
             "UPDATE ca
                 SET ca.th_per_id = cd.th_per_id
-            FROM th_control_acceso ca
-            JOIN th_card_data cd ON ca.th_cardNo = cd.th_cardNo;
-            -- WHERE ca.th_per_id IS NULL;
+            FROM _talentoh.th_control_acceso ca
+            JOIN _talentoh.th_card_data cd ON ca.th_cardNo = cd.th_cardNo;
             ";
 
-        $datos = $this->db->datos($sql);
+        // print_r($sql); exit(); die();
+
+        // $datos = $this->db->datos($sql, false, true, true);
+        $datos = $this->db->sql_string($sql, false, true);
+
         return $datos;
     }
 
@@ -65,11 +69,11 @@ class th_control_accesoM extends BaseModel
         if ($fecha_ini == '') {
             $limit = "TOP 1000";
         }
-        
+
         $sql =
-        "SELECT $limit
+            "SELECT $limit
                 ca.th_acc_fecha_hora AS fecha,
-                p.th_per_observaciones AS nombre,
+                p.th_per_codigo_externo_1 AS nombre,
                 d.th_dis_nombre         AS dispositivo_nombre
             FROM th_control_acceso AS ca
             LEFT JOIN th_personas AS p

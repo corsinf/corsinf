@@ -163,6 +163,9 @@ function insertar(parametros) {
             } else if (response == -2) {
                 Swal.fire('', 'Error al guardar la información.', 'warning');
             }
+            else if (response == -3) {
+                Swal.fire('', 'Las fechas ya son utilizadas en otra justificación', 'warning');
+            }
         },
 
         error: function(xhr, status, error) {

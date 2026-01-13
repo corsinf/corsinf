@@ -17,5 +17,30 @@ class th_pos_experiencia_laboralM extends BaseModel
         'th_expl_estado',
         'th_expl_fecha_creacion',
         'th_expl_fecha_modificacion',
+        'th_expl_sueldo',
     ];
+
+    function listar_experiencia_laboral_postulante($th_pos_id)
+    {
+        $sql = "
+        SELECT
+            expl.th_expl_id,
+            expl.th_pos_id,
+            expl.th_expl_nombre_empresa,
+            expl.th_expl_cargos_ocupados,
+            expl.th_expl_fecha_inicio_experiencia,
+            expl.th_expl_fecha_fin_experiencia,
+            expl.th_expl_cbx_fecha_fin_experiencia,
+            expl.th_expl_responsabilidades_logros,
+            expl.th_expl_estado,
+            expl.th_expl_fecha_creacion,
+            expl.th_expl_fecha_modificacion,
+            expl.th_expl_sueldo
+        FROM th_pos_experiencia_laboral expl
+        WHERE expl.th_pos_id = '$th_pos_id'
+        AND expl.th_expl_estado = 1
+    ";
+
+        return $this->db->datos($sql);
+    }
 }

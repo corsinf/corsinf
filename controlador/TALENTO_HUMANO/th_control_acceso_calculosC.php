@@ -33,6 +33,18 @@ if (isset($_GET['descargar_excel'])) {
     $controlador->descargar_excel($nombreArchivo, $parametros, $encabezado);
 }
 
+if (isset($_GET['descargar_excel_general'])) {
+    $parametros = [
+        'txt_fecha_inicio' => $_GET['txt_fecha_inicio'] ?? '',
+        'txt_fecha_fin' => $_GET['txt_fecha_fin'] ?? '',
+        'ddl_departamentos' => $_GET['ddl_departamentos'] ?? '',
+        '_id' => $_GET['_id'] ?? '',
+
+    ];
+    $nombreArchivo = $parametros['txt_fecha_inicio'] . "_" . $parametros['txt_fecha_fin'] . "_" . $parametros['ddl_departamentos'] . ".xlsx";
+    $controlador->descargar_excel_general($nombreArchivo, $parametros);
+}
+
 if (isset($_GET['informacion_marcacion'])) {
     echo json_encode($controlador->mostrar_informacion_marcacion($_POST['id_marcacion'] ?? ''));
 }
@@ -310,5 +322,127 @@ class th_control_acceso_calculosC
         $texto .= "Rango extras: {$d['rango_extras']}<br>";
 
         return nl2br($texto); // para que los \n se vean como saltos en HTML
+    }
+
+    function descargar_excel_general($nombreArchivo = 'Reporte.xlsx', $parametros = [])
+    {
+
+        $txt_fecha_inicio   = $parametros['txt_fecha_inicio'] ?? '';
+        $txt_fecha_fin      = $parametros['txt_fecha_fin'] ?? '';
+        $ddl_departamentos  = $parametros['ddl_departamentos'] ?? '';
+        $id                 = $parametros['_id'] ?? '';
+
+        // Mapa de encabezados a claves reales en datos
+        $encabezado = [
+            'APELLIDOS',
+            'NOMBRES',
+            'Empleado',
+            'Cedula',
+            'Correo Institucional',
+            'Departamento',
+            'Dia',
+            'Fecha',
+            'Horario Contrato',
+            'Turno',
+            'Entrada Inicio Turno',
+            'Entrada Fin Turno',
+            'RegEntrada',
+            'Hora Entrada',
+            'Hora Ajustada',
+            'Atrasos',
+            'Ausente',
+            'Salida Inicio Turno',
+            'Salida Fin Turno',
+            'RegSalida',
+            'Hora Salida',
+            'Salidas Temprano',
+            'Dias Trabajados',
+            'Cumplimiento de jornada (8 horas)',
+            'Horas faltantes por cumplir jornada',
+            'Horas excedentes',
+            'SalidasTemprano',
+            'Suplem 25%',
+            'Extra 100%',
+        ];
+
+        // Obtener datos filtrados de acuerdo a parámetros
+        $datos = $this->modelo->listar_asistencia_por_fecha_departamento(
+            $txt_fecha_inicio,
+            $txt_fecha_fin,
+            $ddl_departamentos
+        );
+
+        // Limpiar buffer para evitar errores al descargar
+        if (ob_get_length()) {
+            ob_end_clean();
+        }
+
+        // print_r($datos); exit(); die();
+
+        // Preparar headers para descarga Excel
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . $nombreArchivo . '"');
+        header('Cache-Control: max-age=0');
+
+        // Crear escritor XLSX (Spout)
+        $writer = WriterEntityFactory::createXLSXWriter();
+        $writer->openToBrowser($nombreArchivo);
+
+        // Estilo para encabezado
+        $estilo = (new StyleBuilder())
+            ->setFontBold()
+            ->setFontSize(12)
+            ->setFontColor(Color::BLACK)
+            ->setBackgroundColor(Color::YELLOW)
+            ->setCellAlignment(CellAlignment::CENTER)
+            ->build();
+
+        // Crear fila encabezado con estilo
+        $cells = [];
+        foreach ($encabezado as $titulo) {
+            $cells[] = WriterEntityFactory::createCell($titulo);
+        }
+        $writer->addRow(WriterEntityFactory::createRow($cells, $estilo));
+
+
+        // Agregar datos filas filtradas según encabezados
+        foreach ($datos as $dato) {
+            $filas_datos = [
+                $dato['apellidos'],
+                $dato['nombres'],
+                $dato['empleado'],
+                $dato['cedula'],
+                $dato['correo_institucional'],
+                $dato['departamento'],
+                $dato['dia'],
+                $dato['fecha'],
+                $dato['horario_contrato'],
+                $dato['turno_nombre'],
+                $dato['entrada_hora_inicio_turno'],
+                $dato['entrada_hora_fin_turno'],
+                $dato['regentrada'],
+                $dato['hora_entrada'],
+                $dato['hora_ajustada'],
+                $dato['atrasos'],
+                $dato['ausente'],
+                $dato['salida_hora_inicio_turno'],
+                $dato['salida_hora_fin_turno'],
+                $dato['regsalida'],
+                $dato['hora_salida'],
+                $dato['salidas_temprano'],
+                $dato['dias_trabajados'],
+                $dato['cumple_jornada'],
+                $dato['horas_faltantes'],
+                $dato['horas_excedentes'],
+                $dato['salidas_temprano'],
+                $dato['horas_suplementarias'],
+                $dato['horas_extraordinarias'],
+            ];
+
+            $writer->addRow(WriterEntityFactory::createRowFromArray($filas_datos));
+        }
+
+        $writer->close();
+        exit();
     }
 }

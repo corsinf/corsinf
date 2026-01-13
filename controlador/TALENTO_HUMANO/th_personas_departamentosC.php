@@ -2,24 +2,26 @@
 date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_personas_departamentosM.php');
+require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 
 $controlador = new th_personas_departamentosC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
+
 if (isset($_GET['verificar'])) {
     $password = $_POST['password'] ?? '';
+    $per_id = $_POST['id'] ?? '';
 
     // Llama a tu función (asumiendo que $controlador ya está instanciado)
-    $controlador->validar_correo($password);
+    echo json_encode($controlador->validar_correo($password, $per_id));
     // No pongas nada más aquí porque validar_correo() ya hace exit
 }
 
 if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
-// th_personas_departamentosC.php
 
 // Para mover una o varias personas
 if (isset($_GET['mover_varios'])) {
@@ -51,9 +53,6 @@ if (isset($_GET['mover_varios'])) {
     exit;
 }
 
-
-
-// Mantén tu función original para otros usos
 if (isset($_GET['insertar_editar_persona'])) {
     echo json_encode($controlador->insertar_editar_persona_departamento($_POST['parametros']));
 }
@@ -67,40 +66,55 @@ if (isset($_GET['listar_personas_modal'])) {
 }
 
 
+
 class th_personas_departamentosC
 {
     private $modelo;
-
+    private $codigo_globales;
 
     function __construct()
     {
         $this->modelo = new th_personas_departamentosM();
+        $this->codigo_globales = new codigos_globales();
     }
 
-    function validar_correo($password)
+    function validar_correo($password_validar, $id)
     {
 
         $email = $_SESSION['INICIO']['EMAIL'];
+        $id_usuario = $_SESSION['INICIO']['ID_USUARIO'];
+
+        $usuario = $this->modelo->obtener_correo_y_password($id_usuario);
 
 
-        header('Content-Type: application/json');
-        echo json_encode([
-            'valido' => true,
-            'session' => $_SESSION['INICIO']['EMAIL'],
-            'password_recibido' => $password
-        ]);
-        exit; // IMPORTANTE: Detiene toda ejecución
+        $password = $this->codigo_globales->desenciptar_clave(trim($usuario[0]['password'] ?? ''));
+
+
+
+        if ($password_validar == $password) {
+
+            $where = array(
+                array('campo' => 'th_per_id', 'dato' => $id),
+            );
+
+            $datos = $this->modelo->eliminar($where);
+            return $datos;
+        } else {
+
+            return -3;
+        }
     }
 
     function listar($id = '')
     {
         if ($id == '') {
-            //$datos = $this->modelo->where('th_dep_estado', 1)->listar();
+            $datos = $this->modelo->listar_personas_departamentos($id);
         } else {
             //Busqueda por departamento
             $datos = $this->modelo->listar_personas_departamentos($id);
-            return $datos;
         }
+
+        return $datos;
     }
 
     function listar_personas_modal($id_departamento = '')

@@ -176,13 +176,13 @@ class db
 	    return $rsp;
 	}
 
-	function datos($sql, $master = false, $error = false)
+	function datos($sql, $master = false, $error = false, $sin_esquema = false)
 	{
 
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
 		$result = array();
-		if(!$master)
+		if(!$master && !$sin_esquema)
 		{
 			$sql = $this->esquema_modulo($sql);
 		}
@@ -262,20 +262,37 @@ class db
 		try {
 			$stmt->execute($valores);
 			$conn = null;
+
+			// Guardar log INSERT 
+			$this->guardar_log_auditoria(
+				'INSERT',
+				$tabla,
+				$datos,
+			);
+
 			return 1;
-			
 		} catch (Exception $e) {
 			echo "Error:<br>";
 			echo "SQL: <pre>" . htmlspecialchars($sql) . "</pre><br>";
 			echo "Detalles del error:<br>";
 			echo "<pre>";
-			echo($e);
+			echo ($e);
 			echo "</pre>";
 			$conn = null;
 
+			// Guardar log INSERT 
+			$this->guardar_log_auditoria(
+				'INSERT',
+				$tabla,
+				$sql,
+				$datos_despues = null,
+				$registro_id = null,
+				$e,
+				$menu = null,
+			);
+
 			return -1;
 		}
-		
 	}
 
 	function validarFecha($fecha) 
@@ -384,25 +401,43 @@ class db
 				$sql .= " AND ";
 			}
 			$sql = substr($sql, 0, -5);	
-		}	
+		}
 
 		// print_r($datos_update);die();
 		// print_r($sql);die();
 
 		try {
 			$stmt = $conn->prepare($sql);
-    		$stmt->execute($datos_update);
-    		$conn=null;
-    		return 1;
-			
+			$stmt->execute($datos_update);
+			$conn = null;
+
+			// Guardar log UPDATE 
+			$this->guardar_log_auditoria(
+				'UPDATE',
+				$tabla,
+				$datos,
+			);
+
+			return 1;
 		} catch (Exception $e) {
 			echo "Error:<br>";
 			echo "SQL: <pre>" . htmlspecialchars($sql) . "</pre><br>";
 			echo "Detalles del error:<br>";
 			echo "<pre>";
-			echo($e);
+			echo ($e);
 			echo "</pre>";
-			
+
+			// Guardar log UPDATE 
+			$this->guardar_log_auditoria(
+				'UPDATE',
+				$tabla,
+				$sql,
+				$datos = null,
+				$registro_id = null,
+				$descripcion = $e,
+				$menu = null,
+			);
+
 			return -1;
 		}
 			
@@ -436,7 +471,15 @@ class db
 
 			$sql = substr($sql, 0, -5);
 		}
-		// print_r($sql);	die();			
+		// print_r($sql);	die();	
+
+		// Guardar log DELETE 
+		$this->guardar_log_auditoria(
+			'DELETE',
+			$tabla,
+			$datos,
+		);
+
 		return $this->sql_string($sql);
 	}
 
@@ -515,7 +558,7 @@ class db
 	}
 
 	//Para retonar valores de la procedures de todo un select
-	function ejecutar_procedimiento_con_retorno_1($sql, $parametros = false, $master = false)
+	function ejecutar_procedimiento_con_retorno_1($sql, $parametros = [], $master = false)
 	{
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
@@ -1151,4 +1194,99 @@ class db
 		}
 
 	}
+
+	private function insert_log_auditoria($tabla, array $datos)
+	{
+		try {
+			$this->parametros_conexion(false);
+			$conn = $this->conexion();
+
+			$campos = [];
+			$placeholders = [];
+			$valores = [];
+
+			foreach ($datos as $item) {
+				$campos[] = $item['campo'];
+
+				if ($this->validarFecha($item['dato']) === 'date') {
+					$placeholders[] = 'CAST(? AS DATE)';
+				} else {
+					$placeholders[] = '?';
+				}
+
+				$valores[] = $item['dato'];
+			}
+
+			$sql = sprintf(
+				'INSERT INTO %s (%s) VALUES (%s)',
+				$tabla,
+				implode(',', $campos),
+				implode(',', $placeholders)
+			);
+
+			$stmt = $conn->prepare($sql);
+			$stmt->execute($valores);
+
+			$conn = null;
+		} catch (Throwable $e) {
+			// IMPORTANTE:
+			// no echo
+			// no return
+			// opcional: error_log($e->getMessage());
+		}
+	}
+
+
+	public function guardar_log_auditoria(
+		$accion,
+		$tabla_afectada,
+		$datos_antes = null,
+		$datos_despues = null,
+		$registro_id = null,
+		$descripcion = null,
+		$menu = null,
+	) {
+		$usuario_id = (isset($_SESSION['INICIO']['ID_USUARIO']))
+			? $_SESSION['INICIO']['ID_USUARIO']
+			: null;
+
+		$usuario_nombre = (isset($_SESSION['INICIO']['USUARIO']))
+			? $_SESSION['INICIO']['USUARIO']
+			: 'ADMINISTRADOR';
+
+		$usuario_no_concurrente = (isset($_SESSION['INICIO']['NO_CONCURENTE']))
+			? $_SESSION['INICIO']['NO_CONCURENTE']
+			: 'ADMINISTRADOR';
+
+		$modulo = (isset($_SESSION['INICIO']['MODULO_SISTEMA_NOMBRE']))
+			? $_SESSION['INICIO']['MODULO_SISTEMA_NOMBRE']
+			: 'SISTEMA';
+
+		$datos_insert = [
+			['campo' => 'usuario_id', 'dato' => $usuario_id],
+			['campo' => 'usuario_nombre', 'dato' => $usuario_nombre],
+			['campo' => 'usuario_no_concurrente', 'dato' => $usuario_no_concurrente],
+
+			['campo' => 'accion', 'dato' => $accion],
+			['campo' => 'descripcion', 'dato' => $descripcion],
+
+			['campo' => 'modulo', 'dato' => $modulo],
+			['campo' => 'menu', 'dato' => $menu],
+			['campo' => 'controlador', 'dato' => $_SERVER['PHP_SELF'] ?? null],
+			['campo' => 'metodo', 'dato' => $_SERVER['REQUEST_METHOD'] ?? null],
+			['campo' => 'url_solicitud', 'dato' => ($_SERVER['REQUEST_URI'] ?? null)],
+
+			['campo' => 'tabla_afectada', 'dato' => $tabla_afectada],
+			['campo' => 'registro_id', 'dato' => $registro_id],
+
+			['campo' => 'datos_antes', 'dato' => $datos_antes ? json_encode($datos_antes) : null],
+			['campo' => 'datos_despues', 'dato' => $datos_despues ? json_encode($datos_despues) : null],
+
+			['campo' => 'ip_address', 'dato' => $_SERVER['REMOTE_ADDR'] ?? null],
+			['campo' => 'user_agent', 'dato' => $_SERVER['HTTP_USER_AGENT'] ?? null],
+		];
+
+		$this->insert_log_auditoria('LOGS_AUDITORIA', $datos_insert);
+	}
+
 }

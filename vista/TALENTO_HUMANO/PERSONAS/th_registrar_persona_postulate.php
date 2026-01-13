@@ -1,4 +1,12 @@
 <?php
+
+/**
+ * @deprecated Archivo dado de baja el 05/01/2025.
+ * @note Este archivo se mantiene como respaldo, pero ya no se utilizará en producción.
+ * @warning No modificar este archivo. Para cambios, referirse a la nueva implementación.
+ */
+
+
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 $_id = '';

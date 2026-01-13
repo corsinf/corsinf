@@ -45,7 +45,6 @@ class th_feriadosC
     {
         if ($id == '') {
             $datos = $this->modelo->where('th_fer_estado', 1)->listar();
-
         } else {
             $datos = $this->modelo->where('th_fer_id', $id)->listar();
         }
@@ -55,7 +54,17 @@ class th_feriadosC
     function insertar_editar($parametros)
     {
 
-        //print_r($parametros); exit(); die();
+        $feriado_encontrado = $this->modelo->existe_feriado_en_rango(
+            $parametros['txt_fecha_inicio_feriado'],
+            $parametros['txt_dias'],
+            $parametros['_id']
+        );
+
+        $total = intval($feriado_encontrado[0]['total']);
+
+        if ($total > 0) {
+            return -3;
+        }
         $datos = array(
             array('campo' => 'th_fer_nombre', 'dato' => $parametros['txt_nombre']),
             array('campo' => 'th_fer_fecha_inicio_feriado', 'dato' => $parametros['txt_fecha_inicio_feriado']),
@@ -65,13 +74,13 @@ class th_feriadosC
         );
 
         if ($parametros['_id'] == '') {
-            if (count($this->modelo->where('th_fer_nombre', $parametros['txt_nombre'])->where('th_fer_estado',1)->listar()) == 0) {
+            if (count($this->modelo->where('th_fer_nombre', $parametros['txt_nombre'])->where('th_fer_estado', 1)->listar()) == 0) {
                 $datos = $this->modelo->insertar($datos);
             } else {
                 return -2;
             }
         } else {
-            if (count($this->modelo->where('th_fer_nombre', $parametros['txt_nombre'])->where('th_fer_id !', $parametros['_id'])->where('th_fer_estado',1)->listar()) == 0) {
+            if (count($this->modelo->where('th_fer_nombre', $parametros['txt_nombre'])->where('th_fer_id !', $parametros['_id'])->where('th_fer_estado', 1)->listar()) == 0) {
                 $where[0]['campo'] = 'th_fer_id';
                 $where[0]['dato'] = $parametros['_id'];
                 $datos = $this->modelo->editar($datos, $where);

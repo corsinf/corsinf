@@ -14,45 +14,176 @@ if (isset($_GET['_id'])) {
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script type="text/javascript">
+    $(document).ready(function() {
+
+        tbl_plazas = $('#tbl_plazas').DataTable($.extend({}, configuracion_datatable('Nombre', 'cuidad',
+            'telefono'), {
+            reponsive: true,
+             dom: 'frtip',
+            buttons: [{
+                extend: 'colvis',
+                text: '<i class="bx bx-columns"></i> Columnas',
+                className: 'btn btn-outline-secondary btn-sm'
+            }],
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            },
+            ajax: {
+                url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_plazasC.php?listar=true',
+                dataSrc: '',
+
+            },
+            columns: [{
+                    data: null,
+                    render: function(data, type, item) {
+                        href =
+                            `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_plaza&_id=${item._id}`;
+                        return `<a href="${href}"><u>${item.th_pla_titulo}</u></a>`;
+                    }
+                },
+                {
+                    data: 'th_pla_descripcion',
+                    render: function(data, type, row) {
+                        if (!data) return '';
+                        return data.length > 50 ? data.substring(0, 50) + '...' : data;
+                    }
+                },
+                {
+                    data: 'th_pla_tipo'
+                },
+                {
+                    data: 'th_pla_num_vacantes'
+                },
+            ],
+            order: [
+                [1, 'asc']
+            ]
+        }));
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        tbl_requisitos = $('#tbl_requisitos').DataTable($.extend({}, configuracion_datatable(
+            'Tipo', 'Descripción', 'Obligatorio', 'Ponderación', 'Estado'), {
+
+            responsive: true,
+             dom: 'frtip',
+            buttons: [{
+                extend: 'colvis',
+                text: '<i class="bx bx-columns"></i> Columnas',
+                className: 'btn btn-outline-secondary btn-sm'
+            }],
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            },
+
+            ajax: {
+                url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_requisitosC.php?listar=true',
+                dataSrc: ''
+            },
+
+            columns: [{
+                    data: null,
+                    render: function(data, type, item) {
+
+                        // quitar guiones bajos en el texto
+                        let tipoLimpio = item.tipo ? item.tipo.replace(/_/g, ' ') : '';
+
+                        let href =
+                            `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_requisito&_id=${item._id}`;
+
+                        return `<a href="${href}"><u>${tipoLimpio}</u></a>`;
+                    }
+                },
+                {
+                    data: 'descripcion'
+                },
+                {
+                    data: 'obligatorio',
+                    render: d => d == 1 ? "<span class='badge bg-success'>Sí</span>" : "<span class='badge bg-secondary'>No</span>"
+                },
+                {
+                    data: 'ponderacion'
+                },
+
+            ],
+
+            order: [
+                [0, 'asc']
+            ]
+        }));
+    });
+</script>
+
+<script type="text/javascript">
+let tbl_etapas;
+
 $(document).ready(function() {
 
-    tbl_plazas = $('#tbl_plazas').DataTable($.extend({}, configuracion_datatable('Nombre', 'cuidad',
-        'telefono'), {
-        reponsive: true,
+    // Inicializar datatable de etapas
+    tbl_etapas = $('#tbl_etapas').DataTable($.extend({}, configuracion_datatable('Nombre', 'tipo',
+        'orden'), {
+        responsive: true,
+        dom: 'frtip',
+            buttons: [{
+                extend: 'colvis',
+                text: '<i class="bx bx-columns"></i> Columnas',
+                className: 'btn btn-outline-secondary btn-sm'
+            }],
         language: {
             url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
         },
         ajax: {
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_plazasC.php?listar=true',
-            dataSrc: '',
-
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_etapas_procesoC.php?listar=true',
+            dataSrc: ''
         },
         columns: [{
                 data: null,
                 render: function(data, type, item) {
+                    // link al formulario de registro/modificación (ajusta acc si lo tienes distinto)
                     href =
-                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_plaza&_id=${item._id}`;
-                    return `<a href="${href}"><u>${item.th_pla_titulo}</u></a>`;
+                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_etapa_proceso&_id=${item._id}`;
+                    return `<a href="${href}"><u>${item.nombre}</u></a>`;
                 }
             },
             {
-                data: 'th_pla_descripcion',
-                render: function(data, type, row) {
+                data: 'tipo',
+                render: function(data) {
+                    return data ? data.replace(/_/g, ' ') : '';
+                }
+            },
+            {
+                data: 'orden',
+                render: function(data) {
+                    return data !== null && data !== undefined ? data : '';
+                }
+            },
+            {
+                data: 'obligatoria',
+                render: function(data) {
+                    return (data == 1 || data === true || data === '1') ?
+                        '<span class="badge bg-success">Sí</span>' :
+                        '<span class="badge bg-secondary">No</span>';
+                }
+            },
+            {
+                data: 'descripcion',
+                render: function(data, type, item) {
                     if (!data) return '';
-                    return data.length > 50 ? data.substring(0, 50) + '...' : data;
+                    // Acortar descripción en la tabla
+                    return data.length > 120 ? data.substring(0, 117) + '...' : data;
                 }
-            },
-            {
-                data: 'th_pla_tipo'
-            },
-            {
-                data: 'th_pla_num_vacantes'
-            },
+            }
         ],
         order: [
-            [1, 'asc']
+            [0, 'asc']
         ]
     }));
+
+
 
 });
 </script>
@@ -84,41 +215,118 @@ $(document).ready(function() {
             <div class="col-xl-12 mx-auto">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
-                        <div class="card-title d-flex align-items-center">
 
-                            <h5 class="mb-0 text-primary"></h5>
-
-                            <div class="row mx-0">
-
-                                <div class="" id="btn_nuevo">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_proceso_contratacion"
-                                        type="button" class="btn btn-success btn-sm ">
-                                        <i class="bx bx-plus me-0 pb-1"></i> Proceso Contratación
+                        <div class="">
+                            <ul class="nav nav-tabs nav-primary" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#tab_plazas">
+                                        Plazas
                                     </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tab_requisitos">
+                                        Requisitos de la plaza
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tab_etapas_seleccion">
+                                        Etapas de selección
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content py-3">
+
+                                <!-- TAB PLAZAS -->
+                                <div class="tab-pane fade show active" id="tab_plazas">
+                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_proceso_contratacion"
+                                        class="btn btn-success btn-sm mb-3">
+                                        <i class="bx bx-plus"></i> Generar Plaza
+                                    </a>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped" id="tbl_plazas" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Título</th>
+                                                    <th>Descripción</th>
+                                                    <th>Tipo</th>
+                                                    <th>N° Vacantes</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
                                 </div>
+
+                                <!-- TAB REQUISITOS -->
+                                <div class="tab-pane fade" id="tab_requisitos">
+                                    <div class="card-title d-flex align-items-center w-100 justify-content-between">
+                                        <h5 class="mb-0 text-primary">Listado de requisitos</h5>
+
+                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_requisito"
+                                            class="btn btn-success btn-sm">
+                                            <i class="bx bx-plus"></i> Nuevo
+                                        </a>
+                                    </div>
+
+                                    <section class="content pt-2">
+                                        <div class="container-fluid">
+
+                                            <div class="table-responsive">
+                                                <table class="table table-striped" id="tbl_requisitos" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Tipo</th>
+                                                            <th>Descripción</th>
+                                                            <th>Obligatorio</th>
+                                                            <th>Ponderación</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </section>
+
+                                </div>
+
+
+                                <div class="tab-pane fade" id="tab_etapas_seleccion">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="mb-0 text-primary">Etapas del proceso</h5>
+
+                                        <div id="btn_nuevo">
+                                            <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_etapa_proceso"
+                                                class="btn btn-success btn-sm">
+                                                <i class="bx bx-plus me-1"></i> Nuevo
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <section class="content pt-2">
+                                        <div class="container-fluid px-0">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped responsive" id="tbl_etapas" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Nombre</th>
+                                                            <th>Tipo</th>
+                                                            <th>Orden</th>
+                                                            <th>Obligatoria</th>
+                                                            <th>Descripción</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                </div>
+
                             </div>
+
                         </div>
-
-
-                        <section class="content pt-2">
-                            <div class="container-fluid">
-                                <div class="table-responsive">
-                                    <table class="table table-striped responsive " id="tbl_plazas" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Titulo</th>
-                                                <th>Descripción</th>
-                                                <th>tipo</th>
-                                                <th>N° Vacantes</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="">
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div><!-- /.container-fluid -->
-                        </section>
                     </div>
                 </div>
             </div>

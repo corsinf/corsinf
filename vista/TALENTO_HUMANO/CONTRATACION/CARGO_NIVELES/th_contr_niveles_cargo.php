@@ -78,14 +78,15 @@ $(document).ready(function() {
 
                             <h5 class="mb-0 text-primary">Catálogo de Niveles</h5>
 
-                            <div class="d-flex gap-2">
+                           
+
+                        </div>
+                         <div class="d-flex gap-2">
                                 <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_niveles_cargo"
                                     class="btn btn-success btn-sm">
                                     <i class="bx bx-plus me-0 pb-1"></i> Nuevo Nivel
                                 </a>
                             </div>
-
-                        </div>
 
                         <section class="content pt-2">
                             <div class="container-fluid">

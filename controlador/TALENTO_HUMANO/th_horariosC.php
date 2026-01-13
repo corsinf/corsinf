@@ -63,7 +63,8 @@ class th_horariosC
         );
 
         if ($parametros['_id'] == '') {
-            if (count($this->modelo->where('th_hor_nombre', $parametros['txt_nombre'])->listar()) == 0) {
+            if (count($this->modelo->where('th_hor_nombre', $parametros['txt_nombre'])
+                ->where('th_hor_estado', 1)->listar()) == 0) {
                 $datos = $this->modelo->insertar_id($datos);
 
                 if (!empty($parametros['arr_eventos_horario'])) {
@@ -76,7 +77,8 @@ class th_horariosC
             }
         } else {
 
-            if (count($this->modelo->where('th_hor_nombre', $parametros['txt_nombre'])->where('th_hor_id !', $parametros['_id'])->listar()) == 0) {
+            if (count($this->modelo->where('th_hor_nombre', $parametros['txt_nombre'])
+                ->where('th_hor_id !', $parametros['_id'])->where('th_hor_estado', 1)->listar()) == 0) {
                 $where[0]['campo'] = 'th_hor_id';
                 $where[0]['dato'] = $parametros['_id'];
                 $datos = $this->modelo->editar($datos, $where);

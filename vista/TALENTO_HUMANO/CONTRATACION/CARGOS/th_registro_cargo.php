@@ -3070,8 +3070,12 @@ function cargar_competencias(id_cargo) {
                             </div>
 
                             <div id="div_subordinacion_input">
-                                <textarea class="form-control" id="txt_subordinacion" name="txt_subordinacion" rows="2"
-                                    placeholder="Indique a quién reporta este cargo"></textarea>
+                                <input type="text"
+                                    class="form-control"
+                                    id="txt_subordinacion"
+                                    name="txt_subordinacion"
+                                    value="Ninguno"
+                                    disabled>
                             </div>
                         </div>
 
@@ -3096,8 +3100,12 @@ function cargar_competencias(id_cargo) {
                             </div>
 
                             <div id="div_supervision_input">
-                                <textarea class="form-control" id="txt_supervision" name="txt_supervision" rows="2"
-                                    placeholder="Describa qué cargos o personal supervisa"></textarea>
+                               <input type="text"
+                                class="form-control"
+                                id="txt_supervision"
+                                name="txt_supervision"
+                                value="Ninguno"
+                                disabled>
                             </div>
                         </div>
 
@@ -3122,9 +3130,12 @@ function cargar_competencias(id_cargo) {
                             </div>
 
                             <div id="div_comunicaciones_input">
-                                <textarea class="form-control" id="txt_comunicaciones" name="txt_comunicaciones"
-                                    rows="3"
-                                    placeholder="Indique con qué áreas o cargos del mismo nivel se comunica"></textarea>
+                                <input type="text"
+                                    class="form-control"
+                                    id="txt_comunicaciones"
+                                    name="txt_comunicaciones"
+                                    value="Ninguno"
+                                    disabled>
                             </div>
                         </div>
 

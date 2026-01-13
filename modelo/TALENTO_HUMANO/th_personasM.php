@@ -120,28 +120,29 @@ class th_personasM extends BaseModel
 
         if ($valor === '') {
             // Si no se manda nada, devolvemos todas las personas activas con o sin departamento
-            $sql = "
-        SELECT DISTINCT p.th_per_id,
-              p.th_per_cedula AS cedula,
-                   p.th_per_correo AS correo,
-                   p.th_per_telefono_1 AS telefono_1,
-             p.th_per_primer_nombre AS primer_nombre,
-                   p.th_per_segundo_nombre AS segundo_nombre,
-                   p.th_per_primer_apellido AS primer_apellido,
-                   p.th_per_segundo_apellido AS segundo_apellido,
-                   p.th_per_id_comunidad AS id_comunidad,
-               d.th_dep_id,
-               d.th_dep_nombre,
-               CASE 
-                   WHEN d.th_dep_nombre IS NULL THEN 'Sin departamento'
-                   ELSE d.th_dep_nombre 
-               END AS departamento_display
-        FROM th_personas p
-        LEFT JOIN th_personas_departamentos pd ON p.th_per_id = pd.th_per_id
-        LEFT JOIN th_departamentos d ON pd.th_dep_id = d.th_dep_id
-        WHERE p.th_per_estado = 1
-        ORDER BY p.th_per_primer_apellido, p.th_per_primer_nombre
-        ";
+            $sql =
+                "SELECT DISTINCT p.th_per_id,
+                    p.th_per_cedula AS cedula,
+                        p.th_per_correo AS correo,
+                        p.th_per_telefono_1 AS telefono_1,
+                    p.th_per_primer_nombre AS primer_nombre,
+                        p.th_per_segundo_nombre AS segundo_nombre,
+                        p.th_per_primer_apellido AS primer_apellido,
+                        p.th_per_segundo_apellido AS segundo_apellido,
+                        p.th_per_id_comunidad AS id_comunidad,
+                    d.th_dep_id,
+                    d.th_dep_nombre,
+                    p.th_per_fecha_creacion AS fecha_creacion,
+                    p.th_pos_id AS _id_postulante,
+                    CASE 
+                        WHEN d.th_dep_nombre IS NULL THEN 'Sin departamento'
+                        ELSE d.th_dep_nombre 
+                    END AS departamento_display
+                FROM th_personas p
+                LEFT JOIN th_personas_departamentos pd ON p.th_per_id = pd.th_per_id
+                LEFT JOIN th_departamentos d ON pd.th_dep_id = d.th_dep_id
+                WHERE p.th_per_estado = 1
+                ORDER BY p.th_per_primer_apellido, p.th_per_primer_nombre, p.th_per_fecha_creacion;";
         }
 
 
@@ -150,10 +151,10 @@ class th_personasM extends BaseModel
 
 
     public function listar_personas_no_asignadas($id_plaza = '', $coincidencias = false)
-{
-   $id = ($id_plaza !== '' && $id_plaza !== null) ? (int)$id_plaza : '';
+    {
+        $id = ($id_plaza !== '' && $id_plaza !== null) ? (int)$id_plaza : '';
 
-    $sql = "
+        $sql = "
         SELECT DISTINCT
             p.th_per_id                  AS _id,
             p.th_per_primer_nombre       AS primer_nombre,
@@ -196,17 +197,17 @@ class th_personasM extends BaseModel
         ORDER BY p.th_per_primer_apellido, p.th_per_primer_nombre
     ";
 
-    return $this->db->datos($sql);
-}
+        return $this->db->datos($sql);
+    }
 
 
-public function listar_personas_correos($id_persona = null)
-{
-    $id = ($id_persona !== '' && $id_persona !== null) ? (int)$id_persona : '';
+    public function listar_personas_correos($id_persona = null)
+    {
+        $id = ($id_persona !== '' && $id_persona !== null) ? (int)$id_persona : '';
 
-    $where_id = ($id !== '') ? "AND p.th_per_id = {$id}" : "";
+        $where_id = ($id !== '') ? "AND p.th_per_id = {$id}" : "";
 
-    $sql = "
+        $sql = "
         SELECT
             p.th_per_id AS th_per_id,
             p.th_per_correo AS th_per_correo,
@@ -223,8 +224,36 @@ public function listar_personas_correos($id_persona = null)
           {$where_id}
     ";
 
-    return $this->db->datos($sql);
-}
+        return $this->db->datos($sql);
+    }
 
+    function listar_personas_departamentos($id_departamento)
+    {
+        $sql =
+            "SELECT
+                    p.th_per_id AS th_per_id,
+                    p.th_per_correo AS th_per_correo,
+                    P.PASS AS PASS,
+                    CONCAT(
+                    ISNULL(p.th_per_primer_nombre, ''), ' ',
+                    ISNULL(p.th_per_segundo_nombre, ''), ' ',
+                    ISNULL(p.th_per_primer_apellido, ''), ' ',
+                    ISNULL(p.th_per_segundo_apellido, '')
+                    ) AS nombre_completo,
+                    dep.th_dep_nombre AS nombre_departamento
+                FROM
+                th_personas_departamentos per_dep
+                INNER JOIN th_personas p ON per_dep.th_per_id = p.th_per_id 
+                INNER JOIN th_departamentos dep ON per_dep.th_dep_id = dep.th_dep_id
+                WHERE p.th_per_estado = 1 ";
 
+        if ($id_departamento != '' && $id_departamento != null) {
+            $sql .= " AND per_dep.th_dep_id = '$id_departamento'";
+        }
+
+        $sql .= ";";
+
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
 }
