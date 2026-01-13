@@ -16,18 +16,26 @@
                     if (!result.value) {
                         $('#radio_baja').prop('checked', false);
                         $('#radio_recategorizacion').prop('checked', false);
+                        enabled_campos(false);
+                    } else {
+                        enabled_campos(true);
                     }
                 });
+            }
+            if ($(this).val() === 'baja') {
+                enabled_campos(true);
             }
         });
         $('input[name="tipo_cambio"]').on('click', function() {
             if ($(this).data('checked')) {
                 $(this).prop('checked', false);
                 $(this).data('checked', false);
+                enabled_campos(false);
             } else {
                 $('input[name="tipo_cambio"]').data('checked', false);
                 $(this).data('checked', true);
             }
+
         });
 
 
@@ -118,10 +126,14 @@
                         $('#radio_recategorizacion').prop('checked', true);
                     } else if (tipo_cambio == "DADO_BAJA") {
                         $('#radio_baja').prop('checked', true);
+                        enabled_campos(true);
                     }
                 } else {
                     $('input[name="tipo_cambio"]').prop('checked', false);
+                    enabled_campos(false);
                 }
+
+
 
                 // Verificar si la fecha de salida es NULL, vacía o 01/01/1900
                 var fechaSalida = response[0].th_est_fecha_salida;
@@ -137,6 +149,7 @@
                 }
 
                 $('#txt_experiencia_estado_id').val(response[0]._id);
+                enabled_campos(true);
                 //ocultar_opciones_estado();
             }
         });
@@ -212,6 +225,15 @@
                 }
             }
         });
+    }
+
+    function enabled_campos(estado) {
+        $('#ddl_cargo').prop('disabled', estado);
+        $('#ddl_seccion').prop('disabled', estado);
+        $('#ddl_nomina').prop('disabled', estado);
+        $('#txt_remuneracion').prop('disabled', estado);
+        $('#txt_fecha_contratacion_estado').prop('disabled', estado);
+        $('#txt_fecha_salida_estado').prop('disabled', estado);
     }
 
 
@@ -339,13 +361,13 @@
                 <div class="modal-body">
                     <div class="row mb-col">
                         <div class="col-md-6">
-                            <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado Laboral:</label>
+                            <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado Laboral</label>
                             <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" required>
                                 <option selected disabled value="">-- Seleccione un Estado --</option>
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="ddl_cargo" class="form-label form-label-sm">Cargo:</label>
+                            <label for="ddl_cargo" class="form-label form-label-sm">Cargo</label>
                             <select class="form-select form-select-sm" id="ddl_cargo" name="ddl_cargo" required>
                                 <option selected disabled value="">-- Seleccione un Cargo --</option>
                             </select>
@@ -353,7 +375,7 @@
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-6">
-                            <label for="ddl_seccion" class="form-label form-label-sm">Sección:</label>
+                            <label for="ddl_seccion" class="form-label form-label-sm">Sección</label>
                             <select class="form-select form-select-sm" id="ddl_seccion" name="ddl_seccion" required>
                                 <option selected disabled value="">-- Seleccione una Sección --</option>
                             </select>
@@ -367,17 +389,17 @@
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_remuneracion" class="form-label form-label-sm">Remuneración:</label>
+                            <label for="txt_remuneracion" class="form-label form-label-sm">Remuneración</label>
                             <input type="number" step="0.01" class="form-control form-control-sm" name="txt_remuneracion" id="txt_remuneracion" placeholder="0.00">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-6">
-                            <label for="txt_fecha_contratacion_estado" class="form-label form-label-sm">Fecha de contratación:</label>
+                            <label for="txt_fecha_contratacion_estado" class="form-label form-label-sm">Fecha de contratación</label>
                             <input type="date" class="form-control form-control-sm" name="txt_fecha_contratacion_estado" id="txt_fecha_contratacion_estado" onchange="validar_fechas_est_lab();">
                         </div>
                         <div class="col-md-6">
-                            <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida:</label>
+                            <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida</label>
                             <div class="input-group input-group-sm">
                                 <input type="date" class="form-control form-control-sm" name="txt_fecha_salida_estado" id="txt_fecha_salida_estado" onchange="validar_fechas_est_lab();">
                                 <div class="input-group-text">
@@ -389,7 +411,7 @@
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label class="form-label form-label-sm">Tipo de cambio:</label>
+                            <label for="rbx_radio_baja" class="form-label form-label-sm">Tipo de cambio</label>
                             <div class="d-flex gap-3">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="tipo_cambio" id="radio_baja" value="baja">
@@ -422,8 +444,10 @@
         agregar_asterisco_campo_obligatorio('ddl_cargo');
         agregar_asterisco_campo_obligatorio('ddl_seccion');
         agregar_asterisco_campo_obligatorio('ddl_nomina');
+        agregar_asterisco_campo_obligatorio('txt_remuneracion');
         agregar_asterisco_campo_obligatorio('txt_fecha_contratacion_estado');
         agregar_asterisco_campo_obligatorio('txt_fecha_salida_estado');
+        agregar_asterisco_campo_obligatorio('rbx_radio_baja');
 
         $("#form_estado_laboral").validate({
             rules: {

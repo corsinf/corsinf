@@ -142,19 +142,21 @@ HTML;
                 $ddl_estado_laboral = 1;
 
                 $estado_laboral =  $this->modelo->listar_estado_laboral_por_id($parametros['_id']);
+                $empresa   = $_SESSION['INICIO']["RAZON_SOCIAL"] ?? 'Sistema';
 
                 $datos_estado_laboral = array(
-                    array('campo' => 'th_expl_nombre_empresa', 'dato' => 'TALENTO HUMANO'),
+                    array('campo' => 'th_expl_nombre_empresa', 'dato' => $empresa),
                     array('campo' => 'th_expl_cargos_ocupados', 'dato' => $estado_laboral[0]['cargo_nombre']),
                     array('campo' => 'th_expl_fecha_inicio_experiencia', 'dato' => $estado_laboral[0]['th_est_fecha_contratacion']),
                     array('campo' => 'th_expl_fecha_fin_experiencia', 'dato' => date('Y-m-d H:i:s')),
                     array('campo' => 'th_expl_cbx_fecha_fin_experiencia', 'dato' => 0),
-                    array('campo' => 'th_expl_responsabilidades_logros', 'dato' => 'Ninguna'),
+                    array('campo' => 'th_expl_responsabilidades_logros', 'dato' => 'RECATEGORIZACIÖN'),
                     array('campo' => 'th_expl_sueldo', 'dato' => $estado_laboral[0]['th_est_remuneracion']),
                     array('campo' => 'th_pos_id', 'dato' => $parametros['pos_id']),
                 );
                 $this->th_pos_experiencia_laboral->insertar($datos_estado_laboral);
                 $tipo_cambio = null;
+                
 
                 $experiencias = $this->th_pos_experiencia_laboral
                     ->listar_experiencia_laboral_postulante($parametros['pos_id']);
@@ -185,6 +187,18 @@ HTML;
                     $whereInf[0]['dato']  = $encontrado[0]['th_inf_adi_id'];
                     $this->th_per_informacion_adicional->editar($datos_inf, $whereInf);
                 }
+
+                $datos_update = array(
+                    array('campo' => 'th_est_estado', 'dato' => 0),
+                    array('campo' => 'th_est_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+                );
+
+                $where[0]['campo'] = 'th_est_id';
+                $where[0]['dato'] = strval($parametros['_id']);
+                $resultado = $this->modelo->editar($datos_update, $where);
+
+
+                $parametros['_id'] = '';
             }
         }
 
