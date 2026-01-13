@@ -276,57 +276,6 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
         }
     });
 </script>
-<style>
-    .nav-link.active i.text-primary,
-    .nav-link.active span.text-primary {
-        color: #198754 !important;
-    }
-
-    .nav-link.active {
-        border-color: #198754 !important;
-        background-color: #f8fff9 !important;
-    }
-
-    .nav-tabs .nav-link.active {
-        border-bottom: 3px solid #198754 !important;
-    }
-</style>
-
-<style>
-    /* Estilo para el scroll horizontal */
-    .tabs-container {
-        scrollbar-width: thin;
-        scrollbar-color: #0d6efd #f1f1f1;
-    }
-
-    .tabs-container::-webkit-scrollbar {
-        height: 6px;
-    }
-
-    .tabs-container::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 10px;
-    }
-
-    .tabs-container::-webkit-scrollbar-thumb {
-        background: #0d6efd;
-        border-radius: 10px;
-    }
-
-    .tabs-container::-webkit-scrollbar-thumb:hover {
-        background: #0a58ca;
-    }
-
-    /* Optimización de tabs */
-    .nav-link {
-        white-space: nowrap;
-        transition: all 0.2s ease;
-    }
-
-    .nav-link:hover {
-        transform: translateY(-2px);
-    }
-</style>
 
 <div class="page-wrapper">
     <div class="page-content">
@@ -344,309 +293,341 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
             </div>
             <div class="row m-2">
                 <div class="col-sm-12">
-                    <button onclick="boton_regresar_js();"
+                    <a href="inicio.php?mod=<?= $modulo_sistema ?>&acc=<?= $redireccionar_vista ?>"
                         class="btn btn-outline-primary btn-sm"><i class="bx bx-arrow-back"></i>
-                        Regresar</button>
+                        Regresar</a>
                 </div>
             </div>
         </div>
         <!--end breadcrumb-->
         <div class="container-fluid">
             <div class="main-body">
-                <div class="row d-flex justify-content-center">
 
-                    <!-- Cards de la derecha -->
-                    <div class="">
-                        <div class="card-body">
-                            <!-- Nav Cards -->
-                            <div class="tabs-container mb-3" style="overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;">
-                                <ul class="nav nav-pills nav-success d-flex flex-nowrap gap-2 p-2" role="tablist" style="border-bottom: none; min-width: max-content;">
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link border border-primary rounded-3 shadow-sm px-3 py-2 active" data-bs-toggle="tab" href="#tab_persona" role="tab" aria-selected="true">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="bx bxs-user text-primary" style="font-size: 0.875rem;"></i>
-                                                <span class="fw-semibold text-primary" style="font-size: 0.875rem;">Información</span>
+                <div class="card shadow-sm border-0">
+                    <div class="row g-0">
+                        <div class="col-md-3 bg-light border-end">
+                            <div class="p-3">
+
+                                <div class="card border-0 shadow-sm overflow-hidden" style="border-radius: 15px;">
+                                    <div class="bg-primary" style="height: 80px; background: linear-gradient(45deg, #4e73df 0%, #224abe 100%);"></div>
+
+                                    <div class="card-body pt-0 pb-4">
+                                        <div class="d-flex flex-column align-items-center" style="margin-top: -40px;">
+
+                                            <div class="position-relative">
+                                                <div class="shadow-sm rounded-circle bg-white p-1">
+                                                    <img src="../img/sin_imagen.jpg"
+                                                        id="img_persona_inf"
+                                                        alt="Perfil"
+                                                        class="rounded-circle object-fit-cover"
+                                                        style="width: 115px; height: 115px; display: block;">
+                                                </div>
+
+                                                <button type="button"
+                                                    class="btn btn-dark btn-sm rounded-circle position-absolute bottom-0 end-0 d-flex align-items-center justify-content-center shadow"
+                                                    style="width: 34px; height: 34px; border: 2px solid #fff;"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#modal_agregar_cambiar_foto_persona"
+                                                    onclick="abrir_modal_cambiar_foto_persona('<?= $id_persona ?>');"
+                                                    title="Cambiar foto">
+                                                    <i class='bx bxs-camera fs-6'></i>
+                                                </button>
                                             </div>
-                                        </a>
-                                    </li>
 
-                                    <?php if (isset($_GET['_persona_nomina']) && $_GET['_persona_nomina'] == 'true') { ?>
-
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link border border-primary rounded-3 shadow-sm px-3 py-2" data-bs-toggle="tab" href="#tab_departamento" role="tab">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <i class="bx bxs-building text-primary" style="font-size: 0.875rem;"></i>
-                                                    <span class="fw-semibold text-primary" style="font-size: 0.875rem;">Departamento</span>
+                                            <?php if (isset($_GET['_persona_nomina']) && $_GET['_persona_nomina'] == 'true'): ?>
+                                                <div class="mt-3">
+                                                    <span class="badge bg-primary-subtle text-primary rounded-pill px-4 py-2 fs-6 shadow-sm border border-primary-subtle">
+                                                        <i class='bx bxs-badge-check me-1'></i> Empleado
+                                                    </span>
                                                 </div>
-                                            </a>
-                                        </li>
+                                            <?php endif; ?>
 
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link border border-primary rounded-3 shadow-sm px-3 py-2" data-bs-toggle="tab" href="#tab_estado_laboral" role="tab">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <i class="bx bxs-briefcase-alt-2 text-primary" style="font-size: 0.875rem;"></i>
-                                                    <span class="fw-semibold text-primary" style="font-size: 0.875rem;">Estado Laboral</span>
-                                                </div>
-                                            </a>
-                                        </li>
-
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link border border-primary rounded-3 shadow-sm px-3 py-2" data-bs-toggle="tab" href="#tab_vehiculos" role="tab">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <i class="bx bxs-car text-primary" style="font-size: 0.875rem;"></i>
-                                                    <span class="fw-semibold text-primary" style="font-size: 0.875rem;">Vehículos</span>
-                                                </div>
-                                            </a>
-                                        </li>
-
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link border border-primary rounded-3 shadow-sm px-3 py-2" data-bs-toggle="tab" href="#tab_comision" role="tab">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <i class="bx bxs-wallet text-primary" style="font-size: 0.875rem;"></i>
-                                                    <span class="fw-semibold text-primary" style="font-size: 0.875rem;">Comisión</span>
-                                                </div>
-                                            </a>
-                                        </li>
-
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link border border-primary rounded-3 shadow-sm px-3 py-2" data-bs-toggle="tab" href="#tab_parientes" role="tab">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <i class="bx bxs-group text-primary" style="font-size: 0.875rem;"></i>
-                                                    <span class="fw-semibold text-primary" style="font-size: 0.875rem;">Referencias Personales</span>
-                                                </div>
-                                            </a>
-                                        </li>
-
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link border border-primary rounded-3 shadow-sm px-3 py-2" data-bs-toggle="tab" href="#tab_informacion_adicional" role="tab">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <i class="bx bxs-info-circle text-primary" style="font-size: 0.875rem;"></i>
-                                                    <span class="fw-semibold text-primary" style="font-size: 0.875rem;">Información Adicional</span>
-                                                </div>
-                                            </a>
-                                        </li>
-
-                                        <?php if (isset($_GET['id_postulante']) && $_GET['id_postulante'] != null) {
-                                            include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_all_tab.php');
-                                        } ?>
-
-                                    <?php } ?>
-                                </ul>
-                            </div>
-                            <div class="tab-content pt-3">
-                                <!-- Primera Sección, Informacion de la persona -->
-                                <div class="tab-pane fade show active" id="tab_persona" role="tabpanel">
-                                    <div class="card">
-                                        <div class="d-flex flex-column mx-4">
-                                            <div class="card-body">
-                                                <div class="col-12">
-                                                    <h5 class="mb-0 text-primary">
-                                                        <i class="bx bxs-user me-1 font-22 text-primary"></i>
-                                                        <?php
-                                                        if ($id_persona == '') {
-                                                            echo 'Registrar Persona';
-                                                        } else {
-                                                            echo 'Información personal';
-                                                        }
-                                                        ?>
-                                                    </h5>
-
-
-                                                    <?php if ($_SESSION['INICIO']['TIPO'] != "PERSONAS") { ?>
-                                                        <div class="col-12 pt-2">
-                                                            <button class="btn btn-primary btn-sm" onclick="modalBiometria()"><i
-                                                                    class="bx bx-sync"></i>Biometria</button>
-                                                            <a href="javascript:void(0)" class="btn btn-success btn-sm" data-bs-toggle="modal"
-                                                                data-bs-target="#modal_mensaje">
-                                                                <i class="bx bx-envelope"></i> Enviar Mensaje
-                                                            </a>
-                                                            <!-- Todo lo relacionado con Biometria -->
-                                                            <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_biometrico.php'); ?>
-
-                                                            <!-- <button class="btn btn-primary btn-sm" onclick="syncronizarPersona()"><i class="bx bx-sync"></i>Syncronizar persona en biometrico</button>                                     -->
-                                                        </div>
-                                                    <?php } ?>
-
-                                                </div>
-
-                                                <hr>
-
-                                                <div class="pt-2">
-                                                    <form id="registrar_personas" class="modal_general_provincias">
-                                                        <?php include_once('../vista/GENERAL/registrar_personas.php'); ?>
-
-                                                        <div class="d-flex justify-content-end pt-2">
-                                                            <?php if ($id_persona == '') { ?>
-                                                                <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center"
-                                                                    onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i>
-                                                                    Guardar</button>
-                                                            <?php } else { ?>
-                                                                <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center"
-                                                                    onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i>
-                                                                    Guardar</button>
-                                                                <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center"
-                                                                    onclick="delete_datos_persona()" type="button"><i class="bx bx-trash"></i>
-                                                                    Eliminar</button>
-                                                            <?php } ?>
-                                                        </div>
-                                                    </form>
-                                                    <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/th_per_cambiar_foto.php'); ?>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
+                                </div>
+
+                                <hr class="mb-4 opacity-25">
+
+                                <div class="nav flex-column nav-pills gap-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+
+                                    <button class="nav-link active py-2 px-3 border shadow-sm" data-bs-toggle="pill" data-bs-target="#tab_persona" type="button" role="tab">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bx bxs-user-circle me-3 fs-5"></i>
+                                            <span>Información Personal</span>
+                                        </div>
+                                    </button>
+
+                                    <?php if (isset($_GET['_persona_nomina']) && $_GET['_persona_nomina'] == 'true'): ?>
+
+                                        <button class="nav-link py-2 px-3 border shadow-sm" data-bs-toggle="pill" data-bs-target="#tab_departamento" type="button" role="tab">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bx bxs-building-house me-3 fs-5"></i>
+                                                <span>Departamento</span>
+                                            </div>
+                                        </button>
+
+                                        <button class="nav-link py-2 px-3 border shadow-sm" data-bs-toggle="pill" data-bs-target="#tab_estado_laboral" type="button" role="tab">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bx bxs-briefcase me-3 fs-5"></i>
+                                                <span>Estado Laboral</span>
+                                            </div>
+                                        </button>
+
+                                        <button class="nav-link py-2 px-3 border shadow-sm" data-bs-toggle="pill" data-bs-target="#tab_vehiculos" type="button" role="tab">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bx bxs-car me-3 fs-5"></i>
+                                                <span>Vehículos</span>
+                                            </div>
+                                        </button>
+
+                                        <button class="nav-link py-2 px-3 border shadow-sm" data-bs-toggle="pill" data-bs-target="#tab_comision" type="button" role="tab">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bx bxs-dollar-circle me-3 fs-5"></i>
+                                                <span>Comisión</span>
+                                            </div>
+                                        </button>
+
+                                        <button class="nav-link py-2 px-3 border shadow-sm" data-bs-toggle="pill" data-bs-target="#tab_parientes" type="button" role="tab">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bx bxs-group me-3 fs-5"></i>
+                                                <span>Referencias</span>
+                                            </div>
+                                        </button>
+
+                                        <button class="nav-link py-2 px-3 border shadow-sm" data-bs-toggle="pill" data-bs-target="#tab_informacion_adicional" type="button" role="tab">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bx bxs-info-circle me-3 fs-5"></i>
+                                                <span>Adicional</span>
+                                            </div>
+                                        </button>
+
+                                        <!-- Vista para postulante -->
+                                        <div class="mt-4 mb-2 ps-2">
+                                            <small class="text-muted fw-bold" style="font-size: 0.7rem;">DETALLES</small>
+                                        </div>
+                                        <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_all_tab.php'); ?>
+                                        <!-- end vista postulante -->
+
+                                    <?php endif; ?>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-9 bg-white min-vh-100">
+                            <div class="tab-content p-4" id="v-pills-tabContent">
+
+                                <div class="tab-pane fade show active" id="tab_persona" role="tabpanel">
+                                    <!-- <div class="card border-0"> -->
+                                    <div class="card-body">
+                                        <div class="col-12">
+                                            <!-- <h5 class="mb-0 text-primary">
+                                                <i class="bx bxs-user me-1 font-22 text-primary"></i>
+                                                <?php
+                                                if ($id_persona == '') {
+                                                    echo 'Registrar Persona';
+                                                } else {
+                                                    echo 'Información personal';
+                                                }
+                                                ?>
+                                            </h5> -->
+
+
+                                            <?php if ($_SESSION['INICIO']['TIPO'] != "PERSONAS") { ?>
+                                                <div class="col-12 pt-2">
+                                                    <button class="btn btn-primary btn-sm" onclick="modalBiometria()"><i
+                                                            class="bx bx-sync"></i>Biometria</button>
+                                                    <a href="javascript:void(0)" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                                        data-bs-target="#modal_mensaje">
+                                                        <i class="bx bx-envelope"></i> Enviar Mensaje
+                                                    </a>
+                                                    <!-- Todo lo relacionado con Biometria -->
+                                                    <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_biometrico.php'); ?>
+
+                                                    <!-- <button class="btn btn-primary btn-sm" onclick="syncronizarPersona()"><i class="bx bx-sync"></i>Syncronizar persona en biometrico</button>                                     -->
+                                                </div>
+                                            <?php } ?>
+
+                                        </div>
+
+                                        <hr>
+
+                                        <div class="pt-2">
+                                            <form id="registrar_personas" class="modal_general_provincias">
+                                                <?php include_once('../vista/GENERAL/registrar_personas.php'); ?>
+
+                                                <div class="d-flex justify-content-end pt-2">
+                                                    <?php if ($id_persona == '') { ?>
+                                                        <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center"
+                                                            onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i>
+                                                            Guardar</button>
+                                                    <?php } else { ?>
+                                                        <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center"
+                                                            onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i>
+                                                            Guardar</button>
+                                                        <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center"
+                                                            onclick="delete_datos_persona()" type="button"><i class="bx bx-trash"></i>
+                                                            Eliminar</button>
+                                                    <?php } ?>
+                                                </div>
+                                            </form>
+                                            <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/th_per_cambiar_foto.php'); ?>
+                                        </div>
+                                    </div>
+                                    <!-- </div> -->
                                 </div>
 
                                 <?php if (isset($_GET['_persona_nomina']) && $_GET['_persona_nomina'] == 'true') { ?>
                                     <!-- Segunda Sección, Departamentos -->
                                     <div class="tab-pane fade" id="tab_departamento" role="tabpanel">
-                                        <div class="card">
-                                            <div class="d-flex flex-column mx-4">
-                                                <!-- Documento de Identidad -->
-                                                <div class="card-body">
-                                                    <div class="mb-2">
-                                                        <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_departamento.php'); ?>
-                                                    </div>
+                                        <!-- <div class="card"> -->
+                                        <div class="d-flex flex-column mx-4">
+                                            <!-- Documento de Identidad -->
+                                            <div class="card-body">
+                                                <div class="mb-2">
+                                                    <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_departamento.php'); ?>
                                                 </div>
                                             </div>
                                         </div>
+                                        <!-- </div> -->
 
                                     </div>
 
                                     <!-- Tercera Sección, Estado Labaral -->
                                     <div class="tab-pane fade" id="tab_estado_laboral" role="tabpanel">
-                                        <div class="card">
-                                            <div class="d-flex flex-column mx-4">
-                                                <!-- Idiomas -->
-                                                <div class="card-body">
-                                                    <div class="mb-2">
-                                                        <div class="row">
-                                                            <div class="col-6 d-flex align-items-center">
-                                                                <h6 class="mb-0 fw-bold text-primary">Estado laboral:</h6>
-                                                            </div>
-                                                            <div id="pnl_crear_estado_laboral" class="col-6 d-flex justify-content-end">
-                                                                <a href="#"
-                                                                    class="text-success icon-hover d-flex align-items-center"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#modal_estado_laboral">
-                                                                    <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                    <span>Agregar</span>
-                                                                </a>
-                                                            </div>
+                                        <!-- <div class="card"> -->
+                                        <div class="d-flex flex-column mx-4">
+                                            <!-- Idiomas -->
+                                            <div class="card-body">
+                                                <div class="mb-2">
+                                                    <div class="row">
+                                                        <div class="col-6 d-flex align-items-center">
+                                                            <h6 class="mb-0 fw-bold text-primary">Estado laboral:</h6>
+                                                        </div>
+                                                        <div id="pnl_crear_estado_laboral" class="col-6 d-flex justify-content-end">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal_estado_laboral">
+                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                                                <span>Agregar</span>
+                                                            </a>
                                                         </div>
                                                     </div>
-
-                                                    <hr>
-                                                    <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_estado_laboral.php'); ?>
                                                 </div>
 
+                                                <hr>
+                                                <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_estado_laboral.php'); ?>
                                             </div>
+
                                         </div>
+                                        <!-- </div> -->
                                     </div>
                                     <!-- Cuarta Sección, Vehiculos -->
                                     <div class="tab-pane fade" id="tab_vehiculos" role="tabpanel">
-                                        <div class="card">
-                                            <div class="d-flex flex-column mx-4">
-                                                <div class="card-body">
-                                                    <div class="mb-2">
-                                                        <div class="row">
-                                                            <div class="col-6 d-flex align-items-center">
-                                                                <h6 class="mb-0 fw-bold text-primary">Vehiculos:</h6>
-                                                            </div>
-                                                            <div class="col-6 d-flex justify-content-end">
-                                                                <a href="#"
-                                                                    class="text-success icon-hover d-flex align-items-center"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#modal_agregar_vehiculo">
-                                                                    <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                    <span>Agregar</span>
-                                                                </a>
-                                                            </div>
+                                        <!-- <div class="card"> -->
+                                        <div class="d-flex flex-column mx-4">
+                                            <div class="card-body">
+                                                <div class="mb-2">
+                                                    <div class="row">
+                                                        <div class="col-6 d-flex align-items-center">
+                                                            <h6 class="mb-0 fw-bold text-primary">Vehiculos:</h6>
+                                                        </div>
+                                                        <div class="col-6 d-flex justify-content-end">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal_agregar_vehiculo">
+                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                                                <span>Agregar</span>
+                                                            </a>
                                                         </div>
                                                     </div>
-
-                                                    <hr>
-
-                                                    <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_vehiculo.php'); ?>
-
                                                 </div>
+
+                                                <hr>
+
+                                                <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_vehiculo.php'); ?>
+
                                             </div>
                                         </div>
+                                        <!-- </div> -->
                                     </div>
 
                                     <div class="tab-pane fade" id="tab_comision" role="tabpanel">
-                                        <div class="card">
-                                            <div class="d-flex flex-column mx-4">
-                                                <div class="card-body">
+                                        <!-- <div class="card"> -->
+                                        <div class="d-flex flex-column mx-4">
+                                            <div class="card-body">
 
-                                                    <div class="mb-2">
-                                                        <div class="row">
-                                                            <div class="col-6 d-flex align-items-center">
-                                                                <h6 class="mb-0 fw-bold text-primary">Comisiones:</h6>
-                                                            </div>
+                                                <div class="mb-2">
+                                                    <div class="row">
+                                                        <div class="col-6 d-flex align-items-center">
+                                                            <h6 class="mb-0 fw-bold text-primary">Comisiones:</h6>
+                                                        </div>
 
-                                                            <div class="col-6 d-flex justify-content-end">
-                                                                <a href="#"
-                                                                    class="text-success icon-hover d-flex align-items-center"
-                                                                    onclick="abrir_modal_comision('');">
-                                                                    <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                    <span>Agregar</span>
-                                                                </a>
-                                                            </div>
+                                                        <div class="col-6 d-flex justify-content-end">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                onclick="abrir_modal_comision('');">
+                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                                                <span>Agregar</span>
+                                                            </a>
                                                         </div>
                                                     </div>
-
-                                                    <hr>
-
-                                                    <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_comision.php'); ?>
-
                                                 </div>
+
+                                                <hr>
+
+                                                <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_comision.php'); ?>
+
                                             </div>
                                         </div>
+                                        <!-- </div> -->
                                     </div>
 
                                     <div class="tab-pane fade" id="tab_parientes" role="tabpanel">
-                                        <div class="card">
-                                            <div class="d-flex flex-column mx-4">
-                                                <div class="card-body">
+                                        <!-- <div class="card"> -->
+                                        <div class="d-flex flex-column mx-4">
+                                            <div class="card-body">
 
-                                                    <div class="mb-2">
-                                                        <div class="row">
-                                                            <div class="col-6 d-flex align-items-center">
-                                                                <h6 class="mb-0 fw-bold text-primary">Referencias Personales:</h6>
-                                                            </div>
+                                                <div class="mb-2">
+                                                    <div class="row">
+                                                        <div class="col-6 d-flex align-items-center">
+                                                            <h6 class="mb-0 fw-bold text-primary">Referencias Personales:</h6>
+                                                        </div>
 
-                                                            <div class="col-6 d-flex justify-content-end">
-                                                                <a href="#"
-                                                                    class="text-success icon-hover d-flex align-items-center"
-                                                                    onclick="abrir_modal_nuevo_pariente('');">
-                                                                    <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                    <span>Agregar</span>
-                                                                </a>
-                                                            </div>
+                                                        <div class="col-6 d-flex justify-content-end">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                onclick="abrir_modal_nuevo_pariente('');">
+                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                                                <span>Agregar</span>
+                                                            </a>
                                                         </div>
                                                     </div>
-
-                                                    <hr>
-
-                                                    <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_parentesco.php'); ?>
-
                                                 </div>
+
+                                                <hr>
+
+                                                <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_parentesco.php'); ?>
+
                                             </div>
                                         </div>
+                                        <!-- </div> -->
                                     </div>
 
                                     <div class="tab-pane fade" id="tab_informacion_adicional" role="tabpanel">
-                                        <div class="card">
-                                            <div class="d-flex flex-column mx-4">
-                                                <div class="card-body">
+                                        <!-- <div class="card"> -->
+                                        <div class="d-flex flex-column mx-4">
+                                            <div class="card-body">
 
-                                                    <div class="mb-2">
-                                                        <div class="row">
-                                                            <div class="col-6 d-flex align-items-center">
-                                                                <h6 class="mb-0 fw-bold text-primary">Información Adicional:</h6>
-                                                            </div>
-                                                            <!--
+                                                <div class="mb-2">
+                                                    <div class="row">
+                                                        <div class="col-6 d-flex align-items-center">
+                                                            <h6 class="mb-0 fw-bold text-primary">Información Adicional:</h6>
+                                                        </div>
+                                                        <!--
                                                             <div class="col-6 d-flex justify-content-end">
                                                                 <a href="#"
                                                                     class="text-success icon-hover d-flex align-items-center"
@@ -655,31 +636,32 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                                                     <span>Agregar</span>
                                                                 </a>
                                                             </div>
-                                -->
-                                                        </div>
+                                                            -->
                                                     </div>
-
-                                                    <hr>
-
-                                                    <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_informacion_adicional.php'); ?>
-
                                                 </div>
+
+                                                <hr>
+
+                                                <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_informacion_adicional.php'); ?>
+
                                             </div>
                                         </div>
+                                        <!-- </div> -->
                                     </div>
 
                                     <?php if (isset($_GET['id_postulante']) && $_GET['id_postulante'] != null) { ?>
                                         <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_all_tab_pane.php'); ?>
                                     <?php } ?>
                                 <?php } ?>
-
-
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <?php //include_once('../vista/TALENTO_HUMANO/PERSONAS/prueba.php'); 
+            ?>
+
         </div>
     </div>
 </div>
@@ -842,3 +824,32 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
         });
     });
 </script>
+
+
+<style>
+    /* CSS para que se vea profesional */
+    .nav-pills .nav-link {
+        color: #4b5563;
+        background-color: #ffffff;
+        border: 1px solid #e5e7eb !important;
+        transition: all 0.2s ease;
+        text-align: left;
+    }
+
+    .nav-pills .nav-link:hover {
+        background-color: #f3f4f6;
+        color: #2563eb;
+        border-color: #2563eb !important;
+    }
+
+    .nav-pills .nav-link.active {
+        background-color: #2563eb !important;
+        color: #ffffff !important;
+        border-color: #2563eb !important;
+        font-weight: 600;
+    }
+
+    .bg-light {
+        background-color: #f9fafb !important;
+    }
+</style>

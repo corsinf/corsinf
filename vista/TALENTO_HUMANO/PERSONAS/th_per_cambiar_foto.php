@@ -83,7 +83,7 @@
 
     function abrir_modal_cambiar_foto_persona(id) {
         $('#modal_agregar_cambiar_foto_persona').modal('show');
-        $('#lbl_titulo_cambiar_foto_persona').html('Editar foto de perfil');
+        $('#lbl_titulo_cambiar_foto_persona').html('Editar foto de perfil ');
         $('#btn_guardar_cambiar_foto_persona').html('Guardar');
     }
 
@@ -102,7 +102,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h6><small class="text-body-secondary fw-bold" id="lbl_titulo_cambiar_foto_persona">Foto de
-                        Perfil</small></h6>
+                        Perfil </small></h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form id="form_cambiar_foto_persona" enctype="multipart/form-data" method="post">
@@ -117,6 +117,7 @@
                             </div>
                             <hr />
                             <input type="file" class="form-control form-control-sm" name="txt_copia_cambiar_foto" id="txt_copia_cambiar_foto_persona" accept=".jpg, .jpeg, .png">
+                            <small class="text-muted text-center">Formatos: JPG, PNG. Máx 2MB</small>
                         </div>
                     </div>
                 </div>

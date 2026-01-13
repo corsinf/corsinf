@@ -1,13 +1,16 @@
  <?php
     $tab_pane_postulante_activo = 'show active';
+    $tab_pane_card = 'card';
     if (isset($_GET['_persona_nomina']) && $_GET['_persona_nomina'] == 'true') {
         $tab_pane_postulante_activo = '';
+        $tab_pane_card = "";
     }
     ?>
 
  <!-- Primera Sección, Historial Laboral -->
  <div class="tab-pane fade <?= $tab_pane_postulante_activo ?>" id="tab_experiencia" role="tabpanel">
-     <div class="card">
+     <!-- Aqui viene un card cuando sea postulante -->
+     <div id="pnl_experiencia_tab" class="<?= $tab_pane_card ?>">
          <div class="d-flex flex-column mx-4">
              <!-- Experiencia Previa -->
              <div class="card-body">
@@ -88,7 +91,8 @@
  </div>
  <!-- Segunda Sección, Documentos relevantes -->
  <div class="tab-pane fade" id="successdocs" role="tabpanel">
-     <div class="card">
+     <!-- Aqui viene un card cuando sea postulante -->
+     <div id="pnl_documentos_tab" class="<?= $tab_pane_card ?>">
          <div class="d-flex flex-column mx-4">
              <!-- Documento de Identidad -->
              <div class="card-body">
@@ -195,7 +199,8 @@
  </div>
  <!-- Tercera Sección, Idiomas y aptitudes -->
  <div class="tab-pane fade" id="successprofile" role="tabpanel">
-     <div class="card">
+     <!-- Aqui viene un card cuando sea postulante -->
+     <div id="pnl_idiomas_tab" class="<?= $tab_pane_card ?>">
          <div class="d-flex flex-column mx-4">
              <!-- Idiomas -->
              <div class="card-body">
@@ -249,7 +254,8 @@
  </div>
  <!-- Cuarta Sección, discapacidad -->
  <div class="tab-pane fade" id="tab_discapacidad" role="tabpanel">
-     <div class="card">
+     <!-- Aqui viene un card cuando sea postulante -->
+     <div id="pnl_discapacidad_tab" class="<?= $tab_pane_card ?>">
          <div class="d-flex flex-column mx-4">
              <div class="card-body">
 
