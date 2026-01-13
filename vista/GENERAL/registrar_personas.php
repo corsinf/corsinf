@@ -149,7 +149,7 @@
 
 <div class="container-fluid pt-3">
     <div class="row">
-        <div class="col-md-3 text-center border-end">
+        <!-- <div class="col-md-3 text-center border-end">
             <div class="card shadow-sm">
                 <div class="card-body">
                     <label class="form-label d-block"><strong>Fotografía del Usuario</strong></label>
@@ -166,7 +166,7 @@
                             <div>
                                 <a href="#" class="d-flex justify-content-center" data-bs-toggle="modal"
                                     data-bs-target="#modal_agregar_cambiar_foto_persona"
-                                    onclick="abrir_modal_cambiar_foto_persona('<?= $id_persona ?>');">
+                                    onclick="abrir_modal_cambiar_foto_persona('<?php //echo $id_persona ?>');">
                                     <i class='bx bxs-camera bx-sm'></i>
                                 </a>
                                 <small class="text-muted">Formatos: JPG, PNG. Máx 2MB</small>
@@ -175,9 +175,9 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
-        <div class="col-md-9">
+        <div class="col-md-12">
 
             <div class="card mb-4 border-0 shadow-sm">
                 <div class="card-header bg-light text-primary"><strong><i class="fas fa-user"></i> Datos de Identidad</strong></div>
@@ -227,101 +227,105 @@
                 </div>
             </div>
 
-            <div class="card mb-4 border-0 shadow-sm">
-                <div class="card-header bg-light text-primary"><strong><i class="fas fa-info-circle"></i> Información Socio-Demográfica</strong></div>
-                <div class="card-body">
-                    <div class="row mb-col">
-                        <div class="col-md-4">
-                            <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad </label>
-                            <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
-                                <option selected disabled value="">Seleccione...</option>
-                                <option value="Ecuatoriano">Ecuatoriano</option>
-                                <option value="Colombiano">Colombiano</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil </label>
-                            <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
-                                <option selected disabled value="">Seleccione...</option>
-                                <option value="Soltero/a">Soltero/a</option>
-                                <option value="Casado/a">Casado/a</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="ddl_tipo_sangre" class="form-label form-label-sm">Tipo Sangre </label>
-                            <select class="form-select form-select-sm" id="ddl_tipo_sangre" name="ddl_tipo_sangre">
-                                <option selected disabled value="">Seleccione...</option>
-                                <option value="O+">O+</option>
-                                <option value="A+">A+</option>
-                            </select>
-                        </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="card mb-4 border-0 shadow-sm">
+            <div class="card-header bg-light text-primary"><strong><i class="fas fa-info-circle"></i> Información Socio-Demográfica</strong></div>
+            <div class="card-body">
+                <div class="row mb-col">
+                    <div class="col-md-4">
+                        <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad </label>
+                        <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
+                            <option selected disabled value="">Seleccione...</option>
+                            <option value="Ecuatoriano">Ecuatoriano</option>
+                            <option value="Colombiano">Colombiano</option>
+                        </select>
                     </div>
-                    <div class="row mb-col">
-                        <div class="col-md-3">
-                            <label for="ddl_etnia" class="form-label form-label-sm">Etnía </label>
-                            <select class="form-select form-select-sm select2-validation" id="ddl_etnia" name="ddl_etnia"></select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="ddl_orientacion_sexual" class="form-label form-label-sm">Orientación Sexual </label>
-                            <select class="form-select form-select-sm select2-validation" id="ddl_orientacion_sexual" name="ddl_orientacion_sexual"></select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="ddl_religion" class="form-label form-label-sm">Religión </label>
-                            <select class="form-select form-select-sm select2-validation" id="ddl_religion" name="ddl_religion"></select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="ddl_identidad_genero" class="form-label form-label-sm">Identidad Genero </label>
-                            <select class="form-select form-select-sm select2-validation" id="ddl_identidad_genero" name="ddl_identidad_genero"></select>
-                        </div>
+                    <div class="col-md-4">
+                        <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil </label>
+                        <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
+                            <option selected disabled value="">Seleccione...</option>
+                            <option value="Soltero/a">Soltero/a</option>
+                            <option value="Casado/a">Casado/a</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="ddl_tipo_sangre" class="form-label form-label-sm">Tipo Sangre </label>
+                        <select class="form-select form-select-sm" id="ddl_tipo_sangre" name="ddl_tipo_sangre">
+                            <option selected disabled value="">Seleccione...</option>
+                            <option value="O+">O+</option>
+                            <option value="A+">A+</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-col">
+                    <div class="col-md-3">
+                        <label for="ddl_etnia" class="form-label form-label-sm">Etnía </label>
+                        <select class="form-select form-select-sm select2-validation" id="ddl_etnia" name="ddl_etnia"></select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="ddl_orientacion_sexual" class="form-label form-label-sm">Orientación Sexual </label>
+                        <select class="form-select form-select-sm select2-validation" id="ddl_orientacion_sexual" name="ddl_orientacion_sexual"></select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="ddl_religion" class="form-label form-label-sm">Religión </label>
+                        <select class="form-select form-select-sm select2-validation" id="ddl_religion" name="ddl_religion"></select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="ddl_identidad_genero" class="form-label form-label-sm">Identidad Genero </label>
+                        <select class="form-select form-select-sm select2-validation" id="ddl_identidad_genero" name="ddl_identidad_genero"></select>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="card mb-4 border-0 shadow-sm">
-                <div class="card-header bg-light text-primary"><strong><i class="fas fa-map-marker-alt"></i> Ubicación y Contacto</strong></div>
-                <div class="card-body">
-                    <?php include_once('../vista/GENERAL/provincias_ciudades_parroquias.php'); ?>
+        <div class="card mb-4 border-0 shadow-sm">
+            <div class="card-header bg-light text-primary"><strong><i class="fas fa-map-marker-alt"></i> Ubicación y Contacto</strong></div>
+            <div class="card-body">
+                <?php include_once('../vista/GENERAL/provincias_ciudades_parroquias.php'); ?>
 
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_direccion" class="form-label form-label-sm">Dirección Exacta </label>
-                            <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" maxlength="200">
-                        </div>
+                <div class="row mb-col">
+                    <div class="col-md-12">
+                        <label for="txt_direccion" class="form-label form-label-sm">Dirección Exacta </label>
+                        <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" maxlength="200">
                     </div>
+                </div>
 
-                    <div class="row mb-col">
-                        <div class="col-md-3">
-                            <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono Principal </label>
-                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_1" id="txt_telefono_1" maxlength="12">
-                        </div>
-                        <div class="col-md-3">
-                            <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono Alternativo </label>
-                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_2" id="txt_telefono_2" maxlength="12">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="txt_correo" class="form-label form-label-sm">Correo Institucional </label>
-                            <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" maxlength="100">
-                        </div>
+                <div class="row mb-col">
+                    <div class="col-md-3">
+                        <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono Principal </label>
+                        <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_1" id="txt_telefono_1" maxlength="12">
                     </div>
+                    <div class="col-md-3">
+                        <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono Alternativo </label>
+                        <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_2" id="txt_telefono_2" maxlength="12">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="txt_correo" class="form-label form-label-sm">Correo Institucional </label>
+                        <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" maxlength="100">
+                    </div>
+                </div>
 
-                    <div class="row mb-col">
-                        <div class="col-md-6">
-                            <label for="txt_per_correo_personal_1" class="form-label form-label-sm">Correo Personal </label>
-                            <input type="email" class="form-control form-control-sm" name="txt_per_correo_personal_1" id="txt_per_correo_personal_1" maxlength="100">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="txt_per_correo_personal_2" class="form-label form-label-sm">Correo Personal Alternativo </label>
-                            <input type="email" class="form-control form-control-sm" name="txt_per_correo_personal_2" id="txt_per_correo_personal_2" maxlength="100">
-                        </div>
+                <div class="row mb-col">
+                    <div class="col-md-6">
+                        <label for="txt_per_correo_personal_1" class="form-label form-label-sm">Correo Personal </label>
+                        <input type="email" class="form-control form-control-sm" name="txt_per_correo_personal_1" id="txt_per_correo_personal_1" maxlength="100">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="txt_per_correo_personal_2" class="form-label form-label-sm">Correo Personal Alternativo </label>
+                        <input type="email" class="form-control form-control-sm" name="txt_per_correo_personal_2" id="txt_per_correo_personal_2" maxlength="100">
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="card mb-4 border-0 shadow-sm">
-                <div class="card-body">
-                    <label for="txt_observaciones" class="form-label form-label-sm">Observaciones Adicionales </label>
-                    <textarea class="form-control form-control-sm" name="txt_observaciones" id="txt_observaciones" rows="2" maxlength="200"></textarea>
-                </div>
+        <div class="card mb-4 border-0 shadow-sm">
+            <div class="card-body">
+                <label for="txt_observaciones" class="form-label form-label-sm">Observaciones Adicionales </label>
+                <textarea class="form-control form-control-sm" name="txt_observaciones" id="txt_observaciones" rows="2" maxlength="200"></textarea>
             </div>
         </div>
     </div>
