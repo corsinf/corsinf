@@ -67,9 +67,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         cargar_selects2();
 
         function cargar_selects2() {
-            let url_departamentosC = '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true';
+            let url_departamentosC = '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar_departamento=true';
             cargar_select2_url('ddl_departamentos', url_departamentosC);
         }
+
 
     });
 </script>
@@ -132,9 +133,9 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                                 id="ddl_departamentos"
                                                 name="ddl_departamentos">
                                                 <option selected disabled>-- Seleccione --</option>
-                                                  <option value="">Todos</option>
+                                                <option value="">Todos</option>
                                             </select>
-                                            
+
                                             <label class="error d-none" for="ddl_departamentos"></label>
                                         </div>
 

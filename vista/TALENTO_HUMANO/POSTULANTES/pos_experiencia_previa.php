@@ -78,6 +78,7 @@
         var parametros_experiencia_laboral = {
             '_id': txt_id_experiencia_laboral,
             'txt_id_postulante': txt_id_postulante,
+            'txt_id_persona': "<?= $id_persona ?? '' ?>",
             'txt_nombre_empresa': txt_nombre_empresa,
             'txt_cargos_ocupados': txt_cargos_ocupados,
             'txt_fecha_inicio_laboral': txt_fecha_inicio_laboral,
@@ -109,7 +110,7 @@
                     cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
                     limpiar_campos_experiencia_laboral_modal();
                     $('#modal_agregar_experiencia').modal('hide');
-                    cargar_datos_info_adicional(<?= $id_postulante ?>);
+                    cargar_datos_info_adicional(<?= $id_persona ?>);
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
                 }
@@ -151,6 +152,7 @@
         $.ajax({
             data: {
                 id: id,
+                id_persona: <?= $id_persona ?>,
                 id_postulante: <?= $id_postulante ?>
             },
             url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_experiencia_laboralC.php?eliminar=true',
@@ -162,7 +164,7 @@
                     cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
                     limpiar_campos_experiencia_laboral_modal();
                     $('#modal_agregar_experiencia').modal('hide');
-                    cargar_datos_info_adicional(<?= $id_postulante ?>);
+                    cargar_datos_info_adicional(<?= $id_persona ?>);
                 }
             }
         });
@@ -245,7 +247,7 @@
 
 <script>
     $(document).ready(function() {
-        cargar_datos_info_adicional(<?= $id_postulante ?>);
+        cargar_datos_info_adicional(<?= $id_persona ?>);
     });
 
     function cargar_datos_info_adicional(id) {

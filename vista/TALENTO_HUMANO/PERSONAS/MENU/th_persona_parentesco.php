@@ -1,12 +1,49 @@
 <script>
     $(document).ready(function() {
         cargar_datos_parientes(<?= $id_persona ?>);
-        cargar_selects_parientes();
+        cargar_select_parientes(<?= $id_persona ?>)
     });
 
     function cargar_selects_parientes() {
         url_parentescoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_parentescoC.php?buscar=true';
         cargar_select2_url('ddl_parentesco', url_parentescoC, '', '#modal_parientes');
+    }
+
+
+    function cargar_select_parientes(id_persona) {
+        // Si select2 ya está inicializado, destruirlo
+        if ($('#ddl_parentesco').hasClass("select2-hidden-accessible")) {
+            $('#ddl_parentesco').select2('destroy');
+        }
+
+        $('#ddl_parentesco').select2({
+            dropdownParent: $('#modal_parientes'),
+            ajax: {
+                url: '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_parentescoC.php?buscar_parientes=true',
+                dataType: 'json',
+                data: function(params) {
+                    return {
+                        q: params.term,
+                        th_per_id: id_persona
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: data
+                    };
+                }
+            },
+            minimumInputLength: 0,
+            placeholder: "Seleccione un requisito",
+            language: {
+                noResults: function() {
+                    return "No hay requisitos disponibles para asignar";
+                },
+                searching: function() {
+                    return "Buscando...";
+                }
+            }
+        });
     }
 
     function cargar_datos_parientes(id) {

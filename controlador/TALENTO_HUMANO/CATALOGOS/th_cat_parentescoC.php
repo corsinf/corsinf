@@ -22,6 +22,20 @@ if (isset($_GET['buscar'])) {
 
     echo json_encode($controlador->buscar($parametros));
 }
+if (isset($_GET['buscar_parientes'])) {
+
+    $query = '';
+    if (isset($_GET['q'])) {
+        $query = $_GET['q'];
+    }
+
+    $parametros = [
+        'query' => $_GET['q'] ?? '',
+        'th_per_id' => $_GET['th_per_id'] ?? 0
+    ];
+
+    echo json_encode($controlador->buscar_parientes($parametros));
+}
 
 class th_cat_parentescoC
 {
@@ -55,6 +69,21 @@ class th_cat_parentescoC
         }
 
         return $lista;
-       
+    }
+
+    function buscar_parientes($parametros)
+    {
+        $lista = array();
+        $concat = "descripcion, estado";
+        $datos = $this->modelo->buscar_parientes($parametros);
+
+        return $datos;
+
+        foreach ($datos as $key => $value) {
+            $text = $value['descripcion'];
+            $lista[] = array('id' => ($value['id_parentesco']), 'text' => ($text), /* 'data' => $value */);
+        }
+
+        return $lista;
     }
 }

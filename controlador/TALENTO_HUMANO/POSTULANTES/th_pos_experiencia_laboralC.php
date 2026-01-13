@@ -17,7 +17,7 @@ if (isset($_GET['insertar'])) {
 }
 
 if (isset($_GET['eliminar'])) {
-    echo json_encode($controlador->eliminar($_POST['id'] ?? '', $_POST['id_postulante'] ?? ''));
+    echo json_encode($controlador->eliminar($_POST['id'] ?? '', $_POST['id_persona'] ?? '', $_POST['id_postulante'] ?? ''));
 }
 
 
@@ -113,11 +113,11 @@ class th_pos_experiencia_laboralC
             2
         );
         $encontrado =  $this->th_per_informacion_adicional
-            ->where('th_per_id', $parametros['txt_id_postulante'])
+            ->where('th_per_id', $parametros['txt_id_persona'])
             ->listar();
 
         $datos_inf = array(
-            array('campo' => 'th_per_id', 'dato' =>  $parametros['txt_id_postulante']),
+            array('campo' => 'th_per_id', 'dato' =>  $parametros['txt_id_persona']),
             array('campo' => 'th_inf_adi_tiempo_trabajo', 'dato' => $texto),
             array('campo' => 'th_inf_adi_remuneracion_promedio', 'dato' => $promedio),
             array('campo' => 'th_inf_adi_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
@@ -134,7 +134,7 @@ class th_pos_experiencia_laboralC
         return $datos;
     }
 
-    function eliminar($id, $id_postulante)
+    function eliminar($id, $id_persona , $id_postulante)
     {
         $datos = [
             ['campo' => 'th_expl_estado', 'dato' => 0],
@@ -157,7 +157,7 @@ class th_pos_experiencia_laboralC
         );
 
         $encontrado = $this->th_per_informacion_adicional
-            ->where('th_per_id', $id_postulante)
+            ->where('th_per_id', $id_persona)
             ->listar();
 
         $datos_inf = [
@@ -167,7 +167,7 @@ class th_pos_experiencia_laboralC
         ];
 
         if (empty($encontrado)) {
-            $datos_inf[] = ['campo' => 'th_per_id', 'dato' => $id_postulante];
+            $datos_inf[] = ['campo' => 'th_per_id', 'dato' => $id_persona];
             $this->th_per_informacion_adicional->insertar($datos_inf);
         } else {
             $whereInf[0]['campo'] = 'th_inf_adi_id';

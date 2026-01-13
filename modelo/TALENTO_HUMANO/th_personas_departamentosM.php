@@ -37,7 +37,7 @@ class th_personas_departamentosM extends BaseModel
                 INNER JOIN th_departamentos dep ON per_dep.th_dep_id = dep.th_dep_id
                 WHERE per.th_per_estado = 1 ";
 
-        if ($id_departamento != '' && $id_departamento != null) {
+        if ($id_departamento != '' && $id_departamento != null && $id_departamento != ' ') {
             $sql .= " AND per_dep.th_dep_id = '$id_departamento'";
         }
 

@@ -51,7 +51,7 @@ class th_cat_nominaC
         foreach ($datos as $value) {
             $lista[] = [
                 'id'   => $value['id_nomina'],
-                'text' => $value['codigo'] . ' - ' . $value['nombre']
+                'text' => $value['nombre']
             ];
         }
 

@@ -63,13 +63,13 @@ class th_departamentosC
 
     function listar_organigrama($id = '')
     {
-       
+
         $datos = $this->modelo->obtener_departamento_completo($id);
         return $datos;
     }
     function listar_organigrama_personas($id = '')
     {
-       
+
         $datos = $this->modelo->obtener_departamento_cargos_personas($id);
         return $datos;
     }
@@ -151,19 +151,14 @@ class th_departamentosC
         $concat = "th_dep_nombre, th_dep_estado";
         $datos = $this->modelo->where('th_dep_estado', 1)->like($concat, $parametros['query']);
 
-        // 🔹 Agregar al inicio la opción "Todos los departamentos"
         $lista[] = [
-            'id' => '0',
+            'id' => ' ',
             'text' => 'Todos los departamentos'
         ];
 
-        // 🔹 Recorrer resultados reales
         foreach ($datos as $key => $value) {
             $text = $value['th_dep_nombre'];
-            $lista[] = [
-                'id'   => $value['th_dep_nombre'], // aquí estás usando el nombre como ID, puedes cambiarlo a $value['th_dep_id'] si prefieres
-                'text' => $text
-            ];
+            $lista[] = array('id' => ($value['th_dep_id']), 'text' => ($text), /* 'data' => $value */);
         }
 
         return $lista;
