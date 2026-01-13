@@ -547,8 +547,8 @@ if (isset($_GET['mod']) && $_GET['mod'] != '') {
 
 	<?php if (
 		(isset($_SESSION['INICIO']['NO_CONCURENTE_POLITICAS']) &&
-		$_SESSION['INICIO']['NO_CONCURENTE_POLITICAS'] == 0 &&
-		$acc !== 'perfil') && $acc !== 'politicas_datos'
+			$_SESSION['INICIO']['NO_CONCURENTE_POLITICAS'] == 0 &&
+			$acc !== 'perfil') && $acc !== 'politicas_datos'
 	) { ?>
 
 		<script>
@@ -1038,6 +1038,7 @@ if (isset($_GET['mod']) && $_GET['mod'] != '') {
 								<p class="designattion mb-0"><?php echo $_SESSION['INICIO']['TIPO']; ?></p>
 							</div>
 						</a>
+
 						<ul class="dropdown-menu dropdown-menu-end">
 							<li><a class="dropdown-item" href="inicio.php?acc=perfil"><i class="bx bx-user"></i><span>Perfil</span></a>
 							</li>
@@ -1051,13 +1052,22 @@ if (isset($_GET['mod']) && $_GET['mod'] != '') {
 
 							<li><a class="dropdown-item" href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=descargas"><i class='bx bx-download'></i><span>Descargas</span></a>
 							</li>
+
 							<li onclick="$('#myModal_acerca_de').modal('show')"><a class="dropdown-item" href="#"><i class='bx bx-info-circle'></i><span>Acerca de</span></a>
 							</li>
-							<li onclick="mi_licencias('<?php echo $_SESSION['INICIO']['ID_EMPRESA']; ?>')"><a class="dropdown-item" href="#"><i class='bx bxs-key'></i><span>Mi Licencia</span></a>
+
+							<?php if ($_SESSION['INICIO']['TIPO'] == 'DBA' || $_SESSION['INICIO']['TIPO'] == 'ADMINISTRADOR' || $_SESSION['INICIO']['TIPO'] == 'ADMIN') { ?>
+								<li onclick="mi_licencias('<?php echo $_SESSION['INICIO']['ID_EMPRESA']; ?>')"><a class="dropdown-item" href="#"><i class='bx bxs-key'></i><span>Mi Licencia</span></a>
+								</li>
+							<?php } ?>
+
+							<li><a class="dropdown-item" href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=politicas_datos"><i class='bx bx-key'></i><span>Políticas</span></a>
 							</li>
+
 							<li>
 								<div class="dropdown-divider mb-0"></div>
 							</li>
+
 							<?php if ($_SESSION['INICIO']['MODULO_SISTEMA'] == 1) { ?>
 								<li><a class="dropdown-item" href="javascript:;" onclick="regresar_modulo();"><i class='bx bx-cog'></i><span>Salir de configuraciones</span></a>
 								<?php } ?>
