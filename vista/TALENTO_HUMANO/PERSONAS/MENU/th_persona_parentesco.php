@@ -382,7 +382,12 @@
                 txt_apellidos_pariente: {
                     required: true,
                 },
-                // La fecha de nacimiento se validará dinámicamente
+                txt_telefono_pariente: {
+                    required: false,
+                    digits: true,
+                    minlength: 7,
+                    maxlength: 10
+                }
             },
             messages: {
                 ddl_parentesco: {
@@ -394,6 +399,12 @@
                 txt_apellidos_pariente: {
                     required: "Por favor ingrese los apellidos",
                 },
+                txt_telefono_pariente: {
+                    digits: "Ingrese solo números",
+                    minlength: "Debe tener al menos 7 dígitos",
+                    maxlength: "No debe exceder 10 dígitos"
+                }
+
             },
             highlight: function(element) {
                 $(element).addClass('is-invalid');

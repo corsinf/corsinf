@@ -2,9 +2,39 @@
     $(document).ready(function() {
         cargar_datos_estado_laboral(<?= $id_persona ?>);
         cargar_selects();
+
+        $('input[name="tipo_cambio"]').on('change', function() {
+            if ($(this).val() === 'recategorizacion') {
+                Swal.fire({
+                    title: 'Atención',
+                    text: "Estos datos serán enviados a experiencia previa. ¿Desea continuar?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, continuar',
+                    cancelButtonText: 'No, cancelar'
+                }).then((result) => {
+                    if (!result.value) {
+                        $('#radio_baja').prop('checked', false);
+                        $('#radio_recategorizacion').prop('checked', false);
+                    }
+                });
+            }
+        });
+        $('input[name="tipo_cambio"]').on('click', function() {
+            if ($(this).data('checked')) {
+                $(this).prop('checked', false);
+                $(this).data('checked', false);
+            } else {
+                $('input[name="tipo_cambio"]').data('checked', false);
+                $(this).data('checked', true);
+            }
+        });
+
+
     });
 
     function cargar_selects() {
+        $('#ddl_estado_laboral').prop('disabled', true);
         url_estado_laboralC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_estado_laboralC.php?buscar=true';
         cargar_select2_url('ddl_estado_laboral', url_estado_laboralC, '', '#modal_estado_laboral');
         url_cargoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_cargoC.php?buscar=true';
@@ -14,6 +44,7 @@
         url_nominaC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_nominaC.php?buscar=true';
         cargar_select2_url('ddl_nomina', url_nominaC, '', '#modal_estado_laboral');
     }
+
 
     function cargar_datos_estado_laboral(id) {
         $.ajax({
@@ -50,6 +81,8 @@
                     selected: true
                 }));
 
+                $('#ddl_estado_laboral').prop('disabled', true);
+
                 // Cargar cargo
                 $('#ddl_cargo').append($('<option>', {
                     value: response[0].id_cargo,
@@ -76,12 +109,18 @@
                 $('#txt_remuneracion').val(response[0].th_est_remuneracion);
                 $('#txt_fecha_contratacion_estado').val(response[0].th_est_fecha_contratacion);
 
-                // Cargar el radio button de tipo de cambio
                 var tipo_cambio = response[0].th_est_check_estado_laboral;
-                if (tipo_cambio == 1) {
-                    $('#radio_recategorizacion').prop('checked', true);
+
+                $('input[name="tipo_cambio"]').prop('checked', false);
+
+                if (tipo_cambio !== "" && tipo_cambio !== null) {
+                    if (tipo_cambio == "RECATEGORIZACION") {
+                        $('#radio_recategorizacion').prop('checked', true);
+                    } else if (tipo_cambio == "DADO_BAJA") {
+                        $('#radio_baja').prop('checked', true);
+                    }
                 } else {
-                    $('#radio_baja').prop('checked', true);
+                    $('input[name="tipo_cambio"]').prop('checked', false);
                 }
 
                 // Verificar si la fecha de salida es NULL, vacía o 01/01/1900
@@ -98,12 +137,28 @@
                 }
 
                 $('#txt_experiencia_estado_id').val(response[0]._id);
-                ocultar_opciones_estado();
+                //ocultar_opciones_estado();
             }
         });
     }
 
     function insertar_editar_estado_laboral() {
+
+        var radioSeleccionado = $('input[name="tipo_cambio"]:checked').val() || null;
+
+        var estado_laboral; // ACTIVO / INACTIVO
+        var tipo_cambio = null; // 1 = recategorización | 0 = baja | null = normal
+
+        var radioSeleccionado = $('input[name="tipo_cambio"]:checked').val() || null;
+
+        var tipo_cambio = null; // valor que irá a BD
+
+        if (radioSeleccionado === 'baja') {
+            tipo_cambio = 'DADO_BAJA';
+        } else if (radioSeleccionado === 'recategorizacion') {
+            tipo_cambio = 'RECATEGORIZACION';
+        }
+
         var ddl_estado_laboral = $('#ddl_estado_laboral').val();
         var ddl_cargo = $('#ddl_cargo').val();
         var ddl_seccion = $('#ddl_seccion').val();
@@ -111,17 +166,15 @@
         var txt_remuneracion = $('#txt_remuneracion').val();
         var txt_fecha_contratacion_estado = $('#txt_fecha_contratacion_estado').val();
 
-        // Obtener el valor del radio button: 1 = RECATEGORIZACIÓN, 0 = DADO DE BAJA
-        var tipo_cambio = $('input[name="tipo_cambio"]:checked').val() === 'recategorizacion' ? 1 : 0;
-
-        // Si el checkbox está marcado, enviar null
         var txt_fecha_salida_estado = $('#cbx_fecha_salida_estado').is(':checked') ? null : $('#txt_fecha_salida_estado').val();
 
         var per_id = '<?= $id_persona ?>';
+        var pos_id = '<?= $id_postulante ?>';
         var txt_experiencia_estado_id = $('#txt_experiencia_estado_id').val();
 
         var parametros_estado_laboral = {
             'per_id': per_id,
+            'pos_id': pos_id,
             'ddl_estado_laboral': ddl_estado_laboral,
             'ddl_cargo': ddl_cargo,
             'ddl_seccion': ddl_seccion,
@@ -152,6 +205,8 @@
                     $('#modal_estado_laboral').modal('hide');
                     cargar_datos_estado_laboral(<?= $id_persona ?>);
                     limpiar_campos_estado_laboral_modal();
+                    cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
+                    cargar_datos_info_adicional(<?= $id_persona ?>);
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
                 }
@@ -159,18 +214,6 @@
         });
     }
 
-    function ocultar_opciones_estado() {
-        var select_opciones_estado = $('#ddl_estado_laboral option:selected').text();
-        $('#txt_fecha_contratacion_estado').prop('disabled', false);
-        $('#txt_fecha_salida_estado').prop('disabled', false);
-
-        if (select_opciones_estado === "Freelancer" || select_opciones_estado === "Autonomo") {
-            $('#txt_fecha_contratacion_estado').prop('disabled', true);
-            $('#txt_fecha_salida_estado').prop('disabled', true);
-            $('#txt_fecha_contratacion_estado').val('');
-            $('#txt_fecha_salida_estado').val('');
-        }
-    }
 
     function abrir_modal_estado_laboral(id) {
         limpiar_campos_estado_laboral_modal();
@@ -230,7 +273,6 @@
         $('#txt_fecha_salida_estado').val('');
         $('#txt_experiencia_estado_id').val('');
         $('#cbx_fecha_salida_estado').prop('checked', false);
-        $('#radio_baja').prop('checked', true);
         $('#txt_fecha_contratacion_estado').prop('disabled', false);
         $('#txt_fecha_salida_estado').prop('disabled', false);
         $('#lbl_titulo_estado_laboral').html('Agregar Estado Laboral');
@@ -245,10 +287,6 @@
 
         // No validar si el checkbox está marcado (indefinido)
         if ($('#cbx_fecha_salida_estado').is(':checked')) {
-            return true;
-        }
-
-        if (estado === "Freelancer" || estado === "Autonomo") {
             return true;
         }
 
@@ -302,7 +340,7 @@
                     <div class="row mb-col">
                         <div class="col-md-6">
                             <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado Laboral:</label>
-                            <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" onchange="ocultar_opciones_estado()" required>
+                            <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" required>
                                 <option selected disabled value="">-- Seleccione un Estado --</option>
                             </select>
                         </div>
@@ -354,7 +392,7 @@
                             <label class="form-label form-label-sm">Tipo de cambio:</label>
                             <div class="d-flex gap-3">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="tipo_cambio" id="radio_baja" value="baja" checked>
+                                    <input class="form-check-input" type="radio" name="tipo_cambio" id="radio_baja" value="baja">
                                     <label class="form-check-label" for="radio_baja">
                                         DADO DE BAJA
                                     </label>

@@ -1,6 +1,10 @@
 <?php
 // Ajusta la ruta según tu estructura de carpetas
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_per_estado_laboralM.php');
+require_once(dirname(__DIR__, 2)  . '/modelo/TALENTO_HUMANO/POSTULANTES/th_pos_experiencia_laboralM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_per_informacion_adicionalM.php');
+
+
 
 $controlador = new th_per_estado_laboralC();
 
@@ -23,10 +27,14 @@ if (isset($_GET['eliminar'])) {
 class th_per_estado_laboralC
 {
     private $modelo;
+    private $th_pos_experiencia_laboral;
+    private $th_per_informacion_adicional;
 
     function __construct()
     {
         $this->modelo = new th_per_estado_laboralM();
+        $this->th_pos_experiencia_laboral = new th_pos_experiencia_laboralM();
+        $this->th_per_informacion_adicional = new th_per_informacion_adicionalM();
     }
 
     function listar($id)
@@ -116,24 +124,87 @@ HTML;
 
     function insertar_editar($parametros)
     {
+
+        $tipo_cambio = null;
+        $ddl_estado_laboral = 1;
+
+
+
+        if (isset($parametros['tipo_cambio']) && $parametros['tipo_cambio'] !== '') {
+            if (in_array($parametros['tipo_cambio'], ['DADO_BAJA', 'RECATEGORIZACION'])) {
+                $tipo_cambio = $parametros['tipo_cambio'];
+            }
+            if ($parametros['tipo_cambio'] === 'baja' || $parametros['tipo_cambio'] === 'DADO_BAJA') {
+                $ddl_estado_laboral = 2;
+            }
+            // Si es RECATEGORIZACIÓN, asignamos 1 (o simplemente se mantiene el default)
+            else if ($parametros['tipo_cambio'] === 'recategorizacion' || $parametros['tipo_cambio'] === 'RECATEGORIZACION') {
+                $ddl_estado_laboral = 1;
+
+                $estado_laboral =  $this->modelo->listar_estado_laboral_por_id($parametros['_id']);
+
+                $datos_estado_laboral = array(
+                    array('campo' => 'th_expl_nombre_empresa', 'dato' => 'TALENTO HUMANO'),
+                    array('campo' => 'th_expl_cargos_ocupados', 'dato' => $estado_laboral[0]['cargo_nombre']),
+                    array('campo' => 'th_expl_fecha_inicio_experiencia', 'dato' => $estado_laboral[0]['th_est_fecha_contratacion']),
+                    array('campo' => 'th_expl_fecha_fin_experiencia', 'dato' => date('Y-m-d H:i:s')),
+                    array('campo' => 'th_expl_cbx_fecha_fin_experiencia', 'dato' => 0),
+                    array('campo' => 'th_expl_responsabilidades_logros', 'dato' => 'Ninguna'),
+                    array('campo' => 'th_expl_sueldo', 'dato' => $estado_laboral[0]['th_est_remuneracion']),
+                    array('campo' => 'th_pos_id', 'dato' => $parametros['pos_id']),
+                );
+                $this->th_pos_experiencia_laboral->insertar($datos_estado_laboral);
+                $tipo_cambio = null;
+
+                $experiencias = $this->th_pos_experiencia_laboral
+                    ->listar_experiencia_laboral_postulante($parametros['pos_id']);
+
+                $resultado = $this->calcular_experiencia_y_remuneracion($experiencias);
+
+                $texto = $resultado['resumen_general']['tiempo_total']['texto'];
+                $promedio = round(
+                    (float)$resultado['resumen_general']['remuneracion_promedio'],
+                    2
+                );
+
+                $encontrado = $this->th_per_informacion_adicional
+                    ->where('th_per_id', $parametros['per_id'])
+                    ->listar();
+
+                $datos_inf = [
+                    ['campo' => 'th_inf_adi_tiempo_trabajo', 'dato' => $texto],
+                    ['campo' => 'th_inf_adi_remuneracion_promedio', 'dato' => $promedio],
+                    ['campo' => 'th_inf_adi_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')],
+                ];
+
+                if (empty($encontrado)) {
+                    $datos_inf[] = ['campo' => 'th_per_id', 'dato' =>  $parametros['per_id']];
+                    $this->th_per_informacion_adicional->insertar($datos_inf);
+                } else {
+                    $whereInf[0]['campo'] = 'th_inf_adi_id';
+                    $whereInf[0]['dato']  = $encontrado[0]['th_inf_adi_id'];
+                    $this->th_per_informacion_adicional->editar($datos_inf, $whereInf);
+                }
+            }
+        }
+
         $datos = array(
             array('campo' => 'th_per_id', 'dato' => $parametros['per_id']),
             array('campo' => 'id_cargo', 'dato' => $parametros['ddl_cargo']),
             array('campo' => 'id_seccion', 'dato' => $parametros['ddl_seccion']),
             array('campo' => 'id_nomina', 'dato' => $parametros['ddl_nomina']),
-            array('campo' => 'id_estado_laboral', 'dato' => $parametros['ddl_estado_laboral']),
+            array('campo' => 'id_estado_laboral', 'dato' => $ddl_estado_laboral),
             array('campo' => 'th_est_remuneracion', 'dato' => $parametros['txt_remuneracion']),
-            array('campo' => 'th_est_check_estado_laboral', 'dato' => $parametros['tipo_cambio']), // Ahora viene del radio button
+            array('campo' => 'th_est_check_estado_laboral', 'dato' =>  $tipo_cambio), // Ahora viene del radio button
             array('campo' => 'th_est_fecha_contratacion', 'dato' => $parametros['txt_fecha_contratacion_estado']),
             array('campo' => 'th_est_fecha_salida', 'dato' => $parametros['txt_fecha_salida_estado']),
         );
 
+
         if ($parametros['_id'] == '') {
-            // INSERTAR
             $datos[] = array('campo' => 'th_est_fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
             $resultado = $this->modelo->insertar($datos);
         } else {
-            // EDITAR
             $datos[] = array('campo' => 'th_est_fecha_modificacion', 'dato' => date('Y-m-d H:i:s'));
             $where[0]['campo'] = 'th_est_id';
             $where[0]['dato'] = $parametros['_id'];
@@ -155,5 +226,77 @@ HTML;
         $resultado = $this->modelo->editar($datos, $where);
 
         return $resultado;
+    }
+
+
+    function calcular_experiencia_y_remuneracion($experiencias)
+    {
+        $detalleEmpresas = [];
+
+        $totalDias = 0;
+        $totalSueldo = 0;
+        $contadorSueldos = 0;
+
+        foreach ($experiencias as $exp) {
+
+            $fechaInicio = new DateTime($exp['th_expl_fecha_inicio_experiencia']);
+
+            if ($exp['th_expl_cbx_fecha_fin_experiencia'] == 1 || empty($exp['th_expl_fecha_fin_experiencia'])) {
+                $fechaFin = new DateTime();
+            } else {
+                $fechaFin = new DateTime($exp['th_expl_fecha_fin_experiencia']);
+            }
+
+            $diff = $fechaInicio->diff($fechaFin);
+
+            $anios = $diff->y;
+            $meses = $diff->m;
+            $dias  = $diff->d;
+
+            $diasTotalesExp = ($anios * 365) + ($meses * 30) + $dias;
+            $totalDias += $diasTotalesExp;
+
+            $sueldo = floatval($exp['th_expl_sueldo']);
+            if ($sueldo > 0) {
+                $totalSueldo += $sueldo;
+                $contadorSueldos++;
+            }
+
+            $detalleEmpresas[] = [
+                'empresa' => $exp['th_expl_nombre_empresa'],
+                'cargo' => $exp['th_expl_cargos_ocupados'],
+                'fecha_inicio' => $exp['th_expl_fecha_inicio_experiencia'],
+                'fecha_fin' => ($exp['th_expl_cbx_fecha_fin_experiencia'] == 1 ? 'ACTUALIDAD' : $exp['th_expl_fecha_fin_experiencia']),
+                'tiempo_trabajado' => [
+                    'anios' => $anios,
+                    'meses' => $meses,
+                    'dias' => $dias,
+                    'texto' => "{$anios} años, {$meses} meses, {$dias} días"
+                ],
+                'sueldo' => $sueldo
+            ];
+        }
+
+        $totalAnios = floor($totalDias / 365);
+        $totalMeses = floor(($totalDias % 365) / 30);
+        $totalDiasFinal = ($totalDias % 365) % 30;
+
+        $remuneracionPromedio = ($contadorSueldos > 0)
+            ? round($totalSueldo / $contadorSueldos, 2)
+            : 0;
+
+        return [
+            'detalle_experiencia' => $detalleEmpresas,
+            'resumen_general' => [
+                'tiempo_total' => [
+                    'anios' => $totalAnios,
+                    'meses' => $totalMeses,
+                    'dias' => $totalDiasFinal,
+                    'texto' => "{$totalAnios} años, {$totalMeses} meses, {$totalDiasFinal} días"
+                ],
+                'total_sueldo' => round($totalSueldo, 2),
+                'remuneracion_promedio' => $remuneracionPromedio
+            ]
+        ];
     }
 }

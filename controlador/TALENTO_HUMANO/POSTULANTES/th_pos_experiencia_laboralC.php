@@ -80,8 +80,6 @@ class th_pos_experiencia_laboralC
 
     function insertar_editar($parametros)
     {
-
-
         $datos = array(
             array('campo' => 'th_expl_nombre_empresa', 'dato' => $parametros['txt_nombre_empresa']),
             array('campo' => 'th_expl_cargos_ocupados', 'dato' => $parametros['txt_cargos_ocupados']),
@@ -93,7 +91,6 @@ class th_pos_experiencia_laboralC
             array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']),
 
         );
-
         if ($parametros['_id'] == '') {
             $datos = $this->modelo->insertar($datos);
         } else {
