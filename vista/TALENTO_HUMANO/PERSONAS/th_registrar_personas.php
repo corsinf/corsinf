@@ -30,8 +30,11 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
 <script src="../js/RECURSOS_HUMANOS/biometria.js"></script>
 
 <script>
-    // Postulante agregar en caso de que no este
+    $(window).on('load', function() {
+        $("#loader-overlay").fadeOut("slow");
+    });
 
+    // Postulante agregar en caso de que no este
     $(document).ready(function() {
         <?php if (isset($_GET['id_postulante'])) { ?>
             recargar_persona_postulante('<?= $id_postulante ?>', '<?= $id_persona ?>');
@@ -276,6 +279,8 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
         }
     });
 </script>
+
+<?php include_once('../vista/GENERAL/sppiner_cargar_pagina.php'); ?>
 
 <div class="page-wrapper">
     <div class="page-content">

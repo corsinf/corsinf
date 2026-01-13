@@ -246,6 +246,11 @@ function texto_minusculas(input) {
     input.value = texto.toLowerCase();
 }
 
+function texto_mayusculas(input) {
+    let texto = input.value;
+    input.value = texto.toUpperCase();
+}
+
 //Para convertir de minutos a hora (HH:mm)
 function minutos_formato_hora(num) {
     if (num < 0) return "00:00";

@@ -190,19 +190,19 @@
                     <div class="row mb-col">
                         <div class="col-md-3">
                             <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Apellido paterno" maxlength="50">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Apellido paterno" maxlength="50" oninput="texto_mayusculas(this);">
                         </div>
                         <div class="col-md-3">
                             <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Apellido materno" maxlength="50">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Apellido materno" maxlength="50" oninput="texto_mayusculas(this);">
                         </div>
                         <div class="col-md-3">
                             <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Primer nombre" maxlength="50">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Primer nombre" maxlength="50" oninput="texto_mayusculas(this);">
                         </div>
                         <div class="col-md-3">
                             <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Segundo nombre" maxlength="50">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Segundo nombre" maxlength="50" oninput="texto_mayusculas(this);">
                         </div>
                     </div>
 
@@ -295,7 +295,7 @@
                 <div class="row mb-col">
                     <div class="col-md-12">
                         <label for="txt_direccion" class="form-label form-label-sm">Dirección Exacta </label>
-                        <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" maxlength="200">
+                        <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" maxlength="200" oninput="texto_mayusculas(this);">
                     </div>
                 </div>
 
@@ -310,18 +310,18 @@
                     </div>
                     <div class="col-md-6">
                         <label for="txt_correo" class="form-label form-label-sm">Correo Institucional </label>
-                        <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" maxlength="100">
+                        <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" maxlength="100" oninput="texto_minusculas(this);">
                     </div>
                 </div>
 
                 <div class="row mb-col">
                     <div class="col-md-6">
                         <label for="txt_per_correo_personal_1" class="form-label form-label-sm">Correo Personal </label>
-                        <input type="email" class="form-control form-control-sm" name="txt_per_correo_personal_1" id="txt_per_correo_personal_1" maxlength="100">
+                        <input type="email" class="form-control form-control-sm" name="txt_per_correo_personal_1" id="txt_per_correo_personal_1" maxlength="100" oninput="texto_minusculas(this);">
                     </div>
                     <div class="col-md-6">
                         <label for="txt_per_correo_personal_2" class="form-label form-label-sm">Correo Personal Alternativo </label>
-                        <input type="email" class="form-control form-control-sm" name="txt_per_correo_personal_2" id="txt_per_correo_personal_2" maxlength="100">
+                        <input type="email" class="form-control form-control-sm" name="txt_per_correo_personal_2" id="txt_per_correo_personal_2" maxlength="100" oninput="texto_minusculas(this);">
                     </div>
                 </div>
             </div>
@@ -330,7 +330,7 @@
         <div class="card mb-4 border-0 shadow-sm">
             <div class="card-body">
                 <label for="txt_observaciones" class="form-label form-label-sm">Observaciones Adicionales </label>
-                <textarea class="form-control form-control-sm" name="txt_observaciones" id="txt_observaciones" rows="2" maxlength="200"></textarea>
+                <textarea class="form-control form-control-sm" name="txt_observaciones" id="txt_observaciones" rows="2" maxlength="200" oninput="texto_mayusculas(this);"></textarea>
             </div>
         </div>
     </div>
