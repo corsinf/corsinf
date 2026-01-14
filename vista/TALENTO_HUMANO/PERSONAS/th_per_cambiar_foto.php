@@ -116,8 +116,8 @@
                                 <img class="rounded-circle p-1 bg-primary" src="../img/sin_imagen.jpg" id="img_persona_inf_modal" alt="Imagen Perfil Persona" width="110" height="110" />
                             </div>
                             <hr />
-                            <input type="file" class="form-control form-control-sm" name="txt_copia_cambiar_foto" id="txt_copia_cambiar_foto_persona" accept=".jpg, .jpeg, .png">
-                            <small class="text-muted text-center">Formatos: JPG, PNG. Máx 2MB</small>
+                            <input type="file" class="form-control form-control-sm" name="txt_copia_cambiar_foto" id="txt_copia_cambiar_foto_persona" accept=".jpg, .jpeg, .png, .webp">
+                            <small class="text-muted text-center">Formatos: JPG, PNG, WEBP Máx 2MB</small>
                         </div>
                     </div>
                 </div>
