@@ -244,29 +244,31 @@ class loginM
 
 	function modulos_sistema()
 	{
-		if($_SESSION['INICIO']['TIPO']=="DBA")
-		{
+		if ($_SESSION['INICIO']['TIPO'] == "DBA") {
+
 			$sql = "SELECT DISTINCT id_modulos as 'id',nombre_modulo,link,icono,esquema   
 			FROM MODULOS_SISTEMA MS
 			INNER JOIN LICENCIAS L ON MS.id_modulos = L.Id_Modulo
 			WHERE estado ='A'";
 
 			// AND DATEDIFF(DAY, GETDATE(), Fecha_exp) >= 0
-		}else
-		{
+		} else {
+
 			$sql = "SELECT DISTINCT(MS.id_modulos) as 'id', MS.nombre_modulo,MS.icono,MS.link,MS.esquema
 			FROM ACCESOS A 
 			INNER JOIN PAGINAS P ON A.id_paginas = P.id_paginas
 			INNER JOIN MODULOS M ON P.id_modulo = M.id_modulo
 			INNER JOIN MODULOS_SISTEMA MS ON M.modulos_sistema = MS.id_modulos
 			INNER JOIN LICENCIAS L ON MS.id_modulos = L.Id_Modulo
-			WHERE id_tipo_usu ='".$_SESSION['INICIO']['PERFIL']."' 
-			AND L.Id_empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."'
+			WHERE id_tipo_usu ='" . $_SESSION['INICIO']['PERFIL'] . "' 
+			AND A.Id_empresa = '" . $_SESSION['INICIO']['ID_EMPRESA'] . "'
+			AND L.Id_empresa = '" . $_SESSION['INICIO']['ID_EMPRESA'] . "'
 			AND subpagina<> 1 
 			AND Ver <> 0 
 			AND editar <> 0 
 			AND eliminar <> 0
 			AND MS.estado = 'A' ";
+
 		}
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
@@ -275,39 +277,41 @@ class loginM
 
 	function modulos_sistema_licencia_activa($modulo)
 	{
-		if($_SESSION['INICIO']['TIPO']=="DBA")
-		{
+		if ($_SESSION['INICIO']['TIPO'] == "DBA") {
+			
 			$sql = "SELECT id_modulos as 'id',nombre_modulo,link,icono,L.Fecha_ini,L.Fecha_exp   
 			FROM MODULOS_SISTEMA MS
 			INNER JOIN LICENCIAS L ON MS.id_modulos = L.Id_Modulo
 			WHERE estado ='A' 
-			AND L.Id_empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."'
-			AND MS.id_modulos = '".$modulo."'
+			AND L.Id_empresa = '" . $_SESSION['INICIO']['ID_EMPRESA'] . "'
+			AND MS.id_modulos = '" . $modulo . "'
 			AND L.registrado = 1
 			AND DATEDIFF(DAY, GETDATE(), Fecha_exp) >= 0";
+
+		} else {
 			
-		}else
-		{
-			$sql = "SELECT DISTINCT(MS.id_modulos) as 'id', MS.nombre_modulo,MS.icono,MS.link,L.Fecha_ini,L.Fecha_exp  
+			$sql = 
+			"SELECT DISTINCT(MS.id_modulos) as 'id', MS.nombre_modulo,MS.icono,MS.link,L.Fecha_ini,L.Fecha_exp  
 			FROM ACCESOS A 
 			INNER JOIN PAGINAS P ON A.id_paginas = P.id_paginas
 			INNER JOIN MODULOS M ON P.id_modulo = M.id_modulo
 			INNER JOIN MODULOS_SISTEMA MS ON M.modulos_sistema = MS.id_modulos
 			INNER JOIN LICENCIAS L ON MS.id_modulos = L.Id_Modulo
-			WHERE id_tipo_usu ='".$_SESSION['INICIO']['PERFIL']."' 
-			AND MS.id_modulos = '".$modulo."'
+			WHERE id_tipo_usu ='" . $_SESSION['INICIO']['PERFIL'] . "' 
+			AND MS.id_modulos = '" . $modulo . "'
 			AND L.registrado = 1
 			AND DATEDIFF(DAY, GETDATE(), Fecha_exp) >= 0
-			AND L.Id_empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."'
+			AND L.Id_empresa = '" . $_SESSION['INICIO']['ID_EMPRESA'] . "'
 			AND subpagina<> 1 
 			AND Ver <> 0 
 			AND editar <> 0 
 			AND eliminar <> 0
 			AND MS.estado = 'A' ";
+
 		}
 		// print_r($sql);
 		// die();
-		$datos = $this->db->datos($sql,1);
+		$datos = $this->db->datos($sql, 1);
 		return $datos;
 	}
 
