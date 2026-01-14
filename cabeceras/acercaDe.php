@@ -1,10 +1,10 @@
 <?php
 $imagen_acerca = '../img/de_sistema/apudata_acerca_de_general.jpg';
-if (($_SESSION['INICIO']['ACERCA_DE']) == '.' || $_SESSION['INICIO']['ACERCA_DE'] == '' || $_SESSION['INICIO']['ACERCA_DE'] == null) {
-    $imagen_acerca;
-} else {
-    $imagen_acerca = $_SESSION['INICIO']['ACERCA_DE'];
-}
+// if (($_SESSION['INICIO']['ACERCA_DE']) == '.' || $_SESSION['INICIO']['ACERCA_DE'] == '' || $_SESSION['INICIO']['ACERCA_DE'] == null) {
+//     $imagen_acerca;
+// } else {
+//     $imagen_acerca = $_SESSION['INICIO']['ACERCA_DE'];
+// }
 
 //print_r($_SESSION['INICIO']);
 ?>
