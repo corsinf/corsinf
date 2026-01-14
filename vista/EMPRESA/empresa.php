@@ -64,9 +64,9 @@
 									<li class="nav-item">
 										<a class="nav-link" data-bs-toggle="pill" href="#menu5">Active Directory</a>
 									</li>
-									<li class="nav-item">
+									<!-- <li class="nav-item">
 										<a class="nav-link" data-bs-toggle="pill" href="#menu6">Idukay</a>
-									</li>
+									</li> -->
 								<?php } ?>
 								</ul>
 
@@ -363,7 +363,7 @@
 
 										</div>
 									</div>
-									<div class="tab-pane container fade" id="menu6">
+									<!-- <div class="tab-pane container fade" id="menu6">
 										<div class="row">
 											<div class="col-sm-6">
 												<b>URL API</b>
@@ -372,9 +372,9 @@
 												<b>Token</b>
 												<div class="input-group mb-3">
 													<input type="password" class="form-control form-control-sm" name="txt_token_idukay" id="txt_token_idukay" >
-													<?php if ($_SESSION['INICIO']['TIPO'] == 'DBA') { ?>
+													<?php // if ($_SESSION['INICIO']['TIPO'] == 'DBA') { ?>
 														<button type="button" class="btn btn-info btn-flat btn-sm" onclick="pass('txt_token_idukay')"><i class="lni lni-eye" id="eye"></i></button>
-													<?php } ?>
+													<?php // } ?>
 												</div>
 
 												<b>Año Lectivo</b>
@@ -393,7 +393,7 @@
 											</div>
 
 										</div>
-									</div>
+									</div> -->
 								</div>
 
 							</div>
