@@ -125,7 +125,7 @@ HTML;
     function insertar_editar($parametros)
     {
 
-        $tipo_cambio = null;
+        $tipo_cambio = "NINGUNO";
         $ddl_estado_laboral = 1;
 
 
@@ -155,7 +155,7 @@ HTML;
                     array('campo' => 'th_pos_id', 'dato' => $parametros['pos_id']),
                 );
                 $this->th_pos_experiencia_laboral->insertar($datos_estado_laboral);
-                $tipo_cambio = null;
+                $tipo_cambio = "NINGUNO";
                 
 
                 $experiencias = $this->th_pos_experiencia_laboral

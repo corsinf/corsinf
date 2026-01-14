@@ -301,9 +301,7 @@
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_sueldo" class="form-label form-label-sm">
-                                Sueldo
-                            </label>
+                            <label for="txt_sueldo" class="form-label form-label-sm">Sueldo </label>
                             <input
                                 type="number"
                                 class="form-control form-control-sm"
@@ -359,8 +357,6 @@
         agregar_asterisco_campo_obligatorio('txt_fecha_inicio_laboral');
         agregar_asterisco_campo_obligatorio('txt_fecha_final_laboral');
         agregar_asterisco_campo_obligatorio('txt_responsabilidades_logros');
-        agregar_asterisco_campo_obligatorio('txt_sueldo');
-        agregar_asterisco_campo_obligatorio('txt_sueldo');
         agregar_asterisco_campo_obligatorio('txt_sueldo');
 
         //! Validación Experiencia Laboral

@@ -109,23 +109,27 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         <div class="row">
                             <div class="col-12">
                                 <div class="card-title">
-                                    <div class="d-flex align-items-end gap-3 flex-wrap" id="btn_nuevo">
 
-                                        <a href="javascript:void(0)"
-                                            class="btn btn-success"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#modal_mensaje_personas">
-                                            <i class="bx bx-envelope me-1"></i> Enviar Mensaje
-                                        </a>
+                                    <div class="row mb-2">
+                                        <div class="col-12">
+                                            <a href="javascript:void(0)"
+                                                class="btn btn-success btn-sm"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modal_mensaje_personas">
+                                                <i class="bx bx-envelope me-1"></i> Enviar Mensaje
+                                            </a>
 
-                                        <button class="btn btn-success"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#modal_mensaje"
-                                            disabled>
-                                            <i class='bx bx-file me-1'></i> Descargar Nómina
-                                        </button>
+                                            <button class="btn btn-success btn-sm"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modal_mensaje"
+                                                disabled>
+                                                <i class='bx bx-file me-1'></i> Descargar Nómina
+                                            </button>
+                                        </div>
+                                    </div>
 
-                                        <div class="d-flex flex-column" style="min-width: 260px;">
+                                    <div class="row">
+                                        <div class="col-md-4">
                                             <label for="ddl_departamentos" class="form-label mb-1">
                                                 Departamentos
                                             </label>
@@ -138,8 +142,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
                                             <label class="error d-none" for="ddl_departamentos"></label>
                                         </div>
-
                                     </div>
+
                                 </div>
                             </div>
 

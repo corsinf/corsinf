@@ -179,7 +179,7 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_placa_original" class="form-label form-label-sm">Placa Original</label>
+                            <label for="txt_placa_original" class="form-label form-label-sm">Placa Original </label>
                             <input type="text"
                                 class="form-control form-control-sm text-uppercase"
                                 name="txt_placa_original"
