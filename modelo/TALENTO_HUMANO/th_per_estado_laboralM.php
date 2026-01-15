@@ -23,7 +23,7 @@ class th_per_estado_laboralM extends BaseModel
         'id_estado_laboral'
     ];
 
-     public function listar_estado_laboral_por_persona($id_persona)
+    public function listar_estado_laboral_por_persona($id_persona)
     {
         $id_persona = intval($id_persona);
         $sql = "
@@ -55,7 +55,7 @@ class th_per_estado_laboralM extends BaseModel
             LEFT JOIN th_cat_estado_laboral est ON el.id_estado_laboral = est.id_estado_laboral
             WHERE el.th_per_id = $id_persona 
             AND el.th_est_estado = 1
-            ORDER BY el.th_est_fecha_contratacion DESC
+           ORDER BY el.th_est_id DESC
         ";
         return $this->db->datos($sql);
     }

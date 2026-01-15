@@ -1,5 +1,7 @@
 <script>
     $(document).ready(function() {
+
+        cargar_datos_dotaciones(<?= $id_persona ?>);
         cargar_selects_dotacion();
 
         $('#ddl_dotacion').on('change', function() {
@@ -10,6 +12,20 @@
         });
 
     });
+
+    function cargar_datos_dotaciones(id) {
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/DOTACIONES/th_per_dotacion_detalleC.php?listar=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#pnl_dotaciones').html(response);
+            }
+        });
+    }
 
 
     function cargar_datos_dotaciones_items(id) {
@@ -302,9 +318,49 @@
             }
         });
     }
+
+
+     function eliminar_dotacion(id) {
+        Swal.fire({
+            title: '¿Eliminar Registro?',
+            text: "¿Está seguro de eliminar este registro?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.value) {
+                eliminar_dotacion_actual(id);
+            }
+        })
+    }
+
+    function eliminar_dotacion_actual(id) {
+        $.ajax({
+            data: {
+                id: id
+            },
+            url: '../controlador/TALENTO_HUMANO/DOTACIONES/th_per_dotacionC.php?eliminar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
+                   cargar_datos_dotaciones(<?= $id_persona ?>);
+                }
+            }
+        });
+    }
+
+    function insertar_editar_dotacion() {
+        $('#modal_estado_laboral').modal('hide');
+        cargar_datos_dotaciones(<?= $id_persona ?>);
+    }
 </script>
 
-<div id="pnl_dotacion"></div>
+<div id="pnl_dotaciones"></div>
 
 <div class="modal" id="modal_dotacion" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -313,10 +369,12 @@
                 <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_dotacion">Agregar Dotación</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_dotacion_modal()"></button>
             </div>
-            <form id="form_dotacion">
-                <input type="hidden" name="txt_dotacion_id" id="txt_dotacion_id">
-                <div class="modal-body">
-                    <!-- Datos Generales -->
+
+            <div class="modal-body">
+                <!-- FORMULARIO 1: Datos Generales -->
+                <form id="form_dotacion">
+                    <input type="hidden" name="txt_dotacion_id" id="txt_dotacion_id">
+
                     <div class="card mb-3">
                         <div class="card-header bg-primary text-white">
                             <strong>Datos Generales</strong>
@@ -324,70 +382,65 @@
                         <div class="card-body">
                             <div class="row mb-col">
                                 <div class="col-md-6">
-                                    <label for="txt_fecha_entrega" class="form-label form-label-sm">Fecha de Entrega </label>
+                                    <label for="txt_fecha_entrega" class="form-label form-label-sm">Fecha de Entrega</label>
                                     <input type="date" class="form-control form-control-sm" name="txt_fecha_entrega" id="txt_fecha_entrega" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="txt_observacion" class="form-label form-label-sm">Observación </label>
+                                    <label for="txt_observacion" class="form-label form-label-sm">Observación</label>
                                     <textarea class="form-control form-control-sm" name="txt_observacion" id="txt_observacion" rows="2"></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
-            </form>
-            <form id="form_dotacion_items">
+                </form>
+                <!-- FIN FORMULARIO 1 -->
 
-                <!-- Agregar Items -->
-                <div class="card mb-3">
-                    <div class="card-header bg-success text-white">
-                        <strong>Agregar Dotación</strong>
-                    </div>
-                    <div class="card-body">
-                        <div class="row mb-3">
-                            <!-- Dotación Principal -->
-                            <div class="col-md-4">
-                                <label for="ddl_dotacion" class="form-label form-label-sm">Dotación</label>
-                                <select class="form-select form-select-sm" id="ddl_dotacion" name="ddl_dotacion">
-                                    <option selected disabled value="">-- Seleccione una Dotación --</option>
-                                </select>
+                <!-- FORMULARIO 2: Items de Dotación -->
+                <form id="form_dotacion_items">
+                    <div class="card mb-3">
+                        <div class="card-header bg-success text-white">
+                            <strong>Agregar Dotación</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="ddl_dotacion" class="form-label form-label-sm">Dotación</label>
+                                    <select class="form-select form-select-sm" id="ddl_dotacion" name="ddl_dotacion">
+                                        <option selected disabled value="">-- Seleccione una Dotación --</option>
+                                    </select>
+                                </div>
                             </div>
 
-                        </div>
-
-                        <!-- Sección Adicionales (Se muestra condicionalmente) -->
-                        <div class="row" id="div_adicionales" style="display: none;">
-                            <div class="col-md-12">
-                                <div class="card border-secondary">
-                                    <div class="card-header bg-light">
-                                        <strong class="text-secondary">Agregar Adicionales</strong>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <!-- Item Adicional -->
-                                            <div class="col-md-4">
-                                                <label for="ddl_dotacion_item" class="form-label form-label-sm">Item Adicional </label>
-                                                <select class="form-select form-select-sm" id="ddl_dotacion_item" name="ddl_dotacion_item">
-                                                    <option selected disabled value="">-- Seleccione un Item --</option>
-                                                </select>
-                                            </div>
-                                            <!-- Talla -->
-                                            <div class="col-md-3">
-                                                <label for="ddl_talla" class="form-label form-label-sm">Talla </label>
-                                                <select class="form-select form-select-sm" id="ddl_talla" name="ddl_talla" disabled>
-                                                    <option selected disabled value="">-- Seleccione una Talla --</option>
-                                                </select>
-                                            </div>
-                                            <!-- Cantidad Adicional -->
-                                            <div class="col-md-2">
-                                                <label for="txt_cantidad_adicional" class="form-label form-label-sm">Cantidad </label>
-                                                <input type="number" class="form-control form-control-sm" id="txt_cantidad_adicional" name="txt_cantidad_adicional" value="1" min="1">
-                                            </div>
-
-                                            <!-- Botón Agregar Adicional -->
-                                            <div class="col-md-3 d-flex align-items-end">
-                                                <button type="button" class="btn btn-success btn-sm w-100" onclick="agregar_dotacion()">
-                                                    <i class="bx bx-plus-circle"></i> Agregar dotación
-                                                </button>
+                            <!-- Sección de adicionales -->
+                            <div class="row" id="div_adicionales" style="display: none;">
+                                <div class="col-md-12">
+                                    <div class="card border-secondary">
+                                        <div class="card-header bg-light">
+                                            <strong class="text-secondary">Agregar Adicionales</strong>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label for="ddl_dotacion_item" class="form-label form-label-sm">Item Adicional</label>
+                                                    <select class="form-select form-select-sm" id="ddl_dotacion_item" name="ddl_dotacion_item">
+                                                        <option selected disabled value="">-- Seleccione un Item --</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="ddl_talla" class="form-label form-label-sm">Talla</label>
+                                                    <select class="form-select form-select-sm" id="ddl_talla" name="ddl_talla" disabled>
+                                                        <option selected disabled value="">-- Seleccione una Talla --</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="txt_cantidad_adicional" class="form-label form-label-sm">Cantidad</label>
+                                                    <input type="number" class="form-control form-control-sm" id="txt_cantidad_adicional" name="txt_cantidad_adicional" value="1" min="1">
+                                                </div>
+                                                <div class="col-md-3 d-flex align-items-end">
+                                                    <button type="button" class="btn btn-success btn-sm w-100" onclick="agregar_dotacion()">
+                                                        <i class="bx bx-plus-circle"></i> Agregar dotación
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -395,46 +448,50 @@
                             </div>
                         </div>
                     </div>
-            </form>
-        </div>
-        <div class="card">
-            <div class="card-header bg-info text-white">
-                <strong>Detalle de Dotación</strong>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-sm table-hover">
-                        <thead class="table-light">
-                            <tr>
-                                <th class="text-center">Item</th>
-                                <th class="text-center">Talla</th>
-                                <th class="text-center">Cantidad</th>
-                                <th class="text-center" style="width: 100px;">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody_detalle_dotacion">
-                            <tr id="mensaje_sin_items">
-                                <td colspan="4" class="text-center text-muted">
-                                    <i class="bx bx-info-circle"></i> No hay items agregados
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                </form>
+                <!-- FIN FORMULARIO 2 -->
+
+                <!-- Tabla de detalle (fuera de los formularios) -->
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <strong>Detalle de Dotación</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-sm table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="text-center">Item</th>
+                                        <th class="text-center">Talla</th>
+                                        <th class="text-center">Cantidad</th>
+                                        <th class="text-center" style="width: 100px;">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_detalle_dotacion">
+                                    <tr id="mensaje_sin_items">
+                                        <td colspan="4" class="text-center text-muted">
+                                            <i class="bx bx-info-circle"></i> No hay items agregados
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="modal-footer d-flex justify-content-center">
-            <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_dotacion" onclick="insertar_editar_dotacion();">
-                <i class="bx bx-save"></i> Agregar
-            </button>
-            <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_dotacion" onclick="delete_datos_dotacion();">
-                <i class="bx bx-trash"></i> Eliminar
-            </button>
+            <!-- FIN MODAL-BODY -->
+
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_dotacion" onclick="insertar_editar_dotacion();">
+                    <i class="bx bx-save"></i> Agregar
+                </button>
+                <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_dotacion" onclick="delete_datos_dotacion();">
+                    <i class="bx bx-trash"></i> Eliminar
+                </button>
+            </div>
         </div>
     </div>
 </div>
-</div>
-
 <script>
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('txt_fecha_entrega');

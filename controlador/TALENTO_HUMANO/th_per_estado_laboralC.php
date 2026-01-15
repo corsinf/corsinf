@@ -40,6 +40,7 @@ class th_per_estado_laboralC
     function listar($id)
     {
         $datos = $this->modelo->listar_estado_laboral_por_persona($id);
+
         $texto = '';
 
         foreach ($datos as $key => $value) {
@@ -47,6 +48,8 @@ class th_per_estado_laboralC
             $cargo = $value['cargo_nombre'] ?? 'N/A';
             $seccion = $value['seccion_descripcion'] ?? 'N/A';
             $nomina = $value['nomina_nombre'] ?? 'N/A';
+            $id_estado_laboral = $value['id_estado_laboral'];
+            $estado_laboral_nombre = $value['th_est_check_estado_laboral'];
 
             // Remuneración formateada
             $remuneracion = !empty($value['th_est_remuneracion'])
@@ -81,9 +84,18 @@ class th_per_estado_laboralC
                     break;
             }
 
+            $boton_editar = '';
+            if ($id_estado_laboral == 2 && $estado_laboral_nombre == "RECATEGORIZACION") {
+            } else {
+                $boton_editar = <<<HTML
+                <button class="btn btn-sm btn-light border icon-hover" title="Editar Registro" onclick="abrir_modal_estado_laboral('{$value['_id']}')">
+                    <i class="bx bx-pencil fs-5 text-dark"></i>
+                </button>
+HTML;
+            }
             $texto .= <<<HTML
        <div class="row mb-col">
-                    <div class="col-10" style="cursor: pointer;" onclick="abrir_modal_estado_laboral('{$value['_id']}')">
+                    <div class="col-10">
                         <div class="mb-2">
                             <span class="badge {$badge_class}">{$estado_laboral}</span>
                         </div>
@@ -98,9 +110,7 @@ class th_per_estado_laboralC
                     </div>
                     
                     <div class="col-2 text-end">
-                        <button class="btn btn-sm btn-light border icon-hover" title="Editar Registro" onclick="abrir_modal_estado_laboral('{$value['_id']}')">
-                            <i class="bx bx-pencil fs-5 text-dark"></i>
-                        </button>
+                        {$boton_editar}
                     </div>
         </div>
 HTML;
@@ -156,7 +166,7 @@ HTML;
                 );
                 $this->th_pos_experiencia_laboral->insertar($datos_estado_laboral);
                 $tipo_cambio = "NINGUNO";
-                
+
 
                 $experiencias = $this->th_pos_experiencia_laboral
                     ->listar_experiencia_laboral_postulante($parametros['pos_id']);
@@ -189,7 +199,8 @@ HTML;
                 }
 
                 $datos_update = array(
-                    array('campo' => 'th_est_estado', 'dato' => 0),
+                    array('campo' => 'th_est_check_estado_laboral', 'dato' => 'RECATEGORIZACION'),
+                    array('campo' => 'id_estado_laboral', 'dato' => 2),
                     array('campo' => 'th_est_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
                 );
 
