@@ -628,16 +628,14 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                                                         <div class="col-6 d-flex align-items-center">
                                                             <h6 class="mb-0 fw-bold text-primary">Información Adicional:</h6>
                                                         </div>
-                                                        <!--
                                                             <div class="col-6 d-flex justify-content-end">
                                                                 <a href="#"
                                                                     class="text-success icon-hover d-flex align-items-center"
-                                                                    onclick="abrir_modal_pariente('');">
+                                                                    onclick="abrir_modal_informacion_adicional('');">
                                                                     <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                     <span>Agregar</span>
                                                                 </a>
                                                             </div>
-                                                            -->
                                                     </div>
                                                 </div>
 
