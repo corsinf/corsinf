@@ -6,6 +6,7 @@
 
 #Ignorario la carpeta REPOSITORIO
 /REPOSITORIO/
+logs/
 
 # Ignorar arhivo para configuraciones
 variables_entorno.php
