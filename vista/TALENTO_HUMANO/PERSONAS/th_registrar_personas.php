@@ -212,7 +212,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
                 asunto: asunto,
                 descripcion: descripcion,
                 per_id: '<?= $id_persona ? $id_persona : '' ?>',
-                personas: 'general'
+                personas: 'nomina'
             };
             enviar_Mail_Persona(parametrosLogCorreos);
             $modal.modal('hide');

@@ -81,6 +81,9 @@ class th_solicitud_permisoC
             ['campo' => 'th_sol_per_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')],
         ];
 
+
+        return;
+
         if (empty($parametros['_id'])) {
             $datos[] = ['campo' => 'th_sol_per_fecha_creacion', 'dato' => date('Y-m-d H:i:s')];
             $datos[] = ['campo' => 'th_sol_per_estado', 'dato' => 1];

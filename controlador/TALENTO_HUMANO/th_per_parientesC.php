@@ -19,6 +19,24 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
 
+
+if (isset($_GET['buscar'])) {
+    $query = '';
+    $th_per_id = '';
+    if (isset($_GET['q'])) {
+        $query = $_GET['q'];
+    }
+    if (isset($_GET['th_per_id'])) {
+        $th_per_id = $_GET['th_per_id'];
+    }
+    $parametros = array(
+        'th_per_id' => $th_per_id,
+        'query' => $query,
+    );
+
+    echo json_encode($controlador->buscar_parientes_persona($parametros));
+}
+
 class th_per_parientesC
 {
     private $modelo;
@@ -173,5 +191,33 @@ class th_per_parientesC
             ['campo' => 'th_ppa_id', 'dato' => $id]
         ];
         return $this->modelo->eliminar($datos);
+    }
+
+    public function buscar_parientes_persona($parametros)
+    {
+        $lista = array();
+
+        // Llamamos al modelo con el ID de la persona y el query de búsqueda
+        $datos = $this->modelo->buscar_familiares_con_parentesco($parametros);
+
+        foreach ($datos as $value) {
+            // Armamos el nombre completo del pariente
+            $nombre_familiar = trim($value['th_ppa_apellidos'] . ' ' . $value['th_ppa_nombres']);
+
+            // Obtenemos la descripción del parentesco
+            $parentesco = $value['parentesco_nombre'];
+
+            // Formato solicitado: Apellidos Nombres - Parentesco
+            $text = $nombre_familiar . ' - ' . $parentesco;
+
+            $lista[] = array(
+                'id'   => $value['id'],
+                'fecha_nacimiento'   => $value['th_ppa_fecha_nacimiento'],
+                'parentesco'   => $parentesco,
+                'text' => $text
+            );
+        }
+
+        return $lista;
     }
 }

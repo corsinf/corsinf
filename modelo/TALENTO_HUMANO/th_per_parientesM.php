@@ -117,4 +117,33 @@ class th_per_parientesM extends BaseModel
 
         $resultado = $this->db->datos($sql);
     }
+
+    public function buscar_familiares_con_parentesco($parametros)
+    {
+        $th_per_id = isset($parametros['th_per_id']) ? intval($parametros['th_per_id']) : 0;
+        $query = isset($parametros['query']) ? trim($parametros['query']) : '';
+
+        $sql = "
+        SELECT 
+            pp.th_ppa_id AS id,
+            pp.th_ppa_nombres,
+            pp.th_ppa_apellidos,
+            pp.th_ppa_fecha_nacimiento,
+            cp.descripcion AS parentesco_nombre
+        FROM th_per_parientes pp
+        INNER JOIN th_cat_parentesco cp ON pp.id_parentesco = cp.id_parentesco
+        WHERE pp.th_per_id = $th_per_id
+          AND pp.th_ppa_estado = 1
+    ";
+
+        // Filtro opcional por si escriben en el ddl_
+        if ($query !== '') {
+            $sql .= " AND (pp.th_ppa_nombres LIKE '%" . addslashes($query) . "%' 
+                   OR pp.th_ppa_apellidos LIKE '%" . addslashes($query) . "%')";
+        }
+
+        $sql .= " ORDER BY pp.th_ppa_apellidos ASC";
+
+        return $this->db->datos($sql);
+    }
 }

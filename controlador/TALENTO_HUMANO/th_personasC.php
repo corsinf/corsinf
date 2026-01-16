@@ -51,6 +51,19 @@ if (isset($_GET['buscar'])) {
 
     echo json_encode($controlador->buscar($parametros));
 }
+if (isset($_GET['busca_persona_nomina'])) {
+    $query = '';
+
+    if (isset($_GET['q'])) {
+        $query = $_GET['q'];
+    }
+
+    $parametros = array(
+        'query' => $query,
+    );
+
+    echo json_encode($controlador->buscar_personas_por_departamento($parametros));
+}
 
 
 if (isset($_GET['buscar_departamento'])) {
@@ -232,7 +245,7 @@ class th_personasC
         }
         return $datos;
     }
-    
+
     function listar_persona_departamento($id = '')
     {
         $datos = $this->personas_departamentos->listar_buscar_persona_departamento($id);
@@ -269,6 +282,32 @@ class th_personasC
         foreach ($datos as $key => $value) {
             $text = $value['th_per_cedula'] . ' - ' . $value['th_per_primer_apellido'] . ' ' . $value['th_per_segundo_apellido'] . ' ' . $value['th_per_primer_nombre'] . ' ' . $value['th_per_segundo_nombre'];
             $lista[] = array('id' => ($value['th_per_id']), 'text' => ($text), /* 'data' => $value */);
+        }
+
+        return $lista;
+    }
+    public function buscar_personas_por_departamento($parametros)
+    {
+        $lista = array();
+
+        // Llamamos al modelo pasándole los parámetros (query e id_departamento)
+        $datos = $this->modelo->buscar_personas_con_departamento_unicamente($parametros);
+
+        foreach ($datos as $value) {
+            // Armamos el texto: Cédula - Apellidos Nombres (Departamento)
+            $nombre_completo = trim($value['th_per_primer_apellido'] . ' ' .
+                $value['th_per_segundo_apellido'] . ' ' .
+                $value['th_per_primer_nombre'] . ' ' .
+                $value['th_per_segundo_nombre']);
+
+            $dep = ($value['th_dep_nombre']) ? ' [' . $value['th_dep_nombre'] . ']' : ' [Sin Depto]';
+
+            $text = $value['th_per_cedula'] . ' - ' . $nombre_completo ;
+
+            $lista[] = array(
+                'id'   => $value['id'],
+                'text' => $text
+            );
         }
 
         return $lista;

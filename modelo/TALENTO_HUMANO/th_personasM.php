@@ -227,7 +227,7 @@ class th_personasM extends BaseModel
         return $this->db->datos($sql);
     }
 
-    function listar_personas_departamentos($id_departamento)
+    function listar_personas_departamentos($id_departamento, $per_id = '')
     {
         $sql =
             "SELECT
@@ -250,10 +250,52 @@ class th_personasM extends BaseModel
         if ($id_departamento != '' && $id_departamento != null) {
             $sql .= " AND per_dep.th_dep_id = '$id_departamento'";
         }
+        if ($per_id != '' && $per_id != null) {
+            $sql .= " AND p.th_per_id = '$per_id'";
+        }
 
         $sql .= ";";
 
         $datos = $this->db->datos($sql);
         return $datos;
     }
+    public function buscar_personas_con_departamento_unicamente($parametros)
+{
+    $query = isset($parametros['query']) ? trim($parametros['query']) : '';
+    $id_dep = isset($parametros['id_departamento']) ? $parametros['id_departamento'] : '';
+
+    $sql = "
+        SELECT DISTINCT 
+            p.th_per_id AS id,
+            p.th_per_cedula,
+            p.th_per_primer_nombre,
+            p.th_per_segundo_nombre,
+            p.th_per_primer_apellido,
+            p.th_per_segundo_apellido,
+            d.th_dep_nombre,
+            d.th_dep_id
+        FROM th_personas p
+        INNER JOIN th_personas_departamentos pd ON p.th_per_id = pd.th_per_id
+        INNER JOIN th_departamentos d ON pd.th_dep_id = d.th_dep_id
+        WHERE p.th_per_estado = 1
+    ";
+
+    // Filtro por ID de departamento específico (opcional)
+    if ($id_dep !== '' && $id_dep !== null) {
+        $sql .= " AND d.th_dep_id = " . intval($id_dep);
+    }
+
+    // Filtro de búsqueda por texto (Cédula o Apellidos)
+    if ($query !== '') {
+        $sql .= " AND (
+            p.th_per_cedula LIKE '%" . addslashes($query) . "%' OR 
+            p.th_per_primer_apellido LIKE '%" . addslashes($query) . "%' OR
+            p.th_per_primer_nombre LIKE '%" . addslashes($query) . "%'
+        )";
+    }
+
+    $sql .= " ORDER BY p.th_per_primer_apellido ASC";
+
+    return $this->db->datos($sql);
+}
 }

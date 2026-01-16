@@ -72,19 +72,17 @@ class th_logs_correosC
     $support       = $_SESSION['INICIO']["EMAIL"] ?? 'soporte@corsinf.com';
     $id_remitente  = $_SESSION['INICIO']["ID_USUARIO"] ?? null;
     
-    $id = $parametros['per_id']; 
+    $id_dep = $parametros['id_dep'] ?? ''; 
+    $per_id = $parametros['per_id']; 
     $loginUrl = 'https://corsinf.com:447/corsinf/login.php';
     $logoUrl  = 'https://corsinf.com:447/corsinf/img/Firmas/banner_2.jpg';
 
-  
-    
     try {
 
         if($parametros['personas'] == 'nomina'){
-           $personas_correos =  $this->personas->listar_personas_departamentos($id);
+           $personas_correos =  $this->personas->listar_personas_departamentos($id_dep , $per_id);
         }else
         {
-            // $personas_correos = $this->personas->listar_personas_correos($id); //No se usa para personas es solo nomina
             $personas_correos = [];
         }
 
