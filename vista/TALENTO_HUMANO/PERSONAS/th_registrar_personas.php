@@ -18,6 +18,10 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
     $redireccionar_vista = 'th_personas_nomina';
 }
 
+if ($_SESSION['INICIO']['TIPO'] == "PERSONAS") {
+    $redireccionar_vista = "th_informacion_personal&id_postulante=$id_postulante&id_persona=$id_persona";
+}
+
 ?>
 
 <script>
