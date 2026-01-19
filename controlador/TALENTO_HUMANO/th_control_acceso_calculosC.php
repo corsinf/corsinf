@@ -411,6 +411,16 @@ class th_control_acceso_calculosC
 
         // Agregar datos filas filtradas según encabezados
         foreach ($datos as $dato) {
+
+            $es_feriado = $dato['es_feriado'] ?? '';
+
+            $regentrada = $dato['regentrada'] ?? '';
+
+            if($es_feriado == "SI" && $regentrada == ""){
+                $regentrada = "FERIADO";
+            }
+
+
             $filas_datos = [
                 $dato['apellidos'],
                 $dato['nombres'],
@@ -424,7 +434,7 @@ class th_control_acceso_calculosC
                 $dato['turno_nombre'],
                 $dato['entrada_hora_inicio_turno'],
                 $dato['entrada_hora_fin_turno'],
-                $dato['regentrada'],
+                $regentrada,
                 $dato['hora_entrada'],
                 $dato['hora_ajustada'],
                 $dato['atrasos'],

@@ -120,7 +120,8 @@ class th_control_acceso_calculosM extends BaseModel
         th_asi_atrasos_minutos AS tiempo_atrasado_str,
         th_asi_minutos_descanso_calculado AS minutos_descanso_calculo,
         th_asi_usa_descanso_formal AS rango_calculado,
-        th_asi_tiempo_post_descanso AS horas_trabajadas
+        th_asi_tiempo_post_descanso AS horas_trabajadas,
+        th_asi_es_feriado AS es_feriado
     FROM 
         th_control_acceso_calculos
     WHERE 
