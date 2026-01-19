@@ -1,14 +1,14 @@
 <script>
     $(document).ready(function() {
-        cargar_datos_aptitudes_tecnicas(<?= $id_postulante ?>);
-        cargar_datos_aptitudes_blandas(<?= $id_postulante ?>);
+        cargar_datos_aptitudes_tecnicas('<?= $id_postulante ?>');
+        cargar_datos_aptitudes_blandas('<?= $id_postulante ?>');
 
     });
 
     function activar_select2() {
 
-        lista_aptitudes_tecnicas_postulante(<?= $id_postulante ?>);
-        lista_aptitudes_blandas_postulante(<?= $id_postulante ?>);
+        lista_aptitudes_tecnicas_postulante('<?= $id_postulante ?>');
+        lista_aptitudes_blandas_postulante('<?= $id_postulante ?>');
 
         $('#ddl_seleccionar_aptitud_blanda').select2({
             placeholder: ' Selecciona una opción',

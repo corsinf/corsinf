@@ -437,6 +437,10 @@ function cargar_select2_url(ddl, url_controlador, placeholder = '-- Seleccione -
 }
 
 function cargar_select2_con_id(ddl, url_controlador, id_seleccionado, texto) {
+    if (id_seleccionado == null || id_seleccionado == '') {
+        return;
+    }
+
     $.ajax({
         data: {
             id: id_seleccionado

@@ -171,7 +171,8 @@
                             <div>
                                 <a href="#" class="d-flex justify-content-center" data-bs-toggle="modal"
                                     data-bs-target="#modal_agregar_cambiar_foto_persona"
-                                    onclick="abrir_modal_cambiar_foto_persona('<?php //echo $id_persona ?>');">
+                                    onclick="abrir_modal_cambiar_foto_persona('<?php //echo $id_persona 
+                                                                                ?>');">
                                     <i class='bx bxs-camera bx-sm'></i>
                                 </a>
                                 <small class="text-muted">Formatos: JPG, PNG. Máx 2MB</small>
@@ -244,25 +245,37 @@
                     <div class="col-md-4">
                         <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad </label>
                         <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
-                            <option selected disabled value="">Seleccione...</option>
+                            <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
                             <option value="Ecuatoriano">Ecuatoriano</option>
                             <option value="Colombiano">Colombiano</option>
+                            <option value="Peruano">Peruano</option>
+                            <option value="Venezolano">Venezolano</option>
+                            <option value="Paraguayo">Paraguayo</option>
                         </select>
                     </div>
                     <div class="col-md-4">
                         <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil </label>
                         <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
-                            <option selected disabled value="">Seleccione...</option>
+                            <option selected disabled value="">-- Selecciona un Estado Civil --</option>
                             <option value="Soltero/a">Soltero/a</option>
                             <option value="Casado/a">Casado/a</option>
+                            <option value="Divorciado/a">Divorciado/a</option>
+                            <option value="Viudo/a">Viudo/a</option>
+                            <option value="Unión de hecho">Unión de hecho</option>
                         </select>
                     </div>
                     <div class="col-md-4">
                         <label for="ddl_tipo_sangre" class="form-label form-label-sm">Tipo Sangre </label>
                         <select class="form-select form-select-sm" id="ddl_tipo_sangre" name="ddl_tipo_sangre">
-                            <option selected disabled value="">Seleccione...</option>
-                            <option value="O+">O+</option>
+                            <option selected disabled value="">-- Selecciona una opción --</option>
                             <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
                         </select>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 <script>
     $(document).ready(function() {
-        cargar_datos_experiencia_laboral(<?= $id_postulante ?>);
+        cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
         // console.log('Cargando experiencia laboral del postulante ID: <?= $id_postulante ?>');
     });
 

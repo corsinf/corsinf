@@ -1,6 +1,6 @@
 <script>
     $(document).ready(function() {
-        cargar_datos_documentos_identidad(<?= $id_postulante ?>);
+        cargar_datos_documentos_identidad('<?= $id_postulante ?>');
     });
 
     //Documentos de Identidad
@@ -95,9 +95,7 @@
                         });
                     } else if (response == 1) {
                         Swal.fire('', 'Operación realizada con éxito.', 'success');
-                        <?php if (isset($_GET['id'])) { ?>
-                            cargar_datos_documentos_identidad(<?= $id_postulante ?>);
-                        <?php } ?>
+                        cargar_datos_documentos_identidad('<?= $id_postulante ?>');
                         limpiar_parametros_documentos_identidad();
                         $('#modal_agregar_documentos_identidad').modal('hide');
                     }

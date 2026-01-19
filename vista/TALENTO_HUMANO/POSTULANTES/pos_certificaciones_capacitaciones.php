@@ -1,6 +1,6 @@
 <script>
     $(document).ready(function() {
-        cargar_datos_certificaciones_capacitaciones(<?= $id_postulante ?>);
+        cargar_datos_certificaciones_capacitaciones('<?= $id_postulante ?>');
     });
 
     //Certificaciones y Capacitaciones
@@ -81,9 +81,7 @@
                         });
                     } else if (response == 1) {
                         Swal.fire('', 'Operación realizada con éxito.', 'success');
-                        <?php if (isset($_GET['id'])) { ?>
-                            cargar_datos_certificaciones_capacitaciones(<?= $id_postulante ?>);
-                        <?php } ?>
+                        cargar_datos_certificaciones_capacitaciones('<?= $id_postulante ?>');
                         limpiar_parametros_certificaciones_capacitaciones();
                         $('#modal_agregar_certificaciones').modal('hide');
                     }

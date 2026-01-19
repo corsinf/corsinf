@@ -1,6 +1,6 @@
 <script>
     $(document).ready(function() {
-        cargar_datos_contratos_trabajos(<?= $id_postulante ?>);
+        cargar_datos_contratos_trabajos('<?= $id_postulante ?>');
     });
 
     //Contratos de Trabajo
@@ -133,9 +133,7 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_contratos_trabajos(<?= $id_postulante ?>);
-                    <?php } ?>
+                    cargar_datos_contratos_trabajos('<?= $id_postulante ?>');
                     limpiar_parametros_contratos_trabajos();
                     $('#modal_agregar_contratos').modal('hide');
                 }

@@ -131,7 +131,7 @@ class th_pos_experiencia_laboralC
         return $datos;
     }
 
-    function eliminar($id, $id_persona , $id_postulante)
+    function eliminar($id, $id_persona, $id_postulante)
     {
         $datos = [
             ['campo' => 'th_expl_estado', 'dato' => 0],

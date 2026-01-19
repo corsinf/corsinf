@@ -1,6 +1,6 @@
 <script>
     $(document).ready(function() {
-        cargar_datos_referencias_laborales(<?= $id_postulante ?>);
+        cargar_datos_referencias_laborales('<?= $id_postulante ?>');
     });
 
     //Formación Académica

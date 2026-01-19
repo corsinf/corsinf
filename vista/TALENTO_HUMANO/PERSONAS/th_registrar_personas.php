@@ -65,8 +65,6 @@ $html_disabled = $es_restringido ? "disabled" : "";
             dataType: 'json',
             success: function(response) {
 
-                console.log("desde aqui:" + response);
-
                 if (response.recargar == 1 && response.id_postulante) {
                     let nueva_Url = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&id_persona=<?= $id_persona ?>&id_postulante=${response.id_postulante}&_origen=nomina&_persona_nomina=true`;
 
@@ -650,20 +648,22 @@ $html_disabled = $es_restringido ? "disabled" : "";
                                                         <div class="col-6 d-flex align-items-center">
                                                             <h6 class="mb-0 fw-bold text-primary">Información Adicional:</h6>
                                                         </div>
-                                                        <div class="col-6 d-flex justify-content-end">
+                                                        <!-- <div class="col-6 d-flex justify-content-end">
                                                             <a href="#"
                                                                 class="text-success icon-hover d-flex align-items-center"
                                                                 onclick="abrir_modal_informacion_adicional('');">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar</span>
                                                             </a>
-                                                        </div>
+                                                        </div> -->
                                                     </div>
                                                 </div>
 
+                                                <h3>Próximamente</h3>
+
                                                 <hr>
 
-                                                <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_informacion_adicional.php'); ?>
+                                                <?php //include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_informacion_adicional.php'); ?>
 
                                             </div>
                                         </div>

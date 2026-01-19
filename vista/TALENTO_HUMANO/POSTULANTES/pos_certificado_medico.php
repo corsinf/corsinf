@@ -1,6 +1,6 @@
 <script>
     $(document).ready(function() {
-        cargar_datos_cerficados_medicos(<?= $id_postulante ?>);
+        cargar_datos_cerficados_medicos('<?= $id_postulante ?>');
     });
 
     //Certificados Médicos

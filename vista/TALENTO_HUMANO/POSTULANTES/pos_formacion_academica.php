@@ -178,6 +178,14 @@
         $('#lbl_titulo_formacion_acedemica').html('Agregar Formación Académica');
         $('#btn_guardar_formacion').html('<i class="bx bx-save"></i>Agregar');
         $('#btn_eliminar_formacion_academica').hide();
+
+        $('#ddl_nivel_academico').val(null).trigger('change');
+        $('#txt_th_fora_registro_senescyt').val('');
+
+        $('.select2-selection').removeClass('is-valid is-invalid');
+        $('.select2-validation').each(function() {
+            $('label.error[for="' + this.id + '"]').hide();
+        });
     }
 
     function validar_fechas_form_acad() {
@@ -197,7 +205,7 @@
                 $('#txt_fecha_final_academico').val('');
                 $('#txt_fecha_inicio_academico').val('');
                 $('#cbx_fecha_final_academico').prop('checked', false);
-                $('$txt_fecha_final_academico').prop('disabled', false);
+                $('#txt_fecha_final_academico').prop('disabled', false);
             }
             if (Date.parse(fecha_inicio) > Date.parse(fecha_actual)) {
                 Swal.fire({
@@ -208,7 +216,7 @@
                 $('.form-control').removeClass('is-valid is-invalid');
                 $('#txt_fecha_inicio_academico').val('');
                 $('#cbx_fecha_final_academico').prop('checked', false);
-                $('$txt_fecha_final_academico').prop('disabled', false);
+                $('#txt_fecha_final_academico').prop('disabled', false);
             }
         }
 
@@ -232,7 +240,7 @@
             $('.form-control').removeClass('is-valid is-invalid');
             $('#txt_fecha_final_academico').val('');
             $('#cbx_fecha_final_academico').prop('checked', false);
-            $('$txt_fecha_final_academico').prop('disabled', false);
+            $('#txt_fecha_final_academico').prop('disabled', false);
         }
     }
 </script>
@@ -264,11 +272,12 @@
                             <label for="ddl_nivel_academico" class="form-label form-label-sm">
                                 Nivel Académico
                             </label>
-                            <select class="form-select form-select-sm mb-2"
+                            <select class="form-select form-select-sm mb-2 select2-validation"
                                 name="ddl_nivel_academico"
                                 id="ddl_nivel_academico">
                                 <option value="">-- Seleccione --</option>
                             </select>
+                            <label class="error" style="display: none;" for="ddl_nivel_academico"></label>
                         </div>
                         <div class="col-md-6">
                             <label for="txt_th_fora_registro_senescyt" class="form-label form-label-sm">
@@ -292,14 +301,14 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_inicio_academico" class="form-label form-label-sm">Fecha Inicio Estudios </label>
-                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_academico" id="txt_fecha_inicio_academico" onchange="checkbox_actualidad_form_acad();">
+                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_academico" id="txt_fecha_inicio_academico" onblur="checkbox_actualidad_form_acad();">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_final_academico" class="form-label form-label-sm">Fecha Finalización Estudios </label>
-                            <input type="date" class="form-control form-control-sm mb-2 no_caracteres" name="txt_fecha_final_academico" id="txt_fecha_final_academico" onchange="checkbox_actualidad_form_acad();">
+                            <input type="date" class="form-control form-control-sm mb-2 no_caracteres" name="txt_fecha_final_academico" id="txt_fecha_final_academico" onblur="checkbox_actualidad_form_acad();">
 
                             <input type="checkbox" class="form-check-input" name="cbx_fecha_final_academico" id="cbx_fecha_final_academico" onchange="checkbox_actualidad_form_acad();">
                             <label for="cbx_fecha_final_academico" class="form-label form-label-sm">Actualidad</label>
@@ -324,6 +333,13 @@
         agregar_asterisco_campo_obligatorio('txt_institucion');
         agregar_asterisco_campo_obligatorio('txt_fecha_inicio_academico');
         agregar_asterisco_campo_obligatorio('txt_fecha_final_academico');
+        agregar_asterisco_campo_obligatorio('ddl_nivel_academico');
+        agregar_asterisco_campo_obligatorio('txt_th_fora_registro_senescyt');
+
+        //Para validar los select2
+        $(".select2-validation").on("select2:select", function(e) {
+            unhighlight_select(this);
+        });
 
         //Validación Formación Académica
         $("#form_formacion_academica").validate({
@@ -338,6 +354,12 @@
                     required: true,
                 },
                 txt_fecha_final_academico: {
+                    required: true,
+                },
+                ddl_nivel_academico: {
+                    required: true,
+                },
+                txt_th_fora_registro_senescyt: {
                     required: true,
                 },
             },
@@ -357,15 +379,37 @@
             },
 
             highlight: function(element) {
-                // Agrega la clase 'is-invalid' al input que falla la validación
-                $(element).addClass('is-invalid');
-                $(element).removeClass('is-valid');
-            },
-            unhighlight: function(element) {
-                // Elimina la clase 'is-invalid' si la validación pasa
-                $(element).removeClass('is-invalid');
-                $(element).addClass('is-valid');
+                let $element = $(element);
 
+                if ($element.hasClass("select2-hidden-accessible")) {
+                    // Elimina la clase 'is-invalid' y agrega 'is-valid' al contenedor correcto de select2
+                    $element.next(".select2-container").find(".select2-selection").removeClass(
+                        "is-valid").addClass("is-invalid");
+                } else if ($element.is(':radio')) {
+                    // Si es un radio button, aplicar la clase al grupo de radios (al contenedor padre si existe)
+                    $('input[name="' + $element.attr("name") + '"]').addClass("is-invalid").removeClass(
+                        "is-valid");
+                } else {
+                    // Elimina la clase 'is-invalid' y agrega 'is-valid' al input normal
+                    $element.removeClass("is-valid").addClass("is-invalid");
+                }
+            },
+
+            unhighlight: function(element) {
+                let $element = $(element);
+
+                if ($element.hasClass("select2-hidden-accessible")) {
+                    // Para Select2, elimina 'is-invalid' y agrega 'is-valid' en el contenedor adecuado
+                    $element.next(".select2-container").find(".select2-selection").removeClass(
+                        "is-invalid").addClass("is-valid");
+                } else if ($element.is(':radio')) {
+                    // Si es un radio button, marcar todo el grupo como válido
+                    $('input[name="' + $element.attr("name") + '"]').removeClass("is-invalid").addClass(
+                        "is-valid");
+                } else {
+                    // Para otros elementos normales
+                    $element.removeClass("is-invalid").addClass("is-valid");
+                }
             }
         });
     });
