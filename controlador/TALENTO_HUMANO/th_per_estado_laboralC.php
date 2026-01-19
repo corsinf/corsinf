@@ -39,6 +39,14 @@ class th_per_estado_laboralC
 
     function listar($id)
     {
+        // ----------------------------------------------------------------
+        // Restricciones
+        // ----------------------------------------------------------------
+        $roles_restringidos = ['PERSONAS', 'POSTULANTES'];
+        $tipo_usuario = strtoupper($_SESSION['INICIO']['TIPO']);
+        $es_restringido = in_array($tipo_usuario, $roles_restringidos);
+        // ----------------------------------------------------------------
+
         $datos = $this->modelo->listar_estado_laboral_por_persona($id);
 
         $texto = '';
@@ -87,33 +95,36 @@ class th_per_estado_laboralC
             $boton_editar = '';
             if ($id_estado_laboral == 2 && $estado_laboral_nombre == "RECATEGORIZACION") {
             } else {
-                $boton_editar = <<<HTML
-                <button class="btn btn-sm btn-light border icon-hover" title="Editar Registro" onclick="abrir_modal_estado_laboral('{$value['_id']}')">
-                    <i class="bx bx-pencil fs-5 text-dark"></i>
-                </button>
-HTML;
+                if (!$es_restringido) {
+                    $boton_editar = <<<HTML
+                                        <button class="btn btn-sm btn-light border icon-hover" title="Editar Registro" onclick="abrir_modal_estado_laboral('{$value['_id']}')">
+                                            <i class="bx bx-pencil fs-5 text-dark"></i>
+                                        </button>
+                                    HTML;
+                }
             }
+
             $texto .= <<<HTML
-       <div class="row mb-col">
-                    <div class="col-10">
-                        <div class="mb-2">
-                            <span class="badge {$badge_class}">{$estado_laboral}</span>
-                        </div>
-                        <p class="mb-1"><strong>Cargo:</strong> {$cargo}</p>
-                        <p class="mb-1"><strong>Sección:</strong> {$seccion}</p>
-                        <p class="mb-1"><strong>Nómina:</strong> {$nomina}</p>
-                        {$remuneracion}
-                        <div class="d-flex gap-3 small text-muted mt-2">
-                            <span><i class="bx bx-calendar"></i> Inicia: {$fecha_contratacion}</span>
-                            <span><i class="bx bx-calendar-x"></i> Fin: {$fecha_salida}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="col-2 text-end">
-                        {$boton_editar}
-                    </div>
-        </div>
-HTML;
+                            <div class="row mb-col">
+                                            <div class="col-10">
+                                                <div class="mb-2">
+                                                    <span class="badge {$badge_class}">{$estado_laboral}</span>
+                                                </div>
+                                                <p class="mb-1"><strong>Cargo:</strong> {$cargo}</p>
+                                                <p class="mb-1"><strong>Sección:</strong> {$seccion}</p>
+                                                <p class="mb-1"><strong>Nómina:</strong> {$nomina}</p>
+                                                {$remuneracion}
+                                                <div class="d-flex gap-3 small text-muted mt-2">
+                                                    <span><i class="bx bx-calendar"></i> Inicia: {$fecha_contratacion}</span>
+                                                    <span><i class="bx bx-calendar-x"></i> Fin: {$fecha_salida}</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-2 text-end">
+                                                {$boton_editar}
+                                            </div>
+                                </div>
+                        HTML;
         }
 
         if (empty($datos)) {

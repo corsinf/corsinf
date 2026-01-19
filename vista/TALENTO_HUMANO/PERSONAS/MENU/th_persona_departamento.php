@@ -79,16 +79,20 @@
             <i class="bx bxs-building"></i> Departamento
         </label>
 
-        <select id="ddl_departamentos" class="form-select form-select-sm">
+        <select id="ddl_departamentos" class="form-select form-select-sm" <?= $html_disabled ?>>
             <option value="">-- Seleccione Departamento --</option>
         </select>
 
-        <button
-            class="btn btn-primary btn-sm px-4 mt-2 d-flex align-items-center"
-            onclick="insertar_persona_departamento();"
-            type="button">
-            <i class="bx bx-save me-1"></i> Guardar
-        </button>
+        <?php if (!$es_restringido): ?>
+            <button
+                class="btn btn-primary btn-sm px-4 mt-2 d-flex align-items-center"
+                onclick="insertar_persona_departamento();"
+                type="button">
+                <i class="bx bx-save me-1"></i> Guardar
+            </button>
+        <?php endif; ?>
+
+
     </div>
     <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/th_persona_departamento_horario.php'); ?>
 </div>

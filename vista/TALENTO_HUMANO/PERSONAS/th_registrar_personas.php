@@ -9,9 +9,9 @@ if (isset($_GET['id_persona'])) {
 }
 
 $id_postulante = '';
+
 if (isset($_GET['id_postulante'])) {
     $id_postulante = $_GET['id_postulante'];
-    $redireccionar_vista = "th_informacion_personal&id_postulante=$id_postulante&id_persona=$id_persona";
 }
 
 if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
@@ -19,10 +19,19 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
 }
 
 if ($_SESSION['INICIO']['TIPO'] == "PERSONAS") {
-    $redireccionar_vista = "th_informacion_personal&id_postulante=$id_postulante&id_persona=$id_persona";
+    $redireccionar_vista = "th_registrar_personas&id_persona=$id_persona&id_postulante=$id_postulante&_origen=nomina&_persona_nomina=true";
 }
 
+$roles_restringidos = ['PERSONAS', 'POSTULANTES'];
+$tipo_usuario = strtoupper($_SESSION['INICIO']['TIPO']);
+$es_restringido = in_array($tipo_usuario, $roles_restringidos);
+
+// Esta variable sirve para CUALQUIER input, select o button
+$html_disabled = $es_restringido ? "disabled" : "";
+
+
 ?>
+
 
 <script>
     //Se lo utiliza para la seccion de biometria
@@ -55,6 +64,8 @@ if ($_SESSION['INICIO']['TIPO'] == "PERSONAS") {
             },
             dataType: 'json',
             success: function(response) {
+
+                console.log("desde aqui:" + response);
 
                 if (response.recargar == 1 && response.id_postulante) {
                     let nueva_Url = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&id_persona=<?= $id_persona ?>&id_postulante=${response.id_postulante}&_origen=nomina&_persona_nomina=true`;
@@ -291,6 +302,7 @@ if ($_SESSION['INICIO']['TIPO'] == "PERSONAS") {
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
             <div class="breadcrumb-title pe-3">Persona</div>
+            <h6></h6>
             <div class="ps-3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
@@ -511,13 +523,17 @@ if ($_SESSION['INICIO']['TIPO'] == "PERSONAS") {
                                                             <h6 class="mb-0 fw-bold text-primary">Estado laboral:</h6>
                                                         </div>
                                                         <div id="pnl_crear_estado_laboral" class="col-6 d-flex justify-content-end">
-                                                            <a href="#"
-                                                                class="text-success icon-hover d-flex align-items-center"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#modal_estado_laboral">
-                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span>Agregar</span>
-                                                            </a>
+
+                                                            <?php if (!$es_restringido): ?>
+                                                                <a href="#"
+                                                                    class="text-success icon-hover d-flex align-items-center"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#modal_estado_laboral">
+                                                                    <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                                                    <span>Agregar</span>
+                                                                </a>
+                                                            <?php endif; ?>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -572,12 +588,14 @@ if ($_SESSION['INICIO']['TIPO'] == "PERSONAS") {
                                                         </div>
 
                                                         <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#"
-                                                                class="text-success icon-hover d-flex align-items-center"
-                                                                onclick="abrir_modal_comision('');">
-                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span>Agregar</span>
-                                                            </a>
+                                                            <?php if (!$es_restringido): ?>
+                                                                <a href="#"
+                                                                    class="text-success icon-hover d-flex align-items-center"
+                                                                    onclick="abrir_modal_comision('');">
+                                                                    <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                                                    <span>Agregar</span>
+                                                                </a>
+                                                            <?php endif; ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -632,14 +650,14 @@ if ($_SESSION['INICIO']['TIPO'] == "PERSONAS") {
                                                         <div class="col-6 d-flex align-items-center">
                                                             <h6 class="mb-0 fw-bold text-primary">Información Adicional:</h6>
                                                         </div>
-                                                            <div class="col-6 d-flex justify-content-end">
-                                                                <a href="#"
-                                                                    class="text-success icon-hover d-flex align-items-center"
-                                                                    onclick="abrir_modal_informacion_adicional('');">
-                                                                    <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                    <span>Agregar</span>
-                                                                </a>
-                                                            </div>
+                                                        <div class="col-6 d-flex justify-content-end">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                onclick="abrir_modal_informacion_adicional('');">
+                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                                                <span>Agregar</span>
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
 

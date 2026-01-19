@@ -84,26 +84,42 @@ class th_per_comisionC
 
     function listar($id)
     {
+        // ----------------------------------------------------------------
+        // Restricciones
+        // ----------------------------------------------------------------
+        $roles_restringidos = ['PERSONAS', 'POSTULANTES'];
+        $tipo_usuario = strtoupper($_SESSION['INICIO']['TIPO']);
+        $es_restringido = in_array($tipo_usuario, $roles_restringidos);
+        // ----------------------------------------------------------------
+
         $datos = $this->modelo->listar_comision_por_persona($id);
         $texto = '';
 
         foreach ($datos as $value) {
 
+            // 1. Definimos el botón antes del bloque de texto
+            $boton_editar = "";
+            if (!$es_restringido) {
+                $boton_editar =
+                    "<button class=\"btn icon-hover\" onclick=\"abrir_modal_comision('{$value['_id']}');\">
+                        <i class=\"bx bx-pencil bx-sm text-dark\"></i>
+                    </button>";
+            }
+
+            // 2. Lo insertamos en el Heredoc
             $texto .= <<<HTML
-                <div class="row mb-col">
-                    <div class="col-10">
-                        <p class="m-0"><strong>Código:</strong> {$value['comision_codigo']}</p>
-                        <p class="m-0"><strong>Comisión:</strong> {$value['comision_nombre']}</p>
-                        <p class="m-0"><strong>Descripción:</strong> {$value['comision_descripcion']}</p>
-                    </div>
-                    <div class="col-2 d-flex justify-content-end">
-                        <button class="btn icon-hover" onclick="abrir_modal_comision('{$value['_id']}');">
-                            <i class="bx bx-pencil bx-sm text-dark"></i>
-                        </button>
-                    </div>
-                </div>
-                <hr>
-            HTML;
+                            <div class="row mb-col">
+                                <div class="col-10">
+                                    <p class="m-0"><strong>Código:</strong> {$value['comision_codigo']}</p>
+                                    <p class="m-0"><strong>Comisión:</strong> {$value['comision_nombre']}</p>
+                                    <p class="m-0"><strong>Descripción:</strong> {$value['comision_descripcion']}</p>
+                                </div>
+                                <div class="col-2 d-flex justify-content-end">
+                                    {$boton_editar}
+                                </div>
+                            </div>
+                            <hr>
+                        HTML;
         }
 
         if (empty($datos)) {

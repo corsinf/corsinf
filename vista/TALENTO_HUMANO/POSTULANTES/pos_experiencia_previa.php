@@ -152,8 +152,8 @@
         $.ajax({
             data: {
                 id: id,
-                id_persona: <?= $id_persona ?>,
-                id_postulante: <?= $id_postulante ?>
+                id_persona: '<?= $id_persona ?>',
+                id_postulante: '<?= $id_postulante ?>'
             },
             url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_experiencia_laboralC.php?eliminar=true',
             type: 'post',
