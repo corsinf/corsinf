@@ -6,22 +6,16 @@ require_once(dirname(__DIR__, 1) . '/calculo_control_acceso.php');
 require_once(dirname(__DIR__, 3) . '/variables_entorno.php');
 
 // Crear una instancia de la clase y llamar al método
-$proceso = new calculo_persona(ENV_DEV_TH_USUARIO, ENV_DEV_TH_PASSWORD, ENV_DEV_TH_SERVIDOR, ENV_DEV_TH_DATABASE, ENV_DEV_TH_PUERTO);
+$proceso = new calculo_persona(ENV_SAINT_USUARIO, ENV_SAINT_PASSWORD, ENV_SAINT_SERVIDOR, ENV_SAINT_DATABASE, ENV_SAINT_PUERTO);
 
 $fecha_actual = date("Y-m-d");
-$fecha_actual = '2026-01-16';
+// $fecha_actual = '2025-08-07';
 
-// $parametros = $proceso->calculo_persona_control_acceso(1, '2026-01-16');
-// exit();
+// $parametros = $proceso->calculo_persona_control_acceso(2000, '2025-06-27');
 
-//Funcion para guardar de fora masiva
-guardar_log('[INF] Inicio Inserción Masiva ', ENV_DEV_TH_DATABASE);
+guardar_log('[INF] Inicio Inserción Masiva ', ENV_SAINT_DATABASE);
 $parametros = $proceso->carga_masiva($fecha_actual);
-guardar_log($parametros, ENV_DEV_TH_DATABASE);
-
-//Para realizar pruebas individuales
-// $parametros = $proceso->calculo_persona_control_acceso(60, $fecha_actual, true);
-
+guardar_log($parametros, ENV_SAINT_DATABASE);
 
 print_r($parametros);
 exit();

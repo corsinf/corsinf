@@ -93,10 +93,10 @@ class calculo_persona
                     dep.th_dep_nombre,
                     CASE WHEN pro.th_per_id IS NOT NULL THEN 0 ELSE 1 END AS prioridad
                 FROM
-                    _talentoh.th_programar_horarios pro
-                    JOIN _talentoh.th_horarios hor ON hor.th_hor_id = pro.th_hor_id
-                    JOIN _talentoh.th_turnos_horario tur_hor ON tur_hor.th_hor_id = hor.th_hor_id
-                    JOIN _talentoh.th_turnos tur ON tur.th_tur_id = tur_hor.th_tur_id
+                    _asistencias.th_programar_horarios pro
+                    JOIN _asistencias.th_horarios hor ON hor.th_hor_id = pro.th_hor_id
+                    JOIN _asistencias.th_turnos_horario tur_hor ON tur_hor.th_hor_id = hor.th_hor_id
+                    JOIN _asistencias.th_turnos tur ON tur.th_tur_id = tur_hor.th_tur_id
                     LEFT JOIN _talentoh.th_departamentos dep ON dep.th_dep_id = pro.th_dep_id
                 WHERE
                     pro.th_pro_estado = 1
@@ -123,9 +123,9 @@ class calculo_persona
                 pro.pro_fecha_fin
             FROM
                 prog pro
-                JOIN _talentoh.th_horarios hor ON hor.th_hor_id = pro.th_hor_id
-                JOIN _talentoh.th_turnos_horario tur_hor ON tur_hor.th_hor_id = hor.th_hor_id
-                JOIN _talentoh.th_turnos tur ON tur.th_tur_id = tur_hor.th_tur_id
+                JOIN _asistencias.th_horarios hor ON hor.th_hor_id = pro.th_hor_id
+                JOIN _asistencias.th_turnos_horario tur_hor ON tur_hor.th_hor_id = hor.th_hor_id
+                JOIN _asistencias.th_turnos tur ON tur.th_tur_id = tur_hor.th_tur_id
             ORDER BY
                 pro.prioridad;
             ";
@@ -145,8 +145,8 @@ class calculo_persona
                     WHEN jus.th_per_id IS NOT NULL THEN 0
                     ELSE 1
                 END AS prioridad
-            FROM _talentoh.th_justificaciones jus
-            JOIN _talentoh.th_cat_tipo_justificacion tipo ON tipo.th_tip_jus_id = jus.th_tip_jus_id
+            FROM _asistencias.th_justificaciones jus
+            JOIN _asistencias.th_cat_tipo_justificacion tipo ON tipo.th_tip_jus_id = jus.th_tip_jus_id
             WHERE jus.th_jus_estado = 1
               AND CAST('$fecha' AS DATE)
                   BETWEEN CAST(jus.th_jus_fecha_inicio AS DATE)
@@ -191,7 +191,7 @@ class calculo_persona
             "SELECT TOP 1
             th_acc_fecha_hora
         FROM
-            _talentoh.th_control_acceso
+            _asistencias.th_control_acceso
         WHERE
             th_per_id = $th_per_id
             AND th_acc_fecha_hora BETWEEN '$inicio' AND '$fin'
@@ -249,7 +249,7 @@ class calculo_persona
 
         $sql =
             "SELECT TOP 1 th_acc_fecha_hora
-            FROM _talentoh.th_control_acceso
+            FROM _asistencias.th_control_acceso
             WHERE
                 th_per_id = $th_per_id
                 AND CAST(th_acc_fecha_hora AS DATE) = '$fecha'
@@ -298,10 +298,10 @@ class calculo_persona
         WHERE per.th_per_estado = 1
         AND EXISTS (
             SELECT 1
-            FROM _talentoh.th_programar_horarios pro
-            JOIN _talentoh.th_horarios hor ON hor.th_hor_id = pro.th_hor_id
-            JOIN _talentoh.th_turnos_horario tur_hor ON tur_hor.th_hor_id = hor.th_hor_id
-            JOIN _talentoh.th_turnos tur ON tur.th_tur_id = tur_hor.th_tur_id
+            FROM _asistencias.th_programar_horarios pro
+            JOIN _asistencias.th_horarios hor ON hor.th_hor_id = pro.th_hor_id
+            JOIN _asistencias.th_turnos_horario tur_hor ON tur_hor.th_hor_id = hor.th_hor_id
+            JOIN _asistencias.th_turnos tur ON tur.th_tur_id = tur_hor.th_tur_id
             WHERE pro.th_pro_estado = 1
             AND (
                 (pro.th_per_id = per.th_per_id)
@@ -324,7 +324,7 @@ class calculo_persona
     {
         $sql =
             "SELECT 1
-        FROM _talentoh.th_control_acceso_calculos
+        FROM _asistencias.th_control_acceso_calculos
         WHERE th_asi_empleado = $th_per_id
         AND th_asi_fecha = '$fecha';";
 
@@ -338,7 +338,7 @@ class calculo_persona
             "SELECT CASE 
             WHEN EXISTS (
                 SELECT 1
-                FROM _talentoh.th_feriados
+                FROM _asistencias.th_feriados
                 WHERE
                     th_fer_estado = 1 AND
                     CAST('$fecha' AS DATE) BETWEEN 
@@ -482,6 +482,8 @@ class calculo_persona
         //Salida de analisis
         $atrasado = '';
         $ausente = '';
+        $minutos_atraso = 0;
+        $tiempo_atraso_str = '00:00';
 
         $hora_original = '';
         $hora_entrada_dt = '';
@@ -517,12 +519,23 @@ class calculo_persona
 
             // Determinar si está atrasado
             // Atrasado si la marcación original es después de la hora de entrada
-
+            $atrasado = 'NO';
+            // Comparamos los objetos DateTime
             if ($entrada_marcacion > $hora_entrada_dt) {
                 $atrasado = 'SI';
-            } else {
-                $atrasado = 'NO';
+
+                // Calculamos la diferencia
+                $intervalo = $hora_entrada_dt->diff($entrada_marcacion);
+
+                // Convertimos la diferencia total a minutos
+                $minutos_atraso = ($intervalo->days * 24 * 60) + ($intervalo->h * 60) + $intervalo->i;
+
+                // Formateamos a HH:MM
+                $tiempo_atraso_str = $intervalo->format('%H:%I');
             }
+
+            // echo "Estado: $atrasado | Minutos: $minutos_atraso | Tiempo: $tiempo_atraso_str";
+            // exit();
 
             // Formatear la hora ajustada
 
@@ -647,6 +660,7 @@ class calculo_persona
         $justificacion_arr = $this->validar_justificacion($th_per_id, $fecha);
 
         // print_r($justificacion_arr);
+        // exit();
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -739,6 +753,8 @@ class calculo_persona
             echo "hora_fin_descanso: " . $resultado_descanso['hora_fin_descanso'] . "<br>";
             echo "minutos_descanso: " . $resultado_descanso['minutos_descanso'] . "<br>";
             echo "modo_descanso: " . $resultado_descanso['modo_descanso'] . "<br>";
+            echo  'Es descanso simple ' . ($resultado_descanso['modo_descanso'] == "FIJO" ? "SI" : "NO") . "<br>";
+            echo  'Hora descanso turno ' . ($resultado_descanso['minutos_descanso_turno'] ?? '') . "<br>";
 
             echo "<br>";
             echo "<strong>Resultado de Justificación:</strong><br>";
@@ -751,6 +767,7 @@ class calculo_persona
             // echo "Minutos Justificados: " . $justificacion_arr['minutos_justificados'] . "<br>";
             echo "¿Es Rango?: " . ($justificacion_arr['es_rango'] ? 'Sí' : 'No') . "<br>";
             echo "Asignado a: " . ($justificacion_arr['tipo_asignacion'] ?? 'N/A') . "<br>";
+            echo "Asi dia justificado: " . ($justificacion_arr['justificado'] ?? 'N/A') . "<br>";
 
             echo "<br>";
             echo "<strong>Horas de trabajo: </strong><br>";
@@ -770,6 +787,10 @@ class calculo_persona
 
             echo "¿Trabajó en feriado?: " . $horas_trabajadas_arr['trabajo_en_feriado'] . "<br>";
             echo "¿Trabajó con justificación?: " . $horas_trabajadas_arr['trabajo_con_justificacion'] . "<br>";
+
+
+            echo  'Atrasos min ' . ($minutos_atraso) . "<br>";
+            echo  'Atrasos min str ' . ($tiempo_atraso_str) . "<br>";
 
             echo "<br>";
             echo "<strong>Horas de extra: </strong><br>";
@@ -824,14 +845,17 @@ class calculo_persona
             'th_asi_horas_faltantes' => $horas_trabajadas_arr['horas_faltantes'] ?? 0,
 
             // Descanso
-            'th_asi_usa_descanso_formal' => ($resultado_descanso['modo_descanso'] == 'FORMAL' ? 1 : 0),
+            'th_asi_usa_descanso_formal' => ($resultado_descanso['modo_descanso'] ?? ''),
             'th_asi_descanso_inicio' => $resultado_descanso['hora_inicio_descanso'] ?? '',
             'th_asi_descanso_fin' => $resultado_descanso['hora_fin_descanso'] ?? '',
             'th_asi_minutos_descanso_simple' => $resultado_descanso['minutos_descanso'] ?? 0,
-            'th_asi_descanso_simple' => ($resultado_descanso['modo_descanso'] == 'SIMPLE' ? 1 : 0),
+            'th_asi_descanso_simple' => ($resultado_descanso['modo_descanso']  == "FIJO" ? "SI" : "NO"),
+            'th_asi_atrasos_calculo' => ($minutos_atraso),
+            'th_asi_atrasos_minutos' => ($tiempo_atraso_str),
+
 
             // Justificación
-            'th_asi_dia_justificado' => ($justificacion_arr['justificado'] ? 'SI' : 'NO'),
+            'th_asi_dia_justificado' => ($justificacion_arr['justificado'] ?? 'N/A'),
             'th_asi_motivo_justificacion' => $justificacion_arr['justificacion'] ?? '',
             'th_asi_inicio_justificacion' => $justificacion_arr['fecha_inicio'] ?? '',
             'th_asi_fin_justificacion' => $justificacion_arr['fecha_fin'] ?? '',
@@ -887,8 +911,14 @@ class calculo_persona
         $tipo_justificacion = 'NINGUNA';
         $min_finales = 0;
         $trabajo_en_feriado = 'NO';
-        $trabajo_con_justificacion = 'NO';
+        $trabajo_con_justificacion = 'SI'; // Se asume NO y cambia si aplica
         $horas_trabajadas_reales = '00:00';
+
+        // 1. Convertir minutos de descanso (Viene como HH:MM desde la otra función)
+        $str_descanso = $resultado_descanso['minutos_descanso'] ?? '00:00';
+        $partes_descanso = explode(':', $str_descanso);
+        $min_descanso_total = ($partes_descanso[0] * 60) + $partes_descanso[1];
+        $modo_descanso = $resultado_descanso['modo_descanso'] ?? 'NINGUNO';
 
         if ($hay_marcacion) {
             $dt_entrada = new DateTime($hora_entrada_completa);
@@ -898,8 +928,10 @@ class calculo_persona
             $segundos_trabajados = $dt_salida->getTimestamp() - $dt_entrada->getTimestamp();
             $min_entrada_salida = max(0, floor($segundos_trabajados / 60));
 
-            $min_descanso = isset($resultado_descanso['minutos_descanso']) ? (int)$resultado_descanso['minutos_descanso'] : 0;
-            $min_post_descanso = max(0, $min_entrada_salida - $min_descanso);
+            // --- LÓGICA DE DESCANSO MEJORADA ---
+            // Si es FIJO, se resta siempre. 
+            // Si es RANGO, la función previa ya calculó cuánto se tomó o el valor por defecto.
+            $min_post_descanso = max(0, $min_entrada_salida - $min_descanso_total);
 
             $horas_trabajadas_reales = $this->minutos_a_horas_mm($min_post_descanso);
             $min_finales = $min_post_descanso;
@@ -915,16 +947,18 @@ class calculo_persona
                 } else {
                     $min_finales += $min_justificados;
                 }
+            } else {
+                $trabajo_con_justificacion = 'NO';
             }
 
             // Feriado con marcación
-            if ($es_feriado['es_feriado'] == 1) {
+            if (isset($es_feriado['es_feriado']) && $es_feriado['es_feriado'] == 1) {
                 $tipo_justificacion = 'FERIADO';
                 $trabajo_en_feriado = 'SI';
-                // Aquí NO se fuerza jornada mínima, se mantiene lo que trabajó
             }
         } else {
-            // No hay marcaciones, validar justificación
+            // No hay marcaciones
+            $trabajo_con_justificacion = 'NO';
             if (!empty($justificacion_arr) && $justificacion_arr['justificado'] === 'SI') {
                 $min_justificados = (int)$justificacion_arr['minutos_justificados'];
                 $tipo_justificacion = $justificacion_arr['tipo_justificacion'];
@@ -937,76 +971,32 @@ class calculo_persona
                 }
             }
 
-            // No marcación, pero es feriado
-            if ($es_feriado['es_feriado'] == 1) {
+            if (isset($es_feriado['es_feriado']) && $es_feriado['es_feriado'] == 1) {
                 $tipo_justificacion = 'FERIADO';
                 $min_finales = max($min_finales, $horas_trabajo_min);
             }
         }
 
-        $horas_trabajo_hora = $this->minutos_a_horas_mm($horas_trabajo_min);
-
+        // Cálculos finales
         $min_faltantes = max(0, $horas_trabajo_min - $min_finales);
-        $horas_faltantes = $this->minutos_a_horas_mm($min_faltantes);
-
-        // Formatos finales
-        $tiempo_entrada_salida     = $this->minutos_a_horas_mm($min_entrada_salida);
-        $tiempo_post_descanso      = $this->minutos_a_horas_mm($min_post_descanso);
-        $tiempo_post_justificacion = $this->minutos_a_horas_mm($min_finales);
-        $horas_excedentes          = $this->minutos_a_horas_mm(max(0, $min_finales - $horas_trabajo_min));
-        $cumple                    = $min_finales >= $horas_trabajo_min ? 'SI' : 'NO';
 
         return [
-            'tiempo_entrada_salida'     => $tiempo_entrada_salida,
-            'tiempo_post_descanso'      => $tiempo_post_descanso,
-            'tiempo_post_justificacion' => $tiempo_post_justificacion,
-            'horas_trabajadas'          => $tiempo_post_justificacion,
+            'tiempo_entrada_salida'     => $this->minutos_a_horas_mm($min_entrada_salida),
+            'tiempo_post_descanso'      => $this->minutos_a_horas_mm($min_post_descanso),
+            'tiempo_post_justificacion' => $this->minutos_a_horas_mm($min_finales),
+            'horas_trabajadas'          => $this->minutos_a_horas_mm($min_finales),
             'horas_trabajadas_reales'   => $horas_trabajadas_reales,
-            'horas_excedentes'          => $horas_excedentes,
-            'horas_faltantes'           => $horas_faltantes,
-            'cumple_horas_trabajadas'   => $cumple,
+            'horas_excedentes'          => $this->minutos_a_horas_mm(max(0, $min_finales - $horas_trabajo_min)),
+            'horas_faltantes'           => $this->minutos_a_horas_mm($min_faltantes),
+            'cumple_horas_trabajadas'   => $min_finales >= $horas_trabajo_min ? 'SI' : 'NO',
             'tipo_justificacion'        => $tipo_justificacion,
-            'minutos_descanso'          => $min_descanso ?? 0,
+            'minutos_descanso'          => $min_descanso_total,
+            'modo_descanso'             => $modo_descanso,
             'minutos_justificados'      => $min_justificados,
-            'es_feriado'                => $es_feriado['es_feriado'],
+            'es_feriado'                => $es_feriado['es_feriado'] ?? 0,
             'trabajo_en_feriado'        => $trabajo_en_feriado,
             'trabajo_con_justificacion' => $trabajo_con_justificacion,
-            'horas_trabajo_hora'        => $horas_trabajo_hora,
-        ];
-    }
-
-    //No se usa
-    function calcular_horas_trabajadas_2($horas_trabajo_min, $hora_entrada_completa, $hora_salida_completa)
-    {
-        // Crear objetos DateTime
-        $dt_entrada = new DateTime($hora_entrada_completa);
-        $dt_salida = new DateTime($hora_salida_completa);
-
-        // Si la salida es antes que la entrada, sumar un día
-        if ($dt_salida < $dt_entrada) {
-            $dt_salida->modify('+1 day');
-        }
-
-        // Calcular diferencia en segundos
-        $segundos_trabajados = $dt_salida->getTimestamp() - $dt_entrada->getTimestamp();
-        $minutos_trabajados = floor($segundos_trabajados / 60);
-
-        // Convertir a HH:MM
-        $horas = floor($minutos_trabajados / 60);
-        $minutos = $minutos_trabajados % 60;
-        $horas_trabajadas = str_pad($horas, 2, '0', STR_PAD_LEFT) . ':' . str_pad($minutos, 2, '0', STR_PAD_LEFT);
-
-        // Evaluar si cumple la jornada mínima
-        $cumple = $minutos_trabajados >= $horas_trabajo_min ? 'SI' : 'NO';
-
-        // Calcular excedente
-        $excedente_minutos = max(0, $minutos_trabajados - $horas_trabajo_min);
-        $horas_excedentes = str_pad(floor($excedente_minutos / 60), 2, '0', STR_PAD_LEFT) . ':' . str_pad($excedente_minutos % 60, 2, '0', STR_PAD_LEFT);
-
-        return [
-            'horas_trabajadas' => $horas_trabajadas,
-            'horas_excedentes' => $horas_excedentes,
-            'cumple_horas_trabajadas' => $cumple
+            'horas_trabajo_hora'        => $this->minutos_a_horas_mm($horas_trabajo_min),
         ];
     }
 
@@ -1026,72 +1016,122 @@ class calculo_persona
     ) {
         $salida_descanso = null;
         $regreso_descanso = null;
-
         $minutos_descanso = 0;
         $modo = 'NINGUNO';
 
-        // Caso 1: descanso fijo
+        // 1. Caso: Descanso Fijo (No usa marcaciones, descuenta lo que dice el turno)
         if ($descanso == 1 && $usar_descanso == 0) {
             $minutos_descanso = $hora_descanso;
             $modo = 'FIJO';
         }
 
-        // Caso 2: descanso por rango con marcaciones
+        // 2. Caso: Descanso por Marcaciones (Rango)
         if ($usar_descanso == 1) {
             $modo = 'RANGO';
-
             $fecha_base = new DateTime($fecha . ' 00:00:00');
 
-            $inicio_teorico = clone $fecha_base;
-            $inicio_teorico->modify("+$descanso_inicio minutes");
+            $inicio_busqueda = clone $fecha_base;
+            $inicio_busqueda->modify("+$descanso_inicio minutes");
+            $inicio_busqueda->modify("-$tolerancia_inicio minutes");
 
-            $fin_teorico = clone $fecha_base;
-            $fin_teorico->modify("+$descanso_fin minutes");
+            $fin_busqueda = clone $fecha_base;
+            $fin_busqueda->modify("+$descanso_fin minutes");
+            $fin_busqueda->modify("+$tolerancia_fin minutes");
 
-            $inicio_rango = clone $inicio_teorico;
-            $inicio_rango->modify("-$tolerancia_inicio minutes");
+            $inicio_str = $inicio_busqueda->format('Y-m-d H:i:s');
+            $fin_str = $fin_busqueda->format('Y-m-d H:i:s');
 
-            $fin_rango = clone $fin_teorico;
-            $fin_rango->modify("+$tolerancia_fin minutes");
+            $marcacion_inicio = $this->obtener_marcacion_especifica($th_per_id, $inicio_str, $fin_str, 'ASC');
 
-            $inicio_rango_str = $inicio_rango->format('Y-m-d H:i:s');
-            $fin_rango_str = $fin_rango->format('Y-m-d H:i:s');
-
-            // Obtener marcaciones reales dentro del rango
-            $marcacion_inicio = $this->obtener_registro_entrada($th_per_id, $inicio_rango_str, $fin_rango_str);
-            $marcacion_fin = $this->obtener_registro_salida($th_per_id, $inicio_rango_str, null, null, $fin_hora_turno_entrada);
-
-            if (!empty($marcacion_inicio) && !empty($marcacion_fin)) {
+            if (!empty($marcacion_inicio)) {
                 $salida_descanso = new DateTime($marcacion_inicio[0]['th_acc_fecha_hora']);
-                $regreso_descanso = new DateTime($marcacion_fin[0]['th_acc_fecha_hora']);
+                $marcacion_fin = $this->obtener_ultimo_regreso_descanso($th_per_id, $salida_descanso->format('Y-m-d H:i:s'), $fin_str, $hora_salida_str);
 
-                // Verificar que el descanso esté dentro de la jornada (entre entrada y salida reales)
-                $hora_entrada = new DateTime($hora_ajustada_str);
-                $hora_salida = new DateTime($hora_salida_str);
+                if (!empty($marcacion_fin)) {
+                    $regreso_descanso = new DateTime($marcacion_fin[0]['th_acc_fecha_hora']);
 
-                if ($salida_descanso > $hora_entrada && $regreso_descanso < $hora_salida) {
-                    $minutos_descanso = floor(($regreso_descanso->getTimestamp() - $salida_descanso->getTimestamp()) / 60);
+                    $diff_segundos = $regreso_descanso->getTimestamp() - $salida_descanso->getTimestamp();
+                    $diff_minutos = floor($diff_segundos / 60);
+
+                    // FILTRO DE 10 MINUTOS
+                    if ($diff_minutos <= 10) {
+                        $regreso_descanso = null;
+                        $minutos_descanso = $hora_descanso; // No marcó bien, descontamos el de ley
+                        $modo = 'RANGO_INVALIDO_TIEMPO_CORTO';
+                    } else {
+                        $dt_entrada_j = new DateTime($hora_ajustada_str);
+                        $dt_salida_j = new DateTime($hora_salida_str);
+
+                        if ($salida_descanso >= $dt_entrada_j && $regreso_descanso < $dt_salida_j) {
+                            $minutos_descanso = $diff_minutos;
+                        } else {
+                            $modo = 'RANGO_FUERA_JORNADA';
+                            $minutos_descanso = $hora_descanso; // Fuera de rango, aplicamos el de ley
+                        }
+                    }
                 } else {
-                    $modo = 'RANGO_FUERA_JORNADA';
+                    $modo = 'RANGO_INCOMPLETO';
+                    $minutos_descanso = $hora_descanso; // Solo marcó salida, aplicamos el de ley
                 }
             } else {
-                $modo = 'RANGO_INCOMPLETO';
-                $minutos_descanso = $hora_descanso;
+                $modo = 'RANGO_NO_DETECTADO';
+                $minutos_descanso = $hora_descanso; // No marcó nada, aplicamos el de ley
             }
         }
 
-        // Convertir a HH:MM con DateTime
-        $base = new DateTime('00:00');
-        $intervalo_descanso = new DateInterval("PT{$minutos_descanso}M");
-        $base->add($intervalo_descanso);
-        $horas_descanso = $base->format('H:i');
-
         return [
-            'minutos_descanso' => $horas_descanso,
-            'modo_descanso' => $modo,
-            'hora_inicio_descanso' => $salida_descanso ? $salida_descanso->format('H:i:s') : '0',
-            'hora_fin_descanso' => $regreso_descanso ? $regreso_descanso->format('H:i:s') : '0'
+            'minutos_descanso'       => $this->minutos_a_horas_mm($minutos_descanso),
+            'minutos_descanso_turno' => $this->minutos_a_horas_mm($hora_descanso), // Siempre devolvemos cuánto debería ser por turno
+            'modo_descanso'          => $modo,
+            'hora_inicio_descanso'   => $salida_descanso ? $salida_descanso->format('H:i:s') : '00:00:00',
+            'hora_fin_descanso'      => $regreso_descanso ? $regreso_descanso->format('H:i:s') : '00:00:00'
         ];
+    }
+
+    /**
+     * FUNCIONES SQL AUXILIARES
+     */
+
+    function obtener_ultimo_regreso_descanso($th_per_id, $fecha_salida_descanso, $fin_rango_tolerancia, $fecha_salida_jornada)
+    {
+        /**
+         * Buscamos la marcación más tardía (DESC) que:
+         * 1. Sea después de la salida a refrigerio.
+         * 2. Esté dentro del rango permitido (fin_rango_tolerancia).
+         * 3. Sea estrictamente menor a la salida final de la jornada.
+         */
+        $sql = "SELECT TOP 1 th_acc_fecha_hora 
+            FROM _asistencias.th_control_acceso 
+            WHERE th_per_id = $th_per_id 
+            AND th_acc_fecha_hora > '$fecha_salida_descanso'
+            AND th_acc_fecha_hora <= '$fin_rango_tolerancia'
+            AND th_acc_fecha_hora < '$fecha_salida_jornada'
+            ORDER BY th_acc_fecha_hora DESC;"; // <--- DESC para tomar las 12:30 y no las 12:16
+
+        return $this->datos($sql);
+    }
+
+    function obtener_marcacion_especifica($th_per_id, $inicio, $fin, $orden = 'ASC')
+    {
+        $sql = "SELECT TOP 1 th_acc_fecha_hora 
+            FROM _asistencias.th_control_acceso 
+            WHERE th_per_id = $th_per_id 
+            AND th_acc_fecha_hora BETWEEN '$inicio' AND '$fin' 
+            ORDER BY th_acc_fecha_hora $orden;";
+        return $this->datos($sql);
+    }
+
+    function obtener_retorno_descanso_real($th_per_id, $fecha_salida_descanso, $fecha_salida_jornada)
+    {
+        // Busca la marcación más próxima DESPUÉS de salir al almuerzo 
+        // pero que NO sea la misma marcación de salida del trabajo.
+        $sql = "SELECT TOP 1 th_acc_fecha_hora 
+            FROM _asistencias.th_control_acceso 
+            WHERE th_per_id = $th_per_id 
+            AND th_acc_fecha_hora > '$fecha_salida_descanso'
+            AND th_acc_fecha_hora < '$fecha_salida_jornada'
+            ORDER BY th_acc_fecha_hora ASC;";
+        return $this->datos($sql);
     }
 
     function validar_justificacion($th_per_id, $fecha)
@@ -1294,6 +1334,10 @@ class calculo_persona
             array('campo' => 'th_asi_horas_extraordinarias', 'dato' => $parametro['th_asi_horas_extraordinarias']),
             array('campo' => 'th_asi_rango_suplementarias', 'dato' => $parametro['th_asi_rango_suplementarias']),
             array('campo' => 'th_asi_rango_extras', 'dato' => $parametro['th_asi_rango_extras']),
+
+            //Atrasos
+            array('campo' => 'th_asi_atrasos_calculo', 'dato' => $parametro['th_asi_atrasos_calculo']),
+            array('campo' => 'th_asi_atrasos_minutos', 'dato' => $parametro['th_asi_atrasos_minutos']),
         );
 
         // Generar SQL MERGE para este registro (por empleado + fecha)
@@ -1437,7 +1481,7 @@ class calculo_persona
             }
 
             if (!empty($datos_lote)) {
-                $sql_lote = $this->generar_merge_lote('_talentoh.th_control_acceso_calculos', $datos_lote, ['th_per_id', 'th_asi_fecha']);
+                $sql_lote = $this->generar_merge_lote('_asistencias.th_control_acceso_calculos', $datos_lote, ['th_per_id', 'th_asi_fecha']);
 
                 // print_r($sql_lote);
                 // exit();

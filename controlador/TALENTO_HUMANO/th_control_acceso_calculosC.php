@@ -350,6 +350,7 @@ class th_control_acceso_calculosC
             'Hora Entrada',
             'Hora Ajustada',
             'Atrasos',
+            'Tiempo Atrasado',
             'Ausente',
             'Salida Inicio Turno',
             'Salida Fin Turno',
@@ -363,6 +364,9 @@ class th_control_acceso_calculosC
             'SalidasTemprano',
             'Suplem 25%',
             'Extra 100%',
+            'Descanso en minutos',
+            'Rango Descanso',
+            'Horas trabajadas',
         ];
 
         // Obtener datos filtrados de acuerdo a parámetros
@@ -424,6 +428,7 @@ class th_control_acceso_calculosC
                 $dato['hora_entrada'],
                 $dato['hora_ajustada'],
                 $dato['atrasos'],
+                $dato['tiempo_atrasado_str'],
                 $dato['ausente'],
                 $dato['salida_hora_inicio_turno'],
                 $dato['salida_hora_fin_turno'],
@@ -437,6 +442,9 @@ class th_control_acceso_calculosC
                 $dato['salidas_temprano'],
                 $dato['horas_suplementarias'],
                 $dato['horas_extraordinarias'],
+                $dato['minutos_descanso_calculo'],
+                $dato['rango_calculado'],
+                $dato['horas_trabajadas'],
             ];
 
             $writer->addRow(WriterEntityFactory::createRowFromArray($filas_datos));

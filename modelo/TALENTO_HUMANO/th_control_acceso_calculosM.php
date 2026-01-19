@@ -116,7 +116,11 @@ class th_control_acceso_calculosM extends BaseModel
         th_asi_horas_excedentes AS horas_excedentes,
         th_asi_salidas_temprano AS salidastemprano,
         th_asi_horas_suplementarias AS horas_suplementarias,
-        th_asi_horas_extraordinarias AS horas_extraordinarias
+        th_asi_horas_extraordinarias AS horas_extraordinarias,
+        th_asi_atrasos_minutos AS tiempo_atrasado_str,
+        th_asi_minutos_descanso_calculado AS minutos_descanso_calculo,
+        th_asi_usa_descanso_formal AS rango_calculado,
+        th_asi_tiempo_post_descanso AS horas_trabajadas
     FROM 
         th_control_acceso_calculos
     WHERE 
