@@ -3,6 +3,15 @@
      * Script para manejar los dispositivos biométricos y la captura de huellas dactilares.
      */
 
+    $(document).ready(function() {
+        // cargar_tabla();
+        <?php if (isset($_GET['id_persona'])) { ?>
+            dispositivos();
+        <?php } ?>
+
+    });
+
+
     function cambiar(finger) {
         $('.btn-outline-primary').removeClass('active');
         $('#img_palma').attr('src', '../img/de_sistema/palma' + finger + '.gif');

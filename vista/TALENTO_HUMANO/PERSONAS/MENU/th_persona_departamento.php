@@ -1,4 +1,11 @@
 <script>
+    $(document).ready(function() {
+        <?php if (isset($_GET['id_persona'])) { ?>
+            cargar_departamento(<?= $id_persona ?>);
+        <?php } ?>
+
+    });
+
     function cargar_departamento(id) {
         $.ajax({
             data: {

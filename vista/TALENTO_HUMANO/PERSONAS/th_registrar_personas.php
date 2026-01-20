@@ -95,14 +95,10 @@ $html_disabled = $es_restringido ? "disabled" : "";
 
 <script type="text/javascript">
     $(document).ready(function() {
-        dispositivos();
-        // cargar_tabla();
         <?php if (isset($_GET['id_persona'])) { ?>
-            cargar_datos_persona(<?= $id_persona ?>);
-            cargar_departamento(<?= $id_persona ?>);
+            cargar_datos_persona('<?= $id_persona ?>');
+            cargar_selects2();
         <?php } ?>
-        cargar_selects2();
-
     });
 
     function cargar_selects2() {
@@ -663,7 +659,8 @@ $html_disabled = $es_restringido ? "disabled" : "";
 
                                                 <hr>
 
-                                                <?php //include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_informacion_adicional.php'); ?>
+                                                <?php //include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_informacion_adicional.php'); 
+                                                ?>
 
                                             </div>
                                         </div>
