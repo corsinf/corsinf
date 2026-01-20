@@ -212,6 +212,7 @@ class th_control_acceso_temporalC
                     array('campo' => 'th_dis_id', 'dato' => $marcacion_aprobar[0]['remote_addr'] ?? ''),
                     array('campo' => 'th_acc_hora', 'dato' => $marcacion_aprobar[0]['hora'] ?? ''),
                     array('campo' => 'th_acc_fecha_hora', 'dato' => $marcacion_aprobar[0]['fecha_hora'] ?? ''),
+                    array('campo' => 'th_acc_fecha', 'dato' => $marcacion_aprobar[0]['fecha_hora'] ?? ''),
                     array('campo' => 'th_acc_tipo_origen', 'dato' => 'WEB'),
                     array('campo' => 'th_act_id', 'dato' => $marcacion_aprobar[0]['_id'] ?? ''),
                 );
@@ -241,6 +242,7 @@ class th_control_acceso_temporalC
                         array('campo' => 'th_acc_tipo_registro', 'dato' => $marcacion_aprobar[0]['tipo_registro'] ?? ''),
                         array('campo' => 'th_dis_id', 'dato' => $marcacion_aprobar[0]['remote_addr'] ?? ''),
                         array('campo' => 'th_acc_hora', 'dato' => $marcacion_aprobar[0]['hora'] ?? ''),
+                        array('campo' => 'th_acc_fecha', 'dato' => $marcacion_aprobar[0]['fecha_hora'] ?? ''),
                         array('campo' => 'th_acc_fecha_hora', 'dato' => $marcacion_aprobar[0]['fecha_hora'] ?? ''),
                         array('campo' => 'th_acc_tipo_origen', 'dato' => 'WEB'),
                         array('campo' => 'th_act_id', 'dato' => $marcacion_aprobar[0]['_id'] ?? ''),
@@ -277,7 +279,7 @@ class th_control_acceso_temporalC
             }
         }
 
-        return 1;
+        // return 1;
     }
 
     //Para cambiar de estado y aprobar por usuario
@@ -306,9 +308,9 @@ class th_control_acceso_temporalC
 
         $fecha_hora = $parametros['txt_fecha_hora'];
         $fecha_hora_format = new DateTime($fecha_hora);
-        $txt_hora = $fecha_hora_format->format('H:i:s'); 
+        $txt_hora = $fecha_hora_format->format('H:i:s');
 
-        $txt_fecha_hora = $fecha_hora_format->format('Y-m-d H:i:s'); 
+        $txt_fecha_hora = $fecha_hora_format->format('Y-m-d H:i:s');
 
         // print_r($txt_fecha_hora); exit(); die();
 
@@ -334,7 +336,7 @@ class th_control_acceso_temporalC
             array('campo' => 'th_act_http_x_forwarded_for', 'dato' => $_SERVER['HTTP_X_FORWARDED_FOR'] ?? ''),
 
             array('campo' => 'th_act_observacion_aprobacion', 'dato' => $parametros['txt_descripcion'] ?? null),
-            
+
             array('campo' => 'th_tri_origen', 'dato' => 'MANUAL'),
         );
 
