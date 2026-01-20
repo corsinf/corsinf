@@ -312,56 +312,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal_mensaje" tabindex="-1" aria-labelledby="modal_mensaje_label" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal_mensaje_label">Enviar Mensaje</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-            <form id="form_mensaje" onsubmit="return false;">
-                <div class="modal-body">
-
-
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" value="1" id="cbx_enviar_credenciales"
-                            checked>
-                        <label class="form-check-label" for="cbx_enviar_credenciales">Enviar credenciales</label>
-                    </div>
-
-
-                    <!-- Contenedor de inputs que se muestran cuando NO está marcado 'Enviar credenciales' -->
-                    <div id="cont_inputs_mensaje" style="display: none;">
-                        <div class="mb-3">
-                            <label for="txt_asunto" class="form-label">Asunto</label>
-                            <input type="text" class="form-control" id="txt_asunto" name="txt_asunto"
-                                placeholder="Asunto del mensaje">
-                        </div>
-                        <div class="mb-3">
-                            <label for="txt_descripcion" class="form-label">Descripción</label>
-                            <textarea class="form-control" id="txt_descripcion" name="txt_descripcion" rows="5"
-                                placeholder="Escribe aquí la descripción..."></textarea>
-                        </div>
-                    </div>
-
-
-                    <!-- Mensaje informativo opcional -->
-                    <div id="info_credenciales" class="small text-muted" style="display: block;">
-                        Se enviarán las credenciales almacenadas para esta persona.
-                    </div>
-
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" id="btn_enviar_mensaje" class="btn btn-primary"
-                        onclick="enviarMensaje()">Enviar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <div class="modal" id="nuevaTarjeta" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static"
     data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
