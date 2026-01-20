@@ -209,11 +209,18 @@
     function limpiar_campos_discapacidad() {
         $('#form_discapacidad').validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
-        $('#ddl_discapacidad_escala').val('').trigger('change');
-        $('#ddl_discapacidad').val('').trigger('change');
         $('#txt_porcentaje').val('');
         $('#txt_escala').val('');
         $('#txt_discapacidad_id').val('');
+
+        $('#ddl_discapacidad_escala').val(null).trigger('change');
+        $('#ddl_discapacidad').val(null).trigger('change');
+
+        $('.select2-selection').removeClass('is-valid is-invalid');
+        $('.select2-validation').each(function() {
+            $('label.error[for="' + this.id + '"]').hide();
+        });
+
     }
 </script>
 
@@ -234,11 +241,22 @@
                 <div class="modal-body">
 
                     <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="ddl_discapacidad" class="form-label form-label-sm">Discapacidad </label>
-                            <select class="form-select form-select-sm" id="ddl_discapacidad" required>
+                        <div class="col-md-6">
+                            <label for="ddl_discapacidad" class="form-label form-label-sm ">Discapacidad </label>
+                            <select class="form-select form-select-sm select2-validation" id="ddl_discapacidad" name="ddl_discapacidad" required>
                                 <option value="">-- Seleccione --</option>
                             </select>
+                            <label class="error" style="display: none;" for="ddl_discapacidad"></label>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="ddl_discapacidad_escala" class="form-label form-label-sm ">Escala </label>
+                            <select class="form-select form-select-sm select2-validation" id="ddl_discapacidad_escala" name="ddl_discapacidad_escala" required>
+                                <option value="">-- Seleccione --</option>
+                            </select>
+                            <label class="error" style="display: none;" for="ddl_discapacidad_escala"></label>
+
                         </div>
                     </div>
 
@@ -246,14 +264,7 @@
                         <div class="col-md-6">
                             <label for="txt_porcentaje" class="form-label form-label-sm">Porcentaje </label>
                             <input type="number" class="form-control form-control-sm"
-                                id="txt_porcentaje" min="0" max="100" required>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="ddl_discapacidad_escala" class="form-label form-label-sm">Escala </label>
-                            <select class="form-select form-select-sm" id="ddl_discapacidad_escala" required>
-                                <option value="">-- Seleccione --</option>
-                            </select>
+                                id="txt_porcentaje" name="txt_porcentaje" min="0" max="100" required>
                         </div>
                     </div>
 
@@ -285,6 +296,12 @@
         agregar_asterisco_campo_obligatorio('ddl_discapacidad_escala');
         agregar_asterisco_campo_obligatorio('txt_porcentaje');
 
+
+        //Para validar los select2
+        $(".select2-validation").on("select2:select", function(e) {
+            unhighlight_select(this);
+        });
+
         $("#form_discapacidad").validate({
             rules: {
                 ddl_discapacidad: {
@@ -313,11 +330,39 @@
                     max: "Máximo 100"
                 }
             },
+
             highlight: function(element) {
-                $(element).addClass('is-invalid').removeClass('is-valid');
+                let $element = $(element);
+
+                if ($element.hasClass("select2-hidden-accessible")) {
+                    // Elimina la clase 'is-invalid' y agrega 'is-valid' al contenedor correcto de select2
+                    $element.next(".select2-container").find(".select2-selection").removeClass(
+                        "is-valid").addClass("is-invalid");
+                } else if ($element.is(':radio')) {
+                    // Si es un radio button, aplicar la clase al grupo de radios (al contenedor padre si existe)
+                    $('input[name="' + $element.attr("name") + '"]').addClass("is-invalid").removeClass(
+                        "is-valid");
+                } else {
+                    // Elimina la clase 'is-invalid' y agrega 'is-valid' al input normal
+                    $element.removeClass("is-valid").addClass("is-invalid");
+                }
             },
+
             unhighlight: function(element) {
-                $(element).removeClass('is-invalid').addClass('is-valid');
+                let $element = $(element);
+
+                if ($element.hasClass("select2-hidden-accessible")) {
+                    // Para Select2, elimina 'is-invalid' y agrega 'is-valid' en el contenedor adecuado
+                    $element.next(".select2-container").find(".select2-selection").removeClass(
+                        "is-invalid").addClass("is-valid");
+                } else if ($element.is(':radio')) {
+                    // Si es un radio button, marcar todo el grupo como válido
+                    $('input[name="' + $element.attr("name") + '"]').removeClass("is-invalid").addClass(
+                        "is-valid");
+                } else {
+                    // Para otros elementos normales
+                    $element.removeClass("is-invalid").addClass("is-valid");
+                }
             }
         });
 

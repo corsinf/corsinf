@@ -32,15 +32,8 @@ $html_disabled = $es_restringido ? "disabled" : "";
 
 ?>
 
-
-<script>
-    //Se lo utiliza para la seccion de biometria
-    var PersonaId = '<?php echo $id_persona; ?>'
-</script>
-
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
-<script src="../js/RECURSOS_HUMANOS/biometria.js"></script>
 
 <script>
     $(window).on('load', function() {
@@ -454,7 +447,7 @@ $html_disabled = $es_restringido ? "disabled" : "";
                                                         <i class="bx bx-envelope"></i> Enviar Mensaje
                                                     </a>
                                                     <!-- Todo lo relacionado con Biometria -->
-                                                    <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_biometrico.php'); ?>
+                                                    <?php //include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_biometrico.php'); ?>
 
                                                     <!-- <button class="btn btn-primary btn-sm" onclick="syncronizarPersona()"><i class="bx bx-sync"></i>Syncronizar persona en biometrico</button>                                     -->
                                                 </div>

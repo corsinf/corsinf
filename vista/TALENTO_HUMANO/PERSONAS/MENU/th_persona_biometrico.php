@@ -1,3 +1,10 @@
+<script src="../js/RECURSOS_HUMANOS/biometria.js"></script>
+
+<script>
+    //Se lo utiliza para la seccion de biometria
+    var PersonaId = '<?php echo $id_persona; ?>'
+</script>
+
 <script>
     /**
      * Script para manejar los dispositivos biométricos y la captura de huellas dactilares.

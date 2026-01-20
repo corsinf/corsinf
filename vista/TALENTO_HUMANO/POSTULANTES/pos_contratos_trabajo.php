@@ -241,13 +241,13 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_inicio_contrato" class="form-label form-label-sm">Fecha Inicio Contrato </label>
-                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_contrato" id="txt_fecha_inicio_contrato" onchange="checkbox_actualidad_contratos_trabajos();">
+                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_contrato" id="txt_fecha_inicio_contrato" onblur="checkbox_actualidad_contratos_trabajos();" onkeydown="saltar_input(event, 'txt_fecha_fin_contrato')">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_fin_contrato" class="form-label form-label-sm">Fecha Finalización Contrato </label>
-                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_fin_contrato" id="txt_fecha_fin_contrato" onchange="checkbox_actualidad_contratos_trabajos();">
+                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_fin_contrato" id="txt_fecha_fin_contrato" onblur="checkbox_actualidad_contratos_trabajos();" onkeydown="saltar_input(event, 'cbx_fecha_fin_experiencia')">
                         </div>
                     </div>
                     <div class="row mb-col">

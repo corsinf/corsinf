@@ -195,7 +195,7 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre Empleador</label>
+                            <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre Empleador </label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_nombre_referencia" id="txt_nombre_referencia" maxlength="50">
                         </div>
                     </div>
@@ -209,7 +209,7 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_referencia_correo" class="form-label form-label-sm">Correo Empleador</label>
+                            <label for="txt_referencia_correo" class="form-label form-label-sm">Correo Empleador </label>
                             <input type="email" class="form-control form-control-sm" name="txt_referencia_correo" id="txt_referencia_correo" maxlength="100">
                         </div>
                     </div>

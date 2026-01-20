@@ -247,14 +247,14 @@
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_med_fecha_inicio_certificado" class="form-label form-label-sm">Fecha Inicio Certificado</label>
-                            <input type="date" class="form-control form-control-sm " name="txt_med_fecha_inicio_certificado" id="txt_med_fecha_inicio_certificado" onchange="txt_fecha_fin_certificado_1();">
+                            <label for="txt_med_fecha_inicio_certificado" class="form-label form-label-sm">Fecha Inicio Certificado </label>
+                            <input type="date" class="form-control form-control-sm " name="txt_med_fecha_inicio_certificado" id="txt_med_fecha_inicio_certificado" onblur="txt_fecha_fin_certificado_1();" onkeydown="saltar_input(event, 'txt_med_fecha_fin_certificado')">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_med_fecha_fin_certificado" class="form-label form-label-sm">Fecha Fin Certificado</label>
-                            <input type="date" class="form-control form-control-sm " name="txt_med_fecha_fin_certificado" id="txt_med_fecha_fin_certificado" onchange="txt_fecha_fin_certificado_1();">
+                            <label for="txt_med_fecha_fin_certificado" class="form-label form-label-sm">Fecha Fin Certificado </label>
+                            <input type="date" class="form-control form-control-sm " name="txt_med_fecha_fin_certificado" id="txt_med_fecha_fin_certificado" onblur="txt_fecha_fin_certificado_1();" onkeydown="saltar_input(event, 'txt_ruta_certificados_medicos')">
                         </div>
                     </div>
                     <div class="row mb-col">

@@ -301,14 +301,14 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_inicio_academico" class="form-label form-label-sm">Fecha Inicio Estudios </label>
-                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_academico" id="txt_fecha_inicio_academico" onblur="checkbox_actualidad_form_acad();">
+                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_academico" id="txt_fecha_inicio_academico" onblur="checkbox_actualidad_form_acad();" onkeydown="saltar_input(event, 'txt_fecha_final_academico')">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_final_academico" class="form-label form-label-sm">Fecha Finalización Estudios </label>
-                            <input type="date" class="form-control form-control-sm mb-2 no_caracteres" name="txt_fecha_final_academico" id="txt_fecha_final_academico" onblur="checkbox_actualidad_form_acad();">
+                            <input type="date" class="form-control form-control-sm mb-2 no_caracteres" name="txt_fecha_final_academico" id="txt_fecha_final_academico" onblur="checkbox_actualidad_form_acad();" onkeydown="saltar_input(event, 'cbx_fecha_final_academico')">
 
                             <input type="checkbox" class="form-check-input" name="cbx_fecha_final_academico" id="cbx_fecha_final_academico" onchange="checkbox_actualidad_form_acad();">
                             <label for="cbx_fecha_final_academico" class="form-label form-label-sm">Actualidad</label>

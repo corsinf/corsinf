@@ -539,3 +539,27 @@ function handle_ajax_response(response) {
 }
 
 
+function saltar_input(e, siguienteinput) {
+    if (e.key === 'Tab') {
+        e.preventDefault();
+        document.getElementById(siguienteinput).focus();
+    }
+}
+
+function confirmar_terminos_datos(url) {
+    Swal.fire({
+        title: 'Información Importante',
+        text: 'La información solicitada es voluntaria, se usa únicamente con fines estadísticos e institucionales relacionados con políticas de inclusión y no influye en el proceso de selección.',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#0d6efd', // Azul Bootstrap primary
+        cancelButtonColor: '#6c757d', // Gris Bootstrap secondary
+        confirmButtonText: 'Sí, continuar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true // Pone el botón de confirmar a la derecha
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = url;
+        }
+    });
+}

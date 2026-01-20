@@ -216,7 +216,7 @@
                         <div class="col-md-12">
                             <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma </label>
                             <select class="form-select form-select-sm" id="ddl_seleccionar_idioma"
-                                name="ddl_seleccionar_idioma">
+                                name="ddl_seleccionar_idioma" >
                                 <option selected disabled value="">-- Seleccionar Idioma --</option>
                                 <option value="Español">Español</option>
                                 <option value="Inglés">Inglés</option>
@@ -232,7 +232,7 @@
                         <div class="col-md-12">
                             <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio Idioma </label>
                             <select class="form-select form-select-sm" id="ddl_dominio_idioma" name="ddl_dominio_idioma"
-                                required>
+                                required >
                                 <option selected disabled value="">-- Selecciona su Nivel de Dominio del idioma --
                                 </option>
                                 <option value="Nativo">Nativo</option>
@@ -257,7 +257,7 @@
                             <label for="txt_fecha_inicio_idioma" class="form-label form-label-sm">Fecha Inicio Curso
                                 Idioma </label>
                             <input type="date" class="form-control form-control-sm" name="txt_fecha_inicio_idioma"
-                                id="txt_fecha_inicio_idioma" onchange="txt_fecha_fin_idioma_1();">
+                                id="txt_fecha_inicio_idioma" onblur="txt_fecha_fin_idioma_1();" onkeydown="saltar_input(event, 'txt_fecha_fin_idioma')">
                         </div>
                     </div>
                     <div class="row mb-col">
@@ -265,7 +265,7 @@
                             <label for="txt_fecha_fin_idioma" class="form-label form-label-sm">Fecha Final Curso Idioma
                             </label>
                             <input type="date" class="form-control form-control-sm" name="txt_fecha_fin_idioma"
-                                id="txt_fecha_fin_idioma" onchange="txt_fecha_fin_idioma_1();">
+                                id="txt_fecha_fin_idioma" onblur="txt_fecha_fin_idioma_1();" onkeydown="saltar_input(event, 'txt_fecha_fin_idioma')">
                         </div>
                     </div>
                 </div>

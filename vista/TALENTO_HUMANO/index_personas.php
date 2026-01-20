@@ -377,13 +377,13 @@ if ($NO_CONCURENTE_TABLA == "_talentoh.th_personas") {
                                 <img src="../img/sin_imagen.jpg" id="img_perfil" width="115" height="115" class="rounded-circle p-1 border " alt="img_perfil">
                             </div>
 
-                            <h5 class="mb-1 fw-bold" id="lbl_nombre">Pauline I. Bird</h5>
-                            <p class="text-muted mb-3" id="lbl_ci">Web Developer</p>
+                            <h5 class="mb-1 fw-bold" id="lbl_nombre">---</h5>
+                            <p class="text-muted mb-3" id="lbl_ci">---</p>
 
                             <div class="d-grid">
-                                <a href="<?= $link_edicion ?>" class="btn btn-primary radius-15 px-4">
+                                <button onclick="confirmar_terminos_datos('<?= $link_edicion ?>')" class="btn btn-primary radius-15 px-4">
                                     <i class="bx bx-edit-alt me-1"></i>Editar Perfil
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -392,15 +392,15 @@ if ($NO_CONCURENTE_TABLA == "_talentoh.th_personas") {
         </div>
     </div>
 
-    <div class="col-12 mb-4">
+    <!-- <div class="col-12 mb-4">
         <div class="alerts-sidebar">
             <h6 class="mb-0 text-uppercase">Notificaciones de Asistencia</h6>
             <hr>
-            <div class="px-3" id="notificationContainer">
+            <div class="px-3" id="notificationContainer"> -->
                 <!-- Las alertas aparecerán aquí automáticamente -->
-            </div>
+            <!-- </div>
         </div>
-    </div>
+    </div> -->
 
 
 

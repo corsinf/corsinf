@@ -315,14 +315,14 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_inicio_laboral" class="form-label form-label-sm">Fecha Inicio </label>
-                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_laboral" id="txt_fecha_inicio_laboral" onchange="checkbox_actualidad_exp_prev();">
+                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_laboral" id="txt_fecha_inicio_laboral" onchange="checkbox_actualidad_exp_prev();" onkeydown="saltar_input(event, 'txt_fecha_final_laboral')">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_final_laboral" class="form-label form-label-sm">Fecha de Finalización </label>
-                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_final_laboral" id="txt_fecha_final_laboral" onchange="checkbox_actualidad_exp_prev();">
+                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_final_laboral" id="txt_fecha_final_laboral" onchange="checkbox_actualidad_exp_prev();" onkeydown="saltar_input(event, 'cbx_fecha_final_laboral')">
                         </div>
                     </div>
 
@@ -375,6 +375,9 @@
                     required: true,
                 },
                 txt_responsabilidades_logros: {
+                    required: true,
+                },
+                txt_sueldo: {
                     required: true,
                 },
             },

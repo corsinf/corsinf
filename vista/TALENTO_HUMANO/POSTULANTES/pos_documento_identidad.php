@@ -207,7 +207,7 @@
                                 <option selected disabled value="">-- Selecciona una opción --</option>
                                 <option value="Cédula de Identidad">Cédula de Identidad</option>
                                 <option value="Pasaporte">Pasaporte</option>
-                                <option value="Tarjeta de identificación">Tarjeta de identificación</option>
+                                <!-- <option value="Tarjeta de identificación">Tarjeta de identificación</option> -->
                                 <option value="Licencia">Licencia</option>
                                 <option value="Carnét o Certificado para miembro de la Fuerza Pública Ecuatoriana">Carnét o Certificado para miembro de la Fuerza Pública Ecuatoriana</option>
                                 <option value="Carnét de discapacidad">Carnét de discapacidad</option>
@@ -216,7 +216,7 @@
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_ruta_documentos_identidad" class="form-label form-label-sm">Pdf Documento Identidad</label>
+                            <label for="txt_ruta_documentos_identidad" class="form-label form-label-sm">Pdf Documento Identidad </label>
                             <input type="file" class="form-control form-control-sm" name="txt_ruta_documentos_identidad" id="txt_ruta_documentos_identidad" accept=".pdf">
                             <!-- <div class="pt-2"></div> -->
                             <input type="hidden" class="form-control form-control-sm" name="txt_ruta_guardada_documentos_identidad" id="txt_ruta_guardada_documentos_identidad">

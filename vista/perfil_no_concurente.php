@@ -289,9 +289,9 @@ if ($NO_CONCURENTE_TABLA == "_talentoh.th_personas") {
                             </div>
 
                             <div class="text-end mt-4 pt-3 border-top">
-                                <a class="btn btn-outline-primary px-4" href="<?= $link_edicion ?>">
+                                <button onclick="confirmar_terminos_datos('<?= $link_edicion ?>')" class="btn btn-outline-primary px-4">
                                     <i class="bx bx-edit-alt me-1"></i>Editar Perfil
-                                </a>
+                                </button>
                             </div>
 
                         </div>
