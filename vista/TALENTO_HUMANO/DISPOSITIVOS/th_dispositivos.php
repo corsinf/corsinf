@@ -12,7 +12,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         tbl_dispositivos = $('#tbl_dispositivos').DataTable($.extend({}, configuracion_datatable('Dispostivos', 'dispostivos'), {
             reponsive: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?listarAll=true',
@@ -111,7 +111,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         $('#tbl_dispositivos_red').DataTable($.extend({},{
             reponsive: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?BuscarDevice=true&vlans='+$('#txt_vlans').val()+'&tipoBusqueda='+$('input[name="rbl_tipoBusqueda"]:checked').val(),

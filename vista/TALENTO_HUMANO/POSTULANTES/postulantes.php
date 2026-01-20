@@ -9,7 +9,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     $(document).ready(function() {
         $('#tabla_postulantes').DataTable({
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             responsive: false,
             ajax: {

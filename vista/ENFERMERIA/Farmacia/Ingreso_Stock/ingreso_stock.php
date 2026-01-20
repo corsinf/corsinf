@@ -7,7 +7,7 @@
 		lista_proveedor();
 		tablaAll = $('#tabla_todos').DataTable({
 			language: {
-				url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+				url: '../assets/plugins/datatable/spanish.json'
 			},
 			responsive: true,
 			ajax: {
@@ -90,7 +90,7 @@
 
 		tablaInsu = $('#tabla_insumos').DataTable({
 			language: {
-				url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+				url: '../assets/plugins/datatable/spanish.json'
 			},
 			responsive: true,
 			ajax: {
@@ -125,7 +125,7 @@
 
 		tablaMedi = $('#tabla_medicamentos').DataTable({
 			language: {
-				url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+				url: '../assets/plugins/datatable/spanish.json'
 			},
 			responsive: true,
 			ajax: {

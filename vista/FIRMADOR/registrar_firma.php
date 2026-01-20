@@ -13,7 +13,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     tbl_personas = $('#tbl_firmas').DataTable($.extend({}, configuracion_datatable('Personas', 'personas'), {
       dom: 'lfrtip',
       language: {
-        url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+        url: '../assets/plugins/datatable/spanish.json'
       },
       responsive: true,
       ajax: {

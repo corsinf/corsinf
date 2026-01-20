@@ -233,7 +233,7 @@ if (isset($_GET['_id'])) {
             destroy: true,
             responsive: false,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/th_control_acceso_calculosC.php?reporte=true',

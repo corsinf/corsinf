@@ -20,7 +20,7 @@ if (isset($_GET['_id'])) {
         tbl_tipo_espacios = $('#tbl_tipo_espacios').DataTable($.extend({}, configuracion_datatable('Nombre', 'descripcion'), {
             reponsive: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/XPACE_CUBE/tipo_espacioC.php?listar=true',

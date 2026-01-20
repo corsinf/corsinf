@@ -10,7 +10,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         tbl_feriados = $('#tbl_feriados').DataTable($.extend({}, configuracion_datatable('Feriados', 'feriados'), {
             reponsive: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/th_feriadosC.php?listar=true',

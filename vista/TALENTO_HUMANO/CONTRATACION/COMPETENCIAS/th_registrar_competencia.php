@@ -186,7 +186,7 @@ function cargar_competencias_detalle(id_cargo) {
         'fecha'), {
         responsive: true,
         language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            url: '../assets/plugins/datatable/spanish.json'
         },
         ajax: {
             url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_competencias_detalleC.php?listar_competencia_detalle=true',

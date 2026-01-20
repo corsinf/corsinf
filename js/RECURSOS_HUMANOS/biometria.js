@@ -287,7 +287,7 @@ function listaTarjetas()
             info: false,       // Opcional: Desactiva la información (ej. "Mostrando 1 a 10 de 100 registros")
 
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 type:'POST',
@@ -555,7 +555,7 @@ function listaTarjetas()
             info: false,       // Opcional: Desactiva la información (ej. "Mostrando 1 a 10 de 100 registros")
 
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 type:'POST',
@@ -839,7 +839,7 @@ function listaTarjetas()
             info: false,       // Opcional: Desactiva la información (ej. "Mostrando 1 a 10 de 100 registros")
 
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 type:'POST',

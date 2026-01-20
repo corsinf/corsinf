@@ -10,7 +10,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     tbl_localizacion = $('#tbl_localizacion').DataTable($.extend({}, configuracion_datatable('Localización', 'localizacion'), {
       reponsive: true,
       language: {
-        url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+        url: '../assets/plugins/datatable/spanish.json'
       },
       ajax: {
         url: '../controlador/ACTIVOS_FIJOS/localizacionC.php?listar=true',

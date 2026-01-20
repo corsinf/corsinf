@@ -224,7 +224,7 @@ if (isset($_GET['_id'])) {
 
         tbl_comision_personas = $('#tbl_comision_personas').DataTable({
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             responsive: true,
             ajax: {
@@ -493,7 +493,7 @@ if (isset($_GET['_id'])) {
         tbl_personas = $('#tbl_personas').DataTable({
             responsive: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/th_per_comisionC.php?listar_personas_modal=true',

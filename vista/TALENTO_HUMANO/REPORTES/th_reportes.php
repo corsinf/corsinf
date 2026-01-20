@@ -10,7 +10,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         tbl_reportes = $('#tbl_reportes').DataTable($.extend({}, configuracion_datatable('Reportes', 'reportes'), {
             reponsive: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/th_reportesC.php?listar=true',

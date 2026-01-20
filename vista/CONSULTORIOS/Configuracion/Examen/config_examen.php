@@ -17,7 +17,7 @@
     function consultarDatosExamenes(id = '') {
         tbl_examen = $('#tbl_examen').DataTable({
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             responsive: true,
             processing: true,
@@ -57,7 +57,7 @@
     function consultarDatosFeatExamenes(id = '') {
         tbl_feat_examen = $('#tbl_feat_examen').DataTable({
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             responsive: true,
             processing: true,
@@ -96,7 +96,7 @@
 
         tbl_itee = $('#tbl_itee').DataTable({
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             responsive: true,
             processing: true,

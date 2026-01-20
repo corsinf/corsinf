@@ -10,7 +10,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         tbl_tipo_justificacion = $('#tbl_tipo_justificacion').DataTable($.extend({}, configuracion_datatable('Tipo de Justificación', 'tipo_justificacion'), {
             reponsive: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/th_cat_tipo_justificacionC.php?listar=true',

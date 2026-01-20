@@ -7,7 +7,7 @@ include(dirname(__DIR__, 3) . '/cabeceras/header2.php');
     tbl_familias = $('#tbl_familias').DataTable($.extend({}, configuracion_datatable('Familias', 'familias', 'contenedor_botones'), {
       reponsive: false,
       language: {
-        url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+        url: '../assets/plugins/datatable/spanish.json'
       },
       ajax: {
         url: 'controlador/ACTIVOS_FIJOS/familiasC.php?lista=true',
@@ -32,7 +32,7 @@ include(dirname(__DIR__, 3) . '/cabeceras/header2.php');
     tbl_subfamilias = $('#tbl_subfamilias').DataTable($.extend({}, configuracion_datatable('Subfamilias', 'subfamilias', 'contenedor_botones_2'), {
       reponsive: false,
       language: {
-        url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+        url: '../assets/plugins/datatable/spanish.json'
       },
       ajax: {
         url: 'controlador/ACTIVOS_FIJOS/familiasC.php?lista_subfamilias=true',

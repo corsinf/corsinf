@@ -25,7 +25,7 @@ if ($id != null && $id != '') {
 
         tbl_doc_par = $('#tbl_doc_par').DataTable({
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             responsive: true,
             ajax: {

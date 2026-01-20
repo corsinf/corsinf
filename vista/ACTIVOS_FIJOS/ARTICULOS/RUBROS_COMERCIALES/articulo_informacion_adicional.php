@@ -32,7 +32,7 @@
             reponsive: false,
 
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/ACTIVOS_FIJOS/detalle_articuloC.php?movimientos=true',

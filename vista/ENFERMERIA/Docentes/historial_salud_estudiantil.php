@@ -74,7 +74,7 @@ if ($id != null && $id != '') {
             var formato_Fecha = fecha_Hoy.getFullYear() + '-' + (fecha_Hoy.getMonth() + 1) + '-' + fecha_Hoy.getDate();
             tabla_consultas = $('#tabla_consultas').DataTable({
                 language: {
-                    url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                    url: '../assets/plugins/datatable/spanish.json'
                 },
                 responsive: true,
                 ajax: {
@@ -167,7 +167,7 @@ if ($id != null && $id != '') {
 
             tabla_consultas = $('#tabla_consultas').DataTable({
                 language: {
-                    url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                    url: '../assets/plugins/datatable/spanish.json'
                 },
             });
         }

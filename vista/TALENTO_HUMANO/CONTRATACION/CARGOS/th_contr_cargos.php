@@ -20,7 +20,7 @@ if (isset($_GET['_id'])) {
         tbl_cargos = $('#tbl_cargos').DataTable($.extend({}, configuracion_datatable('Nombre', 'area', 'nivel'), {
             responsive: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 // Cambia la ruta si es diferente en tu proyecto
@@ -67,7 +67,7 @@ if (isset($_GET['_id'])) {
             'nombre'), {
             responsive: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_niveles_cargoC.php?listar=true',
@@ -105,7 +105,7 @@ if (isset($_GET['_id'])) {
             'descripcion', 'fecha'), {
             responsive: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_requisitosC.php?listar=true',

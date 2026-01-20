@@ -88,7 +88,7 @@ $(document).ready(function() {
             'Candidato'), {
             responsive: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_postulacionesC.php?listar_plaza_postulados=true',
@@ -402,7 +402,7 @@ function cargar_personas(tipoPostulante, id_plaza, buscarCoincidencias = false) 
     tbl_personas = $('#tbl_personas').DataTable({
         responsive: true,
         language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            url: '../assets/plugins/datatable/spanish.json'
         },
         ajax: {
             url: url,

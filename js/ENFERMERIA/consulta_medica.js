@@ -111,7 +111,7 @@ function consultar_datos_h(id_paciente = '', nombres = '') {
                 destroy: true, // Destruir la tabla existente antes de recrearla
                 data: response,
                 language: {
-                    url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                    url: '../assets/plugins/datatable/spanish.json'
                 },
                 responsive: true, // Datos de las consultas médicas
                 columns: [

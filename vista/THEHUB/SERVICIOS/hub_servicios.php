@@ -19,7 +19,7 @@ if (isset($_GET['_id'])) {
         tbl_servicios = $('#tbl_servicios').DataTable($.extend({}, configuracion_datatable('Nombre', 'Descripcion', 'Precio'), {
             responsive: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/XPACE_CUBE/serviciosC.php?listar=true',

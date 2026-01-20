@@ -107,7 +107,7 @@ if (isset($_GET['_id'])) {
         tbl_reserva_servicio = $('#tbl_reserva_servicio').DataTable($.extend({},  {
             responsive: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/XPACE_CUBE/reserva_servicioC.php?listar=true',

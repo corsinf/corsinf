@@ -106,7 +106,7 @@ if (isset($_GET['pac_id'])) {
               destroy: true, // Destruir la tabla existente antes de recrearla
               data: responseConsultas,
               language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
               },
               responsive: true, // Datos de las consultas médicas
               columns: [
@@ -221,7 +221,7 @@ if (isset($_GET['pac_id'])) {
           destroy: true, // Destruir la tabla existente antes de recrearla
           data: response, // Usar la respuesta del AJAX como datos
           language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            url: '../assets/plugins/datatable/spanish.json'
           },
           responsive: true, // Datos de las consultas médicas
           columns: [

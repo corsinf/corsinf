@@ -65,7 +65,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         tbl_marcaciones_web = $('#tbl_marcaciones_web').DataTable($.extend({}, configuracion_datatable('Marcaciones', 'Marcaciones'), {
             reponsive: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/th_control_acceso_temporalC.php?listar=true',

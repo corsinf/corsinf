@@ -11,7 +11,7 @@ $(document).ready(function() {
         'Turnos', 'turnos', 'contenedor_botones_departamento'), {
         reponsive: true,
         language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            url: '../assets/plugins/datatable/spanish.json'
         },
         ajax: {
             url: '../controlador/TALENTO_HUMANO/th_programar_horariosC.php?listar_departamentos_horarios=true',
@@ -52,7 +52,7 @@ $(document).ready(function() {
         'turnos', 'contenedor_botones_persona'), {
         reponsive: true,
         language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            url: '../assets/plugins/datatable/spanish.json'
         },
         ajax: {
             url: '../controlador/TALENTO_HUMANO/th_programar_horariosC.php?listar_personas_horarios=true',

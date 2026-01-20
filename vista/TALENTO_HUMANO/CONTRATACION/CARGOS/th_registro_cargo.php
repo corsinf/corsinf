@@ -532,7 +532,7 @@ $(document).ready(function() {
             'fecha'), {
             responsive: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_union_cargo_requisitoC.php?listar=true',
@@ -1952,7 +1952,7 @@ function cargar_competencias(id_cargo) {
         destroy: true,
         responsive: true,
         language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            url: '../assets/plugins/datatable/spanish.json'
         },
         ajax: {
             url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_competenciasC.php?listar=true',

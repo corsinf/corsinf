@@ -224,7 +224,7 @@ function cargar_requisitos_cargo(id_cargo_requisito) {
     $('#tbl_req_detalles').DataTable($.extend({}, configuracion_datatable('Nombre', 'tipo', 'fecha'), {
         responsive: true,
         language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            url: '../assets/plugins/datatable/spanish.json'
         },
         ajax: {
             url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_union_cargo_requisito_detalleC.php?listar=true',

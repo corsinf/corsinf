@@ -9,7 +9,7 @@
     function consultar_datos(id = '') {
         $('#tbl_t_examen').DataTable({
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             responsive: true,
             ajax: {
@@ -36,7 +36,7 @@
     function consultar_datos_1(id = '') {
         $('#tbl_examen').DataTable({
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             responsive: true,
             ajax: {
@@ -63,7 +63,7 @@
     function consultar_datos_2() {
         $('#tbl_itee').DataTable({
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             responsive: true,
             ajax: {

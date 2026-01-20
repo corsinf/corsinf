@@ -11,7 +11,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         tbl_triangulacion_departamento = $('#tbl_triangulacion_departamento').DataTable($.extend({}, configuracion_datatable('Justificaciones', 'turnos', 'contenedor_botones_departamento'), {
             reponsive: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/th_triangular_departamento_personaC.php?listarDepartamentos=true',
@@ -48,7 +48,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         tbl_triangulacion_persona = $('#tbl_triangulacion_persona').DataTable($.extend({}, configuracion_datatable('Justificaciones', 'turnos', 'contenedor_botones_persona'), {
             reponsive: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/th_triangular_departamento_personaC.php?listarUsuarios=true',

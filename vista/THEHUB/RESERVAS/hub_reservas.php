@@ -23,7 +23,7 @@ if (isset($_GET['_id'])) {
         tbl_reservas = $('#tbl_reservas').DataTable($.extend({}, configuracion_datatable('Nombre', 'cuidad', 'telefono'), {
             responsive: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
                 url: '../controlador/XPACE_CUBE/reservasC.php?listar=true',

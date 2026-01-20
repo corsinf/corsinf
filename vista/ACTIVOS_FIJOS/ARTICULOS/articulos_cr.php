@@ -11,7 +11,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
         tbl_articulos = $('#tbl_articulos').DataTable($.extend({}, configuracion_datatable('Artículos', 'articulos'), {
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
 
             searchDelay: 500,

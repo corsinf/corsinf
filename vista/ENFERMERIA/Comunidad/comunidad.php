@@ -4,7 +4,7 @@
     $(document).ready(function() {
         $('#tabla_administrativo').DataTable({
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                url: '../assets/plugins/datatable/spanish.json'
             },
             responsive: true,
             ajax: {
