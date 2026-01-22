@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * @deprecated Archivo dado de baja el 22/01/2026.
+ * @note Este archivo se mantiene como respaldo, pero ya no se utilizará en producción.
+ * @warning No modificar este archivo. Para cambios, referirse a la nueva implementación.
+ */
+
 require_once(dirname(__DIR__, 3)  . '/modelo/TALENTO_HUMANO/POSTULANTES/th_pos_contacto_emergenciaM.php');
 
 $controlador = new th_pos_contacto_emergenciaC();

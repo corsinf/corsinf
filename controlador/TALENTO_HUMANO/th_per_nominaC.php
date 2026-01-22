@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * @deprecated Archivo dado de baja el 22/01/2026.
+ * @note Este archivo se mantiene como respaldo, pero ya no se utilizará en producción.
+ * @warning No modificar este archivo. Para cambios, referirse a la nueva implementación.
+ */
+
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_per_nominaM.php');
 
 $controlador = new th_per_nominaC();
