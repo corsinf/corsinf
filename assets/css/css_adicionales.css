@@ -100,3 +100,79 @@ label.error {
     margin-top: 10px;
     font-size: 13px;
 }
+
+/* Ajuste para el botón de editar en personas ostulantes */
+.btn-edit-minimal {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: #64748b;
+    background: transparent;
+    border: none;
+}
+
+.btn-edit-minimal:hover {
+    background-color: #f1f5f9;
+    color: #0f172a;
+}
+
+/* Contenedor principal con efecto Glassmorphism */
+.cert-card {
+    background: rgba(248, 249, 250, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ident-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Etiqueta superior (Badge custom) */
+.cert-badge {
+    background: rgba(0, 0, 0, 0.05);
+    color: #666;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+/* Tipografía y textos */
+.cert-title {
+    font-size: 0.9rem;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+}
+
+.cert-doctor {
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+
+.cert-label-small {
+    font-size: 0.6rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    opacity: 0.75;
+}
+
+.cert-date-range {
+    font-size: 0.72rem;
+    color: #777;
+}
+
+/* Botón de acción */
+.btn-cert-action {
+    font-size: 0.65rem;
+    border-radius: 6px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}

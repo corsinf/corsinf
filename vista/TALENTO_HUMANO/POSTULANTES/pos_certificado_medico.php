@@ -160,6 +160,7 @@
     function ruta_iframe_certificados_medicos(url) {
         $('#modal_ver_pdf_certificados_medicos').modal('show');
         var cambiar_ruta = $('#iframe_certificados_medicos_pdf').attr('src', url);
+        var cambiar_ruta_btn = $('#btn_abrir_externo_cert').attr('href', url);
     }
 
     function limpiar_parametros_iframe_cert_medicos() {
@@ -211,63 +212,90 @@
 <div id="pnl_certificados_medicos">
 </div>
 
-<!-- Modal para agregar certificados médicos-->
-<div class="modal" id="modal_agregar_certificados_medicos" tabindex="-1" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_certificados_medicos">Agregar Certificado Médico</small></h5>
+<div class="modal fade" id="modal_agregar_certificados_medicos" tabindex="-1" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+
+            <div class="modal-header bg-dark bg-opacity-10">
+                <div>
+                    <h5 class="modal-title fw-bold text-primary" id="lbl_titulo_certificados_medicos">
+                        <i class='bx bx-pulse me-2'></i>Antecedentes Médicos
+                    </h5>
+                    <small class="text-muted">Registra enfermedades crónicas o condiciones preexistentes.</small>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_certificados_medicos()"></button>
             </div>
-            <!-- Modal body -->
-            <form id="form_certificados_medicos">
+
+            <form id="form_certificados_medicos" class="needs-validation">
                 <div class="modal-body">
+
                     <input type="hidden" name="txt_certificados_medicos_id" id="txt_certificados_medicos_id">
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
 
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_med_motivo_certificado" class="form-label form-label-sm">Motivo Certificado Médico </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_motivo_certificado" id="txt_med_motivo_certificado" maxlength="50">
+                    <div class="row mb-col mb-3">
+                        <label for="txt_med_motivo_certificado" class="form-label fw-semibold fs-7">Enfermedad o Patología </label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-white text-muted"><i class='bx bx-notepad'></i></span>
+                            <input type="text" class="form-control form-control-sm" name="txt_med_motivo_certificado" id="txt_med_motivo_certificado" maxlength="50" placeholder="Ej: Diabetes Tipo 2, Hipertensión, Alergia a Penicilina...">
+                        </div>
+                        <label class="error" style="display: none;" for="txt_med_motivo_certificado"></label>
+                    </div>
+
+                    <div class="row mb-col mb-3">
+                        <div class="col-md-6">
+                            <label for="txt_med_nom_medico" class="form-label fw-semibold fs-7">Médico que certifica </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-light"><i class='bx bx-user-pin'></i></span>
+                                <input type="text" class="form-control" name="txt_med_nom_medico" id="txt_med_nom_medico" maxlength="50" placeholder="Nombre del doctor/a">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="txt_med_ins_medico" class="form-label fw-semibold fs-7">Institución de Salud </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-light"><i class='bx bx-buildings'></i></span>
+                                <input type="text" class="form-control form-control-sm" name="txt_med_ins_medico" id="txt_med_ins_medico" maxlength="50" placeholder="Ej: Hospital IESS, Clínica...">
+                            </div>
                         </div>
                     </div>
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_med_nom_medico" class="form-label form-label-sm">Nombre Médico Tratante </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_nom_medico" id="txt_med_nom_medico" maxlength="50">
+
+                    <div class="p-3 bg-light rounded-3 mb-col border border-dashed mb-3">
+                        <h6 class="text-muted fs-7 mb-2 fw-bold text-uppercase ls-1">Vigencia del Documento </h6>
+                        <div class="row g-3 mb-col">
+                            <div class="col-md-6">
+                                <label for="txt_med_fecha_inicio_certificado" class="form-label fs-7 mb-1">Fecha Emisión/Diagnóstico </label>
+                                <input type="date" class="form-control form-control-sm" name="txt_med_fecha_inicio_certificado" id="txt_med_fecha_inicio_certificado" onblur="txt_fecha_fin_certificado_1();" onkeydown="saltar_input(event, 'txt_med_fecha_fin_certificado')">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="txt_med_fecha_fin_certificado" class="form-label fs-7 mb-1">
+                                    Válido hasta <small class="text-muted fw-normal">(Opcional)</small>
+                                    <i class='bx bx-info-circle text-primary' data-bs-toggle="tooltip" title="Dejar vacío si es permanente"></i>
+                                </label>
+                                <input type="date" class="form-control form-control-sm" name="txt_med_fecha_fin_certificado" id="txt_med_fecha_fin_certificado" onblur="txt_fecha_fin_certificado_1();" onkeydown="saltar_input(event, 'txt_ruta_certificados_medicos')">
+                            </div>
                         </div>
                     </div>
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_med_ins_medico" class="form-label form-label-sm">Nombre Institución Médica </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_ins_medico" id="txt_med_ins_medico" maxlength="50">
-                        </div>
+
+                    <div class="mb-col mb-3">
+                        <label for="txt_ruta_certificados_medicos" class="form-label fw-semibold">Adjuntar Respaldo (PDF) </label>
+                        <input type="file" class="form-control form-control-sm" name="txt_ruta_certificados_medicos" id="txt_ruta_certificados_medicos" accept=".pdf">
+                        <input type="text" class="form-control" name="txt_ruta_guardada_certificados_medicos" id="txt_ruta_guardada_certificados_medicos" hidden>
+                        <div class="form-text text-xs"><i class='bx bx-upload'></i> Sube el certificado escaneado. Máximo 5MB.</div>
                     </div>
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_med_fecha_inicio_certificado" class="form-label form-label-sm">Fecha Inicio Certificado </label>
-                            <input type="date" class="form-control form-control-sm " name="txt_med_fecha_inicio_certificado" id="txt_med_fecha_inicio_certificado" onblur="txt_fecha_fin_certificado_1();" onkeydown="saltar_input(event, 'txt_med_fecha_fin_certificado')">
-                        </div>
-                    </div>
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_med_fecha_fin_certificado" class="form-label form-label-sm">Fecha Fin Certificado </label>
-                            <input type="date" class="form-control form-control-sm " name="txt_med_fecha_fin_certificado" id="txt_med_fecha_fin_certificado" onblur="txt_fecha_fin_certificado_1();" onkeydown="saltar_input(event, 'txt_ruta_certificados_medicos')">
-                        </div>
-                    </div>
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_ruta_certificados_medicos" class="form-label form-label-sm">Pdf Certificado Médico </label>
-                            <input type="file" class="form-control form-control-sm" name="txt_ruta_certificados_medicos" id="txt_ruta_certificados_medicos" accept=".pdf">
-                            <input type="text" class="form-control form-control-sm" name="txt_ruta_guardada_certificados_medicos" id="txt_ruta_guardada_certificados_medicos" hidden>
-                        </div>
-                    </div>
+
                 </div>
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_certificados_medicos" onclick="insertar_editar_certificados_medicos(); validar_fechas_certificados_medicos()"><i class="bx bx-save"></i>Agregar</button>
-                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_certificado_medico" onclick="delete_datos_certificados_medicos();"><i class="bx bx-trash"></i>Eliminar</button>
+
+                <div class="modal-footer bg-light border-top-0 d-flex justify-content-between">
+                    <button type="button" style="display: none;" class="btn btn-outline-danger btn-sm" id="btn_eliminar_certificado_medico" onclick="delete_datos_certificados_medicos();">
+                        <i class="bx bx-trash"></i> Eliminar
+                    </button>
+
+                    <div class="ms-auto">
+                        <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" onclick="limpiar_parametros_certificados_medicos()">Cancelar</button>
+                        <button type="button" class="btn btn-primary btn-sm px-4" id="btn_guardar_certificados_medicos" onclick="insertar_editar_certificados_medicos(); validar_fechas_certificados_medicos()">
+                            <i class="bx bx-save"></i> Guardar
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -275,21 +303,50 @@
 </div>
 
 <!-- Modal para ver certificados médicos -->
-<div class="modal" id="modal_ver_pdf_certificados_medicos" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="modal_ver_pdf_certificados_medicos" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
+        <div class="modal-content border-0 shadow-lg">
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_certificados_medicos">Certificado Médico:</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe_cert_medicos();"></button>
-            </div>
-            <!-- Modal body -->
-            <form id="form_certificados_medicos">
-                <div class="modal-body d-flex justify-content-center">
-                    <iframe src='' id="iframe_certificados_medicos_pdf" frameborder="0" width="900px" height="700px"></iframe>
+            <div class="modal-header bg-dark bg-opacity-10 py-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-white p-2 rounded-circle me-2 text-primary shadow-sm">
+                        <i class='bx bxs-file-pdf bx-sm'></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark mb-0" id="lbl_titulo_certificados_medicos">Visualizar Documento</h5>
+                        <small class="text-muted">Vista previa del certificado adjunto</small>
+                    </div>
                 </div>
-            </form>
+
+                <!-- <div class="d-flex align-items-center gap-2">
+                    <a href="#" id="btn_abrir_externo_cert" target="_blank" class="btn btn-outline-primary btn-sm d-none d-sm-inline-flex align-items-center" title="Abrir en nueva pestaña">
+                        <i class='bx bx-link-external me-1'></i> Expandir
+                    </a>
+                    <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe_cert_medicos();" aria-label="Cerrar"></button>
+                </div> -->
+            </div>
+
+            <div class="modal-body p-0 bg-light">
+                <div class="w-100 position-relative" style="height: 80vh;">
+
+                    <div class="position-absolute top-50 start-50 translate-middle text-muted" style="z-index: 0;">
+                        <i class='bx bx-loader-alt bx-spin bx-md'></i> Cargando documento...
+                    </div>
+
+                    <iframe src=''
+                        id="iframe_certificados_medicos_pdf"
+                        class="w-100 h-100 border-0 position-relative"
+                        style="z-index: 1;"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="modal-footer py-1 bg-white">
+                <small class="text-muted me-auto fst-italic"><i class='bx bx-info-circle'></i> Si el documento no carga, consultar con el administrador.</small>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe_cert_medicos();">Cerrar</button>
+            </div>
+
         </div>
     </div>
 </div>
@@ -300,7 +357,7 @@
         agregar_asterisco_campo_obligatorio('txt_med_nom_medico');
         agregar_asterisco_campo_obligatorio('txt_med_ins_medico');
         agregar_asterisco_campo_obligatorio('txt_med_fecha_inicio_certificado');
-        agregar_asterisco_campo_obligatorio('txt_med_fecha_fin_certificado');
+        // agregar_asterisco_campo_obligatorio('txt_med_fecha_fin_certificado');
         agregar_asterisco_campo_obligatorio('txt_ruta_certificados_medicos');
         //Validación de campos certificados medicos
         $("#form_certificados_medicos").validate({
@@ -317,9 +374,9 @@
                 txt_med_fecha_inicio_certificado: {
                     required: true,
                 },
-                txt_med_fecha_fin_certificado: {
-                    required: true,
-                },
+                // txt_med_fecha_fin_certificado: {
+                //     required: true,
+                // },
                 txt_ruta_certificados_medicos: {
                     required: true,
                 }
@@ -372,9 +429,9 @@
                 .removeClass('is-invalid');
         } else {
             // Si no tiene valor, mostrar como inválido
-            $('#txt_med_fecha_fin_certificado')
-                .addClass('is-invalid')
-                .removeClass('is-valid');
+            // $('#txt_med_fecha_fin_certificado')
+            //     .addClass('is-invalid')
+            //     .removeClass('is-valid');
         }
 
         // Si el campo está deshabilitado, se habilita y se limpia el valor
@@ -384,12 +441,12 @@
         }
 
         // Agregar validación dinámica al campo con jQuery Validate
-        $('#txt_med_fecha_fin_certificado').rules("add", {
-            required: true,
-            messages: {
-                required: "La fecha de fin es obligatoria."
-            }
-        });
+        // $('#txt_med_fecha_fin_certificado').rules("add", {
+        //     required: true,
+        //     messages: {
+        //         required: "La fecha de fin es obligatoria."
+        //     }
+        // });
 
         // Validar las fechas usando la función personalizada
         validar_fechas_certificados_medicos();

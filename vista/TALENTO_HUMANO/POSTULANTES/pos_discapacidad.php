@@ -226,69 +226,75 @@
 
 <div id="pnl_discapacidad"></div>
 
-<div class="modal" id="modal_agregar_discapacidad" tabindex="-1" data-bs-backdrop="static">
+<div class="modal fade" id="modal_agregar_discapacidad" tabindex="-1" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
+        <div class="modal-content border-0 shadow-lg">
 
-            <div class="modal-header">
-                <h5><small class="fw-bold" id="lbl_titulo_discapacidad">Agregar Discapacidad</small></h5>
+            <div class="modal-header bg-dark bg-opacity-10">
+                <div>
+                    <h5 class="modal-title fw-bold text-primary" id="lbl_titulo_discapacidad">
+                        <i class='bx bx-accessibility me-2'></i>Información de Discapacidad
+                    </h5>
+                    <small class="text-muted">Registra el tipo, escala y porcentaje según tu carnet oficial.</small>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
-            <form id="form_discapacidad">
+            <form id="form_discapacidad" class="needs-validation">
                 <input type="hidden" id="txt_discapacidad_id">
 
                 <div class="modal-body">
+                    <div class="row g-3 mb-3">
 
-                    <div class="row mb-col">
                         <div class="col-md-6">
-                            <label for="ddl_discapacidad" class="form-label form-label-sm ">Discapacidad </label>
-                            <select class="form-select form-select-sm select2-validation" id="ddl_discapacidad" name="ddl_discapacidad" required>
-                                <option value="">-- Seleccione --</option>
+                            <label for="ddl_discapacidad" class="form-label fw-semibold fs-7">Tipo de Discapacidad </label>
+                            <select class="form-select select2-validation" id="ddl_discapacidad" name="ddl_discapacidad" required>
+                                <option value="">-- Seleccione tipo --</option>
                             </select>
                             <label class="error" style="display: none;" for="ddl_discapacidad"></label>
-
                         </div>
 
                         <div class="col-md-6">
-                            <label for="ddl_discapacidad_escala" class="form-label form-label-sm ">Escala </label>
-                            <select class="form-select form-select-sm select2-validation" id="ddl_discapacidad_escala" name="ddl_discapacidad_escala" required>
-                                <option value="">-- Seleccione --</option>
+                            <label for="ddl_discapacidad_escala" class="form-label fw-semibold fs-7">Escala / Nivel <i class='bx bx-info-circle text-primary' data-bs-toggle="tooltip" title="Primero seleccionar un Tipo de Discapacidad"></i> </label>
+                            <select class="form-select select2-validation" id="ddl_discapacidad_escala" name="ddl_discapacidad_escala" required>
+                                <option value="">-- Seleccione escala --</option>
                             </select>
                             <label class="error" style="display: none;" for="ddl_discapacidad_escala"></label>
-
                         </div>
+
                     </div>
 
-                    <div class="row mb-col">
-                        <div class="col-md-6">
-                            <label for="txt_porcentaje" class="form-label form-label-sm">Porcentaje </label>
-                            <input type="number" class="form-control form-control-sm"
-                                id="txt_porcentaje" name="txt_porcentaje" min="0" max="100" required>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="txt_porcentaje" class="form-label fw-semibold fs-7">Porcentaje (%) </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white text-muted"><strong>%</strong></span>
+                                <input type="number" class="form-control" id="txt_porcentaje" name="txt_porcentaje" min="0" max="100" required placeholder="0 - 100">
+                            </div>
+                            <label class="error" style="display: none;" for="txt_porcentaje"></label>
                         </div>
                     </div>
-
                 </div>
 
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4"
-                        id="btn_guardar_discapacidad"
-                        onclick="insertar_editar_discapacidad();">
-                        <i class="bx bx-save"></i> Agregar
-                    </button>
-
-                    <button type="button" class="btn btn-danger btn-sm px-4"
-                        id="btn_eliminar_discapacidad"
-                        onclick="delete_datos_discapacidad();" style="display:none;">
+                <div class="modal-footer bg-light border-top-0 d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-danger btn-sm" id="btn_eliminar_discapacidad" onclick="delete_datos_discapacidad();" style="display:none;">
                         <i class="bx bx-trash"></i> Eliminar
                     </button>
+
+                    <div class="ms-auto">
+                        <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary btn-sm px-4" id="btn_guardar_discapacidad" onclick="insertar_editar_discapacidad();">
+                            <i class="bx bx-save"></i> Guardar
+                        </button>
+                    </div>
                 </div>
 
             </form>
-
         </div>
     </div>
 </div>
+
+
 <script>
     $(document).ready(function() {
 

@@ -119,37 +119,12 @@
                  <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_documento_identidad.php'); ?>
 
              </div>
-             <!-- Contratos de Trabajo -->
-             <div class="card-body">
-                 <div class="mb-2">
-                     <div class="row">
-                         <div class="col-7 d-flex align-items-center">
-                             <h6 class="mb-0 fw-bold text-primary">Contratos de Trabajo:
-                             </h6>
-                         </div>
-                         <div
-                             class="col-5 d-flex justify-content-end align-items-center">
-                             <a href="#"
-                                 class="text-success icon-hover d-flex align-items-center"
-                                 data-bs-toggle="modal"
-                                 data-bs-target="#modal_agregar_contratos">
-                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                 <span class="">Agregar</span>
-                             </a>
-                         </div>
-                     </div>
-                 </div>
-                 <hr class="my-0 mb-3">
-
-                 <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_contratos_trabajo.php'); ?>
-
-             </div>
              <!-- Certificado Médicos -->
              <div class="card-body my-0">
                  <div class="mb-2">
                      <div class="row">
                          <div class="col-7 d-flex align-items-center">
-                             <h6 class="mb-0 fw-bold text-primary">Certificados Médicos:
+                             <h6 class="mb-0 fw-bold text-primary">Antecedentes Médicos:
                              </h6>
                          </div>
                          <div
@@ -220,7 +195,8 @@
                          </div>
                      </div>
                  </div>
-                 <hr class="my-0">
+                 
+                 <hr>
 
                  <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_idiomas.php'); ?>
 

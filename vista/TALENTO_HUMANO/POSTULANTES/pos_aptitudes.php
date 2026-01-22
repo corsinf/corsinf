@@ -208,37 +208,50 @@
 </div>
 
 <!-- Modal para agregar aptitudes técnicas y blandas-->
-<div class="modal" id="modal_agregar_aptitudes" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+<div class="modal fade" id="modal_agregar_aptitudes" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg">
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold">Agregar Aptitudes</small></h5>
+            <div class="modal-header bg-dark bg-opacity-10">
+                <div>
+                    <h5 class="modal-title fw-bold text-primary" id="lbl_titulo_aptitudes">
+                        <i class='bx bx-extension me-2'></i>Habilidades y Aptitudes
+                    </h5>
+                    <small class="text-muted">Selecciona las competencias que mejor describan tu perfil profesional.</small>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_aptitudes_modal();"></button>
             </div>
-            <!-- Modal body -->
+
             <form id="form_aptitudes">
                 <div class="modal-body">
                     <input type="hidden" class="txt_id_habilidades_postulante">
 
-                    <div class="row mb-col">
+                    <div class="row mb-4">
                         <div class="col-md-12">
-                            <label for="ddl_seleccionar_aptitud_tecnica" class="form-label form-label-sm">Seleccione sus Aptitudes Técnicas </label>
-                            <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_tecnica" name="ddl_seleccionar_aptitud_tecnica" multiple="multiple"></select>
+                            <label for="ddl_seleccionar_aptitud_tecnica" class="form-label fw-semibold fs-7">Aptitudes Técnicas (Hard Skills)</label>
+                            <select class="form-select ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_tecnica" name="ddl_seleccionar_aptitud_tecnica" multiple="multiple" style="width: 100%;"></select>
+                            <div class="form-text text-xs mt-1">
+                                <i class='bx bx-check-double'></i> Puedes seleccionar múltiples conocimientos técnicos o herramientas.
+                            </div>
                         </div>
                     </div>
 
-                    <div class="row mb-col">
+                    <div class="row mb-2">
                         <div class="col-md-12">
-                            <label for="ddl_seleccionar_aptitud_blanda" class="form-label form-label-sm">Seleccione sus Aptitudes Blandas </label>
-                            <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_blanda" name="ddl_seleccionar_aptitud_blanda" multiple="multiple"></select>
+                            <label for="ddl_seleccionar_aptitud_blanda" class="form-label fw-semibold fs-7">Aptitudes Blandas (Soft Skills)</label>
+                            <select class="form-select ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_blanda" name="ddl_seleccionar_aptitud_blanda" multiple="multiple" style="width: 100%;"></select>
+                            <div class="form-text text-xs mt-1">
+                                <i class='bx bx-smile'></i> Selecciona habilidades interpersonales y de gestión.
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="modal-footer d-flex justify-content-center">
-                    <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" id="btn_guardar_aptitudes" onclick="insertar_editar_aptitudes();" type="button"><i class="bx bx-save"></i>Guardar Aptitudes</button>
+                <div class="modal-footer bg-light border-top-0 d-flex justify-content-end">
+                    <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" onclick="limpiar_campos_aptitudes_modal();">Cancelar</button>
+                    <button class="btn btn-primary btn-sm px-4 d-flex align-items-center" id="btn_guardar_aptitudes" onclick="insertar_editar_aptitudes();" type="button">
+                        <i class="bx bx-save me-1"></i> Guardar Aptitudes
+                    </button>
                 </div>
             </form>
         </div>

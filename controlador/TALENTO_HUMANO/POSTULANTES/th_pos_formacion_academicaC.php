@@ -34,15 +34,17 @@ class th_pos_formacion_academicaC
     {
         $datos = $this->modelo->listar_formacion_academica_con_nivel_id($id);
 
-        $texto = '';
+        $texto = '<div class="row g-3">';
+
         foreach ($datos as $value) {
 
+            // Lógica de fechas
             $fecha_inicio_estudio = !empty($value['th_fora_fecha_inicio_formacion'])
                 ? date('d/m/Y', strtotime($value['th_fora_fecha_inicio_formacion']))
                 : '';
 
             $fecha_fin_estudio = empty($value['th_fora_fecha_fin_formacion'])
-                ? 'Actualidad'
+                ? '<span class="fw-bold text-primary">Actualidad</span>'
                 : date('d/m/Y', strtotime($value['th_fora_fecha_fin_formacion']));
 
             $nivel = !empty($value['nivel_academico_descripcion'])
@@ -54,34 +56,55 @@ class th_pos_formacion_academicaC
                 : '';
 
             $texto .= <<<HTML
-            <div class="row mb-col">
-                <div class="col-10">
-                    <h6 class="fw-bold mb-1">
-                        {$value['th_fora_titulo_obtenido']}
-                    </h6>
+                            <div class="col-md-6 mb-col">
+                                <div class="cert-card p-3 h-100 position-relative shadow-sm">
+                                    
+                                    <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
+                                            onclick="abrir_modal_formacion_academica('{$value['_id']}');" 
+                                            title="Editar Formación">
+                                        <i class="bx bx-pencil"></i>
+                                    </button>
 
-                    <p class="m-0 text-muted">
-                        {$value['th_fora_institución']}
-                    </p>
+                                    <div class="d-flex flex-column h-100">
+                                        <div class="mb-2">
+                                            <span class="cert-badge mb-1">Instrucción Formal</span>
+                                            
+                                            <h6 class="fw-bold text-dark cert-title mb-1">
+                                                {$value['th_fora_titulo_obtenido']}
+                                            </h6>
+                                            
+                                            <p class="cert-doctor mb-1 text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.3px;">
+                                                <i class="bx bx-buildings me-1"></i>{$value['th_fora_institución']}
+                                            </p>
 
-                    <p class="m-0">
-                        <strong>Nivel:</strong> {$nivel}
-                    </p>
+                                            <p class="m-0 text-muted" style="font-size: 0.75rem;">
+                                                <i class="bx bx-graduation me-1"></i>Nivel: <strong>{$nivel}</strong>
+                                            </p>
+                                        </div>
 
-                    <p class="m-0">
-                        {$fecha_inicio_estudio} - {$fecha_fin_estudio}{$senescyt}
-                    </p>
-                </div>
+                                        <div class="mt-auto pt-2">
+                                            <div class="d-flex align-items-center justify-content-between p-2" 
+                                                style="background: rgba(255, 193, 7, 0.05); border-radius: 8px; border: 1px dashed rgba(255, 193, 7, 0.3);">
+                                                
+                                                <div class="cert-date-range">
+                                                    <div class="cert-label-small" style="color: #856404;">Periodo y Registro</div>
+                                                    <span class="text-dark" style="font-size: 0.65rem;">
+                                                        <i class="bx bx-calendar me-1"></i>{$fecha_inicio_estudio} — {$fecha_fin_estudio}{$senescyt}
+                                                    </span>
+                                                </div>
 
-                <div class="col-2 d-flex justify-content-end align-items-start">
-                    <button class="btn icon-hover"
-                        onclick="abrir_modal_formacion_academica({$value['_id']});">
-                        <i class="text-dark bx bx-pencil bx-sm"></i>
-                    </button>
-                </div>
-            </div>
-        HTML;
+                                                <div style="color: #ffc107; opacity: 0.6;">
+                                                    <i class="bx bxs-certification bx-sm"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        HTML;
         }
+
+        $texto .= '</div>';
 
         return $texto;
     }

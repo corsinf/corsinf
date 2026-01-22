@@ -273,78 +273,98 @@
 </div>
 
 <!-- Modal para agregar experiencia laboral-->
-<div class="modal" id="modal_agregar_experiencia" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+<div class="modal fade" id="modal_agregar_experiencia" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg">
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_experiencia_laboral">Agregar Experiencia Laboral</small></h5>
+            <div class="modal-header bg-dark bg-opacity-10">
+                <div>
+                    <h5 class="modal-title fw-bold text-primary" id="lbl_titulo_experiencia_laboral">
+                        <i class='bx bx-briefcase-alt-2 me-2'></i>Experiencia Laboral
+                    </h5>
+                    <small class="text-muted">Detalla tu trayectoria profesional y logros alcanzados.</small>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_experiencia_laboral_modal()"></button>
             </div>
-            <!-- Modal body -->
-            <form id="form_experiencia_laboral">
+
+            <form id="form_experiencia_laboral" class="needs-validation">
                 <input type="hidden" id="txt_experiencia_id">
+
                 <div class="modal-body">
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_nombre_empresa" class="form-label form-label-sm">Nombre Empresa </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_nombre_empresa" id="txt_nombre_empresa" maxlength="100">
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="txt_nombre_empresa" class="form-label fw-semibold fs-7">Nombre Empresa </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white text-muted"><i class='bx bx-buildings'></i></span>
+                                <input type="text" class="form-control no_caracteres" name="txt_nombre_empresa" id="txt_nombre_empresa" maxlength="100" placeholder="Ej: Corporación XYZ">
+                            </div>
+                            <label class="error" style="display: none;" for="txt_nombre_empresa"></label>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="txt_cargos_ocupados" class="form-label fw-semibold fs-7">Cargo Ocupado </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white text-muted"><i class='bx bx-user'></i></span>
+                                <input type="text" class="form-control no_caracteres" name="txt_cargos_ocupados" id="txt_cargos_ocupados" maxlength="100" placeholder="Ej: Analista de Sistemas">
+                            </div>
+                            <label class="error" style="display: none;" for="txt_cargos_ocupados"></label>
                         </div>
                     </div>
 
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_cargos_ocupados" class="form-label form-label-sm">Cargos Ocupados </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_cargos_ocupados" id="txt_cargos_ocupados" maxlength="100">
-                        </div>
-                    </div>
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_sueldo" class="form-label form-label-sm">Sueldo </label>
-                            <input
-                                type="number"
-                                class="form-control form-control-sm"
-                                name="txt_sueldo"
-                                id="txt_sueldo"
-                                step="0.01"
-                                min="0">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="txt_sueldo" class="form-label fw-semibold fs-7">Sueldo Mensual (Opcional) </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white text-muted"><i class='bx bx-money'></i></span>
+                                <input type="number" class="form-control" name="txt_sueldo" id="txt_sueldo" step="0.01" min="0" placeholder="0.00">
+                            </div>
                         </div>
                     </div>
 
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_fecha_inicio_laboral" class="form-label form-label-sm">Fecha Inicio </label>
-                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_laboral" id="txt_fecha_inicio_laboral" onchange="checkbox_actualidad_exp_prev();" onkeydown="saltar_input(event, 'txt_fecha_final_laboral')">
+                    <div class="p-3 bg-light rounded-3 border border-dashed mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="text-muted fs-7 mb-0 fw-bold text-uppercase ls-1">Periodo Laboral </h6>
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" name="cbx_fecha_final_laboral" id="cbx_fecha_final_laboral" onchange="checkbox_actualidad_exp_prev();">
+                                <label for="cbx_fecha_final_laboral" class="form-check-label fs-7 fw-semibold text-primary">Actualidad</label>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="txt_fecha_inicio_laboral" class="form-label fs-7 mb-1">Fecha Inicio </label>
+                                <input type="date" class="form-control form-control-sm" name="txt_fecha_inicio_laboral" id="txt_fecha_inicio_laboral" onchange="checkbox_actualidad_exp_prev();">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="txt_fecha_final_laboral" class="form-label fs-7 mb-1">Fecha Fin </label>
+                                <input type="date" class="form-control form-control-sm" name="txt_fecha_final_laboral" id="txt_fecha_final_laboral" onchange="checkbox_actualidad_exp_prev();">
+                            </div>
                         </div>
                     </div>
 
-                    <div class="row mb-col">
+                    <div class="row mb-2">
                         <div class="col-md-12">
-                            <label for="txt_fecha_final_laboral" class="form-label form-label-sm">Fecha de Finalización </label>
-                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_final_laboral" id="txt_fecha_final_laboral" onchange="checkbox_actualidad_exp_prev();" onkeydown="saltar_input(event, 'cbx_fecha_final_laboral')">
+                            <label for="txt_responsabilidades_logros" class="form-label fw-semibold fs-7">Descripción de Responsabilidades y/o Logros </label>
+                            <textarea class="form-control no_caracteres" name="txt_responsabilidades_logros" id="txt_responsabilidades_logros" rows="3" maxlength="300" placeholder="Describe brevemente tus funciones principales y éxitos alcanzados..."></textarea>
+                            <div class="form-text text-end text-xs">Máximo 300 caracteres.</div>
                         </div>
                     </div>
 
-                    <div class="row mb-col">
-                        <div class="col md-12">
-                            <input type="checkbox" class="form-check-input" name="cbx_fecha_final_laboral" id="cbx_fecha_final_laboral" onchange="checkbox_actualidad_exp_prev();">
-                            <label for="cbx_fecha_final_laboral" class="form-label form-label-sm">Actualidad</label>
-                        </div>
-                    </div>
+                </div>
 
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_responsabilidades_logros" class="form-label form-label-sm">Descripción de Responsabilidades y/o Logros</label>
-                            <textarea type="text" class="form-control form-control-sm no_caracteres" name="txt_responsabilidades_logros" id="txt_responsabilidades_logros" maxlength="300"></textarea>
-                        </div>
+                <div class="modal-footer bg-light border-top-0 d-flex justify-content-between">
+                    <button type="button" style="display: none;" class="btn btn-outline-danger btn-sm" id="btn_eliminar_experiencia" onclick="delete_datos_experiencia_laboral();">
+                        <i class="bx bx-trash"></i> Eliminar
+                    </button>
+
+                    <div class="ms-auto">
+                        <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" onclick="limpiar_campos_experiencia_laboral_modal()">Cancelar</button>
+                        <button type="button" class="btn btn-primary btn-sm px-4" id="btn_guardar_experiencia" onclick="validar_fechas_exp_prev(); insertar_editar_experiencia_laboral();">
+                            <i class="bx bx-save"></i> Guardar
+                        </button>
                     </div>
                 </div>
 
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_experiencia" onclick="validar_fechas_exp_prev(); insertar_editar_experiencia_laboral();"><i class="bx bx-save"></i>Agregar</button>
-                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_experiencia" onclick="delete_datos_experiencia_laboral();"><i class="bx bx-trash"></i>Eliminar</button>
-                </div>
             </form>
         </div>
     </div>

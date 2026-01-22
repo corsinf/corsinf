@@ -197,26 +197,29 @@
 </div>
 
 <!-- Modal para agregar idiomas-->
-<div class="modal" id="modal_agregar_idioma" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static"
-    data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+<div class="modal fade" id="modal_agregar_idioma" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg">
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_nombre_idioma">Agregar Idioma </small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                    onclick="limpiar_campos_idiomas_modal()"></button>
+            <div class="modal-header bg-dark bg-opacity-10">
+                <div>
+                    <h5 class="modal-title fw-bold text-primary" id="lbl_nombre_idioma">
+                        <i class='bx bx-world me-2'></i>Idiomas y Lenguas
+                    </h5>
+                    <small class="text-muted">Registra tu dominio de lenguas extranjeras o nativas.</small>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_idiomas_modal()"></button>
             </div>
-            <!-- Modal body -->
-            <form id="form_agregar_idioma">
+
+            <form id="form_agregar_idioma" class="needs-validation">
                 <input type="hidden" id="txt_idiomas_id">
+
                 <div class="modal-body">
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma </label>
-                            <select class="form-select form-select-sm" id="ddl_seleccionar_idioma"
-                                name="ddl_seleccionar_idioma" >
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="ddl_seleccionar_idioma" class="form-label fw-semibold fs-7">Idioma </label>
+                            <select class="form-select form-select-sm select2-validation" id="ddl_seleccionar_idioma" name="ddl_seleccionar_idioma" style="width: 100%;">
                                 <option selected disabled value="">-- Seleccionar Idioma --</option>
                                 <option value="Español">Español</option>
                                 <option value="Inglés">Inglés</option>
@@ -226,15 +229,10 @@
                                 <option value="Italiano">Italiano</option>
                             </select>
                         </div>
-                    </div>
-
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio Idioma </label>
-                            <select class="form-select form-select-sm" id="ddl_dominio_idioma" name="ddl_dominio_idioma"
-                                required >
-                                <option selected disabled value="">-- Selecciona su Nivel de Dominio del idioma --
-                                </option>
+                        <div class="col-md-6">
+                            <label for="ddl_dominio_idioma" class="form-label fw-semibold fs-7">Nivel de Dominio </label>
+                            <select class="form-select form-select-sm select2-validation" id="ddl_dominio_idioma" name="ddl_dominio_idioma" style="width: 100%;" required>
+                                <option selected disabled value="">-- Seleccionar Nivel --</option>
                                 <option value="Nativo">Nativo</option>
                                 <option value="A1: Principiante">A1: Principiante</option>
                                 <option value="A2: Básico">A2: Básico</option>
@@ -245,38 +243,46 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row mb-col">
+
+                    <div class="row mb-3">
                         <div class="col-md-12">
-                            <label for="txt_institucion" class="form-label form-label-sm">Institución </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres"
-                                name="txt_institucion_1" id="txt_institucion_1" maxlength="100">
+                            <label for="txt_institucion_1" class="form-label fw-semibold fs-7">Institución de enseñanza </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white text-muted"><i class='bx bx-buildings'></i></span>
+                                <input type="text" class="form-control no_caracteres" name="txt_institucion_1" id="txt_institucion_1" maxlength="100" placeholder="Ej: Alianza Francesa, British Council...">
+                            </div>
+                            <label class="error" style="display: none;" for="txt_institucion_1"></label>
                         </div>
                     </div>
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_fecha_inicio_idioma" class="form-label form-label-sm">Fecha Inicio Curso
-                                Idioma </label>
-                            <input type="date" class="form-control form-control-sm" name="txt_fecha_inicio_idioma"
-                                id="txt_fecha_inicio_idioma" onblur="txt_fecha_fin_idioma_1();" onkeydown="saltar_input(event, 'txt_fecha_fin_idioma')">
+
+                    <div class="p-3 bg-light rounded-3 border border-dashed">
+                        <h6 class="text-muted fs-7 mb-2 fw-bold text-uppercase">Periodo de Estudio</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="txt_fecha_inicio_idioma" class="form-label fs-7 mb-1">Fecha Inicio </label>
+                                <input type="date" class="form-control form-control-sm" name="txt_fecha_inicio_idioma" id="txt_fecha_inicio_idioma" onblur="txt_fecha_fin_idioma_1();">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="txt_fecha_fin_idioma" class="form-label fs-7 mb-1">Fecha Finalización </label>
+                                <input type="date" class="form-control form-control-sm" name="txt_fecha_fin_idioma" id="txt_fecha_fin_idioma" onblur="txt_fecha_fin_idioma_1();">
+                            </div>
                         </div>
+                        <div class="form-text text-xs mt-2"><i class='bx bx-calendar-check'></i> Indica el tiempo que tomó tu formación.</div>
                     </div>
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_fecha_fin_idioma" class="form-label form-label-sm">Fecha Final Curso Idioma
-                            </label>
-                            <input type="date" class="form-control form-control-sm" name="txt_fecha_fin_idioma"
-                                id="txt_fecha_fin_idioma" onblur="txt_fecha_fin_idioma_1();" onkeydown="saltar_input(event, 'txt_fecha_fin_idioma')">
-                        </div>
-                    </div>
+
                 </div>
-                <!-- Modal footer -->
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_idioma"
-                        onclick="insertar_editar_idiomas(); validar_fechas_idioma();"><i
-                            class="bx bx-save"></i>Agregar</button>
-                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1"
-                        id="btn_eliminar_idiomas" onclick="borrar_datos_idioma();"><i
-                            class="bx bx-trash"></i>Eliminar</button>
+
+                <div class="modal-footer bg-light border-top-0 d-flex justify-content-between">
+                    <button type="button" style="display: none;" class="btn btn-outline-danger btn-sm" id="btn_eliminar_idiomas" onclick="borrar_datos_idioma();">
+                        <i class="bx bx-trash"></i> Eliminar
+                    </button>
+
+                    <div class="ms-auto">
+                        <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" onclick="limpiar_campos_idiomas_modal()">Cancelar</button>
+                        <button type="button" class="btn btn-primary btn-sm px-4" id="btn_guardar_idioma" onclick="insertar_editar_idiomas(); validar_fechas_idioma();">
+                            <i class="bx bx-save"></i> Guardar
+                        </button>
+                    </div>
                 </div>
 
             </form>

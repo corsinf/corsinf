@@ -20,50 +20,80 @@ if (isset($_GET['eliminar'])) {
 }
 
 
-class th_pos_certificados_medicosC 
+class th_pos_certificados_medicosC
 {
     private $modelo;
 
-    function __construct() 
+    function __construct()
     {
-       
-        $this-> modelo = new th_pos_certificados_medicosM();
+
+        $this->modelo = new th_pos_certificados_medicosM();
     }
 
     //Funcion para listar los certidicados médicos del postulante
     function listar($id)
     {
-        
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_cer_estado', 1)->orderBy('th_cer_fecha_fin_certificado','DESC')->listar();
-        
-        $texto = '';
-     
+
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_cer_estado', 1)->orderBy('th_cer_fecha_fin_certificado', 'DESC')->listar();
+
+
+        $texto = '<div class="row g-3">';
+
         foreach ($datos as $key => $value) {
-            //Formato de fechas de certificados médicos
-            $fecha_inicio_certificado = date('d/m/Y', strtotime($value['th_cer_fecha_inicio_certificado']));
-            $fecha_fin_certificado = date('d/m/Y', strtotime($value['th_cer_fecha_fin_certificado']));
-                        
-            $texto .=
-                <<<HTML
-                    <div class="row mb-col">
-                        <div class="col-10">
-                            <h6 class="fw-bold my-0 d-flex align-items-center">{$value['th_cer_motivo_certificado']}</h6>
-                            <p class="m-0">{$value['th_cer_nom_medico']}</p>
-                            <p class="m-0">{$value['th_cer_ins_medico']}</p>
-                            <p class="m-0">{$fecha_inicio_certificado} - {$fecha_fin_certificado} </p>
-                            <a href="#" onclick="ruta_iframe_certificados_medicos('{$value['th_cer_ruta_certficado']}');">Ver Certificado Médico</a>
-                        </div>
-                        
-                        <div class="col-2 d-flex justify-content-end align-items-start">
-                            <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_certificados_medicos('{$value['_id']}');">
-                                <i class="text-dark bx bx-pencil bx-sm"></i>
-                            </button>
-                        </div>
-                    </div>
+            // Lógica de fechas
+            $fecha_inicio = date('d/m/Y', strtotime($value['th_cer_fecha_inicio_certificado']));
+            $raw_fecha_fin = $value['th_cer_fecha_fin_certificado'];
 
+            $es_permanente = ($raw_fecha_fin == '1900-01-01' || strpos($raw_fecha_fin, '01/01/1900') !== false);
+            $fecha_fin_txt = $es_permanente
+                ? '<span class="fw-bolder text-success">PERMANENTE</span>'
+                : date('d/m/Y', strtotime($raw_fecha_fin));
 
-                HTML;
+            $texto .= <<<HTML
+                        <div class="col-md-6 mb-col">
+                            <div class="cert-card p-3 h-100 position-relative shadow-sm">
+                                
+                                <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
+                                        onclick="abrir_modal_certificados_medicos('{$value['_id']}');" 
+                                        title="Editar Certificado">
+                                    <i class="bx bx-edit-alt"></i>
+                                </button>
+
+                                <div class="d-flex flex-column h-100">
+                                    <div class="mb-2">
+                                        <span class="cert-badge mb-1">Certificado</span>
+                                        
+                                        <h6 class="fw-bold text-dark cert-title mb-1">
+                                            {$value['th_cer_motivo_certificado']}
+                                        </h6>
+                                        
+                                        <p class="cert-doctor m-0">
+                                            <i class="bx bx-user-circle me-1"></i>{$value['th_cer_nom_medico']}
+                                        </p>
+                                    </div>
+
+                                    <div class="mt-auto pt-2 d-flex justify-content-between align-items-end">
+                                        <div class="cert-date-range">
+                                            <div class="cert-label-small">Vigencia</div>
+                                            <span class="text-dark" style="font-size: 0.72rem;">
+                                                <i class="bx bx-calendar-alt me-1"></i>{$fecha_inicio} — {$fecha_fin_txt}
+                                            </span>
+                                        </div>
+                                        
+                                        <button onclick="ruta_iframe_certificados_medicos('{$value['th_cer_ruta_certficado']}');" 
+                                                class="btn btn-dark btn-xs py-1 px-3 btn-cert-action">
+                                            DOCUMENTO
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    HTML;
         }
+
+        $texto .= '</div>';
+
+
         return $texto;
     }
 

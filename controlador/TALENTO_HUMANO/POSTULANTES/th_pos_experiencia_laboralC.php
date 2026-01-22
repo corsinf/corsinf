@@ -37,33 +37,70 @@ class th_pos_experiencia_laboralC
     {
         $datos = $this->modelo->where('th_pos_id', $id)->where('th_expl_estado', 1)->orderBy('th_expl_cbx_fecha_fin_experiencia', 'DESC')->orderBy('th_expl_fecha_fin_experiencia', 'DESC')->listar();
         //$datos = $this->modelo->where('th_pos_id', $id)->where('th_expl_estado', 1)->orderBy('th_expl_fecha_fin_experiencia', 'DESC')->listar();
-        $texto = '';
+        $texto = '<div class="row g-3">'; 
 
         foreach ($datos as $key => $value) {
-            //Formato de fechas de experiencia laboral
+            // Formato de fechas
             $fecha_inicio_experiencia = date('d/m/Y', strtotime($value['th_expl_fecha_inicio_experiencia']));
-            //$fecha_fin_experiencia = $value['th_expl_fecha_fin_experiencia'] == '' ? 'Actualidad' : date('d/m/Y', strtotime($value['th_expl_fecha_fin_experiencia']));
-            $fecha_fin_experiencia = $value['th_expl_cbx_fecha_fin_experiencia'] == 1 ? 'Actualidad' : date('d/m/Y', strtotime($value['th_expl_fecha_fin_experiencia']));
+            $fecha_fin_experiencia = $value['th_expl_cbx_fecha_fin_experiencia'] == 1
+                ? '<span class="fw-bold text-success">Actualidad</span>'
+                : date('d/m/Y', strtotime($value['th_expl_fecha_fin_experiencia']));
 
             $sueldo_actual = number_format($value['th_expl_sueldo'], 2, '.', ',');
-            $texto .=
-                <<<HTML
-                    <div class="row mb-col">
-                        <div class="col-10">
-                            <h6 class="fw-bold">{$value['th_expl_nombre_empresa']}</h6>
-                            <p class="m-0">{$value['th_expl_cargos_ocupados']}</p>
-                            <p class="m-0">{$sueldo_actual}</p>
-                            <p class="m-0">{$fecha_inicio_experiencia} - {$fecha_fin_experiencia}</p>
-                            <p class="m-0">{$value['th_expl_responsabilidades_logros']}</p>
-                        </div>
-                        <div class="col-2 d-flex justify-content-end align-items-start">
-                            <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_experiencia_laboral({$value['_id']});">
-                                <i class="text-dark bx bx-pencil bx-sm"></i>
-                            </button>
-                        </div>
-                    </div>
-                HTML;
+
+            $texto .= <<<HTML
+                            <div class="col-md-6 mb-col">
+                                <div class="cert-card p-3 h-100 position-relative shadow-sm">
+                                    
+                                    <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
+                                            onclick="abrir_modal_experiencia_laboral('{$value['_id']}');" 
+                                            title="Editar Experiencia">
+                                        <i class="bx bx-pencil"></i>
+                                    </button>
+
+                                    <div class="d-flex flex-column h-100">
+                                        <div class="mb-2">
+                                            <span class="cert-badge mb-1">Experiencia Laboral</span>
+                                            
+                                            <h6 class="fw-bold text-dark cert-title mb-1">
+                                                {$value['th_expl_nombre_empresa']}
+                                            </h6>
+                                            
+                                            <p class="cert-doctor mb-1">
+                                                <i class="bx bx-briefcase-alt-2 me-1"></i><strong>{$value['th_expl_cargos_ocupados']}</strong>
+                                            </p>
+
+                                            <p class="text-muted mb-0" style="font-size: 0.7rem; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                                {$value['th_expl_responsabilidades_logros']}
+                                            </p>
+                                        </div>
+
+                                        <div class="mt-auto pt-2">
+                                            <div class="d-flex align-items-center justify-content-between p-2" 
+                                                style="background: rgba(25, 135, 84, 0.05); border-radius: 8px; border: 1px dashed rgba(25, 135, 84, 0.2);">
+                                                
+                                                <div class="cert-date-range">
+                                                    <div class="cert-label-small" style="color: #198754;">Periodo</div>
+                                                    <span class="text-dark" style="font-size: 0.65rem;">
+                                                        <i class="bx bx-calendar me-1"></i>{$fecha_inicio_experiencia} — {$fecha_fin_experiencia}
+                                                    </span>
+                                                </div>
+
+                                                <div class="text-end">
+                                                    <div class="cert-label-small" style="color: #198754;">Sueldo</div>
+                                                    <span class="fw-bold" style="font-size: 0.9rem; color: #198754;">
+                                                        <small>$</small>{$sueldo_actual}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        HTML;
         }
+
+        $texto .= '</div>';
         return $texto;
     }
 

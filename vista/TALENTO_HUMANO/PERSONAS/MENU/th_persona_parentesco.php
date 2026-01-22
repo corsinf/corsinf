@@ -443,24 +443,6 @@
         transform: scale(1.1);
     }
 
-    /* Ajuste para el botón de editar */
-    .btn-edit-minimal {
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
-        color: #64748b;
-        background: transparent;
-        border: none;
-    }
-
-    .btn-edit-minimal:hover {
-        background-color: #f1f5f9;
-        color: #0f172a;
-    }
-
     /* Avatar más pequeño para ahorrar espacio */
     .avatar-mini {
         width: 34px;

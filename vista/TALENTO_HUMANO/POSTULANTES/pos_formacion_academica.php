@@ -247,86 +247,110 @@
 
 <div id="pnl_formacion_academica">
 </div>
-<!-- Modal para agregar formación académica-->
-<div class="modal" id="modal_agregar_formacion" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_formacion_acedemica">Agregar Formación Académica</small></h5>
+<!-- Modal para agregar formación académica-->
+<div class="modal fade" id="modal_agregar_formacion" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+
+            <div class="modal-header bg-dark bg-opacity-10">
+                <div>
+                    <h5 class="modal-title fw-bold text-primary" id="lbl_titulo_formacion_acedemica">
+                        <i class='bx bx-book-reader me-2'></i>Formación Académica
+                    </h5>
+                    <small class="text-muted">Registra tus estudios secundarios, universitarios y de posgrado.</small>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_formacion_academica_modal();"></button>
             </div>
-            <!-- Modal body -->
-            <form id="form_formacion_academica">
-                <input type="text" id="txt_formacion_id" hidden>
+
+            <form id="form_formacion_academica" class="needs-validation">
+                <input type="hidden" id="txt_formacion_id">
+
                 <div class="modal-body">
-                    <div class="row mb-col">
+
+                    <div class="row mb-3">
                         <div class="col-md-12">
-                            <label for="txt_titulo_obtenido" class="form-label form-label-sm">Título Obtenido </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_titulo_obtenido" id="txt_titulo_obtenido" maxlength="100">
+                            <label for="txt_titulo_obtenido" class="form-label fw-semibold fs-7">Título Obtenido </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white text-muted"><i class='bx bx-certification'></i></span>
+                                <input type="text" class="form-control no_caracteres" name="txt_titulo_obtenido" id="txt_titulo_obtenido" maxlength="100" placeholder="Ej: Ingeniero en Sistemas, Bachiller en Ciencias...">
+                            </div>
+                            <label class="error" style="display: none;" for="txt_titulo_obtenido"></label>
+
                         </div>
                     </div>
-                    <div class="row mb-col">
+
+                    <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label for="ddl_nivel_academico" class="form-label form-label-sm">
-                                Nivel Académico
-                            </label>
-                            <select class="form-select form-select-sm mb-2 select2-validation"
-                                name="ddl_nivel_academico"
-                                id="ddl_nivel_academico">
+                            <label for="ddl_nivel_academico" class="form-label fw-semibold fs-7">Nivel Académico </label>
+                            <select class="form-select select2-validation" name="ddl_nivel_academico" id="ddl_nivel_academico" style="width: 100%;">
                                 <option value="">-- Seleccione --</option>
                             </select>
                             <label class="error" style="display: none;" for="ddl_nivel_academico"></label>
                         </div>
                         <div class="col-md-6">
-                            <label for="txt_th_fora_registro_senescyt" class="form-label form-label-sm">
-                                Registro SENESCYT
-                            </label>
-                            <input type="text"
-                                class="form-control form-control-sm mb-2"
-                                name="txt_th_fora_registro_senescyt"
-                                id="txt_th_fora_registro_senescyt"
-                                placeholder="Ej: 1234567890">
+                            <label for="txt_th_fora_registro_senescyt" class="form-label fw-semibold fs-7">Registro SENESCYT </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white text-muted"><i class='bx bx-id-card'></i></span>
+                                <input type="text" class="form-control" name="txt_th_fora_registro_senescyt" id="txt_th_fora_registro_senescyt" placeholder="Número de registro">
+                            </div>
+                            <label class="error" style="display: none;" for="txt_th_fora_registro_senescyt"></label>
+
                         </div>
                     </div>
 
-                    <div class="row mb-col">
+                    <div class="row mb-3">
                         <div class="col-md-12">
-                            <label for="txt_institucion" class="form-label form-label-sm">Institución </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_institucion" id="txt_institucion" maxlength="100">
+                            <label for="txt_institucion" class="form-label fw-semibold fs-7">Institución Educativa </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white text-muted"><i class='bx bx-buildings'></i></span>
+                                <input type="text" class="form-control no_caracteres" name="txt_institucion" id="txt_institucion" maxlength="100" placeholder="Ej: Universidad Central del Ecuador">
+                            </div>
+                            <label class="error" style="display: none;" for="txt_institucion"></label>
                         </div>
                     </div>
 
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_fecha_inicio_academico" class="form-label form-label-sm">Fecha Inicio Estudios </label>
-                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_academico" id="txt_fecha_inicio_academico" onblur="checkbox_actualidad_form_acad();" onkeydown="saltar_input(event, 'txt_fecha_final_academico')">
+                    <div class="p-3 bg-light rounded-3 border border-dashed mb-2">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="text-muted fs-7 mb-0 fw-bold text-uppercase">Periodo de Estudios </h6>
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" name="cbx_fecha_final_academico" id="cbx_fecha_final_academico" onchange="checkbox_actualidad_form_acad();">
+                                <label for="cbx_fecha_final_academico" class="form-check-label fs-7 fw-semibold text-primary">Cursando actualmente</label>
+                            </div>
+                            <label class="error" style="display: none;" for="cbx_fecha_final_academico"></label>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="txt_fecha_inicio_academico" class="form-label fs-7 mb-1">Fecha Inicio </label>
+                                <input type="date" class="form-control form-control-sm" name="txt_fecha_inicio_academico" id="txt_fecha_inicio_academico" onblur="checkbox_actualidad_form_acad();">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="txt_fecha_final_academico" class="form-label fs-7 mb-1">Fecha Finalización </label>
+                                <input type="date" class="form-control form-control-sm" name="txt_fecha_final_academico" id="txt_fecha_final_academico" onblur="checkbox_actualidad_form_acad();">
+                            </div>
                         </div>
                     </div>
-
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_fecha_final_academico" class="form-label form-label-sm">Fecha Finalización Estudios </label>
-                            <input type="date" class="form-control form-control-sm mb-2 no_caracteres" name="txt_fecha_final_academico" id="txt_fecha_final_academico" onblur="checkbox_actualidad_form_acad();" onkeydown="saltar_input(event, 'cbx_fecha_final_academico')">
-
-                            <input type="checkbox" class="form-check-input" name="cbx_fecha_final_academico" id="cbx_fecha_final_academico" onchange="checkbox_actualidad_form_acad();">
-                            <label for="cbx_fecha_final_academico" class="form-label form-label-sm">Actualidad</label>
-                        </div>
-                    </div>
-
-
 
                 </div>
 
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_formacion" onclick="validar_fechas_form_acad();insertar_editar_formacion_academica();"><i class="bx bx-save"></i>Agregar</button>
-                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion_academica" onclick="delete_datos_form_acad();"><i class="bx bx-trash"></i>Eliminar</button>
+                <div class="modal-footer bg-light border-top-0 d-flex justify-content-between">
+                    <button type="button" style="display: none;" class="btn btn-outline-danger btn-sm" id="btn_eliminar_formacion_academica" onclick="delete_datos_form_acad();">
+                        <i class="bx bx-trash"></i> Eliminar
+                    </button>
+
+                    <div class="ms-auto">
+                        <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" onclick="limpiar_campos_formacion_academica_modal();">Cancelar</button>
+                        <button type="button" class="btn btn-primary btn-sm px-4" id="btn_guardar_formacion" onclick="validar_fechas_form_acad();insertar_editar_formacion_academica();">
+                            <i class="bx bx-save"></i> Guardar
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 <script>
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('txt_titulo_obtenido');

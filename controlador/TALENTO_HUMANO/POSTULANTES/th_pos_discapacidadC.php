@@ -31,31 +31,61 @@ class th_pos_discapacidadC
     function listar($id)
     {
         $datos = $this->modelo->listar_por_persona($id);
-        $texto = '';
+
+        $texto = '<div class="row g-3">';
 
         if (empty($datos)) {
-            return '<div class="alert alert-info">No registra discapacidad.</div>';
+            return '<div class="alert alert-info border-0 shadow-sm" style="border-radius: 12px;">No registra discapacidad.</div>';
         }
 
         foreach ($datos as $value) {
 
             $texto .= <<<HTML
-            <div class="row mb-col">
-                <div class="col-10">
-                    <p class="m-0"><strong>Discapacidad:</strong> {$value['discapacidad']}</p>
-                    <p class="m-0"><strong>Porcentaje:</strong> {$value['th_pos_dis_porcentaje']}%</p>
-                    <p class="m-0"><strong>Escala:</strong> {$value['escala_discapacidad']}</p>
-                </div>
-                <div class="col-2 d-flex justify-content-end">
-                    <button class="btn icon-hover"
-                        onclick="abrir_modal_discapacidad('{$value['_id']}');">
-                        <i class="bx bx-pencil bx-sm text-dark"></i>
-                    </button>
-                </div>
-            </div>
-            <hr>
-        HTML;
+                            <div class="col-md-6 mb-col">
+                                <div class="cert-card p-3 h-100 position-relative shadow-sm">
+                                    
+                                    <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
+                                            onclick="abrir_modal_discapacidad('{$value['_id']}');" 
+                                            title="Editar Discapacidad">
+                                        <i class="bx bx-pencil"></i>
+                                    </button>
+
+                                    <div class="d-flex flex-column h-100">
+                                        <div class="mb-2">
+                                            <span class="cert-badge mb-1">Discapacidad</span>
+                                            
+                                            <h6 class="fw-bold text-dark cert-title mb-1">
+                                                {$value['discapacidad']}
+                                            </h6>
+                                            
+                                            <p class="cert-doctor m-0">
+                                                <i class="bx bx-layer me-1"></i>Escala: {$value['escala_discapacidad']}
+                                            </p>
+                                        </div>
+
+                                        <div class="mt-auto pt-2">
+                                            <div class="d-flex align-items-center justify-content-between p-2" 
+                                                style="background: rgba(13, 110, 253, 0.05); border-radius: 8px; border: 1px dashed rgba(13, 110, 253, 0.2);">
+                                                
+                                                <div class="cert-date-range">
+                                                    <div class="cert-label-small" style="color: #0d6efd;">Porcentaje</div>
+                                                    <span class="fw-bold" style="font-size: 1.2rem; color: #0d6efd;">
+                                                        {$value['th_pos_dis_porcentaje']}<small class="fw-normal">%</small>
+                                                    </span>
+                                                </div>
+
+                                                <div class="text-primary opacity-50">
+                                                    <i class="bx bxs-pie-chart-alt-2 bx-sm"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        HTML;
         }
+
+        $texto .= '</div>';
 
         return $texto;
     }

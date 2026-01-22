@@ -93,38 +93,68 @@ class th_per_comisionC
         // ----------------------------------------------------------------
 
         $datos = $this->modelo->listar_comision_por_persona($id);
-        $texto = '';
+        $texto = '<div class="row g-3">'; // Contenedor principal
+
+        if (empty($datos)) {
+            return '<div class="alert alert-info border-0 shadow-sm" style="border-radius: 12px;">No hay registros de comisión.</div>';
+        }
 
         foreach ($datos as $value) {
 
-            // 1. Definimos el botón antes del bloque de texto
+            // 1. Definimos el botón con la nueva clase minimalista y la lógica de restricción
             $boton_editar = "";
             if (!$es_restringido) {
-                $boton_editar =
-                    "<button class=\"btn icon-hover\" onclick=\"abrir_modal_comision('{$value['_id']}');\">
-                        <i class=\"bx bx-pencil bx-sm text-dark\"></i>
-                    </button>";
+                $boton_editar = <<<HTML
+                                    <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
+                                            onclick="abrir_modal_comision('{$value['_id']}');" 
+                                            title="Editar Comisión">
+                                        <i class="bx bx-pencil"></i>
+                                    </button>
+                                HTML;
             }
 
-            // 2. Lo insertamos en el Heredoc
             $texto .= <<<HTML
-                            <div class="row mb-col">
-                                <div class="col-10">
-                                    <p class="m-0"><strong>Código:</strong> {$value['comision_codigo']}</p>
-                                    <p class="m-0"><strong>Comisión:</strong> {$value['comision_nombre']}</p>
-                                    <p class="m-0"><strong>Descripción:</strong> {$value['comision_descripcion']}</p>
-                                </div>
-                                <div class="col-2 d-flex justify-content-end">
+                            <div class="col-md-6 mb-col">
+                                <div class="cert-card p-3 h-100 position-relative shadow-sm">
+                                    
                                     {$boton_editar}
+
+                                    <div class="d-flex flex-column h-100">
+                                        <div class="mb-2">
+                                            <span class="cert-badge mb-1">Comisión</span>
+                                            
+                                            <h6 class="fw-bold text-dark cert-title mb-1">
+                                                {$value['comision_nombre']}
+                                            </h6>
+                                            
+                                            <p class="text-muted m-0" style="font-size: 0.75rem; line-height: 1.3;">
+                                                {$value['comision_descripcion']}
+                                            </p>
+                                        </div>
+
+                                        <div class="mt-auto pt-2">
+                                            <div class="d-flex align-items-center justify-content-between p-2" 
+                                                style="background: rgba(111, 66, 193, 0.05); border-radius: 8px; border: 1px dashed rgba(111, 66, 193, 0.2);">
+                                                
+                                                <div class="cert-date-range">
+                                                    <div class="cert-label-small" style="color: #6f42c1;">Código Identificador</div>
+                                                    <span class="fw-bold" style="font-size: 0.85rem; color: #6f42c1; letter-spacing: 1px;">
+                                                        <i class="bx bx-barcode-reader me-1"></i>{$value['comision_codigo']}
+                                                    </span>
+                                                </div>
+
+                                                <div style="color: #6f42c1; opacity: 0.5;">
+                                                    <i class="bx bx-group bx-sm"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <hr>
                         HTML;
         }
 
-        if (empty($datos)) {
-            $texto = '<div class="alert alert-info">No hay registros de comisión.</div>';
-        }
+        $texto .= '</div>';
 
         return $texto;
     }

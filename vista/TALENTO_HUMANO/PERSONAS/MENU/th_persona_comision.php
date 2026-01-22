@@ -155,53 +155,54 @@
     }
 </script>
 <div id="pnl_comision"></div>
-<div class="modal" id="modal_agregar_comision" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content">
 
-            <div class="modal-header">
-                <h5>
-                    <small class="text-body-secondary fw-bold" id="lbl_titulo_comision">
-                        Agregar Comisión
-                    </small>
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                    onclick="limpiar_campos_comision_modal()"></button>
+<div class="modal fade" id="modal_agregar_comision" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content border-0 shadow-lg">
+
+            <div class="modal-header bg-dark bg-opacity-10">
+                <div>
+                    <h5 class="modal-title fw-bold text-primary" id="lbl_titulo_comision">
+                        <i class='bx bx-group me-2'></i>Asignación de Comisión
+                    </h5>
+                    <small class="text-muted">Selecciona la comisión técnica o administrativa correspondiente.</small>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_comision_modal()"></button>
             </div>
 
-            <form id="form_comision">
+            <form id="form_comision" class="needs-validation">
                 <input type="hidden" id="txt_comision_id">
 
                 <div class="modal-body">
-                    <div class="row mb-col">
+                    <div class="row mb-2">
                         <div class="col-md-12">
-                            <label for="ddl_comision" class="form-label form-label-sm">Comisión </label>
-                            <select class="form-select form-select-sm" id="ddl_comision" required>
+                            <label for="ddl_comision" class="form-label fw-semibold fs-7">Comisión</label>
+                            <select class="form-select select2-validation" id="ddl_comision" name="ddl_comision" required style="width: 100%;">
                                 <option selected disabled value="">-- Seleccione una Comisión --</option>
                             </select>
+                            
                         </div>
                     </div>
                 </div>
 
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1"
-                        id="btn_guardar_comision"
-                        onclick="insertar_editar_comision();">
-                        <i class="bx bx-save"></i> Agregar
-                    </button>
-
-                    <button type="button" style="display:none;"
-                        class="btn btn-danger btn-sm px-4 m-1"
-                        id="btn_eliminar_comision"
-                        onclick="delete_datos_comision();">
+                <div class="modal-footer bg-light border-top-0 d-flex justify-content-between">
+                    <button type="button" style="display:none;" class="btn btn-outline-danger btn-sm" id="btn_eliminar_comision" onclick="delete_datos_comision();">
                         <i class="bx bx-trash"></i> Eliminar
                     </button>
-                </div>
-            </form>
 
+                    <div class="ms-auto">
+                        <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" onclick="limpiar_campos_comision_modal()">Cancelar</button>
+                        <button type="button" class="btn btn-primary btn-sm px-4" id="btn_guardar_comision" onclick="insertar_editar_comision();">
+                            <i class="bx bx-save"></i> Guardar
+                        </button>
+                    </div>
+                </div>
+
+            </form>
         </div>
     </div>
 </div>
+
 <script>
     $(document).ready(function() {
 

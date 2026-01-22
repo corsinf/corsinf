@@ -1,6 +1,6 @@
 <script>
     $(document).ready(function() {
-        cargar_datos_estado_laboral(<?= $id_persona ?>);
+        cargar_datos_estado_laboral('<?= $id_persona ?>');
         cargar_selects();
 
         $('input[name="tipo_cambio"]').on('change', function() {
@@ -21,11 +21,9 @@
                         enabled_campos(true);
                     }
                 });
-            }
-            else  if($(this).val() === 'baja') {
+            } else if ($(this).val() === 'baja') {
                 enabled_campos(true);
-            }
-            else if($(this).val() === 'ninguno') {
+            } else if ($(this).val() === 'ninguno') {
                 enabled_campos(false);
             }
         });
@@ -43,7 +41,6 @@
         url_nominaC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_nominaC.php?buscar=true';
         cargar_select2_url('ddl_nomina', url_nominaC, '', '#modal_estado_laboral');
     }
-
 
     function cargar_datos_estado_laboral(id) {
         $.ajax({
@@ -210,34 +207,15 @@
                 if (response == 1) {
                     Swal.fire('', 'Operación realizada con éxito.', 'success');
                     $('#modal_estado_laboral').modal('hide');
-                    cargar_datos_estado_laboral(<?= $id_persona ?>);
+                    cargar_datos_estado_laboral('<?= $id_persona ?>');
                     limpiar_campos_estado_laboral_modal();
                     cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
-                    cargar_datos_info_adicional(<?= $id_persona ?>);
+                    cargar_datos_info_adicional('<?= $id_persona ?>');
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
                 }
             }
         });
-    }
-
-    function enabled_campos(estado) {
-        $('#ddl_cargo').prop('disabled', estado);
-        $('#ddl_seccion').prop('disabled', estado);
-        $('#ddl_nomina').prop('disabled', estado);
-        $('#txt_remuneracion').prop('disabled', estado);
-        $('#txt_fecha_contratacion_estado').prop('disabled', estado);
-        $('#txt_fecha_salida_estado').prop('disabled', estado);
-    }
-
-
-    function abrir_modal_estado_laboral(id) {
-        limpiar_campos_estado_laboral_modal();
-        cargar_datos_modal_estado_laboral(id);
-        $('#modal_estado_laboral').modal('show');
-        $('#lbl_titulo_estado_laboral').html('Editar Estado Laboral');
-        $('#btn_guardar_estado_laboral').html('<i class="bx bx-save"></i> Editar');
-        $('#btn_eliminar_estado_laboral').show();
     }
 
     function delete_datos_estado_laboral() {
@@ -270,20 +248,34 @@
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
                     $('#modal_estado_laboral').modal('hide');
-                    cargar_datos_estado_laboral(<?= $id_persona ?>);
+                    cargar_datos_estado_laboral('<?= $id_persona ?>');
                     limpiar_campos_estado_laboral_modal();
                 }
             }
         });
     }
 
+    function enabled_campos(estado) {
+        $('#ddl_cargo').prop('disabled', estado);
+        $('#ddl_seccion').prop('disabled', estado);
+        $('#ddl_nomina').prop('disabled', estado);
+        $('#txt_remuneracion').prop('disabled', estado);
+        $('#txt_fecha_contratacion_estado').prop('disabled', estado);
+        $('#txt_fecha_salida_estado').prop('disabled', estado);
+    }
+
+    function abrir_modal_estado_laboral(id) {
+        limpiar_campos_estado_laboral_modal();
+        cargar_datos_modal_estado_laboral(id);
+        $('#modal_estado_laboral').modal('show');
+        $('#lbl_titulo_estado_laboral').html('Editar Estado Laboral');
+        $('#btn_guardar_estado_laboral').html('<i class="bx bx-save"></i> Editar');
+        $('#btn_eliminar_estado_laboral').show();
+    }
+
     function limpiar_campos_estado_laboral_modal() {
         $('#form_estado_laboral').validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
-        $('#ddl_estado_laboral').val('').trigger('change');
-        $('#ddl_cargo').val('').trigger('change');
-        $('#ddl_seccion').val('').trigger('change');
-        $('#ddl_nomina').val('').trigger('change');
         $('#txt_remuneracion').val('');
         $('#txt_fecha_contratacion_estado').val('');
         $('#txt_fecha_salida_estado').val('');
@@ -294,6 +286,16 @@
         $('#lbl_titulo_estado_laboral').html('Agregar Estado Laboral');
         $('#btn_guardar_estado_laboral').html('<i class="bx bx-save"></i> Agregar');
         $('#btn_eliminar_estado_laboral').hide();
+
+        $('#ddl_estado_laboral').val(null).trigger('change');
+        $('#ddl_cargo').val(null).trigger('change');
+        $('#ddl_seccion').val(null).trigger('change');
+        $('#ddl_nomina').val(null).trigger('change');
+
+        $('.select2-selection').removeClass('is-valid is-invalid');
+        $('.select2-validation').each(function() {
+            $('label.error[for="' + this.id + '"]').hide();
+        });
     }
 
     function validar_fechas_est_lab() {
@@ -343,95 +345,130 @@
 
 <div id="pnl_estado_laboral"></div>
 
-<div class="modal" id="modal_estado_laboral" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="modal_estado_laboral" tabindex="-1" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_estado_laboral">Agregar Estado Laboral</small></h5>
+        <div class="modal-content border-0 shadow-lg">
+
+            <div class="modal-header bg-dark bg-opacity-10">
+                <div>
+                    <h5 class="modal-title fw-bold text-primary" id="lbl_titulo_estado_laboral">
+                        <i class='bx bx-briefcase me-2'></i>Estado Laboral Interno
+                    </h5>
+                    <small class="text-muted">Gestiona la situación contractual, cargos y remuneraciones.</small>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_estado_laboral_modal()"></button>
             </div>
-            <form id="form_estado_laboral">
+
+            <form id="form_estado_laboral" class="needs-validation">
                 <input type="hidden" name="txt_experiencia_estado_id" id="txt_experiencia_estado_id">
+
                 <div class="modal-body">
-                    <div class="row mb-col">
+
+                    <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado Laboral </label>
-                            <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" required>
+                            <label for="ddl_estado_laboral" class="form-label fw-semibold fs-7">Estado Laboral </label>
+                            <select class="form-select select2-validation" id="ddl_estado_laboral" name="ddl_estado_laboral" required style="width: 100%;">
                                 <option selected disabled value="">-- Seleccione un Estado --</option>
                             </select>
+                            <label class="error" style="display: none;" for="ddl_estado_laboral"></label>
+
                         </div>
                         <div class="col-md-6">
-                            <label for="ddl_cargo" class="form-label form-label-sm">Cargo </label>
-                            <select class="form-select form-select-sm" id="ddl_cargo" name="ddl_cargo" required>
+                            <label for="ddl_cargo" class="form-label fw-semibold fs-7">Cargo </label>
+                            <select class="form-select select2-validation" id="ddl_cargo" name="ddl_cargo" required style="width: 100%;">
                                 <option selected disabled value="">-- Seleccione un Cargo --</option>
                             </select>
+                            <label class="error" style="display: none;" for="ddl_cargo"></label>
+
                         </div>
                     </div>
-                    <div class="row mb-col">
+
+                    <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label for="ddl_seccion" class="form-label form-label-sm">Sección </label>
-                            <select class="form-select form-select-sm" id="ddl_seccion" name="ddl_seccion" required>
+                            <label for="ddl_seccion" class="form-label fw-semibold fs-7">Sección / Departamento </label>
+                            <select class="form-select select2-validation" id="ddl_seccion" name="ddl_seccion" required style="width: 100%;">
                                 <option selected disabled value="">-- Seleccione una Sección --</option>
                             </select>
+                            <label class="error" style="display: none;" for="ddl_seccion"></label>
+
                         </div>
                         <div class="col-md-6">
-                            <label for="ddl_nomina" class="form-label form-label-sm">Nómina </label>
-                            <select class="form-select form-select-sm" id="ddl_nomina" name="ddl_nomina" required>
+                            <label for="ddl_nomina" class="form-label fw-semibold fs-7">Nómina </label>
+                            <select class="form-select select2-validation" id="ddl_nomina" name="ddl_nomina" required style="width: 100%;">
                                 <option selected disabled value="">-- Seleccione una Nómina --</option>
                             </select>
+                            <label class="error" style="display: none;" for="ddl_nomina"></label>
+
                         </div>
                     </div>
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_remuneracion" class="form-label form-label-sm">Remuneración </label>
-                            <input type="number" step="0.01" class="form-control form-control-sm" name="txt_remuneracion" id="txt_remuneracion" placeholder="0.00">
-                        </div>
-                    </div>
-                    <div class="row mb-col">
-                        <div class="col-md-6">
-                            <label for="txt_fecha_contratacion_estado" class="form-label form-label-sm">Fecha de contratación </label>
-                            <input type="date" class="form-control form-control-sm" name="txt_fecha_contratacion_estado" id="txt_fecha_contratacion_estado" onchange="validar_fechas_est_lab();">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida </label>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="txt_remuneracion" class="form-label fw-semibold fs-7">Remuneración </label>
                             <div class="input-group input-group-sm">
-                                <input type="date" class="form-control form-control-sm" name="txt_fecha_salida_estado" id="txt_fecha_salida_estado" onchange="validar_fechas_est_lab();">
-                                <div class="input-group-text">
-                                    <input class="form-check-input mt-0" type="checkbox" id="cbx_fecha_salida_estado" onchange="checkbox_actualidad_est_lab();" title="Marcar si el periodo es indefinido">
-                                    <label class="form-check-label ms-1" for="cbx_fecha_salida_estado" style="font-size: 0.8rem;">Indefinido</label>
+                                <span class="input-group-text bg-white text-muted"><i class='bx bx-money'></i></span>
+                                <input type="number" step="0.01" class="form-control" name="txt_remuneracion" id="txt_remuneracion" placeholder="0.00">
+                            </div>
+                            <label class="error" style="display: none;" for="txt_remuneracion"></label>
+
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-light rounded-3 border border-dashed mb-3">
+                        <h6 class="text-muted fs-7 mb-2 fw-bold text-uppercase ls-1">Periodo de Gestión </h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="txt_fecha_contratacion_estado" class="form-label fs-7 mb-1">Fecha de Contratación </label>
+                                <input type="date" class="form-control form-control-sm" name="txt_fecha_contratacion_estado" id="txt_fecha_contratacion_estado" onchange="validar_fechas_est_lab();">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="txt_fecha_salida_estado" class="form-label fs-7 mb-1">Fecha de Salida </label>
+                                <div class="input-group input-group-sm">
+                                    <input type="date" class="form-control" name="txt_fecha_salida_estado" id="txt_fecha_salida_estado" onchange="validar_fechas_est_lab();">
+                                    <div class="input-group-text bg-white border-start-0">
+                                        <div class="form-check form-switch mb-0">
+                                            <input class="form-check-input" type="checkbox" id="cbx_fecha_salida_estado" onchange="checkbox_actualidad_est_lab();">
+                                            <label class="form-check-label text-xs fw-bold text-primary" for="cbx_fecha_salida_estado">Indefinido</label>
+                                        </div>
+                                    </div>
+                                    <label class="error" style="display: none;" for="txt_fecha_salida_estado"></label>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-col">
+
+                    <div class="row">
                         <div class="col-md-12">
-                            <label for="rbx_radio_baja" class="form-label form-label-sm">Tipo de cambio </label>
-                            <div class="d-flex gap-3">
+                            <label class="form-label fw-semibold fs-7 mb-2">Tipo de cambio / Novedad </label>
+                            <div class="d-flex flex-wrap gap-3 p-2 border rounded bg-white">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="tipo_cambio" id="radio_ninguno" value="ninguno" checked>
-                                    <label class="form-check-label" for="radio_baja">
-                                        NINGUNO
-                                    </label>
+                                    <label class="form-check-label fs-7" for="radio_ninguno">NINGUNO</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="tipo_cambio" id="radio_baja" value="baja">
-                                    <label class="form-check-label" for="radio_baja">
-                                        DADO DE BAJA
-                                    </label>
+                                    <label class="form-check-label fs-7 text-danger" for="radio_baja">DADO DE BAJA</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="tipo_cambio" id="radio_recategorizacion" value="recategorizacion">
-                                    <label class="form-check-label" for="radio_recategorizacion">
-                                        RECATEGORIZACIÓN
-                                    </label>
+                                    <label class="form-check-label fs-7 text-success" for="radio_recategorizacion">RECATEGORIZACIÓN</label>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_estado_laboral" onclick="if(validar_fechas_est_lab()) { insertar_editar_estado_laboral(); }"><i class="bx bx-save"></i> Agregar</button>
-                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_estado_laboral" onclick="delete_datos_estado_laboral();"><i class="bx bx-trash"></i> Eliminar</button>
+
+                <div class="modal-footer bg-light border-top-0 d-flex justify-content-between">
+                    <button type="button" style="display: none;" class="btn btn-outline-danger btn-sm" id="btn_eliminar_estado_laboral" onclick="delete_datos_estado_laboral();">
+                        <i class="bx bx-trash"></i> Eliminar
+                    </button>
+
+                    <div class="ms-auto">
+                        <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" onclick="limpiar_campos_estado_laboral_modal()">Cancelar</button>
+                        <button type="button" class="btn btn-primary btn-sm px-4" id="btn_guardar_estado_laboral" onclick="if(validar_fechas_est_lab()) { insertar_editar_estado_laboral(); }">
+                            <i class="bx bx-save"></i> Guardar
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -449,6 +486,11 @@
         agregar_asterisco_campo_obligatorio('txt_fecha_salida_estado');
         agregar_asterisco_campo_obligatorio('rbx_radio_baja');
 
+        //Para validar los select2
+        $(".select2-validation").on("select2:select", function(e) {
+            unhighlight_select(this);
+        });
+
         $("#form_estado_laboral").validate({
             rules: {
                 ddl_estado_laboral: {
@@ -458,6 +500,9 @@
                     required: true,
                 },
                 ddl_seccion: {
+                    required: true,
+                },
+                txt_remuneracion: {
                     required: true,
                 },
                 ddl_nomina: {
@@ -496,13 +541,39 @@
                     required: "Por favor ingrese la fecha de salida",
                 },
             },
+
             highlight: function(element) {
-                $(element).addClass('is-invalid');
-                $(element).removeClass('is-valid');
+                let $element = $(element);
+
+                if ($element.hasClass("select2-hidden-accessible")) {
+                    // Elimina la clase 'is-invalid' y agrega 'is-valid' al contenedor correcto de select2
+                    $element.next(".select2-container").find(".select2-selection").removeClass(
+                        "is-valid").addClass("is-invalid");
+                } else if ($element.is(':radio')) {
+                    // Si es un radio button, aplicar la clase al grupo de radios (al contenedor padre si existe)
+                    $('input[name="' + $element.attr("name") + '"]').addClass("is-invalid").removeClass(
+                        "is-valid");
+                } else {
+                    // Elimina la clase 'is-invalid' y agrega 'is-valid' al input normal
+                    $element.removeClass("is-valid").addClass("is-invalid");
+                }
             },
+
             unhighlight: function(element) {
-                $(element).removeClass('is-invalid');
-                $(element).addClass('is-valid');
+                let $element = $(element);
+
+                if ($element.hasClass("select2-hidden-accessible")) {
+                    // Para Select2, elimina 'is-invalid' y agrega 'is-valid' en el contenedor adecuado
+                    $element.next(".select2-container").find(".select2-selection").removeClass(
+                        "is-invalid").addClass("is-valid");
+                } else if ($element.is(':radio')) {
+                    // Si es un radio button, marcar todo el grupo como válido
+                    $('input[name="' + $element.attr("name") + '"]').removeClass("is-invalid").addClass(
+                        "is-valid");
+                } else {
+                    // Para otros elementos normales
+                    $element.removeClass("is-invalid").addClass("is-valid");
+                }
             }
         });
     })

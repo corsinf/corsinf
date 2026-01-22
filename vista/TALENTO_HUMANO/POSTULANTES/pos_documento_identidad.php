@@ -181,73 +181,113 @@
 </div>
 
 <!-- Modal para agregar documento de identidad-->
-<div class="modal" id="modal_agregar_documentos_identidad" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+<div class="modal fade" id="modal_agregar_documentos_identidad" tabindex="-1" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg">
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_documentos_identidad">Agregar Documento Identidad</small></h5>
+            <div class="modal-header bg-dark bg-opacity-10">
+                <div>
+                    <h5 class="modal-title fw-bold text-primary" id="lbl_titulo_documentos_identidad">
+                        <i class='bx bx-id-card me-2'></i>Documento de Identidad
+                    </h5>
+                    <small class="text-muted">Carga tus documentos oficiales (Cédula, Pasaporte, Licencia, etc.)</small>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_documentos_identidad()"></button>
             </div>
 
-            <!-- Modal Body -->
-            <form id="form_documento_identidad">
-                <input type="hidden">
+            <form id="form_documento_identidad" class="needs-validation">
                 <div class="modal-body">
 
                     <input type="hidden" name="txt_documentos_identificacion_id" id="txt_documentos_identificacion_id">
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
 
-                    <div class="row mb-col">
+                    <div class="row mb-col mb-3">
                         <div class="col-md-12">
-                            <label for="ddl_tipo_documento_identidad" class="form-label form-label-sm">Tipo de Documento </label>
-                            <select class="form-select form-select-sm" id="ddl_tipo_documento_identidad" name="ddl_tipo_documento_identidad" onclick="obtener_documentos_repetidos();">
-                                <option selected disabled value="">-- Selecciona una opción --</option>
-                                <option value="Cédula de Identidad">Cédula de Identidad</option>
-                                <option value="Pasaporte">Pasaporte</option>
-                                <!-- <option value="Tarjeta de identificación">Tarjeta de identificación</option> -->
-                                <option value="Licencia">Licencia</option>
-                                <option value="Carnét o Certificado para miembro de la Fuerza Pública Ecuatoriana">Carnét o Certificado para miembro de la Fuerza Pública Ecuatoriana</option>
-                                <option value="Carnét de discapacidad">Carnét de discapacidad</option>
-                            </select>
+                            <label for="ddl_tipo_documento_identidad" class="form-label fw-semibold fs-7">Tipo de Documento </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white text-muted"><i class='bx bx-list-check'></i></span>
+                                <select class="form-select form-select-sm" id="ddl_tipo_documento_identidad" name="ddl_tipo_documento_identidad" onchange="obtener_documentos_repetidos();">
+                                    <option selected disabled value="">-- Selecciona una opción --</option>
+                                    <option value="Cédula de Identidad">Cédula de Identidad</option>
+                                    <option value="Pasaporte">Pasaporte</option>
+                                    <option value="Licencia">Licencia</option>
+                                    <option value="Carnét o Certificado para miembro de la Fuerza Pública Ecuatoriana">Carnét o Certificado para miembro de la Fuerza Pública Ecuatoriana</option>
+                                    <option value="Carnét de discapacidad">Carnét de discapacidad</option>
+                                </select>
+                            </div>
+                            <label class="error" style="display: none;" for="ddl_tipo_documento_identidad"></label>
                         </div>
                     </div>
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_ruta_documentos_identidad" class="form-label form-label-sm">Pdf Documento Identidad </label>
-                            <input type="file" class="form-control form-control-sm" name="txt_ruta_documentos_identidad" id="txt_ruta_documentos_identidad" accept=".pdf">
-                            <!-- <div class="pt-2"></div> -->
-                            <input type="hidden" class="form-control form-control-sm" name="txt_ruta_guardada_documentos_identidad" id="txt_ruta_guardada_documentos_identidad">
+
+                    <div class="mb-col mb-3">
+                        <label for="txt_ruta_documentos_identidad" class="form-label fw-semibold">Adjuntar Documento (PDF) </label>
+                        <input type="file" class="form-control form-control-sm" name="txt_ruta_documentos_identidad" id="txt_ruta_documentos_identidad" accept=".pdf">
+                        <input type="hidden" name="txt_ruta_guardada_documentos_identidad" id="txt_ruta_guardada_documentos_identidad">
+                        <div class="form-text text-xs">
+                            <i class='bx bx-upload'></i> Sube el documento escaneado por ambos lados. Máximo 5MB.
                         </div>
                     </div>
 
                 </div>
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_documentos_identidad" onclick="insertar_editar_documentos_identidad();"><i class="bx bx-save"></i>Agregar</button>
-                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_documento_identidad" onclick="delete_datos_documentos_identidad();"><i class="bx bx-trash"></i>Eliminar</button>
+
+                <div class="modal-footer bg-light border-top-0 d-flex justify-content-between">
+                    <button type="button" style="display: none;" class="btn btn-outline-danger btn-sm" id="btn_eliminar_documento_identidad" onclick="delete_datos_documentos_identidad();">
+                        <i class="bx bx-trash"></i> Eliminar
+                    </button>
+
+                    <div class="ms-auto">
+                        <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" onclick="limpiar_parametros_documentos_identidad()">Cancelar</button>
+                        <button type="button" class="btn btn-primary btn-sm px-4" id="btn_guardar_documentos_identidad" onclick="insertar_editar_documentos_identidad();">
+                            <i class="bx bx-save"></i> Guardar
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<div class="modal" id="modal_ver_pdf_documentos_identidad" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="modal_ver_pdf_documentos_identidad" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
+        <div class="modal-content border-0 shadow-lg">
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_documentos_identidad">Documento Identidad</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();"></button>
-            </div>
-            <!-- Modal body -->
-            <form id="form_documento_identidad">
-                <div class="modal-body d-flex justify-content-center">
-                    <iframe src='' id="iframe_documentos_identidad_pdf" frameborder="0" width="900px" height="700px"></iframe>
+            <div class="modal-header bg-dark bg-opacity-10 py-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-white p-2 rounded-circle me-2 text-primary shadow-sm">
+                        <i class='bx bxs-id-card bx-sm'></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark mb-0" id="lbl_titulo_documentos_identidad">Documento Identidad</h5>
+                        <small class="text-muted">Vista previa del documento de identidad</small>
+                    </div>
                 </div>
-            </form>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body p-0 bg-light">
+                <div class="w-100 position-relative" style="height: 80vh;">
+
+                    <div class="position-absolute top-50 start-50 translate-middle text-muted" style="z-index: 0;">
+                        <i class='bx bx-loader-alt bx-spin bx-md'></i> Cargando documento...
+                    </div>
+
+                    <iframe src=''
+                        id="iframe_documentos_identidad_pdf"
+                        class="w-100 h-100 border-0 position-relative"
+                        style="z-index: 1;"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="modal-footer py-1 bg-white">
+                <small class="text-muted me-auto fst-italic">
+                    <i class='bx bx-info-circle'></i> Si el documento no carga, consultar con el administrador.
+                </small>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();">Cerrar</button>
+            </div>
+
         </div>
     </div>
 </div>

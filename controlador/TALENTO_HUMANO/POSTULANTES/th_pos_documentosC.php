@@ -34,33 +34,58 @@ class th_pos_documentosC
     {
         $datos = $this->modelo->where('th_pos_id', $id)->where('th_poi_estado', 1)->listar();
 
-        $texto = '';
+        $texto = '<div class="row g-3">';
+
         foreach ($datos as $key => $value) {
 
+            // Lógica para documentos repetidos
             $documentos_repetidos = '';
             if ($value['th_poi_estado'] == 1) {
-                $documentos_repetidos .= '<input type="hidden" name="documentos_identidad[]" value="' . $value['th_poi_tipo'] . '">';
+                $documentos_repetidos = '<input type="hidden" name="documentos_identidad[]" value="' . $value['th_poi_tipo'] . '">';
             }
 
-            $texto .=
-                <<<HTML
-                    <div class="row mb-col">
-                        <div class="col-10">
-                            <h6 class="fw-bold my-0 d-flex align-items-center">{$value['th_poi_tipo']}</h6>
-                            <a href="#" onclick="ruta_iframe_documento_identificacion('{$value['th_poi_ruta_archivo']}');">Ver Documento de Identificación</a>
-                        </div>
-                        
-                        <div class="col-2 d-flex justify-content-end align-items-center">
-                            <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_documentos_identidad('{$value['_id']}');">
-                                <i class="text-dark bx bx-pencil bx-sm"></i>
-                            </button>
-                        </div>
-                    </div>
+            $texto .= <<<HTML
+                            <div class="col-md-6 mb-col">
+                                <div class="cert-card p-3 h-100 position-relative shadow-sm">
+                                    
+                                    <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
+                                            onclick="abrir_modal_documentos_identidad('{$value['_id']}');" 
+                                            title="Editar Identificación">
+                                        <i class="bx bx-pencil"></i>
+                                    </button>
 
-                    {$documentos_repetidos}
+                                    <div class="d-flex flex-column h-100">
+                                        <div class="mb-2">
+                                            <span class="cert-badge mb-1">Documento</span>
+                                            
+                                            <h6 class="fw-bold text-dark cert-title mb-1">
+                                                {$value['th_poi_tipo']}
+                                            </h6>
+                                            
+                                        </div>
 
-                HTML;
+                                        <div class="mt-auto pt-2 d-flex justify-content-between align-items-end">
+                                            <div class="cert-date-range">
+                                                <span class="text-success" style="font-size: 0.7rem;">
+                                                    <i class="bx bxs-check-shield me-1"></i>Activo
+                                                </span>
+                                            </div>
+                                            
+                                            <button onclick="ruta_iframe_documento_identificacion('{$value['th_poi_ruta_archivo']}');" 
+                                                    class="btn btn-dark btn-xs py-1 px-3 btn-cert-action">
+                                                DOCUMENTO
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {$documentos_repetidos}
+                                </div>
+                            </div>
+                        HTML;
         }
+
+        $texto .= '</div>';
+
         return $texto;
     }
 

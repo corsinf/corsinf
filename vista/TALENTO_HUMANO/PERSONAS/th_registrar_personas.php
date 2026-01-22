@@ -401,6 +401,13 @@ $html_disabled = $es_restringido ? "disabled" : "";
                                             </div>
                                         </button>
 
+                                        <button class="nav-link py-2 px-3 border shadow-sm" data-bs-toggle="pill" data-bs-target="#tab_contrato_trabajo" type="button" role="tab">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bx bxs-info-circle me-3 fs-5"></i>
+                                                <span>Contrato de Trabajo</span>
+                                            </div>
+                                        </button>
+
                                         <button class="nav-link py-2 px-3 border shadow-sm" data-bs-toggle="pill" data-bs-target="#tab_informacion_adicional" type="button" role="tab">
                                             <div class="d-flex align-items-center">
                                                 <i class="bx bxs-info-circle me-3 fs-5"></i>
@@ -565,6 +572,7 @@ $html_disabled = $es_restringido ? "disabled" : "";
                                         <!-- </div> -->
                                     </div>
 
+                                    <!-- Quinta Sección, Comisiones -->
                                     <div class="tab-pane fade" id="tab_comision" role="tabpanel">
                                         <!-- <div class="card"> -->
                                         <div class="d-flex flex-column mx-4">
@@ -598,6 +606,7 @@ $html_disabled = $es_restringido ? "disabled" : "";
                                         <!-- </div> -->
                                     </div>
 
+                                    <!-- Sexta Sección, Referencias Personales -->
                                     <div class="tab-pane fade" id="tab_parientes" role="tabpanel">
                                         <!-- <div class="card"> -->
                                         <div class="d-flex flex-column mx-4">
@@ -629,6 +638,37 @@ $html_disabled = $es_restringido ? "disabled" : "";
                                         <!-- </div> -->
                                     </div>
 
+                                    <!-- Septima Sección, Contratos de Trabajo -->
+                                    <div class="tab-pane fade" id="tab_contrato_trabajo" role="tabpanel">
+                                        <div class="d-flex flex-column mx-4">
+                                            <div class="card-body">
+                                                <div class="mb-2">
+                                                    <div class="row">
+                                                        <div class="col-7 d-flex align-items-center">
+                                                            <h6 class="mb-0 fw-bold text-primary">Contratos de Trabajo:
+                                                            </h6>
+                                                        </div>
+                                                        <div
+                                                            class="col-5 d-flex justify-content-end align-items-center">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal_agregar_contratos">
+                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                                                <span class="">Agregar</span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr class="my-0 mb-3">
+
+                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_contratos_trabajo.php'); ?>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Octava Sección, Información Adicional: -->
                                     <div class="tab-pane fade" id="tab_informacion_adicional" role="tabpanel">
                                         <!-- <div class="card"> -->
                                         <div class="d-flex flex-column mx-4">

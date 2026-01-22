@@ -40,26 +40,54 @@ class th_pos_contratos_trabajoC
     {
         $datos = $this->modelo->where('th_pos_id', $id)->where('th_ctr_estado', 1)->listar();
 
-        $texto = '';
-        foreach ($datos as $key => $value) {
-            $url_pdf = '../REPOSITORIO/TALENTO_HUMANO.pdf';
+        $texto = '<div class="row g-3">';
 
-            $texto .=
-                <<<HTML
-                    <div class="row mb-3">
-                        <div class="col-10">
-                            <h6 class="fw-bold my-0 d-flex align-items-center">{$value['th_ctr_nombre_empresa']}</h6>
-                            <p class="my-0 d-flex align-items-center">{$value['th_ctr_tipo_contrato']}</p>
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal_ver_pdf_contratos" onclick="definir_ruta_iframe_contratos('{$value['th_ctr_ruta_archivo']}');">Ver Contrato Trabajo</a>
+        foreach ($datos as $key => $value) {
+
+            $texto .= <<<HTML
+                        <div class="col-md-6 mb-col">
+                            <div class="cert-card p-3 h-100 position-relative shadow-sm">
+                                
+                                <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
+                                        onclick="abrir_modal_contratos_trabajos('{$value['_id']}')" 
+                                        title="Editar Contrato">
+                                    <i class="bx bx-pencil"></i>
+                                </button>
+
+                                <div class="d-flex flex-column h-100">
+                                    <div class="mb-2">
+                                        <span class="cert-badge mb-1">Contrato</span>
+                                        
+                                        <h6 class="fw-bold text-dark cert-title mb-1">
+                                            {$value['th_ctr_nombre_empresa']}
+                                        </h6>
+                                        
+                                        <p class="cert-doctor m-0">
+                                            <i class="bx bx-file-blank me-1"></i>{$value['th_ctr_tipo_contrato']}
+                                        </p>
+                                    </div>
+
+                                    <div class="mt-auto pt-2 d-flex justify-content-between align-items-end">
+                                        <div class="cert-date-range">
+                                            <div class="cert-label-small" style="color: #052c65;">Documentación</div>
+                                            <span class="text-muted" style="font-size: 0.7rem;">
+                                                <i class="bx bx-check-double me-1"></i>Copia Digitalizada
+                                            </span>
+                                        </div>
+                                        
+                                        <button data-bs-toggle="modal" data-bs-target="#modal_ver_pdf_contratos" 
+                                                onclick="definir_ruta_iframe_contratos('{$value['th_ctr_ruta_archivo']}');" 
+                                                class="btn btn-dark btn-xs py-1 px-3 btn-cert-action">
+                                            CONTRATO
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-2 d-flex justify-content-end align-items-center">
-                            <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_contratos_trabajos('{$value['_id']}')">
-                                <i class="text-dark bx bx-pencil bx-sm"></i>
-                            </button>
-                        </div>
-                    </div>
-                HTML;
+                    HTML;
         }
+
+        $texto .= '</div>';
 
         return $texto;
     }
@@ -77,24 +105,24 @@ class th_pos_contratos_trabajoC
 
     function insertar_editar($file, $parametros)
     {
-        // print_r($file);
+        // print_r($parametros);
         // exit();
         // die();
-      
-        $in_cbx_fecha_fin_experiencia = (isset($parametros['cbx_fecha_fin_experiencia']) && $parametros['cbx_fecha_fin_experiencia'] == 'true') ? 1 : 0;
+
+        // $in_cbx_fecha_fin_experiencia = (isset($parametros['cbx_fecha_fin_experiencia']) && $parametros['cbx_fecha_fin_experiencia'] == 'true') ? 1 : 0;
 
         $datos = array(
             array('campo' => 'th_ctr_nombre_empresa', 'dato' => $parametros['txt_nombre_empresa_contrato']),
             array('campo' => 'th_ctr_tipo_contrato', 'dato' => $parametros['txt_tipo_contrato']),
             //array('campo' => 'th_ctr_ruta_archivo', 'dato' => $parametros['txt_ruta_archivo']),
             array('campo' => 'th_ctr_fecha_inicio_contrato', 'dato' => $parametros['txt_fecha_inicio_contrato']),
-            array('campo' => 'th_ctr_cbx_fecha_fin_experiencia', 'dato' => $in_cbx_fecha_fin_experiencia),
+            array('campo' => 'th_ctr_cbx_fecha_fin_experiencia', 'dato' => $parametros['cbx_fecha_fin_experiencia'] ?? 0),
             array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
 
 
         );
 
-        if (!isset($parametros['cbx_fecha_fin_experiencia']) || !in_array($in_cbx_fecha_fin_experiencia, [0, 1])) {
+        if (!isset($parametros['cbx_fecha_fin_experiencia']) || !in_array($parametros['cbx_fecha_fin_experiencia'], [0, 1])) {
             return "El campo de fecha fin de experiencia es inválido o no se ha proporcionado correctamente.";
         }
 

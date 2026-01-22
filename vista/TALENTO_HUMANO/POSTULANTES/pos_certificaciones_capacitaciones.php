@@ -165,64 +165,112 @@
 </div>
 
 <!-- Modal para agregar certificaciones y capacitaciones-->
-<div class="modal" id="modal_agregar_certificaciones" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+<div class="modal fade" id="modal_agregar_certificaciones" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg">
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_certificaciones_capacitaciones">Agregar Certificado y/o Capacitación</small></h5>
+            <div class="modal-header bg-dark bg-opacity-10">
+                <div>
+                    <h5 class="modal-title fw-bold text-primary" id="lbl_titulo_certificaciones_capacitaciones">
+                        <i class='bx bx-award me-2'></i>Certificaciones y Capacitaciones
+                    </h5>
+                    <small class="text-muted">Registra cursos, seminarios o certificaciones técnicas obtenidas.</small>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_certificaciones_capacitaciones()"></button>
             </div>
 
-            <!-- Modal body -->
-            <form id="form_certificaciones_capacitaciones" enctype="multipart/form-data" method="post" style="width: inherit;">
-
+            <form id="form_certificaciones_capacitaciones" enctype="multipart/form-data" class="needs-validation">
                 <div class="modal-body">
+
                     <input type="hidden" name="txt_certificaciones_capacitaciones_id" id="txt_certificaciones_capacitaciones_id">
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
 
-                    <div class="row mb-col">
+                    <div class="row mb-4">
                         <div class="col-md-12">
-                            <label for="txt_nombre_curso" class="form-label form-label-sm">Nombre Curso y/o Capacitación </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_nombre_curso" id="txt_nombre_curso" value="" maxlength="100">
+                            <label for="txt_nombre_curso" class="form-label fw-semibold fs-7">Nombre del Curso o Capacitación </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white text-muted"><i class='bx bx-book-bookmark'></i></span>
+                                <input type="text" class="form-control no_caracteres" name="txt_nombre_curso" id="txt_nombre_curso" maxlength="100" placeholder="Ej: Certificación en AWS Cloud Practitioner, Curso de Excel Avanzado...">
+                            </div>
+                            <label class="error" style="display: none;" for="txt_nombre_curso"></label>
+
                         </div>
                     </div>
 
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_ruta_archivo" class="form-label form-label-sm">1. PDF del Certificado Obtenido </label>
-                            <input type="file" class="form-control form-control-sm" name="txt_ruta_archivo" id="txt_ruta_archivo" accept=".pdf" value="">
-                            <input type="hidden" class="form-control form-control-sm" name="txt_ruta_guardada_certificaciones_capacitaciones" id="txt_ruta_guardada_certificaciones_capacitaciones">
+                    <div class="p-4 bg-light rounded-3 border border-dashed">
+                        <label for="txt_ruta_archivo" class="form-label fw-semibold text-dark">Documento de Respaldo (PDF) </label>
+                        <div class="input-group input-group-sm">
+                            <input type="file" class="form-control" name="txt_ruta_archivo" id="txt_ruta_archivo" accept=".pdf">
                         </div>
+                        <input type="hidden" name="txt_ruta_guardada_certificaciones_capacitaciones" id="txt_ruta_guardada_certificaciones_capacitaciones">
+                        <label class="error" style="display: none;" for="txt_ruta_archivo"></label>
+
+                        <div class="form-text text-xs mt-2 text-muted">
+                            <i class='bx bx-cloud-upload me-1'></i> Adjunta el certificado escaneado. Asegúrate de que el archivo sea legible y no supere los 5MB.
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer bg-light border-top-0 d-flex justify-content-between">
+                    <button type="button" style="display: none;" class="btn btn-outline-danger btn-sm" id="btn_eliminar_certificaciones" onclick="delete_datos_certificaciones_capacitaciones();">
+                        <i class="bx bx-trash"></i> Eliminar
+                    </button>
+
+                    <div class="ms-auto">
+                        <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" onclick="limpiar_parametros_certificaciones_capacitaciones()">Cancelar</button>
+                        <button type="button" class="btn btn-primary btn-sm px-4" id="btn_guardar_certificaciones_capacitaciones" onclick="insertar_editar_certificaciones_capacitaciones();">
+                            <i class="bx bx-save"></i> Guardar
+                        </button>
                     </div>
                 </div>
 
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_certificaciones_capacitaciones" onclick="insertar_editar_certificaciones_capacitaciones();"><i class="bx bx-save"></i>Agregar</button>
-                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_certificaciones" onclick="delete_datos_certificaciones_capacitaciones();"><i class="bx bx-trash"></i>Eliminar</button>
-                </div>
             </form>
         </div>
     </div>
 </div>
 
-<div class="modal" id="modal_ver_pdf_certificaciones" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="modal_ver_pdf_certificaciones" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
+        <div class="modal-content border-0 shadow-lg">
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_certificaciones_capacitaciones">Certificado y/o Capacitación</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();"></button>
-            </div>
-            <!-- Modal body -->
-            <form id="form_certificaciones_capacitaciones">
-                <div class="modal-body d-flex justify-content-center">
-                    <iframe src='' id="iframe_certificaciones_capacitaciones_pdf" frameborder="0" width="900px" height="700px"></iframe>
+            <div class="modal-header bg-dark bg-opacity-10 py-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-white p-2 rounded-circle me-2 text-primary shadow-sm">
+                        <i class='bx bx-medal bx-sm'></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark mb-0" id="lbl_titulo_certificaciones_capacitaciones">Certificado y/o Capacitación</h5>
+                        <small class="text-muted">Vista previa de la certificación académica</small>
+                    </div>
                 </div>
-            </form>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body p-0 bg-light">
+                <div class="w-100 position-relative" style="height: 80vh;">
+
+                    <div class="position-absolute top-50 start-50 translate-middle text-muted" style="z-index: 0;">
+                        <i class='bx bx-loader-alt bx-spin bx-md'></i> Cargando documento...
+                    </div>
+
+                    <iframe src=''
+                        id="iframe_certificaciones_capacitaciones_pdf"
+                        class="w-100 h-100 border-0 position-relative"
+                        style="z-index: 1;"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="modal-footer py-1 bg-white">
+                <small class="text-muted me-auto fst-italic">
+                    <i class='bx bx-info-circle'></i> Si el documento no carga, consultar con el administrador.
+                </small>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();">Cerrar</button>
+            </div>
+
         </div>
     </div>
 </div>

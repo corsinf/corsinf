@@ -49,7 +49,16 @@ class th_per_estado_laboralC
 
         $datos = $this->modelo->listar_estado_laboral_por_persona($id);
 
-        $texto = '';
+        $texto = '<div class="row g-3">';
+
+        if (empty($datos)) {
+            $texto = '<div class="alert alert-info border-0 shadow-sm text-center" style="border-radius: 12px;">No hay registros de estado laboral.</div>';
+
+            return [
+                'html' => $texto,
+                'tiene_registros' => false
+            ];
+        }
 
         foreach ($datos as $key => $value) {
             $estado_laboral = $value['estado_laboral_descripcion'] ?? 'N/A';
@@ -61,8 +70,8 @@ class th_per_estado_laboralC
 
             // Remuneración formateada
             $remuneracion = !empty($value['th_est_remuneracion'])
-                ? '<p class="mb-1"><strong>Remuneración:</strong> $' . number_format($value['th_est_remuneracion'], 2) . '</p>'
-                : '';
+                ? number_format($value['th_est_remuneracion'], 2)
+                : '0.00';
 
             // Fechas
             $fecha_contratacion = !empty($value['th_est_fecha_contratacion'])
@@ -74,62 +83,84 @@ class th_per_estado_laboralC
                 $fecha_salida = date('d/m/Y', strtotime($value['th_est_fecha_salida']));
             }
 
-            // Badge Tipo de Cambio (Radio Button logic)
-            $badge_tipo_class = ($value['th_est_check_estado_laboral'] == 1) ? 'bg-info' : 'bg-warning text-dark';
-            $tipo_badge_text = ($value['th_est_check_estado_laboral'] == 1) ? 'RECATEGORIZACIÓN' : 'DADO DE BAJA';
-
-            // Badge Estado dinámico
-            $badge_class = 'bg-secondary';
+            // Lógica del Badge de Estado (Clases nativas de Bootstrap para el texto)
+            $badge_color = 'secondary';
             switch ($estado_laboral) {
                 case 'Activo':
-                    $badge_class = 'bg-success';
+                    $badge_color = 'success';
                     break;
                 case 'Inactivo':
-                    $badge_class = 'bg-danger';
+                    $badge_color = 'danger';
                     break;
                 case 'Prueba':
-                    $badge_class = 'bg-warning text-dark';
+                    $badge_color = 'warning text-dark';
                     break;
             }
 
+            // Lógica del Botón Editar (Tu lógica original preservada)
             $boton_editar = '';
-            if ($id_estado_laboral == 2 && $estado_laboral_nombre == "RECATEGORIZACION") {
-            } else {
+            if (!($id_estado_laboral == 2 && $estado_laboral_nombre == "RECATEGORIZACION")) {
                 if (!$es_restringido) {
                     $boton_editar = <<<HTML
-                                        <button class="btn btn-sm btn-light border icon-hover" title="Editar Registro" onclick="abrir_modal_estado_laboral('{$value['_id']}')">
-                                            <i class="bx bx-pencil fs-5 text-dark"></i>
-                                        </button>
-                                    HTML;
+                                            <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
+                                                    onclick="abrir_modal_estado_laboral('{$value['_id']}')" title="Editar Estado">
+                                                <i class="bx bx-pencil"></i>
+                                            </button>
+                                        HTML;
                 }
             }
 
             $texto .= <<<HTML
-                            <div class="row mb-col">
-                                            <div class="col-10">
-                                                <div class="mb-2">
-                                                    <span class="badge {$badge_class}">{$estado_laboral}</span>
-                                                </div>
-                                                <p class="mb-1"><strong>Cargo:</strong> {$cargo}</p>
-                                                <p class="mb-1"><strong>Sección:</strong> {$seccion}</p>
-                                                <p class="mb-1"><strong>Nómina:</strong> {$nomina}</p>
-                                                {$remuneracion}
-                                                <div class="d-flex gap-3 small text-muted mt-2">
-                                                    <span><i class="bx bx-calendar"></i> Inicia: {$fecha_contratacion}</span>
-                                                    <span><i class="bx bx-calendar-x"></i> Fin: {$fecha_salida}</span>
-                                                </div>
+                            <div class="col-md-6 mb-col">
+                                <div class="cert-card p-3 h-100 position-relative shadow-sm">
+                                    
+                                    {$boton_editar}
+
+                                    <div class="d-flex flex-column h-100">
+                                        <div class="mb-2">
+                                            <div class="d-flex align-items-center gap-2 mb-1">
+                                                <span class="cert-badge">Laboral</span>
+                                                <span class="badge bg-{$badge_color}" style="font-size: 0.6rem; border-radius: 4px;">{$estado_laboral}</span>
                                             </div>
                                             
-                                            <div class="col-2 text-end">
-                                                {$boton_editar}
+                                            <h6 class="fw-bold text-dark cert-title mb-1">
+                                                {$cargo}
+                                            </h6>
+                                            
+                                            <p class="cert-doctor m-0">
+                                                <i class="bx bx-map-alt me-1"></i>{$seccion}
+                                            </p>
+                                            <p class="text-muted m-0" style="font-size: 0.75rem;">
+                                                <i class="bx bx-spreadsheet me-1"></i>{$nomina}
+                                            </p>
+                                        </div>
+
+                                        <div class="mt-auto pt-2">
+                                            <div class="d-flex align-items-center justify-content-between p-2" 
+                                                style="background: rgba(33, 37, 41, 0.03); border-radius: 8px; border: 1px dashed rgba(0,0,0,0.1);">
+                                                
+                                                <div class="cert-date-range">
+                                                    <div class="cert-label-small">Periodo Contrato</div>
+                                                    <span class="text-dark" style="font-size: 0.65rem;">
+                                                        <i class="bx bx-calendar me-1"></i>{$fecha_contratacion} — {$fecha_salida}
+                                                    </span>
+                                                </div>
+
+                                                <div class="text-end">
+                                                    <div class="cert-label-small">Sueldo Base</div>
+                                                    <span class="fw-bold text-dark" style="font-size: 0.9rem;">
+                                                        <small>$</small>{$remuneracion}
+                                                    </span>
+                                                </div>
                                             </div>
+                                        </div>
+                                    </div>
                                 </div>
+                            </div>
                         HTML;
         }
 
-        if (empty($datos)) {
-            $texto = '<div class="alert alert-info text-center">No hay registros de estado laboral.</div>';
-        }
+        $texto .= '</div>';
 
         return [
             'html' => $texto,

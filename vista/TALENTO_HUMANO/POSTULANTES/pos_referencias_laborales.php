@@ -175,86 +175,132 @@
 </div>
 
 <!-- Modal para agregar referencias laborales-->
-<div class="modal" id="modal_agregar_referencia_laboral" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+<div class="modal fade" id="modal_agregar_referencia_laboral" tabindex="-1" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg">
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_referencia_laboral">Agregar Referencia Laboral</small></h5>
+            <div class="modal-header bg-dark bg-opacity-10">
+                <div>
+                    <h5 class="modal-title fw-bold text-primary" id="lbl_titulo_referencia_laboral">
+                        <i class='bx bx-briefcase me-2'></i>Referencias Laborales
+                    </h5>
+                    <small class="text-muted">Ingresa contactos de empleadores previos que puedan validar tu experiencia.</small>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_referencias_laborales()"></button>
             </div>
 
-            <!-- Modal body -->
-            <form id="form_referencias_laborales" enctype="multipart/form-data" method="post" style="width: inherit;">
-
+            <form id="form_referencias_laborales" enctype="multipart/form-data" class="needs-validation">
                 <div class="modal-body">
+
                     <input type="hidden" name="txt_referencias_laborales_id" id="txt_referencias_laborales_id">
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
 
-                    <div class="row mb-col">
+                    <div class="row mb-3">
                         <div class="col-md-12">
-                            <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre Empleador </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_nombre_referencia" id="txt_nombre_referencia" maxlength="50">
+                            <label for="txt_nombre_referencia" class="form-label fw-semibold fs-7">Nombre del Jefe o Contacto </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white text-muted"><i class='bx bx-user'></i></span>
+                                <input type="text" class="form-control no_caracteres" name="txt_nombre_referencia" id="txt_nombre_referencia" maxlength="50" placeholder="Ej: Ing. Juan Pérez">
+                            </div>
+                            <label class="error" style="display: none;" for="txt_nombre_referencia"></label>
                         </div>
                     </div>
 
-                    <div class="row mb-col">
+                    <div class="row mb-3">
                         <div class="col-md-12">
-                            <label for="txt_telefono_referencia" class="form-label form-label-sm">Teléfono Empleador </label>
-                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_referencia" id="txt_telefono_referencia" maxlength="15">
+                            <label for="txt_referencia_nombre_empresa" class="form-label fw-semibold fs-7">Empresa / Institución </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white text-muted"><i class='bx bx-buildings'></i></span>
+                                <input type="text" class="form-control no_caracteres" name="txt_referencia_nombre_empresa" id="txt_referencia_nombre_empresa" maxlength="100" placeholder="Nombre de la organización">
+                            </div>
+                            <label class="error" style="display: none;" for="txt_referencia_nombre_empresa"></label>
                         </div>
                     </div>
 
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_referencia_correo" class="form-label form-label-sm">Correo Empleador </label>
-                            <input type="email" class="form-control form-control-sm" name="txt_referencia_correo" id="txt_referencia_correo" maxlength="100">
+                    <div class="row mb-3 g-3">
+                        <div class="col-md-6">
+                            <label for="txt_telefono_referencia" class="form-label fw-semibold fs-7">Teléfono de Contacto </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white text-muted"><i class='bx bx-phone'></i></span>
+                                <input type="text" class="form-control solo_numeros_int" name="txt_telefono_referencia" id="txt_telefono_referencia" maxlength="15" placeholder="Ej: 0987654321">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="txt_referencia_correo" class="form-label fw-semibold fs-7">Correo Electrónico </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white text-muted"><i class='bx bx-envelope'></i></span>
+                                <input type="email" class="form-control" name="txt_referencia_correo" id="txt_referencia_correo" maxlength="100" placeholder="ejemplo@correo.com">
+                            </div>
                         </div>
                     </div>
 
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_referencia_nombre_empresa" class="form-label form-label-sm">Empresa/Institución </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_referencia_nombre_empresa" id="txt_referencia_nombre_empresa" maxlength="100">
-                        </div>
+                    <div class="p-3 bg-light rounded-3 border border-dashed">
+                        <label for="txt_copia_carta_recomendacion" class="form-label fw-semibold">Carta de Recomendación (PDF) </label>
+                        <input type="file" class="form-control form-control-sm" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" accept=".pdf">
+                        <input type="hidden" name="txt_ruta_guardada_carta_recomendacion" id="txt_ruta_guardada_carta_recomendacion">
+                        <div class="form-text text-xs"><i class='bx bx-info-circle'></i> Adjunta el documento escaneado firmado. Máximo 5MB.</div>
                     </div>
 
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Pdf Carta Recomendación </label>
-                            <input type="file" class="form-control form-control-sm" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" accept=".pdf">
-                            <!-- <div class="pt-2"></div> -->
-                            <input type="text" class="form-control form-control-sm" name="txt_ruta_guardada_carta_recomendacion" id="txt_ruta_guardada_carta_recomendacion" hidden>
-                        </div>
-                    </div>
                 </div>
 
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_referencia_laboral" onclick="insertar_editar_referencias_laborales();"><i class="bx bx-save"></i>Agregar</button>
-                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_referencia_laboral" onclick="delete_datos_referencias_laborales();"><i class="bx bx-trash"></i>Eliminar</button>
+                <div class="modal-footer bg-light border-top-0 d-flex justify-content-between">
+                    <button type="button" style="display: none;" class="btn btn-outline-danger btn-sm" id="btn_eliminar_referencia_laboral" onclick="delete_datos_referencias_laborales();">
+                        <i class="bx bx-trash"></i> Eliminar
+                    </button>
+
+                    <div class="ms-auto">
+                        <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" onclick="limpiar_parametros_referencias_laborales()">Cancelar</button>
+                        <button type="button" class="btn btn-primary btn-sm px-4" id="btn_guardar_referencia_laboral" onclick="insertar_editar_referencias_laborales();">
+                            <i class="bx bx-save"></i> Guardar
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<div class="modal" id="modal_ver_pdf_referencias_laborales" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="modal_ver_pdf_referencias_laborales" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
+        <div class="modal-content border-0 shadow-lg">
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_referencia_laboral">Referencia Laboral</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();"></button>
-            </div>
-            <!-- Modal body -->
-            <form id="form_referencias_laborales">
-                <div class="modal-body d-flex justify-content-center">
-                    <iframe src='' id="iframe_referencias_laborales_pdf" frameborder="0" width="900px" height="700px"></iframe>
+            <div class="modal-header bg-dark bg-opacity-10 py-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-white p-2 rounded-circle me-2 text-primary shadow-sm">
+                        <i class='bx bx-briefcase bx-sm'></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark mb-0" id="lbl_titulo_referencia_laboral">Referencia Laboral</h5>
+                        <small class="text-muted">Vista previa del certificado de experiencia</small>
+                    </div>
                 </div>
-            </form>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body p-0 bg-light">
+                <div class="w-100 position-relative" style="height: 80vh;">
+
+                    <div class="position-absolute top-50 start-50 translate-middle text-muted" style="z-index: 0;">
+                        <i class='bx bx-loader-alt bx-spin bx-md'></i> Cargando documento...
+                    </div>
+
+                    <iframe src=''
+                        id="iframe_referencias_laborales_pdf"
+                        class="w-100 h-100 border-0 position-relative"
+                        style="z-index: 1;"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="modal-footer py-1 bg-white">
+                <small class="text-muted me-auto fst-italic">
+                    <i class='bx bx-info-circle'></i> Si el documento no carga, consultar con el administrador.
+                </small>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();">Cerrar</button>
+            </div>
+
         </div>
     </div>
 </div>

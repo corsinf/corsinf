@@ -45,25 +45,30 @@ class th_pos_habilidadesC
     {
         $datos = $this->modelo->where('th_pos_id', $id)->where('th_tiph_id', 2)->orderBy('th_hab_nombre', 'ASC')->listarJoin();
 
-        $texto = '';
+        $texto = '<div class="d-flex flex-wrap gap-2 p-2">'; // Contenedor Flex para que se alineen solas
         foreach ($datos as $key => $value) {
-            $texto .=
-                <<<HTML
-                    <div class="row mt-1">
-                        <div class="col-8">
-                            <ul>
-                                <li>{$value['th_hab_nombre']}</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="col-4 d-flex justify-content-end align-items-center">
-                            <button class="btn icon-hover" style="color: white;" onclick="delete_datos_aptitudes({$value['th_habp_id']})">
-                                <i class="text-danger bx bx-trash bx-sm"></i>
-                            </button>
-                        </div>
-                    </div>
-                HTML;
+            $texto .= <<<HTML
+                            <div class="badge rounded-pill d-flex align-items-center border-0" 
+                                style="background-color: #e8f5e9; color: #2e7d32; padding: 0.5rem 0.8rem; font-size: 0.85rem;">
+                                
+                                <span class="me-2 fw-bold">
+                                    <i class="bx bx-check-double me-1"></i> {$value['th_hab_nombre']}
+                                </span>
+                                
+                                <button type="button" 
+                                        class="btn p-0 d-flex align-items-center shadow-none" 
+                                        style="color: #2e7d32; transition: 0.2s;"
+                                        onmouseover="this.style.color='#d32f2f'" 
+                                        onmouseout="this.style.color='#2e7d32'"
+                                        onclick="delete_datos_aptitudes({$value['th_habp_id']})">
+                                    <i class="bx bx-x-circle fs-5"></i>
+                                </button>
+                                
+                            </div>
+                        HTML;
         }
+
+        $texto .= '</div>';
 
         return $texto;
     }
@@ -72,24 +77,28 @@ class th_pos_habilidadesC
     {
         $datos = $this->modelo->where('th_pos_id', $id)->where('th_tiph_id', 1)->orderBy('th_hab_nombre', 'ASC')->listarJoin();
 
-        $texto = '';
+        $texto = '<div class="d-flex flex-wrap gap-2 p-2">';
         foreach ($datos as $key => $value) {
-            $texto .=
-                <<<HTML
-                    <div class="row mt-1">
-                        <div class="col-8">
-                            <ul>
-                                <li>{$value['th_hab_nombre']}</li>
-                            </ul>
-                        </div>
-                        <div class="col-4 d-flex justify-content-end align-items-center">
-                            <button class="btn icon-hover" style="color: white;" onclick="delete_datos_aptitudes({$value['th_habp_id']})">
-                                <i class="text-danger bx bx-trash bx-sm"></i>
-                            </button>
-                        </div>
-                    </div>
-                HTML;
+            $texto .= <<<HTML
+                            <div class="badge rounded-pill d-flex align-items-center" 
+                                style="background-color: #e7f1ff; color: #0d6efd; border: 1px solid #cfe2ff; padding: 8px 12px; font-weight: 500;">
+                                
+                                <span class="me-2 text-uppercase" style="font-size: 0.85rem; letter-spacing: 0.5px;">
+                                    {$value['th_hab_nombre']}
+                                </span>
+                                
+                                <button type="button" 
+                                        class="btn p-0 d-flex align-items-center justify-content-center" 
+                                        style="color: #0d6efd; transition: 0.3s;"
+                                        onmouseover="this.style.color='#dc3545'" 
+                                        onmouseout="this.style.color='#0d6efd'"
+                                        onclick="delete_datos_aptitudes({$value['th_habp_id']})">
+                                    <i class="bx bx-x-circle fs-5"></i>
+                                </button>
+                            </div>
+                        HTML;
         }
+        $texto .= '</div>';
 
         return $texto;
     }
