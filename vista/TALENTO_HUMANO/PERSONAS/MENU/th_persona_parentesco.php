@@ -296,69 +296,107 @@
 </div>
 
 <!-- Modal Referencias Personales -->
-<div class="modal" id="modal_parientes" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="modal_parientes" tabindex="-1" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_parientes">Agregar Referencia Personal</small></h5>
+        <div class="modal-content border-0 shadow-lg">
+
+            <div class="modal-header bg-dark bg-opacity-10">
+                <div>
+                    <h5 class="modal-title fw-bold text-primary" id="lbl_titulo_parientes">
+                        <i class='bx bx-group me-2'></i>Referencia Personal / Familiar
+                    </h5>
+                    <small class="text-muted">Registra a tus parientes directos o contactos de confianza.</small>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_parientes_modal()"></button>
             </div>
-            <form id="form_parientes">
+
+            <form id="form_parientes" class="needs-validation">
                 <input type="hidden" name="txt_pariente_id" id="txt_pariente_id">
+
                 <div class="modal-body">
-                    <div class="row mb-col">
+
+                    <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label for="ddl_parentesco" class="form-label form-label-sm">Parentesco </label>
-                            <select class="form-select form-select-sm" id="ddl_parentesco" name="ddl_parentesco" onchange="validar_parentesco_seleccionado()" required>
+                            <label for="txt_nombres_pariente" class="form-label fw-semibold fs-7">Nombres </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white text-muted"><i class='bx bx-user'></i></span>
+                                <input type="text" class="form-control" name="txt_nombres_pariente" id="txt_nombres_pariente" required placeholder="Nombres completos">
+                            </div>
+                            <label class="error" style="display: none;" for="txt_nombres_pariente"></label>
+
+                        </div>
+                        <div class="col-md-6">
+                            <label for="txt_apellidos_pariente" class="form-label fw-semibold fs-7">Apellidos </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white text-muted"><i class='bx bx-user'></i></span>
+                                <input type="text" class="form-control" name="txt_apellidos_pariente" id="txt_apellidos_pariente" required placeholder="Apellidos completos">
+                            </div>
+                            <label class="error" style="display: none;" for="txt_apellidos_pariente"></label>
+
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="ddl_parentesco" class="form-label fw-semibold fs-7">Parentesco </label>
+                            <select class="form-select form-select-sm select2-validation" id="ddl_parentesco" name="ddl_parentesco" onchange="validar_parentesco_seleccionado()" required style="width: 100%;">
                                 <option selected disabled value="">-- Seleccione un Parentesco --</option>
                             </select>
+                            <label class="error" style="display: none;" for="ddl_parentesco"></label>
+                            
                         </div>
                         <div class="col-md-6">
-                            <label for="txt_telefono_pariente" class="form-label form-label-sm">Número de Teléfono </label>
-                            <input type="text" class="form-control form-control-sm" name="txt_telefono_pariente" id="txt_telefono_pariente">
+                            <label for="txt_telefono_pariente" class="form-label fw-semibold fs-7">Número de Teléfono </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white text-muted"><i class='bx bx-phone'></i></span>
+                                <input type="text" class="form-control solo_numeros_int" name="txt_telefono_pariente" id="txt_telefono_pariente" placeholder="Ej: 0987654321">
+                            </div>
+                            <label class="error" style="display: none;" for="txt_telefono_pariente"></label>
+
                         </div>
                     </div>
-                    <div class="row mb-col">
-                        <div class="col-md-6">
-                            <label for="txt_nombres_pariente" class="form-label form-label-sm">Nombres </label>
-                            <input type="text" class="form-control form-control-sm" name="txt_nombres_pariente" id="txt_nombres_pariente" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="txt_apellidos_pariente" class="form-label form-label-sm">Apellidos </label>
-                            <input type="text" class="form-control form-control-sm" name="txt_apellidos_pariente" id="txt_apellidos_pariente" required>
-                        </div>
-                    </div>
-                    <div class="row mb-col">
-                        <div class="col-md-6">
-                            <label for="txt_fecha_nacimiento_pariente" class="form-label form-label-sm" id="lbl_fecha_nacimiento_pariente">Fecha de Nacimiento </label>
-                            <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento_pariente" id="txt_fecha_nacimiento_pariente" onchange="calcular_edad_pariente()">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="txt_edad_pariente" class="form-label form-label-sm">Edad </label>
-                            <input type="number" class="form-control form-control-sm" name="txt_edad_pariente" id="txt_edad_pariente" readonly>
+
+                    <div class="p-3 bg-light rounded-3 border border-dashed mb-3">
+                        <h6 class="text-muted fs-7 mb-2 fw-bold text-uppercase ls-1">Datos Demográficos </h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="txt_fecha_nacimiento_pariente" class="form-label fs-7 mb-1">Fecha de Nacimiento </label>
+                                <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento_pariente" id="txt_fecha_nacimiento_pariente" onchange="calcular_edad_pariente()">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="txt_edad_pariente" class="form-label fs-7 mb-1">Edad Calculada</label>
+                                <input type="number" class="form-control form-control-sm bg-white" name="txt_edad_pariente" id="txt_edad_pariente" readonly placeholder="0">
+                            </div>
                         </div>
                     </div>
+
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox"
-                                    id="chk_contacto_emergencia"
-                                    name="chk_contacto_emergencia">
-
-                                <label class="form-check-label" for="chk_contacto_emergencia">
-                                    Contacto de Emergencia
+                            <div class="form-check form-switch custom-switch">
+                                <input class="form-check-input" type="checkbox" id="chk_contacto_emergencia" name="chk_contacto_emergencia">
+                                <label class="form-check-label fw-bold text-primary" for="chk_contacto_emergencia">
+                                    ¿Es contacto de emergencia?
                                 </label>
                             </div>
-
-                            <span class="form-text text-muted ms-4">
-                                Este pariente será utilizado como contacto en caso de una emergencia.
-                            </span>
+                            <div class="form-text text-xs ms-0 mt-1">
+                                <i class='bx bx-info-circle'></i> Si se marca, este pariente será el contacto principal en caso de incidentes.
+                            </div>
                         </div>
                     </div>
+
                 </div>
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_parientes" onclick="insertar_editar_parientes();"><i class="bx bx-save"></i> Agregar</button>
-                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_parientes" onclick="delete_datos_parientes();"><i class="bx bx-trash"></i> Eliminar</button>
+
+                <div class="modal-footer bg-light border-top-0 d-flex justify-content-between">
+                    <button type="button" style="display: none;" class="btn btn-outline-danger btn-sm" id="btn_eliminar_parientes" onclick="delete_datos_parientes();">
+                        <i class="bx bx-trash"></i> Eliminar
+                    </button>
+
+                    <div class="ms-auto">
+                        <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" onclick="limpiar_campos_parientes_modal()">Cancelar</button>
+                        <button type="button" class="btn btn-primary btn-sm px-4" id="btn_guardar_parientes" onclick="insertar_editar_parientes();">
+                            <i class="bx bx-save"></i> Guardar
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
