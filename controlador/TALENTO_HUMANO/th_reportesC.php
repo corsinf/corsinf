@@ -48,6 +48,9 @@ if (isset($_GET['sincronizar_calculo_asistencia_fecha'])) {
     echo json_encode($controlador->sincronizar_calculo_asistencia_fecha($_POST['fecha_inicio'] ?? '', $_POST['fecha_fin'] ?? ''));
 }
 
+if (isset($_GET['sincronizar_marcaciones'])) {
+    echo json_encode($controlador->sincronizar_marcaciones());
+}
 
 class th_reportesC
 {
@@ -370,7 +373,11 @@ class th_reportesC
         $fecha_actual = new DateTime($fecha_inicio);
         $fecha_limite = new DateTime($fecha_fin);
 
-        $this->guardar_log('[INF] Inicio Inserción Masiva ', $BASEDATO);
+        // Usamos ->format('Y-m-d H:i:s') para convertir el objeto a texto
+        $mensaje = "[INF] Inicio Inserción Masiva de las fechas -> " . $fecha_actual->format('Y-m-d') . " - " . $fecha_limite->format('Y-m-d');
+
+        $this->guardar_log($mensaje, $BASEDATO);
+
         while ($fecha_actual <= $fecha_limite) {
             $fecha_str = $fecha_actual->format('Y-m-d');
 
@@ -381,9 +388,13 @@ class th_reportesC
         }
         $this->guardar_log($parametros, $BASEDATO);
 
+        return ($parametros);
+    }
 
-        print_r($parametros);
-        exit();
+    function sincronizar_marcaciones()
+    {
+        $datos = $this->modelo->sincronizar_marcaciones();
+        return $datos;
     }
 
     function guardar_log($mensaje, $db)

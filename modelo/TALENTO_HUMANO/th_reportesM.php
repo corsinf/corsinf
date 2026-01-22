@@ -54,4 +54,10 @@ class th_reportesM extends BaseModel
         $datos = $this->db->datos($sql);
         return $datos;
     }
+
+    public function sincronizar_marcaciones()
+    {
+        $sql = "EXEC _asistencias.SP_PROCESAR_LOG_DISPOSITIVOS_MASIVOS;";
+        return $this->db->sql_string($sql);
+    }
 }

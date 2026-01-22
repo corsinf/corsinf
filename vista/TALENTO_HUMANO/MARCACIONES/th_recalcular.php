@@ -26,9 +26,9 @@
                 fecha_fin: fecha_fin,
             },
             success: function(response) {
-                console.log(response);
+                // console.log(response);
                 Swal.close();
-                Swal.fire('Sincornizado correctamente.', '', 'success');
+                Swal.fire('Sincornizado correctamente.', response, 'success');
             },
             error: function(xhr, status, error) {
                 console.log('Status: ' + status);
@@ -103,7 +103,7 @@
 
                                     <button onclick="sincronizar_calculo_asistencia_fecha();"
                                         type="button" class="btn btn-primary btn-sm">
-                                        <i class="bx bx-rotate-right"></i> Sincronizar Fecha
+                                        <i class="bx bx-rotate-right"></i> Recalcular Fecha
                                     </button>
 
                                 </div>

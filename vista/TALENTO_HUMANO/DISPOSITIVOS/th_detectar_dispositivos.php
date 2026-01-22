@@ -18,31 +18,52 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 url: '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?DeviceLog=true',
                 dataSrc: ''
             },
-            columns: [                   
-                    { data: 'th_acc_id' }, // Tipo dispositivo
-                    { data: null,
-                        render: function(data, type, item) {
+            columns: [{
+                    data: 'th_acc_id'
+                }, // Tipo dispositivo
+                {
+                    data: null,
+                    render: function(data, type, item) {
                         var nombre = '';
-                        if(item.th_per_primer_apellido!='' && item.th_per_primer_apellido!=null){nombre+= item.th_per_primer_apellido+' ';}
-                        if(item.th_per_segundo_apellido!='' && item.th_per_segundo_apellido!=null){nombre+= item.th_per_segundo_apellido+' ';}
-                        if(item.th_per_primer_nombre!='' && item.th_per_primer_nombre!=null){nombre+= item.th_per_primer_nombre+' ';}
-                        if(item.th_per_segundo_nombre!='' && item.th_per_segundo_nombre!=null){nombre+= item.th_per_segundo_nombre+' ';}
+                        if (item.th_per_primer_apellido != '' && item.th_per_primer_apellido != null) {
+                            nombre += item.th_per_primer_apellido + ' ';
+                        }
+                        if (item.th_per_segundo_apellido != '' && item.th_per_segundo_apellido != null) {
+                            nombre += item.th_per_segundo_apellido + ' ';
+                        }
+                        if (item.th_per_primer_nombre != '' && item.th_per_primer_nombre != null) {
+                            nombre += item.th_per_primer_nombre + ' ';
+                        }
+                        if (item.th_per_segundo_nombre != '' && item.th_per_segundo_nombre != null) {
+                            nombre += item.th_per_segundo_nombre + ' ';
+                        }
 
                         return nombre;
-                        }
-                    }, // Estado
-                    { data: 'th_per_cedula' }, // IPV4
-                    { data: 'th_cardNo' }, // IPV4
-                    { data: 'th_acc_fecha_hora'}, // Puerto
-                    { data: 'th_acc_hora' }, // Serial
-                    { data: 'th_dis_id' }, // MAC Address
-                    { data: null,
-                        render: function(data, type, item) {
+                    }
+                }, // Estado
+                {
+                    data: 'th_per_cedula'
+                }, // IPV4
+                {
+                    data: 'th_cardNo'
+                }, // IPV4
+                {
+                    data: 'th_acc_fecha_hora'
+                }, // Puerto
+                {
+                    data: 'th_acc_hora'
+                }, // Serial
+                {
+                    data: 'th_dis_id'
+                }, // MAC Address
+                {
+                    data: null,
+                    render: function(data, type, item) {
                         data1 = String(item);
                         return `<button type="button" class="btn btn-primary btn-xs" onclick="registrar_device('${item.ipv4}','${item.puerto}','${item.serie}')"><i class="bx bx-save fs-7 me-0 fw-bold"></i></button>`;
                     }
                 },
-               
+
             ],
             order: [
                 [1, 'asc']
@@ -50,20 +71,20 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         }));
 
 
-         $("#form_dispositivo").validate({
+        $("#form_dispositivo").validate({
             rules: {
-              
+
                 txt_nombre: {
                     required: true,
                 },
                 txt_pass: {
-                    required : true
+                    required: true
                 },
                 txt_usuario: {
-                    required : true
+                    required: true
                 }
             },
-            messages: {                
+            messages: {
                 txt_nombre: {
                     required: "El campo 'Nombre' es obligatorio",
                 },
@@ -101,30 +122,29 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             success: function(response) {
                 console.log(response);
                 op = '';
-                response.forEach(function(item,i){
-                    op+='<option value="'+item._id+'">'+item.nombre+'</option>';
+                response.forEach(function(item, i) {
+                    op += '<option value="' + item._id + '">' + item.nombre + '</option>';
                 })
                 $('#ddl_dispositivos').html(op);
-               
-            },  error: function(xhr, status, error) {
-                console.log('Status: ' + status); 
-                console.log('Error: ' + error); 
-                console.log('XHR Response: ' + xhr.responseText); 
+
+            },
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
 
                 Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
         });
     }
 
-    function probar_conexion()
-    {
+    function probar_conexion() {
         var txt_host = $('#txt_host').val();
         var txt_puerto = $('#txt_puerto').val();
         var txt_usuario = $('#txt_usuario').val();
         var txt_pass = $('#txt_pass').val();
-        if(txt_pass=='' || txt_usuario=='' || txt_host=='')
-        {
-            Swal.fire("Ingrese todos los datos","","info")
+        if (txt_pass == '' || txt_usuario == '' || txt_host == '') {
+            Swal.fire("Ingrese todos los datos", "", "info")
             return false;
         }
 
@@ -135,7 +155,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             'txt_pass': txt_pass,
         };
 
-         $.ajax({
+        $.ajax({
             data: {
                 parametros: parametros
             },
@@ -146,35 +166,34 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             success: function(response) {
                 if (response.respuesta.resp == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
-                } else{
+                } else {
                     Swal.fire('No se pudo conectar', response.respuesta.msj, 'error')
                 }
             },
-            
+
             error: function(xhr, status, error) {
-                console.log('Status: ' + status); 
-                console.log('Error: ' + error); 
-                console.log('XHR Response: ' + xhr.responseText); 
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
 
                 Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
         });
     }
 
-    function detectar()
-    {
+    function detectar() {
         // setInterval(
-            DeviceLog()
-            // , 5000);
-      
+        DeviceLog()
+        // , 5000);
+
     }
-    function DeviceLog()
-    {
+
+    function DeviceLog() {
         var parametros = {
             'dispostivos': $('#ddl_dispositivos').val(),
         };
 
-         $.ajax({
+        $.ajax({
             data: {
                 parametros: parametros
             },
@@ -183,24 +202,22 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             dataType: 'json',
 
             success: function(response, status, xhr) {
-            // Verificar si el estatus HTTP es 200
-          
-                if(response==-1)
-                {
-                    Swal.fire("dispositivo no encontrado","","info");
-                }else
-                {
+                // Verificar si el estatus HTTP es 200
+
+                if (response == -1) {
+                    Swal.fire("dispositivo no encontrado", "", "info");
+                } else {
                     if (xhr.status === 200) {
                         Swal.fire("Detección activada", "", "success");
                         // console.log("Respuesta del servidor: ", response); // Opcional para depuración
-                    }           
+                    }
                 }
             },
-            
+
             error: function(xhr, status, error) {
-                console.log('Status: ' + status); 
-                console.log('Error: ' + error); 
-                console.log('XHR Response: ' + xhr.responseText); 
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
 
                 Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
@@ -208,13 +225,12 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
     }
 
-    function Detenerdeteccion()
-    {
+    function Detenerdeteccion() {
         var parametros = {
             'dispostivos': $('#ddl_dispositivos').val(),
         };
 
-         $.ajax({
+        $.ajax({
             data: {
                 parametros: parametros
             },
@@ -223,13 +239,13 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             dataType: 'json',
 
             success: function(response) {
-                Swal.fire("Activado deteccion","","success")
+                Swal.fire("Activado deteccion", "", "success")
             },
-            
+
             error: function(xhr, status, error) {
-                console.log('Status: ' + status); 
-                console.log('Error: ' + error); 
-                console.log('XHR Response: ' + xhr.responseText); 
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
 
                 Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
@@ -237,8 +253,38 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
     }
 
+    function sincronizar_marcaciones() {
 
+        Swal.fire({
+            title: 'Por favor, espere',
+            text: 'Procesando la solicitud...',
+            allowOutsideClick: false,
+            onOpen: () => {
+                Swal.showLoading();
+            }
+        });
 
+        fecha_inicio = $('#txt_fecha_inicio').val();
+        fecha_fin = $('#txt_fecha_fin').val();
+
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_reportesC.php?sincronizar_marcaciones=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                Swal.close();
+                Swal.fire('Sincornizado correctamente.', '', 'success');
+            },
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
+    }
 </script>
 
 <div class="page-wrapper">
@@ -281,15 +327,15 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                     <div class="" id="btn_nuevo">
                                         <button type="button" class="btn btn-success btn-sm" onclick="detectar()">
                                             <i class="bx bx-play me-0 pb-1"></i> Comenzar deteccion
-                                        </button> 
+                                        </button>
                                         <button type="button" class="btn btn-danger btn-sm" onclick="Detenerdeteccion()">
                                             <i class="bx bx-stop me-0 pb-1"></i> Deteccion deteccion
                                         </button>
-                                       <!--  <button type="button" class="btn btn-success btn-sm" onclick="DeviceLog()">
+                                        <!--  <button type="button" class="btn btn-success btn-sm" onclick="DeviceLog()">
                                             <i class="bx bx-search me-0 pb-1"></i> Buscar log
                                         </button> -->
                                     </div>
-                                    
+
                                 </div>
                             </div>
 
@@ -297,7 +343,25 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                 <div id="contenedor_botones"></div>
                             </div>
                         </div>
+                        <hr>
 
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <label class="form-label fw-semibold fs-7 d-block mb-2">
+                                    Sincronizar Marcaciones
+                                    <i class='bx bx-info-circle text-primary'
+                                        data-bs-toggle="tooltip"
+                                        title="Sube todas las marcaciones cuando se exporta del dispositivo"></i>
+                                </label>
+
+                                <button id="btnSincronizar"
+                                    onclick="sincronizar_marcaciones();"
+                                    type="button"
+                                    class="btn btn-secondary btn-sm d-inline-flex align-items-center">
+                                    <i class="bx bx-rotate-right me-1"></i> Sincronizar
+                                </button>
+                            </div>
+                        </div>
                         <hr>
 
                         <section class="content pt-2">
@@ -308,7 +372,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                             <tr>
                                                 <th>No.</th>
                                                 <th>Nombre</th>
-                                                <th>Cedula</th>                                                
+                                                <th>Cedula</th>
                                                 <th>Tarjeta</th>
                                                 <th>Fecha</th>
                                                 <th>Hora</th>
@@ -349,21 +413,21 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         <label for="">Ip<label class="text-danger">*</label></label>
                         <input class="form-control form-control-sm" name="txt_ipv4" id="txt_ipv4" readonly>
                     </div>
-                     <div class="col-4">
-                        <label for="">Puerto <label class="text-danger">*</label></label>                        
+                    <div class="col-4">
+                        <label for="">Puerto <label class="text-danger">*</label></label>
                         <input class="form-control form-control-sm" name="txt_ipv4_port" id="txt_ipv4_port" readonly>
                     </div>
                 </div>
-                   
+
                 <div class="row pt-3">
                     <div class="col-12">
-                        <label for="">Antigua Contraseña <label class="text-danger">*</label></label>                        
+                        <label for="">Antigua Contraseña <label class="text-danger">*</label></label>
                         <input class="form-control form-control-sm" name="txt_ipv4_pass_ant" id="txt_ipv4_pass_ant">
                     </div>
                 </div>
                 <div class="row pt-3">
                     <div class="col-12">
-                        <label for="">Nueva Contraseña <label class="text-danger">*</label></label>                        
+                        <label for="">Nueva Contraseña <label class="text-danger">*</label></label>
                         <input class="form-control form-control-sm" name="txt_ipv4_pass" id="txt_ipv4_pass">
                     </div>
                 </div>
@@ -393,10 +457,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
             <!-- Modal body -->
             <div class="modal-body">
-                    <form id="form_dispositivo" novalidate="novalidate">
+                <form id="form_dispositivo" novalidate="novalidate">
 
-                            <div class="row pt-3 mb-col">
-                               <!--  <div class="col-md-4">
+                    <div class="row pt-3 mb-col">
+                        <!--  <div class="col-md-4">
                                     <label for="ddl_modelo" class="form-label">Modelo <label style="color: red;">*</label></label>
                                     <select class="form-select form-select-sm is-valid" id="ddl_modelo" name="ddl_modelo" aria-invalid="false">
                                         <option selected="" disabled="">-- Seleccione --</option>
@@ -405,72 +469,70 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                     </select>
                                 </div> -->
 
-                                <div class="col-md-8">
-                                    <label for="txt_nombre" class="form-label">Nombre <label style="color: red;">*</label></label>
-                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_nombre" name="txt_nombre" maxlength="50">
-                                    <span id="error_txt_nombre" class="text-danger"></span>
-                                </div>
-
-                            </div>
-
-                            <div class="row mb-col">
-                                <div class="col-md-4 ">
-                                    <label for="txt_host" class="form-label">IP/Host </label>
-                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_host" name="txt_host" maxlength="50" oninput="texto_minusculas(this);" readonly>
-                                </div>
-
-                                <div class="col-md-2 ">
-                                    <label for="txt_puerto" class="form-label">Puerto </label>
-                                    <input type="text" class="form-control form-control-sm solo_numeros_int" id="txt_puerto" name="txt_puerto" maxlength="4" readonly>
-                                </div>
-
-                                <div class="col-md-6 ">
-                                    <label for="txt_serial" class="form-label">Número de Serie </label>
-                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_serial" name="txt_serial" maxlength="100" readonly>
-                                </div>
-                            </div>
-
-                            <div class="row mb-col">
-                                <div class="col-md-4 ">
-                                    <label for="txt_usuario" class="form-label">Usuario <label style="color: red;">*</label></label>
-                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_usuario" name="txt_usuario" maxlength="50">
-                                    <span id="error_txt_usuario" class="text-danger"></span>
-                                </div>
-
-                                <div class="col-md-8 ">
-                                    <label for="txt_pass" class="form-label">Contraseña <label style="color: red;">*</label></label>
-                                    <input type="text" class="form-control form-control-sm" id="txt_pass" name="txt_pass" maxlength="50">                                    
-                                    <span id="error_txt_pass" class="text-danger"></span>
-                                </div>
-                            </div>
-
-                            <div class="row mb-col">
-                                <div class="col-md-12">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" name="cbx_ssl" id="cbx_ssl">
-                                        <label class="form-label" for="cbx_ssl">SSL </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row mb-col">
-                                <div class="col-md-12">
-
-                                    <button class="btn btn-primary btn-sm px-4" onclick="probar_conexion()" type="button"><i class="lni lni-play fs-6 me-0"></i> Probar conexión</button>
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-end pt-2">
-
-                            <button class="btn btn-success btn-sm px-4 m-0" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
+                        <div class="col-md-8">
+                            <label for="txt_nombre" class="form-label">Nombre <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" id="txt_nombre" name="txt_nombre" maxlength="50">
+                            <span id="error_txt_nombre" class="text-danger"></span>
                         </div>
 
+                    </div>
 
-                    </form>
+                    <div class="row mb-col">
+                        <div class="col-md-4 ">
+                            <label for="txt_host" class="form-label">IP/Host </label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" id="txt_host" name="txt_host" maxlength="50" oninput="texto_minusculas(this);" readonly>
+                        </div>
+
+                        <div class="col-md-2 ">
+                            <label for="txt_puerto" class="form-label">Puerto </label>
+                            <input type="text" class="form-control form-control-sm solo_numeros_int" id="txt_puerto" name="txt_puerto" maxlength="4" readonly>
+                        </div>
+
+                        <div class="col-md-6 ">
+                            <label for="txt_serial" class="form-label">Número de Serie </label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" id="txt_serial" name="txt_serial" maxlength="100" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row mb-col">
+                        <div class="col-md-4 ">
+                            <label for="txt_usuario" class="form-label">Usuario <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" id="txt_usuario" name="txt_usuario" maxlength="50">
+                            <span id="error_txt_usuario" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-8 ">
+                            <label for="txt_pass" class="form-label">Contraseña <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm" id="txt_pass" name="txt_pass" maxlength="50">
+                            <span id="error_txt_pass" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="cbx_ssl" id="cbx_ssl">
+                                <label class="form-label" for="cbx_ssl">SSL </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+
+                            <button class="btn btn-primary btn-sm px-4" onclick="probar_conexion()" type="button"><i class="lni lni-play fs-6 me-0"></i> Probar conexión</button>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end pt-2">
+
+                        <button class="btn btn-success btn-sm px-4 m-0" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
+                    </div>
+
+
+                </form>
 
             </div>
         </div>
     </div>
 </div>
-
-
