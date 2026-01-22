@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__DIR__, 3)  . '/modelo/TALENTO_HUMANO/POSTULANTES/th_pos_contratos_trabajoM.php');
+require_once(dirname(__DIR__, 2)  . '/modelo/TALENTO_HUMANO/th_per_contratos_trabajoM.php');
 
 $controlador = new th_pos_contratos_trabajoC();
 
@@ -30,7 +30,7 @@ class th_pos_contratos_trabajoC
 
     function __construct()
     {
-        $this->modelo = new th_pos_contratos_trabajoM();
+        $this->modelo = new th_per_contratos_trabajoM();
     }
 
     //Funcion para listar la formacion academica del postulante
@@ -38,7 +38,7 @@ class th_pos_contratos_trabajoC
 
     function listar($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_ctr_estado', 1)->listar();
+        $datos = $this->modelo->where('th_per_id', $id)->where('th_ctr_estado', 1)->listar();
 
         $texto = '<div class="row g-3">';
 
@@ -117,7 +117,7 @@ class th_pos_contratos_trabajoC
             //array('campo' => 'th_ctr_ruta_archivo', 'dato' => $parametros['txt_ruta_archivo']),
             array('campo' => 'th_ctr_fecha_inicio_contrato', 'dato' => $parametros['txt_fecha_inicio_contrato']),
             array('campo' => 'th_ctr_cbx_fecha_fin_experiencia', 'dato' => $parametros['cbx_fecha_fin_experiencia'] ?? 0),
-            array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
+            array('campo' => 'th_per_id', 'dato' => $parametros['txt_persona_id']),
 
 
         );
@@ -179,9 +179,9 @@ class th_pos_contratos_trabajoC
     private function guardar_archivo($file, $post, $id_insertar_editar)
     {
         $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
-        $ruta = dirname(__DIR__, 3) . '/REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/'; //ruta carpeta donde queremos copiar los archivos
-        $ruta .= $post['txt_postulante_cedula'] . '/' . 'CONTRATOS_TRABAJOS/';
-
+        $ruta = dirname(__DIR__, 2) . '/REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/'; //ruta carpeta donde queremos copiar los archivos
+        $ruta .= $post['txt_persona_cedula'] . '/' . 'CONTRATOS_TRABAJOS/';
+        // print_r($ruta); exit(); die();
         if (!file_exists($ruta)) {
             mkdir($ruta, 0777, true);
         }
@@ -193,7 +193,7 @@ class th_pos_contratos_trabajoC
             $nombre = 'contratos_trabajos_' . $id_insertar_editar . '.' . $extension;
             $nuevo_nom = $ruta . $nombre;
 
-            $nombre_ruta = '../REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/' . $post['txt_postulante_cedula'] . '/' . 'CONTRATOS_TRABAJOS/';
+            $nombre_ruta = '../REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/' . $post['txt_persona_cedula'] . '/' . 'CONTRATOS_TRABAJOS/';
             $nombre_ruta .= $nombre;
             //print_r($post); exit(); die();
 

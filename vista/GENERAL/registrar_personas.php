@@ -78,7 +78,8 @@
                 $('#lbl_nombre_completo_perfil').text(response[0].nombres_completos);
                 $('#lbl_cedula_perfil').text(response[0].cedula);
 
-
+                $('input[name="txt_persona_id"]').val(response[0].th_per_id);
+                $('input[name="txt_persona_cedula"]').val(response[0].cedula);
             },
         });
     }

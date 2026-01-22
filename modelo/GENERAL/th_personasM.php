@@ -122,12 +122,13 @@ class th_personasM extends BaseModel
                 p.id_orientacion_sexual,
                 p.id_identidad_genero,
                 p.id_religion,
-                p.th_per_correo_personal_1             AS correo_personal_1,
-                p.th_per_correo_personal_2             AS correo_personal_2,
+                p.th_per_correo_personal_1           AS correo_personal_1,
+                p.th_per_correo_personal_2           AS correo_personal_2,
                 et.descripcion                       AS descripcion_etnia,
                 ori_sex.descripcion                  AS descripcion_orientacion_sexual,
                 rel.descripcion                      AS descripcion_religion,
                 ide_gen.descripcion                  AS descripcion_identidad_genero,
+                p.th_pos_id                          AS id_postulante,
                 RTRIM(
                     CONCAT(
                         COALESCE(p.th_per_primer_apellido, ''), ' ',

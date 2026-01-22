@@ -662,7 +662,7 @@ $html_disabled = $es_restringido ? "disabled" : "";
                                                 </div>
                                                 <hr class="my-0 mb-3">
 
-                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_contratos_trabajo.php'); ?>
+                                                <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_contratos_trabajo.php'); ?>
 
                                             </div>
                                         </div>

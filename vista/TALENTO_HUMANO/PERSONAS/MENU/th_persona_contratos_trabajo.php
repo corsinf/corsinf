@@ -1,13 +1,13 @@
 <script>
     $(document).ready(function() {
-        cargar_datos_contratos_trabajos('<?= $id_postulante ?>');
+        cargar_datos_contratos_trabajos('<?= $id_persona ?>');
     });
 
     //Contratos de Trabajo
 
     function cargar_datos_contratos_trabajos(id) {
         $.ajax({
-            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_contratos_trabajoC.php?listar=true',
+            url: '../controlador/TALENTO_HUMANO/th_per_contratos_trabajoC.php?listar=true',
             type: 'post',
             data: {
                 id: id
@@ -21,7 +21,7 @@
 
     function cargar_datos_modal_contratos_trabajos(id) {
         $.ajax({
-            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_contratos_trabajoC.php?listar_modal=true',
+            url: '../controlador/TALENTO_HUMANO/th_per_contratos_trabajoC.php?listar_modal=true',
             type: 'post',
             data: {
                 id: id
@@ -81,7 +81,7 @@
         if ($("#form_contratos_trabajos").valid()) {
 
             $.ajax({
-                url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_contratos_trabajoC.php?insertar=true',
+                url: '../controlador/TALENTO_HUMANO/th_per_contratos_trabajoC.php?insertar=true',
                 type: 'post',
                 data: form_data,
                 contentType: false,
@@ -109,7 +109,7 @@
                         });
                     } else if (response == 1) {
                         Swal.fire('', 'Operación realizada con éxito.', 'success');
-                        cargar_datos_contratos_trabajos('<?= $id_postulante ?>');
+                        cargar_datos_contratos_trabajos('<?= $id_persona ?>');
                         limpiar_parametros_contratos_trabajos();
                         $('#modal_agregar_contratos').modal('hide');
                     }
@@ -150,13 +150,13 @@
             data: {
                 id: id
             },
-            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_contratos_trabajoC.php?eliminar=true',
+            url: '../controlador/TALENTO_HUMANO/th_per_contratos_trabajoC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
-                    cargar_datos_contratos_trabajos('<?= $id_postulante ?>');
+                    cargar_datos_contratos_trabajos('<?= $id_persona ?>');
                     limpiar_parametros_contratos_trabajos();
                     $('#modal_agregar_contratos').modal('hide');
                 }
@@ -246,8 +246,8 @@
             <form id="form_contratos_trabajos" enctype="multipart/form-data">
                 <div class="modal-body">
                     <input type="hidden" name="txt_contratos_trabajos_id" id="txt_contratos_trabajos_id">
-                    <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
-                    <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
+                    <input type="hidden" name="txt_persona_cedula" id="txt_persona_cedula">
+                    <input type="hidden" name="txt_persona_id" id="txt_persona_id">
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
