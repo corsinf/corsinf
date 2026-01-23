@@ -7,370 +7,685 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <script>
-$(document).ready(function() {
+    $(document).ready(function() {
 
-    // Si existe ID cargamos solicitud para editar
-    <?php if ($_id != '') { ?>
-    cargar_solicitud_medica(<?= $_id ?>);
-    <?php } ?>
+        // Si existe ID cargamos solicitud para editar
+        <?php if ($_id != '') { ?>
+            cargar_solicitud_medica(<?= $_id ?>);
+        <?php } ?>
+        <?php if ($_id_sol != '') { ?>
+            abrirResumenSolicitud(<?= $_id_sol ?>);
+        <?php } ?>
 
-    /*
-    cargar_selects2();
-
-    function cargar_selects2() {
-        url_personasC = '../controlador/TALENTO_HUMANO/th_personasC.php?buscar=true';
-        cargar_select2_url('ddl_personas', url_personasC);
-    }*/
-
-    $('#cbx_reposo').change(function() {
-        if ($(this).is(':checked')) {
-            $('#pnl_reposo').slideDown();
-            $('#cbx_permiso_consulta').prop('checked', false);
-            $('#pnl_consulta').slideUp();
-        } else {
-            $('#pnl_reposo').slideUp();
-            limpiar_campos_reposo();
-        }
-    });
-
-    $('#cbx_permiso_consulta').change(function() {
-        if ($(this).is(':checked')) {
-            $('#pnl_consulta').slideDown();
-            $('#cbx_reposo').prop('checked', false);
-            $('#pnl_reposo').slideUp();
-        } else {
-            $('#pnl_consulta').slideUp();
-            limpiar_campos_consulta();
-        }
-    });
-
-    $('#txt_fecha_reposo_desde, #txt_fecha_reposo_hasta').change(function() {
-        calcularDiasReposo();
-    });
-
-    $('#cbx_presenta_cert_medico').change(function() {
-        if ($(this).is(':checked')) {
-            $('#pnl_datos_certificado').slideDown();
-        } else {
-            $('#pnl_datos_certificado').slideUp();
-        }
-    });
-
-});
-
-function calcularDiasReposo() {
-    let desde = $('#txt_fecha_reposo_desde').val();
-    let hasta = $('#txt_fecha_reposo_hasta').val();
-
-    if (desde && hasta) {
-        let f1 = new Date(desde);
-        let f2 = new Date(hasta);
-
-        if (f2 >= f1) {
-            let diff = Math.ceil((f2 - f1) / (1000 * 60 * 60 * 24)) + 1;
-            $('#txt_dias_reposo').val(diff);
-        } else {
-            $('#txt_dias_reposo').val(0);
-            Swal.fire('Advertencia', 'La fecha hasta debe ser mayor o igual a la fecha desde', 'warning');
-        }
-    }
-}
-
-function limpiar_campos_reposo() {
-    $('#txt_fecha_reposo_desde').val('');
-    $('#txt_fecha_reposo_hasta').val('');
-    $('#txt_dias_reposo').val('');
-}
-
-function limpiar_campos_consulta() {
-    $('#txt_fecha_consulta').val('');
-    $('#txt_hora_consulta_desde').val('');
-    $('#txt_hora_consulta_hasta').val('');
-}
-
-function toDateInput(val) {
-    if (!val || val.startsWith('1900')) return '';
-    return val.split(' ')[0];
-}
-
-function toTimeInput(val) {
-    if (!val || val.startsWith('1900')) return '';
-    let parts = val.split(' ');
-    if (parts.length > 1) {
-        return parts[1].substring(0, 5);
-    }
-    return '';
-}
-
-function combinarFechaHora(fecha, hora) {
-    if (!fecha) return null;
-    if (!hora) return fecha + ' 00:00:00';
-    return fecha + ' ' + hora + ':00';
-}
-
-function cargar_solicitud_medica(id) {
-    $.ajax({
-        url: '../controlador/TALENTO_HUMANO/th_solicitud_permiso_medicoC.php?listar_solicitud_medico=true',
-        type: 'post',
-        data: {
-            id: id
-        },
-        dataType: 'json',
-        success: function(response) {
-            var r = (Array.isArray(response) && response.length > 0) ? response[0] : response;
-            if (!r) return;
-
-            console.log('Datos recibidos:', r); // Debug
-
-            // Datos básicos - usar los alias correctos
-            $("#txt_id").val(r._id || '');
-            $("#txt_sol_per_id").val(r.id_solicitud || '');
-
-            // Tipo de solicitud - convertir a booleano
-            let esReposo = (r.reposo == '1' || r.reposo == 1 || r.reposo == true);
-            let esConsulta = (r.permiso_consulta == '1' || r.permiso_consulta == 1 || r.permiso_consulta ==
-                true);
-
-            if (esReposo) {
-                $('#cbx_reposo').prop('checked', true).trigger('change');
-                $("#txt_fecha_reposo_desde").val(toDateInput(r.desde));
-                $("#txt_fecha_reposo_hasta").val(toDateInput(r.hasta));
-                calcularDiasReposo();
+        // TIPO DE SOLICITUD: Reposo o Permiso
+        $('#cbx_reposo').change(function() {
+            if ($(this).is(':checked')) {
+                $('#cbx_permiso').prop('checked', false);
+                $('#pnl_tipo_enfermedad').slideDown();
             }
+        });
 
-            if (esConsulta) {
-                $('#cbx_permiso_consulta').prop('checked', true).trigger('change');
-                $("#txt_fecha_consulta").val(toDateInput(r.fecha));
-                $("#txt_hora_consulta_desde").val(toTimeInput(r.desde));
-                $("#txt_hora_consulta_hasta").val(toTimeInput(r.hasta));
+        $('#cbx_permiso').change(function() {
+            if ($(this).is(':checked')) {
+                $('#cbx_reposo').prop('checked', false);
+                $('#pnl_tipo_enfermedad').slideDown();
             }
+        });
 
-            // Certificados
-            let presentaCertMedico = (r.presenta_cert_medico == '1' || r.presenta_cert_medico == 1);
-            let presentaCertAsistencia = (r.presenta_cert_asistencia == '1' || r.presenta_cert_asistencia ==
-                1);
+        // TIPO DE ENFERMEDAD
+        $('input[name="tipo_enfermedad"]').change(function() {
+            // Solo mostrar el panel cuando hay algo seleccionado
+        });
 
-            $('#cbx_presenta_cert_medico').prop('checked', presentaCertMedico);
-            $('#cbx_presenta_cert_asistencia').prop('checked', presentaCertAsistencia);
+        // CERTIFICADOS
+        $('input[name="cert_medico"]').change(function() {
+            // Lógica adicional si es necesaria
+        });
 
-            if (presentaCertMedico) {
-                $('#pnl_datos_certificado').slideDown();
+        $('input[name="cert_asistencia"]').change(function() {
+            // Lógica adicional si es necesaria
+        });
+
+        // TIPO DE CÁLCULO: Fecha o Horas
+        $('input[name="tipo_calculo"]').change(function() {
+            if ($('#rbtn_fecha').is(':checked')) {
+                $('#pnl_calculo_fecha').slideDown();
+                $('#pnl_calculo_horas').slideUp();
+            } else if ($('#rbtn_horas').is(':checked')) {
+                $('#pnl_calculo_fecha').slideUp();
+                $('#pnl_calculo_horas').slideDown();
             }
+        });
 
-            // Datos del médico y diagnóstico
-            $("#txt_codigo_idg").val(r.codigo_idg || '');
-            $("#txt_nombre_medico").val(r.nombre_medico || '');
-            $("#txt_motivo").val(r.motivo || '');
-            $("#txt_observaciones").val(r.observaciones || '');
+        // CALCULAR DÍAS (para modo fecha)
+        $('#txt_fecha_desde, #txt_fecha_hasta').change(function() {
+            calcularDiasFecha();
+        });
 
-            // Estado - convertir a string
-            let estadoSolicitud = r.estado_solicitud || '0';
-            $("#ddl_estado_solicitud").val(estadoSolicitud.toString());
-        },
-        error: function(xhr) {
-            console.error('Error cargar_solicitud_medica:', xhr.responseText);
-            Swal.fire('Error', 'No se pudo cargar la solicitud médica.', 'error');
-        }
+        // CALCULAR HORAS (para modo horas)
+        $('#txt_fecha_horas, #txt_hora_desde, #txt_hora_hasta').change(function() {
+            calcularTotalHoras();
+        });
+
+        // Inicializar con el modo fecha por defecto
+        $('#rbtn_fecha').prop('checked', true).trigger('change');
     });
-}
 
-// Funciones auxiliares mejoradas
-function toDateInput(val) {
-    if (!val || val == null || val == 'null' || val.startsWith('1900')) return '';
+    function calcularDiasFecha() {
+        let fecha1 = $('#txt_fecha_desde').val();
+        let fecha3 = $('#txt_fecha_hasta').val();
 
-    // Si es una fecha válida, extraer solo la parte de fecha
-    let dateStr = val.split(' ')[0];
+        if (fecha1 && fecha3) {
+            // Creamos los objetos de fecha
+            let f1 = new Date(fecha1);
+            let f3 = new Date(fecha3);
 
-    // Validar formato de fecha
-    if (dateStr && dateStr.includes('-')) {
-        return dateStr;
-    }
+            // Calculamos la diferencia en milisegundos
+            let diferencia = f3.getTime() - f1.getTime();
 
-    return '';
-}
+            // Convertimos a días (ms / (1000ms * 60s * 60m * 24h))
+            let totalDias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
 
-function toTimeInput(val) {
-    if (!val || val == null || val == 'null' || val.startsWith('1900')) return '';
-
-    let parts = val.split(' ');
-    if (parts.length > 1) {
-        // Extraer HH:MM de HH:MM:SS
-        return parts[1].substring(0, 5);
-    }
-
-    return '';
-}
-
-// ================== VALIDAR FORMULARIO ==================
-function validar_formulario() {
-
-    // Validar que se seleccione un tipo
-    if (!$('#cbx_reposo').is(':checked') && !$('#cbx_permiso_consulta').is(':checked')) {
-        Swal.fire('Error', 'Debe seleccionar el tipo de permiso médico (Reposo o Permiso para Consulta)', 'error');
-        return false;
-    }
-
-    // Validar reposo
-    if ($('#cbx_reposo').is(':checked')) {
-        let desde = $('#txt_fecha_reposo_desde').val();
-        let hasta = $('#txt_fecha_reposo_hasta').val();
-
-        if (!desde || !hasta) {
-            Swal.fire('Error', 'Complete las fechas de reposo', 'error');
-            return false;
-        }
-
-        if (new Date(desde) > new Date(hasta)) {
-            Swal.fire('Error', 'La fecha desde no puede ser mayor que la fecha hasta', 'error');
-            return false;
-        }
-    }
-
-    // Validar permiso consulta
-    if ($('#cbx_permiso_consulta').is(':checked')) {
-        let fecha = $('#txt_fecha_consulta').val();
-        let desde = $('#txt_hora_consulta_desde').val();
-        let hasta = $('#txt_hora_consulta_hasta').val();
-
-        if (!fecha || !desde || !hasta) {
-            Swal.fire('Error', 'Complete la fecha y horas de la consulta', 'error');
-            return false;
-        }
-
-        if (desde >= hasta) {
-            Swal.fire('Error', 'La hora desde debe ser menor que la hora hasta', 'error');
-            return false;
-        }
-    }
-
-    // Validar certificado médico
-    if ($('#cbx_presenta_cert_medico').is(':checked')) {
-        if (!$('#txt_codigo_idg').val() || !$('#txt_nombre_medico').val()) {
-            Swal.fire('Error', 'Complete los datos del certificado médico', 'error');
-            return false;
-        }
-    }
-
-    // Validar motivo
-    if (!$('#txt_motivo').val()) {
-        Swal.fire('Error', 'Ingrese el motivo de la solicitud', 'error');
-        return false;
-    }
-
-    return true;
-}
-
-// ================== GUARDAR/ACTUALIZAR ==================
-function insertar_actualizar() {
-    if (!validar_formulario()) return;
-
-    let esReposo = $('#cbx_reposo').is(':checked');
-    let esConsulta = $('#cbx_permiso_consulta').is(':checked');
-
-    let fechaDesde = null;
-    let fechaHasta = null;
-    let fechaSolicitud = null;
-
-    if (esReposo) {
-        fechaDesde = $('#txt_fecha_reposo_desde').val();
-        fechaHasta = $('#txt_fecha_reposo_hasta').val();
-        fechaSolicitud = fechaDesde;
-    } else if (esConsulta) {
-        let fecha = $('#txt_fecha_consulta').val();
-        fechaDesde = combinarFechaHora(fecha, $('#txt_hora_consulta_desde').val());
-        fechaHasta = combinarFechaHora(fecha, $('#txt_hora_consulta_hasta').val());
-        fechaSolicitud = fecha;
-    }
-
-    // Obtener el ID correctamente
-    let idMedico = $("#txt_id").val();
-
-    let parametros = {
-        '_id': idMedico || '', // Si está vacío, es inserción
-        'id_solicitud': '<?= $_id_sol ?>', // ID de la solicitud de persona
-        'reposo': esReposo ? 1 : 0,
-        'permiso_consulta': esConsulta ? 1 : 0,
-        'codigo_idg': $("#txt_codigo_idg").val() || null,
-        'presenta_cert_medico': $('#cbx_presenta_cert_medico').is(':checked') ? 1 : 0,
-        'presenta_cert_asistencia': $('#cbx_presenta_cert_asistencia').is(':checked') ? 1 : 0,
-        'motivo': $("#txt_motivo").val(),
-        'observaciones': $("#txt_observaciones").val() || null,
-        'fecha': fechaSolicitud,
-        'desde': fechaDesde,
-        'hasta': fechaHasta,
-        'nombre_medico': $("#txt_nombre_medico").val() || null,
-        'estado_solicitud': $("#ddl_estado_solicitud").val() || '0'
-    };
-
-    console.log('Parámetros a enviar:', parametros); // Debug
-
-    $.ajax({
-        url: '../controlador/TALENTO_HUMANO/th_solicitud_permiso_medicoC.php?insertar_editar=true',
-        type: 'post',
-        data: {
-            parametros: parametros
-        },
-        dataType: 'json',
-        success: function(res) {
-            if (res == 1) {
-                Swal.fire('Éxito', 'Solicitud médica guardada correctamente.', 'success')
-                    .then(() => location.href =
-                        "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_solicitudes_personas&_id=<?= $_per_id ?>"
-                    );
+            // Validamos que el resultado no sea negativo
+            if (totalDias < 0) {
+                console.log("La fecha 'Hasta' debe ser mayor a 'Desde'");
+                $('#txt_total_dias').val(0);
             } else {
-                Swal.fire('Error', res.msg || 'No se pudo guardar la solicitud', 'error');
+                // Sumamos 1 si quieres contar el día inicial como un día de permiso
+                // de lo contrario, deja solo totalDias
+                $('#txt_total_dias').val(totalDias + 1);
             }
-        },
-        error: function(xhr) {
-            console.error('Error al guardar:', xhr.responseText);
-            Swal.fire('Error', 'Error del servidor', 'error');
         }
-    });
-}
-
-// ================== ELIMINAR ==================
-function eliminar() {
-    var id = $("#txt_id").val() || '';
-    if (!id) {
-        Swal.fire('', 'ID no encontrado para eliminar', 'warning');
-        return;
     }
 
-    Swal.fire({
-        title: '¿Eliminar Solicitud Médica?',
-        text: "¿Está seguro de eliminar esta solicitud de permiso médico?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '../controlador/TALENTO_HUMANO/th_solicitud_permiso_medicoC.php?eliminar=true',
-                type: 'post',
-                data: {
-                    id: id
-                },
-                dataType: 'json',
-                success: function(res) {
-                    if (res == 1) {
-                        Swal.fire('Eliminado', 'Solicitud médica eliminada correctamente.',
-                                'success')
-                            .then(() => location.href =
-                                "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_aprobacion_solicitudes"
-                            );
-                    } else {
-                        Swal.fire('Error', res.msg || 'No se pudo eliminar.', 'error');
-                    }
-                },
-                error: function(xhr) {
-                    console.error('Error eliminar:', xhr.responseText);
-                    Swal.fire('Error', 'Ocurrió un error al eliminar.', 'error');
+
+
+    function calcularTotalHoras() {
+        let fecha = $('#txt_fecha_horas').val();
+        let horaDesde = $('#txt_hora_desde').val();
+        let horaHasta = $('#txt_hora_hasta').val();
+
+        if (fecha && horaDesde && horaHasta) {
+            if (horaDesde >= horaHasta) {
+                Swal.fire('Advertencia', 'La hora desde debe ser menor que la hora hasta', 'warning');
+                $('#txt_total_horas').val(0);
+                return;
+            }
+
+            let desde = new Date('2000-01-01 ' + horaDesde);
+            let hasta = new Date('2000-01-01 ' + horaHasta);
+
+            let diff = (hasta - desde) / (1000 * 60 * 60); // diferencia en horas
+            $('#txt_total_horas').val(diff.toFixed(2));
+        }
+    }
+
+    function toDateInput(val) {
+        if (!val || val == null || val == 'null' || val.startsWith('1900')) return '';
+        let dateStr = val.split(' ')[0];
+        if (dateStr && dateStr.includes('-')) {
+            return dateStr;
+        }
+        return '';
+    }
+
+    function toTimeInput(val) {
+        if (!val || val == null || val == 'null' || val.startsWith('1900')) return '';
+        let parts = val.split(' ');
+        if (parts.length > 1) {
+            return parts[1].substring(0, 5);
+        }
+        return '';
+    }
+
+    function cargar_solicitud_medica(id) {
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_solicitud_permiso_medicoC.php?listar_solicitud_medico=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                var r = (Array.isArray(response) && response.length > 0) ? response[0] : response;
+                if (!r) return;
+
+
+                // Datos básicos
+                $("#txt_id").val(r._id || '');
+                $("#txt_sol_per_id").val(r.id_solicitud || '');
+
+                // Tipo de solicitud
+                let esReposo = (r.reposo == '1' || r.reposo == 1);
+                let esPermiso = (r.permiso_consulta == '1' || r.permiso_consulta == 1);
+
+                $('#cbx_reposo').prop('checked', esReposo);
+                $('#cbx_permiso').prop('checked', esPermiso);
+
+                if (esReposo || esPermiso) {
+                    $('#pnl_tipo_enfermedad').slideDown();
                 }
+
+                // Tipo de enfermedad
+                if (r.tipo_enfermedad) {
+                    $('input[name="tipo_enfermedad"][value="' + r.tipo_enfermedad + '"]').prop('checked', true);
+                }
+
+                // IDG
+                $("#txt_codigo_idg").val(r.codigo_idg || '');
+
+                // Certificados
+                let certMedico = (r.presenta_cert_medico == '1' || r.presenta_cert_medico == 1);
+                let certAsistencia = (r.presenta_cert_asistencia == '1' || r.presenta_cert_asistencia == 1);
+
+                if (certMedico) {
+                    $('input[name="cert_medico"][value="si"]').prop('checked', true);
+                } else {
+                    $('input[name="cert_medico"][value="no"]').prop('checked', true);
+                }
+
+                if (certAsistencia) {
+                    $('input[name="cert_asistencia"][value="si"]').prop('checked', true);
+                } else {
+                    $('input[name="cert_asistencia"][value="no"]').prop('checked', true);
+                }
+
+                // Motivo
+                $("#txt_motivo").val(r.motivo || '');
+
+                // ===== FECHAS DEL DEPARTAMENTO MÉDICO =====
+                $("#txt_fecha_principal").val(toDateInput(r.fecha));
+                $("#txt_fecha_desde_medico").val(toDateInput(r.desde));
+                $("#txt_fecha_hasta_medico").val(toDateInput(r.hasta));
+                $("#txt_nombre_medico").val(r.nombre_medico || '');
+
+                // ===== FECHAS DEL PERMISO (calculadas) =====
+                let tipoCalculo = r.tipo_calculo || 'fecha';
+
+                if (tipoCalculo === 'fecha') {
+                    $('#rbtn_fecha').prop('checked', true).trigger('change');
+                    $("#txt_fecha_desde").val(toDateInput(r.fecha_desde_permiso));
+                    $("#txt_fecha_hasta").val(toDateInput(r.fecha_hasta_permiso));
+                    $("#txt_total_dias").val(r.total_dias_permiso || 0);
+                } else {
+                    $('#rbtn_horas').prop('checked', true).trigger('change');
+                    $("#txt_fecha_horas").val(toDateInput(r.fecha_principal_permiso));
+                    $("#txt_hora_desde").val(toTimeInput(r.fecha_desde_permiso));
+                    $("#txt_hora_hasta").val(toTimeInput(r.fecha_hasta_permiso));
+                    $("#txt_total_horas").val(r.total_horas_permiso || 0);
+                }
+
+                // Observaciones y estado
+                let estadoSolicitud = r.estado_solicitud || '0';
+                $("#ddl_estado_solicitud").val(estadoSolicitud.toString());
+            },
+            error: function(xhr) {
+                console.error('Error cargar_solicitud_medica:', xhr.responseText);
+                Swal.fire('Error', 'No se pudo cargar la solicitud médica.', 'error');
+            }
+        });
+    }
+
+    function validar_formulario() {
+
+        if ($('#pnl_departamento_medico').is(':visible')) {
+
+            if (!$('#cbx_reposo').is(':checked') && !$('#cbx_permiso').is(':checked')) {
+                Swal.fire('Error', 'Debe seleccionar REPOSO o PERMISO', 'error');
+                return false;
+            }
+
+            if (!$('input[name="tipo_enfermedad"]:checked').val()) {
+                Swal.fire('Error', 'Debe seleccionar el tipo de enfermedad o consulta', 'error');
+                return false;
+            }
+
+            if (!$('#txt_codigo_idg').val()) {
+                Swal.fire('Error', 'Ingrese el código IDG', 'error');
+                return false;
+            }
+
+            if (!$('input[name="cert_medico"]:checked').val()) {
+                Swal.fire('Error', 'Seleccione si presenta certificado médico', 'error');
+                return false;
+            }
+
+            if (!$('input[name="cert_asistencia"]:checked').val()) {
+                Swal.fire('Error', 'Seleccione si presenta certificado de asistencia', 'error');
+                return false;
+            }
+            if (!$('#txt_motivo').val()) {
+                Swal.fire('Error', 'Ingrese o seleccione el motivo', 'error');
+                return false;
+            }
+            if (!$('#txt_fecha_principal').val()) {
+                Swal.fire('Error', 'Ingrese la fecha principal', 'error');
+                return false;
+            }
+        }
+
+        if ($('#rbtn_fecha').is(':checked')) {
+            if (!$('#txt_fecha_desde').val() || !$('#txt_fecha_hasta').val()) {
+                Swal.fire('Error', 'Complete todas las fechas del rango', 'error');
+                return false;
+            }
+        } else {
+            if (!$('#txt_fecha_horas').val() || !$('#txt_hora_desde').val() || !$('#txt_hora_hasta').val()) {
+                Swal.fire('Error', 'Complete la fecha y el horario (Desde/Hasta)', 'error');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function insertar_actualizar() {
+        if (!validar_formulario()) return;
+
+        let esReposo = $('#cbx_reposo').is(':checked') ? 1 : 0;
+        let esPermiso = $('#cbx_permiso').is(':checked') ? 1 : 0;
+        let tipoEnfermedad = $('input[name="tipo_enfermedad"]:checked').val();
+        let certMedico = $('input[name="cert_medico"]:checked').val() === 'si' ? 1 : 0;
+        let certAsistencia = $('input[name="cert_asistencia"]:checked').val() === 'si' ? 1 : 0;
+
+        // ===== FECHAS DEL PERMISO (calculadas) =====
+        let tipoCalculo = $('#rbtn_fecha').is(':checked') ? 'fecha' : 'horas';
+        let fechaPrincipalPermiso, desdePermiso, hastaPermiso, totalDias = 0,
+            totalHoras = 0;
+
+        if (tipoCalculo === 'fecha') {
+            desdePermiso = $('#txt_fecha_desde').val();
+            hastaPermiso = $('#txt_fecha_hasta').val();
+            totalDias = parseInt($('#txt_total_dias').val()) || 0;
+        } else {
+            let fecha = $('#txt_fecha_horas').val();
+            let horaD = $('#txt_hora_desde').val();
+            let horaH = $('#txt_hora_hasta').val();
+            fechaPrincipalPermiso = fecha;
+            desdePermiso = fecha + ' ' + horaD + ':00';
+            hastaPermiso = fecha + ' ' + horaH + ':00';
+            totalHoras = parseFloat($('#txt_total_horas').val()) || 0;
+        }
+
+        let idMedico = $("#txt_id").val();
+
+        let parametros = {
+            '_id': idMedico || '',
+            'id_solicitud': '<?= $_id_sol ?>',
+            'cedula_persona': $("#txt_cedula_persona").val() || '',
+            'reposo': esReposo,
+            'permiso_consulta': esPermiso,
+            'tipo_enfermedad': tipoEnfermedad,
+            'codigo_idg': $("#txt_codigo_idg").val(),
+            'presenta_cert_medico': certMedico,
+            'presenta_cert_asistencia': certAsistencia,
+            'motivo': $("#txt_motivo").val(),
+
+            // FECHAS DEL DEPARTAMENTO MÉDICO
+            'fecha_medico': $("#txt_fecha_principal").val(),
+            'desde_medico': $("#txt_fecha_desde_medico").val(),
+            'hasta_medico': $("#txt_fecha_hasta_medico").val(),
+            'nombre_medico': $("#txt_nombre_medico").val() || null,
+
+            // FECHAS DEL PERMISO (calculadas)
+            'tipo_calculo': tipoCalculo,
+            'fecha_principal_permiso': fechaPrincipalPermiso,
+            'desde_permiso': desdePermiso,
+            'hasta_permiso': hastaPermiso,
+            'total_dias': totalDias,
+            'total_horas': totalHoras,
+
+            'estado_solicitud': $("#ddl_estado_solicitud").val() || '0'
+        };
+
+        console.log('Parámetros a enviar:', parametros);
+
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_solicitud_permiso_medicoC.php?insertar_editar=true',
+            type: 'post',
+            data: {
+                parametros: parametros
+            },
+            dataType: 'json',
+            success: function(res) {
+                if (res == 1) {
+                    Swal.fire('Éxito', 'Solicitud médica guardada correctamente.', 'success')
+                        .then(() => location.href = "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_solicitudes_personas&_id=<?= $_per_id ?>");
+                } else {
+                    Swal.fire('Error', res.msg || 'No se pudo guardar la solicitud', 'error');
+                }
+            },
+            error: function(xhr) {
+                console.error('Error al guardar:', xhr.responseText);
+                Swal.fire('Error', 'Error del servidor', 'error');
+            }
+        });
+    }
+
+    function eliminar() {
+        var id = $("#txt_id").val() || '';
+        if (!id) {
+            Swal.fire('', 'ID no encontrado para eliminar', 'warning');
+            return;
+        }
+
+        Swal.fire({
+            title: '¿Eliminar Solicitud Médica?',
+            text: "¿Está seguro de eliminar esta solicitud de permiso médico?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '../controlador/TALENTO_HUMANO/th_solicitud_permiso_medicoC.php?eliminar=true',
+                    type: 'post',
+                    data: {
+                        id: id
+                    },
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res == 1) {
+                            Swal.fire('Eliminado', 'Solicitud médica eliminada correctamente.', 'success')
+                                .then(() => location.href = "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_aprobacion_solicitudes");
+                        } else {
+                            Swal.fire('Error', res.msg || 'No se pudo eliminar.', 'error');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('Error eliminar:', xhr.responseText);
+                        Swal.fire('Error', 'Ocurrió un error al eliminar.', 'error');
+                    }
+                });
+            }
+        });
+    }
+</script>
+<script>
+    function abrir_modal_cargar_resumen() {
+        $('#modalResumenSolicitud').modal('show');
+        abrirResumenSolicitud(<?= $_id_sol ?>);
+    }
+
+
+    function abrirResumenSolicitud(id_sol) {
+
+        const idSolicitud = id_sol;
+
+        if (!idSolicitud || idSolicitud === '') {
+            Swal.fire('Advertencia', 'No se encontró la solicitud principal', 'warning');
+            return;
+        }
+
+        // Mostrar loader
+        $('#loaderResumen').show();
+        $('#datosResumen').hide();
+
+        // Cargar datos de la solicitud
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_solicitud_permisoC.php?listar=true',
+            type: 'post',
+            data: {
+                id: idSolicitud
+            },
+            dataType: 'json',
+            success: function(response) {
+                var r = (Array.isArray(response) && response.length > 0) ? response[0] : response;
+
+                if (r.motivo == "PERSONAL" || r.motivo == "CALAMIDAD" || r.motivo == "FALLECIMIENTO") {
+                    $("#pnl_departamento_medico").hide();
+                } else {
+                    $('#pnl_departamento_medico').slideDown();
+                }
+
+                if (!r) {
+                    Swal.fire('Error', 'No se pudo cargar la información', 'error');
+                    $('#modalResumenSolicitud').modal('hide');
+                    return;
+                }
+                llenarResumen(r);
+
+                // Ocultar loader y mostrar contenido
+                $('#loaderResumen').hide();
+                $('#datosResumen').fadeIn();
+            },
+            error: function(xhr) {
+                console.error('Error al cargar resumen:', xhr.responseText);
+                Swal.fire('Error', 'Error al cargar la información', 'error');
+                $('#modalResumenSolicitud').modal('hide');
+            }
+        });
+    }
+
+    function llenarResumen(data) {
+        // Información del empleado
+        $('#res_nombre_completo').text(data.nombre_completo || 'N/A');
+        $('#res_cedula').text(data.cedula || 'N/A');
+        $('#txt_cedula_persona').val(data.cedula);
+        $('#res_estado_civil').text(data.estado_civil || 'N/A');
+        $('#res_genero').text(data.sexo || 'N/A');
+
+        // Tipo de solicitud
+        $('#res_tipo_asunto').text(data.tipo_solicitud || 'N/A');
+        $('#res_motivo').text(data.motivo || 'N/A');
+        $('#res_estado').text(data.estado == 1 ? 'ACTIVO' : 'INACTIVO');
+
+        if (data.detalle) {
+            $('#pnl_detalle_motivo').show();
+            $('#res_detalle_motivo').text(data.detalle);
+        }
+
+        // Información familiar
+        if (data.fam_hijos_adultos || data.fecha_nacimiento) {
+            $('#pnl_info_familiar').show();
+            $('#res_parentesco').text(data.fam_hijos_adultos || 'N/A');
+
+            if (data.fam_hijos_adultos === 'HIJO' && data.rango_edad) {
+                $('#col_rango_edad').show();
+                $('#res_rango_edad').text(data.rango_edad + ' años');
+            }
+
+            if (data.fam_hijos_adultos === 'OTRO' && data.tipo_cuidado) {
+                $('#col_tipo_cuidado').show();
+                $('#res_tipo_cuidado').text(data.tipo_cuidado);
+            }
+
+            if (data.fecha_nacimiento && data.fecha_nacimiento !== '1900-01-01 00:00:00') {
+                const fechaNac = formatearFecha(data.fecha_nacimiento);
+                $('#res_fecha_nacimiento').text(fechaNac);
+                const edad = calcularEdadDesdeString(data.fecha_nacimiento);
+                $('#res_edad').text(edad);
+            }
+        }
+
+        // Certificados
+        let certificados = [];
+        if (data.maternidad_paternidad == 1) {
+            certificados.push({
+                icono: 'bx-baby-carriage',
+                nombre: 'Certificado de Maternidad/Paternidad',
+                color: 'primary'
             });
         }
-    });
-}
+        if (data.enfermedad == 1) {
+            certificados.push({
+                icono: 'bx-first-aid',
+                nombre: 'Certificado de Enfermedad',
+                color: 'danger'
+            });
+        }
+        if (data.cita_medica == 1) {
+            certificados.push({
+                icono: 'bx-calendar-heart',
+                nombre: 'Certificado de Cita Médica',
+                color: 'info'
+            });
+        }
+
+        if (certificados.length > 0) {
+            $('#pnl_certificados').show();
+            let htmlCerts = '';
+            certificados.forEach(cert => {
+                htmlCerts += `
+                <div class="col-md-4 mb-2">
+                    <div class="alert alert-${cert.color} mb-0">
+                        <i class="bx ${cert.icono} me-2"></i>
+                        ${cert.nombre}
+                    </div>
+                </div>
+            `;
+            });
+            $('#lista_certificados').html(htmlCerts);
+        }
+
+        // Información médica
+        if (data.tipo_atencion || data.lugar) {
+            $('#pnl_info_medica').show();
+            $('#res_tipo_atencion').text(data.tipo_atencion || 'N/A');
+            $('#res_lugar').text(data.lugar || 'N/A');
+            $('#res_especialidad').text(data.especialidad || 'N/A');
+            $('#res_medico').text(data.medico || 'N/A');
+
+            if (data.hora_desde && data.hora_hasta) {
+                const horario = formatearHora(data.hora_desde) + ' - ' + formatearHora(data.hora_hasta);
+                $('#res_horario_atencion').text(horario);
+            }
+        }
+
+        // Fechas y duración
+        $('#res_fecha_desde').text(formatearFecha(data.fecha_desde) || 'N/A');
+        $('#res_fecha_hasta').text(formatearFecha(data.fecha_hasta) || 'N/A');
+
+        let duracion = '';
+        if (data.total_dias > 0) {
+            duracion = data.total_dias + ' día(s)';
+        } else if (data.total_horas > 0) {
+            duracion = data.total_horas + ' hora(s)';
+        }
+        $('#res_duracion').text(duracion || 'N/A');
+
+        // Limpiar la lista y ocultar el panel por defecto al iniciar la carga
+        $('#lista_documentos').empty();
+        $('#pnl_documentos').hide();
+
+        let documentos = [];
+
+        // Validación de rutas (evita strings 'null' o vacíos)
+        const agregarDoc = (nombre, ruta) => {
+            if (ruta && ruta !== 'null' && ruta !== '') {
+                documentos.push({
+                    nombre,
+                    ruta
+                });
+            }
+        };
+
+        agregarDoc('Acta de Defunción', data.ruta_act_defuncion);
+        agregarDoc('Certificado', data.ruta_certificado);
+
+        if (documentos.length > 0) {
+            $('#pnl_documentos').show();
+            let htmlDocs = '';
+
+            documentos.forEach(doc => {
+                htmlDocs += `
+        <div class="list-group-item list-group-item-action">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <i class="bx bx-file-blank fs-4 text-primary me-3"></i>
+                    <div>
+                        <span class="fw-bold d-block">${doc.nombre}</span>
+                        <small class="text-muted">Archivo adjunto</small>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <a href="${doc.ruta}" target="_blank" class="btn btn-sm btn-outline-primary" title="Ver archivo">
+                        <i class="bx bx-show"></i> Ver
+                    </a>
+                    <a href="${doc.ruta}" download="${doc.nombre}" class="btn btn-sm btn-outline-success" title="Descargar">
+                        <i class="bx bx-download"></i>
+                    </a>
+                </div>
+            </div>
+        </div>`;
+            });
+
+            $('#lista_documentos').html(htmlDocs);
+        }
+    }
+
+
+
+
+    function formatearFecha(fecha) {
+        if (!fecha || fecha === '1900-01-01 00:00:00') return '';
+        const date = new Date(fecha);
+        const opciones = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        };
+        return date.toLocaleDateString('es-ES', opciones);
+    }
+
+    function formatearHora(fecha) {
+        if (!fecha) return '';
+        const parts = fecha.split(' ');
+        if (parts.length > 1) {
+            return parts[1].substring(0, 5);
+        }
+        return '';
+    }
+
+    function calcularEdadDesdeString(fecha) {
+        if (!fecha || fecha === '1900-01-01 00:00:00') return 0;
+        const f = new Date(fecha);
+        const h = new Date();
+        let edad = h.getFullYear() - f.getFullYear();
+        const m = h.getMonth() - f.getMonth();
+        if (m < 0 || (m === 0 && h.getDate() < f.getDate())) {
+            edad--;
+        }
+        return edad;
+    }
+
+    function mostrarVistaPrevia(rutaArchivo, nombreDoc) {
+        if (!rutaArchivo || rutaArchivo === 'null') return;
+
+        // Mostrar el panel principal si estaba oculto
+        $('#pnl_documentos').show();
+
+        // Crear el item de la lista
+        const nuevoItem = `
+        <div class="list-group-item list-group-item-action">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <div class="avatar-sm me-3">
+                        <span class="avatar-title rounded bg-soft-primary text-primary">
+                            <i class="bx bx-file fs-4"></i>
+                        </span>
+                    </div>
+                    <div>
+                        <h6 class="mb-0 text-truncate" style="max-width: 250px;">${nombreDoc}</h6>
+                        <small class="text-muted text-uppercase" style="font-size: 10px;">Documento Guardado</small>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <a href="${rutaArchivo}" target="_blank" class="btn btn-sm btn-outline-primary">
+                        <i class="bx bx-show-alt"></i> Ver
+                    </a>
+                    <a href="${rutaArchivo}" download="${nombreDoc}" class="btn btn-sm btn-outline-secondary">
+                        <i class="bx bx-download"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    `;
+
+        // Añadir a la lista
+        $('#lista_documentos').append(nuevoItem);
+    }
 </script>
 
 <div class="page-wrapper">
@@ -392,6 +707,12 @@ function eliminar() {
                             class="btn btn-outline-dark btn-sm">
                             <i class="bx bx-arrow-back"></i> Regresar
                         </a>
+                        <?php if ($_id_sol != '') { ?>
+                            <!-- BOTÓN PARA VER RESUMEN -->
+                            <button type="button" class="btn btn-outline-info btn-sm" onclick="abrir_modal_cargar_resumen()">
+                                <i class="bx bx-receipt"></i> Ver Resumen de Solicitud Principal
+                            </button>
+                        <?php } ?>
                     </div>
                 </div>
 
@@ -400,119 +721,191 @@ function eliminar() {
 
                     <input type="hidden" id="txt_id" name="txt_id">
                     <input type="hidden" id="txt_sol_per_id" name="txt_sol_per_id">
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <label class="fw-bold">
-                                <i class="bi bi-clipboard-pulse"></i> Tipo de Permiso Médico
-                            </label><br>
-                            <input type="checkbox" id="cbx_reposo"> Reposo Médico
-                            &nbsp;&nbsp;&nbsp;
-                            <input type="checkbox" id="cbx_permiso_consulta"> Permiso para Consulta Médica
+                    <input type="hidden" id="txt_cedula_persona" name="txt_cedula_persona">
+
+                    <!-- ESPACIO EXCLUSIVO DEPARTAMENTO MÉDICO -->
+                    <div id="pnl_departamento_medico" class="card bg-light mb-3" style="display: none;">
+                        <div class="card-header bg-primary text-white">
+                            <h6 class="mb-0">ESPACIO EXCLUSIVO DEPARTAMENTO MÉDICO:</h6>
+                        </div>
+                        <div class="card-body">
+
+                            <!-- Certifico que el/la Trabajador/a requiere de: -->
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label class="fw-bold">Certifico que el/la Trabajador/a requiere de:</label>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <input type="checkbox" id="cbx_reposo"> <label for="cbx_reposo">REPOSO</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="checkbox" id="cbx_permiso"> <label for="cbx_permiso">PERMISO</label>
+                                </div>
+                            </div>
+
+                            <!-- Tipo de enfermedad/consulta -->
+                            <div id="pnl_tipo_enfermedad" style="display:none">
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label>por:</label>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <input type="radio" name="tipo_enfermedad" value="enfermedad_general" id="rbtn_enfermedad">
+                                        <label for="rbtn_enfermedad">Enfermedad General</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="radio" name="tipo_enfermedad" value="asistencia_consulta" id="rbtn_asistencia">
+                                        <label for="rbtn_asistencia">Asistencia a Consulta</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- IDG -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>(IDG)</label>
+                                    <input type="text" class="form-control form-control-sm" id="txt_codigo_idg" placeholder="Código IDG (CIE-10)">
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <!-- OBSERVACIONES -->
+                            <div class="row mb-2">
+                                <div class="col-md-12">
+                                    <label class="fw-bold">Observaciones:</label>
+                                </div>
+                            </div>
+
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <label>PRESENTA CERTIFICADO MÉDICO</label>
+                                    <div>
+                                        <input type="radio" name="cert_medico" value="si" id="cert_med_si">
+                                        <label for="cert_med_si">SI</label>
+                                        &nbsp;&nbsp;
+                                        <input type="radio" name="cert_medico" value="no" id="cert_med_no">
+                                        <label for="cert_med_no">NO</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>PRESENTA CERTIFICADO DE ASISTENCIA</label>
+                                    <div>
+                                        <input type="radio" name="cert_asistencia" value="si" id="cert_asist_si">
+                                        <label for="cert_asist_si">SI</label>
+                                        &nbsp;&nbsp;
+                                        <input type="radio" name="cert_asistencia" value="no" id="cert_asist_no">
+                                        <label for="cert_asist_no">NO</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <!-- MOTIVO -->
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label>(Motivo)</label>
+                                    <input type="text" class="form-control form-control-sm" id="txt_motivo" placeholder="Describa el motivo">
+                                </div>
+                            </div>
+
+                            <!-- FECHA PRINCIPAL -->
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="txt_fecha_principal">Fecha:</label>
+                                    <input type="date" class="form-control form-control-sm" id="txt_fecha_principal">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="txt_fecha_desde_medico">Fecha Desde:</label>
+                                    <input type="date" class="form-control form-control-sm" id="txt_fecha_desde_medico">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="txt_fecha_hasta_medico">Fecha Hasta:</label>
+                                    <input type="date" class="form-control form-control-sm" id="txt_fecha_hasta_medico">
+                                </div>
+                            </div>
+
+                            <!-- Firma Médico -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>Nombre del Médico (Firma Médico)</label>
+                                    <input type="text" class="form-control form-control-sm" id="txt_nombre_medico" placeholder="Nombre del médico">
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
-                    <!-- ================== PANEL REPOSO MÉDICO ================== -->
-                    <div id="pnl_reposo" style="display:none">
-                        <h6 class="text-primary">
-                            <i class="bi bi-file-medical"></i> Datos del Reposo Médico
-                        </h6>
-
-                        <div class="row mb-2">
-                            <div class="col-md-4">
-                                <label>Fecha Desde</label>
-                                <input type="date" class="form-control form-control-sm" id="txt_fecha_reposo_desde">
-                            </div>
-
-                            <div class="col-md-4">
-                                <label>Fecha Hasta</label>
-                                <input type="date" class="form-control form-control-sm" id="txt_fecha_reposo_hasta">
-                            </div>
-
-                            <div class="col-md-4">
-                                <label>Total Días de Reposo</label>
-                                <input type="number" class="form-control form-control-sm" id="txt_dias_reposo" readonly>
-                            </div>
+                    <!-- FECHA Y HORA DEL PERMISO -->
+                    <div class="card bg-light mb-3">
+                        <div class="card-header bg-secondary text-white">
+                            <h6 class="mb-0">FECHA Y HORA DEL PERMISO:</h6>
                         </div>
-                        <hr>
-                    </div>
+                        <div class="card-body">
 
-                    <!-- ================== PANEL CONSULTA MÉDICA ================== -->
-                    <div id="pnl_consulta" style="display:none">
-                        <h6 class="text-primary">
-                            <i class="bi bi-calendar-check"></i> Datos de la Consulta Médica
-                        </h6>
-
-                        <div class="row mb-2">
-                            <div class="col-md-4">
-                                <label>Fecha de Consulta</label>
-                                <input type="date" class="form-control form-control-sm" id="txt_fecha_consulta">
+                            <!-- Radio buttons para elegir tipo de cálculo -->
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <input type="radio" name="tipo_calculo" id="rbtn_fecha" value="fecha">
+                                    <label for="rbtn_fecha">Por Fecha</label>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <input type="radio" name="tipo_calculo" id="rbtn_horas" value="horas">
+                                    <label for="rbtn_horas">Por Horas</label>
+                                </div>
                             </div>
 
-                            <div class="col-md-4">
-                                <label>Hora Desde</label>
-                                <input type="time" class="form-control form-control-sm" id="txt_hora_consulta_desde">
+                            <!-- PANEL CÁLCULO POR FECHA -->
+                            <div id="pnl_calculo_fecha" style="display:none">
+                                <div class="row mb-2">
+                                    <div class="col-md-3">
+                                        <label for="txt_fecha_desde">DESDE: (fecha)</label>
+                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_desde">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="txt_fecha_hasta">HASTA: (fecha)</label>
+                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_hasta">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="txt_total_dias">TOTAL DÍAS</label>
+                                        <input type="number" class="form-control form-control-sm" id="txt_total_dias" readonly>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="col-md-4">
-                                <label>Hora Hasta</label>
-                                <input type="time" class="form-control form-control-sm" id="txt_hora_consulta_hasta">
-                            </div>
-                        </div>
-                        <hr>
-                    </div>
+                            <!-- PANEL CÁLCULO POR HORAS -->
+                            <div id="pnl_calculo_horas" style="display:none">
+                                <div class="row mb-2">
+                                    <div class="col-md-3">
+                                        <label for="txt_fecha_horas">DESDE: (fecha)</label>
+                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_horas">
+                                    </div>
+                                </div>
 
-                    <!-- ================== CERTIFICADOS Y DOCUMENTACIÓN ================== -->
-                    <h6 class="text-primary">
-                        <i class="bi bi-file-earmark-text"></i> Documentación
-                    </h6>
-
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <input type="checkbox" id="cbx_presenta_cert_medico"> Presenta Certificado Médico
-                        </div>
-                        <div class="col-md-6">
-                            <input type="checkbox" id="cbx_presenta_cert_asistencia"> Presenta Certificado de Asistencia
-                        </div>
-                    </div>
-
-                    <!-- ================== DATOS DEL CERTIFICADO ================== -->
-                    <div id="pnl_datos_certificado" style="display:none">
-                        <div class="row mb-2">
-                            <div class="col-md-6">
-                                <label>Código IDG (CIE-10)</label>
-                                <input type="text" class="form-control form-control-sm" id="txt_codigo_idg"
-                                    placeholder="Ej: J06.9">
-                            </div>
-
-                            <div class="col-md-6">
-                                <label>Nombre del Médico</label>
-                                <input type="text" class="form-control form-control-sm" id="txt_nombre_medico">
+                                <div class="row mb-2">
+                                    <div class="col-md-3">
+                                        <label for="txt_hora_desde">DESDE: (Hora)</label>
+                                        <input type="time" class="form-control form-control-sm" id="txt_hora_desde">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="txt_hora_hasta">HASTA: (Hora)</label>
+                                        <input type="time" class="form-control form-control-sm" id="txt_hora_hasta">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="txt_total_horas">TOTAL HORAS</label>
+                                        <input type="number" class="form-control form-control-sm" id="txt_total_horas" readonly>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <hr>
-
-                    <!-- ================== MOTIVO Y OBSERVACIONES ================== -->
-                    <h6 class="text-primary">
-                        <i class="bi bi-chat-left-text"></i> Detalles de la Solicitud
-                    </h6>
-
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <label>Motivo <span class="text-danger">*</span></label>
-                            <textarea class="form-control form-control-sm" id="txt_motivo" rows="2"
-                                placeholder="Describa el motivo de la solicitud"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <label>Observaciones</label>
-                            <textarea class="form-control form-control-sm" id="txt_observaciones" rows="2"
-                                placeholder="Observaciones adicionales (opcional)"></textarea>
-                        </div>
-                    </div>
+                    <!-- ESTADO DE LA SOLICITUD -->
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label>Estado de la Solicitud</label>
@@ -522,20 +915,255 @@ function eliminar() {
                             </select>
                         </div>
                     </div>
+
+                    <!-- BOTONES -->
                     <div class="row mt-4">
                         <div class="col-12 text-end">
                             <button type="button" class="btn btn-success btn-sm" onclick="insertar_actualizar()">
                                 <i class="bx bx-save"></i> Guardar
                             </button>
                             <?php if ($_id != '') { ?>
-                            <button type="button" class="btn btn-danger btn-sm" onclick="eliminar()">
-                                <i class="bx bx-trash"></i> Eliminar
-                            </button>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="eliminar()">
+                                    <i class="bx bx-trash"></i> Eliminar
+                                </button>
                             <?php } ?>
                         </div>
                     </div>
 
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalResumenSolicitud" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-gradient-primary text-white">
+                <h5 class="modal-title">
+                    <i class="bx bx-file-find me-2"></i>
+                    Resumen de Solicitud de Permiso
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body" id="contenidoResumen">
+                <!-- Loader mientras carga -->
+                <div class="text-center py-5" id="loaderResumen">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                    <p class="mt-3 text-muted">Cargando información...</p>
+                </div>
+
+                <!-- Contenido del resumen -->
+                <div id="datosResumen" style="display:none;">
+
+                    <!-- Información del Empleado -->
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0">
+                                <i class="bx bx-user text-primary me-2"></i>
+                                Información del Empleado
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-2">
+                                        <strong>Nombre:</strong>
+                                        <span id="res_nombre_completo" class="text-primary"></span>
+                                    </p>
+                                    <p class="mb-2">
+                                        <strong>Cédula:</strong>
+                                        <span id="res_cedula"></span>
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-2">
+                                        <strong>Estado Civil:</strong>
+                                        <span id="res_estado_civil"></span>
+                                    </p>
+                                    <p class="mb-2">
+                                        <strong>Género:</strong>
+                                        <span id="res_genero"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tipo de Solicitud -->
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0">
+                                <i class="bx bx-list-check text-success me-2"></i>
+                                Tipo de Solicitud
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="badge-container p-3 rounded" style="background: #e7f3ff;">
+                                        <span class="badge bg-primary mb-2">Asunto</span>
+                                        <p class="mb-0 fw-bold" id="res_tipo_asunto"></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="badge-container p-3 rounded" style="background: #fff3e0;">
+                                        <span class="badge bg-warning mb-2">Motivo</span>
+                                        <p class="mb-0 fw-bold" id="res_motivo"></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="badge-container p-3 rounded" style="background: #f1f8e9;">
+                                        <span class="badge bg-success mb-2">Estado</span>
+                                        <p class="mb-0 fw-bold" id="res_estado"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3" id="pnl_detalle_motivo" style="display:none;">
+                                <div class="col-md-12">
+                                    <p class="mb-0">
+                                        <strong>Detalle:</strong>
+                                        <span id="res_detalle_motivo" class="text-muted"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información Familiar (si aplica) -->
+                    <div class="card mb-3 shadow-sm" id="pnl_info_familiar" style="display:none;">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0">
+                                <i class="bx bx-group text-info me-2"></i>
+                                Información Familiar
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="mb-2">
+                                        <strong>Parentesco:</strong>
+                                        <span id="res_parentesco"></span>
+                                    </p>
+                                </div>
+                                <div class="col-md-4" id="col_rango_edad" style="display:none;">
+                                    <p class="mb-2">
+                                        <strong>Rango de Edad:</strong>
+                                        <span id="res_rango_edad"></span>
+                                    </p>
+                                </div>
+                                <div class="col-md-4" id="col_tipo_cuidado" style="display:none;">
+                                    <p class="mb-2">
+                                        <strong>Tipo de Cuidado:</strong>
+                                        <span id="res_tipo_cuidado"></span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-2">
+                                        <strong>Fecha de Nacimiento:</strong>
+                                        <span id="res_fecha_nacimiento"></span>
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-2">
+                                        <strong>Edad:</strong>
+                                        <span id="res_edad" class="badge bg-info"></span> años
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Certificados Presentados -->
+                    <div class="card mb-3 shadow-sm" id="pnl_certificados" style="display:none;">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0">
+                                <i class="bx bx-folder-open text-warning me-2"></i>
+                                Certificados Presentados
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row" id="lista_certificados">
+                                <!-- Se llenarán dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información Médica (si aplica) -->
+                    <div class="card mb-3 shadow-sm" id="pnl_info_medica" style="display:none;">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0">
+                                <i class="bx bx-plus-medical text-danger me-2"></i>
+                                Información de Atención Médica
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-2">
+                                <div class="col-md-4">
+                                    <p class="mb-2">
+                                        <strong>Tipo de Atención:</strong>
+                                        <span id="res_tipo_atencion" class="badge bg-primary"></span>
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="mb-2">
+                                        <strong>Lugar:</strong>
+                                        <span id="res_lugar"></span>
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="mb-2">
+                                        <strong>Especialidad:</strong>
+                                        <span id="res_especialidad"></span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-4">
+                                    <p class="mb-2">
+                                        <strong>Médico:</strong>
+                                        <span id="res_medico"></span>
+                                    </p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="mb-2">
+                                        <strong>Horario de Atención:</strong>
+                                        <span id="res_horario_atencion"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Documentos Adjuntos -->
+                    <div class="card mb-3 shadow-sm" id="pnl_documentos" style="display:none;">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0">
+                                <i class="bx bx-file text-secondary me-2"></i>
+                                Documentos Adjuntos
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group" id="lista_documentos">
+                                <!-- Se llenarán dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bx bx-x"></i> Cerrar
+                </button>
             </div>
         </div>
     </div>

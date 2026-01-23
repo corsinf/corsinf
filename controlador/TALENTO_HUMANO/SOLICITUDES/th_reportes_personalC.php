@@ -2,10 +2,13 @@
 
 class th_reportes_personalC
 {
-    public function reporte_permiso_usuario($parametros, $mostrar = false)
+    public function reporte_permiso_usuario($parametros, $modo_guardar = false)
     {
-        require_once('DOCUMENTOS/reporte_permiso_personal.php');
+        if (is_string($parametros)) {
+            $parametros = json_decode($parametros, true);
+        }
 
-        return pdf_reporte_permiso($parametros, $mostrar);
+        require_once('DOCUMENTOS/reporte_permiso_personal.php');
+        return pdf_reporte_permiso($parametros, $modo_guardar);
     }
 }

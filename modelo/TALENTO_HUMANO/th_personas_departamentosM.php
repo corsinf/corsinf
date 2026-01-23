@@ -89,6 +89,8 @@ class th_personas_departamentosM extends BaseModel
                 per.th_per_segundo_apellido AS segundo_apellido,
                 per.th_per_primer_nombre AS primer_nombre,
                 per.th_per_segundo_nombre AS segundo_nombre,
+                per.th_per_estado_civil AS estado_civil,
+                per.th_per_sexo AS sexo,
                 per.th_per_cedula AS cedula,
                 per.th_per_telefono_1 AS telefono_1,
                 per.th_per_correo AS correo,

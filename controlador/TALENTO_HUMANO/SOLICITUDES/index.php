@@ -8,3 +8,6 @@ if (isset($_GET['ac_reporte_permiso'])) {
 if (isset($_GET['ver_documento'])) {
     echo json_encode($reporte->reporte_permiso_usuario($_POST['parametros'],true));
 }
+if (isset($_GET['ver_documento_pdf'])) {
+    echo json_encode($reporte->reporte_permiso_usuario($_POST['parametros'],false));
+}

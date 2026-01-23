@@ -7,94 +7,121 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script type="text/javascript">
-$(document).ready(function() {
+    $(document).ready(function() {
 
-    let tbl_permisos = $('#tbl_permisos').DataTable($.extend({},
-        configuracion_datatable(
-            'Motivo',
-            'Médico',
-            'Fecha',
-            'Desde',
-            'Hasta',
-        ), {
-            responsive: true,
-            dom: 'frtip',
-            buttons: [{
-                extend: 'colvis',
-                text: '<i class="bx bx-columns"></i> Columnas',
-                className: 'btn btn-outline-secondary btn-sm'
-            }],
-            ajax: {
-                url: '../controlador/TALENTO_HUMANO/th_solicitud_permiso_medicoC.php?listar_solicitudes_persona=true',
-                type: 'POST',
-                data: function(d) {
-                    d.id = <?= $_id ?>;
+        let tbl_permisos = $('#tbl_permisos').DataTable($.extend({},
+            configuracion_datatable(
+                'Motivo',
+                'Médico',
+            ), {
+                responsive: true,
+                dom: 'frtip',
+                buttons: [{
+                    extend: 'colvis',
+                    text: '<i class="bx bx-columns"></i> Columnas',
+                    className: 'btn btn-outline-secondary btn-sm'
+                }],
+                ajax: {
+                    url: '../controlador/TALENTO_HUMANO/th_solicitud_permiso_medicoC.php?listar_solicitudes_persona=true',
+                    type: 'POST',
+                    data: function(d) {
+                        d.id = <?= $_id ?>;
+                    },
+                    dataSrc: ''
                 },
-                dataSrc: ''
+                columns: [{
+                        data: 'motivo',
+                        render: function(data, type, row) {
+                            let href =
+                                `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_aprobacion_solicitudes&_id=${row.id_solicitud_medica ? row.id_solicitud_medica: ''}&_id_sol=${row.id_solicitud}&_per_id=<?= $_id ?>`;
+                            return `<a href="${href}"><u>${data}</u></a>`;
+                        }
+                    },
+                    {
+                        data: 'nombre_medico',
+                        render: function(data) {
+                            return data ? data : '<span class="text-muted">—</span>';
+                        }
+                    },
+                    {
+                        data: 'estado_medico',
+                        className: 'text-center',
+                        render: function(data, type, row) {
+
+                            if (data === null) {
+                                return `<span class="badge bg-secondary">Sin revisión</span>`;
+                            }
+
+                            if (data == 0) {
+                                return `<span class="badge bg-warning text-dark">Pendiente</span>`;
+                            }
+
+                            if (data == 1) {
+                                return `<span class="badge bg-success">Aprobado</span>`;
+                            }
+
+                            return '';
+                        }
+                    }, {
+                        data: null, 
+                        className: 'text-center',
+                        render: function(data, type, row) {
+                            return `
+                <button type="button" class="btn btn-sm btn-outline-danger" 
+                        onclick="cargar_solicitud('${row.id_solicitud}')" 
+                        title="Ver PDF de la Solicitud">
+                   <i class="bx bxs-file-pdf fs-5"></i>
+                </button>`;
+                        }
+                    }
+                ],
+                order: [
+                    [2, 'desc']
+                ]
+            }
+        ));
+
+
+
+
+    });
+
+    function cargar_solicitud(id) {
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_solicitud_permiso_medicoC.php?listar_solicitud_pdf=true',
+            type: 'post',
+            data: {
+                id: id
             },
-            columns: [{
-                    data: 'motivo',
-                    render: function(data, type, row) {
-                        let href =
-                            `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_aprobacion_solicitudes&_id=${row.id_solicitud_medica ? row.id_solicitud_medica: ''}&_id_sol=${row.id_solicitud}&_per_id=<?=$_id?>`;
-                        return `<a href="${href}"><u>${data}</u></a>`;
-                    }
-                },
-                {
-                    data: 'nombre_medico',
-                    render: function(data) {
-                        return data ? data : '<span class="text-muted">—</span>';
-                    }
-                },
-                {
-                    data: 'fecha_creacion',
-                    render: function(data) {
-                        return data ? data.substring(0, 10) : '';
-                    }
-                },
-                {
-                    data: 'fecha_desde',
-                    render: function(data) {
-                        return data ? data.substring(0, 10) : '';
-                    }
-                },
-                {
-                    data: 'fecha_hasta',
-                    render: function(data) {
-                        return data && data !== '1900-01-01 00:00:00' ?
-                            data.substring(0, 10) :
-                            '<span class="text-muted">—</span>';
-                    }
-                },
-                {
-                    data: 'estado_medico',
-                    className: 'text-center',
-                    render: function(data, type, row) {
-
-                        if (data === null) {
-                            return `<span class="badge bg-secondary">Sin revisión</span>`;
-                        }
-
-                        if (data == 0) {
-                            return `<span class="badge bg-warning text-dark">Pendiente</span>`;
-                        }
-
-                        if (data == 1) {
-                            return `<span class="badge bg-success">Aprobado</span>`;
-                        }
-
-                        return '';
-                    }
+            dataType: 'json',
+            success: function(response) {
+                if (response) {
+                    generarPDF(response);
                 }
-            ],
-            order: [
-                [2, 'desc']
-            ]
-        }
-    ));
+            }
+        });
+    }
 
-
-});
+    function generarPDF(datos_completos) {
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/SOLICITUDES/index.php?ver_documento_pdf=true',
+            type: 'post',
+            data: {
+                parametros: JSON.stringify(datos_completos)
+            },
+            xhrFields: {
+                responseType: 'blob'
+            },
+            success: function(blob) {
+                var url = window.URL.createObjectURL(blob);
+                var win = window.open(url, '_blank');
+                win.focus();
+            },
+            error: function() {
+                Swal.fire('Error', 'No se pudo generar el documento', 'error');
+            }
+        });
+    }
 </script>
 
 <div class="page-wrapper">
@@ -157,10 +184,8 @@ $(document).ready(function() {
                                     <tr>
                                         <th>Motivo</th>
                                         <th>Médico</th>
-                                        <th>Fecha</th>
-                                        <th>Desde</th>
-                                        <th>Hasta</th>
                                         <th>Estado</th>
+                                        <th>PDF</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
