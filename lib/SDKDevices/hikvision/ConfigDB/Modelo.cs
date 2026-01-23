@@ -269,12 +269,12 @@ namespace CorsinfSDKHik.ConfigDB
                 "th_tur_supl_ini as 'inico_suplementario',th_tur_supl_fin as 'fin_suplementarias'," +
                 "th_tur_extra_ini as 'inicio_extraordinarias',th_tur_extra_fin as 'fin_extraordinarias' " +
                 "FROM _asistencias.th_programar_horarios PH " +
-                "INNER JOIN _asistencias.th_horarios HO ON PH.th_hor_id = HO.th_hor_id" +
-                "INNER JOIN _asistencias.th_turnos_horario TH ON HO.th_hor_id = TH.th_hor_id" +
-                "INNER JOIN _asistencias.th_turnos TU ON TH.th_tur_id = TU.th_tur_id" +
+                "INNER JOIN _asistencias.th_horarios HO ON PH.th_hor_id = HO.th_hor_id " +
+                "INNER JOIN _asistencias.th_turnos_horario TH ON HO.th_hor_id = TH.th_hor_id " +
+                "INNER JOIN _asistencias.th_turnos TU ON TH.th_tur_id = TU.th_tur_id " +
                 "INNER JOIN _talentoh.th_personas_departamentos PD ON PH.th_dep_id = PD.th_dep_id " +
-                "INNER JOIN _talentoh.th_personas PE ON PD.th_per_id = PE.th_per_id" +
-                "INNER JOIN _talentoh.th_card_data CA ON PE.th_per_id = CA.th_per_id" +
+                "INNER JOIN _talentoh.th_personas PE ON PD.th_per_id = PE.th_per_id " +
+                "INNER JOIN _talentoh.th_card_data CA ON PE.th_per_id = CA.th_per_id " +
                 "WHERE PH.th_pro_estado = 1 AND HO.th_hor_estado = 1 AND PE.th_per_estado = 1 AND TH.th_tuh_dia = @Dia ";
 
             if (!string.IsNullOrEmpty(CardNo))
