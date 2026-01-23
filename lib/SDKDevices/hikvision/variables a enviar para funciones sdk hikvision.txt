@@ -88,12 +88,7 @@ Data12/*
 192.168.100.111
 admin
 8000
-Data12/*
-186.4.219.172
-1487
-DB_TALENTO_HUMANO_DESARROLLO
-sa
-Tango456
+1033 => Id de empresa
 ============== para traer datos de biometrico ==============
 5
 192.168.100.111
