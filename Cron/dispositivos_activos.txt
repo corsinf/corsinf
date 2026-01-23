@@ -1,5 +1,5 @@
-dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8501 SASd52dasd 186.4.219.172 1487 ACTIVOS_DESARROLLO sa Tango456
-dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 192.168.100.31 admin 8000 data12/* 186.4.219.172 1487 ACTIVOS_DESARROLLO sa Tango456
-dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8502 SASd52dasd 186.4.219.172 1487 ACTIVOS_DESARROLLO sa Tango456
-dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8503 SASd52dasd 186.4.219.172 1487 ACTIVOS_DESARROLLO sa Tango456
+dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8501 SASd52dasd 1033
+dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 192.168.100.20 admin 8000 Data12/* 1033
+dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8502 SASd52dasd 1033
+dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8503 SASd52dasd 1033
 

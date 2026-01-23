@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CorsinfSDKHik": {
+      "commandName": "Project",
+      "commandLineArgs": "10\r\n45.162.74.226\r\nadmin\r\n8502\r\nSASd52dasd\r\n2025-11-01\r\n2025-11-13"
+    }
+  }
+}

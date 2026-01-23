@@ -249,8 +249,9 @@
                             <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
                             <option value="Ecuatoriano">Ecuatoriano</option>
                             <option value="Colombiano">Colombiano</option>
-                            <option value="Peruano">Peruano</option>
                             <option value="Venezolano">Venezolano</option>
+                            <option value="Peruano">Peruano</option>
+                            <option value="Cubano">Cubano</option>
                             <option value="Paraguayo">Paraguayo</option>
                         </select>
                     </div>

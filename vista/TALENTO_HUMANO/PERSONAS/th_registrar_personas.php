@@ -29,6 +29,15 @@ $es_restringido = in_array($tipo_usuario, $roles_restringidos);
 // Esta variable sirve para CUALQUIER input, select o button
 $html_disabled = $es_restringido ? "disabled" : "";
 
+/* Validar que sea el usuario correspondiente ******************************************** */
+
+if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
+    if ($_SESSION['INICIO']['NO_CONCURENTE'] != $id_persona && $id_persona != '') {
+        echo "<script>location.href = 'inicio.php?acc=pagina_error';</script>";
+        exit;
+    }
+}
+
 
 ?>
 
@@ -43,9 +52,38 @@ $html_disabled = $es_restringido ? "disabled" : "";
     // Postulante agregar en caso de que no este
     $(document).ready(function() {
         <?php if (isset($_GET['id_postulante'])) { ?>
+            if ('<?= $id_postulante ?>' != 'postulante') {
+                validar_persona_acceso('<?= $id_persona ?>', '<?= $id_postulante ?>');
+            }
             recargar_persona_postulante('<?= $id_postulante ?>', '<?= $id_persona ?>');
         <?php } ?>
     })
+
+    function validar_persona_acceso(id_persona, id_postulante) {
+        $.ajax({
+            url: '../controlador/GENERAL/th_personasC.php?acceso_persona=true',
+            type: 'post',
+            data: {
+                id_persona: id_persona,
+                id_postulante: id_postulante
+            },
+            dataType: 'json',
+            success: function(response) {
+                // console.log(response);
+                if (response != 1) {
+                    location.href = 'inicio.php?acc=pagina_error';
+                }
+            },
+
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
+    }
 
     function recargar_persona_postulante(id, id_persona) {
         $.ajax({
