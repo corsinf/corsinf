@@ -134,7 +134,7 @@ class th_detectar_dispositivosC
 		$dllPath = $this->sdk_patch . '6 ' . $dispositivo[0]['host'] . ' ' . $dispositivo[0]['usuario'] . ' ' . $dispositivo[0]['port'] . ' ' . $dispositivo[0]['pass'] . ' '.$_SESSION['INICIO']['ID_EMPRESA'];
 		$command = "dotnet $dllPath"; // Comando básico para dotnet
 
-		print_r($command);die();
+		// print_r($command);die();
 		// Crear archivo de salida
 		$outputFile = dirname(__DIR__,2).'/Cron/output_file.log';
 		$outputFile2 = dirname(__DIR__,2).'/Cron/output_file_error.log';
