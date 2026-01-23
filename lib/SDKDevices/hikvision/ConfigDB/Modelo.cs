@@ -148,7 +148,7 @@ namespace CorsinfSDKHik.ConfigDB
         }
 
 
-        public List<HorarioPersonasxDiaModelo> ObtenerHorarios(SqlConnection conn,string diaVar = "", string CardNo = "")
+        public List<HorarioPersonasxDiaModelo> ObtenerHorariosXpersona(SqlConnection conn,string diaVar = "", string CardNo = "")
         {
             List<HorarioPersonasxDiaModelo> listaHorarios = new List<HorarioPersonasxDiaModelo>();
 
@@ -240,6 +240,107 @@ namespace CorsinfSDKHik.ConfigDB
 
             return listaHorarios;
         }
+
+        public List<HorarioPersonasxDiaModelo> ObtenerHorariosXDepartamento(SqlConnection conn, string diaVar = "", string CardNo = "")
+        {
+            List<HorarioPersonasxDiaModelo> listaHorarios = new List<HorarioPersonasxDiaModelo>();
+
+            String Dia = diaVar;
+            if (diaVar == "")
+            {
+                DateTime hoy = DateTime.Now;
+                int dia = (int)hoy.DayOfWeek;
+                Dia = (dia + 1).ToString();
+            }
+
+            String SqlText = "SELECT th_pro_id,PH.th_per_id,th_pro_fecha_inicio as 'periodo_ini',th_pro_fecha_fin as 'perido_fin'," +
+                "HO.th_hor_id,PE.th_per_cedula as 'cedula', PE.th_per_nombres_completos,th_card_id,th_cardNo," +
+                "th_tur_hora_entrada as 'entrada_min',th_tur_hora_salida as 'salida_min'," +
+                "th_tur_limite_tardanza_in as 'tolerancia_ini',th_tur_limite_tardanza_out as 'tolerancia_fin'," +
+                "th_tur_checkin_registro_inicio as 'entrada_tiempo_marcacion_valida_inicio'," +
+                "th_tur_checkin_registro_fin as 'entrada_tiempo_marcacion_valida_fin'," +
+                "th_tur_checkout_salida_inicio as 'salida_tiempo_marcacion_valida_inicio'," +
+                "th_tur_checkout_salida_fin as 'salida_tiempo_marcacion_valida_fin'," +
+                "th_tur_valor_hora_trabajar as 'horas_a_trabajar',th_tur_valor_min_trabajar as 'min_a_trabajar'," +
+                "th_tur_descanso as 'aplica_descanso',th_tur_usar_descanso as 'aplica_horario_descanso_intervalo'," +
+                "th_tur_hora_descanso as 'tiempo_descanso' ,th_tur_descanso_inicio as 'descanso_inicio'," +
+                "th_tur_descanso_fin as 'descanso_fin', th_tur_tol_ini_descanso as 'adelanto_descanso'," +
+                "th_tur_tol_fin_descanso as 'tolerancia_descanso',th_tur_calcular_horas_extra as 'calcular_horas_extra'," +
+                "th_tur_supl_ini as 'inico_suplementario',th_tur_supl_fin as 'fin_suplementarias'," +
+                "th_tur_extra_ini as 'inicio_extraordinarias',th_tur_extra_fin as 'fin_extraordinarias' " +
+                "FROM _asistencias.th_programar_horarios PH " +
+                "INNER JOIN _asistencias.th_horarios HO ON PH.th_hor_id = HO.th_hor_id" +
+                "INNER JOIN _asistencias.th_turnos_horario TH ON HO.th_hor_id = TH.th_hor_id" +
+                "INNER JOIN _asistencias.th_turnos TU ON TH.th_tur_id = TU.th_tur_id" +
+                "INNER JOIN _talentoh.th_personas_departamentos PD ON PH.th_dep_id = PD.th_dep_id " +
+                "INNER JOIN _talentoh.th_personas PE ON PD.th_per_id = PE.th_per_id" +
+                "INNER JOIN _talentoh.th_card_data CA ON PE.th_per_id = CA.th_per_id" +
+                "WHERE PH.th_pro_estado = 1 AND HO.th_hor_estado = 1 AND PE.th_per_estado = 1 AND TH.th_tuh_dia = @Dia ";
+
+            if (!string.IsNullOrEmpty(CardNo))
+            {
+                SqlText += " AND th_cardNo = @CardNo";
+            }
+
+            SqlText += ";";
+
+            using (SqlCommand sql = new SqlCommand(SqlText, conn))
+            {
+                // Usar parámetros para evitar SQL Injection
+                sql.Parameters.AddWithValue("@Dia", Dia);
+                if (!string.IsNullOrEmpty(CardNo))
+                {
+                    sql.Parameters.AddWithValue("@CardNo", CardNo);
+                }
+
+                using (SqlDataReader reader = sql.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        // Crear un nuevo objeto para cada registro
+                        HorarioPersonasxDiaModelo data = new HorarioPersonasxDiaModelo();
+
+                        data.th_pro_id = (int)reader["th_pro_id"];
+                        data.th_per_id = (int)reader["th_per_id"];
+                        data.periodo_ini = Convert.ToDateTime(reader["periodo_ini"]);
+                        data.perido_fin = Convert.ToDateTime(reader["perido_fin"]);
+                        data.th_hor_id = (int)reader["th_hor_id"];
+                        data.cedula = reader["cedula"].ToString() ?? "";
+                        data.th_per_nombres_completos = reader["th_per_nombres_completos"].ToString() ?? "";
+                        data.th_card_id = (int)reader["th_card_id"];
+                        data.th_cardNo = reader["th_cardNo"].ToString() ?? "";
+                        data.entrada_min = (int)reader["entrada_min"];
+                        data.salida_min = (int)reader["salida_min"];
+                        data.tolerancia_ini = (int)reader["tolerancia_ini"];
+                        data.tolerancia_fin = (int)reader["tolerancia_fin"];
+                        data.entrada_tiempo_marcacion_valida_inicio = (int)reader["entrada_tiempo_marcacion_valida_inicio"];
+                        data.entrada_tiempo_marcacion_valida_fin = (int)reader["entrada_tiempo_marcacion_valida_fin"];
+                        data.salida_tiempo_marcacion_valida_inicio = (int)reader["salida_tiempo_marcacion_valida_inicio"];
+                        data.salida_tiempo_marcacion_valida_fin = (int)reader["salida_tiempo_marcacion_valida_fin"];
+                        data.horas_a_trabajar = Convert.ToInt32(reader["horas_a_trabajar"]);
+                        data.min_a_trabajar = Convert.ToInt32(reader["min_a_trabajar"]);
+                        data.aplica_descanso = Convert.ToInt32(reader["aplica_descanso"]);
+                        data.aplica_horario_descanso_intervalo = Convert.ToInt32(reader["aplica_horario_descanso_intervalo"]);
+                        data.tiempo_descanso = Convert.ToInt32(reader["tiempo_descanso"]);
+                        data.descanso_inicio = Convert.ToInt32(reader["descanso_inicio"]);
+                        data.descanso_fin = Convert.ToInt32(reader["descanso_fin"]);
+                        data.adelanto_descanso = Convert.ToInt32(reader["adelanto_descanso"]);
+                        data.tolerancia_descanso = Convert.ToInt32(reader["tolerancia_descanso"]);
+                        data.calcular_horas_extra = Convert.ToInt32(reader["calcular_horas_extra"]);
+                        data.inico_suplementario = Convert.ToInt32(reader["inico_suplementario"]);
+                        data.fin_suplementarias = Convert.ToInt32(reader["fin_suplementarias"]);
+                        data.inicio_extraordinarias = Convert.ToInt32(reader["inicio_extraordinarias"]);
+                        data.fin_extraordinarias = Convert.ToInt32(reader["fin_extraordinarias"]);
+
+                        // Agregar a la lista
+                        listaHorarios.Add(data);
+                    }
+                }
+            }
+
+            return listaHorarios;
+        }
+
         public void InsertData(SqlConnection conn, String data)
         {
             configConsulta();
@@ -265,8 +366,13 @@ namespace CorsinfSDKHik.ConfigDB
 
                 //HorarioPersonasxDiaModelo horariosEncontradas = ConsultarHorariosxDia(conn,"",cardNumber);
 
-                List<HorarioPersonasxDiaModelo> horarios = ObtenerHorarios(conn, "", cardNumber);
+                List<HorarioPersonasxDiaModelo> horarios = ObtenerHorariosXpersona(conn, "", cardNumber);
                 HorarioPersonasxDiaModelo horariosEncontradas = horarios.FirstOrDefault();
+                if (horarios.Count() == 0)
+                {
+                   horarios = ObtenerHorariosXDepartamento(conn, "", cardNumber);
+                   horariosEncontradas = horarios.FirstOrDefault();
+                }
                 if (horarios.Count() > 0)
                 {
 
@@ -563,7 +669,8 @@ namespace CorsinfSDKHik.ConfigDB
             string fechaAyer = ayer.ToString("yyyy-MM-dd");
             //validar si existen datos del dia anterior
             if(!_SelectData.ExisteMarcacioFaltas( conn, fechaAyer)) { 
-            List<HorarioPersonasxDiaModelo> horarios = ObtenerHorarios(conn, diaVar, "");
+            List<HorarioPersonasxDiaModelo> horarios = ObtenerHorariosXpersona(conn, diaVar, "");
+                if (horarios.Count() == 0) { horarios = ObtenerHorariosXDepartamento(conn, diaVar, ""); }
                 foreach (var horario in horarios)
                 {
                     if (!_SelectData.ExisteMarcacion(conn, horario.th_cardNo, fechaAyer))
