@@ -374,7 +374,7 @@ class th_detectar_dispositivosC
         $command = "";
         foreach ($datos as $key => $value) {
 
-			$dllPath = $this->sdk_patch . '6 ' . $value['host'] . ' ' . $value['usuario'] . ' ' . $value['port'] . ' ' . $value['pass'] . ' '.$_SESSION['INICIO']['IP_HOST']. ' '.$_SESSION['INICIO']['PUERTO_DB']. ' '.$_SESSION['INICIO']['BASEDATO']. ' '.$_SESSION['INICIO']['USUARIO_DB']. ' '.$_SESSION['INICIO']['PASSWORD_DB'];
+			$dllPath = $this->sdk_patch . '6 ' . $value['host'] . ' ' . $value['usuario'] . ' ' . $value['port'] . ' ' . $value['pass'] . ' '.$_SESSION['INICIO']['ID_EMPRESA'];
 			$command.= "dotnet $dllPath\n"; // Comando básico para dotnet
 
         }
