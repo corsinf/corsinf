@@ -32,6 +32,7 @@ if(isset($_GET['listenEvents']))
 	    $dataArray = json_decode($jsonInput, true); // Decodificar el JSON en un array asociativo
 
 	    // Verificar si el JSON es válido
+	    print_r('expression');die();
 	    if (json_last_error() === JSON_ERROR_NONE) 
 	    {
 

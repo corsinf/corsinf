@@ -353,6 +353,7 @@ namespace CorsinfSDKHik.Funciones
                     //Console.WriteLine($"Alarma desde IP: {deviceIp}, Puerto: {devicePort}, userID: {userID}");
 
                     msj = ProcessCommAlarmACS(ref pAlarmer, pAlarmInfo, dwBufLen, pUser);
+                    //  Console.WriteLine(msj);
                     dbModelo.InsertData(conn_, msj);
                     //  Console.WriteLine(msj);
                     break;
@@ -429,7 +430,7 @@ namespace CorsinfSDKHik.Funciones
 
             if (struAcsAlarmInfo.struAcsEventInfo.byCardNo[0] != 0)
             {
-                msj += "\"Card Number\":\"" + System.Text.Encoding.UTF8.GetString(struAcsAlarmInfo.struAcsEventInfo.byCardNo).TrimEnd('\0') + "\",";
+                msj += "\"Card_Number\":\"" + System.Text.Encoding.UTF8.GetString(struAcsAlarmInfo.struAcsEventInfo.byCardNo).TrimEnd('\0') + "\",";
             }
             String[] szCardType = { "normal card", "disabled card", "blocklist card", "night watch card", "stress card", "super card", "guest card" };
             byte byCardType = struAcsAlarmInfo.struAcsEventInfo.byCardType;
@@ -531,7 +532,8 @@ namespace CorsinfSDKHik.Funciones
                 szInfoBuf = szInfoBuf + "SavePath:" + path;
             }
 
-            msj += "\"fecha\":\"" + DateTime.Now.ToString() + "\"}]";
+            msj += "\"hora\":\"" + DateTime.Now.ToString("HH:mm:ss") + "\",";
+            msj += "\"fecha\":\"" + DateTime.Now.ToString() + "\",}]";
             //xmlDoc.LoadXml(receivedXml); // Cargar el XML en XmlDocument
             //string jsonText = JsonConvert.SerializeXmlNode(xmlDoc); // Convertir a JSON             
             //Console.WriteLine(jsonText);
