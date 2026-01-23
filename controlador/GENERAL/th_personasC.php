@@ -21,6 +21,11 @@ if (isset($_GET['estado_clave'])) {
     echo json_encode($controlador->obtener_per_estado_clave($_POST['id_persona'] ?? ''));
 }
 
+if (isset($_GET['acceso_persona'])) {
+    echo json_encode($controlador->validar_acceso_persona($_POST['id_persona'] ?? '', $_POST['id_postulante'] ?? ''));
+}
+
+
 if (isset($_GET['insertar_imagen'])) {
     echo json_encode($controlador->insertar_imagen($_FILES, $_POST));
 }
@@ -171,6 +176,25 @@ class th_personasC
 
 
         return array('POLITICAS_ACEPTACION' => $datos[0]['POLITICAS_ACEPTACION'], 'id_postulante' => $datos[0]['id_postulante']);
+    }
+
+    function validar_acceso_persona($id_persona, $id_postulante)
+    {
+        $datos = $this->modelo->obtener_per_estado_clave($id_persona);
+        $datos_id_postulante = $datos[0]['id_postulante'] ?? '';
+        $datos_id_perosona = $datos[0]['th_per_id'] ?? '';
+        $estado = $datos[0]['estado'] ?? 0;
+
+        // echo $datos_id_postulante . " - " . $id_postulante . " - " . $datos_id_perosona . " - " . $id_persona;
+        // exit;
+
+        if ($estado == 1 && $datos_id_postulante == $id_postulante && $datos_id_perosona == $id_persona) {
+            $datos = 1; // Acceso permitido
+        } else {
+            $datos = -1; // Acceso denegado
+        }
+
+        return $datos;
     }
 
     //Para colocar una imagen a una persona existente
