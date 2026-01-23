@@ -4,6 +4,7 @@ date_default_timezone_set('America/Guayaquil');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_solicitud_permiso_medicoM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_solicitud_permisoM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_personasM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_per_estado_laboralM.php');
 
 require_once(dirname(__DIR__) . '/TALENTO_HUMANO/SOLICITUDES/DOCUMENTOS/reporte_permiso_personal.php');
 
@@ -35,12 +36,14 @@ class th_solicitud_permisoC
     private $modelo;
     private $th_personas;
     private $th_solicitud_permiso_medico;
+    private $th_per_estado_laboral;
 
     function __construct()
     {
         $this->modelo = new th_solicitud_permisoM();
         $this->th_solicitud_permiso_medico = new th_solicitud_permiso_medicoM();
         $this->th_personas = new th_personasM();
+        $this->th_per_estado_laboral = new th_per_estado_laboralM();
     }
 
     function listar($id = '', $th_per_id = '')
@@ -67,6 +70,7 @@ class th_solicitud_permisoC
         $parametros = json_decode($_POST['parametros'], true);
         $toInt = fn($v) => ($v === '' || $v === null) ? 0 : (int)$v;
         $toBoolInt = fn($v) => ($v === '1' || $v === 1 || $v === true) ? 1 : 0;
+        $toFloat = fn($v) => ($v === '' || $v === null) ? 0 : (float)$v;
 
         $fecha_nacimiento = !empty($parametros['fecha_nacimiento'])
             ? date('Y-m-d H:i:s', strtotime($parametros['fecha_nacimiento']))
@@ -75,7 +79,7 @@ class th_solicitud_permisoC
         // Determinar el motivo según el tipo seleccionado
         $tipo_motivo = $parametros['tipo_motivo'] ?? 'MOTIVO_PERSONAL';
         $motivo = '';
-        
+
         if ($tipo_motivo === 'MOTIVO_PERSONAL') {
             $motivo = $parametros['motivo'] ?? '';
         } else if ($tipo_motivo === 'MOTIVO_MEDICO') {
@@ -111,6 +115,14 @@ class th_solicitud_permisoC
             ['campo' => 'th_ppa_id', 'dato' => $parametros['th_ppa_id'] ?? null],
             ['campo' => 'th_sol_per_tipo_solicitud', 'dato' => $parametros['tipo_asunto'] ?? null],
             ['campo' => 'th_sol_per_planificacion', 'dato' => $parametros['planificacion'] ?? 0],
+
+            // FECHAS DEL PERMISO (calculadas por el usuario)
+            ['campo' => 'th_sol_per_tipo_calculo', 'dato' => $parametros['tipo_calculo'] ?? 'fecha'],
+            ['campo' => 'th_sol_per_fecha_principal_permiso', 'dato' => $parametros['fecha_principal_permiso'] ?? null],
+            ['campo' => 'th_sol_per_fecha_desde_permiso', 'dato' => $parametros['desde_permiso'] ?? null],
+            ['campo' => 'th_sol_per_fecha_hasta_permiso', 'dato' => $parametros['hasta_permiso'] ?? null],
+            ['campo' => 'th_sol_per_total_dias', 'dato' => $toInt($parametros['total_dias'] ?? 0)],
+            ['campo' => 'th_sol_per_total_horas', 'dato' => $toFloat($parametros['total_horas'] ?? 0)],
         ];
 
         if (empty($parametros['_id'])) {
@@ -188,11 +200,15 @@ class th_solicitud_permisoC
         if ($id != null) {
             $res_persona = $this->modelo->buscar_datos_completos_solicitud($id);
             $res_medico = $this->th_solicitud_permiso_medico->where('th_sol_per_id', $id)->where('th_sol_per_med_estado', 1)->listar();
+            
+            $th_per_id = (int)$res_persona[0]['th_per_id'];
+            $res_persona_estado_laboral = $this->th_per_estado_laboral->listar_estado_laboral_por_persona($th_per_id);
 
             $persona = (isset($res_persona[0])) ? $res_persona[0] : [];
             $medico = (isset($res_medico[0])) ? $res_medico[0] : [];
+            $persona_estado_laboral = (isset($res_persona_estado_laboral[0])) ? $res_persona_estado_laboral[0] : [];
 
-            $datos_unificados = array_merge($persona, $medico);
+            $datos_unificados = array_merge($persona, $medico, $persona_estado_laboral);
         }
 
         return $datos_unificados;

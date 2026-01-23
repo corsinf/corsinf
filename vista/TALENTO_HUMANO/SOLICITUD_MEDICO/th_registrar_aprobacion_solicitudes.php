@@ -91,8 +91,6 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                 console.log("La fecha 'Hasta' debe ser mayor a 'Desde'");
                 $('#txt_total_dias').val(0);
             } else {
-                // Sumamos 1 si quieres contar el día inicial como un día de permiso
-                // de lo contrario, deja solo totalDias
                 $('#txt_total_dias').val(totalDias + 1);
             }
         }
@@ -130,11 +128,19 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
     }
 
     function toTimeInput(val) {
-        if (!val || val == null || val == 'null' || val.startsWith('1900')) return '';
-        let parts = val.split(' ');
-        if (parts.length > 1) {
+        if (!val || val == null || val == 'null');
+
+        let strVal = val.toString().trim();
+
+        if (strVal.includes(' ')) {
+            let parts = strVal.split(' ');
             return parts[1].substring(0, 5);
         }
+
+        if (strVal.includes(':')) {
+            return strVal.substring(0, 5);
+        }
+
         return '';
     }
 
@@ -194,9 +200,19 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                 $("#txt_motivo").val(r.motivo || '');
 
                 // ===== FECHAS DEL DEPARTAMENTO MÉDICO =====
-                $("#txt_fecha_principal").val(toDateInput(r.fecha));
-                $("#txt_fecha_desde_medico").val(toDateInput(r.desde));
-                $("#txt_fecha_hasta_medico").val(toDateInput(r.hasta));
+
+
+                let ahora = new Date();
+                let anio = ahora.getFullYear();
+                let mes = String(ahora.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
+                let dia = String(ahora.getDate()).padStart(2, '0');
+                let fechaHoy = `${anio}-${mes}-${dia}`;
+                let horaActual = String(ahora.getHours()).padStart(2, '0') + ":" +
+                    String(ahora.getMinutes()).padStart(2, '0');
+
+                $("#txt_fecha_principal").val(fechaHoy);
+                $("#txt_fecha_desde_medico").val(horaActual);
+                $("#txt_fecha_hasta_medico").val(toTimeInput(r.hasta));
                 $("#txt_nombre_medico").val(r.nombre_medico || '');
 
                 // ===== FECHAS DEL PERMISO (calculadas) =====
@@ -307,6 +323,10 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
             totalHoras = parseFloat($('#txt_total_horas').val()) || 0;
         }
 
+        let ahora = new Date();
+        let horaActual = String(ahora.getHours()).padStart(2, '0') + ":" +
+            String(ahora.getMinutes()).padStart(2, '0');
+
         let idMedico = $("#txt_id").val();
 
         let parametros = {
@@ -324,7 +344,7 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
             // FECHAS DEL DEPARTAMENTO MÉDICO
             'fecha_medico': $("#txt_fecha_principal").val(),
             'desde_medico': $("#txt_fecha_desde_medico").val(),
-            'hasta_medico': $("#txt_fecha_hasta_medico").val(),
+            'hasta_medico': horaActual,
             'nombre_medico': $("#txt_nombre_medico").val() || null,
 
             // FECHAS DEL PERMISO (calculadas)
@@ -819,15 +839,16 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label for="txt_fecha_principal">Fecha:</label>
-                                    <input type="date" class="form-control form-control-sm" id="txt_fecha_principal">
+                                    <input type="date" class="form-control form-control-sm" id="txt_fecha_principal" disabled>
                                 </div>
+
                                 <div class="col-md-4">
                                     <label for="txt_fecha_desde_medico">Fecha Desde:</label>
-                                    <input type="date" class="form-control form-control-sm" id="txt_fecha_desde_medico">
+                                    <input type="time" class="form-control form-control-sm" id="txt_fecha_desde_medico" disabled>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="txt_fecha_hasta_medico">Fecha Hasta:</label>
-                                    <input type="date" class="form-control form-control-sm" id="txt_fecha_hasta_medico">
+                                    <input type="time" class="form-control form-control-sm" id="txt_fecha_hasta_medico" disabled>
                                 </div>
                             </div>
 
@@ -865,15 +886,15 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                                 <div class="row mb-2">
                                     <div class="col-md-3">
                                         <label for="txt_fecha_desde">DESDE: (fecha)</label>
-                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_desde">
+                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_desde" disabled>
                                     </div>
                                     <div class="col-md-3">
                                         <label for="txt_fecha_hasta">HASTA: (fecha)</label>
-                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_hasta">
+                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_hasta" disabled>
                                     </div>
                                     <div class="col-md-3">
                                         <label for="txt_total_dias">TOTAL DÍAS</label>
-                                        <input type="number" class="form-control form-control-sm" id="txt_total_dias" readonly>
+                                        <input type="number" class="form-control form-control-sm" id="txt_total_dias" readonly disabled>
                                     </div>
                                 </div>
                             </div>
@@ -883,22 +904,22 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                                 <div class="row mb-2">
                                     <div class="col-md-3">
                                         <label for="txt_fecha_horas">DESDE: (fecha)</label>
-                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_horas">
+                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_horas" disabled>
                                     </div>
                                 </div>
 
                                 <div class="row mb-2">
                                     <div class="col-md-3">
                                         <label for="txt_hora_desde">DESDE: (Hora)</label>
-                                        <input type="time" class="form-control form-control-sm" id="txt_hora_desde">
+                                        <input type="time" class="form-control form-control-sm" id="txt_hora_desde" disabled>
                                     </div>
                                     <div class="col-md-3">
                                         <label for="txt_hora_hasta">HASTA: (Hora)</label>
-                                        <input type="time" class="form-control form-control-sm" id="txt_hora_hasta">
+                                        <input type="time" class="form-control form-control-sm" id="txt_hora_hasta" disabled>
                                     </div>
                                     <div class="col-md-3">
                                         <label for="txt_total_horas">TOTAL HORAS</label>
-                                        <input type="number" class="form-control form-control-sm" id="txt_total_horas" readonly>
+                                        <input type="number" class="form-control form-control-sm" id="txt_total_horas" readonly disabled>
                                     </div>
                                 </div>
                             </div>

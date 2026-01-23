@@ -112,6 +112,46 @@ class th_personas_departamentosM extends BaseModel
         return null;
     }
 
+    function listar_buscar_persona_departamento_cargo($id_persona)
+    {
+        if (!empty($id_persona)) {
+            $id_persona = intval($id_persona);
+
+            $sql = "
+        SELECT
+            per_dep.th_perdep_id AS _id_perdep,
+            per.th_per_id AS id_persona,
+            per.th_per_primer_apellido AS primer_apellido,
+            per.th_per_segundo_apellido AS segundo_apellido,
+            per.th_per_primer_nombre AS primer_nombre,
+            per.th_per_segundo_nombre AS segundo_nombre,
+            per.th_per_estado_civil AS estado_civil,
+            per.th_per_sexo AS sexo,
+            per.th_per_cedula AS cedula,
+            per.th_per_telefono_1 AS telefono_1,
+            per.th_per_correo AS correo,
+            ISNULL(dep.th_dep_nombre, 'SIN DEPARTAMENTO') AS nombre_departamento,
+            ISNULL(per_dep.th_dep_id, 0) AS id_departamento,
+            ISNULL(c.nombre, 'SIN CARGO') AS nombre_cargo,
+            ISNULL(el.id_cargo, 0) AS id_cargo,
+            el.th_est_remuneracion AS remuneracion
+        FROM
+            th_personas per
+        LEFT JOIN th_personas_departamentos per_dep ON per.th_per_id = per_dep.th_per_id
+        LEFT JOIN th_departamentos dep ON per_dep.th_dep_id = dep.th_dep_id
+        LEFT JOIN th_per_estado_laboral el ON per.th_per_id = el.th_per_id AND el.th_est_estado = 1
+        LEFT JOIN th_cat_cargo c ON el.id_cargo = c.id_cargo
+        WHERE
+            per.th_per_id = $id_persona;
+        ";
+
+            $datos = $this->db->datos($sql);
+            return $datos;
+        }
+
+        return null;
+    }
+
 
     public function obtener_correo_y_password($id_usuario)
     {

@@ -81,6 +81,15 @@ function pdf_reporte_permiso($parametros, $modo_guardar = false)
             break;
     }
 
+    $motivo_solicitud = $parametros['th_sol_per_tipo_motivo'];
+    $string_motivo = "";
+
+    if ($motivo_solicitud == "MOTIVO_MEDICO") {
+        $string_motivo = "Médico";
+    } else if ($motivo_solicitud == "MOTIVO_PERSONAL") {
+        $string_motivo = "Personal";
+    }
+
     /* =====================================================
        RANGO DE EDAD
     ===================================================== */
@@ -462,7 +471,7 @@ function pdf_reporte_permiso($parametros, $modo_guardar = false)
     $pdf->Rect(10, $y_inicio, 190, 5, 'F');
     $pdf->SetXY(10, $y_inicio);
     $pdf->SetFont('helvetica', 'B', 8);
-    $pdf->Cell(30, 5, 'MOTIVO:', 0, 1);
+    $pdf->Cell(30, 5, 'MOTIVO: ' . $string_motivo, 0, 1);
 
     $y = $pdf->GetY() + 2;
     $colX1_Chk = 95;   // Punto checkbox columna 1
