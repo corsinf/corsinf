@@ -6,70 +6,93 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script type="text/javascript">
-$(document).ready(function() {
+    $(document).ready(function() {
 
-    let estado = 2;
+        let estado = 2;
 
-    let tbl_permisos = $('#tbl_permisos').DataTable($.extend({},
-        configuracion_datatable(
-            'Motivo',
-            'Tipo',
-            'Médico',
-            'Fecha',
-            'Desde',
-            'Hasta',
-            'Estado'
-        ), {
-            responsive: true,
-            dom: 'frtip',
-            buttons: [{
-                extend: 'colvis',
-                text: '<i class="bx bx-columns"></i> Columnas',
-                className: 'btn btn-outline-secondary btn-sm'
-            }],
-            language: {
-                url: '../assets/plugins/datatable/spanish.json'
-            },
-            ajax: {
-                url: '../controlador/TALENTO_HUMANO/th_solicitud_permiso_medicoC.php?listar=true',
-                type: 'POST',
-                data: function(d) {
-                    d.estado = estado;
+        let tbl_permisos = $('#tbl_permisos').DataTable($.extend({},
+            configuracion_datatable(
+                'Motivo',
+                'Tipo',
+                'Médico',
+                'Fecha',
+                'Desde',
+                'Hasta',
+                'Estado'
+            ), {
+                responsive: true,
+                dom: 'frtip',
+                buttons: [{
+                    extend: 'colvis',
+                    text: '<i class="bx bx-columns"></i> Columnas',
+                    className: 'btn btn-outline-secondary btn-sm'
+                }],
+                language: {
+                    url: '../assets/plugins/datatable/spanish.json'
                 },
-                dataSrc: ''
-            },
-            columns: [{
-                    data: 'nombre_completo',
-                    render: function(data, type, item) {
-                        let href =
-                            `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_solicitudes_personas&_id=${item.id}`;
-                        return `<a href="${href}"><u>${data}</u></a>`;
+                ajax: {
+                    url: '../controlador/TALENTO_HUMANO/th_solicitud_permiso_medicoC.php?listar=true',
+                    type: 'POST',
+                    data: function(d) {
+                        d.estado = estado;
+                    },
+                    dataSrc: ''
+                },
+                columns: [{
+                        data: 'nombre_completo',
+                        render: function(data, type, item) {
+                            let href =
+                                `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_solicitudes_personas&_id=${item.id}`;
+                            return `<a href="${href}"><u>${data}</u></a>`;
+                        }
+                    },
+                    {
+                        data: 'cedula'
+                    },
+                    {
+                        data: 'telefono'
+                    },
+                    {
+                        data: 'total_solicitudes'
+                    },
+                    {
+                        data: 'total_por_revisar',
+                        render: function(data) {
+                            return `${data || 0}`;
+                        }
+                    },
+                    {
+                        data: 'total_aprobadas',
+                        render: function(data) {
+                            return `${data || 0}`;
+                        }
+                    },
+                    {
+                        data: 'total_rechazada',
+                        render: function(data) {
+                            return `${data || 0}`;
+                        }
+                    },
+                    {
+                        data: 'total_pendientes',
+                        render: function(data) {
+                            return `${data || 0}`;
+                        }
                     }
-                },
-                {
-                    data: 'cedula'
-                },
-                {
-                    data: 'telefono'
-                },
-                {
-                    data: 'total_solicitudes'
-                },
+                ],
+                order: [
+                    [3, 'desc']
+                ]
+            }
+        ));
 
-            ],
-            order: [
-                [3, 'desc']
-            ]
-        }
-    ));
+        // Filtro por estado
+        $('input[name="rbx_variable"]').on('change', function() {
+            estado = $(this).val();
+            tbl_permisos.ajax.reload();
+        });
 
-    // Filtro por estado
-    $('input[name="rbx_variable"]').on('change', function() {
-        estado = $(this).val();
-        tbl_permisos.ajax.reload();
     });
-
-});
 </script>
 
 <div class="page-wrapper">
@@ -91,19 +114,21 @@ $(document).ready(function() {
                         </div>
 
 
-                        <div class="table-responsive pt-3">
-                            <table class="table table-striped" id="tbl_permisos" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Cédula</th>
-                                        <th>Telefono</th>
-                                        <th>Total solicitudes</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
+                        <table class="table table-striped" id="tbl_permisos" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Cédula</th>
+                                    <th>Teléfono</th>
+                                    <th>Total solicitudes</th>
+                                    <th>Por revisar</th>
+                                    <th>Aprobadas</th>
+                                    <th>Rechazadas</th>
+                                    <th>Pendiente</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
 
                     </div>
                 </div>

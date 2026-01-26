@@ -47,23 +47,30 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                         data: 'estado_medico',
                         className: 'text-center',
                         render: function(data, type, row) {
-
                             if (data === null) {
-                                return `<span class="badge bg-secondary">Sin revisión</span>`;
+                                return `<span class="badge bg-secondary">Sin revisión</span>`; // Corresponde a total_por_revisar
                             }
 
-                            if (data == 0) {
-                                return `<span class="badge bg-warning text-dark">Pendiente</span>`;
+                            // Usamos Number() para asegurar la comparación numérica tras el cambio a INT en la DB
+                            let estado = Number(data);
+
+                            if (estado === 0) {
+                                return `<span class="badge bg-warning text-dark">Pendiente</span>`; // total_pendientes
                             }
 
-                            if (data == 1) {
-                                return `<span class="badge bg-success">Aprobado</span>`;
+                            if (estado === 1) {
+                                return `<span class="badge bg-success">Aprobado</span>`; // total_aprobadas
                             }
 
-                            return '';
+                            if (estado === 2) {
+                                // Corregido: faltaba cerrar la comilla del class y el tag >
+                                return `<span class="badge bg-danger">Rechazada</span>`; // total_rechazada
+                            }
+
+                            return `<span class="badge bg-info">Otro</span>`;
                         }
                     }, {
-                        data: null, 
+                        data: null,
                         className: 'text-center',
                         render: function(data, type, row) {
                             return `
@@ -153,30 +160,6 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                             </div>
 
                         </div>
-
-                        <!-- FILA INFERIOR: FILTROS -->
-                        <div class="row mb-3">
-                            <div class="col-12 text-center">
-
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="rbx_variable" value="2" checked>
-                                    <label class="form-check-label">Todas</label>
-                                </div>
-
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="rbx_variable" value="1">
-                                    <label class="form-check-label">Aprobadas</label>
-                                </div>
-
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="rbx_variable" value="0">
-                                    <label class="form-check-label">Pendientes</label>
-                                </div>
-
-                            </div>
-                        </div>
-
-
 
                         <div class="table-responsive pt-3">
                             <table class="table table-striped" id="tbl_permisos" style="width:100%">

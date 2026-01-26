@@ -52,6 +52,7 @@ function pdf_reporte_permiso($parametros, $modo_guardar = false)
        MOTIVOS
     ===================================================== */
     $motivo_personal = false;
+    $motivo_familiar = false;
     $motivo_calamidad = false;
     $motivo_fallecimiento = false;
     $motivo_maternidad_paternidad  = false;
@@ -63,6 +64,9 @@ function pdf_reporte_permiso($parametros, $modo_guardar = false)
     switch ($motivo_db) {
         case 'PERSONAL':
             $motivo_personal = true;
+            break;
+        case 'FAMILIAR':
+            $motivo_familiar = true;
             break;
         case 'CALAMIDAD':
             $motivo_calamidad = true;
@@ -208,6 +212,9 @@ function pdf_reporte_permiso($parametros, $modo_guardar = false)
     $motivo_observacion = $parametros['motivo'] ?? '';
 
     // Fechas médicas
+    $f_obs_fecha_cita = !empty($parametros['fecha'])
+        ? strtotime($parametros['fecha'])
+        : null;
     $f_obs_desde = !empty($parametros['desde'])
         ? strtotime($parametros['desde'])
         : null;
@@ -217,12 +224,12 @@ function pdf_reporte_permiso($parametros, $modo_guardar = false)
         : null;
 
     // Fecha observación (parte superior)
-    $fecha_obs_dia  = $f_obs_desde ? date('d', $f_obs_desde) : '';
-    $fecha_obs_mes  = $f_obs_desde ? date('m', $f_obs_desde) : '';
-    $fecha_obs_anio = $f_obs_desde ? date('y', $f_obs_desde) : '';
+    $fecha_obs_dia  = $f_obs_fecha_cita ? date('d', $f_obs_fecha_cita) : '';
+    $fecha_obs_mes  = $f_obs_fecha_cita ? date('m', $f_obs_fecha_cita) : '';
+    $fecha_obs_anio = $f_obs_fecha_cita ? date('Y', $f_obs_fecha_cita) : '';
 
-    $fecha_desde_completa = $f_obs_desde ? date('d/m/Y', $f_obs_desde) : '';
-    $fecha_hasta_completa = $f_obs_hasta ? date('d/m/Y', $f_obs_hasta) : '';
+    $fecha_desde_completa = $f_obs_desde ? date('H:i', $f_obs_desde) : '';
+    $fecha_hasta_completa = $f_obs_hasta ? date('H:i', $f_obs_hasta) : '';
 
     // Obtener el tipo de cálculo: 'horas' o 'dias' (o 'fechas')
     $tipo_calculo = $parametros['tipo_calculo'] ?? '';
@@ -248,12 +255,6 @@ function pdf_reporte_permiso($parametros, $modo_guardar = false)
     $total_horas = ($tipo_calculo === 'horas') ? ($parametros['total_horas_permiso'] ?? '0.00') : '---';
 
     $tipo_calculo = $parametros['tipo_calculo'] ?? ''; // 'fechas' o 'horas'
-
-
-    $nombre_medico = $parametros['nombre_medico'] ?? '';
-
-    // Ruta del documento médico
-    $ruta_solicitud_medica = $parametros['ruta_solicitud'] ?? '';
 
 
     /* =====================================================
@@ -372,21 +373,21 @@ function pdf_reporte_permiso($parametros, $modo_guardar = false)
     // --- BLOQUE IZQUIERDO (Nombres, Cédula, Cargo) ---
     $pdf->SetFont('helvetica', 'B', 8);
     $pdf->SetXY(10, $startY);
-    $pdf->Cell(20, 6, 'NOMBRES:', 0, 0);
+    $pdf->Cell(17, 6, 'NOMBRES:', 0, 0);
     $pdf->SetFont('helvetica', '', 8);
-    $pdf->Cell(75, 6, $nombres, 'B', 1);
+    $pdf->Cell(70, 6, $nombres, 'B', 1);
 
     $pdf->SetX(10);
     $pdf->SetFont('helvetica', 'B', 8);
-    $pdf->Cell(20, 6, 'CÉDULA:', 0, 0);
+    $pdf->Cell(15, 6, 'CÉDULA:', 0, 0);
     $pdf->SetFont('helvetica', '', 8);
-    $pdf->Cell(75, 6, $cedula, 'B', 1);
+    $pdf->Cell(70, 6, $cedula, 'B', 1);
 
     $pdf->SetX(10);
     $pdf->SetFont('helvetica', 'B', 8);
-    $pdf->Cell(30, 6, 'CARGO (contrato):', 0, 0);
+    $pdf->Cell(26, 6, 'CARGO (contrato):', 0, 0);
     $pdf->SetFont('helvetica', '', 8);
-    $pdf->Cell(65, 6, $cargo, 'B', 1);
+    $pdf->Cell(60, 6, $cargo, 'B', 1);
 
     // --- BLOQUE CENTRAL (GÉNERO / ASUNTO) ---
     // Aumentamos posX_Gen_Chk para dar espacio a "Prefiero no decirlo"
@@ -477,7 +478,7 @@ function pdf_reporte_permiso($parametros, $modo_guardar = false)
     $colX1_Chk = 95;   // Punto checkbox columna 1
     $colX_Final = 196; // Punto checkbox columna 2
 
-    if ($motivo_db == "PERSONAL" || $motivo_db == "FALLECIMIENTO" || $motivo_db == "CALAMIDAD") {
+    if ($motivo_db == "PERSONAL" || $motivo_db == "FALLECIMIENTO" || $motivo_db == "CALAMIDAD" || $motivo_db == "FAMILIAR") {
         $col_chk = 100; // Checkboxes alineados a la derecha (ancho total)
         $pdf->SetFont('helvetica', '', 9);
 
@@ -485,6 +486,12 @@ function pdf_reporte_permiso($parametros, $modo_guardar = false)
         $pdf->SetXY(10, $y);
         $pdf->Cell(50, 5, '* Personal', 0, 0);
         dibujar_checkbox($pdf, $col_chk, $y + 1, $motivo_personal, 4);
+
+        // 1. Personal
+        $y += 8;
+        $pdf->SetXY(10, $y);
+        $pdf->Cell(50, 5, '* Familiar', 0, 0);
+        dibujar_checkbox($pdf, $col_chk, $y + 1, $motivo_familiar, 4);
 
         // 2. Calamidad Doméstica
         $y += 8;
@@ -508,42 +515,45 @@ function pdf_reporte_permiso($parametros, $modo_guardar = false)
         $pdf->Cell(50, 4, '(Adjuntar acta de defunción)', 0, 0);
 
         // 4. Familiar - Hijos (Rango de Edad)
-        $y += 8;
-        $pdf->SetXY(10, $y);
-        $pdf->SetFont('helvetica', '', 9);
-        $pdf->Cell(35, 5, 'Familiar - hijos', 0, 0);
-        $pdf->Cell(30, 5, '0 - 5 años', 0, 0);
-        dibujar_checkbox($pdf, $col_chk, $y + 1, $rango_edad_0_5, 4);
+        if ($motivo_db == "FAMILIAR" || $motivo_db == "FALLECIMIENTO") {
 
-        $y += 6;
-        $pdf->SetXY(10, $y);
-        $pdf->Cell(35, 5, '(Rango de Edad)', 0, 0);
-        $pdf->Cell(30, 5, '6 - 11 años', 0, 0);
-        dibujar_checkbox($pdf, $col_chk, $y + 1, $rango_edad_6_11, 4);
+            $y += 8;
+            $pdf->SetXY(10, $y);
+            $pdf->SetFont('helvetica', '', 9);
+            $pdf->Cell(35, 5, 'Familiar - hijos', 0, 0);
+            $pdf->Cell(30, 5, '0 - 5 años', 0, 0);
+            dibujar_checkbox($pdf, $col_chk, $y + 1, $rango_edad_0_5, 4);
 
-        $y += 6;
-        $pdf->SetXY(45, $y); // Alineado con los rangos anteriores
-        $pdf->Cell(30, 5, '12 - 17 años', 0, 0);
-        dibujar_checkbox($pdf, $col_chk, $y + 1, $rango_edad_12_17, 4);
+            $y += 6;
+            $pdf->SetXY(10, $y);
+            $pdf->Cell(35, 5, '(Rango de Edad)', 0, 0);
+            $pdf->Cell(30, 5, '6 - 11 años', 0, 0);
+            dibujar_checkbox($pdf, $col_chk, $y + 1, $rango_edad_6_11, 4);
 
-        // 5. Familiar - Adultos
-        $y += 8;
-        $pdf->SetXY(10, $y);
-        $pdf->Cell(35, 5, 'Familiar - adultos', 0, 0);
-        $pdf->Cell(30, 5, 'Discapacidad', 0, 0);
-        dibujar_checkbox($pdf, $col_chk, $y + 1, $discapacidad, 4);
+            $y += 6;
+            $pdf->SetXY(45, $y); // Alineado con los rangos anteriores
+            $pdf->Cell(30, 5, '12 - 17 años', 0, 0);
+            dibujar_checkbox($pdf, $col_chk, $y + 1, $rango_edad_12_17, 4);
 
-        $y += 6;
-        $pdf->SetXY(10, $y);
-        $pdf->Cell(35, 5, '(Cuidado Familiar)', 0, 0);
-        $pdf->Cell(30, 5, 'Adulto Mayor', 0, 0);
-        dibujar_checkbox($pdf, $col_chk, $y + 1, $adulto_mayor, 4);
+            // 5. Familiar - Adultos
+            $y += 8;
+            $pdf->SetXY(10, $y);
+            $pdf->Cell(35, 5, 'Familiar - adultos', 0, 0);
+            $pdf->Cell(30, 5, 'Discapacidad', 0, 0);
+            dibujar_checkbox($pdf, $col_chk, $y + 1, $discapacidad, 4);
 
-        // 6. Enfermedad Catastrófica
-        $y += 6;
-        $pdf->SetXY(45, $y);
-        $pdf->Cell(45, 5, 'Enfermedad Catastrófica', 0, 0);
-        dibujar_checkbox($pdf, $col_chk, $y + 1, $enfermedad_catastrofica, 4);
+            $y += 6;
+            $pdf->SetXY(10, $y);
+            $pdf->Cell(35, 5, '(Cuidado Familiar)', 0, 0);
+            $pdf->Cell(30, 5, 'Adulto Mayor', 0, 0);
+            dibujar_checkbox($pdf, $col_chk, $y + 1, $adulto_mayor, 4);
+
+            // 6. Enfermedad Catastrófica
+            $y += 6;
+            $pdf->SetXY(45, $y);
+            $pdf->Cell(45, 5, 'Enfermedad Catastrófica', 0, 0);
+            dibujar_checkbox($pdf, $col_chk, $y + 1, $enfermedad_catastrofica, 4);
+        }
 
         // 7. Detalle Motivo (Ancho completo)
         $y += 10;
@@ -610,47 +620,81 @@ function pdf_reporte_permiso($parametros, $modo_guardar = false)
         $pdf->SetFont('helvetica', '', 7);
         $pdf->Cell(90, 4, '(Enfermedad o Cita Médica)', 0, 0);
 
-        // Campos de texto (Espaciado reducido a 6mm)
+        // Ancho total de la línea de escritura (ajustable según tus márgenes, usualmente 190 para A4)
+        $ancho_max = 185;
+
+        // 1. Lugar
         $y += 6;
         $pdf->SetXY(10, $y);
         $pdf->SetFont('helvetica', '', 9);
-        $pdf->Cell(15, 5, 'Lugar:', 0, 0);
-        $pdf->Cell(170, 5, $lugar, 'B', 1);
+        $label = 'Lugar: ';
+        $w_label = $pdf->GetStringWidth($label) + 1; // Calculamos ancho del texto
+        $pdf->Cell($w_label, 5, $label, 0, 0);
+        // El ancho de la línea es el máximo menos lo que ya ocupó el label
+        $pdf->Cell($ancho_max - $w_label, 5, $lugar, 'B', 1);
 
+        // 2. Especialidad
         $y += 6;
         $pdf->SetXY(10, $y);
-        $pdf->Cell(25, 5, 'Especialidad:', 0, 0);
-        $pdf->Cell(160, 5, $especialidad, 'B', 1);
+        $label = 'Especialidad: ';
+        $w_label = $pdf->GetStringWidth($label) + 1;
+        $pdf->Cell($w_label, 5, $label, 0, 0);
+        $pdf->Cell($ancho_max - $w_label, 5, $especialidad, 'B', 1);
 
+        // 3. Nombre Médico
         $y += 6;
         $pdf->SetXY(10, $y);
-        $pdf->Cell(35, 5, 'Nombre Médico:', 0, 0);
-        $pdf->Cell(150, 5, $nombre_medico, 'B', 1);
+        $label = 'Nombre Médico: ';
+        $w_label = $pdf->GetStringWidth($label) + 1;
+        $pdf->Cell($w_label, 5, $label, 0, 0);
+        $pdf->Cell($ancho_max - $w_label, 5, $nombre_medico, 'B', 1);
 
-        // Fila de Fecha y Horas (Todo en una misma línea Y)
+        // 4. Fila de Fecha y Horas (Ajuste de espacios internos)
         $y += 6.5;
         $pdf->SetXY(10, $y);
-        $pdf->Cell(12, 5, 'Fecha:', 0, 0);
-        $pdf->Cell(28, 5, "$fecha_cita_dia/$fecha_cita_mes/$fecha_cita_anio", 'B', 0, 'C');
-        $pdf->Cell(25, 5, '  Hora Desde:', 0, 0);
-        $pdf->Cell(20, 5, "$hora_desde_HH:$hora_desde_MM", 'B', 0, 'C');
-        $pdf->Cell(20, 5, '  Hasta:', 0, 0);
-        $pdf->Cell(20, 5, "$hora_hasta_HH:$hora_hasta_MM", 'B', 1, 'C');
+        $gap = 1;
 
-        // Detalle Motivo
+        // --- MITAD IZQUIERDA: FECHA ---
+        $label_fec = 'Fecha: ';
+        $w_label_fec = $pdf->GetStringWidth($label_fec) + $gap;
+        $pdf->Cell($w_label_fec, 5, $label_fec, 0, 0);
+        // La línea de fecha ocupa hasta la mitad del ancho total (92.5mm si ancho_max es 185)
+        $w_linea_fecha = ($ancho_max / 2) - $w_label_fec;
+        $pdf->Cell($w_linea_fecha, 5, "$fecha_cita_dia/$fecha_cita_mes/$fecha_cita_anio", 'B', 0, 'C');
+
+        // --- MITAD DERECHA: HORAS (Dividido en 2 partes iguales) ---
+        $label_desde = '   Hora Desde: ';
+        $label_hasta = '   Hasta: ';
+        $w_l_desde = $pdf->GetStringWidth($label_desde) + $gap;
+        $w_l_hasta = $pdf->GetStringWidth($label_hasta) + $gap;
+
+        // Calculamos cuánto queda para las dos líneas de horas y dividimos para 2
+        $w_lineas_horas = (($ancho_max / 2) - $w_l_desde - $w_l_hasta) / 2;
+
+        // Hora Desde
+        $pdf->Cell($w_l_desde, 5, $label_desde, 0, 0);
+        $pdf->Cell($w_lineas_horas, 5, "$hora_desde_HH:$hora_desde_MM", 'B', 0, 'C');
+
+        // Hora Hasta
+        $pdf->Cell($w_l_hasta, 5, $label_hasta, 0, 0);
+        $pdf->Cell($w_lineas_horas, 5, "$hora_hasta_HH:$hora_hasta_MM", 'B', 1, 'C');
+
+        // 5. Detalle Motivo
         $y += 7;
         $pdf->SetXY(10, $y);
         $pdf->SetFont('helvetica', 'B', 9);
-        $pdf->Cell(28, 5, 'Detalle motivo:', 0, 0);
+        $label = 'Detalle motivo: ';
+        $w_label = $pdf->GetStringWidth($label) + 1;
+        $pdf->Cell($w_label, 5, $label, 0, 0);
         $pdf->SetFont('helvetica', '', 9);
-        $pdf->Cell(157, 5, $detalle_motivo, 'B', 1);
+        $pdf->Cell($ancho_max - $w_label, 5, $detalle_motivo, 'B', 1);
     }
 
     // ==========================================
     // SECCIÓN EXCLUSIVA DEPARTAMENTO MÉDICO
     // ==========================================
 
-    if ($motivo_db == "PERSONAL" || $motivo_db == "FALLECIMIENTO" || $motivo_db == "CALAMIDAD") {
+    if ($motivo_db == "PERSONAL" || $motivo_db == "FALLECIMIENTO" || $motivo_db == "CALAMIDAD" || $motivo_db == "FAMILIAR") {
     } else {
         $pdf->Ln(3);
         $y = $pdf->GetY();
@@ -716,7 +760,7 @@ function pdf_reporte_permiso($parametros, $modo_guardar = false)
         $y += 6;
         $pdf->SetXY(10, $y);
         $pdf->SetFont('helvetica', '', 8);
-        $pdf->Cell(10, 5, '(IDG)', 0, 0);
+        $pdf->Cell(9, 5, '(IDG)', 0, 0);
         $pdf->Cell(78, 5, $idg_texto_fila1, 'B', 0); // Fila 1 de IDG
 
         // Motivo al lado derecho

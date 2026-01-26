@@ -40,7 +40,7 @@ class th_solicitud_permiso_medicoC
     private $th_solicitud_permiso;
     private $th_personas;
     private $th_per_estado_laboral;
-    
+
 
     function __construct()
     {
@@ -68,7 +68,7 @@ class th_solicitud_permiso_medicoC
     {
 
         if ($id !=  '') {
-            $datos = $this->modelo->where('th_sol_per_med_id', $id)->listar();
+            $datos = $this->modelo->obtener_detalle_completo_solicitud( $id);
         }
         return $datos;
     }
@@ -133,6 +133,7 @@ class th_solicitud_permiso_medicoC
 
             ['campo' => 'th_sol_per_med_estado_solicitud', 'dato' => $parametros['estado_solicitud'] ?? 0],
             ['campo' => 'th_sol_per_med_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')],
+            ['campo' => 'id_idg', 'dato' => $parametros['id_idg'] ?? null],
         ];
 
         // INSERCIÓN

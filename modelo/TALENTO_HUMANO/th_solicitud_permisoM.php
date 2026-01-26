@@ -63,33 +63,54 @@ class th_solicitud_permisoM extends BaseModel
         }
 
         $sql = "
-        SELECT
-            p.th_per_id AS id,
-            p.th_per_cedula AS cedula,
-            p.th_per_telefono_1 AS telefono,
-            LTRIM(RTRIM(
-                ISNULL(p.th_per_primer_apellido,'') + ' ' +
-                ISNULL(p.th_per_segundo_apellido,'') + ' ' +
-                ISNULL(p.th_per_primer_nombre,'') + ' ' +
-                ISNULL(p.th_per_segundo_nombre,'')
-            )) AS nombre_completo,
-            COUNT(sp.th_sol_per_id) AS total_solicitudes
-        FROM th_solicitud_permiso sp
-        INNER JOIN th_personas p ON sp.th_per_id = p.th_per_id
-        WHERE sp.th_sol_per_estado = 1 {$filtro}
-        GROUP BY
-            p.th_per_id,
-            p.th_per_cedula,
-            p.th_per_telefono_1,
-            p.th_per_primer_nombre,
-            p.th_per_segundo_nombre,
-            p.th_per_primer_apellido,
-            p.th_per_segundo_apellido
-        ORDER BY total_solicitudes DESC";
+    SELECT
+        p.th_per_id AS id,
+        p.th_per_cedula AS cedula,
+        p.th_per_telefono_1 AS telefono,
+        LTRIM(RTRIM(
+            ISNULL(p.th_per_primer_apellido,'') + ' ' +
+            ISNULL(p.th_per_segundo_apellido,'') + ' ' +
+            ISNULL(p.th_per_primer_nombre,'') + ' ' +
+            ISNULL(p.th_per_segundo_nombre,'')
+        )) AS nombre_completo,
+        COUNT(sp.th_sol_per_id) AS total_solicitudes,
+        SUM(CASE 
+            WHEN spm.th_sol_per_med_estado_solicitud IS NULL 
+            THEN 1 
+            ELSE 0 
+        END) AS total_por_revisar,
+        SUM(CASE 
+            WHEN spm.th_sol_per_med_estado_solicitud = 1 
+            THEN 1 
+            ELSE 0 
+        END) AS total_aprobadas,
+        SUM(CASE 
+            WHEN spm.th_sol_per_med_estado_solicitud = 2 
+            THEN 1 
+            ELSE 0 
+        END) AS total_rechazada,
+        SUM(CASE 
+            WHEN spm.th_sol_per_med_estado_solicitud = 0
+            THEN 1 
+            ELSE 0 
+        END) AS total_pendientes
+    FROM th_solicitud_permiso sp
+    INNER JOIN th_personas p ON sp.th_per_id = p.th_per_id
+    LEFT JOIN th_solicitud_permiso_medico spm ON sp.th_sol_per_id = spm.th_sol_per_id 
+        AND spm.th_sol_per_med_estado = 1
+    WHERE sp.th_sol_per_estado = 1 {$filtro}
+    GROUP BY
+        p.th_per_id,
+        p.th_per_cedula,
+        p.th_per_telefono_1,
+        p.th_per_primer_nombre,
+        p.th_per_segundo_nombre,
+        p.th_per_primer_apellido,
+        p.th_per_segundo_apellido
+    ORDER BY total_solicitudes DESC";
 
         return $this->db->datos($sql);
     }
-
 
     function listar_solicitudes_persona_con_medico($th_per_id)
     {

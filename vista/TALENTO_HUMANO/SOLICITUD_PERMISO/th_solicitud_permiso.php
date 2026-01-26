@@ -63,9 +63,35 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         data: 'telefono'
                     },
                     {
-                        data: 'total_solicitudes'
+                        data: 'total_solicitudes',
+                        render: function(data) {
+                            return `<strong>${data || 0}</strong>`;
+                        }
                     },
-
+                    {
+                        data: 'total_por_revisar',
+                        render: function(data) {
+                            return `${data || 0}`;
+                        }
+                    },
+                    {
+                        data: 'total_aprobadas',
+                        render: function(data) {
+                            return `${data || 0}`;
+                        }
+                    },
+                    {
+                        data: 'total_rechazada',
+                        render: function(data) {
+                            return `${data || 0}`;
+                        }
+                    },
+                    {
+                        data: 'total_pendientes',
+                        render: function(data) {
+                            return `${data || 0}`;
+                        }
+                    }
                 ],
                 order: [
                     [3, 'desc']
@@ -106,19 +132,21 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         </div>
 
 
-                        <div class="table-responsive pt-3">
-                            <table class="table table-striped" id="tbl_permisos" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Cédula</th>
-                                        <th>Telefono</th>
-                                        <th>Total solicitudes</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
+                        <table class="table table-striped" id="tbl_permisos" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Cédula</th>
+                                    <th>Teléfono</th>
+                                    <th>Total solicitudes</th>
+                                    <th>Por revisar</th>
+                                    <th>Aprobadas</th>
+                                    <th>Rechazadas</th>
+                                    <th>Pendientes</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
 
                     </div>
                 </div>

@@ -114,6 +114,10 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                                     class="btn btn-outline-dark btn-sm">
                                     <i class="bx bx-arrow-back"></i> Regresar
                                 </a>
+                                <a href = "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_solicitud_permiso&_per_id=<?= $_id ?>"
+                                    class="btn btn-success btn-sm">
+                                    <i class="bx bx-plus"></i> Nuevo Permiso
+                                </a>
                             </div>
                         </div>
 

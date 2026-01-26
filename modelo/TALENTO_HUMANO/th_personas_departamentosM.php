@@ -134,6 +134,10 @@ class th_personas_departamentosM extends BaseModel
             ISNULL(per_dep.th_dep_id, 0) AS id_departamento,
             ISNULL(c.nombre, 'SIN CARGO') AS nombre_cargo,
             ISNULL(el.id_cargo, 0) AS id_cargo,
+            ISNULL(per.th_per_primer_apellido, '') + ' ' + 
+            ISNULL(per.th_per_segundo_apellido, '') + ' ' + 
+            ISNULL(per.th_per_primer_nombre, '') + ' ' + 
+            ISNULL(per.th_per_segundo_nombre, '') AS nombre_completo,
             el.th_est_remuneracion AS remuneracion
         FROM
             th_personas per

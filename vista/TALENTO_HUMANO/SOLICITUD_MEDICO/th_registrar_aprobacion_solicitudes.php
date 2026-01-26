@@ -16,6 +16,14 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
         <?php if ($_id_sol != '') { ?>
             abrirResumenSolicitud(<?= $_id_sol ?>);
         <?php } ?>
+        carga_fecha_hora_cita_medica();
+        cargar_selects2();
+
+        function cargar_selects2() {
+            url_IDG_C = '../controlador/TALENTO_HUMANO/CATALOGOS/sa_cat_cie_10C.php?buscar=true';
+            cargar_select2_url('ddl_IDG', url_IDG_C, '-- Seleccione --', null, 3);
+        }
+
 
         // TIPO DE SOLICITUD: Reposo o Permiso
         $('#cbx_reposo').change(function() {
@@ -156,6 +164,12 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                 var r = (Array.isArray(response) && response.length > 0) ? response[0] : response;
                 if (!r) return;
 
+                $('#ddl_IDG').empty().append($('<option>', {
+                    value: r.id_idg,
+                    text: r.codigo_idg + ' - ' + r.descripcion_idg,
+                    selected: true
+                })).trigger('change');
+
 
                 // Datos básicos
                 $("#txt_id").val(r._id || '');
@@ -202,18 +216,8 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                 // ===== FECHAS DEL DEPARTAMENTO MÉDICO =====
 
 
-                let ahora = new Date();
-                let anio = ahora.getFullYear();
-                let mes = String(ahora.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
-                let dia = String(ahora.getDate()).padStart(2, '0');
-                let fechaHoy = `${anio}-${mes}-${dia}`;
-                let horaActual = String(ahora.getHours()).padStart(2, '0') + ":" +
-                    String(ahora.getMinutes()).padStart(2, '0');
-
-                $("#txt_fecha_principal").val(fechaHoy);
-                $("#txt_fecha_desde_medico").val(horaActual);
                 $("#txt_fecha_hasta_medico").val(toTimeInput(r.hasta));
-                $("#txt_nombre_medico").val(r.nombre_medico || '');
+
 
                 // ===== FECHAS DEL PERMISO (calculadas) =====
                 let tipoCalculo = r.tipo_calculo || 'fecha';
@@ -242,41 +246,24 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
         });
     }
 
+    function carga_fecha_hora_cita_medica() {
+        let ahora = new Date();
+        let anio = ahora.getFullYear();
+        let mes = String(ahora.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
+        let dia = String(ahora.getDate()).padStart(2, '0');
+        let fechaHoy = `${anio}-${mes}-${dia}`;
+        let horaActual = String(ahora.getHours()).padStart(2, '0') + ":" +
+            String(ahora.getMinutes()).padStart(2, '0');
+
+        $("#txt_fecha_principal").val(fechaHoy);
+        $("#txt_fecha_desde_medico").val(horaActual);
+    }
+
     function validar_formulario() {
 
         if ($('#pnl_departamento_medico').is(':visible')) {
+            if ($("#form_permiso_medico").valid()) {
 
-            if (!$('#cbx_reposo').is(':checked') && !$('#cbx_permiso').is(':checked')) {
-                Swal.fire('Error', 'Debe seleccionar REPOSO o PERMISO', 'error');
-                return false;
-            }
-
-            if (!$('input[name="tipo_enfermedad"]:checked').val()) {
-                Swal.fire('Error', 'Debe seleccionar el tipo de enfermedad o consulta', 'error');
-                return false;
-            }
-
-            if (!$('#txt_codigo_idg').val()) {
-                Swal.fire('Error', 'Ingrese el código IDG', 'error');
-                return false;
-            }
-
-            if (!$('input[name="cert_medico"]:checked').val()) {
-                Swal.fire('Error', 'Seleccione si presenta certificado médico', 'error');
-                return false;
-            }
-
-            if (!$('input[name="cert_asistencia"]:checked').val()) {
-                Swal.fire('Error', 'Seleccione si presenta certificado de asistencia', 'error');
-                return false;
-            }
-            if (!$('#txt_motivo').val()) {
-                Swal.fire('Error', 'Ingrese o seleccione el motivo', 'error');
-                return false;
-            }
-            if (!$('#txt_fecha_principal').val()) {
-                Swal.fire('Error', 'Ingrese la fecha principal', 'error');
-                return false;
             }
         }
 
@@ -297,6 +284,8 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
 
     function insertar_actualizar() {
         if (!validar_formulario()) return;
+
+
 
         let esReposo = $('#cbx_reposo').is(':checked') ? 1 : 0;
         let esPermiso = $('#cbx_permiso').is(':checked') ? 1 : 0;
@@ -345,7 +334,6 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
             'fecha_medico': $("#txt_fecha_principal").val(),
             'desde_medico': $("#txt_fecha_desde_medico").val(),
             'hasta_medico': horaActual,
-            'nombre_medico': $("#txt_nombre_medico").val() || null,
 
             // FECHAS DEL PERMISO (calculadas)
             'tipo_calculo': tipoCalculo,
@@ -354,6 +342,7 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
             'hasta_permiso': hastaPermiso,
             'total_dias': totalDias,
             'total_horas': totalHoras,
+            'id_idg': $("#ddl_IDG").val() ?? '',
 
             'estado_solicitud': $("#ddl_estado_solicitud").val() || '0'
         };
@@ -494,6 +483,21 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
         if (data.detalle) {
             $('#pnl_detalle_motivo').show();
             $('#res_detalle_motivo').text(data.detalle);
+        }
+
+        let tipoCalculo = data.tipo_calculo || 'fecha';
+
+        if (tipoCalculo === 'fecha') {
+            $('#rbtn_fecha').prop('checked', true).trigger('change');
+            $("#txt_fecha_desde").val(toDateInput(data.fecha_desde_permiso));
+            $("#txt_fecha_hasta").val(toDateInput(data.fecha_hasta_permiso));
+            $("#txt_total_dias").val(data.total_dias_permiso || 0);
+        } else {
+            $('#rbtn_horas').prop('checked', true).trigger('change');
+            $("#txt_fecha_horas").val(toDateInput(data.fecha_principal_permiso));
+            $("#txt_hora_desde").val(toTimeInput(data.fecha_desde_permiso));
+            $("#txt_hora_hasta").val(toTimeInput(data.fecha_hasta_permiso));
+            $("#txt_total_horas").val(data.total_horas_permiso || 0);
         }
 
         // Información familiar
@@ -787,9 +791,11 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
 
                             <!-- IDG -->
                             <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label>(IDG)</label>
-                                    <input type="text" class="form-control form-control-sm" id="txt_codigo_idg" placeholder="Código IDG (CIE-10)">
+                                <div class="col-md-12">
+                                    <label for="ddl_IDG" class="form-label fw-bold">IDG</label>
+                                    <select class="form-select form-select-sm select2-validation" id="ddl_IDG" name="ddl_IDG">
+                                        <option selected disabled>-- Seleccione --</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -830,13 +836,13 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                             <!-- MOTIVO -->
                             <div class="row mb-3">
                                 <div class="col-md-12">
-                                    <label>(Motivo)</label>
+                                    <label for="txt_motivo">(Motivo)</label>
                                     <input type="text" class="form-control form-control-sm" id="txt_motivo" placeholder="Describa el motivo">
                                 </div>
                             </div>
 
                             <!-- FECHA PRINCIPAL -->
-                            <div class="row mb-3">
+                            <div id="calculos_atencion_medico" class="row mb-3" style="display: none;">
                                 <div class="col-md-4">
                                     <label for="txt_fecha_principal">Fecha:</label>
                                     <input type="date" class="form-control form-control-sm" id="txt_fecha_principal" disabled>
@@ -852,13 +858,7 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                                 </div>
                             </div>
 
-                            <!-- Firma Médico -->
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label>Nombre del Médico (Firma Médico)</label>
-                                    <input type="text" class="form-control form-control-sm" id="txt_nombre_medico" placeholder="Nombre del médico">
-                                </div>
-                            </div>
+
 
                         </div>
                     </div>
@@ -933,6 +933,7 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                             <select class="form-control form-control-sm" id="ddl_estado_solicitud">
                                 <option value="0">Pendiente</option>
                                 <option value="1">Aprobada</option>
+                                <option value="2">Rechazada</option>
                             </select>
                         </div>
                     </div>
@@ -1025,24 +1026,19 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="badge-container p-3 rounded" style="background: #e7f3ff;">
                                         <span class="badge bg-primary mb-2">Asunto</span>
                                         <p class="mb-0 fw-bold" id="res_tipo_asunto"></p>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="badge-container p-3 rounded" style="background: #fff3e0;">
                                         <span class="badge bg-warning mb-2">Motivo</span>
                                         <p class="mb-0 fw-bold" id="res_motivo"></p>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="badge-container p-3 rounded" style="background: #f1f8e9;">
-                                        <span class="badge bg-success mb-2">Estado</span>
-                                        <p class="mb-0 fw-bold" id="res_estado"></p>
-                                    </div>
-                                </div>
+
                             </div>
                             <div class="row mt-3" id="pnl_detalle_motivo" style="display:none;">
                                 <div class="col-md-12">
@@ -1189,3 +1185,93 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $("#form_permiso_medico").validate({
+            rules: {
+                // Sección Médica (CIE-10 e IDG)
+                txt_codigo_idg: {
+                    required: true,
+                },
+                txt_motivo: {
+                    required: true,
+                    minlength: 10
+                },
+                tipo_enfermedad: {
+                    required: function() {
+                        return $("#pnl_tipo_enfermedad").is(":visible");
+                    }
+                },
+                cert_medico: {
+                    required: true
+                },
+                cert_asistencia: {
+                    required: true
+                },
+
+                // Sección de Fechas y Horas
+                tipo_calculo: {
+                    required: true
+                },
+
+                // Si elige "Por Fecha"
+                txt_fecha_desde: {
+                    required: function() {
+                        return $("#rbtn_fecha").is(":checked");
+                    }
+                },
+                txt_fecha_hasta: {
+                    required: function() {
+                        return $("#rbtn_fecha").is(":checked");
+                    }
+                },
+
+                // Si elige "Por Horas"
+                txt_fecha_horas: {
+                    required: function() {
+                        return $("#rbtn_horas").is(":checked");
+                    }
+                },
+                txt_hora_desde: {
+                    required: function() {
+                        return $("#rbtn_horas").is(":checked");
+                    }
+                },
+                txt_hora_hasta: {
+                    required: function() {
+                        return $("#rbtn_horas").is(":checked");
+                    }
+                }
+            },
+            messages: {
+                txt_codigo_idg: "Ingrese el código CIE-10 (IDG)",
+                txt_motivo: "Describa detalladamente el motivo del permiso",
+                tipo_enfermedad: "Seleccione el tipo de enfermedad",
+                cert_medico: "Marque si presenta certificado médico",
+                cert_asistencia: "Marque si presenta certificado de asistencia",
+                tipo_calculo: "Seleccione un método de cálculo",
+                txt_fecha_desde: "Indique fecha inicial",
+                txt_fecha_hasta: "Indique fecha final",
+                txt_fecha_horas: "Indique la fecha del permiso",
+                txt_hora_desde: "Indique hora de inicio",
+                txt_hora_hasta: "Indique hora de fin"
+            },
+            errorElement: "div",
+            errorPlacement: function(error, element) {
+                error.addClass("invalid-feedback");
+                if (element.prop("type") === "radio" || element.prop("type") === "checkbox") {
+                    error.insertAfter(element.closest("div")); // Para que el error salga debajo del grupo
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            highlight: function(element) {
+                $(element).addClass('is-invalid').removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                $(element).removeClass('is-invalid').addClass('is-valid');
+            }
+        });
+    });
+</script>

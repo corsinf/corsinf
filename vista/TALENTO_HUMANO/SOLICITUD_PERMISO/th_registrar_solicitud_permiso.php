@@ -1,6 +1,8 @@
 <?php
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
+$_per_id = (isset($_GET['_per_id'])) ? $_GET['_per_id'] : '';
+$ruta = '';
 ?>
 
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
@@ -50,7 +52,7 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
 
             if (data.fecha_nacimiento) {
                 $('#txt_fecha_nacimiento').val(data.fecha_nacimiento);
-                let edadCalculada = calcularEdad(data.fecha_nacimiento);
+                let edadCalculada = calcularEdad(data.fecha_nacimiento, data.parentesco);
             } else {
                 $('#txt_fecha_nacimiento').val('');
                 $('#txt_fecha_nacimiento').prop('disabled', false);
@@ -70,11 +72,15 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
         const TIPO_USUARIO = "<?= $_SESSION['INICIO']['TIPO'] ?>";
 
         const session = <?= json_encode($_SESSION) ?>;
-
+        //$ruta = "../vista/inicio.php?mod=$modulo_sistema&acc=th_solicitud_permiso"; 
         if (TIPO_USUARIO === 'DBA' || TIPO_USUARIO === 'ADMINISTRADOR') {
-            console.log(session);
+            <?php if ($_per_id !== '') { ?>
+                $('#ddl_personas').prop('disabled', true);
+                cargar_datos_persona(<?= $_per_id ?>);
+                cargar_persona_familia(<?= $_per_id ?>);
+                //$ruta = "../vista/inicio.php?$mod=$modulo_sistema&acc=th_solicitud_persona&_id=" + $_per_id;
+            <?php } ?>
         } else {
-            console.log(session);
             $('#ddl_personas').prop('disabled', true);
         }
 
@@ -82,8 +88,6 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
         function cargar_selects2() {
             url_personasC = '../controlador/TALENTO_HUMANO/th_personasC.php?busca_persona_nomina=true';
             cargar_select2_url('ddl_personas', url_personasC);
-            url_cargoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_cargoC.php?buscar=true';
-            cargar_select2_url('ddl_cargo', url_cargoC);
         }
 
         $('#ddl_personas').on('change', function() {
@@ -199,7 +203,6 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                 $('#ddl_rango_edad').val('').trigger('change');
             } else if (v === 'HIJO') {
                 // Muestra Rango Edad y oculta Adulto
-                $('#pnl_rango_edad').slideDown();
                 $('#pnl_tipo_adulto').slideUp();
 
                 // Opcional: Resetear el valor del que se oculta
@@ -334,7 +337,7 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
         }
     }
 
-    function calcularEdad(fecha) {
+    function calcularEdad(fecha, tipo_pariente = "OTRO") {
         if (!fecha || fecha === '1900-01-01') {
             $('#txt_edad').val('');
             return 0;
@@ -349,6 +352,22 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
         }
 
         $('#txt_edad').val(edad);
+
+        if (tipo_pariente == "HIJO/A") {
+            let rango = "";
+            if (edad >= 0 && edad <= 5) {
+                rango = "0-5";
+            } else if (edad >= 6 && edad <= 11) {
+                rango = "6-11";
+            } else if (edad >= 12 && edad <= 17) {
+                rango = "12-17";
+            } else {
+                rango = ""; // Fuera de los rangos especificados
+            }
+
+            // 3. Seleccionar el valor en el dropdown
+            $('#ddl_rango_edad').val(rango);
+        }
         return edad;
     }
 
@@ -464,7 +483,7 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
 
 
     function limpiar_campos() {
-        $('#ddl_cargo').val('').trigger('change');
+        $('#lbl_cargo').val('').trigger('change');
         $('#ddl_familiar').val('').trigger('change');
         $('#txt_fecha_nacimiento').prop('disabled', false);
         $('#ddl_parentesco').prop('disabled', false);
@@ -549,14 +568,14 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                 if (r.fam_hijos_adultos) {
                     $("#ddl_parentesco").val(r.fam_hijos_adultos).trigger('change');
 
-                    setTimeout(() => {
-                        if (r.fam_hijos_adultos === 'HIJO' && r.rango_edad) {
-                            $("#ddl_rango_edad").val(r.rango_edad).trigger('change');
-                        }
-                        if (r.fam_hijos_adultos === 'OTRO' && r.tipo_cuidado) {
-                            $("#ddl_otro").val(r.tipo_cuidado).trigger('change');
-                        }
-                    }, 200);
+
+                    if (r.fam_hijos_adultos === 'HIJO' && r.rango_edad) {
+                        $("#ddl_rango_edad").val(r.rango_edad).trigger('change');
+                    }
+                    if (r.fam_hijos_adultos === 'OTRO' && r.tipo_cuidado) {
+                        $("#ddl_otro").val(r.tipo_cuidado).trigger('change');
+                    }
+
 
                     const fechaNac = toDateInput(r.fecha_nacimiento);
                     $("#txt_fecha_nacimiento").val(fechaNac);
@@ -607,14 +626,15 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
             dataType: 'json',
             success: function(response) {
                 if (response && response.length > 0) {
-                    console.log(response[0]);
-                    $('#ddl_estado_civil').val(response[0].estado_civil);
-                    $('#ddl_genero').val(response[0].sexo);
-                    $('#ddl_cargo').append($('<option>', {
-                        value: response[0].id_cargo,
-                        text: response[0].nombre_cargo,
+                    $('#ddl_personas').append($('<option>', {
+                        value: response[0].id_persona,
+                        text: response[0].cedula + " - " + response[0].nombre_completo,
                         selected: true
                     }));
+
+                    $("#lbl_cargo").text(response[0].nombre_cargo || 'No asignado');
+                    $("#lbl_genero").text(response[0].sexo || 'No asignado');
+                    $("#lbl_estado_civil").text(response[0].estado_civil || 'No asignado');
 
                     if (response[0].nombre_departamento == "DOCENTES") {
                         $('#pnl_espacio_docente').slideDown();
@@ -708,7 +728,7 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                 return false;
             }
 
-            let camposMedicos = ['#txt_lugar', '#txt_especialidad', '#txt_medico', '#txt_fecha_atencion', '#txt_hora_desde', '#txt_hora_hasta'];
+            let camposMedicos = ['#txt_lugar', '#txt_especialidad', '#txt_medico', '#txt_fecha_atencion', '#txt_hora_desde_atencion', '#txt_hora_hasta_atencion'];
             for (let campo of camposMedicos) {
                 if (!$(campo).val()) {
                     Swal.fire('Error', 'Complete todos los campos de atención médica', 'error');
@@ -971,7 +991,7 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                     </div>
 
                     <div>
-                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_solicitud_permiso"
+                        <a href="../vista/inicio.php?mod=$modulo_sistema&acc=th_solicitud_permiso"
                             class="btn btn-outline-dark btn-sm">
                             <i class="bx bx-arrow-back"></i> Regresar
                         </a>
@@ -979,7 +999,7 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                 </div>
 
                 <hr>
-                <form id="form_permiso">
+                <form id="form_solicitud">
                     <input type="hidden" id="txt_id" name="txt_id">
                     <input type="hidden" id="txt_cedula_persona" name="txt_cedula_persona">
                     <input type="hidden" id="txt_ruta_certificado_guardada">
@@ -1012,27 +1032,16 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                             </div>
                             <div id="pnl_persona_informacion_adicional" class="row g-3 mt-1">
                                 <div class="col-md-4">
-                                    <label class="fw-bold small">Cargo</label>
-                                    <select class="form-select form-select-sm" id="ddl_cargo" disabled></select>
+                                    <label class="fw-bold small d-block">Cargo</label>
+                                    <span id="lbl_cargo" class="text-muted small">---</span>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="fw-bold small">Género</label>
-                                    <select class="form-select form-select-sm" id="ddl_genero" disabled>
-                                        <option value="Masculino">Masculino</option>
-                                        <option value="Femenino">Femenino</option>
-                                        <option value="Otro">Otro</option>
-                                    </select>
+                                    <label class="fw-bold small d-block">Género</label>
+                                    <span id="lbl_genero" class="text-muted small">---</span>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="fw-bold small">Estado Civil</label>
-                                    <select class="form-select form-select-sm" id="ddl_estado_civil" disabled>
-                                        <option selected disabled value="">-- Seleccione --</option>
-                                        <option value="Soltero/a">SOLTERO(A)</option>
-                                        <option value="Casado/a">CASADO(A)</option>
-                                        <option value="Divorciado/a">DIVORCIADO(A)</option>
-                                        <option value="Viudo/a">VIUDO(A)</option>
-                                        <option value="Union libre">UNIÓN LIBRE</option>
-                                    </select>
+                                    <label class="fw-bold small d-block">Estado Civil</label>
+                                    <span id="lbl_estado_civil" class="text-muted small">---</span>
                                 </div>
                             </div>
                         </div>
@@ -1058,6 +1067,7 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                                 </div>
                             </div>
 
+
                             <div id="pnl_motivo_personal" class="row g-3" style="display: none;">
                                 <div class="col-md-6">
                                     <label class="fw-bold">Categoría</label>
@@ -1069,9 +1079,60 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                                         <option value="FALLECIMIENTO">Fallecimiento</option>
                                     </select>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="fw-bold">Detalle específico</label>
-                                    <input type="text" class="form-control form-control-sm" id="txt_detalle_motivo" placeholder="...">
+                                <div class="col-md-6"> <label class="fw-bold">Detalle específico:</label>
+                                    <textarea
+                                        class="form-control form-control-sm"
+                                        id="txt_detalle_motivo"
+                                        name="txt_detalle_motivo"
+                                        rows="3"
+                                        placeholder="Describa de forma detallada el motivo del permiso..."
+                                        style="resize: none;"></textarea>
+                                </div>
+                            </div>
+
+                            <div id="pnl_info_adicional" style="display:none">
+                                <h6 class="text-primary mb-3"><i class="bi bi-people me-2"></i> Información adicional</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <label class="fw-bold">Tipo de Familiar</label>
+                                        <select class="form-control form-control-sm" id="ddl_parentesco">
+                                            <option value="">-- Seleccione --</option>
+                                            <option value="HIJO">Hijo</option>
+                                            <option value="OTRO">Otro</option>
+                                        </select>
+                                    </div>
+                                    <div id="pnl_familiares" class="col-md-3">
+                                        <label for="ddl_familiar" class="fw-bold">Familiar Seleccionado</label>
+                                        <select class="form-control form-control-sm" id="ddl_familiar"></select>
+                                    </div>
+                                    <div class="col-md-3" id="pnl_rango_edad" style="display:none">
+                                        <label class="fw-bold text-danger">Rango de Edad (Hijo)</label>
+                                        <select class="form-control form-control-sm" id="ddl_rango_edad">
+                                            <option value="">-- Seleccione --</option>
+                                            <option value="0-5">0 - 5 años</option>
+                                            <option value="6-11">6 - 11 años</option>
+                                            <option value="12-17">12 - 17 años</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3" id="pnl_tipo_adulto" style="display:none">
+                                        <label class="fw-bold text-danger">Tipo de Cuidado</label>
+                                        <select class="form-control form-control-sm" id="ddl_otro">
+                                            <option value="">-- Seleccione --</option>
+                                            <option value="DISCAPACIDAD">Discapacidad</option>
+                                            <option value="ADULTO_MAYOR">Adulto Mayor</option>
+                                            <option value="ENFERMEDAD_CATASTROFICA">Enfermedad Catastrófica</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row g-3 mt-1">
+                                    <div class="col-md-3">
+                                        <label class="fw-bold">Fecha de Nacimiento</label>
+                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_nacimiento">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="fw-bold">Edad Calculada</label>
+                                        <input type="number" class="form-control form-control-sm" id="txt_edad" readonly>
+                                    </div>
                                 </div>
                             </div>
 
@@ -1110,53 +1171,7 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                     </div>
 
                     <!-- INFORMACIÓN ADICIONAL (PARA PERSONAL) -->
-                    <div id="pnl_info_adicional" class="card border-primary border-bottom border-3 shadow-sm mb-3" style="display:none">
-                        <div class="card-body">
-                            <h6 class="text-primary mb-3"><i class="bi bi-people me-2"></i> Información adicional</h6>
-                            <div class="row g-3">
-                                <div class="col-md-3">
-                                    <label class="fw-bold">Tipo de Familiar</label>
-                                    <select class="form-control form-control-sm" id="ddl_parentesco">
-                                        <option value="">-- Seleccione --</option>
-                                        <option value="HIJO">Hijo</option>
-                                        <option value="OTRO">Otro</option>
-                                    </select>
-                                </div>
-                                <div id="pnl_familiares" class="col-md-3">
-                                    <label for="ddl_familiar" class="fw-bold">Familiar Seleccionado</label>
-                                    <select class="form-control form-control-sm" id="ddl_familiar"></select>
-                                </div>
-                                <div class="col-md-3" id="pnl_rango_edad" style="display:none">
-                                    <label class="fw-bold text-danger">Rango de Edad (Hijo)</label>
-                                    <select class="form-control form-control-sm" id="ddl_rango_edad">
-                                        <option value="">-- Seleccione --</option>
-                                        <option value="0-5">0 - 5 años</option>
-                                        <option value="6-11">6 - 11 años</option>
-                                        <option value="12-17">12 - 17 años</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3" id="pnl_tipo_adulto" style="display:none">
-                                    <label class="fw-bold text-danger">Tipo de Cuidado</label>
-                                    <select class="form-control form-control-sm" id="ddl_otro">
-                                        <option value="">-- Seleccione --</option>
-                                        <option value="DISCAPACIDAD">Discapacidad</option>
-                                        <option value="ADULTO_MAYOR">Adulto Mayor</option>
-                                        <option value="ENFERMEDAD_CATASTROFICA">Enfermedad Catastrófica</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row g-3 mt-1">
-                                <div class="col-md-3">
-                                    <label class="fw-bold">Fecha de Nacimiento</label>
-                                    <input type="date" class="form-control form-control-sm" id="txt_fecha_nacimiento">
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="fw-bold">Edad Calculada</label>
-                                    <input type="number" class="form-control form-control-sm" id="txt_edad" readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
 
                     <!-- CERTIFICADO MÉDICO (ÚNICO) -->
                     <div id="pnl_file_certificado" class="card border-primary border-bottom border-3 shadow-sm mb-3" style="display:none">
@@ -1238,7 +1253,7 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="tipo_calculo" id="rbtn_horas" value="horas">
-                                            <label class="form-check-label fw-bold" for="rbtn_horas">Por Horas (Mismo día)</label>
+                                            <label class="form-check-label fw-bold" for="rbtn_horas">Por Horas</label>
                                         </div>
                                     </div>
                                 </div>
@@ -1326,3 +1341,119 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        // 1. Agregar asteriscos a campos obligatorios
+        agregar_asterisco_campo_obligatorio('txt_fecha_desde');
+        agregar_asterisco_campo_obligatorio('txt_fecha_hasta');
+        agregar_asterisco_campo_obligatorio('txt_fecha_horas');
+        agregar_asterisco_campo_obligatorio('txt_hora_desde');
+        agregar_asterisco_campo_obligatorio('txt_hora_hasta');
+
+        // 2. Lógica para mostrar/ocultar paneles según el radio de tipo_calculo
+        $('input[name="tipo_calculo"]').change(function() {
+            if ($(this).val() === 'fecha') {
+                $('#pnl_calculo_fecha').fadeIn();
+                $('#pnl_calculo_horas').hide();
+                // Limpiar errores del panel que se oculta
+                limpiar_errores_panel('#pnl_calculo_horas');
+            } else {
+                $('#pnl_calculo_horas').fadeIn();
+                $('#pnl_calculo_fecha').hide();
+                limpiar_errores_panel('#pnl_calculo_fecha');
+            }
+        });
+
+        // 3. Validación del Formulario
+        $("#form_solicitud").validate({
+            rules: {
+                tipo_calculo: {
+                    required: true
+                },
+                rbx_tipo_motivo: {
+                    required: true
+                },
+                tipo_asunto: {
+                    required: true
+                },
+                // Validación condicional: solo si el panel está visible
+                txt_fecha_desde: {
+                    required: function() {
+                        return $("#rbtn_fecha").is(":checked");
+                    }
+                },
+                txt_fecha_hasta: {
+                    required: function() {
+                        return $("#rbtn_fecha").is(":checked");
+                    }
+                },
+                txt_fecha_horas: {
+                    required: function() {
+                        return $("#rbtn_horas").is(":checked");
+                    }
+                },
+                txt_hora_desde: {
+                    required: function() {
+                        return $("#rbtn_horas").is(":checked");
+                    }
+                },
+                txt_hora_hasta: {
+                    required: function() {
+                        return $("#rbtn_horas").is(":checked");
+                    }
+                }
+            },
+            messages: {
+                tipo_calculo: "Seleccione un método de cálculo",
+                rbx_tipo_motivo: "Seleccione el tipo de motivo",
+                tipo_asunto: "Seleccione el asunto",
+                txt_fecha_desde: "Ingrese la fecha de inicio",
+                txt_fecha_hasta: "Ingrese la fecha de fin",
+                txt_fecha_horas: "Ingrese la fecha del permiso",
+                txt_hora_desde: "Ingrese la hora de inicio",
+                txt_hora_hasta: "Ingrese la hora de fin"
+            },
+            highlight: function(element) {
+                let $el = $(element);
+                if ($el.is(':radio')) {
+                    // Para radios, resaltar el contenedor o todos los radios del grupo
+                    $('input[name="' + $el.attr("name") + '"]').addClass("is-invalid").removeClass("is-valid");
+                } else {
+                    $el.addClass('is-invalid').removeClass('is-valid');
+                }
+            },
+            unhighlight: function(element) {
+                let $el = $(element);
+                if ($el.is(':radio')) {
+                    $('input[name="' + $el.attr("name") + '"]').removeClass("is-invalid").addClass("is-valid");
+                } else {
+                    $el.removeClass('is-invalid').addClass('is-valid');
+                }
+            },
+            errorPlacement: function(error, element) {
+                if (element.is(':radio')) {
+                    // Colocar el mensaje de error al final del contenedor d-flex de los radios
+                    error.appendTo(element.closest('.col-md-12, .col-md-6'));
+                } else {
+                    error.insertAfter(element);
+                }
+            }
+        });
+    });
+
+    // Función para limpiar validaciones de paneles ocultos
+    function limpiar_errores_panel(panelId) {
+        $(panelId).find('input').val('').removeClass('is-invalid is-valid');
+    }
+
+    // Validación de coherencia de fechas (similar a verificar_fecha_inicio_fecha_fin)
+    $("#txt_fecha_desde, #txt_fecha_hasta").on("blur", function() {
+        let f1 = $("#txt_fecha_desde").val();
+        let f2 = $("#txt_fecha_hasta").val();
+        if (f1 && f2 && f1 > f2) {
+            Swal.fire('Error', 'La fecha "Desde" no puede ser mayor a la fecha "Hasta"', 'error');
+            $(this).val('').addClass('is-invalid');
+        }
+    });
+</script>
