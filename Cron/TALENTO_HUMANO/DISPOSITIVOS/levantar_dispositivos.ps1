@@ -1,7 +1,9 @@
 # ================== CONFIGURACION ==================
 
-$txtFile   = "C:\xampp\htdocs\corsinf\Cron\dispositivos_activos.txt"
-$logFolder = "C:\xampp\htdocs\corsinf\logs\talento_humano\dispositivos"
+# $txtFile   = "C:\xampp\htdocs\corsinf\Cron\dispositivos_activos.txt"
+$txtFile   = "C:\Apache24\htdocs\php81\corsinf\Cron\dispositivos_activos.txt"
+# $logFolder = "C:\xampp\htdocs\corsinf\logs\talento_humano\dispositivos"
+$logFolder = "C:\Apache24\htdocs\php81\corsinf\logs\talento_humano\dispositivos"
 
 $runningJobs  = @{}
 $finishedJobs = @{}
