@@ -23,7 +23,7 @@ exit();
 function guardar_log($mensaje, $db)
 {
     $directorio = dirname(__DIR__, 3) . '/logs/talento_humano/asistencias';
-    $ruta_log = $directorio . '/log_carga_masiva_' . $db . '.log';
+    $ruta_log = $directorio . '/log_carga_cron_' . $db . '.log';
 
     // Verificar si el directorio existe, si no, crearlo con permisos 0777
     if (!is_dir($directorio)) {
