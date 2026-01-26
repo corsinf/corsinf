@@ -166,10 +166,6 @@ class th_solicitud_permiso_medicoC
     }
 
 
-    /**
-     * Genera el PDF de solicitud médica y lo guarda en el servidor
-     * Sobrescribe el PDF anterior si ya existe
-     */
     private function generar_y_guardar_pdf_solicitud($parametros)
     {
         try {

@@ -10,15 +10,14 @@ class th_solicitud_permisoM extends BaseModel
     protected $camposPermitidos = [
         'th_per_id AS th_per_id',
 
-        'th_sol_per_tipo_motivo AS tipo_motivo', // NUEVO: MOTIVO_PERSONAL o MOTIVO_MEDICO
-        'th_sol_per_motivo AS motivo', // Guarda: PERSONAL, CALAMIDAD, FALLECIMIENTO, MATERNIDAD_PATERNIDAD, ENFERMEDAD, CITA_MEDICA
+        'th_sol_per_tipo_motivo AS tipo_motivo',
+        'th_sol_per_motivo AS motivo',
         'th_sol_per_detalle AS detalle',
 
         'th_sol_per_fam_hijos_adultos AS fam_hijos_adultos',
         'th_sol_per_parentesco_fecha_nacimiento AS fecha_nacimiento',
 
-        // Certificado único que se usa según el tipo de motivo
-        'th_sol_per_certificado_adjunto AS certificado_adjunto', // 0 o 1 (si adjuntó certificado)
+        'th_sol_per_certificado_adjunto AS certificado_adjunto',
 
         'th_sol_per_tipo_atencion AS tipo_atencion',
         'th_sol_per_lugar AS lugar',
@@ -32,8 +31,7 @@ class th_solicitud_permisoM extends BaseModel
         'th_sol_per_rango_edad AS rango_edad',
         'th_sol_per_tipo_cuidado AS tipo_cuidado',
 
-        // Rutas de certificados
-        'th_sol_per_ruta_certificado AS ruta_certificado', // Ruta única para cualquier certificado médico
+        'th_sol_per_ruta_certificado AS ruta_certificado',
         'th_sol_per_ruta_act_defuncion AS ruta_act_defuncion',
         'th_sol_per_ruta_solicitud AS ruta_solicitud',
 
@@ -43,7 +41,15 @@ class th_solicitud_permisoM extends BaseModel
 
         'th_ppa_id AS th_ppa_id',
         'th_sol_per_tipo_solicitud AS tipo_solicitud',
-        'th_sol_per_planificacion AS planificacion'
+        'th_sol_per_planificacion AS planificacion',
+
+        // Fechas del permiso (usuario)
+        'th_sol_per_tipo_calculo AS tipo_calculo',
+        'th_sol_per_fecha_principal_permiso AS fecha_principal_permiso',
+        'th_sol_per_fecha_desde_permiso AS fecha_desde_permiso',
+        'th_sol_per_fecha_hasta_permiso AS fecha_hasta_permiso',
+        'th_sol_per_total_dias AS total_dias_permiso',
+        'th_sol_per_total_horas AS total_horas_permiso',
     ];
 
 
@@ -167,7 +173,13 @@ class th_solicitud_permisoM extends BaseModel
         sp.th_sol_per_fecha_modificacion AS fecha_modificacion,
         sp.th_ppa_id AS th_ppa_id,
         sp.th_sol_per_tipo_solicitud AS tipo_solicitud,
-        sp.th_sol_per_planificacion AS planificacion
+        sp.th_sol_per_planificacion AS planificacion,
+        sp.th_sol_per_tipo_calculo AS tipo_calculo,
+        sp.th_sol_per_fecha_principal_permiso AS fecha_principal_permiso,
+        sp.th_sol_per_fecha_desde_permiso AS fecha_desde_permiso,
+        sp.th_sol_per_fecha_hasta_permiso AS fecha_hasta_permiso,
+        sp.th_sol_per_total_dias AS total_dias_permiso,
+        sp.th_sol_per_total_horas AS total_horas_permiso
     FROM th_solicitud_permiso sp
     INNER JOIN th_personas p ON sp.th_per_id = p.th_per_id
     {$where}

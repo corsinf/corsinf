@@ -102,6 +102,19 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
             }
         });
 
+        $('input[name="tipo_calculo"]').change(function() {
+            if ($('#rbtn_fecha').is(':checked')) {
+                $('#pnl_calculo_fecha').slideDown();
+                $('#pnl_calculo_horas').slideUp();
+            } else if ($('#rbtn_horas').is(':checked')) {
+                $('#pnl_calculo_fecha').slideUp();
+                $('#pnl_calculo_horas').slideDown();
+            }
+        });
+
+        // Inicializar con el modo fecha por defecto
+        $('#rbtn_fecha').prop('checked', true).trigger('change');
+
         // ============= CONTROL TIPO DE MOTIVO =============
         $('input[name="rbx_tipo_motivo"]').change(function() {
             let v = $(this).val();
@@ -127,7 +140,8 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
             $('#txt_detalle_motivo').val('');
             $('#pnl_acta_defuncion').slideUp();
 
-            if (v === 'PERSONAL') {
+            if (v === 'PERSONAL') {}
+            if (v === 'FAMILIAR') {
                 $('#pnl_info_adicional').slideDown();
             }
 
@@ -362,6 +376,92 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
         if (!val || val.startsWith('1900')) return '';
         return val.split(' ')[1].substring(0, 5);
     }
+    // CALCULAR DÍAS (para modo fecha)
+    $('#txt_fecha_desde, #txt_fecha_hasta').change(function() {
+        calcularDiasFecha();
+    });
+
+    $(document).on('change', '#txt_fecha_horas, #txt_hora_desde, #txt_hora_hasta', function() {
+        calcularTotalHoras();
+    });
+
+    $(document).on('change', '#txt_hora_desde_atencion, #txt_hora_hasta_atencion', function() {
+        validarHorasAtencion();
+    });
+
+    function validarHorasAtencion() {
+        const horaDesde = $('#txt_hora_desde_atencion').val();
+        const horaHasta = $('#txt_hora_hasta_atencion').val();
+
+        if (horaDesde && horaHasta) {
+            // Convertimos a minutos para comparar fácilmente
+            const [h1, m1] = horaDesde.split(':').map(Number);
+            const [h2, m2] = horaHasta.split(':').map(Number);
+
+            const totalMinutosDesde = h1 * 60 + m1;
+            const totalMinutosHasta = h2 * 60 + m2;
+
+            if (totalMinutosHasta <= totalMinutosDesde) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Rango de horas inválido',
+                    text: 'La "Hora Hasta" debe ser mayor que la "Hora Desde".',
+                    confirmButtonColor: '#d33'
+                });
+
+                // Limpiamos el campo "Hasta" para obligar a corregir
+                $('#txt_hora_hasta_atencion').val('');
+            }
+        }
+    }
+
+    function calcularDiasFecha() {
+        let fecha1 = $('#txt_fecha_desde').val();
+        let fecha3 = $('#txt_fecha_hasta').val();
+
+        if (fecha1 && fecha3) {
+            // Creamos los objetos de fecha
+            let f1 = new Date(fecha1);
+            let f3 = new Date(fecha3);
+
+            // Calculamos la diferencia en milisegundos
+            let diferencia = f3.getTime() - f1.getTime();
+
+            // Convertimos a días (ms / (1000ms * 60s * 60m * 24h))
+            let totalDias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+
+            // Validamos que el resultado no sea negativo
+            if (totalDias < 0) {
+                console.log("La fecha 'Hasta' debe ser mayor a 'Desde'");
+                $('#txt_total_dias').val(0);
+            } else {
+                // Sumamos 1 si quieres contar el día inicial como un día de permiso
+                // de lo contrario, deja solo totalDias
+                $('#txt_total_dias').val(totalDias + 1);
+            }
+        }
+    }
+
+    function calcularTotalHoras() {
+        let fecha = $('#txt_fecha_horas').val();
+        let horaDesde = $('#txt_hora_desde').val();
+        let horaHasta = $('#txt_hora_hasta').val();
+
+        if (fecha && horaDesde && horaHasta) {
+            if (horaDesde >= horaHasta) {
+                Swal.fire('Advertencia', 'La hora desde debe ser menor que la hora hasta', 'warning');
+                $('#txt_total_horas').val(0);
+                return;
+            }
+
+            let desde = new Date('2000-01-01 ' + horaDesde);
+            let hasta = new Date('2000-01-01 ' + horaHasta);
+
+            let diff = (hasta - desde) / (1000 * 60 * 60); // diferencia en horas
+            $('#txt_total_horas').val(diff.toFixed(2));
+        }
+    }
+
 
     function limpiar_campos() {
         $('#ddl_cargo').val('').trigger('change');
@@ -377,7 +477,7 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
         $('#ddl_motivo_medico').val('');
         $('input[name="rbx_tipo_atencion"]').prop('checked', false);
         $('#txt_lugar, #txt_especialidad, #txt_medico').val('');
-        $('#txt_fecha_atencion, #txt_hora_desde, #txt_hora_hasta').val('');
+        $('#txt_fecha_atencion, #txt_hora_desde_atencion, #txt_hora_hasta_atencion').val('');
         $('#file_certificado').val('');
         $('#pnl_file_certificado').slideUp();
         $('#pnl_medico').slideUp();
@@ -442,8 +542,8 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                 $("#txt_especialidad").val(r.especialidad || '');
                 $("#txt_medico").val(r.medico || '');
                 $("#txt_fecha_atencion").val(toDateInput(r.fecha_atencion) || '');
-                $("#txt_hora_desde").val(toTimeInput(r.hora_desde) || '');
-                $("#txt_hora_hasta").val(toTimeInput(r.hora_hasta) || '');
+                $("#txt_hora_desde_atencion").val(toTimeInput(r.hora_desde) || '');
+                $("#txt_hora_hasta_atencion").val(toTimeInput(r.hora_hasta) || '');
 
                 // ========== PARENTESCO ==========
                 if (r.fam_hijos_adultos) {
@@ -478,13 +578,28 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                     $("#pnl_espacio_docente").show();
                     $(`input[name="rbx_planificacion"][value="${r.planificacion}"]`).prop('checked', true);
                 }
+
+                let tipoCalculo = r.tipo_calculo || 'fecha';
+
+                if (tipoCalculo === 'fecha') {
+                    $('#rbtn_fecha').prop('checked', true).trigger('change');
+                    $("#txt_fecha_desde").val(toDateInput(r.fecha_desde_permiso));
+                    $("#txt_fecha_hasta").val(toDateInput(r.fecha_hasta_permiso));
+                    $("#txt_total_dias").val(r.total_dias_permiso || 0);
+                } else {
+                    $('#rbtn_horas').prop('checked', true).trigger('change');
+                    $("#txt_fecha_horas").val(toDateInput(r.fecha_principal_permiso));
+                    $("#txt_hora_desde").val(toTimeInput(r.fecha_desde_permiso));
+                    $("#txt_hora_hasta").val(toTimeInput(r.fecha_hasta_permiso));
+                    $("#txt_total_horas").val(r.total_horas_permiso || 0);
+                }
             }
         });
     }
 
     function cargar_datos_persona(per_id) {
         $.ajax({
-            url: '../controlador/TALENTO_HUMANO/th_personasC.php?listar_persona_departamento=true',
+            url: '../controlador/TALENTO_HUMANO/th_personasC.php?listar_persona_departamento_cargo=true',
             type: 'post',
             data: {
                 id: per_id
@@ -495,6 +610,12 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                     console.log(response[0]);
                     $('#ddl_estado_civil').val(response[0].estado_civil);
                     $('#ddl_genero').val(response[0].sexo);
+                    $('#ddl_cargo').append($('<option>', {
+                        value: response[0].id_cargo,
+                        text: response[0].nombre_cargo,
+                        selected: true
+                    }));
+
                     if (response[0].nombre_departamento == "DOCENTES") {
                         $('#pnl_espacio_docente').slideDown();
                     } else {
@@ -595,6 +716,17 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                 }
             }
         }
+        if ($('#rbtn_fecha').is(':checked')) {
+            if (!$('#txt_fecha_desde').val() || !$('#txt_fecha_hasta').val()) {
+                Swal.fire('Error', 'Complete todas las fechas del rango', 'error');
+                return false;
+            }
+        } else {
+            if (!$('#txt_fecha_horas').val() || !$('#txt_hora_desde').val() || !$('#txt_hora_hasta').val()) {
+                Swal.fire('Error', 'Complete la fecha y el horario (Desde/Hasta)', 'error');
+                return false;
+            }
+        }
 
         return true;
     }
@@ -656,6 +788,25 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
             detalle_motivo = $("#txt_detalle_motivo_medico").val() || '';
         }
 
+        // ===== FECHAS DEL PERMISO (calculadas) =====
+        let tipoCalculo = $('#rbtn_fecha').is(':checked') ? 'fecha' : 'horas';
+        let fechaPrincipalPermiso, desdePermiso, hastaPermiso, totalDias = 0,
+            totalHoras = 0;
+
+        if (tipoCalculo === 'fecha') {
+            desdePermiso = $('#txt_fecha_desde').val();
+            hastaPermiso = $('#txt_fecha_hasta').val();
+            totalDias = parseInt($('#txt_total_dias').val()) || 0;
+        } else {
+            let fecha = $('#txt_fecha_horas').val();
+            let horaD = $('#txt_hora_desde').val();
+            let horaH = $('#txt_hora_hasta').val();
+            fechaPrincipalPermiso = fecha;
+            desdePermiso = fecha + ' ' + horaD + ':00';
+            hastaPermiso = fecha + ' ' + horaH + ':00';
+            totalHoras = parseFloat($('#txt_total_horas').val()) || 0;
+        }
+
         let tipo_asunto = $('input[name="tipo_asunto"]:checked').val();
         let fechaDesde = $("#txt_fecha_desde").val();
         let fechaHasta = $("#txt_fecha_hasta").val();
@@ -677,14 +828,22 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
             'tipo_adulto': $("#ddl_otro").val() || null,
             'fecha_nacimiento': $("#txt_fecha_nacimiento").val() || null,
 
+            // FECHAS DEL PERMISO (calculadas)
+            'tipo_calculo': tipoCalculo,
+            'fecha_principal_permiso': fechaPrincipalPermiso,
+            'desde_permiso': desdePermiso,
+            'hasta_permiso': hastaPermiso,
+            'total_dias': totalDias,
+            'total_horas': totalHoras,
+
             // Médico
             'tipo_atencion': $('input[name="rbx_tipo_atencion"]:checked').val() || null,
             'lugar': $("#txt_lugar").val() || null,
             'especialidad': $("#txt_especialidad").val() || null,
             'medico': $("#txt_medico").val() || null,
             'fecha_atencion': $("#txt_fecha_atencion").val() || fechaDesde,
-            'hora_desde': combinarFechaHora($("#txt_fecha_atencion").val(), $("#txt_hora_desde").val()),
-            'hora_hasta': combinarFechaHora($("#txt_fecha_atencion").val(), $("#txt_hora_hasta").val()),
+            'hora_desde': combinarFechaHora($("#txt_fecha_atencion").val(), $("#txt_hora_desde_atencion").val()),
+            'hora_hasta': combinarFechaHora($("#txt_fecha_atencion").val(), $("#txt_hora_hasta_atencion").val()),
 
             // Rutas actuales
             'ruta_certificado_actual': $("#txt_ruta_certificado_guardada").val() || null,
@@ -800,7 +959,7 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
 <div class="page-wrapper">
     <div class="page-content">
 
-        <div class="card border-primary border-3">
+        <div class="card border-primary border-bottom border-3 shadow-sm">
             <div class="card-body p-4">
 
                 <div class="card-title d-flex align-items-center justify-content-between">
@@ -826,264 +985,299 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                     <input type="hidden" id="txt_ruta_certificado_guardada">
                     <input type="hidden" id="txt_ruta_act_defuncion_guardada">
 
-                    <!-- PERSONA -->
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="ddl_personas" class="form-label fw-bold">
-                                <i class="bi bi-person"></i> Persona
-                            </label>
-                            <select class="form-select form-select-sm select2-validation" id="ddl_personas" name="ddl_personas">
-                                <option selected disabled>-- Seleccione --</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div id="pnl_persona_informacion_adicional" class="row mb-3">
-                        <div class="col-md-3">
-                            <label for="ddl_cargo" class="form-label fw-bold">Cargo: </label>
-                            <select class="form-select form-select-sm select2-validation" id="ddl_cargo" name="ddl_cargo">
-                                <option selected disabled>-- Seleccione --</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="ddl_genero" class="form-label fw-bold">Género: </label>
-                            <select class="form-select form-select-sm select2-validation" id="ddl_genero" name="ddl_genero">
-                                <option value="" selected disabled>-- Seleccione --</option>
-                                <option value="Masculino">Masculino</option>
-                                <option value="Femenino">Femenino</option>
-                                <option value="Otro">Otro</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="ddl_estado_civil" class="form-label fw-bold">Estado Civil: </label>
-                            <select class="form-select form-select-sm select2-validation" id="ddl_estado_civil" name="ddl_estado_civil">
-                                <option selected disabled value="">-- Seleccione --</option>
-                                <option value="Soltero/a">SOLTERO(A)</option>
-                                <option value="Casado/a">CASADO(A)</option>
-                                <option value="Divorciado/a">DIVORCIADO(A)</option>
-                                <option value="Viudo/a">VIUDO(A)</option>
-                                <option value="Union libre">UNIÓN LIBRE</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold">
-                                <i class="bi bi-chat-left-text"></i> Asunto
-                            </label>
-                            <div class="d-flex gap-3 pt-1">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="tipo_asunto" id="radio_solicitud" value="SOLICITUD" checked>
-                                    <label class="form-check-label" for="radio_solicitud">SOLICITUD</label>
+                    <!-- INFORMACIÓN DEL SOLICITANTE -->
+                    <div class="card border-primary border-bottom border-3 shadow-sm mb-3">
+                        <div class="card-body">
+                            <h6 class="text-primary mb-3"><i class="bi bi-person-badge me-2"></i>Información del Solicitante</h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="ddl_personas" class="form-label fw-bold">Persona</label>
+                                    <select class="form-select form-select-sm select2-validation" id="ddl_personas" name="ddl_personas">
+                                        <option selected disabled>-- Seleccione --</option>
+                                    </select>
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="tipo_asunto" id="radio_justificacion" value="JUSTIFICACION">
-                                    <label class="form-check-label" for="radio_justificacion">JUSTIFICACIÓN</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- TIPO DE MOTIVO (PERSONAL O MÉDICO) -->
-                    <div id="pnl_tipo_motivo" class="row mb-3">
-                        <div class="col-md-12">
-                            <div class="card bg-light">
-                                <div class="card-body">
-                                    <label class="fw-bold mb-3">
-                                        <i class="bi bi-toggle-on"></i> Seleccione el Tipo de Motivo
-                                    </label>
-                                    <div class="d-flex gap-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Asunto</label>
+                                    <div class="d-flex gap-3 pt-1">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="rbx_tipo_motivo" id="rbx_motivo_personal" value="MOTIVO_PERSONAL">
-                                            <label class="form-check-label fw-bold" for="rbx_motivo_personal">Personal</label>
+                                            <input class="form-check-input" type="radio" name="tipo_asunto" id="radio_solicitud" value="SOLICITUD" checked>
+                                            <label class="form-check-label" for="radio_solicitud">SOLICITUD</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="rbx_tipo_motivo" id="rbx_motivo_medico" value="MOTIVO_MEDICO">
-                                            <label class="form-check-label fw-bold" for="rbx_motivo_medico">Médico</label>
+                                            <input class="form-check-input" type="radio" name="tipo_asunto" id="radio_justificacion" value="JUSTIFICACION">
+                                            <label class="form-check-label" for="radio_justificacion">JUSTIFICACIÓN</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div id="pnl_persona_informacion_adicional" class="row g-3 mt-1">
+                                <div class="col-md-4">
+                                    <label class="fw-bold small">Cargo</label>
+                                    <select class="form-select form-select-sm" id="ddl_cargo" disabled></select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="fw-bold small">Género</label>
+                                    <select class="form-select form-select-sm" id="ddl_genero" disabled>
+                                        <option value="Masculino">Masculino</option>
+                                        <option value="Femenino">Femenino</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="fw-bold small">Estado Civil</label>
+                                    <select class="form-select form-select-sm" id="ddl_estado_civil" disabled>
+                                        <option selected disabled value="">-- Seleccione --</option>
+                                        <option value="Soltero/a">SOLTERO(A)</option>
+                                        <option value="Casado/a">CASADO(A)</option>
+                                        <option value="Divorciado/a">DIVORCIADO(A)</option>
+                                        <option value="Viudo/a">VIUDO(A)</option>
+                                        <option value="Union libre">UNIÓN LIBRE</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- MOTIVO PERSONAL -->
-                    <div id="pnl_motivo_personal" class="row mb-3" style="display: none;">
-                        <div class="col-md-6">
-                            <label class="fw-bold">
-                                <i class="bi bi-list-task"></i> Motivo del Permiso
-                            </label>
-                            <select class="form-control form-control-sm" id="ddl_motivo" name="ddl_motivo">
-                                <option value="">-- Seleccione --</option>
-                                <option value="PERSONAL">Personal</option>
-                                <option value="CALAMIDAD">Calamidad Doméstica</option>
-                                <option value="FALLECIMIENTO">Fallecimiento</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="fw-bold">
-                                <i class="bi bi-pencil"></i> Detalle del Motivo
-                            </label>
-                            <input type="text" class="form-control form-control-sm" id="txt_detalle_motivo" placeholder="Especifique detalles adicionales">
-                        </div>
-                    </div>
+                    <!-- MOTIVO DE LA AUSENCIA -->
+                    <div class="card border-primary border-bottom border-3 shadow-sm mb-3">
+                        <div class="card-body">
+                            <h6 class="text-primary mb-3"><i class="bi bi-question-circle me-2"></i>Motivo de la Ausencia</h6>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label class="fw-bold mb-2 small text-uppercase">Seleccione el Tipo</label>
+                                    <div class="d-flex gap-4 border p-2 rounded bg-white">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="rbx_tipo_motivo" id="rbx_motivo_personal" value="MOTIVO_PERSONAL">
+                                            <label class="form-check-label fw-bold" for="rbx_motivo_personal">Personal / Familiar</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="rbx_tipo_motivo" id="rbx_motivo_medico" value="MOTIVO_MEDICO">
+                                            <label class="form-check-label fw-bold" for="rbx_motivo_medico">Médico / Salud</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                    <!-- MOTIVO MÉDICO -->
-                    <div id="pnl_motivo_medico" class="row mb-3" style="display: none;">
-                        <div class="col-md-6">
-                            <label class="fw-bold">
-                                <i class="bi bi-list-task"></i> Motivo del Permiso Médico
-                            </label>
-                            <select class="form-control form-control-sm" id="ddl_motivo_medico" name="ddl_motivo_medico">
-                                <option value="">-- Seleccione --</option>
-                                <option value="MATERNIDAD_PATERNIDAD">Maternidad/Paternidad</option>
-                                <option value="ENFERMEDAD">Enfermedad</option>
-                                <option value="CITA_MEDICA">Cita Médica</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="fw-bold">
-                                <i class="bi bi-pencil"></i> Detalle del Motivo
-                            </label>
-                            <input type="text" class="form-control form-control-sm" id="txt_detalle_motivo_medico" placeholder="Especifique detalles adicionales">
+                            <div id="pnl_motivo_personal" class="row g-3" style="display: none;">
+                                <div class="col-md-6">
+                                    <label class="fw-bold">Categoría</label>
+                                    <select class="form-select form-select-sm" id="ddl_motivo" name="ddl_motivo">
+                                        <option value="">-- Seleccione --</option>
+                                        <option value="PERSONAL">Personal</option>
+                                        <option value="FAMILIAR">Familiar</option>
+                                        <option value="CALAMIDAD">Calamidad Doméstica</option>
+                                        <option value="FALLECIMIENTO">Fallecimiento</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="fw-bold">Detalle específico</label>
+                                    <input type="text" class="form-control form-control-sm" id="txt_detalle_motivo" placeholder="...">
+                                </div>
+                            </div>
+
+                            <div id="pnl_motivo_medico" class="row g-3" style="display: none;">
+                                <div class="col-md-6">
+                                    <label class="fw-bold">Categoría Médica</label>
+                                    <select class="form-select form-select-sm" id="ddl_motivo_medico" name="ddl_motivo_medico">
+                                        <option value="">-- Seleccione --</option>
+                                        <option value="MATERNIDAD_PATERNIDAD">Maternidad/Paternidad</option>
+                                        <option value="ENFERMEDAD">Enfermedad</option>
+                                        <option value="CITA_MEDICA">Cita Médica</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="fw-bold">Observación Médica</label>
+                                    <input type="text" class="form-control form-control-sm" id="txt_detalle_motivo_medico">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- ACTA DE DEFUNCIÓN -->
-                    <div id="pnl_acta_defuncion" class="row mb-3" style="display: none;">
-                        <div class="col-md-12">
-                            <div class="card bg-light">
-                                <div class="card-body">
-                                    <h6 class="text-danger mb-3">
-                                        <i class="bi bi-file-earmark-text"></i> Acta de Defunción (Obligatorio)
-                                    </h6>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label class="fw-bold">Adjuntar Acta</label>
-                                            <input type="file" class="form-control form-control-sm" id="file_act_defuncion" accept=".pdf,.doc,.docx">
-                                            <small class="text-muted">PDF o Word • Máx. 5MB</small>
-                                        </div>
-                                    </div>
+                    <div id="pnl_acta_defuncion" class="card border-danger border-bottom border-3 shadow-sm mb-3" style="display: none;">
+                        <div class="card-body">
+                            <h6 class="text-danger mb-3">
+                                <i class="bi bi-file-earmark-text me-2"></i> Acta de Defunción (Obligatorio)
+                            </h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="fw-bold">Adjuntar Acta</label>
+                                    <input type="file" class="form-control form-control-sm" id="file_act_defuncion" accept=".pdf">
+                                    <small class="text-muted">PDF • Máx. 5MB</small>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- INFORMACIÓN ADICIONAL (PARA PERSONAL) -->
-                    <div id="pnl_info_adicional" style="display:none">
-                        <div class="card bg-light mb-3">
-                            <div class="card-body">
-                                <h6 class="text-primary mb-3"><i class="bi bi-people"></i> Información adicional</h6>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label class="fw-bold">Tipo de Familiar</label>
-                                        <select class="form-control form-control-sm" id="ddl_parentesco">
-                                            <option value="">-- Seleccione --</option>
-                                            <option value="HIJO">Hijo</option>
-                                            <option value="OTRO">Otro</option>
-                                        </select>
-                                    </div>
-                                    <div id="pnl_familiares" class="col-md-3">
-                                        <label for="ddl_familiar" class="fw-bold">Familiar Seleccionado</label>
-                                        <select class="form-control form-control-sm" id="ddl_familiar"></select>
-                                    </div>
-                                    <div class="col-md-3" id="pnl_rango_edad" style="display:none">
-                                        <label class="fw-bold text-danger">Rango de Edad (Hijo)</label>
-                                        <select class="form-control form-control-sm" id="ddl_rango_edad">
-                                            <option value="">-- Seleccione --</option>
-                                            <option value="0-5">0 - 5 años</option>
-                                            <option value="6-11">6 - 11 años</option>
-                                            <option value="12-17">12 - 17 años</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3" id="pnl_tipo_adulto" style="display:none">
-                                        <label class="fw-bold text-danger">Tipo de Cuidado</label>
-                                        <select class="form-control form-control-sm" id="ddl_otro">
-                                            <option value="">-- Seleccione --</option>
-                                            <option value="DISCAPACIDAD">Discapacidad</option>
-                                            <option value="ADULTO_MAYOR">Adulto Mayor</option>
-                                            <option value="ENFERMEDAD_CATASTROFICA">Enfermedad Catastrófica</option>
-                                        </select>
-                                    </div>
+                    <div id="pnl_info_adicional" class="card border-primary border-bottom border-3 shadow-sm mb-3" style="display:none">
+                        <div class="card-body">
+                            <h6 class="text-primary mb-3"><i class="bi bi-people me-2"></i> Información adicional</h6>
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <label class="fw-bold">Tipo de Familiar</label>
+                                    <select class="form-control form-control-sm" id="ddl_parentesco">
+                                        <option value="">-- Seleccione --</option>
+                                        <option value="HIJO">Hijo</option>
+                                        <option value="OTRO">Otro</option>
+                                    </select>
                                 </div>
-                                <div class="row mt-2">
-                                    <div class="col-md-3">
-                                        <label class="fw-bold">Fecha de Nacimiento</label>
-                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_nacimiento">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="fw-bold">Edad Calculada</label>
-                                        <input type="number" class="form-control form-control-sm" id="txt_edad" readonly>
-                                    </div>
+                                <div id="pnl_familiares" class="col-md-3">
+                                    <label for="ddl_familiar" class="fw-bold">Familiar Seleccionado</label>
+                                    <select class="form-control form-control-sm" id="ddl_familiar"></select>
+                                </div>
+                                <div class="col-md-3" id="pnl_rango_edad" style="display:none">
+                                    <label class="fw-bold text-danger">Rango de Edad (Hijo)</label>
+                                    <select class="form-control form-control-sm" id="ddl_rango_edad">
+                                        <option value="">-- Seleccione --</option>
+                                        <option value="0-5">0 - 5 años</option>
+                                        <option value="6-11">6 - 11 años</option>
+                                        <option value="12-17">12 - 17 años</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3" id="pnl_tipo_adulto" style="display:none">
+                                    <label class="fw-bold text-danger">Tipo de Cuidado</label>
+                                    <select class="form-control form-control-sm" id="ddl_otro">
+                                        <option value="">-- Seleccione --</option>
+                                        <option value="DISCAPACIDAD">Discapacidad</option>
+                                        <option value="ADULTO_MAYOR">Adulto Mayor</option>
+                                        <option value="ENFERMEDAD_CATASTROFICA">Enfermedad Catastrófica</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row g-3 mt-1">
+                                <div class="col-md-3">
+                                    <label class="fw-bold">Fecha de Nacimiento</label>
+                                    <input type="date" class="form-control form-control-sm" id="txt_fecha_nacimiento">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="fw-bold">Edad Calculada</label>
+                                    <input type="number" class="form-control form-control-sm" id="txt_edad" readonly>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- CERTIFICADO MÉDICO (ÚNICO) -->
-                    <div id="pnl_file_certificado" class="row mb-3" style="display:none">
-                        <div class="col-md-12">
-                            <div class="card bg-light">
-                                <div class="card-body">
-                                    <h6 id="title_certificado" class="text-primary mb-3">
-                                        <i class="bi bi-file-earmark-medical"></i> Certificado Médico
-                                    </h6>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label class="fw-bold">Adjuntar Certificado</label>
-                                            <input type="file" class="form-control form-control-sm" id="file_certificado" accept=".pdf,.doc,.docx">
-                                            <small class="text-muted">PDF o Word • Máx. 5MB</small>
-                                        </div>
-                                    </div>
+                    <div id="pnl_file_certificado" class="card border-primary border-bottom border-3 shadow-sm mb-3" style="display:none">
+                        <div class="card-body">
+                            <h6 id="title_certificado" class="text-primary mb-3">
+                                <i class="bi bi-file-earmark-medical me-2"></i> Certificado Médico
+                            </h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="fw-bold">Adjuntar Certificado</label>
+                                    <input type="file" class="form-control form-control-sm" id="file_certificado" accept=".pdf">
+                                    <small class="text-muted">PDF • Máx. 5MB</small>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- ATENCIÓN MÉDICA -->
-                    <div id="pnl_medico" style="display:none">
-                        <div class="card bg-light mb-3">
-                            <div class="card-body">
-                                <h6 class="text-primary mb-3">
-                                    <i class="bi bi-heart-pulse"></i> Detalle de Atención Médica
-                                </h6>
-                                <div class="row mb-2">
-                                    <div class="col-md-6">
-                                        <label class="fw-bold">Tipo de Atención</label><br>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="rbx_tipo_atencion" id="rbx_privada" value="PRIVADA">
-                                            <label class="form-check-label" for="rbx_privada">Privada</label>
+                    <div id="pnl_medico" class="card border-primary border-bottom border-3 shadow-sm mb-3" style="display:none">
+                        <div class="card-body">
+                            <h6 class="text-primary mb-3">
+                                <i class="bi bi-heart-pulse me-2"></i> Detalle de Atención Médica
+                            </h6>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label class="fw-bold small text-uppercase">Tipo de Atención</label><br>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="rbx_tipo_atencion" id="rbx_privada" value="PRIVADA">
+                                        <label class="form-check-label" for="rbx_privada">Privada</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="rbx_tipo_atencion" id="rbx_publica" value="PUBLICA">
+                                        <label class="form-check-label" for="rbx_publica">Pública</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="fw-bold">Lugar / Clínica</label>
+                                    <input type="text" class="form-control form-control-sm" id="txt_lugar" placeholder="Ej: Hospital">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="fw-bold">Especialidad</label>
+                                    <input type="text" class="form-control form-control-sm" id="txt_especialidad">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="fw-bold">Nombre del Médico</label>
+                                    <input type="text" class="form-control form-control-sm" id="txt_medico">
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="fw-bold">Fecha Atención</label>
+                                    <input type="date" class="form-control form-control-sm" id="txt_fecha_atencion">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="fw-bold">Hora Desde</label>
+                                    <input type="time" class="form-control form-control-sm" id="txt_hora_desde_atencion">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="fw-bold">Hora Hasta</label>
+                                    <input type="time" class="form-control form-control-sm" id="txt_hora_hasta_atencion">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PLANIFICACIÓN DE TIEMPOS -->
+                    <div class="card border-primary border-bottom border-3 shadow-sm mb-3">
+                        <div class="card-body">
+                            <h6 class="text-primary mb-3"><i class="bi bi-calendar-event me-2"></i>Fecha y Hora del Permiso</h6>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label class="fw-bold mb-2 small text-uppercase">Método de Cálculo</label>
+                                    <div class="d-flex gap-4 border p-2 rounded bg-white">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="tipo_calculo" id="rbtn_fecha" value="fecha">
+                                            <label class="form-check-label fw-bold" for="rbtn_fecha">Por Rango de Fechas (Días)</label>
                                         </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="rbx_tipo_atencion" id="rbx_publica" value="PUBLICA">
-                                            <label class="form-check-label" for="rbx_publica">Pública</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="tipo_calculo" id="rbtn_horas" value="horas">
+                                            <label class="form-check-label fw-bold" for="rbtn_horas">Por Horas (Mismo día)</label>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row mb-2">
+                            </div>
+
+                            <div id="pnl_calculo_fecha" style="display:none">
+                                <div class="row g-3">
                                     <div class="col-md-4">
-                                        <label class="fw-bold">Lugar</label>
-                                        <input type="text" class="form-control form-control-sm" id="txt_lugar" placeholder="Ej: Hospital">
+                                        <label class="fw-bold">Desde</label>
+                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_desde">
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="fw-bold">Especialidad</label>
-                                        <input type="text" class="form-control form-control-sm" id="txt_especialidad">
+                                        <label class="fw-bold">Hasta</label>
+                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_hasta">
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="fw-bold">Nombre del Médico</label>
-                                        <input type="text" class="form-control form-control-sm" id="txt_medico">
+                                        <label class="fw-bold text-success">Total Días</label>
+                                        <input type="number" class="form-control form-control-sm bg-white" id="txt_total_dias" readonly>
                                     </div>
                                 </div>
-                                <div class="row mb-2">
-                                    <div class="col-md-4">
-                                        <label class="fw-bold">Fecha Atención</label>
-                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_atencion">
+                            </div>
+
+                            <div id="pnl_calculo_horas" style="display:none">
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <label class="fw-bold">Fecha del Permiso</label>
+                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_horas">
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <label class="fw-bold">Hora Desde</label>
                                         <input type="time" class="form-control form-control-sm" id="txt_hora_desde">
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <label class="fw-bold">Hora Hasta</label>
                                         <input type="time" class="form-control form-control-sm" id="txt_hora_hasta">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="fw-bold text-success">Total Horas</label>
+                                        <input type="number" class="form-control form-control-sm bg-white" id="txt_total_horas" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -1091,38 +1285,37 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                     </div>
 
                     <!-- PLANIFICACIÓN DOCENTE -->
-                    <div id="pnl_espacio_docente" class="row mb-3" style="display: none;">
-                        <div class="col-md-12">
-                            <label class="fw-bold small text-muted text-uppercase">
-                                <i class="bi bi-person-check-fill"></i> Espacio de Responsabilidad (Personal Docente)
-                            </label>
-                            <div class="border p-2 rounded bg-light">
-                                <div class="d-flex gap-4 mb-2">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="rbx_planificacion" id="plani_no" value="NO_REQUIERE">
-                                        <label class="form-check-label fw-bold" for="plani_no" style="font-size: 0.85rem;">
-                                            NO REQUIERE PLANIFICACIÓN
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="rbx_planificacion" id="plani_si" value="ANEXO_PLANIFICACION">
-                                        <label class="form-check-label fw-bold" for="plani_si" style="font-size: 0.85rem;">
-                                            ANEXO PLANIFICACIÓN
-                                        </label>
-                                    </div>
+                    <div id="pnl_espacio_docente" class="card border-primary border-bottom border-3 shadow-sm mb-3" style="display: none;">
+                        <div class="card-body">
+                            <h6 class="text-primary mb-3">
+                                <i class="bi bi-person-check-fill me-2"></i> Espacio de Responsabilidad (Personal Docente)
+                            </h6>
+                            <div class="d-flex gap-4 border p-2 rounded bg-white">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="rbx_planificacion" id="plani_no" value="NO_REQUIERE">
+                                    <label class="form-check-label fw-bold" for="plani_no">
+                                        NO REQUIERE PLANIFICACIÓN
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="rbx_planificacion" id="plani_si" value="ANEXO_PLANIFICACION">
+                                    <label class="form-check-label fw-bold" for="plani_si">
+                                        ANEXO PLANIFICACIÓN
+                                    </label>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- BOTONES -->
-                    <div class="row mt-4">
+                    <hr>
+                    <div class="row">
                         <div class="col-12 text-end">
-                            <button type="button" class="btn btn-success btn-sm px-4" onclick="insertar_actualizar()">
-                                <i class="bx bx-save"></i> Guardar
+                            <button type="button" class="btn btn-primary px-4 shadow-sm" onclick="insertar_actualizar()">
+                                <i class="bx bx-save"></i> Guardar Solicitud
                             </button>
                             <?php if ($_id != '') { ?>
-                                <button type="button" class="btn btn-danger btn-sm px-4" onclick="eliminar()">
+                                <button type="button" class="btn btn-danger px-4 shadow-sm" onclick="eliminar()">
                                     <i class="bx bx-trash"></i> Eliminar
                                 </button>
                             <?php } ?>
