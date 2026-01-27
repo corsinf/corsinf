@@ -10,11 +10,6 @@ $ruta = '';
 <script>
     //quitar session
 
-    const session = <?= json_encode($_SESSION) ?>;
-    console.log(session);
-    const TIPO_USUARIO = session.INICIO.TIPO;
-    let id_persona = (TIPO_USUARIO === 'DBA' || TIPO_USUARIO === 'ADMINISTRADOR') ? '' : session.INICIO.NO_CONCURENTE;
-
     function cargar_persona_familia(th_per_id) {
 
         if ($('#ddl_familiar').hasClass("select2-hidden-accessible")) {
@@ -55,6 +50,7 @@ $ruta = '';
 
             if (data.fecha_nacimiento) {
                 $('#txt_fecha_nacimiento').val(data.fecha_nacimiento);
+                $('#lbl_fecha_nacimiento').text(data.fecha_nacimiento);
                 let edadCalculada = calcularEdad(data.fecha_nacimiento, data.parentesco);
             } else {
                 $('#txt_fecha_nacimiento').val('');
@@ -72,17 +68,18 @@ $ruta = '';
         <?php } ?>
         cargar_selects2();
 
-        const TIPO_USUARIO = "<?= $_SESSION['INICIO']['TIPO'] ?>";
+        const USER_DATA = {
+            tipo: "<?= $_SESSION['INICIO']['TIPO'] ?>",
+            id: "<?= (($_SESSION['INICIO']['TIPO'] === 'DBA' || $_SESSION['INICIO']['TIPO'] === 'ADMINISTRADOR')) ? '' : $_SESSION['INICIO']['NO_CONCURENTE'] ?>"
+        };
 
-        const session = <?= json_encode($_SESSION) ?>;
-        //$ruta = "../vista/inicio.php?mod=$modulo_sistema&acc=th_solicitud_permiso"; 
-        if (TIPO_USUARIO === 'DBA' || TIPO_USUARIO === 'ADMINISTRADOR') {
-            <?php if ($_per_id !== '') { ?>
+
+        if (USER_DATA.tipo === 'DBA' || USER_DATA.tipo === 'ADMINISTRADOR') {
+            <?php if (isset($_per_id) && $_per_id !== '') : ?>
                 $('#ddl_personas').prop('disabled', true);
                 cargar_datos_persona(<?= $_per_id ?>);
                 cargar_persona_familia(<?= $_per_id ?>);
-                //$ruta = "../vista/inicio.php?$mod=$modulo_sistema&acc=th_solicitud_persona&_id=" + $_per_id;
-            <?php } ?>
+            <?php endif; ?>
         } else {
             $('#ddl_personas').prop('disabled', true);
         }
@@ -224,12 +221,16 @@ $ruta = '';
         });
 
         // Calcular horas
-        $('#txt_hora_permiso_desde, #txt_hora_permiso_hasta').change(function() {
+        // Usamos .on('blur') para que se ejecute al perder el foco
+        $('#txt_hora_permiso_desde, #txt_hora_permiso_hasta').on('blur', function() {
             let d = $('#txt_hora_permiso_desde').val();
             let h = $('#txt_hora_permiso_hasta').val();
+
             if (d && h) {
                 let ini = new Date(`1970-01-01T${d}`);
                 let fin = new Date(`1970-01-01T${h}`);
+
+                // Cálculo de diferencia en milisegundos a horas
                 let diff = (fin - ini) / 3600000;
 
                 if (diff < 0) {
@@ -247,13 +248,14 @@ $ruta = '';
         });
 
         // Calcular días
-        $('#txt_fecha_desde, #txt_fecha_hasta').change(function() {
+        $('#txt_fecha_desde, #txt_fecha_hasta').on('blur', function() {
             let f1 = $('#txt_fecha_desde').val();
             let f2 = $('#txt_fecha_hasta').val();
 
             if (f1 && f2) {
-                let fecha1 = new Date(f1);
-                let fecha2 = new Date(f2);
+                // Es recomendable reemplazar '-' por '/' para evitar problemas de zona horaria en algunos navegadores
+                let fecha1 = new Date(f1.replace(/-/g, '\/'));
+                let fecha2 = new Date(f2.replace(/-/g, '\/'));
 
                 if (fecha2 < fecha1) {
                     Swal.fire({
@@ -264,6 +266,7 @@ $ruta = '';
                     });
                     $('#txt_total_dias').val(0);
                 } else {
+                    // Cálculo de diferencia en días
                     let diff = Math.ceil((fecha2 - fecha1) / (1000 * 60 * 60 * 24)) + 1;
                     $('#txt_total_dias').val(diff);
                 }
@@ -352,6 +355,8 @@ $ruta = '';
             // 3. Seleccionar el valor en el dropdown
             $('#ddl_rango_edad').val(rango);
         }
+        $('#lbl_edad').text(edad + ' años');
+
         return edad;
     }
 
@@ -364,16 +369,18 @@ $ruta = '';
         if (!val || val.startsWith('1900')) return '';
         return val.split(' ')[1].substring(0, 5);
     }
-    // CALCULAR DÍAS (para modo fecha)
-    $('#txt_fecha_desde, #txt_fecha_hasta').change(function() {
+    // Para los campos de fecha simples
+    $('#txt_fecha_desde, #txt_fecha_hasta').on('blur', function() {
         calcularDiasFecha();
     });
 
-    $(document).on('change', '#txt_fecha_horas, #txt_hora_desde, #txt_hora_hasta', function() {
+    // Para los campos de horas (usando delegación de eventos)
+    $(document).on('blur', '#txt_fecha_horas, #txt_hora_desde, #txt_hora_hasta', function() {
         calcularTotalHoras();
     });
 
-    $(document).on('change', '#txt_hora_desde_atencion, #txt_hora_hasta_atencion', function() {
+    // Para las horas de atención (usando delegación de eventos)
+    $(document).on('blur', '#txt_hora_desde_atencion, #txt_hora_hasta_atencion', function() {
         validarHorasAtencion();
     });
 
@@ -438,15 +445,26 @@ $ruta = '';
         if (fecha && horaDesde && horaHasta) {
             if (horaDesde >= horaHasta) {
                 Swal.fire('Advertencia', 'La hora desde debe ser menor que la hora hasta', 'warning');
-                $('#txt_total_horas').val(0);
+                $('#txt_total_horas').val(""); // Limpiamos para tipo time
                 return;
             }
 
-            let desde = new Date('2000-01-01 ' + horaDesde);
-            let hasta = new Date('2000-01-01 ' + horaHasta);
+            let desde = new Date('2000-01-01T' + horaDesde);
+            let hasta = new Date('2000-01-01T' + horaHasta);
 
-            let diff = (hasta - desde) / (1000 * 60 * 60); // diferencia en horas
-            $('#txt_total_horas').val(diff.toFixed(2));
+            let diffMs = hasta - desde;
+            let diffMinutosTotales = Math.floor(diffMs / (1000 * 60));
+
+            let horas = Math.floor(diffMinutosTotales / 60);
+            let minutos = diffMinutosTotales % 60;
+
+            // FORMATO REQUERIDO PARA <input type="time">: "HH:mm" (con ceros a la izquierda)
+            let hh = horas.toString().padStart(2, '0');
+            let mm = minutos.toString().padStart(2, '0');
+
+            let resultadoTime = `${hh}:${mm}`;
+
+            $('#txt_total_horas').val(resultadoTime);
         }
     }
 
@@ -557,6 +575,12 @@ $ruta = '';
                     mostrarVistaPrevia('#pnl_acta_defuncion', r.ruta_act_defuncion, 'Acta de Defunción');
                 }
 
+                if (r.ruta_certificado_asistencia) {
+                    $('#txt_ruta_asistencia_guardada').val(r.ruta_certificado_asistencia);
+                    $('#pnl_certificado_asistencia').show();
+                    mostrarVistaPrevia('#pnl_certificado_asistencia', r.ruta_certificado_asistencia, 'Certificado de Asistencia');
+                }
+
                 if (r.th_ppa_id > 0) {
                     cargar_datos_pariente(r.th_ppa_id);
                 }
@@ -579,8 +603,27 @@ $ruta = '';
                     $("#txt_fecha_horas").val(toDateInput(r.fecha_principal_permiso));
                     $("#txt_hora_desde").val(toTimeInput(r.fecha_desde_permiso));
                     $("#txt_hora_hasta").val(toTimeInput(r.fecha_hasta_permiso));
-                    $("#txt_total_horas").val(r.total_horas_permiso || 0);
+                    // r.total_horas_permiso viene de la BD (ej: 150.00)
+                    let minutosTotales = parseFloat(r.total_horas_permiso) || 0;
+
+                    if (minutosTotales > 0) {
+                        let horas = Math.floor(minutosTotales / 60);
+                        let minutos = Math.round(minutosTotales % 60);
+
+                        // Formatear con ceros a la izquierda para el input type="time"
+                        let hh = horas.toString().padStart(2, '0');
+                        let mm = minutos.toString().padStart(2, '0');
+
+                        $("#txt_total_horas").val(`${hh}:${mm}`);
+                    } else {
+                        $("#txt_total_horas").val("00:00");
+                    }
                 }
+                let validator = $("#form_solicitud").validate();
+                validator.resetForm();
+
+                // Quitamos manualmente las clases de Bootstrap por si acaso
+                $("#form_solicitud").find('.is-valid, .is-invalid').removeClass('is-valid is-invalid');
             }
         });
     }
@@ -641,6 +684,7 @@ $ruta = '';
             }
         });
     }
+    /*
 
     function validar_formulario() {
         let tipo_motivo = $('input[name="rbx_tipo_motivo"]:checked').val();
@@ -719,6 +763,7 @@ $ruta = '';
 
         return true;
     }
+        */
 
     function combinarFechaHora(fecha, hora) {
         if (!fecha || !hora) return '';
@@ -728,34 +773,32 @@ $ruta = '';
     function mostrarVistaPrevia(panelSelector, rutaArchivo, nombreDoc) {
         const $panel = $(panelSelector);
 
-        // Remover vista previa anterior si existe
+        // 1. Limpiamos cualquier vista previa existente para no duplicar
         $panel.find('.vista-previa-documento').remove();
 
-        // Crear elemento de vista previa
+        // 2. Creamos la estructura con el diseño "Imagen 5"
         const vistaPrevia = `
-        <div class="vista-previa-documento mt-2 p-2 border rounded bg-light">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center">
-                    <i class="bx bx-file-blank fs-3 text-primary me-2"></i>
-                    <div>
-                        <small class="fw-bold d-block">${nombreDoc}</small>
-                        <small class="text-muted">Archivo actual guardado</small>
-                    </div>
-                </div>
-                <div class="d-flex gap-2">
-                    <a href="${rutaArchivo}" target="_blank" class="btn btn-sm btn-outline-primary" title="Ver documento">
-                        <i class="bx bx-show"></i> Ver
-                    </a>
-                    <a href="${rutaArchivo}" download class="btn btn-sm btn-outline-success" title="Descargar">
-                        <i class="bx bx-download"></i>
-                    </a>
+    <div class="vista-previa-documento mt-3 p-3 border rounded shadow-xs bg-white" 
+         style="border-left: 4px solid #212529 !important;">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <i class="bx bxs-file-pdf fs-2 text-danger me-3"></i>
+                <div>
+                    <small class="fw-bold d-block text-uppercase text-muted" style="font-size: 0.7rem;">${nombreDoc}</small>
+                    <span class="fw-bold text-dark" style="font-size: 0.85rem;">Archivo guardado</span>
                 </div>
             </div>
+            <button type="button" 
+                    onclick="ruta_iframe_documento_identificacion('${rutaArchivo}');" 
+                    class="btn btn-dark btn-sm px-4 fw-bold shadow-sm">
+                <i class="bx bx-show-alt me-1"></i> DOCUMENTO
+            </button>
         </div>
-    `;
+    </div>`;
 
-        // Agregar al final del panel (no dentro de col-md-6)
-        $panel.find('.card-body').append(vistaPrevia);
+        // 3. Inserción inteligente: Busca el card-body, si no existe, lo pega al final del panel
+        const $target = $panel.find('.card-body').length ? $panel.find('.card-body') : $panel;
+        $target.append(vistaPrevia);
     }
 
 
@@ -793,7 +836,16 @@ $ruta = '';
             fechaPrincipalPermiso = fecha;
             desdePermiso = fecha + ' ' + horaD + ':00';
             hastaPermiso = fecha + ' ' + horaH + ':00';
-            totalHoras = parseFloat($('#txt_total_horas').val()) || 0;
+
+            let valorTime = $('#txt_total_horas').val();
+            if (valorTime) {
+                let partes = valorTime.split(':');
+                let h = parseInt(partes[0]) || 0;
+                let m = parseInt(partes[1]) || 0;
+
+                // Convertimos todo a minutos
+                totalHoras = parseFloat((h * 60) + m);
+            }
         }
 
         let tipo_asunto = $('input[name="tipo_asunto"]:checked').val();
@@ -845,12 +897,16 @@ $ruta = '';
         // Agregar archivos
         let file_certificado = $('#file_certificado')[0].files[0];
         let file_acta_defuncion = $('#file_act_defuncion')[0].files[0];
+        let file_certificado_asistencia = $('#file_certificado_asistencia')[0].files[0];
 
         if (file_certificado) {
             form_data.append('file_certificado', file_certificado);
         }
         if (file_acta_defuncion) {
             form_data.append('file_act_defuncion', file_acta_defuncion);
+        }
+        if (file_certificado_asistencia) {
+            form_data.append('file_certificado_asistencia', file_certificado_asistencia);
         }
 
         $.ajax({
@@ -941,6 +997,26 @@ $ruta = '';
             }
         });
     }
+
+    function ruta_iframe_documento_identificacion(url) {
+        if (!url || url === "" || url === null) {
+            Swal.fire('Error', 'No existe una ruta de archivo válida para este documento.', 'error');
+            return;
+        }
+
+        // Mostramos el modal
+        $('#modal_ver_pdf_documentos_identidad').modal('show');
+
+        // Asignamos la ruta al iframe
+        $('#iframe_documentos_identidad_pdf').attr('src', url);
+    }
+
+    /**
+     * Limpia el iframe al cerrar el modal
+     */
+    function limpiar_parametros_iframe() {
+        $('#iframe_documentos_identidad_pdf').attr('src', '');
+    }
 </script>
 
 
@@ -973,6 +1049,7 @@ $ruta = '';
                     <input type="hidden" id="txt_cedula_persona" name="txt_cedula_persona">
                     <input type="hidden" id="txt_ruta_certificado_guardada">
                     <input type="hidden" id="txt_ruta_act_defuncion_guardada">
+                    <input type="hidden" id="txt_ruta_certificado_asistencia">
 
                     <!-- INFORMACIÓN DEL SOLICITANTE -->
                     <div class="card border-primary border-bottom border-3 shadow-sm mb-3">
@@ -986,7 +1063,7 @@ $ruta = '';
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">Asunto</label>
+                                    <label class="form-label fw-bold" for="tipo_asunto">Asunto </label>
                                     <div class="d-flex gap-3 pt-1">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="tipo_asunto" id="radio_solicitud" value="SOLICITUD" checked>
@@ -999,7 +1076,7 @@ $ruta = '';
                                     </div>
                                 </div>
                             </div>
-                            <div id="pnl_persona_informacion_adicional" class="row g-3 mt-1">
+                            <div id="pnl_persona_informacion_adicional" class="row g-3 mt-1 mb-3">
                                 <div class="col-md-4">
                                     <label class="fw-bold small d-block">Cargo</label>
                                     <span id="lbl_cargo" class="text-muted small">---</span>
@@ -1013,6 +1090,26 @@ $ruta = '';
                                     <span id="lbl_estado_civil" class="text-muted small">---</span>
                                 </div>
                             </div>
+
+                        </div>
+                    </div>
+                    <div id="pnl_certificado_asistencia" class="card border-primary border-bottom border-3 shadow-sm mb-3">
+                        <div class="col-md-6">
+                            <div class="card-body">
+                                <h6 class="text-primary mb-3">
+                                    <i class="bi bi-file-earmark-check me-2"></i> Certificado de Asistencia
+                                </h6>
+                                <label for="file_certificado_asistencia" class="fw-bold">Adjuntar Certificado</label>
+                                <input type="file" class="form-control form-control-sm" id="file_certificado_asistencia" accept=".pdf">
+
+                                <div class="row">
+                                    <div class="col-md-6">
+
+                                        <small class="text-muted">PDF • Máx. 5MB</small>
+                                        <input type="hidden" id="txt_ruta_asistencia_guardada">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -1022,7 +1119,7 @@ $ruta = '';
                             <h6 class="text-primary mb-3"><i class="bi bi-question-circle me-2"></i>Motivo de la Ausencia</h6>
                             <div class="row mb-3">
                                 <div class="col-md-12">
-                                    <label class="fw-bold mb-2 small text-uppercase">Seleccione el Tipo</label>
+                                    <label class="fw-bold mb-2 small text-uppercase" for="rbx_tipo_motivo">Seleccione el Tipo </label>
                                     <div class="d-flex gap-4 border p-2 rounded bg-white">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="rbx_tipo_motivo" id="rbx_motivo_personal" value="MOTIVO_PERSONAL">
@@ -1037,9 +1134,9 @@ $ruta = '';
                             </div>
 
 
-                            <div id="pnl_motivo_personal" class="row g-3" style="display: none;">
+                            <div id="pnl_motivo_personal" class="row g-3 mb-3" style="display: none;">
                                 <div class="col-md-6">
-                                    <label class="fw-bold">Categoría</label>
+                                    <label class="fw-bold" for="ddl_motivo">Categoría </label>
                                     <select class="form-select form-select-sm" id="ddl_motivo" name="ddl_motivo">
                                         <option value="">-- Seleccione --</option>
                                         <option value="PERSONAL">Personal</option>
@@ -1048,13 +1145,12 @@ $ruta = '';
                                         <option value="FALLECIMIENTO">Fallecimiento</option>
                                     </select>
                                 </div>
-                                <div class="col-md-6"> <label class="fw-bold">Detalle específico:</label>
+                                <div class="col-md-6"> <label class="fw-bold" for="txt_detalle_motivo">Detalle específico </label>
                                     <textarea
                                         class="form-control form-control-sm"
                                         id="txt_detalle_motivo"
                                         name="txt_detalle_motivo"
-                                        rows="1"
-                                        ></textarea>
+                                        rows="1"></textarea>
                                 </div>
                             </div>
 
@@ -1070,7 +1166,7 @@ $ruta = '';
                                         </select>
                                     </div>
                                     <div id="pnl_familiares" class="col-md-3">
-                                        <label for="ddl_familiar" class="fw-bold">Familiar Seleccionado</label>
+                                        <label for="ddl_familiar" class="fw-bold">Familiar Seleccionado </label>
                                         <select class="form-control form-control-sm" id="ddl_familiar"></select>
                                     </div>
                                     <div class="col-md-3" id="pnl_rango_edad" style="display:none">
@@ -1083,7 +1179,7 @@ $ruta = '';
                                         </select>
                                     </div>
                                     <div class="col-md-3" id="pnl_tipo_adulto" style="display:none">
-                                        <label class="fw-bold text-danger">Tipo de Cuidado</label>
+                                        <label for="ddl_otro" class="fw-bold text-danger">Tipo de Cuidado </label>
                                         <select class="form-control form-control-sm" id="ddl_otro">
                                             <option value="">-- Seleccione --</option>
                                             <option value="DISCAPACIDAD">Discapacidad</option>
@@ -1093,20 +1189,25 @@ $ruta = '';
                                     </div>
                                 </div>
                                 <div class="row g-3 mt-1">
-                                    <div class="col-md-3">
-                                        <label class="fw-bold">Fecha de Nacimiento</label>
-                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_nacimiento">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="fw-bold">Edad Calculada</label>
-                                        <input type="number" class="form-control form-control-sm" id="txt_edad" readonly>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="fw-bold">Fecha de Nacimiento</label>
+                                            <input type="date" class="form-control form-control-sm" id="txt_fecha_nacimiento" hidden>
+                                            <div id="lbl_fecha_nacimiento" class="text-muted">---</div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <label class="fw-bold">Edad Calculada</label>
+                                            <input type="number" class="form-control form-control-sm" id="txt_edad" hidden readonly>
+                                            <div id="lbl_edad" style="font-size: 0.9rem;">0 años</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div id="pnl_motivo_medico" class="row g-3" style="display: none;">
                                 <div class="col-md-6">
-                                    <label class="fw-bold">Categoría Médica</label>
+                                    <label for="ddl_motivo_medico" class="fw-bold">Categoría Médica </label>
                                     <select class="form-select form-select-sm" id="ddl_motivo_medico" name="ddl_motivo_medico">
                                         <option value="">-- Seleccione --</option>
                                         <option value="MATERNIDAD_PATERNIDAD">Maternidad/Paternidad</option>
@@ -1115,24 +1216,29 @@ $ruta = '';
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="fw-bold">Observación Médica</label>
-                                    <input type="text" class="form-control form-control-sm" id="txt_detalle_motivo_medico">
+                                    <label for="txt_detalle_motivo_medico" class="fw-bold">Observación Médica </label>
+                                    <input type="text" class="form-control form-control-sm" name="txt_detalle_motivo_medico" id="txt_detalle_motivo_medico">
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- ACTA DE DEFUNCIÓN -->
-                    <div id="pnl_acta_defuncion" class="card border-danger border-bottom border-3 shadow-sm mb-3" style="display: none;">
-                        <div class="card-body">
-                            <h6 class="text-danger mb-3">
-                                <i class="bi bi-file-earmark-text me-2"></i> Acta de Defunción (Obligatorio)
-                            </h6>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label class="fw-bold">Adjuntar Acta</label>
-                                    <input type="file" class="form-control form-control-sm" id="file_act_defuncion" accept=".pdf">
-                                    <small class="text-muted">PDF • Máx. 5MB</small>
+                    <div id="pnl_acta_defuncion" class="card border-primary border-bottom border-3 shadow-sm mb-3" style="display: none;">
+                        <div class="col-md-6">
+                            <div class="card-body">
+                                <h6 class="text-primary mb-3">
+                                    <i class="bi bi-file-earmark-text me-2"></i> Acta de Defunción (Obligatorio)
+                                </h6>
+                                <label for="file_act_defuncion" class="fw-bold">Adjuntar Acta </label>
+                                <input type="file" class="form-control form-control-sm" id="file_act_defuncion" accept=".pdf">
+
+                                <div class="row">
+                                    <div class="col-md-6">
+
+                                        <small class="text-muted">PDF • Máx. 5MB</small>
+                                    </div>
+                                    <input type="hidden" id="txt_ruta_act_defuncion_guardada">
                                 </div>
                             </div>
                         </div>
@@ -1143,15 +1249,17 @@ $ruta = '';
 
                     <!-- CERTIFICADO MÉDICO (ÚNICO) -->
                     <div id="pnl_file_certificado" class="card border-primary border-bottom border-3 shadow-sm mb-3" style="display:none">
-                        <div class="card-body">
-                            <h6 id="title_certificado" class="text-primary mb-3">
-                                <i class="bi bi-file-earmark-medical me-2"></i> Certificado Médico
-                            </h6>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label class="fw-bold">Adjuntar Certificado</label>
-                                    <input type="file" class="form-control form-control-sm" id="file_certificado" accept=".pdf">
-                                    <small class="text-muted">PDF • Máx. 5MB</small>
+                        <div class="col-md-6">
+                            <div class="card-body">
+                                <h6 id="title_certificado" class="text-primary mb-3">
+                                    <i class="bi bi-file-earmark-medical me-2"></i> Certificado Médico
+                                </h6>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="fw-bold" for="file_certificado">Adjuntar Certificado </label>
+                                        <input type="file" class="form-control form-control-sm" id="file_certificado" accept=".pdf">
+                                        <small class="text-muted">PDF • Máx. 5MB</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1165,7 +1273,7 @@ $ruta = '';
                             </h6>
                             <div class="row mb-3">
                                 <div class="col-md-12">
-                                    <label class="fw-bold small text-uppercase">Tipo de Atención</label><br>
+                                    <label class="fw-bold small text-uppercase" for="rbx_tipo_atencion">Tipo de Atención </label><br>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="rbx_tipo_atencion" id="rbx_privada" value="PRIVADA">
                                         <label class="form-check-label" for="rbx_privada">Privada</label>
@@ -1176,31 +1284,31 @@ $ruta = '';
                                     </div>
                                 </div>
                             </div>
-                            <div class="row g-3">
+                            <div class="row g-3 mb-3">
                                 <div class="col-md-4">
-                                    <label class="fw-bold">Lugar / Clínica</label>
+                                    <label class="fw-bold" for="txt_lugar">Lugar / Clínica </label>
                                     <input type="text" class="form-control form-control-sm" name="txt_lugar" id="txt_lugar" placeholder="Ej: Hospital">
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="fw-bold">Especialidad</label>
+                                    <label class="fw-bold" for="txt_especialidad">Especialidad </label>
                                     <input type="text" class="form-control form-control-sm" name="txt_especialidad" id="txt_especialidad">
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="fw-bold">Nombre del Médico</label>
+                                    <label class="fw-bold" for="txt_medico">Nombre del Médico </label>
                                     <input type="text" class="form-control form-control-sm" name="txt_medico" id="txt_medico">
                                 </div>
                             </div>
                             <div class="row g-3">
                                 <div class="col-md-4">
-                                    <label class="fw-bold">Fecha Atención</label>
+                                    <label class="fw-bold" for="txt_fecha_atencion">Fecha Atención </label>
                                     <input type="date" class="form-control form-control-sm" name="txt_fecha_atencion" id="txt_fecha_atencion">
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="fw-bold">Hora Desde</label>
+                                    <label class="fw-bold" for="txt_hora_desde_atencion">Hora Desde </label>
                                     <input type="time" class="form-control form-control-sm" name="txt_hora_desde_atencion" id="txt_hora_desde_atencion">
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="fw-bold">Hora Hasta</label>
+                                    <label class="fw-bold" for="txt_hora_hasta_atencion">Hora Hasta </label>
                                     <input type="time" class="form-control form-control-sm" name="txt_hora_hasta_atencion" id="txt_hora_hasta_atencion">
                                 </div>
                             </div>
@@ -1213,15 +1321,15 @@ $ruta = '';
                             <h6 class="text-primary mb-3"><i class="bi bi-calendar-event me-2"></i>Fecha y Hora del Permiso</h6>
                             <div class="row mb-3">
                                 <div class="col-md-12">
-                                    <label class="fw-bold mb-2 small text-uppercase">Método de Cálculo</label>
+                                    <label class="fw-bold mb-2 small text-uppercase" for="tipo_calculo">Método de Cálculo </label>
                                     <div class="d-flex gap-4 border p-2 rounded bg-white">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="tipo_calculo" id="rbtn_fecha" value="fecha">
-                                            <label class="form-check-label fw-bold" for="rbtn_fecha">Por Rango de Fechas (Días)</label>
+                                            <label class="form-check-label fw-bold" for="rbtn_fecha">Por Rango de Fechas (Días) </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="tipo_calculo" id="rbtn_horas" value="horas">
-                                            <label class="form-check-label fw-bold" for="rbtn_horas">Por Horas</label>
+                                            <label class="form-check-label fw-bold" for="rbtn_horas">Por Horas </label>
                                         </div>
                                     </div>
                                 </div>
@@ -1230,15 +1338,15 @@ $ruta = '';
                             <div id="pnl_calculo_fecha" style="display:none">
                                 <div class="row g-3">
                                     <div class="col-md-4">
-                                        <label class="fw-bold">Desde</label>
+                                        <label class="fw-bold" for="txt_fecha_desde">Desde </label>
                                         <input type="date" class="form-control form-control-sm" name="txt_fecha_desde" id="txt_fecha_desde">
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="fw-bold">Hasta</label>
+                                        <label class="fw-bold" for="txt_fecha_hasta">Hasta </label>
                                         <input type="date" class="form-control form-control-sm" name="txt_fecha_hasta" id="txt_fecha_hasta">
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="fw-bold text-success">Total Días</label>
+                                        <label class="fw-bold text-success" for="txt_total_dias">Total Días </label>
                                         <input type="number" class="form-control form-control-sm bg-white" name="txt_total_dias" id="txt_total_dias" readonly>
                                     </div>
                                 </div>
@@ -1247,20 +1355,20 @@ $ruta = '';
                             <div id="pnl_calculo_horas" style="display:none">
                                 <div class="row g-3">
                                     <div class="col-md-3">
-                                        <label class="fw-bold">Fecha del Permiso</label>
+                                        <label class="fw-bold" for="txt_fecha_horas">Fecha del Permiso </label>
                                         <input type="date" class="form-control form-control-sm" name="txt_fecha_horas" id="txt_fecha_horas">
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="fw-bold">Hora Desde</label>
+                                        <label class="fw-bold" for="txt_hora_desde">Hora Desde </label>
                                         <input type="time" class="form-control form-control-sm" name="txt_hora_desde" id="txt_hora_desde">
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="fw-bold">Hora Hasta</label>
+                                        <label class="fw-bold" for="txt_hora_hasta">Hora Hasta </label>
                                         <input type="time" class="form-control form-control-sm" name="txt_hora_hasta" id="txt_hora_hasta">
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="fw-bold text-success">Total Horas</label>
-                                        <input type="number" class="form-control form-control-sm bg-white" name="txt_total_horas" id="txt_total_horas" readonly>
+                                        <label class="fw-bold text-success" for="txt_total_horas">Total Horas </label>
+                                        <input type="time" class="form-control form-control-sm bg-white" name="txt_total_horas" id="txt_total_horas" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -1309,9 +1417,43 @@ $ruta = '';
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modal_ver_pdf_documentos_identidad" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-dark bg-opacity-10 py-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-white p-2 rounded-circle me-2 text-primary shadow-sm">
+                        <i class='bx bxs-file-pdf bx-sm'></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark mb-0">Visor de Documentos</h5>
+                        <small class="text-muted" id="lbl_subtitulo_pdf">Vista previa del archivo adjunto</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body p-0 bg-light">
+                <div class="w-100 position-relative" style="height: 80vh;">
+                    <div class="position-absolute top-50 start-50 translate-middle text-muted" style="z-index: 0;">
+                        <i class='bx bx-loader-alt bx-spin bx-md'></i> Cargando documento...
+                    </div>
+                    <iframe src=""
+                        id="iframe_documentos_identidad_pdf"
+                        class="w-100 h-100 border-0 position-relative"
+                        style="z-index: 1;"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+            <div class="modal-footer py-2 bg-white">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();">Cerrar Visualizador</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     $(document).ready(function() {
-        // ... tu código existente ...
 
         // 1. Agregar asteriscos a campos obligatorios
         agregar_asterisco_campo_obligatorio('ddl_personas');
@@ -1320,6 +1462,25 @@ $ruta = '';
         agregar_asterisco_campo_obligatorio('txt_fecha_horas');
         agregar_asterisco_campo_obligatorio('txt_hora_desde');
         agregar_asterisco_campo_obligatorio('txt_hora_hasta');
+        agregar_asterisco_campo_obligatorio('ddl_motivo_medico');
+        agregar_asterisco_campo_obligatorio('txt_detalle_motivo_medico');
+        agregar_asterisco_campo_obligatorio('file_act_defuncion');
+        agregar_asterisco_campo_obligatorio('tipo_calculo');
+        agregar_asterisco_campo_obligatorio('txt_total_dias');
+        agregar_asterisco_campo_obligatorio('txt_total_horas');
+        agregar_asterisco_campo_obligatorio('rbx_tipo_motivo');
+        agregar_asterisco_campo_obligatorio('ddl_familiar');
+        agregar_asterisco_campo_obligatorio('ddl_motivo');
+        agregar_asterisco_campo_obligatorio('txt_detalle_motivo');
+        agregar_asterisco_campo_obligatorio('tipo_asunto');
+        agregar_asterisco_campo_obligatorio('txt_lugar');
+        agregar_asterisco_campo_obligatorio('txt_especialidad');
+        agregar_asterisco_campo_obligatorio('txt_fecha_atencion');
+        agregar_asterisco_campo_obligatorio('txt_medico');
+        agregar_asterisco_campo_obligatorio('txt_hora_desde_atencion');
+        agregar_asterisco_campo_obligatorio('txt_hora_hasta_atencion');
+        agregar_asterisco_campo_obligatorio('file_certificado');
+        agregar_asterisco_campo_obligatorio('rbx_tipo_atencion');
 
         // 2. Validación para select2
         $(".select2-validation").on("select2:select", function() {
@@ -1628,9 +1789,11 @@ $ruta = '';
         });
     }
 
-    // Modificar la función validar_formulario para usar validate
     function validar_formulario() {
-        // Validar el formulario con jQuery Validate
+
+        console.log("desde la validacion");
+
+
         let formularioValido = $("#form_solicitud").valid();
 
         if (!formularioValido) {

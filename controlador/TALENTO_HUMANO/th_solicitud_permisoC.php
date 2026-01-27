@@ -237,6 +237,11 @@ class th_solicitud_permisoC
                 'campo_bd' => 'th_sol_per_ruta_act_defuncion',
                 'prefijo' => 'act_defuncion_',
                 'ruta_actual' => $post['ruta_act_defuncion_actual'] ?? null
+            ],
+            'file_certificado_asistencia' => [
+                'campo_bd' => 'th_sol_per_ruta_certificado_asistencia',
+                'prefijo' => 'certificado_asistencia_',
+                'ruta_actual' => $post['ruta_certificado_asistencia'] ?? null
             ]
         ];
 

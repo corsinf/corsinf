@@ -50,6 +50,7 @@ class th_solicitud_permisoM extends BaseModel
         'th_sol_per_fecha_hasta_permiso AS fecha_hasta_permiso',
         'th_sol_per_total_dias AS total_dias_permiso',
         'th_sol_per_total_horas AS total_horas_permiso',
+        'th_sol_per_ruta_certificado_asistencia AS ruta_certificado_asistencia',
     ];
 
 
@@ -200,7 +201,8 @@ class th_solicitud_permisoM extends BaseModel
         sp.th_sol_per_fecha_desde_permiso AS fecha_desde_permiso,
         sp.th_sol_per_fecha_hasta_permiso AS fecha_hasta_permiso,
         sp.th_sol_per_total_dias AS total_dias_permiso,
-        sp.th_sol_per_total_horas AS total_horas_permiso
+        sp.th_sol_per_total_horas AS total_horas_permiso,
+        sp.th_sol_per_ruta_certificado_asistencia AS ruta_certificado_asistencia
     FROM th_solicitud_permiso sp
     INNER JOIN th_personas p ON sp.th_per_id = p.th_per_id
     {$where}

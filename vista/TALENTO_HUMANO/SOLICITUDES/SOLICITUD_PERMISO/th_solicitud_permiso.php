@@ -6,100 +6,90 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script type="text/javascript">
-    //quitar session
 
-    const session = <?= json_encode($_SESSION) ?>;
-    const TIPO_USUARIO = session.INICIO.TIPO;
-    let id_persona = (TIPO_USUARIO === 'DBA' || TIPO_USUARIO === 'ADMINISTRADOR') ? '' : session.INICIO.NO_CONCURENTE;
+    const USER_DATA = {
+        tipo: "<?= $_SESSION['INICIO']['TIPO'] ?>",
+        id: "<?= (in_array($_SESSION['INICIO']['TIPO'], ['DBA', 'ADMINISTRADOR'])) ? '' : $_SESSION['INICIO']['NO_CONCURENTE'] ?>"
+    };
 
-    if (id_persona !== "") {
-        window.location.href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_solicitud_persona&_id=${id_persona}`;
+    if (USER_DATA.id !== "") {
+        window.location.href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_solicitud_persona&_id=${USER_DATA.id}`;
     } else {
-
+        console.log("Acceso de administrador: No se requiere redirección automática.");
     }
 
     $(document).ready(function() {
 
         let estado = 2;
 
-        let tbl_permisos = $('#tbl_permisos').DataTable($.extend({},
-            configuracion_datatable(
-                'Motivo',
-                'Tipo',
-                'Médico',
-                'Fecha',
-                'Desde',
-                'Hasta',
-                'Estado'
-            ), {
-                responsive: true,
-                dom: 'frtip',
-                buttons: [{
-                    extend: 'colvis',
-                    text: '<i class="bx bx-columns"></i> Columnas',
-                    className: 'btn btn-outline-secondary btn-sm'
-                }],
-                language: {
-                    url: '../assets/plugins/datatable/spanish.json'
+        let tbl_permisos = $('#tbl_permisos').DataTable($.extend({}, {
+            responsive: true,
+            dom: 'frtip',
+            buttons: [{
+                extend: 'colvis',
+                text: '<i class="bx bx-columns"></i> Columnas',
+                className: 'btn btn-outline-secondary btn-sm'
+            }],
+            language: {
+                url: '../assets/plugins/datatable/spanish.json'
+            },
+            ajax: {
+                url: '../controlador/TALENTO_HUMANO/th_solicitud_permiso_medicoC.php?listar=true',
+                type: 'POST',
+                data: function(d) {
+                    d.estado = estado;
                 },
-                ajax: {
-                    url: '../controlador/TALENTO_HUMANO/th_solicitud_permiso_medicoC.php?listar=true',
-                    type: 'POST',
-                    data: function(d) {
-                        d.estado = estado;
-                    },
-                    dataSrc: ''
-                },
-                columns: [{
-                        data: 'nombre_completo',
-                        render: function(data, type, item) {
-                            let href =
-                                `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_solicitud_persona&_id=${item.id}`;
-                            return `<a href="${href}"><u>${data}</u></a>`;
-                        }
-                    },
-                    {
-                        data: 'cedula'
-                    },
-                    {
-                        data: 'telefono'
-                    },
-                    {
-                        data: 'total_solicitudes',
-                        render: function(data) {
-                            return `<strong>${data || 0}</strong>`;
-                        }
-                    },
-                    {
-                        data: 'total_por_revisar',
-                        render: function(data) {
-                            return `${data || 0}`;
-                        }
-                    },
-                    {
-                        data: 'total_aprobadas',
-                        render: function(data) {
-                            return `${data || 0}`;
-                        }
-                    },
-                    {
-                        data: 'total_rechazada',
-                        render: function(data) {
-                            return `${data || 0}`;
-                        }
-                    },
-                    {
-                        data: 'total_pendientes',
-                        render: function(data) {
-                            return `${data || 0}`;
-                        }
+                dataSrc: ''
+            },
+            columns: [{
+                    data: 'nombre_completo',
+                    render: function(data, type, item) {
+                        let href =
+                            `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_solicitud_persona&_id=${item.id}`;
+                        return `<a href="${href}"><u>${data}</u></a>`;
                     }
-                ],
-                order: [
-                    [3, 'desc']
-                ]
-            }
-        ));
+                },
+                {
+                    data: 'cedula'
+                },
+                {
+                    data: 'telefono'
+                },
+                {
+                    data: 'total_solicitudes',
+                    render: function(data) {
+                        return `<strong>${data || 0}</strong>`;
+                    }
+                },
+                {
+                    data: 'total_por_revisar',
+                    render: function(data) {
+                        return `${data || 0}`;
+                    }
+                },
+                {
+                    data: 'total_aprobadas',
+                    render: function(data) {
+                        return `${data || 0}`;
+                    }
+                },
+                {
+                    data: 'total_rechazada',
+                    render: function(data) {
+                        return `${data || 0}`;
+                    }
+                },
+                {
+                    data: 'total_pendientes',
+                    render: function(data) {
+                        return `${data || 0}`;
+                    }
+                }
+            ],
+            order: [
+                [3, 'desc']
+            ]
+        }));
 
         // Filtro por estado
         $('input[name="rbx_variable"]').on('change', function() {
