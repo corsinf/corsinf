@@ -73,12 +73,12 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                         data: null,
                         className: 'text-center',
                         render: function(data, type, row) {
-                            return `
-                <button type="button" class="btn btn-sm btn-outline-danger" 
-                        onclick="cargar_solicitud('${row.id_solicitud}')" 
-                        title="Ver PDF de la Solicitud">
-                   <i class="bx bxs-file-pdf fs-5"></i>
-                </button>`;
+
+                            return `<button type="button" class="btn btn-xs btn-outline-danger" 
+                                            onclick="cargar_solicitud('${row.id_solicitud}')" 
+                                            title="Ver PDF de la Solicitud">
+                                    <i class="bx bxs-file-pdf fs-7 me-0 fw-bold"></i>
+                                    </button>`;
                         }
                     }
                 ],
@@ -135,7 +135,22 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
     <div class="page-content">
 
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Permisos Médicos</div>
+            <div class="breadcrumb-title pe-3">Solicitudes</div>
+            <?php
+            // print_r($_SESSION['INICIO']);die();
+
+            ?>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Solicitudes y Justificaciones - Nombre persona
+                        </li>
+                    </ol>
+                </nav>
+            </div>
         </div>
 
         <div class="row">
@@ -146,13 +161,10 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                         <!-- FILA SUPERIOR: TÍTULO + BOTONES -->
                         <div class="row align-items-center mb-2">
 
-                            <!-- TÍTULO -->
-                            <div class="col-md-6">
-                                <h5 class="mb-0 text-primary">Listado de Solicitudes y Permisos</h5>
-                            </div>
+
 
                             <!-- BOTONES -->
-                            <div class="col-md-6 text-end">
+                            <div class="">
                                 <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_aprobacion_solicitudes"
                                     class="btn btn-outline-dark btn-sm me-2">
                                     <i class="bx bx-arrow-back"></i> Regresar

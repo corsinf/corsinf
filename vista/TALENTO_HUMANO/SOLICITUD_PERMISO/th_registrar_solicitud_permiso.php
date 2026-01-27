@@ -8,7 +8,10 @@ $ruta = '';
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <script>
+    //quitar session
+
     const session = <?= json_encode($_SESSION) ?>;
+    console.log(session);
     const TIPO_USUARIO = session.INICIO.TIPO;
     let id_persona = (TIPO_USUARIO === 'DBA' || TIPO_USUARIO === 'ADMINISTRADOR') ? '' : session.INICIO.NO_CONCURENTE;
 
@@ -977,7 +980,7 @@ $ruta = '';
                             <h6 class="text-primary mb-3"><i class="bi bi-person-badge me-2"></i>Información del Solicitante</h6>
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label for="ddl_personas" class="form-label fw-bold">Persona</label>
+                                    <label for="ddl_personas" class="form-label fw-bold">Persona </label>
                                     <select class="form-select form-select-sm select2-validation" id="ddl_personas" name="ddl_personas">
                                         <option selected disabled>-- Seleccione --</option>
                                     </select>
@@ -1051,14 +1054,14 @@ $ruta = '';
                                         id="txt_detalle_motivo"
                                         name="txt_detalle_motivo"
                                         rows="1"
-                                        style="resize: none;"></textarea>
+                                        ></textarea>
                                 </div>
                             </div>
 
                             <div id="pnl_info_adicional" style="display:none">
                                 <h6 class="text-primary mb-3"><i class="bi bi-people me-2"></i> Información adicional</h6>
                                 <div class="row g-3">
-                                    <div class="col-md-3">
+                                    <div class="col-md-3" hidden>
                                         <label class="fw-bold">Tipo de Familiar</label>
                                         <select class="form-control form-control-sm" id="ddl_parentesco">
                                             <option value="">-- Seleccione --</option>

@@ -99,20 +99,28 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     <div class="page-content">
 
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Permisos Médicos</div>
+            <div class="breadcrumb-title pe-3">Solicitudes</div>
+            <?php
+            // print_r($_SESSION['INICIO']);die();
+
+            ?>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Aprobación Solicitudes y Justificaciones
+                        </li>
+                    </ol>
+                </nav>
+            </div>
         </div>
 
         <div class="row">
             <div class="col-xl-12 mx-auto">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-4">
-
-                        <div class="row align-items-center mb-3">
-                            <div class="col-md-4">
-                                <h5 class="mb-0 text-primary">Listado de Permisos de las Personas</h5>
-                            </div>
-                        </div>
-
 
                         <table class="table table-striped" id="tbl_permisos" style="width:100%">
                             <thead>

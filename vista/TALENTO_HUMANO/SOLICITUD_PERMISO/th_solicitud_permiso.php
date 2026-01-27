@@ -6,6 +6,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script type="text/javascript">
+    //quitar session
+
     const session = <?= json_encode($_SESSION) ?>;
     const TIPO_USUARIO = session.INICIO.TIPO;
     let id_persona = (TIPO_USUARIO === 'DBA' || TIPO_USUARIO === 'ADMINISTRADOR') ? '' : session.INICIO.NO_CONCURENTE;
@@ -112,7 +114,22 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     <div class="page-content">
 
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Permisos Médicos</div>
+            <div class="breadcrumb-title pe-3">Solicitudes</div>
+            <?php
+            // print_r($_SESSION['INICIO']);die();
+
+            ?>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Lista Solicitudes y Justificaciones
+                        </li>
+                    </ol>
+                </nav>
+            </div>
         </div>
 
         <div class="row">
@@ -121,12 +138,12 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     <div class="card-body p-4">
 
                         <div class="card-title d-flex align-items-center justify-content-between">
-                            <h5 class="mb-0 text-primary">Listado de Personas</h5>
 
-                            <div class="d-flex gap-2">
+
+                            <div class="">
                                 <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_solicitud_permiso"
                                     class="btn btn-success btn-sm">
-                                    <i class="bx bx-plus"></i> Nuevo Permiso
+                                    <i class="bx bx-plus"></i> Nueva Solicitud
                                 </a>
                             </div>
                         </div>

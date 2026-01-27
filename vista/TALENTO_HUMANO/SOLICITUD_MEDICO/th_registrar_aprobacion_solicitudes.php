@@ -673,7 +673,6 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
         }
         return edad;
     }
-
 </script>
 
 <div class="page-wrapper">
@@ -753,16 +752,6 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                                 </div>
                             </div>
 
-                            <!-- IDG -->
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <label for="ddl_IDG" class="form-label fw-bold">IDG</label>
-                                    <select class="form-select form-select-sm select2-validation" id="ddl_IDG" name="ddl_IDG">
-                                        <option selected disabled>-- Seleccione --</option>
-                                    </select>
-                                </div>
-                            </div>
-
                             <hr>
 
                             <!-- OBSERVACIONES -->
@@ -792,6 +781,18 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                                         <input type="radio" name="cert_asistencia" value="no" id="cert_asist_no">
                                         <label for="cert_asist_no">NO</label>
                                     </div>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <!-- IDG -->
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label for="ddl_IDG" class="form-label fw-bold">IDG</label>
+                                    <select class="form-select form-select-sm select2-validation" id="ddl_IDG" name="ddl_IDG">
+                                        <option selected disabled>-- Seleccione --</option>
+                                    </select>
                                 </div>
                             </div>
 

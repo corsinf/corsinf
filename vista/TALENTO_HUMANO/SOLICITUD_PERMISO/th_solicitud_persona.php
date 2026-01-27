@@ -9,6 +9,7 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
 
 <script type="text/javascript">
     // 1. Definimos variables globales y cargamos datos de sesión de inmediato
+    //quitar session
     const session = <?= json_encode($_SESSION) ?>;
     const TIPO_USUARIO = session.INICIO.TIPO;
 
