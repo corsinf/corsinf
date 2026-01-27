@@ -9,84 +9,76 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
 <script type="text/javascript">
     $(document).ready(function() {
 
-        let tbl_permisos = $('#tbl_permisos').DataTable($.extend({},
-            configuracion_datatable(
-                'Motivo',
-                'Médico',
-            ), {
-                responsive: true,
-                dom: 'frtip',
-                buttons: [{
-                    extend: 'colvis',
-                    text: '<i class="bx bx-columns"></i> Columnas',
-                    className: 'btn btn-outline-secondary btn-sm'
-                }],
-                ajax: {
-                    url: '../controlador/TALENTO_HUMANO/th_solicitud_permiso_medicoC.php?listar_solicitudes_persona=true',
-                    type: 'POST',
-                    data: function(d) {
-                        d.id = <?= $_id ?>;
-                    },
-                    dataSrc: ''
+        let tbl_permisos = $('#tbl_permisos').DataTable($.extend({}, {
+            responsive: true,
+            language: {
+                url: '../assets/plugins/datatable/spanish.json'
+            },
+            ajax: {
+                url: '../controlador/TALENTO_HUMANO/th_solicitud_permiso_medicoC.php?listar_solicitudes_persona=true',
+                type: 'POST',
+                data: function(d) {
+                    d.id = <?= $_id ?>;
                 },
-                columns: [{
-                        data: 'motivo',
-                        render: function(data, type, row) {
-                            let href =
-                                `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_aprobacion_solicitudes&_id=${row.id_solicitud_medica ? row.id_solicitud_medica: ''}&_id_sol=${row.id_solicitud}&_per_id=<?= $_id ?>`;
-                            return `<a href="${href}"><u>${data}</u></a>`;
+                dataSrc: ''
+            },
+            columns: [{
+                    data: 'motivo',
+                    render: function(data, type, row) {
+                        let href =
+                            `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_aprobacion_solicitudes&_id=${row.id_solicitud_medica ? row.id_solicitud_medica: ''}&_id_sol=${row.id_solicitud}&_per_id=<?= $_id ?>`;
+                        return `<a href="${href}"><u>${data}</u></a>`;
+                    }
+                },
+                {
+                    data: 'nombre_medico',
+                    render: function(data) {
+                        return data ? data : '<span class="text-muted">—</span>';
+                    }
+                },
+                {
+                    data: 'estado_medico',
+                    className: 'text-center',
+                    render: function(data, type, row) {
+                        if (data === null) {
+                            return `<span class="badge bg-secondary">Sin revisión</span>`; // Corresponde a total_por_revisar
                         }
-                    },
-                    {
-                        data: 'nombre_medico',
-                        render: function(data) {
-                            return data ? data : '<span class="text-muted">—</span>';
+
+                        // Usamos Number() para asegurar la comparación numérica tras el cambio a INT en la DB
+                        let estado = Number(data);
+
+                        if (estado === 0) {
+                            return `<span class="badge bg-warning text-dark">Pendiente</span>`; // total_pendientes
                         }
-                    },
-                    {
-                        data: 'estado_medico',
-                        className: 'text-center',
-                        render: function(data, type, row) {
-                            if (data === null) {
-                                return `<span class="badge bg-secondary">Sin revisión</span>`; // Corresponde a total_por_revisar
-                            }
 
-                            // Usamos Number() para asegurar la comparación numérica tras el cambio a INT en la DB
-                            let estado = Number(data);
-
-                            if (estado === 0) {
-                                return `<span class="badge bg-warning text-dark">Pendiente</span>`; // total_pendientes
-                            }
-
-                            if (estado === 1) {
-                                return `<span class="badge bg-success">Aprobado</span>`; // total_aprobadas
-                            }
-
-                            if (estado === 2) {
-                                // Corregido: faltaba cerrar la comilla del class y el tag >
-                                return `<span class="badge bg-danger">Rechazada</span>`; // total_rechazada
-                            }
-
-                            return `<span class="badge bg-info">Otro</span>`;
+                        if (estado === 1) {
+                            return `<span class="badge bg-success">Aprobado</span>`; // total_aprobadas
                         }
-                    }, {
-                        data: null,
-                        className: 'text-center',
-                        render: function(data, type, row) {
 
-                            return `<button type="button" class="btn btn-xs btn-outline-danger" 
+                        if (estado === 2) {
+                            // Corregido: faltaba cerrar la comilla del class y el tag >
+                            return `<span class="badge bg-danger">Rechazada</span>`; // total_rechazada
+                        }
+
+                        return `<span class="badge bg-info">Otro</span>`;
+                    }
+                }, {
+                    data: null,
+                    className: 'text-center',
+                    render: function(data, type, row) {
+
+                        return `<button type="button" class="btn btn-xs btn-outline-danger" 
                                             onclick="cargar_solicitud('${row.id_solicitud}')" 
                                             title="Ver PDF de la Solicitud">
                                     <i class="bx bxs-file-pdf fs-7 me-0 fw-bold"></i>
                                     </button>`;
-                        }
                     }
-                ],
-                order: [
-                    [2, 'desc']
-                ]
-            }
-        ));
+                }
+            ],
+            order: [
+                [2, 'desc']
+            ]
+        }));
 
 
 

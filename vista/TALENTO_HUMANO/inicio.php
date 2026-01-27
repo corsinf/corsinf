@@ -345,29 +345,36 @@ if ($_GET['acc'] == 'th_contr_competencias') {
 if ($_GET['acc'] == 'th_registrar_competencia') {
 	include('TALENTO_HUMANO/CONTRATACION/COMPETENCIAS/th_registrar_competencia.php');
 }
+
+/**
+ * 
+ * Solicitudes y justificaciones
+ * 
+ */
+
 if ($_GET['acc'] == 'th_solicitud_permiso') {
-	include('TALENTO_HUMANO/SOLICITUD_PERMISO/th_solicitud_permiso.php');
+	include('TALENTO_HUMANO/SOLICITUDES/SOLICITUD_PERMISO/th_solicitud_permiso.php');
 }
 
 if ($_GET['acc'] == 'th_registrar_solicitud_permiso') {
-	include('TALENTO_HUMANO/SOLICITUD_PERMISO/th_registrar_solicitud_permiso.php');
+	include('TALENTO_HUMANO/SOLICITUDES/SOLICITUD_PERMISO/th_registrar_solicitud_permiso.php');
 }
 if ($_GET['acc'] == 'th_solicitud_persona') {
-	include('TALENTO_HUMANO/SOLICITUD_PERMISO/th_solicitud_persona.php');
+	include('TALENTO_HUMANO/SOLICITUDES/SOLICITUD_PERMISO/th_solicitud_persona.php');
 }
 
 
 
 if ($_GET['acc'] == 'th_aprobacion_solicitudes') {
-	include('TALENTO_HUMANO/SOLICITUD_MEDICO/th_aprobacion_solicitudes.php');
+	include('TALENTO_HUMANO/SOLICITUDES/SOLICITUD_MEDICO/th_aprobacion_solicitudes.php');
 }
 
 if ($_GET['acc'] == 'th_registrar_aprobacion_solicitudes') {
-	include('TALENTO_HUMANO/SOLICITUD_MEDICO/th_registrar_aprobacion_solicitudes.php');
+	include('TALENTO_HUMANO/SOLICITUDES/SOLICITUD_MEDICO/th_registrar_aprobacion_solicitudes.php');
 }
 
 if ($_GET['acc'] == 'th_solicitudes_personas') {
-	include('TALENTO_HUMANO/SOLICITUD_MEDICO/th_solicitudes_personas.php');
+	include('TALENTO_HUMANO/SOLICITUDES/SOLICITUD_MEDICO/th_solicitudes_personas.php');
 }
 
 /**
