@@ -134,6 +134,7 @@ $ruta = '';
                 $('#ddl_motivo').val('');
                 $('#pnl_info_adicional').slideUp();
                 $('#pnl_acta_defuncion').slideUp();
+                $('#pnl_certificado_asistencia').slideDown();
             }
         });
 
@@ -1093,25 +1094,7 @@ $ruta = '';
 
                         </div>
                     </div>
-                    <div id="pnl_certificado_asistencia" class="card border-primary border-bottom border-3 shadow-sm mb-3">
-                        <div class="col-md-6">
-                            <div class="card-body">
-                                <h6 class="text-primary mb-3">
-                                    <i class="bi bi-file-earmark-check me-2"></i> Certificado de Asistencia
-                                </h6>
-                                <label for="file_certificado_asistencia" class="fw-bold">Adjuntar Certificado</label>
-                                <input type="file" class="form-control form-control-sm" id="file_certificado_asistencia" accept=".pdf">
 
-                                <div class="row">
-                                    <div class="col-md-6">
-
-                                        <small class="text-muted">PDF • Máx. 5MB</small>
-                                        <input type="hidden" id="txt_ruta_asistencia_guardada">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <!-- MOTIVO DE LA AUSENCIA -->
                     <div class="card border-primary border-bottom border-3 shadow-sm mb-3">
@@ -1218,6 +1201,25 @@ $ruta = '';
                                 <div class="col-md-6">
                                     <label for="txt_detalle_motivo_medico" class="fw-bold">Observación Médica </label>
                                     <input type="text" class="form-control form-control-sm" name="txt_detalle_motivo_medico" id="txt_detalle_motivo_medico">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="pnl_certificado_asistencia" class="card border-primary border-bottom border-3 shadow-sm mb-3" style="display: none;">
+                        <div class="col-md-6">
+                            <div class="card-body">
+                                <h6 class="text-primary mb-3">
+                                    <i class="bi bi-file-earmark-check me-2"></i> Certificado de Asistencia
+                                </h6>
+                                <label for="file_certificado_asistencia" class="fw-bold">Adjuntar Certificado</label>
+                                <input type="file" class="form-control form-control-sm" id="file_certificado_asistencia" accept=".pdf">
+
+                                <div class="row">
+                                    <div class="col-md-6">
+
+                                        <small class="text-muted">PDF • Máx. 5MB</small>
+                                        <input type="hidden" id="txt_ruta_asistencia_guardada">
+                                    </div>
                                 </div>
                             </div>
                         </div>
