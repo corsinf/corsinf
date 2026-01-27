@@ -379,7 +379,7 @@ class th_detectar_dispositivosC
 
         }
 
-        $archivo = fopen($dir_cron, "w");
+        $archivo = fopen($dir_cron, "a");
 		if(file_exists($dir_cron))
 		{
 			fwrite($archivo, $command."\n");
