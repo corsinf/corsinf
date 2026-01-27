@@ -253,7 +253,7 @@ namespace CorsinfSDKHik.ConfigDB
                 Dia = (dia + 1).ToString();
             }
 
-            String SqlText = "SELECT th_pro_id,PH.th_per_id,th_pro_fecha_inicio as 'periodo_ini',th_pro_fecha_fin as 'perido_fin'," +
+            String SqlText = "SELECT th_pro_id,PE.th_per_id,th_pro_fecha_inicio as 'periodo_ini',th_pro_fecha_fin as 'perido_fin'," +
                 "HO.th_hor_id,PE.th_per_cedula as 'cedula', PE.th_per_nombres_completos,th_card_id,th_cardNo," +
                 "th_tur_hora_entrada as 'entrada_min',th_tur_hora_salida as 'salida_min'," +
                 "th_tur_limite_tardanza_in as 'tolerancia_ini',th_tur_limite_tardanza_out as 'tolerancia_fin'," +
@@ -298,42 +298,42 @@ namespace CorsinfSDKHik.ConfigDB
                     while (reader.Read())
                     {
                         // Crear un nuevo objeto para cada registro
-                        HorarioPersonasxDiaModelo data = new HorarioPersonasxDiaModelo();
+                        HorarioPersonasxDiaModelo data1 = new HorarioPersonasxDiaModelo();
 
-                        data.th_pro_id = (int)reader["th_pro_id"];
-                        data.th_per_id = (int)reader["th_per_id"];
-                        data.periodo_ini = Convert.ToDateTime(reader["periodo_ini"]);
-                        data.perido_fin = Convert.ToDateTime(reader["perido_fin"]);
-                        data.th_hor_id = (int)reader["th_hor_id"];
-                        data.cedula = reader["cedula"].ToString() ?? "";
-                        data.th_per_nombres_completos = reader["th_per_nombres_completos"].ToString() ?? "";
-                        data.th_card_id = (int)reader["th_card_id"];
-                        data.th_cardNo = reader["th_cardNo"].ToString() ?? "";
-                        data.entrada_min = (int)reader["entrada_min"];
-                        data.salida_min = (int)reader["salida_min"];
-                        data.tolerancia_ini = (int)reader["tolerancia_ini"];
-                        data.tolerancia_fin = (int)reader["tolerancia_fin"];
-                        data.entrada_tiempo_marcacion_valida_inicio = (int)reader["entrada_tiempo_marcacion_valida_inicio"];
-                        data.entrada_tiempo_marcacion_valida_fin = (int)reader["entrada_tiempo_marcacion_valida_fin"];
-                        data.salida_tiempo_marcacion_valida_inicio = (int)reader["salida_tiempo_marcacion_valida_inicio"];
-                        data.salida_tiempo_marcacion_valida_fin = (int)reader["salida_tiempo_marcacion_valida_fin"];
-                        data.horas_a_trabajar = Convert.ToInt32(reader["horas_a_trabajar"]);
-                        data.min_a_trabajar = Convert.ToInt32(reader["min_a_trabajar"]);
-                        data.aplica_descanso = Convert.ToInt32(reader["aplica_descanso"]);
-                        data.aplica_horario_descanso_intervalo = Convert.ToInt32(reader["aplica_horario_descanso_intervalo"]);
-                        data.tiempo_descanso = Convert.ToInt32(reader["tiempo_descanso"]);
-                        data.descanso_inicio = Convert.ToInt32(reader["descanso_inicio"]);
-                        data.descanso_fin = Convert.ToInt32(reader["descanso_fin"]);
-                        data.adelanto_descanso = Convert.ToInt32(reader["adelanto_descanso"]);
-                        data.tolerancia_descanso = Convert.ToInt32(reader["tolerancia_descanso"]);
-                        data.calcular_horas_extra = Convert.ToInt32(reader["calcular_horas_extra"]);
-                        data.inico_suplementario = Convert.ToInt32(reader["inico_suplementario"]);
-                        data.fin_suplementarias = Convert.ToInt32(reader["fin_suplementarias"]);
-                        data.inicio_extraordinarias = Convert.ToInt32(reader["inicio_extraordinarias"]);
-                        data.fin_extraordinarias = Convert.ToInt32(reader["fin_extraordinarias"]);
+                        data1.th_pro_id = (int)reader["th_pro_id"];
+                        data1.th_per_id = (int)reader["th_per_id"];
+                        data1.periodo_ini = Convert.ToDateTime(reader["periodo_ini"]);
+                        data1.perido_fin = Convert.ToDateTime(reader["perido_fin"]);
+                        data1.th_hor_id = (int)reader["th_hor_id"];
+                        data1.cedula = reader["cedula"].ToString() ?? "";
+                        data1.th_per_nombres_completos = reader["th_per_nombres_completos"].ToString() ?? "";
+                        data1.th_card_id = (int)reader["th_card_id"];
+                        data1.th_cardNo = reader["th_cardNo"].ToString() ?? "";
+                        data1.entrada_min = (int)reader["entrada_min"];
+                        data1.salida_min = (int)reader["salida_min"];
+                        data1.tolerancia_ini = (int)reader["tolerancia_ini"];
+                        data1.tolerancia_fin = (int)reader["tolerancia_fin"];
+                        data1.entrada_tiempo_marcacion_valida_inicio = (int)reader["entrada_tiempo_marcacion_valida_inicio"];
+                        data1.entrada_tiempo_marcacion_valida_fin = (int)reader["entrada_tiempo_marcacion_valida_fin"];
+                        data1.salida_tiempo_marcacion_valida_inicio = (int)reader["salida_tiempo_marcacion_valida_inicio"];
+                        data1.salida_tiempo_marcacion_valida_fin = (int)reader["salida_tiempo_marcacion_valida_fin"];
+                        data1.horas_a_trabajar = Convert.ToInt32(reader["horas_a_trabajar"]);
+                        data1.min_a_trabajar = Convert.ToInt32(reader["min_a_trabajar"]);
+                        data1.aplica_descanso = Convert.ToInt32(reader["aplica_descanso"]);
+                        data1.aplica_horario_descanso_intervalo = Convert.ToInt32(reader["aplica_horario_descanso_intervalo"]);
+                        data1.tiempo_descanso = Convert.ToInt32(reader["tiempo_descanso"]);
+                        data1.descanso_inicio = Convert.ToInt32(reader["descanso_inicio"]);
+                        data1.descanso_fin = Convert.ToInt32(reader["descanso_fin"]);
+                        data1.adelanto_descanso = Convert.ToInt32(reader["adelanto_descanso"]);
+                        data1.tolerancia_descanso = Convert.ToInt32(reader["tolerancia_descanso"]);
+                        data1.calcular_horas_extra = Convert.ToInt32(reader["calcular_horas_extra"]);
+                        data1.inico_suplementario = Convert.ToInt32(reader["inico_suplementario"]);
+                        data1.fin_suplementarias = Convert.ToInt32(reader["fin_suplementarias"]);
+                        data1.inicio_extraordinarias = Convert.ToInt32(reader["inicio_extraordinarias"]);
+                        data1.fin_extraordinarias = Convert.ToInt32(reader["fin_extraordinarias"]);
 
                         // Agregar a la lista
-                        listaHorarios.Add(data);
+                        listaHorarios.Add(data1);
                     }
                 }
             }
