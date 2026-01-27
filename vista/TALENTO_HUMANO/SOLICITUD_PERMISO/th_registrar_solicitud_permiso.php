@@ -1085,7 +1085,6 @@ $ruta = '';
                                         id="txt_detalle_motivo"
                                         name="txt_detalle_motivo"
                                         rows="3"
-                                        placeholder="Describa de forma detallada el motivo del permiso..."
                                         style="resize: none;"></textarea>
                                 </div>
                             </div>
@@ -1211,29 +1210,29 @@ $ruta = '';
                             <div class="row g-3">
                                 <div class="col-md-4">
                                     <label class="fw-bold">Lugar / Clínica</label>
-                                    <input type="text" class="form-control form-control-sm" id="txt_lugar" placeholder="Ej: Hospital">
+                                    <input type="text" class="form-control form-control-sm" name="txt_lugar" id="txt_lugar" placeholder="Ej: Hospital">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="fw-bold">Especialidad</label>
-                                    <input type="text" class="form-control form-control-sm" id="txt_especialidad">
+                                    <input type="text" class="form-control form-control-sm" name="txt_especialidad" id="txt_especialidad">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="fw-bold">Nombre del Médico</label>
-                                    <input type="text" class="form-control form-control-sm" id="txt_medico">
+                                    <input type="text" class="form-control form-control-sm" name="txt_medico" id="txt_medico">
                                 </div>
                             </div>
                             <div class="row g-3">
                                 <div class="col-md-4">
                                     <label class="fw-bold">Fecha Atención</label>
-                                    <input type="date" class="form-control form-control-sm" id="txt_fecha_atencion">
+                                    <input type="date" class="form-control form-control-sm" name="txt_fecha_atencion" id="txt_fecha_atencion">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="fw-bold">Hora Desde</label>
-                                    <input type="time" class="form-control form-control-sm" id="txt_hora_desde_atencion">
+                                    <input type="time" class="form-control form-control-sm" name="txt_hora_desde_atencion" id="txt_hora_desde_atencion">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="fw-bold">Hora Hasta</label>
-                                    <input type="time" class="form-control form-control-sm" id="txt_hora_hasta_atencion">
+                                    <input type="time" class="form-control form-control-sm" name="txt_hora_hasta_atencion" id="txt_hora_hasta_atencion">
                                 </div>
                             </div>
                         </div>
@@ -1263,15 +1262,15 @@ $ruta = '';
                                 <div class="row g-3">
                                     <div class="col-md-4">
                                         <label class="fw-bold">Desde</label>
-                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_desde">
+                                        <input type="date" class="form-control form-control-sm" name="txt_fecha_desde" id="txt_fecha_desde">
                                     </div>
                                     <div class="col-md-4">
                                         <label class="fw-bold">Hasta</label>
-                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_hasta">
+                                        <input type="date" class="form-control form-control-sm" name="txt_fecha_hasta" id="txt_fecha_hasta">
                                     </div>
                                     <div class="col-md-4">
                                         <label class="fw-bold text-success">Total Días</label>
-                                        <input type="number" class="form-control form-control-sm bg-white" id="txt_total_dias" readonly>
+                                        <input type="number" class="form-control form-control-sm bg-white" name="txt_total_dias" id="txt_total_dias" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -1280,19 +1279,19 @@ $ruta = '';
                                 <div class="row g-3">
                                     <div class="col-md-3">
                                         <label class="fw-bold">Fecha del Permiso</label>
-                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_horas">
+                                        <input type="date" class="form-control form-control-sm" name="txt_fecha_horas" id="txt_fecha_horas">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="fw-bold">Hora Desde</label>
-                                        <input type="time" class="form-control form-control-sm" id="txt_hora_desde">
+                                        <input type="time" class="form-control form-control-sm" name="txt_hora_desde" id="txt_hora_desde">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="fw-bold">Hora Hasta</label>
-                                        <input type="time" class="form-control form-control-sm" id="txt_hora_hasta">
+                                        <input type="time" class="form-control form-control-sm" name="txt_hora_hasta" id="txt_hora_hasta">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="fw-bold text-success">Total Horas</label>
-                                        <input type="number" class="form-control form-control-sm bg-white" id="txt_total_horas" readonly>
+                                        <input type="number" class="form-control form-control-sm bg-white" name="txt_total_horas" id="txt_total_horas" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -1341,43 +1340,160 @@ $ruta = '';
         </div>
     </div>
 </div>
-
 <script>
     $(document).ready(function() {
+        // ... tu código existente ...
+
         // 1. Agregar asteriscos a campos obligatorios
+        agregar_asterisco_campo_obligatorio('ddl_personas');
         agregar_asterisco_campo_obligatorio('txt_fecha_desde');
         agregar_asterisco_campo_obligatorio('txt_fecha_hasta');
         agregar_asterisco_campo_obligatorio('txt_fecha_horas');
         agregar_asterisco_campo_obligatorio('txt_hora_desde');
         agregar_asterisco_campo_obligatorio('txt_hora_hasta');
 
-        // 2. Lógica para mostrar/ocultar paneles según el radio de tipo_calculo
-        $('input[name="tipo_calculo"]').change(function() {
-            if ($(this).val() === 'fecha') {
-                $('#pnl_calculo_fecha').fadeIn();
-                $('#pnl_calculo_horas').hide();
-                // Limpiar errores del panel que se oculta
-                limpiar_errores_panel('#pnl_calculo_horas');
-            } else {
-                $('#pnl_calculo_horas').fadeIn();
-                $('#pnl_calculo_fecha').hide();
-                limpiar_errores_panel('#pnl_calculo_fecha');
-            }
+        // 2. Validación para select2
+        $(".select2-validation").on("select2:select", function() {
+            $(this).valid();
         });
 
         // 3. Validación del Formulario
         $("#form_solicitud").validate({
+            ignore: [], // No ignorar campos ocultos
             rules: {
-                tipo_calculo: {
-                    required: true
-                },
-                rbx_tipo_motivo: {
+                // ========== OBLIGATORIOS SIEMPRE ==========
+                ddl_personas: {
                     required: true
                 },
                 tipo_asunto: {
                     required: true
                 },
-                // Validación condicional: solo si el panel está visible
+                rbx_tipo_motivo: {
+                    required: true
+                },
+
+                // ========== MOTIVO PERSONAL ==========
+                ddl_motivo: {
+                    required: function() {
+                        return $('input[name="rbx_tipo_motivo"]:checked').val() === 'MOTIVO_PERSONAL';
+                    }
+                },
+                txt_detalle_motivo: {
+                    required: function() {
+                        let tipoMotivo = $('input[name="rbx_tipo_motivo"]:checked').val();
+                        let motivo = $('#ddl_motivo').val();
+                        return tipoMotivo === 'MOTIVO_PERSONAL' &&
+                            (motivo === 'PERSONAL' || motivo === 'CALAMIDAD' || motivo === 'FALLECIMIENTO' || motivo === 'FAMILIAR');
+                    },
+                    minlength: 10
+                },
+
+                // ========== INFO ADICIONAL (Fallecimiento y Familiar) ==========
+                ddl_parentesco: {
+                    required: function() {
+                        let tipoMotivo = $('input[name="rbx_tipo_motivo"]:checked').val();
+                        let motivo = $('#ddl_motivo').val();
+                        return tipoMotivo === 'MOTIVO_PERSONAL' && (motivo === 'FALLECIMIENTO' || motivo === 'FAMILIAR');
+                    }
+                },
+                ddl_familiar: {
+                    required: function() {
+                        let tipoMotivo = $('input[name="rbx_tipo_motivo"]:checked').val();
+                        let motivo = $('#ddl_motivo').val();
+                        return tipoMotivo === 'MOTIVO_PERSONAL' && (motivo === 'FALLECIMIENTO' || motivo === 'FAMILIAR');
+                    }
+                },
+                txt_fecha_nacimiento: {
+                    required: function() {
+                        let tipoMotivo = $('input[name="rbx_tipo_motivo"]:checked').val();
+                        let motivo = $('#ddl_motivo').val();
+                        return tipoMotivo === 'MOTIVO_PERSONAL' && (motivo === 'FALLECIMIENTO' || motivo === 'FAMILIAR');
+                    }
+                },
+                ddl_rango_edad: {
+                    required: function() {
+                        return $('#ddl_parentesco').val() === 'HIJO' && $('#pnl_rango_edad').is(':visible');
+                    }
+                },
+                ddl_otro: {
+                    required: function() {
+                        return $('#ddl_parentesco').val() === 'OTRO' && $('#pnl_tipo_adulto').is(':visible');
+                    }
+                },
+
+                // ========== ACTA DE DEFUNCIÓN ==========
+                file_act_defuncion: {
+                    required: function() {
+                        let tipoMotivo = $('input[name="rbx_tipo_motivo"]:checked').val();
+                        let motivo = $('#ddl_motivo').val();
+                        let tieneActaGuardada = $('#txt_ruta_act_defuncion_guardada').val();
+                        return tipoMotivo === 'MOTIVO_PERSONAL' && motivo === 'FALLECIMIENTO' && !tieneActaGuardada;
+                    }
+                },
+
+                // ========== MOTIVO MÉDICO ==========
+                ddl_motivo_medico: {
+                    required: function() {
+                        return $('input[name="rbx_tipo_motivo"]:checked').val() === 'MOTIVO_MEDICO';
+                    }
+                },
+                txt_detalle_motivo_medico: {
+                    required: function() {
+                        return $('input[name="rbx_tipo_motivo"]:checked').val() === 'MOTIVO_MEDICO';
+                    },
+                    minlength: 10
+                },
+
+                // ========== CERTIFICADO MÉDICO ==========
+                file_certificado: {
+                    required: function() {
+                        let tipoMotivo = $('input[name="rbx_tipo_motivo"]:checked').val();
+                        let tieneCertificadoGuardado = $('#txt_ruta_certificado_guardada').val();
+                        return tipoMotivo === 'MOTIVO_MEDICO' && !tieneCertificadoGuardado;
+                    }
+                },
+
+                // ========== ATENCIÓN MÉDICA ==========
+                rbx_tipo_atencion: {
+                    required: function() {
+                        return $('input[name="rbx_tipo_motivo"]:checked').val() === 'MOTIVO_MEDICO';
+                    }
+                },
+                txt_lugar: {
+                    required: function() {
+                        return $('input[name="rbx_tipo_motivo"]:checked').val() === 'MOTIVO_MEDICO';
+                    }
+                },
+                txt_especialidad: {
+                    required: function() {
+                        return $('input[name="rbx_tipo_motivo"]:checked').val() === 'MOTIVO_MEDICO';
+                    }
+                },
+                txt_medico: {
+                    required: function() {
+                        return $('input[name="rbx_tipo_motivo"]:checked').val() === 'MOTIVO_MEDICO';
+                    }
+                },
+                txt_fecha_atencion: {
+                    required: function() {
+                        return $('input[name="rbx_tipo_motivo"]:checked').val() === 'MOTIVO_MEDICO';
+                    }
+                },
+                txt_hora_desde_atencion: {
+                    required: function() {
+                        return $('input[name="rbx_tipo_motivo"]:checked').val() === 'MOTIVO_MEDICO';
+                    }
+                },
+                txt_hora_hasta_atencion: {
+                    required: function() {
+                        return $('input[name="rbx_tipo_motivo"]:checked').val() === 'MOTIVO_MEDICO';
+                    }
+                },
+
+                // ========== FECHAS DEL PERMISO ==========
+                tipo_calculo: {
+                    required: true
+                },
                 txt_fecha_desde: {
                     required: function() {
                         return $("#rbtn_fecha").is(":checked");
@@ -1405,55 +1521,225 @@ $ruta = '';
                 }
             },
             messages: {
-                tipo_calculo: "Seleccione un método de cálculo",
+                ddl_personas: "Seleccione una persona",
+                tipo_asunto: "Seleccione el tipo de asunto",
                 rbx_tipo_motivo: "Seleccione el tipo de motivo",
-                tipo_asunto: "Seleccione el asunto",
+                ddl_motivo: "Seleccione el motivo del permiso",
+                txt_detalle_motivo: {
+                    required: "Describa el motivo del permiso",
+                    minlength: "El detalle debe tener al menos 10 caracteres"
+                },
+                ddl_parentesco: "Seleccione el tipo de parentesco",
+                ddl_familiar: "Seleccione un familiar",
+                txt_fecha_nacimiento: "Ingrese la fecha de nacimiento",
+                ddl_rango_edad: "Seleccione el rango de edad",
+                ddl_otro: "Seleccione el tipo de cuidado",
+                file_act_defuncion: "Debe adjuntar el Acta de Defunción",
+                ddl_motivo_medico: "Seleccione el motivo médico",
+                txt_detalle_motivo_medico: {
+                    required: "Describa la observación médica",
+                    minlength: "La observación debe tener al menos 10 caracteres"
+                },
+                file_certificado: "Debe adjuntar el certificado médico",
+                rbx_tipo_atencion: "Seleccione el tipo de atención",
+                txt_lugar: "Ingrese el lugar de atención",
+                txt_especialidad: "Ingrese la especialidad médica",
+                txt_medico: "Ingrese el nombre del médico",
+                txt_fecha_atencion: "Ingrese la fecha de atención",
+                txt_hora_desde_atencion: "Ingrese la hora de inicio",
+                txt_hora_hasta_atencion: "Ingrese la hora de fin",
+                tipo_calculo: "Seleccione un método de cálculo",
                 txt_fecha_desde: "Ingrese la fecha de inicio",
                 txt_fecha_hasta: "Ingrese la fecha de fin",
                 txt_fecha_horas: "Ingrese la fecha del permiso",
                 txt_hora_desde: "Ingrese la hora de inicio",
                 txt_hora_hasta: "Ingrese la hora de fin"
             },
-            highlight: function(element) {
-                let $el = $(element);
-                if ($el.is(':radio')) {
-                    // Para radios, resaltar el contenedor o todos los radios del grupo
-                    $('input[name="' + $el.attr("name") + '"]').addClass("is-invalid").removeClass("is-valid");
-                } else {
-                    $el.addClass('is-invalid').removeClass('is-valid');
-                }
-            },
-            unhighlight: function(element) {
-                let $el = $(element);
-                if ($el.is(':radio')) {
-                    $('input[name="' + $el.attr("name") + '"]').removeClass("is-invalid").addClass("is-valid");
-                } else {
-                    $el.removeClass('is-invalid').addClass('is-valid');
-                }
-            },
+            errorElement: "div",
             errorPlacement: function(error, element) {
-                if (element.is(':radio')) {
-                    // Colocar el mensaje de error al final del contenedor d-flex de los radios
-                    error.appendTo(element.closest('.col-md-12, .col-md-6'));
+                error.addClass("invalid-feedback");
+
+                if (element.prop("type") === "radio" || element.prop("type") === "checkbox") {
+                    error.insertAfter(element.closest("div").parent());
+                } else if (element.hasClass("select2-hidden-accessible")) {
+                    error.insertAfter(element.next(".select2-container"));
+                } else if (element.prop("type") === "file") {
+                    error.insertAfter(element.next("small"));
                 } else {
                     error.insertAfter(element);
                 }
+            },
+            highlight: function(element) {
+                let $element = $(element);
+
+                if ($element.hasClass("select2-hidden-accessible")) {
+                    $element.next(".select2-container").find(".select2-selection")
+                        .removeClass("is-valid").addClass("is-invalid");
+                } else if ($element.is(':radio') || $element.is(':checkbox')) {
+                    $('input[name="' + $element.attr("name") + '"]')
+                        .addClass("is-invalid").removeClass("is-valid");
+                } else {
+                    $element.removeClass("is-valid").addClass("is-invalid");
+                }
+            },
+            unhighlight: function(element) {
+                let $element = $(element);
+
+                if ($element.hasClass("select2-hidden-accessible")) {
+                    $element.next(".select2-container").find(".select2-selection")
+                        .removeClass("is-invalid").addClass("is-valid");
+                } else if ($element.is(':radio') || $element.is(':checkbox')) {
+                    $('input[name="' + $element.attr("name") + '"]')
+                        .removeClass("is-invalid").addClass("is-valid");
+                } else {
+                    $element.removeClass("is-invalid").addClass("is-valid");
+                }
             }
+        });
+
+        // 4. Triggers para revalidar cuando cambian los radios/selects
+        $('input[name="rbx_tipo_motivo"]').change(function() {
+            // Limpiar validaciones de paneles que se ocultan
+            if ($(this).val() === 'MOTIVO_PERSONAL') {
+                limpiar_errores_panel('#pnl_motivo_medico');
+                limpiar_errores_panel('#pnl_file_certificado');
+                limpiar_errores_panel('#pnl_medico');
+            } else {
+                limpiar_errores_panel('#pnl_motivo_personal');
+                limpiar_errores_panel('#pnl_info_adicional');
+                limpiar_errores_panel('#pnl_acta_defuncion');
+            }
+
+            // Revalidar el formulario
+            $('#form_solicitud').valid();
+        });
+
+        $('#ddl_motivo').change(function() {
+            // Revalidar campos relacionados
+            $('#txt_detalle_motivo').valid();
+            $('#ddl_parentesco').valid();
+            $('#ddl_familiar').valid();
+            $('#txt_fecha_nacimiento').valid();
+            $('#file_act_defuncion').valid();
+        });
+
+        $('#ddl_motivo_medico').change(function() {
+            $('#txt_detalle_motivo_medico').valid();
+            $('#file_certificado').valid();
+            $('input[name="rbx_tipo_atencion"]').valid();
+        });
+
+        $('#ddl_parentesco').change(function() {
+            $('#ddl_rango_edad').valid();
+            $('#ddl_otro').valid();
+        });
+
+        $('input[name="tipo_calculo"]').change(function() {
+            if ($(this).val() === 'fecha') {
+                limpiar_errores_panel('#pnl_calculo_horas');
+            } else {
+                limpiar_errores_panel('#pnl_calculo_fecha');
+            }
+        });
+
+        $('input[name="rbx_tipo_atencion"]').change(function() {
+            $(this).valid();
+        });
+
+        $('input[name="tipo_asunto"]').change(function() {
+            $(this).valid();
         });
     });
 
     // Función para limpiar validaciones de paneles ocultos
     function limpiar_errores_panel(panelId) {
-        $(panelId).find('input').val('').removeClass('is-invalid is-valid');
+        $(panelId).find('input, select, textarea').each(function() {
+            $(this).removeClass('is-invalid is-valid');
+            $(this).next('.invalid-feedback').remove();
+        });
     }
 
-    // Validación de coherencia de fechas (similar a verificar_fecha_inicio_fecha_fin)
+    // Modificar la función validar_formulario para usar validate
+    function validar_formulario() {
+        // Validar el formulario con jQuery Validate
+        let formularioValido = $("#form_solicitud").valid();
+
+        if (!formularioValido) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Formulario Incompleto',
+                text: 'Por favor complete todos los campos requeridos',
+                confirmButtonColor: '#3085d6'
+            });
+
+            // Hacer scroll al primer campo con error
+            let primerError = $('.is-invalid:first');
+            if (primerError.length) {
+                $('html, body').animate({
+                    scrollTop: primerError.offset().top - 100
+                }, 500);
+            }
+
+            return false;
+        }
+
+        // Validaciones adicionales de coherencia
+        let tipo_motivo = $('input[name="rbx_tipo_motivo"]:checked').val();
+
+        if (tipo_motivo === 'MOTIVO_PERSONAL') {
+            let motivo = $('#ddl_motivo').val();
+
+            // Validar fallecimiento
+            if (motivo === 'FALLECIMIENTO') {
+                let tiene_acta_nueva = $('#file_act_defuncion')[0].files.length > 0;
+                let tiene_acta_guardada = $('#txt_ruta_act_defuncion_guardada').val();
+
+                if (!tiene_acta_nueva && !tiene_acta_guardada) {
+                    Swal.fire('Error', 'Debe adjuntar el Acta de Defunción', 'error');
+                    $('#file_act_defuncion').addClass('is-invalid');
+                    return false;
+                }
+            }
+        } else if (tipo_motivo === 'MOTIVO_MEDICO') {
+            // Validar certificado médico
+            let tiene_cert_nuevo = $('#file_certificado')[0].files.length > 0;
+            let tiene_cert_guardado = $('#txt_ruta_certificado_guardada').val();
+
+            if (!tiene_cert_nuevo && !tiene_cert_guardado) {
+                Swal.fire('Error', 'Debe adjuntar el certificado médico', 'error');
+                $('#file_certificado').addClass('is-invalid');
+                return false;
+            }
+        }
+
+        // Validar fechas
+        if ($('#rbtn_fecha').is(':checked')) {
+            let fechaDesde = new Date($('#txt_fecha_desde').val());
+            let fechaHasta = new Date($('#txt_fecha_hasta').val());
+
+            if (fechaHasta < fechaDesde) {
+                Swal.fire('Error', 'La fecha hasta debe ser mayor que la fecha desde', 'error');
+                $('#txt_fecha_hasta').addClass('is-invalid');
+                return false;
+            }
+        } else if ($('#rbtn_horas').is(':checked')) {
+            if ($('#txt_hora_desde').val() >= $('#txt_hora_hasta').val()) {
+                Swal.fire('Error', 'La hora hasta debe ser mayor que la hora desde', 'error');
+                $('#txt_hora_hasta').addClass('is-invalid');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // Validación de coherencia de fechas
     $("#txt_fecha_desde, #txt_fecha_hasta").on("blur", function() {
         let f1 = $("#txt_fecha_desde").val();
         let f2 = $("#txt_fecha_hasta").val();
         if (f1 && f2 && f1 > f2) {
             Swal.fire('Error', 'La fecha "Desde" no puede ser mayor a la fecha "Hasta"', 'error');
-            $(this).val('').addClass('is-invalid');
+            $(this).addClass('is-invalid');
         }
     });
 </script>

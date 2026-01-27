@@ -442,7 +442,7 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
             success: function(response) {
                 var r = (Array.isArray(response) && response.length > 0) ? response[0] : response;
 
-                if (r.motivo == "PERSONAL" || r.motivo == "CALAMIDAD" || r.motivo == "FALLECIMIENTO") {
+                if (r.motivo == "PERSONAL" || r.motivo == "CALAMIDAD" || r.motivo == "FALLECIMIENTO" || r.motivo == "FAMILIAR") {
                     $("#pnl_departamento_medico").hide();
                 } else {
                     $('#pnl_departamento_medico').slideDown();
@@ -763,10 +763,10 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
 
                             <div class="row mb-3">
                                 <div class="col-md-3">
-                                    <input type="checkbox" id="cbx_reposo"> <label for="cbx_reposo">REPOSO</label>
+                                    <input type="checkbox" id="cbx_reposo" name="cbx_reposo"> <label for="cbx_reposo">REPOSO</label>
                                 </div>
                                 <div class="col-md-3">
-                                    <input type="checkbox" id="cbx_permiso"> <label for="cbx_permiso">PERMISO</label>
+                                    <input type="checkbox" id="cbx_permiso" name="cbx_reposo"> <label for="cbx_permiso">PERMISO</label>
                                 </div>
                             </div>
 
@@ -837,7 +837,7 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                             <div class="row mb-3">
                                 <div class="col-md-12">
                                     <label for="txt_motivo">(Motivo)</label>
-                                    <input type="text" class="form-control form-control-sm" id="txt_motivo" placeholder="Describa el motivo">
+                                    <input type="text" class="form-control form-control-sm" name="txt_motivo" id="txt_motivo" placeholder="Describa el motivo">
                                 </div>
                             </div>
 
@@ -1188,90 +1188,257 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
 
 <script>
     $(document).ready(function() {
+        // ... tu código existente ...
+
+        // Agregar método personalizado para validar que al menos uno esté marcado
+        $.validator.addMethod("requiereReposoOPermiso", function(value, element) {
+            return $('#cbx_reposo').is(':checked') || $('#cbx_permiso').is(':checked');
+        }, "Debe seleccionar REPOSO o PERMISO");
+
+        // Configurar validación del formulario
         $("#form_permiso_medico").validate({
+            ignore: [], // No ignorar campos ocultos
             rules: {
-                // Sección Médica (CIE-10 e IDG)
-                txt_codigo_idg: {
-                    required: true,
+                // Validación para checkboxes de REPOSO/PERMISO
+                cbx_reposo: {
+                    requiereReposoOPermiso: function() {
+                        return $('#pnl_departamento_medico').is(':visible');
+                    }
+                },
+                cbx_permiso: {
+                    requiereReposoOPermiso: function() {
+                        return $('#pnl_departamento_medico').is(':visible');
+                    }
+                },
+
+                // Campos del panel médico (solo cuando está visible)
+                ddl_IDG: {
+                    required: function() {
+                        return $('#pnl_departamento_medico').is(':visible');
+                    }
                 },
                 txt_motivo: {
-                    required: true,
+                    required: function() {
+                        return $('#pnl_departamento_medico').is(':visible');
+                    },
                     minlength: 10
                 },
                 tipo_enfermedad: {
                     required: function() {
-                        return $("#pnl_tipo_enfermedad").is(":visible");
+                        return $('#pnl_tipo_enfermedad').is(':visible') && $('#pnl_departamento_medico').is(':visible');
                     }
                 },
                 cert_medico: {
-                    required: true
+                    required: function() {
+                        return $('#pnl_departamento_medico').is(':visible');
+                    }
                 },
                 cert_asistencia: {
-                    required: true
+                    required: function() {
+                        return $('#pnl_departamento_medico').is(':visible');
+                    }
                 },
 
-                // Sección de Fechas y Horas
-                tipo_calculo: {
-                    required: true
-                },
-
-                // Si elige "Por Fecha"
+                // Campos de cálculo por fecha
                 txt_fecha_desde: {
                     required: function() {
-                        return $("#rbtn_fecha").is(":checked");
+                        return $('#rbtn_fecha').is(':checked');
                     }
                 },
                 txt_fecha_hasta: {
                     required: function() {
-                        return $("#rbtn_fecha").is(":checked");
+                        return $('#rbtn_fecha').is(':checked');
                     }
                 },
 
-                // Si elige "Por Horas"
+                // Campos de cálculo por horas
                 txt_fecha_horas: {
                     required: function() {
-                        return $("#rbtn_horas").is(":checked");
+                        return $('#rbtn_horas').is(':checked');
                     }
                 },
                 txt_hora_desde: {
                     required: function() {
-                        return $("#rbtn_horas").is(":checked");
+                        return $('#rbtn_horas').is(':checked');
                     }
                 },
                 txt_hora_hasta: {
                     required: function() {
-                        return $("#rbtn_horas").is(":checked");
+                        return $('#rbtn_horas').is(':checked');
                     }
                 }
             },
             messages: {
-                txt_codigo_idg: "Ingrese el código CIE-10 (IDG)",
-                txt_motivo: "Describa detalladamente el motivo del permiso",
+                cbx_reposo: "Debe seleccionar REPOSO o PERMISO",
+                cbx_permiso: "Debe seleccionar REPOSO o PERMISO",
+                ddl_IDG: "Seleccione un código IDG",
+                txt_motivo: {
+                    required: "Describa el motivo del permiso médico",
+                    minlength: "El motivo debe tener al menos 10 caracteres"
+                },
                 tipo_enfermedad: "Seleccione el tipo de enfermedad",
-                cert_medico: "Marque si presenta certificado médico",
-                cert_asistencia: "Marque si presenta certificado de asistencia",
-                tipo_calculo: "Seleccione un método de cálculo",
-                txt_fecha_desde: "Indique fecha inicial",
-                txt_fecha_hasta: "Indique fecha final",
-                txt_fecha_horas: "Indique la fecha del permiso",
-                txt_hora_desde: "Indique hora de inicio",
-                txt_hora_hasta: "Indique hora de fin"
+                cert_medico: "Indique si presenta certificado médico",
+                cert_asistencia: "Indique si presenta certificado de asistencia",
+                txt_fecha_desde: "Ingrese la fecha inicial",
+                txt_fecha_hasta: "Ingrese la fecha final",
+                txt_fecha_horas: "Ingrese la fecha del permiso",
+                txt_hora_desde: "Ingrese la hora de inicio",
+                txt_hora_hasta: "Ingrese la hora de fin"
             },
             errorElement: "div",
             errorPlacement: function(error, element) {
                 error.addClass("invalid-feedback");
                 if (element.prop("type") === "radio" || element.prop("type") === "checkbox") {
-                    error.insertAfter(element.closest("div")); // Para que el error salga debajo del grupo
+                    error.insertAfter(element.closest("div").parent());
+                } else if (element.hasClass("select2-hidden-accessible")) {
+                    error.insertAfter(element.next(".select2-container"));
                 } else {
                     error.insertAfter(element);
                 }
             },
             highlight: function(element) {
-                $(element).addClass('is-invalid').removeClass('is-valid');
+                let $element = $(element);
+
+                if ($element.hasClass("select2-hidden-accessible")) {
+                    $element.next(".select2-container").find(".select2-selection")
+                        .removeClass("is-valid").addClass("is-invalid");
+                } else if ($element.is(':radio') || $element.is(':checkbox')) {
+                    $('input[name="' + $element.attr("name") + '"]')
+                        .addClass("is-invalid").removeClass("is-valid");
+                } else {
+                    $element.removeClass("is-valid").addClass("is-invalid");
+                }
             },
             unhighlight: function(element) {
-                $(element).removeClass('is-invalid').addClass('is-valid');
+                let $element = $(element);
+
+                if ($element.hasClass("select2-hidden-accessible")) {
+                    $element.next(".select2-container").find(".select2-selection")
+                        .removeClass("is-invalid").addClass("is-valid");
+                } else if ($element.is(':radio') || $element.is(':checkbox')) {
+                    $('input[name="' + $element.attr("name") + '"]')
+                        .removeClass("is-invalid").addClass("is-valid");
+                } else {
+                    $element.removeClass("is-invalid").addClass("is-valid");
+                }
             }
         });
+
+        // Validación para select2
+        $(".select2-validation").on("select2:select", function() {
+            $(this).valid(); // Trigger validation
+        });
+
+        // Cuando cambian los checkboxes REPOSO/PERMISO
+        $('#cbx_reposo, #cbx_permiso').change(function() {
+            // Validar ambos checkboxes
+            $('#cbx_reposo').valid();
+            $('#cbx_permiso').valid();
+
+            // Si está visible el panel, validar tipo de enfermedad
+            if ($('#pnl_departamento_medico').is(':visible') && $('#pnl_tipo_enfermedad').is(':visible')) {
+                $('#form_permiso_medico').validate().element('input[name="tipo_enfermedad"]');
+            }
+        });
+
+        $('input[name="tipo_enfermedad"]').change(function() {
+            $(this).valid();
+        });
+
+        $('input[name="cert_medico"], input[name="cert_asistencia"]').change(function() {
+            $(this).valid();
+        });
+
+        // Cuando cambia el tipo de cálculo, validar campos correspondientes
+        $('input[name="tipo_calculo"]').change(function() {
+            // Limpiar validaciones previas
+            $('#txt_fecha_desde, #txt_fecha_hasta').removeClass('is-valid is-invalid');
+            $('#txt_fecha_horas, #txt_hora_desde, #txt_hora_hasta').removeClass('is-valid is-invalid');
+
+            // Remover mensajes de error
+            $('#txt_fecha_desde, #txt_fecha_hasta').next('.invalid-feedback').remove();
+            $('#txt_fecha_horas, #txt_hora_desde, #txt_hora_hasta').next('.invalid-feedback').remove();
+        });
+
+        // Marcar campos obligatorios al cargar
+        marcarCamposObligatorios();
     });
+
+    function validar_formulario() {
+        // Primero validar el formulario completo
+        let formularioValido = $("#form_permiso_medico").valid();
+
+        if (!formularioValido) {
+            Swal.fire('Error', 'Por favor complete todos los campos requeridos', 'error');
+
+            // Hacer scroll al primer campo con error
+            let primerError = $('.is-invalid:first');
+            if (primerError.length) {
+                $('html, body').animate({
+                    scrollTop: primerError.offset().top - 100
+                }, 500);
+            }
+
+            return false;
+        }
+
+        // Validaciones adicionales específicas
+        if ($('#rbtn_fecha').is(':checked')) {
+            if (!$('#txt_fecha_desde').val() || !$('#txt_fecha_hasta').val()) {
+                Swal.fire('Error', 'Complete todas las fechas del rango', 'error');
+                return false;
+            }
+
+            // Validar que fecha hasta sea mayor que fecha desde
+            let fechaDesde = new Date($('#txt_fecha_desde').val());
+            let fechaHasta = new Date($('#txt_fecha_hasta').val());
+
+            if (fechaHasta < fechaDesde) {
+                Swal.fire('Error', 'La fecha hasta debe ser mayor que la fecha desde', 'error');
+                $('#txt_fecha_hasta').addClass('is-invalid');
+                return false;
+            }
+        } else if ($('#rbtn_horas').is(':checked')) {
+            if (!$('#txt_fecha_horas').val() || !$('#txt_hora_desde').val() || !$('#txt_hora_hasta').val()) {
+                Swal.fire('Error', 'Complete la fecha y el horario (Desde/Hasta)', 'error');
+                return false;
+            }
+
+            // Validar que hora hasta sea mayor que hora desde
+            if ($('#txt_hora_desde').val() >= $('#txt_hora_hasta').val()) {
+                Swal.fire('Error', 'La hora hasta debe ser mayor que la hora desde', 'error');
+                $('#txt_hora_hasta').addClass('is-invalid');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // Agregar asteriscos a campos obligatorios
+    function marcarCamposObligatorios() {
+        // Campos del panel médico
+        if ($('#pnl_departamento_medico').is(':visible')) {
+            agregar_asterisco_campo_obligatorio('ddl_IDG');
+            agregar_asterisco_campo_obligatorio('txt_motivo');
+        }
+
+        // Campos de fecha/hora según selección
+        if ($('#rbtn_fecha').is(':checked')) {
+            agregar_asterisco_campo_obligatorio('txt_fecha_desde');
+            agregar_asterisco_campo_obligatorio('txt_fecha_hasta');
+        } else if ($('#rbtn_horas').is(':checked')) {
+            agregar_asterisco_campo_obligatorio('txt_fecha_horas');
+            agregar_asterisco_campo_obligatorio('txt_hora_desde');
+            agregar_asterisco_campo_obligatorio('txt_hora_hasta');
+        }
+    }
+
+    // Función auxiliar para agregar asterisco (si no la tienes)
+    function agregar_asterisco_campo_obligatorio(id_campo) {
+        let label = $('label[for="' + id_campo + '"]');
+        if (label.length && label.find('.text-danger').length === 0) {
+            label.append(' <span class="text-danger">*</span>');
+        }
+    }
 </script>
