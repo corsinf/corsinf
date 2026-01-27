@@ -20,6 +20,9 @@ if (isset($_GET['listar'])) {
 if (isset($_GET['listar_persona_departamento'])) {
     echo json_encode($controlador->listar_persona_departamento($_POST['id'] ?? ''));
 }
+if (isset($_GET['listar_persona_departamento_cargo'])) {
+    echo json_encode($controlador->listar_persona_departamento_cargo($_POST['id'] ?? ''));
+}
 
 if (isset($_GET['listar_personas_rol'])) {
     echo json_encode($controlador->listar_personas_rol());
@@ -249,6 +252,11 @@ class th_personasC
     function listar_persona_departamento($id = '')
     {
         $datos = $this->personas_departamentos->listar_buscar_persona_departamento($id);
+        return $datos;
+    }
+    function listar_persona_departamento_cargo($id = '')
+    {
+        $datos = $this->personas_departamentos->listar_buscar_persona_departamento_cargo($id);
         return $datos;
     }
 

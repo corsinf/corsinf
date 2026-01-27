@@ -260,11 +260,11 @@ class th_personasM extends BaseModel
         return $datos;
     }
     public function buscar_personas_con_departamento_unicamente($parametros)
-{
-    $query = isset($parametros['query']) ? trim($parametros['query']) : '';
-    $id_dep = isset($parametros['id_departamento']) ? $parametros['id_departamento'] : '';
+    {
+        $query = isset($parametros['query']) ? trim($parametros['query']) : '';
+        $id_dep = isset($parametros['id_departamento']) ? $parametros['id_departamento'] : '';
 
-    $sql = "
+        $sql = "
         SELECT DISTINCT 
             p.th_per_id AS id,
             p.th_per_cedula,
@@ -278,24 +278,50 @@ class th_personasM extends BaseModel
         INNER JOIN th_personas_departamentos pd ON p.th_per_id = pd.th_per_id
         INNER JOIN th_departamentos d ON pd.th_dep_id = d.th_dep_id
         WHERE p.th_per_estado = 1
+        AND p.th_per_cedula IS NOT NULL 
+        AND p.th_per_cedula <> ''
     ";
 
-    // Filtro por ID de departamento específico (opcional)
-    if ($id_dep !== '' && $id_dep !== null) {
-        $sql .= " AND d.th_dep_id = " . intval($id_dep);
-    }
+        // Filtro por ID de departamento específico (opcional)
+        if ($id_dep !== '' && $id_dep !== null) {
+            $sql .= " AND d.th_dep_id = " . intval($id_dep);
+        }
 
-    // Filtro de búsqueda por texto (Cédula o Apellidos)
-    if ($query !== '') {
-        $sql .= " AND (
+        // Filtro de búsqueda por texto (Cédula o Apellidos)
+        if ($query !== '') {
+            $sql .= " AND (
             p.th_per_cedula LIKE '%" . addslashes($query) . "%' OR 
             p.th_per_primer_apellido LIKE '%" . addslashes($query) . "%' OR
             p.th_per_primer_nombre LIKE '%" . addslashes($query) . "%'
         )";
+        }
+
+        $sql .= " ORDER BY p.th_per_primer_apellido ASC";
+
+        return $this->db->datos($sql);
     }
 
-    $sql .= " ORDER BY p.th_per_primer_apellido ASC";
+    public function listar_personas_pdf($id_persona = null)
+    {
+        $id = ($id_persona !== '' && $id_persona !== null) ? (int)$id_persona : '';
+        $where_id = ($id !== '') ? "AND p.th_per_id = {$id}" : "";
 
-    return $this->db->datos($sql);
-}
+        $sql = "
+    SELECT
+        p.th_per_cedula AS cedula,
+        p.th_per_sexo AS genero,
+        p.th_per_estado_civil AS estado_civil,
+        LTRIM(RTRIM(CONCAT(
+            ISNULL(p.th_per_primer_nombre, ''), ' ',
+            ISNULL(p.th_per_segundo_nombre, ''), ' ',
+            ISNULL(p.th_per_primer_apellido, ''), ' ',
+            ISNULL(p.th_per_segundo_apellido, '')
+        ))) AS nombre_completo
+    FROM th_personas p
+    WHERE p.th_per_estado = 1
+      {$where_id}
+    ";
+
+        return $this->db->datos($sql);
+    }
 }

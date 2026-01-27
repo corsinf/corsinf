@@ -352,6 +352,9 @@ if ($_GET['acc'] == 'th_solicitud_permiso') {
 if ($_GET['acc'] == 'th_registrar_solicitud_permiso') {
 	include('TALENTO_HUMANO/SOLICITUD_PERMISO/th_registrar_solicitud_permiso.php');
 }
+if ($_GET['acc'] == 'th_solicitud_persona') {
+	include('TALENTO_HUMANO/SOLICITUD_PERMISO/th_solicitud_persona.php');
+}
 
 
 
