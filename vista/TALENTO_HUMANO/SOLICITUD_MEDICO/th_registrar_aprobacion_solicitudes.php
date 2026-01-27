@@ -674,42 +674,6 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
         return edad;
     }
 
-    function mostrarVistaPrevia(rutaArchivo, nombreDoc) {
-        if (!rutaArchivo || rutaArchivo === 'null') return;
-
-        // Mostrar el panel principal si estaba oculto
-        $('#pnl_documentos').show();
-
-        // Crear el item de la lista
-        const nuevoItem = `
-        <div class="list-group-item list-group-item-action">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center">
-                    <div class="avatar-sm me-3">
-                        <span class="avatar-title rounded bg-soft-primary text-primary">
-                            <i class="bx bx-file fs-4"></i>
-                        </span>
-                    </div>
-                    <div>
-                        <h6 class="mb-0 text-truncate" style="max-width: 250px;">${nombreDoc}</h6>
-                        <small class="text-muted text-uppercase" style="font-size: 10px;">Documento Guardado</small>
-                    </div>
-                </div>
-                <div class="btn-group">
-                    <a href="${rutaArchivo}" target="_blank" class="btn btn-sm btn-outline-primary">
-                        <i class="bx bx-show-alt"></i> Ver
-                    </a>
-                    <a href="${rutaArchivo}" download="${nombreDoc}" class="btn btn-sm btn-outline-secondary">
-                        <i class="bx bx-download"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    `;
-
-        // Añadir a la lista
-        $('#lista_documentos').append(nuevoItem);
-    }
 </script>
 
 <div class="page-wrapper">

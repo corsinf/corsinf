@@ -317,25 +317,6 @@ $ruta = '';
         });
     });
 
-    function controlarPanelMedico() {
-        // Verifica si hay AL MENOS uno seleccionado
-        let algunoSeleccionado = $('.cert-check:checked').length > 0;
-
-        if (algunoSeleccionado) {
-            $('#pnl_medico').slideDown();
-        } else {
-            // Si no hay nada, limpia y oculta todo
-            $('#pnl_medico').slideUp();
-            $('[id^="pnl_file_"]').slideUp();
-
-            // Limpiar campos
-            $('input[name="rbx_tipo_atencion"]').prop('checked', false);
-            $('#txt_lugar, #txt_especialidad, #txt_medico').val('');
-            $('#txt_fecha_atencion, #txt_hora_desde, #txt_hora_hasta').val('');
-            // Limpiar inputs de archivos
-            $('input[type="file"]').val('');
-        }
-    }
 
     function calcularEdad(fecha, tipo_pariente = "OTRO") {
         if (!fecha || fecha === '1900-01-01') {
@@ -369,21 +350,6 @@ $ruta = '';
             $('#ddl_rango_edad').val(rango);
         }
         return edad;
-    }
-
-    function mostrar_campos_fecha() {
-        $('#txt_fecha_desde, #txt_fecha_hasta, #txt_total_dias').closest('.col-md-3').show();
-        $('#txt_hora_permiso_desde, #txt_hora_permiso_hasta, #txt_total_horas').closest('.col-md-3').hide();
-    }
-
-    function mostrar_campos_hora() {
-        $('#txt_hora_permiso_desde, #txt_hora_permiso_hasta, #txt_total_horas').closest('.col-md-3').show();
-        $('#txt_fecha_hasta, #txt_total_dias').closest('.col-md-3').hide();
-    }
-
-    function ocultar_todos_campos_permiso() {
-        $('#txt_fecha_desde, #txt_fecha_hasta, #txt_hora_permiso_desde, #txt_hora_permiso_hasta, #txt_total_horas, #txt_total_dias')
-            .closest('.col-md-3').hide();
     }
 
     function toDateInput(val) {
@@ -1084,7 +1050,7 @@ $ruta = '';
                                         class="form-control form-control-sm"
                                         id="txt_detalle_motivo"
                                         name="txt_detalle_motivo"
-                                        rows="3"
+                                        rows="1"
                                         style="resize: none;"></textarea>
                                 </div>
                             </div>
