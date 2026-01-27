@@ -104,8 +104,6 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
         }
     }
 
-
-
     function calcularTotalHoras() {
         let fecha = $('#txt_fecha_horas').val();
         let horaDesde = $('#txt_hora_desde').val();
@@ -113,16 +111,23 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
 
         if (fecha && horaDesde && horaHasta) {
             if (horaDesde >= horaHasta) {
-                Swal.fire('Advertencia', 'La hora desde debe ser menor que la hora hasta', 'warning');
+                Swal.fire('Advertencia', 'La hora de inicio debe ser menor que la hora de fin', 'warning');
                 $('#txt_total_horas').val(0);
                 return;
             }
 
+            // Creamos objetos de fecha base para comparar las horas
             let desde = new Date('2000-01-01 ' + horaDesde);
             let hasta = new Date('2000-01-01 ' + horaHasta);
 
-            let diff = (hasta - desde) / (1000 * 60 * 60); // diferencia en horas
-            $('#txt_total_horas').val(diff.toFixed(2));
+            let diffMs = hasta - desde;
+            let totalMinutos = Math.floor(diffMs / (1000 * 60));
+
+            // Mostramos el resultado en el input
+            $('#txt_total_horas').val(totalMinutos);
+
+            // Opcional: Si quieres mostrar un texto que diga "minutos" al lado
+            console.log("Total calculado: " + totalMinutos + " minutos");
         }
     }
 
@@ -136,7 +141,7 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
     }
 
     function toTimeInput(val) {
-        if (!val || val == null || val == 'null');
+        if (!val || val == null || val == 'null') return '';
 
         let strVal = val.toString().trim();
 
@@ -172,7 +177,7 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
 
 
                 // Datos básicos
-                $("#txt_id").val(r._id || '');
+                $("#txt_id").val(r.id_medico || '');
                 $("#txt_sol_per_id").val(r.id_solicitud || '');
 
                 // Tipo de solicitud
@@ -190,9 +195,6 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                 if (r.tipo_enfermedad) {
                     $('input[name="tipo_enfermedad"][value="' + r.tipo_enfermedad + '"]').prop('checked', true);
                 }
-
-                // IDG
-                $("#txt_codigo_idg").val(r.codigo_idg || '');
 
                 // Certificados
                 let certMedico = (r.presenta_cert_medico == '1' || r.presenta_cert_medico == 1);
@@ -219,25 +221,13 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                 $("#txt_fecha_hasta_medico").val(toTimeInput(r.hasta));
 
 
-                // ===== FECHAS DEL PERMISO (calculadas) =====
-                let tipoCalculo = r.tipo_calculo || 'fecha';
 
-                if (tipoCalculo === 'fecha') {
-                    $('#rbtn_fecha').prop('checked', true).trigger('change');
-                    $("#txt_fecha_desde").val(toDateInput(r.fecha_desde_permiso));
-                    $("#txt_fecha_hasta").val(toDateInput(r.fecha_hasta_permiso));
-                    $("#txt_total_dias").val(r.total_dias_permiso || 0);
-                } else {
-                    $('#rbtn_horas').prop('checked', true).trigger('change');
-                    $("#txt_fecha_horas").val(toDateInput(r.fecha_principal_permiso));
-                    $("#txt_hora_desde").val(toTimeInput(r.fecha_desde_permiso));
-                    $("#txt_hora_hasta").val(toTimeInput(r.fecha_hasta_permiso));
-                    $("#txt_total_horas").val(r.total_horas_permiso || 0);
-                }
 
                 // Observaciones y estado
                 let estadoSolicitud = r.estado_solicitud || '0';
                 $("#ddl_estado_solicitud").val(estadoSolicitud.toString());
+
+
             },
             error: function(xhr) {
                 console.error('Error cargar_solicitud_medica:', xhr.responseText);
@@ -259,33 +249,8 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
         $("#txt_fecha_desde_medico").val(horaActual);
     }
 
-    function validar_formulario() {
-
-        if ($('#pnl_departamento_medico').is(':visible')) {
-            if ($("#form_permiso_medico").valid()) {
-
-            }
-        }
-
-        if ($('#rbtn_fecha').is(':checked')) {
-            if (!$('#txt_fecha_desde').val() || !$('#txt_fecha_hasta').val()) {
-                Swal.fire('Error', 'Complete todas las fechas del rango', 'error');
-                return false;
-            }
-        } else {
-            if (!$('#txt_fecha_horas').val() || !$('#txt_hora_desde').val() || !$('#txt_hora_hasta').val()) {
-                Swal.fire('Error', 'Complete la fecha y el horario (Desde/Hasta)', 'error');
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     function insertar_actualizar() {
         if (!validar_formulario()) return;
-
-
 
         let esReposo = $('#cbx_reposo').is(':checked') ? 1 : 0;
         let esPermiso = $('#cbx_permiso').is(':checked') ? 1 : 0;
@@ -295,13 +260,12 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
 
         // ===== FECHAS DEL PERMISO (calculadas) =====
         let tipoCalculo = $('#rbtn_fecha').is(':checked') ? 'fecha' : 'horas';
-        let fechaPrincipalPermiso, desdePermiso, hastaPermiso, totalDias = 0,
+        let fechaPrincipalPermiso, desdePermiso, hastaPermiso,
             totalHoras = 0;
 
         if (tipoCalculo === 'fecha') {
             desdePermiso = $('#txt_fecha_desde').val();
             hastaPermiso = $('#txt_fecha_hasta').val();
-            totalDias = parseInt($('#txt_total_dias').val()) || 0;
         } else {
             let fecha = $('#txt_fecha_horas').val();
             let horaD = $('#txt_hora_desde').val();
@@ -325,7 +289,6 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
             'reposo': esReposo,
             'permiso_consulta': esPermiso,
             'tipo_enfermedad': tipoEnfermedad,
-            'codigo_idg': $("#txt_codigo_idg").val(),
             'presenta_cert_medico': certMedico,
             'presenta_cert_asistencia': certAsistencia,
             'motivo': $("#txt_motivo").val(),
@@ -335,13 +298,7 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
             'desde_medico': $("#txt_fecha_desde_medico").val(),
             'hasta_medico': horaActual,
 
-            // FECHAS DEL PERMISO (calculadas)
-            'tipo_calculo': tipoCalculo,
-            'fecha_principal_permiso': fechaPrincipalPermiso,
-            'desde_permiso': desdePermiso,
-            'hasta_permiso': hastaPermiso,
-            'total_dias': totalDias,
-            'total_horas': totalHoras,
+            // FECHAS DEL PERMISO (calculadas)            'hasta_permiso': hastaPermiso,
             'id_idg': $("#ddl_IDG").val() ?? '',
 
             'estado_solicitud': $("#ddl_estado_solicitud").val() || '0'
@@ -458,6 +415,8 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                 // Ocultar loader y mostrar contenido
                 $('#loaderResumen').hide();
                 $('#datosResumen').fadeIn();
+
+                $('#lbl_nombre_solicitud').text(response[0].nombre_completo);
             },
             error: function(xhr) {
                 console.error('Error al cargar resumen:', xhr.responseText);
@@ -468,6 +427,11 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
     }
 
     function llenarResumen(data) {
+
+        $('#txt_ruta_cert_medico').val(data.ruta_certificado || '');
+        $('#txt_ruta_cert_asistencia').val(data.ruta_certificado_asistencia || '');
+
+        $("input[name='tipo_calculo']").prop('disabled', true).parent().css('cursor', 'not-allowed');
         // Información del empleado
         $('#res_nombre_completo').text(data.nombre_completo || 'N/A');
         $('#res_cedula').text(data.cedula || 'N/A');
@@ -675,6 +639,21 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
     }
 </script>
 
+<script>
+    function abrir_modal_solicitudes(tipo) {
+        let url = "";
+
+        if (tipo === 'medico') {
+            url = $('#txt_ruta_cert_medico').val();
+        } else if (tipo === 'asistencia') {
+            url = $('#txt_ruta_cert_asistencia').val();
+        }
+
+        $('#modal_ver_pdf_solicitudes').modal('show');
+        $('#iframe_certificados_pdf').attr('src', url);
+    }
+</script>
+
 <div class="page-wrapper">
     <div class="page-content">
 
@@ -711,183 +690,232 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                     <input type="hidden" id="txt_cedula_persona" name="txt_cedula_persona">
 
                     <!-- ESPACIO EXCLUSIVO DEPARTAMENTO MÉDICO -->
-                    <div id="pnl_departamento_medico" class="card bg-light mb-3" style="display: none;">
-                        <div class="card-header bg-primary text-white">
-                            <h6 class="mb-0">ESPACIO EXCLUSIVO DEPARTAMENTO MÉDICO:</h6>
+                    <div id="pnl_departamento_medico" class="card border-secondary shadow-sm mb-4" style="display:none">
+
+                        <!-- HEADER -->
+                        <div class="card-header bg-primary text-white py-2">
+                            <h6 class="mb-0 text-uppercase fw-bold" style="font-size:0.85rem; letter-spacing:1px;">
+                                <i class="bx bxs-check-shield me-2"></i>Espacio exclusivo departamento médico
+                            </h6>
                         </div>
-                        <div class="card-body">
 
-                            <!-- Certifico que el/la Trabajador/a requiere de: -->
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <label class="fw-bold">Certifico que el/la Trabajador/a requiere de:</label>
-                                </div>
-                            </div>
+                        <!-- BODY -->
+                        <div class="card-body p-4 bg-light">
 
-                            <div class="row mb-3">
-                                <div class="col-md-3">
-                                    <input type="checkbox" id="cbx_reposo" name="cbx_reposo"> <label for="cbx_reposo">REPOSO</label>
+                            <!-- REPOSO / PERMISO -->
+                            <div class="row mb-4 align-items-center">
+                                <div class="col-md-4">
+                                    <label class="fw-bold mb-0">Certifico que el/la trabajador/a requiere de:</label>
                                 </div>
-                                <div class="col-md-3">
-                                    <input type="checkbox" id="cbx_permiso" name="cbx_reposo"> <label for="cbx_permiso">PERMISO</label>
-                                </div>
-                            </div>
-
-                            <!-- Tipo de enfermedad/consulta -->
-                            <div id="pnl_tipo_enfermedad" style="display:none">
-                                <div class="row mb-3">
-                                    <div class="col-md-4">
-                                        <label>por:</label>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-md-4">
-                                        <input type="radio" name="tipo_enfermedad" value="enfermedad_general" id="rbtn_enfermedad">
-                                        <label for="rbtn_enfermedad">Enfermedad General</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="radio" name="tipo_enfermedad" value="asistencia_consulta" id="rbtn_asistencia">
-                                        <label for="rbtn_asistencia">Asistencia a Consulta</label>
+                                <div class="col-md-8">
+                                    <div class="d-flex gap-5">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="cbx_reposo" id="cbx_reposo">
+                                            <label class="form-check-label fw-bold" for="cbx_reposo">Reposo</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="cbx_reposo" id="cbx_permiso">
+                                            <label class="form-check-label fw-bold" for="cbx_permiso">Permiso</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <hr>
+                            <!-- TIPO DE ENFERMEDAD -->
+                            <div id="pnl_tipo_enfermedad" class="border rounded bg-white p-3 mb-4" style="display:block">
+                                <div class="row align-items-center">
+                                    <div class="col-md-3 text-md-end">
+                                        <label class="fw-bold mb-0">Motivo:</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="d-flex gap-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="tipo_enfermedad" id="rbtn_enfermedad" value="enfermedad_general">
+                                                <label class="form-check-label" for="rbtn_enfermedad">Enfermedad general</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="tipo_enfermedad" id="rbtn_asistencia" value="asistencia_consulta">
+                                                <label class="form-check-label" for="rbtn_asistencia">Asistencia a consulta</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- OBSERVACIONES -->
-                            <div class="row mb-2">
-                                <div class="col-md-12">
-                                    <label class="fw-bold">Observaciones:</label>
-                                </div>
-                            </div>
+                            <div class="mb-3">
+                                <label class="fw-bold text-primary mb-2 d-block">
+                                    <i class="bx bx-file me-1"></i>Observaciones
+                                </label>
 
-                            <div class="row mb-2">
-                                <div class="col-md-6">
-                                    <label>PRESENTA CERTIFICADO MÉDICO</label>
-                                    <div>
-                                        <input type="radio" name="cert_medico" value="si" id="cert_med_si">
-                                        <label for="cert_med_si">SI</label>
-                                        &nbsp;&nbsp;
-                                        <input type="radio" name="cert_medico" value="no" id="cert_med_no">
-                                        <label for="cert_med_no">NO</label>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="border-start border-3 border-info bg-white p-3 h-100 shadow-sm rounded-end">
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <label class="small fw-bold text-uppercase text-muted">Presenta certificado médico</label>
+                                                <button type="button" class="btn btn-outline-primary btn-xs py-0 px-2" onclick="abrir_modal_solicitudes('medico')" title="Visualizar archivo">
+                                                    <i class="bx bx-show me-1"></i>Ver Doc.
+                                                </button>
+                                                <input type="hidden" id="txt_ruta_cert_medico" name="txt_ruta_cert_medico">
+                                            </div>
+                                            <div class="d-flex gap-4">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="cert_medico" id="cert_med_si" value="si">
+                                                    <label class="form-check-label" for="cert_med_si">Sí</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="cert_medico" id="cert_med_no" value="no" checked>
+                                                    <label class="form-check-label" for="cert_med_no">No</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="border-start border-3 border-info bg-white p-3 h-100 shadow-sm rounded-end">
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <label class="small fw-bold text-uppercase text-muted">Presenta certificado de asistencia</label>
+                                                <button type="button" class="btn btn-outline-primary btn-xs py-0 px-2" onclick="abrir_modal_solicitudes('asistencia')" title="Visualizar archivo">
+                                                    <i class="bx bx-show me-1"></i>Ver Doc.
+                                                </button>
+                                                <input type="hidden" id="txt_ruta_cert_asistencia" name="txt_ruta_cert_asistencia">
+
+                                            </div>
+                                            <div class="d-flex gap-4">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="cert_asistencia" id="cert_asist_si" value="si">
+                                                    <label class="form-check-label" for="cert_asist_si">Sí</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="cert_asistencia" id="cert_asist_no" value="no" checked>
+                                                    <label class="form-check-label" for="cert_asist_no">No</label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label>PRESENTA CERTIFICADO DE ASISTENCIA</label>
-                                    <div>
-                                        <input type="radio" name="cert_asistencia" value="si" id="cert_asist_si">
-                                        <label for="cert_asist_si">SI</label>
-                                        &nbsp;&nbsp;
-                                        <input type="radio" name="cert_asistencia" value="no" id="cert_asist_no">
-                                        <label for="cert_asist_no">NO</label>
-                                    </div>
-                                </div>
                             </div>
 
-                            <hr>
-
-                            <!-- IDG -->
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <label for="ddl_IDG" class="form-label fw-bold">IDG</label>
-                                    <select class="form-select form-select-sm select2-validation" id="ddl_IDG" name="ddl_IDG">
-                                        <option selected disabled>-- Seleccione --</option>
-                                    </select>
-                                </div>
+                            <!-- DIAGNÓSTICO -->
+                            <div class="mb-3">
+                                <label for="ddl_IDG" class="form-label fw-bold">IDG (Diagnóstico)</label>
+                                <select class="form-select form-select-sm select2-validation" id="ddl_IDG" name="ddl_IDG">
+                                    <option selected disabled>-- Seleccione el diagnóstico --</option>
+                                </select>
                             </div>
 
-                            <hr>
-
-                            <!-- MOTIVO -->
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <label for="txt_motivo">(Motivo)</label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_motivo" id="txt_motivo" placeholder="Describa el motivo">
-                                </div>
+                            <!-- DESCRIPCIÓN -->
+                            <div class="mb-4">
+                                <label for="txt_motivo" class="form-label fw-bold">Descripción del motivo</label>
+                                <textarea class="form-control" id="txt_motivo" name="txt_motivo" rows="3"
+                                    placeholder="Detalle el motivo de la atención médica"></textarea>
                             </div>
 
-                            <!-- FECHA PRINCIPAL -->
-                            <div id="calculos_atencion_medico" class="row mb-3" style="display: none;">
-                                <div class="col-md-4">
-                                    <label for="txt_fecha_principal">Fecha:</label>
-                                    <input type="date" class="form-control form-control-sm" id="txt_fecha_principal" disabled>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="txt_fecha_desde_medico">Fecha Desde:</label>
-                                    <input type="time" class="form-control form-control-sm" id="txt_fecha_desde_medico" disabled>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="txt_fecha_hasta_medico">Fecha Hasta:</label>
-                                    <input type="time" class="form-control form-control-sm" id="txt_fecha_hasta_medico" disabled>
-                                </div>
+                            <!-- FECHAS / HORAS -->
+                            <div id="calculos_atencion_medico" class="border rounded bg-white p-3" style="display:none">
+                                <input type="date" id="txt_fecha_principal">
+                                <input type="time" id="txt_fecha_desde_medico">
+                                <input type="time" id="txt_fecha_hasta_medico">
                             </div>
-
-
 
                         </div>
                     </div>
 
+
                     <!-- FECHA Y HORA DEL PERMISO -->
-                    <div class="card bg-light mb-3">
-                        <div class="card-header bg-secondary text-white">
-                            <h6 class="mb-0">FECHA Y HORA DEL PERMISO:</h6>
+                    <div class="card bg-light mb-4 shadow-sm" style="border: 1px solid #dee2e6; border-radius: 8px; overflow: hidden;">
+                        <div class="card-header bg-secondary text-white py-2 px-3 d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 text-uppercase d-flex align-items-center" style="font-size: 0.8rem; letter-spacing: 1.2px; font-weight: 700;">
+                                <i class="bx bx-time-five me-2 font-18"></i> FECHA Y HORA DEL PERMISO
+                            </h6>
+
+                            <span class="badge bg-white text-dark shadow-sm px-3 py-2 border-start border-primary border-3" style="font-size: 0.75rem; border-radius: 4px; font-weight: 600;">
+                                <i class="bx bxs-user-detail me-1 text-primary"></i>
+                                Solicitud realizada por <span class="text-primary text-decoration-underline" id="lbl_nombre_solicitud">-</span> para el periodo indicado:
+                            </span>
                         </div>
-                        <div class="card-body">
 
-                            <!-- Radio buttons para elegir tipo de cálculo -->
-                            <div class="row mb-3">
+                        <div class="card-body p-4">
+
+                            <div class="row mb-4">
                                 <div class="col-md-12">
-                                    <input type="radio" name="tipo_calculo" id="rbtn_fecha" value="fecha">
-                                    <label for="rbtn_fecha">Por Fecha</label>
-                                    &nbsp;&nbsp;&nbsp;
-                                    <input type="radio" name="tipo_calculo" id="rbtn_horas" value="horas">
-                                    <label for="rbtn_horas">Por Horas</label>
-                                </div>
-                            </div>
-
-                            <!-- PANEL CÁLCULO POR FECHA -->
-                            <div id="pnl_calculo_fecha" style="display:none">
-                                <div class="row mb-2">
-                                    <div class="col-md-3">
-                                        <label for="txt_fecha_desde">DESDE: (fecha)</label>
-                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_desde" disabled>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label for="txt_fecha_hasta">HASTA: (fecha)</label>
-                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_hasta" disabled>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label for="txt_total_dias">TOTAL DÍAS</label>
-                                        <input type="number" class="form-control form-control-sm" id="txt_total_dias" readonly disabled>
+                                    <label class="fw-bold text-dark d-block mb-2">Modalidad del permiso:</label>
+                                    <div class="d-flex gap-4 p-3 bg-white rounded border border-dashed">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="tipo_calculo" id="rbtn_fecha" value="fecha">
+                                            <label class="form-check-label fw-bold" for="rbtn_fecha">
+                                                <i class="bx bx-calendar me-1"></i> Por Fecha (Días)
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="tipo_calculo" id="rbtn_horas" value="horas">
+                                            <label class="form-check-label fw-bold" for="rbtn_horas">
+                                                <i class="bx bx-stopwatch me-1"></i> Por Horas
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- PANEL CÁLCULO POR HORAS -->
-                            <div id="pnl_calculo_horas" style="display:none">
-                                <div class="row mb-2">
-                                    <div class="col-md-3">
-                                        <label for="txt_fecha_horas">DESDE: (fecha)</label>
-                                        <input type="date" class="form-control form-control-sm" id="txt_fecha_horas" disabled>
+                            <div id="pnl_calculo_fecha" class="p-3 bg-white border rounded shadow-sm mb-2" style="display:none; border-left: 4px solid #6c757d !important;">
+                                <div class="row g-3 align-items-end">
+                                    <div class="col-md-4">
+                                        <label for="txt_fecha_desde" class="form-label small fw-bold text-muted">DESDE</label>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text"><i class="bx bx-calendar-plus"></i></span>
+                                            <input type="date" class="form-control" id="txt_fecha_desde" disabled>
+                                        </div>
                                     </div>
-                                </div>
-
-                                <div class="row mb-2">
-                                    <div class="col-md-3">
-                                        <label for="txt_hora_desde">DESDE: (Hora)</label>
-                                        <input type="time" class="form-control form-control-sm" id="txt_hora_desde" disabled>
+                                    <div class="col-md-4">
+                                        <label for="txt_fecha_hasta" class="form-label small fw-bold text-muted">HASTA</label>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text"><i class="bx bx-calendar-check"></i></span>
+                                            <input type="date" class="form-control" id="txt_fecha_hasta" disabled>
+                                        </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label for="txt_hora_hasta">HASTA: (Hora)</label>
-                                        <input type="time" class="form-control form-control-sm" id="txt_hora_hasta" disabled>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label for="txt_total_horas">TOTAL HORAS</label>
-                                        <input type="number" class="form-control form-control-sm" id="txt_total_horas" readonly disabled>
+                                    <div class="col-md-4">
+                                        <label for="txt_total_dias" class="form-label small fw-bold text-primary text-uppercase">Total Días</label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" class="form-control fw-bold border-primary text-primary bg-light" id="txt_total_dias" readonly disabled>
+                                            <span class="input-group-text bg-primary text-white"><i class="bx bx-calculator"></i></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div id="pnl_calculo_horas" class="p-3 bg-white border rounded shadow-sm mb-2" style="display:none; border-left: 4px solid #6c757d !important;">
+                                <div class="row g-3">
+                                    <div class="col-md-12 mb-2">
+                                        <label for="txt_fecha_horas" class="form-label small fw-bold text-muted text-uppercase">Fecha del Permiso</label>
+                                        <div class="input-group input-group-sm" style="max-width: 250px;">
+                                            <span class="input-group-text"><i class="bx bx-calendar-event"></i></span>
+                                            <input type="date" class="form-control" id="txt_fecha_horas" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="txt_hora_desde" class="form-label small fw-bold text-muted">HORA INICIO </label>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text"><i class="bx bx-time"></i></span>
+                                            <input type="time" class="form-control" id="txt_hora_desde" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="txt_hora_hasta" class="form-label small fw-bold text-muted">HORA FINALIZACIÓN </label>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text"><i class="bx bx-time-five"></i></span>
+                                            <input type="time" class="form-control" id="txt_hora_hasta" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="txt_total_horas" class="form-label small fw-bold text-success text-uppercase">Total Horas</label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" class="form-control fw-bold border-success text-success bg-light" id="txt_total_horas" readonly disabled>
+                                            <span class="input-group-text bg-success text-white"><i class="bx bx-timer"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
@@ -919,6 +947,50 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
 
                 </form>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_ver_pdf_solicitudes" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content border-0 shadow-lg">
+
+            <div class="modal-header bg-dark bg-opacity-10 py-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-white p-2 rounded-circle me-2 text-primary shadow-sm">
+                        <i class='bx bx-edit-alt bx-sm'></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark mb-0" id="lbl_titulo_contratos_trabajos">Visualización Documento</h5>
+                        <small class="text-muted">Vista previa del certificado</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body p-0 bg-light">
+                <div class="w-100 position-relative" style="height: 80vh;">
+
+                    <div class="position-absolute top-50 start-50 translate-middle text-muted" style="z-index: 0;">
+                        <i class='bx bx-loader-alt bx-spin bx-md'></i> Cargando documento...
+                    </div>
+
+                    <iframe src=''
+                        id="iframe_certificados_pdf"
+                        class="w-100 h-100 border-0 position-relative"
+                        style="z-index: 1;"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="modal-footer py-1 bg-white">
+                <small class="text-muted me-auto fst-italic">
+                    <i class='bx bx-info-circle'></i> Si el documento no carga, consultar con el administrador.
+                </small>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+
         </div>
     </div>
 </div>
@@ -1153,7 +1225,6 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
 
 <script>
     $(document).ready(function() {
-        // ... tu código existente ...
 
         // Agregar método personalizado para validar que al menos uno esté marcado
         $.validator.addMethod("requiereReposoOPermiso", function(value, element) {
@@ -1170,12 +1241,6 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                         return $('#pnl_departamento_medico').is(':visible');
                     }
                 },
-                cbx_permiso: {
-                    requiereReposoOPermiso: function() {
-                        return $('#pnl_departamento_medico').is(':visible');
-                    }
-                },
-
                 // Campos del panel médico (solo cuando está visible)
                 ddl_IDG: {
                     required: function() {
@@ -1300,10 +1365,6 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
             $('#cbx_reposo').valid();
             $('#cbx_permiso').valid();
 
-            // Si está visible el panel, validar tipo de enfermedad
-            if ($('#pnl_departamento_medico').is(':visible') && $('#pnl_tipo_enfermedad').is(':visible')) {
-                $('#form_permiso_medico').validate().element('input[name="tipo_enfermedad"]');
-            }
         });
 
         $('input[name="tipo_enfermedad"]').change(function() {
@@ -1312,17 +1373,6 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
 
         $('input[name="cert_medico"], input[name="cert_asistencia"]').change(function() {
             $(this).valid();
-        });
-
-        // Cuando cambia el tipo de cálculo, validar campos correspondientes
-        $('input[name="tipo_calculo"]').change(function() {
-            // Limpiar validaciones previas
-            $('#txt_fecha_desde, #txt_fecha_hasta').removeClass('is-valid is-invalid');
-            $('#txt_fecha_horas, #txt_hora_desde, #txt_hora_hasta').removeClass('is-valid is-invalid');
-
-            // Remover mensajes de error
-            $('#txt_fecha_desde, #txt_fecha_hasta').next('.invalid-feedback').remove();
-            $('#txt_fecha_horas, #txt_hora_desde, #txt_hora_hasta').next('.invalid-feedback').remove();
         });
 
         // Marcar campos obligatorios al cargar
@@ -1396,14 +1446,6 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
             agregar_asterisco_campo_obligatorio('txt_fecha_horas');
             agregar_asterisco_campo_obligatorio('txt_hora_desde');
             agregar_asterisco_campo_obligatorio('txt_hora_hasta');
-        }
-    }
-
-    // Función auxiliar para agregar asterisco (si no la tienes)
-    function agregar_asterisco_campo_obligatorio(id_campo) {
-        let label = $('label[for="' + id_campo + '"]');
-        if (label.length && label.find('.text-danger').length === 0) {
-            label.append(' <span class="text-danger">*</span>');
         }
     }
 </script>

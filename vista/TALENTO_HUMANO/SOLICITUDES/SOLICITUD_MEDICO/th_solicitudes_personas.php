@@ -1,6 +1,9 @@
 <?php
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
+
+
+$nombre = (isset($_GET['nombre'])) ? $_GET['nombre'] : '';
 ?>
 
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
@@ -9,7 +12,7 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
 <script type="text/javascript">
     $(document).ready(function() {
 
-        let tbl_permisos = $('#tbl_permisos').DataTable($.extend({}, {
+        let tbl_permisos = $('#tbl_permisos').DataTable({
             responsive: true,
             language: {
                 url: '../assets/plugins/datatable/spanish.json'
@@ -18,11 +21,16 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                 url: '../controlador/TALENTO_HUMANO/th_solicitud_permiso_medicoC.php?listar_solicitudes_persona=true',
                 type: 'POST',
                 data: function(d) {
-                    d.id = <?= $_id ?>;
+                    d.id = '<?= $_id ?>';
                 },
                 dataSrc: ''
             },
             columns: [{
+                    data: null,
+                    render: function(data, type, item) {
+                        return fecha_formateada_hora(item.fecha_creacion);
+                    }
+                }, {
                     data: 'motivo',
                     render: function(data, type, row) {
                         let href =
@@ -76,13 +84,9 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                 }
             ],
             order: [
-                [2, 'desc']
+                [0, 'desc']
             ]
-        }));
-
-
-
-
+        });
     });
 
     function cargar_solicitud(id) {
@@ -138,7 +142,7 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Solicitudes y Justificaciones - Nombre persona
+                            Solicitudes y Justificaciones - <?= $nombre ?>
                         </li>
                     </ol>
                 </nav>
@@ -169,6 +173,7 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                             <table class="table table-striped" id="tbl_permisos" style="width:100%">
                                 <thead>
                                     <tr>
+                                        <th width="5%">Fecha Creación</th>
                                         <th>Motivo</th>
                                         <th>Médico</th>
                                         <th>Estado</th>

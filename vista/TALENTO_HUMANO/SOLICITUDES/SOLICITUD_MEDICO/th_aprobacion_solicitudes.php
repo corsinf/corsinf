@@ -10,81 +10,65 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
         let estado = 2;
 
-        let tbl_permisos = $('#tbl_permisos').DataTable($.extend({},
-            configuracion_datatable(
-                'Motivo',
-                'Tipo',
-                'Médico',
-                'Fecha',
-                'Desde',
-                'Hasta',
-                'Estado'
-            ), {
-                responsive: true,
-                dom: 'frtip',
-                buttons: [{
-                    extend: 'colvis',
-                    text: '<i class="bx bx-columns"></i> Columnas',
-                    className: 'btn btn-outline-secondary btn-sm'
-                }],
-                language: {
-                    url: '../assets/plugins/datatable/spanish.json'
+        let tbl_permisos = $('#tbl_permisos').DataTable({
+            responsive: true,
+            language: {
+                url: '../assets/plugins/datatable/spanish.json'
+            },
+            ajax: {
+                url: '../controlador/TALENTO_HUMANO/th_solicitud_permiso_medicoC.php?listar=true',
+                type: 'POST',
+                data: function(d) {
+                    d.estado = estado;
                 },
-                ajax: {
-                    url: '../controlador/TALENTO_HUMANO/th_solicitud_permiso_medicoC.php?listar=true',
-                    type: 'POST',
-                    data: function(d) {
-                        d.estado = estado;
-                    },
-                    dataSrc: ''
-                },
-                columns: [{
-                        data: 'nombre_completo',
-                        render: function(data, type, item) {
-                            let href =
-                                `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_solicitudes_personas&_id=${item.id}`;
-                            return `<a href="${href}"><u>${data}</u></a>`;
-                        }
-                    },
-                    {
-                        data: 'cedula'
-                    },
-                    {
-                        data: 'telefono'
-                    },
-                    {
-                        data: 'total_solicitudes'
-                    },
-                    {
-                        data: 'total_por_revisar',
-                        render: function(data) {
-                            return `${data || 0}`;
-                        }
-                    },
-                    {
-                        data: 'total_aprobadas',
-                        render: function(data) {
-                            return `${data || 0}`;
-                        }
-                    },
-                    {
-                        data: 'total_rechazada',
-                        render: function(data) {
-                            return `${data || 0}`;
-                        }
-                    },
-                    {
-                        data: 'total_pendientes',
-                        render: function(data) {
-                            return `${data || 0}`;
-                        }
+                dataSrc: ''
+            },
+            columns: [{
+                    data: 'nombre_completo',
+                    render: function(data, type, item) {
+                        let href =
+                            `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_solicitudes_personas&_id=${item.id}&nombre=${item.nombre_completo}`;
+                        return `<a href="${href}"><u>${data}</u></a>`;
                     }
-                ],
-                order: [
-                    [3, 'desc']
-                ]
-            }
-        ));
+                },
+                {
+                    data: 'cedula'
+                },
+                {
+                    data: 'telefono'
+                },
+                {
+                    data: 'total_solicitudes'
+                },
+                {
+                    data: 'total_por_revisar',
+                    render: function(data) {
+                        return `${data || 0}`;
+                    }
+                },
+                {
+                    data: 'total_aprobadas',
+                    render: function(data) {
+                        return `${data || 0}`;
+                    }
+                },
+                {
+                    data: 'total_rechazada',
+                    render: function(data) {
+                        return `${data || 0}`;
+                    }
+                },
+                {
+                    data: 'total_pendientes',
+                    render: function(data) {
+                        return `${data || 0}`;
+                    }
+                }
+            ],
+            order: [
+                [3, 'desc']
+            ]
+        });
 
         // Filtro por estado
         $('input[name="rbx_variable"]').on('change', function() {
@@ -110,7 +94,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Aprobación Solicitudes y Justificaciones
+                            Aprobación de Solicitudes y Justificaciones
                         </li>
                     </ol>
                 </nav>

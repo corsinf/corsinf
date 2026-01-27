@@ -68,7 +68,7 @@ class th_solicitud_permiso_medicoC
     {
 
         if ($id !=  '') {
-            $datos = $this->modelo->obtener_detalle_completo_solicitud( $id);
+            $datos = $this->modelo->obtener_detalle_completo_solicitud($id);
         }
         return $datos;
     }
@@ -99,7 +99,6 @@ class th_solicitud_permiso_medicoC
 
     function insertar_editar($parametros)
     {
-        $toInt = fn($v) => ($v === '' || $v === null) ? 0 : (int)$v;
         $toBool = fn($v) => ($v === '1' || $v === 1 || $v === true) ? 1 : 0;
         $toFloat = fn($v) => ($v === '' || $v === null) ? 0 : (float)$v;
 
@@ -109,7 +108,6 @@ class th_solicitud_permiso_medicoC
             ['campo' => 'th_sol_per_med_reposo', 'dato' => $toBool($parametros['reposo'] ?? 0)],
             ['campo' => 'th_sol_per_med_permiso_consulta', 'dato' => $toBool($parametros['permiso_consulta'] ?? 0)],
             ['campo' => 'th_sol_per_med_tipo_enfermedad', 'dato' => $parametros['tipo_enfermedad'] ?? null],
-            ['campo' => 'th_sol_per_med_codigo_idg', 'dato' => $parametros['codigo_idg'] ?? null],
 
             ['campo' => 'th_sol_per_med_presenta_cert_medico', 'dato' => $toBool($parametros['presenta_cert_medico'] ?? 0)],
             ['campo' => 'th_sol_per_med_presenta_cert_asistencia', 'dato' => $toBool($parametros['presenta_cert_asistencia'] ?? 0)],
@@ -121,15 +119,7 @@ class th_solicitud_permiso_medicoC
             ['campo' => 'th_sol_per_med_fecha', 'dato' => $parametros['fecha_medico'] ?? null],
             ['campo' => 'th_sol_per_med_desde', 'dato' => $parametros['desde_medico'] ?? null],
             ['campo' => 'th_sol_per_med_hasta', 'dato' => $parametros['hasta_medico'] ?? null],
-            ['campo' => 'th_sol_per_med_nombre_medico', 'dato' => $parametros['nombre_medico'] ?? null],
-
-            // FECHAS DEL PERMISO (calculadas por el usuario)
-            ['campo' => 'th_sol_per_med_tipo_calculo', 'dato' => $parametros['tipo_calculo'] ?? 'fecha'],
-            ['campo' => 'th_sol_per_med_fecha_principal_permiso', 'dato' => $parametros['fecha_principal_permiso'] ?? null],
-            ['campo' => 'th_sol_per_med_fecha_desde_permiso', 'dato' => $parametros['desde_permiso'] ?? null],
-            ['campo' => 'th_sol_per_med_fecha_hasta_permiso', 'dato' => $parametros['hasta_permiso'] ?? null],
-            ['campo' => 'th_sol_per_med_total_dias', 'dato' => $toInt($parametros['total_dias'] ?? 0)],
-            ['campo' => 'th_sol_per_med_total_horas', 'dato' => $toFloat($parametros['total_horas'] ?? 0)],
+            ['campo' => 'th_sol_per_med_nombre_medico', 'dato' => $_SESSION['INICIO']['USUARIO'] ?? null],
 
             ['campo' => 'th_sol_per_med_estado_solicitud', 'dato' => $parametros['estado_solicitud'] ?? 0],
             ['campo' => 'th_sol_per_med_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')],
