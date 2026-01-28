@@ -111,23 +111,27 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
 
         if (fecha && horaDesde && horaHasta) {
             if (horaDesde >= horaHasta) {
-                Swal.fire('Advertencia', 'La hora de inicio debe ser menor que la hora de fin', 'warning');
-                $('#txt_total_horas').val(0);
+                Swal.fire('Advertencia', 'La hora desde debe ser menor que la hora hasta', 'warning');
+                $('#txt_total_horas').val(""); // Limpiamos para tipo time
                 return;
             }
 
-            // Creamos objetos de fecha base para comparar las horas
-            let desde = new Date('2000-01-01 ' + horaDesde);
-            let hasta = new Date('2000-01-01 ' + horaHasta);
+            let desde = new Date('2000-01-01T' + horaDesde);
+            let hasta = new Date('2000-01-01T' + horaHasta);
 
             let diffMs = hasta - desde;
-            let totalMinutos = Math.floor(diffMs / (1000 * 60));
+            let diffMinutosTotales = Math.floor(diffMs / (1000 * 60));
 
-            // Mostramos el resultado en el input
-            $('#txt_total_horas').val(totalMinutos);
+            let horas = Math.floor(diffMinutosTotales / 60);
+            let minutos = diffMinutosTotales % 60;
 
-            // Opcional: Si quieres mostrar un texto que diga "minutos" al lado
-            console.log("Total calculado: " + totalMinutos + " minutos");
+            // FORMATO REQUERIDO PARA <input type="time">: "HH:mm" (con ceros a la izquierda)
+            let hh = horas.toString().padStart(2, '0');
+            let mm = minutos.toString().padStart(2, '0');
+
+            let resultadoTime = `${hh}:${mm}`;
+
+            $('#txt_total_horas').val(resultadoTime);
         }
     }
 
@@ -455,13 +459,26 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
             $('#rbtn_fecha').prop('checked', true).trigger('change');
             $("#txt_fecha_desde").val(toDateInput(data.fecha_desde_permiso));
             $("#txt_fecha_hasta").val(toDateInput(data.fecha_hasta_permiso));
-            $("#txt_total_dias").val(data.total_dias_permiso || 0);
+            $("#txt_total_dias").val(parseInt(data.total_dias_permiso) || 0);
         } else {
             $('#rbtn_horas').prop('checked', true).trigger('change');
             $("#txt_fecha_horas").val(toDateInput(data.fecha_principal_permiso));
             $("#txt_hora_desde").val(toTimeInput(data.fecha_desde_permiso));
             $("#txt_hora_hasta").val(toTimeInput(data.fecha_hasta_permiso));
-            $("#txt_total_horas").val(data.total_horas_permiso || 0);
+            let minutosTotales = parseFloat(data.total_horas_permiso) || 0;
+
+            if (minutosTotales > 0) {
+                let horas = Math.floor(minutosTotales / 60);
+                let minutos = Math.round(minutosTotales % 60);
+
+                // Formatear con ceros a la izquierda para el input type="time"
+                let hh = horas.toString().padStart(2, '0');
+                let mm = minutos.toString().padStart(2, '0');
+
+                $("#txt_total_horas").val(`${hh}:${mm}`);
+            } else {
+                $("#txt_total_horas").val("00:00");
+            }
         }
 
         // Información familiar
@@ -876,8 +893,17 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                                     <div class="col-md-4">
                                         <label for="txt_total_dias" class="form-label small fw-bold text-primary text-uppercase">Total Días</label>
                                         <div class="input-group input-group-sm">
-                                            <input type="number" class="form-control fw-bold border-primary text-primary bg-light" id="txt_total_dias" readonly disabled>
-                                            <span class="input-group-text bg-primary text-white"><i class="bx bx-calculator"></i></span>
+                                            <input type="number"
+                                                step="1"
+                                                pattern="\d*"
+                                                onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                class="form-control fw-bold border-primary text-primary bg-light"
+                                                id="txt_total_dias"
+                                                readonly
+                                                disabled>
+                                            <span class="input-group-text bg-primary text-white">
+                                                <i class="bx bx-calculator"></i>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -909,7 +935,7 @@ $_id_sol = (isset($_GET['_id_sol'])) ? $_GET['_id_sol'] : '';
                                     <div class="col-md-4">
                                         <label for="txt_total_horas" class="form-label small fw-bold text-success text-uppercase">Total Horas</label>
                                         <div class="input-group input-group-sm">
-                                            <input type="number" class="form-control fw-bold border-success text-success bg-light" id="txt_total_horas" readonly disabled>
+                                            <input type="time" class="form-control fw-bold border-success text-success bg-light" id="txt_total_horas" readonly disabled>
                                             <span class="input-group-text bg-success text-white"><i class="bx bx-timer"></i></span>
                                         </div>
                                     </div>

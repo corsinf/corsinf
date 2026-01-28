@@ -598,7 +598,7 @@ $ruta = '';
                     $('#rbtn_fecha').prop('checked', true).trigger('change');
                     $("#txt_fecha_desde").val(toDateInput(r.fecha_desde_permiso));
                     $("#txt_fecha_hasta").val(toDateInput(r.fecha_hasta_permiso));
-                    $("#txt_total_dias").val(r.total_dias_permiso || 0);
+                    $("#txt_total_dias").val(parseInt(r.total_dias_permiso) || 0);
                 } else {
                     $('#rbtn_horas').prop('checked', true).trigger('change');
                     $("#txt_fecha_horas").val(toDateInput(r.fecha_principal_permiso));
