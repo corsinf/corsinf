@@ -44,6 +44,7 @@ class th_per_vehiculosC
 
         foreach ($datos as $key => $value) {
             $tipo_vehiculo = isset($value['tipo_vehiculo_descripcion']) ? $value['tipo_vehiculo_descripcion'] : 'N/A';
+            $nombre_propietario = isset($value['th_per_veh_nombre_propietario']) ? $value['th_per_veh_nombre_propietario'] : 'N/A';
             $placa_original = $value['th_per_veh_placa_original'];
             $placa_sintesis = $value['th_per_veh_placa_sintesis'] ? $value['th_per_veh_placa_sintesis'] : 'N/A';
 
@@ -66,8 +67,11 @@ class th_per_vehiculosC
                             </div>
                             <div class="text-truncate">
                                 <h6 class="mb-0 fw-bold text-dark lh-1" style="font-size: 0.85rem;">
-                                    {$tipo_vehiculo}
+                                    {$tipo_vehiculo} 
                                 </h6>
+                                <p>
+                                    {$nombre_propietario}
+                                </p>
                                 <div class="d-flex align-items-center mt-1">
                                     <span class="badge-plate me-1" title="Original">{$placa_original}</span>
                                     <span class="badge-plate-alt" title="Síntesis">{$placa_sintesis}</span>
@@ -103,6 +107,7 @@ class th_per_vehiculosC
     {
         $datos = array(
             array('campo' => 'th_per_id', 'dato' => $parametros['txt_id_persona']),
+            array('campo' => 'th_per_veh_nombre_propietario', 'dato' => $parametros['txt_nombre_propietario']),
             array('campo' => 'id_vehiculo', 'dato' => $parametros['ddl_tipo_vehiculo']),
             array('campo' => 'th_per_veh_placa_original', 'dato' => strtoupper($parametros['txt_placa_original'])),
         );

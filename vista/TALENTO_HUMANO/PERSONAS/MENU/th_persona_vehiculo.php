@@ -40,12 +40,14 @@
                     selected: true
                 }));
                 $('#txt_vehiculo_id').val(response[0]._id);
+                $('#txt_nombre_propietario').val(response[0].th_per_veh_nombre_propietario);
             }
         });
     }
 
     function insertar_editar_vehiculo() {
         var txt_placa_original = $('#txt_placa_original').val();
+        var txt_nombre_propietario = $('#txt_nombre_propietario').val();
         var ddl_tipo_vehiculo = $('#ddl_tipo_vehiculo').val();
         var txt_id_persona = '<?= $id_persona ?>';
         var txt_id_vehiculo = $('#txt_vehiculo_id').val();
@@ -54,6 +56,7 @@
             '_id': txt_id_vehiculo,
             'txt_id_persona': txt_id_persona,
             'txt_placa_original': txt_placa_original,
+            'txt_nombre_propietario': txt_nombre_propietario,
             'ddl_tipo_vehiculo': ddl_tipo_vehiculo,
         }
 
@@ -176,7 +179,21 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_nombre_propietario" class="form-label form-label-sm">
+                                Nombre del Propietario
+                                <i class='bx bx-info-circle text-primary' data-bs-toggle="tooltip" title="Si no es el propietario, indique el nombre del titular registrado."></i>
+                            </label>
 
+                            <input type="text"
+                                class="form-control form-control-sm text-uppercase"
+                                name="txt_nombre_propietario"
+                                id="txt_nombre_propietario"
+                                maxlength="100"
+                                placeholder="Ingrese el nombre completo">
+                        </div>
+                    </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_placa_original" class="form-label form-label-sm">Placa Original </label>
@@ -216,6 +233,7 @@
 <script>
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('ddl_tipo_vehiculo');
+        agregar_asterisco_campo_obligatorio('txt_nombre_propietario');
         agregar_asterisco_campo_obligatorio('txt_placa_original');
 
         // Validación Vehículo
@@ -265,7 +283,7 @@
         background: #ffffff;
         border: 1px solid #edf2f7 !important;
     }
-    
+
     .custom-card-compact:hover {
         border-color: #cbd5e0 !important;
         background: #f8fafc;
@@ -275,13 +293,17 @@
     .mini-status-icon {
         width: 32px;
         height: 32px;
-        min-width: 32px; /* Evita que se encoja */
+        min-width: 32px;
+        /* Evita que se encoja */
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 8px;
     }
-    .bg-primary-soft { background-color: #eef2ff; }
+
+    .bg-primary-soft {
+        background-color: #eef2ff;
+    }
 
     /* Estilo de Placas tipo etiqueta */
     .badge-plate {
@@ -294,7 +316,7 @@
         font-weight: 600;
         border: 1px solid #e2e8f0;
     }
-    
+
     .badge-plate-alt {
         font-family: 'Monaco', 'Consolas', monospace;
         font-size: 0.7rem;

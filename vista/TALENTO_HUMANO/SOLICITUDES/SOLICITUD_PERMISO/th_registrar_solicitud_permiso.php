@@ -82,6 +82,8 @@ $ruta = '';
             <?php endif; ?>
         } else {
             $('#ddl_personas').prop('disabled', true);
+            cargar_datos_persona(USER_DATA.id);
+            cargar_persona_familia(USER_DATA.id);
         }
 
 

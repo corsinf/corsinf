@@ -12,6 +12,7 @@ class th_per_vehiculosM extends BaseModel
         'id_vehiculo AS id_vehiculo',
         'th_per_veh_placa_original AS placa_original',
         'th_per_veh_placa_sintesis AS placa_sintesis',
+        'th_per_veh_nombre_propietario AS nombre_propietario',
         'th_per_veh_estado AS estado',
         'th_per_veh_fecha_creacion AS fecha_creacion',
         'th_per_veh_fecha_modificacion AS fecha_modificacion',
@@ -27,6 +28,7 @@ class th_per_vehiculosM extends BaseModel
             pv.th_per_veh_placa_original,
             pv.th_per_veh_placa_sintesis,
             pv.th_per_veh_estado,
+            pv.th_per_veh_nombre_propietario,
             pv.th_per_veh_fecha_creacion,
             pv.th_per_veh_fecha_modificacion,
             tv.descripcion AS tipo_vehiculo_descripcion
@@ -52,6 +54,7 @@ class th_per_vehiculosM extends BaseModel
             pv.id_vehiculo,
             pv.th_per_veh_placa_original,
             pv.th_per_veh_placa_sintesis,
+            pv.th_per_veh_nombre_propietario,
             pv.th_per_veh_estado,
             pv.th_per_veh_fecha_creacion,
             pv.th_per_veh_fecha_modificacion,
