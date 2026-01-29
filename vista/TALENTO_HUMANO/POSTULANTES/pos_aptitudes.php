@@ -215,7 +215,7 @@
             <div class="modal-header bg-dark bg-opacity-10">
                 <div>
                     <h5 class="modal-title fw-bold text-primary" id="lbl_titulo_aptitudes">
-                        <i class='bx bx-extension me-2'></i>Habilidades y Aptitudes
+                        <i class='bx bx-extension me-2'></i>Competencias laborales
                     </h5>
                     <small class="text-muted">Selecciona las competencias que mejor describan tu perfil profesional.</small>
                 </div>
