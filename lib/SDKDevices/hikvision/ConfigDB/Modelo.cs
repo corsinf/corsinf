@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
+using System.Globalization;
 using System.Security.Cryptography;
 
 namespace CorsinfSDKHik.ConfigDB
@@ -15,6 +16,7 @@ namespace CorsinfSDKHik.ConfigDB
         private string esquema;
         private string tabla;
         private string fecha;
+        private string[] diasEspanol = { "Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado" };
 
         public void configConsulta()
         {
@@ -344,6 +346,9 @@ namespace CorsinfSDKHik.ConfigDB
         public void InsertData(SqlConnection conn, String data)
         {
             configConsulta();
+            DateTime hoy = DateTime.Now;
+            int dia = (int)hoy.DayOfWeek;
+            string nombreDia = diasEspanol[dia];
             _empresaDal.validarTablas(conn, esquema, fecha);
             ControlAccesosModelo Acceso = new ControlAccesosModelo();
             DescuentosTiempoModelo DescuentoTime = new DescuentosTiempoModelo();
@@ -385,6 +390,7 @@ namespace CorsinfSDKHik.ConfigDB
                     Acceso.th_acc_tipo_origen = "BIO";
                     Acceso.th_per_id = Convert.ToInt32(idPersona);
                     Acceso.th_acc_fecha = FechaMarcacion;
+                    Acceso.th_acc_dia = nombreDia;
 
                     int rangoValidoIngreso = horariosEncontradas.entrada_min + horariosEncontradas.tolerancia_ini;
                     int rangoValidoSalida = horariosEncontradas.salida_min - horariosEncontradas.tolerancia_fin;
@@ -487,10 +493,15 @@ namespace CorsinfSDKHik.ConfigDB
                                     Acceso.th_acc_detalle_registro = "Registro normal";
 
                                     int nuevo_intervalo = horariosEncontradas.salida_min - horariosEncontradas.entrada_min - horariosEncontradas.tiempo_descanso - totalAtrazo;
-                                    Acceso.th_acc_horas_trabajadasJornada_min = nuevo_intervalo - MinutosMarcacion - ConvertirHoratomin(horariosAccesoXPersona.th_acc_hora);
+                                    Acceso.th_acc_hor_faltantesJornada_min = (horariosEncontradas.salida_min - horariosEncontradas.tiempo_descanso) - MinutosMarcacion;
 
-                                    Acceso.th_acc_hor_faltantesJornada_min = (horariosEncontradas.salida_min - horariosEncontradas.tiempo_descanso) - (MinutosMarcacion - totalAtrazo);
+                                    Acceso.th_acc_horas_trabajadasJornada_min = MinutosMarcacion - (horariosEncontradas.entrada_min + totalAtrazo);
 
+
+                                    //Acceso.th_acc_horas_trabajadasJornada_min = nuevo_intervalo - MinutosMarcacion - ConvertirHoratomin(horariosAccesoXPersona.th_acc_hora);
+                                    //Acceso.th_acc_hor_faltantesJornada_min = (horariosEncontradas.salida_min - horariosEncontradas.tiempo_descanso) - (MinutosMarcacion - totalAtrazo);
+
+      
                                 }
 
                                 List<ControlAccesosModelo> Lista = _SelectData.RegistroEntradaCC(conn, FechaMarcacion, cardNumber);
@@ -555,20 +566,21 @@ namespace CorsinfSDKHik.ConfigDB
                         {
                             Acceso.th_acc_tipo_registro = "Salida";
                         }
-                        int nuevo_intervalo = horariosEncontradas.salida_min - horariosEncontradas.entrada_min - horariosEncontradas.tiempo_descanso - totalAtrazo;
-
+                        
                         Acceso.th_acc_detalle_registro = "Registro normal";
                         Acceso.th_acc_atraso_min = totalAtrazo;
                         Acceso.th_acc_almuerzo_min = horariosEncontradas.tiempo_descanso;
-
-                        Acceso.th_acc_horas_trabajadasJornada_min = MinutosMarcacion - ConvertirHoratomin(horariosAccesoXPersona.th_acc_hora);
                         Acceso.th_acc_justificacion_min = 0;
-                        Acceso.th_acc_hor_faltantesJornada_min = (horariosEncontradas.salida_min - horariosEncontradas.tiempo_descanso) - (MinutosMarcacion - totalAtrazo);
+                        
+                        Acceso.th_acc_hor_faltantesJornada_min = (horariosEncontradas.salida_min - horariosEncontradas.tiempo_descanso) - MinutosMarcacion;
+                        
+                        Acceso.th_acc_horas_trabajadasJornada_min = MinutosMarcacion - (horariosEncontradas.entrada_min+totalAtrazo);
+                        
                         Acceso.th_acc_horario_jornada = ConvertirConTimeSpan(horariosEncontradas.entrada_min) + " - " + ConvertirConTimeSpan(horariosEncontradas.salida_min);
                         if (MinutosMarcacion > horariosEncontradas.salida_min)
                         {
                             Acceso.th_acc_hor_faltantesJornada_min = 0;
-                            Acceso.th_acc_horas_trabajadasJornada_min = nuevo_intervalo;
+                            Acceso.th_acc_horas_trabajadasJornada_min = (horariosEncontradas.salida_min-horariosEncontradas.tiempo_descanso) - (horariosEncontradas.entrada_min+totalAtrazo);
                         }
 
                         _InsertData.InsertarAccesos(conn, Acceso);
