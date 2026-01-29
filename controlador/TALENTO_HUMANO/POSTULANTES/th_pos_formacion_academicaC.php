@@ -50,6 +50,9 @@ class th_pos_formacion_academicaC
             $nivel = !empty($value['nivel_academico_descripcion'])
                 ? $value['nivel_academico_descripcion']
                 : 'No especificado';
+            $pais = !empty($value['pais_nombre'])
+                ? $value['pais_nombre']
+                : 'No especificado';
 
             $senescyt = !empty($value['th_fora_registro_senescyt'])
                 ? " | SENESCYT: {$value['th_fora_registro_senescyt']}"
@@ -79,6 +82,9 @@ class th_pos_formacion_academicaC
 
                                             <p class="m-0 text-muted" style="font-size: 0.75rem;">
                                                 <i class="bx bx-graduation me-1"></i>Nivel: <strong>{$nivel}</strong>
+                                            </p>
+                                            <p class="m-0 text-muted" style="font-size: 0.75rem;">
+                                                <i class="bx bx-graduation me-1"></i>Pais: <strong>{$pais}</strong>
                                             </p>
                                         </div>
 
@@ -132,6 +138,7 @@ class th_pos_formacion_academicaC
             array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']),
             array('campo' => 'th_fora_registro_senescyt', 'dato' => $parametros['txt_fora_registro_senescyt']),
             array('campo' => 'id_nivel_academico', 'dato' => $parametros['ddl_nivel_academico']),
+            array('campo' => 'id_pais', 'dato' => $parametros['ddl_pais']),
         );
 
         if ($parametros['_id'] == '') {
