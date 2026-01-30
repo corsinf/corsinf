@@ -33,12 +33,12 @@ class th_cat_paisC
     function buscar($parametros)
     {
         $lista = array();
-        $concat = "nombre, nacionalidad, codigo";
+        $concat = "nombre,iso_alpha2";
         
         $datos = $this->modelo->where('estado', 1)->where('se_lista_pais', 1)->like($concat, $parametros['query']);
 
         foreach ($datos as $key => $value) {
-            $text =  $value['codigo'] ." - ". $value['nombre'];
+            $text = $value['nombre'];
             $lista[] = array(
                 'id' =>$value['id_pais'], 
                 'text' => $text,

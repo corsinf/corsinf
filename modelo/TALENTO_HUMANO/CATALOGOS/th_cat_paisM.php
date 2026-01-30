@@ -9,8 +9,11 @@ class th_cat_paisM extends BaseModel
     protected $primaryKey = 'id_pais AS _id';
 
     protected $camposPermitidos = [
-        'codigo AS codigo',
         'nombre AS nombre',
+        //'iso_alpha2 AS iso_alpha2',
+        //'iso_alpha3 AS iso_alpha3',
+        //'iso_numerico AS iso_numerico',
+        //'codigo_telefonico AS codigo_telefonico',
         'nacionalidad AS nacionalidad',
         'se_lista_nac AS se_lista_nac',
         'se_lista_pais AS se_lista_pais',

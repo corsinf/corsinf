@@ -48,7 +48,7 @@
                 }));
                 $('#ddl_pais').append($('<option>', {
                     value: response[0].id_pais,
-                    text: response[0].pais_codigo + " - " + response[0].pais_nombre,
+                    text: response[0].pais_nombre,
                     selected: true
                 }));
 

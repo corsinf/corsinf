@@ -35,8 +35,7 @@ class th_pos_formacion_academicaM extends BaseModel
             fa.id_nivel_academico,
             fa.id_pais,
             na.descripcion AS nivel_academico_descripcion,
-            pa.nombre AS pais_nombre,
-            pa.codigo AS pais_codigo
+            pa.nombre AS pais_nombre
         FROM th_pos_formacion_academica fa
         LEFT JOIN th_cat_pos_nivel_academico na
             ON fa.id_nivel_academico = na.id_nivel_academico
@@ -66,8 +65,7 @@ class th_pos_formacion_academicaM extends BaseModel
             fa.th_fora_registro_senescyt,
             fa.id_nivel_academico,
             na.descripcion AS nivel_academico_descripcion,
-            pa.nombre AS pais_nombre,
-            pa.codigo AS pais_codigo
+            pa.nombre AS pais_nombre
         FROM th_pos_formacion_academica fa
         LEFT JOIN th_cat_pos_nivel_academico na
             ON fa.id_nivel_academico = na.id_nivel_academico
