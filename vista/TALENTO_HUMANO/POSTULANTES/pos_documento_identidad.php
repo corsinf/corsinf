@@ -1,7 +1,15 @@
 <script>
     $(document).ready(function() {
         cargar_datos_documentos_identidad('<?= $id_postulante ?>');
+        cargar_selects_documentos();
     });
+
+
+    function cargar_selects_documentos() {
+        url_docIdentidadC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_doc_identidadC.php?buscar=true';
+        cargar_select2_url('ddl_tipo_documento_identidad', url_docIdentidadC, '', '#modal_agregar_documentos_identidad');
+    }
+
 
     //Documentos de Identidad
     function cargar_datos_documentos_identidad(id) {
@@ -45,7 +53,12 @@
             success: function(response) {
                 $('#txt_documentos_identificacion_id').val(response[0]._id);
 
-                $('#ddl_tipo_documento_identidad').val(response[0].th_poi_tipo);
+                $('#ddl_tipo_documento_identidad').append($('<option>', {
+                    value: response[0].id_documento,
+                    text: response[0].nombre_documento,
+                    selected: true
+                }));
+
                 $('#txt_ruta_guardada_documentos_identidad').val(response[0].th_pos_documentos);
             }
         });
@@ -153,7 +166,7 @@
 
     function limpiar_parametros_documentos_identidad() {
         //certificaciones capacitaciones
-        $('#ddl_tipo_documento_identidad').val('');
+        $('#ddl_tipo_documento_identidad').val(null).trigger('change');
         $('#txt_cargar_documento_identidad').val('');
         $('#txt_ruta_documentos_identidad').val('');
         $('#txt_documentos_identificacion_id').val('');
@@ -206,14 +219,14 @@
                         <div class="col-md-12">
                             <label for="ddl_tipo_documento_identidad" class="form-label fw-semibold fs-7">Tipo de Documento </label>
                             <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-white text-muted"><i class='bx bx-list-check'></i></span>
                                 <select class="form-select form-select-sm" id="ddl_tipo_documento_identidad" name="ddl_tipo_documento_identidad" onchange="obtener_documentos_repetidos();">
                                     <option selected disabled value="">-- Selecciona una opción --</option>
+                                    <!--
                                     <option value="Cédula de Identidad">Cédula de Identidad</option>
                                     <option value="Pasaporte">Pasaporte</option>
                                     <option value="Licencia">Licencia</option>
                                     <option value="Carnét o Certificado para miembro de la Fuerza Pública Ecuatoriana">Carnét o Certificado para miembro de la Fuerza Pública Ecuatoriana</option>
-                                    <option value="Carnét de discapacidad">Carnét de discapacidad</option>
+-->
                                 </select>
                             </div>
                             <label class="error" style="display: none;" for="ddl_tipo_documento_identidad"></label>
