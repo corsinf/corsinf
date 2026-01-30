@@ -1,7 +1,22 @@
 <script>
     $(document).ready(function() {
         cargar_datos_certificaciones_capacitaciones('<?= $id_postulante ?>');
+        cargar_selects2_capacitaciones();
     });
+
+    function cargar_selects2_capacitaciones() {
+        url_CertificadoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_tipo_certificadoC.php?buscar=true';
+
+        url_EventoCertifidoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_tipo_evento_certificadoC.php?buscar=true';
+
+        url_PaisC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_paisC.php?buscar=true';
+
+        cargar_select2_url('ddl_certificado', url_CertificadoC, '', '#modal_agregar_certificaciones');
+
+        cargar_select2_url('ddl_evento_cert', url_EventoCertifidoC, '', '#modal_agregar_certificaciones');
+
+        cargar_select2_url('ddl_pais_cerficacion', url_PaisC, '', '#modal_agregar_certificaciones');
+    }
 
     //Certificaciones y Capacitaciones
     function cargar_datos_certificaciones_capacitaciones(id) {
@@ -30,6 +45,23 @@
                 $('#txt_certificaciones_capacitaciones_id').val(response[0]._id);
                 $('#txt_ruta_guardada_certificaciones_capacitaciones').val(response[0].th_cert_ruta_archivo);
                 $('#txt_nombre_curso').val(response[0].th_cert_nombre_curso);
+                $('#ddl_pais_cerficacion').append($('<option>', {
+                    value: response[0].id_pais,
+                    text: response[0].nombre_pais,
+                    selected: true
+                }));
+                $('#ddl_evento_cert').append($('<option>', {
+                    value: response[0].id_evento_cert,
+                    text: response[0].nombre_evento_certificado,
+                    selected: true
+                }));
+                $('#ddl_certificado').append($('<option>', {
+                    value: response[0].id_certificado,
+                    text: response[0].nombre_certificado,
+                    selected: true
+                }));
+
+
             }
         });
     }
@@ -38,6 +70,9 @@
         var form_data = new FormData(document.getElementById("form_certificaciones_capacitaciones")); // Captura todos los campos y archivos
 
         var txt_id_certificaciones_capacitaciones = $('#txt_certificaciones_capacitaciones_id').val();
+        var ddl_pais_cerficacion = $('#ddl_pais_cerficacion').val();
+        var ddl_certificado = $('#ddl_certificado').val();
+        var ddl_evento_cert = $('#ddl_evento_cert').val();
 
         if ($('#txt_ruta_archivo').val() === '' && txt_id_certificaciones_capacitaciones != '') {
             var txt_ruta_archivo = $('#txt_ruta_guardada_certificaciones_capacitaciones').val()
@@ -143,6 +178,9 @@
         $('#txt_ruta_archivo').val('');
         $('#txt_certificaciones_capacitaciones_id').val('');
         $('#txt_ruta_guardada_certificaciones_capacitaciones').val('');
+        $('#ddl_pais_cerficacion').val(null).trigger('change');
+        $('#ddl_evento_cert').val(null).trigger('change');
+        $('#ddl_certificado').val(null).trigger('change');
         //Limpiar validaciones
         $("#form_certificaciones_capacitaciones").validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
@@ -186,28 +224,57 @@
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
 
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            <label for="txt_nombre_curso" class="form-label fw-semibold fs-7">Nombre del Evento </label>
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <label for="txt_nombre_curso" class="form-label fw-semibold fs-7">Nombre del Evento</label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-book-bookmark'></i></span>
-                                <textarea class="form-control form-control-sm no_caracteres" name="txt_nombre_curso" id="txt_nombre_curso" rows="2" maxlength="200" oninput="texto_mayusculas(this);" placeholder="Ej: Certificación en AWS Cloud Practitioner, Curso de Excel Avanzado..."></textarea>
+                                <textarea class="form-control form-control-sm no_caracteres" name="txt_nombre_curso" id="txt_nombre_curso" rows="2" maxlength="200" oninput="texto_mayusculas(this);" placeholder="Ej: CERTIFICACIÓN EN AWS CLOUD PRACTITIONER..."></textarea>
                             </div>
                             <label class="error" style="display: none;" for="txt_nombre_curso"></label>
+                        </div>
 
+                        <div class="col-md-4">
+                            <label for="ddl_pais_cerficacion" class="form-label fw-semibold fs-7">País</label>
+                            <select class="form-select select2-validation" id="ddl_pais_cerficacion" name="ddl_pais_cerficacion" required>
+                                <option value="">-- Seleccione País --</option>
+                            </select>
+                            <label class="error" style="display: none;" for="ddl_pais_cerficacion"></label>
                         </div>
                     </div>
 
-                    <div class="p-4 bg-light rounded-3 border border-dashed">
-                        <label for="txt_ruta_archivo" class="form-label fw-semibold text-dark">Documento de Respaldo (PDF) </label>
-                        <div class="input-group input-group-sm">
-                            <input type="file" class="form-control" name="txt_ruta_archivo" id="txt_ruta_archivo" accept=".pdf">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="ddl_evento_cert" class="form-label fw-semibold fs-7">Tipo de Evento</label>
+                            <select class="form-select select2-validation" id="ddl_evento_cert" name="ddl_evento_cert" required>
+                                <option value="">-- Seleccione tipo --</option>
+                            </select>
+                            <label class="error" style="display: none;" for="ddl_evento_cert"></label>
                         </div>
-                        <input type="hidden" name="txt_ruta_guardada_certificaciones_capacitaciones" id="txt_ruta_guardada_certificaciones_capacitaciones">
-                        <label class="error" style="display: none;" for="txt_ruta_archivo"></label>
 
-                        <div class="form-text text-xs mt-2 text-muted">
-                            <i class='bx bx-cloud-upload me-1'></i> Adjunta el certificado escaneado. Asegúrate de que el archivo sea legible y no supere los 5MB.
+                        <div class="col-md-6">
+                            <label for="ddl_certificado" class="form-label fw-semibold fs-7">Tipo de Certificado</label>
+                            <select class="form-select select2-validation" id="ddl_certificado" name="ddl_certificado" required>
+                                <option value="">-- Seleccione tipo --</option>
+                            </select>
+                            <label class="error" style="display: none;" for="ddl_certificado"></label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="p-3 bg-light rounded-3 border border-dashed">
+                                <label for="txt_ruta_archivo" class="form-label fw-semibold text-dark fs-7">Documento de Respaldo (PDF)</label>
+                                <div class="input-group input-group-sm">
+                                    <input type="file" class="form-control" name="txt_ruta_archivo" id="txt_ruta_archivo" accept=".pdf">
+                                </div>
+                                <input type="hidden" name="txt_ruta_guardada_certificaciones_capacitaciones" id="txt_ruta_guardada_certificaciones_capacitaciones">
+                                <label class="error" style="display: none;" for="txt_ruta_archivo"></label>
+
+                                <div class="form-text text-xs mt-2 text-muted" style="font-size: 0.75rem;">
+                                    <i class='bx bx-cloud-upload me-1'></i> Adjunta el certificado escaneado. Asegúrate de que el archivo sea legible y no supere los 5MB.
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -279,6 +346,9 @@
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('txt_nombre_curso');
         agregar_asterisco_campo_obligatorio('txt_ruta_archivo');
+        agregar_asterisco_campo_obligatorio('ddl_pais_cerficacion');
+        agregar_asterisco_campo_obligatorio('ddl_evento_cert');
+        agregar_asterisco_campo_obligatorio('ddl_certificado');
 
         //Validación Certificaciones y Capacitaciones
         $("#form_certificaciones_capacitaciones").validate({
@@ -289,6 +359,15 @@
                 txt_ruta_archivo: {
                     required: true,
                 },
+                ddl_pais_cerficacion: {
+                    required: true,
+                },
+                ddl_evento_cert: {
+                    required: true,
+                },
+                ddl_certificado: {
+                    required: true,
+                },
             },
             messages: {
                 txt_nombre_curso: {
@@ -297,6 +376,16 @@
                 txt_ruta_archivo: {
                     required: "Por favor ingrese el PDF de su certificado",
                 },
+                ddl_pais_cerficacion: {
+                    required: "Por favor seleccione el pais",
+                },
+                ddl_evento_cert: {
+                    required: "Por favor seleccione el evento del certificado",
+                },
+                ddl_certificado: {
+                    required: "Por favor seleccione el certificado",
+                },
+
             },
 
             highlight: function(element) {

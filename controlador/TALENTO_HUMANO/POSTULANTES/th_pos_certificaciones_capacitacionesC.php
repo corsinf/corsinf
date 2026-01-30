@@ -32,59 +32,65 @@ class th_pos_certificaciones_capacitacionesC
     //Funcion para listar la formacion academica del postulante
     function listar($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_cert_estado', 1)->orderBy('th_cert_nombre_curso')->listar();
+        // Usamos la función con INNER JOIN que creamos en el modelo
+        $datos = $this->modelo->listar_certificaciones_postulante($id);
 
         $texto = '<div class="row g-3">';
 
-        foreach ($datos as $key => $value) {
+        if (empty($datos)) {
+            $texto .= '<div class="col-12 text-center text-muted"><p>No se encontraron certificaciones registradas.</p></div>';
+        } else {
+            foreach ($datos as $key => $value) {
+                $texto .= <<<HTML
+            <div class="col-md-6 mb-col">
+                <div class="cert-card p-3 h-100 position-relative shadow-sm border-start border-primary border-3">
+                    
+                    <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
+                            onclick="abrir_modal_certificaciones_capacitaciones('{$value['_id']}')" 
+                            title="Editar Certificación">
+                        <i class="bx bx-pencil text-primary"></i>
+                    </button>
 
-            $texto .= <<<HTML
-                            <div class="col-md-6 mb-col">
-                                <div class="cert-card p-3 h-100 position-relative shadow-sm">
-                                    
-                                    <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
-                                            onclick="abrir_modal_certificaciones_capacitaciones('{$value['_id']}')" 
-                                            title="Editar Certificación">
-                                        <i class="bx bx-pencil"></i>
-                                    </button>
+                    <div class="d-flex flex-column h-100">
+                        <div class="mb-2">
+                            <span class="badge bg-light text-primary mb-1" style="font-size: 0.65rem; text-transform: uppercase;">
+                                {$value['nombre_evento_certificado']}
+                            </span>
+                            
+                            <h6 class="fw-bold text-dark mb-1" style="line-height: 1.2;">
+                                {$value['th_cert_nombre_curso']}
+                            </h6>
+                            
+                            <p class="m-0 text-muted" style="font-size: 0.75rem;">
+                                <i class="bx bx-award me-1"></i>{$value['nombre_certificado']} | 
+                                <i class="bx bx-map-pin me-1"></i>{$value['nombre_pais']}
+                            </p>
+                        </div>
 
-                                    <div class="d-flex flex-column h-100">
-                                        <div class="mb-2">
-                                            <span class="cert-badge mb-1">Capacitación</span>
-                                            
-                                            <h6 class="fw-bold text-dark cert-title mb-1">
-                                                {$value['th_cert_nombre_curso']}
-                                            </h6>
-                                            
-                                            <p class="cert-doctor m-0">
-                                                <i class="bx bx-award me-1"></i>Certificado de Logro Profesional
-                                            </p>
-                                        </div>
-
-                                        <div class="mt-auto pt-2 d-flex justify-content-between align-items-end">
-                                            <div class="cert-date-range">
-                                                <div class="cert-label-small" style="color: #0dcaf_f;">Archivo</div>
-                                                <span class="text-muted" style="font-size: 0.7rem;">
-                                                    <i class="bx bx-file me-1"></i>Documento PDF
-                                                </span>
-                                            </div>
-                                            
-                                            <button data-bs-toggle="modal" data-bs-target="#modal_ver_pdf_certificaciones" 
-                                                    onclick="definir_ruta_iframe_certificaciones('{$value['th_cert_ruta_archivo']}');" 
-                                                    class="btn btn-dark btn-xs py-1 px-3 btn-cert-action">
-                                                DOCUMENTO
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="mt-auto pt-2 d-flex justify-content-between align-items-end">
+                            <div class="cert-date-range">
+                                <span class="text-success" style="font-size: 0.7rem;">
+                                    <i class="bx bxs-check-shield me-1"></i>Vigente
+                                </span>
                             </div>
-                        HTML;
+                            
+                            <button data-bs-toggle="modal" data-bs-target="#modal_ver_pdf_certificaciones" 
+                                    onclick="definir_ruta_iframe_certificaciones('{$value['th_cert_ruta_archivo']}');" 
+                                    class="btn btn-dark btn-xs py-1 px-3">
+                                <i class="bx bx-show me-1"></i> VER PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+HTML;
+            }
         }
 
         $texto .= '</div>';
-
         return $texto;
     }
+
 
     //Buscando registros por id de la formacion academica
     function listar_modal($id)
@@ -92,7 +98,7 @@ class th_pos_certificaciones_capacitacionesC
         if ($id == '') {
             $datos = $this->modelo->where('th_cert_estado', 1)->listar();
         } else {
-            $datos = $this->modelo->where('th_cert_id', $id)->listar();
+            $datos = $this->modelo->listar_certificacion_postulante_id($id);
         }
         return $datos;
     }
@@ -106,6 +112,9 @@ class th_pos_certificaciones_capacitacionesC
             array('campo' => 'th_cert_nombre_curso', 'dato' => $parametros['txt_nombre_curso']),
             // array('campo' => 'th_cert_ruta_archivo', 'dato' => $parametros['txt_ruta_archivo']),
             array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
+            array('campo' => 'id_certificado', 'dato' => $parametros['ddl_certificado']),
+            array('campo' => 'id_evento_cert', 'dato' => $parametros['ddl_evento_cert']),
+            array('campo' => 'id_pais', 'dato' => $parametros['ddl_pais_cerficacion']),
         );
 
 
