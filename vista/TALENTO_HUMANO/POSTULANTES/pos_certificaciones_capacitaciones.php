@@ -188,10 +188,10 @@
 
                     <div class="row mb-4">
                         <div class="col-md-12">
-                            <label for="txt_nombre_curso" class="form-label fw-semibold fs-7">Nombre del Curso o Capacitación </label>
+                            <label for="txt_nombre_curso" class="form-label fw-semibold fs-7">Nombre del Evento </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-book-bookmark'></i></span>
-                                <input type="text" class="form-control no_caracteres" name="txt_nombre_curso" id="txt_nombre_curso" maxlength="100" placeholder="Ej: Certificación en AWS Cloud Practitioner, Curso de Excel Avanzado...">
+                                <textarea class="form-control form-control-sm no_caracteres" name="txt_nombre_curso" id="txt_nombre_curso" rows="2" maxlength="200" oninput="texto_mayusculas(this);" placeholder="Ej: Certificación en AWS Cloud Practitioner, Curso de Excel Avanzado..."></textarea>
                             </div>
                             <label class="error" style="display: none;" for="txt_nombre_curso"></label>
 
