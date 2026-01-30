@@ -312,8 +312,8 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label for="txt_sueldo" class="form-label fw-semibold fs-7">Sueldo Mensual (Opcional) </label>
+                        <div class="col-md-6">
+                            <label for="txt_sueldo" class="form-label fw-semibold fs-7">Sueldo Mensual </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-money'></i></span>
                                 <input type="number" class="form-control" name="txt_sueldo" id="txt_sueldo" step="0.01" min="0" placeholder="0.00">
