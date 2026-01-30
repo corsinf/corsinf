@@ -187,11 +187,11 @@
                             </label>
 
                             <input type="text"
-                                class="form-control form-control-sm text-uppercase"
+                                class="form-control form-control-sm"
                                 name="txt_nombre_propietario"
                                 id="txt_nombre_propietario"
                                 maxlength="100"
-                                placeholder="Ingrese el nombre completo">
+                                placeholder="Ingrese el nombre completo" oninput="texto_mayusculas(this);">
                         </div>
                     </div>
                     <div class="row mb-col">

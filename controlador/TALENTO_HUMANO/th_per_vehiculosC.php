@@ -57,7 +57,7 @@ class th_per_vehiculosC
             }
 
             $texto .= <<<HTML
-            <div class="col-12 col-md-6 col-lg-4 mb-col">
+            <div class="col-12 col-md-6 col-lg-6 mb-col">
                 <div class="card border-0 shadow-sm custom-card-compact">
                     <div class="card-body p-2 d-flex align-items-center justify-content-between">
                         
