@@ -37,18 +37,22 @@ class th_pos_experiencia_laboralC
     {
         $datos = $this->modelo->where('th_pos_id', $id)->where('th_expl_estado', 1)->orderBy('th_expl_cbx_fecha_fin_experiencia', 'DESC')->orderBy('th_expl_fecha_fin_experiencia', 'DESC')->listar();
         //$datos = $this->modelo->where('th_pos_id', $id)->where('th_expl_estado', 1)->orderBy('th_expl_fecha_fin_experiencia', 'DESC')->listar();
-        $texto = '<div class="row g-3">'; 
+        if (empty($datos)) {
+            $texto = '<div  class="alert alert-info mb-0"><p>No hay información adicional registrada.</p></div>';
+        } else {
 
-        foreach ($datos as $key => $value) {
-            // Formato de fechas
-            $fecha_inicio_experiencia = date('d/m/Y', strtotime($value['th_expl_fecha_inicio_experiencia']));
-            $fecha_fin_experiencia = $value['th_expl_cbx_fecha_fin_experiencia'] == 1
-                ? '<span class="fw-bold text-success">Actualidad</span>'
-                : date('d/m/Y', strtotime($value['th_expl_fecha_fin_experiencia']));
+            $texto = '<div class="row g-3">';
 
-            $sueldo_actual = number_format($value['th_expl_sueldo'], 2, '.', ',');
+            foreach ($datos as $key => $value) {
+                // Formato de fechas
+                $fecha_inicio_experiencia = date('d/m/Y', strtotime($value['th_expl_fecha_inicio_experiencia']));
+                $fecha_fin_experiencia = $value['th_expl_cbx_fecha_fin_experiencia'] == 1
+                    ? '<span class="fw-bold text-success">Actualidad</span>'
+                    : date('d/m/Y', strtotime($value['th_expl_fecha_fin_experiencia']));
 
-            $texto .= <<<HTML
+                $sueldo_actual = number_format($value['th_expl_sueldo'], 2, '.', ',');
+
+                $texto .= <<<HTML
                             <div class="col-md-6 mb-col">
                                 <div class="cert-card p-3 h-100 position-relative shadow-sm">
                                     
@@ -98,9 +102,10 @@ class th_pos_experiencia_laboralC
                                 </div>
                             </div>
                         HTML;
-        }
+            }
 
-        $texto .= '</div>';
+            $texto .= '</div>';
+        }
         return $texto;
     }
 

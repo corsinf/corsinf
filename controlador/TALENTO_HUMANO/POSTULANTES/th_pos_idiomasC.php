@@ -38,6 +38,9 @@ class th_pos_idiomasC
         //Formato de ordenamiento de idiomas por fechas
         $datos = $this->modelo->where('th_pos_id', $id)->where('th_idi_estado', 1)->orderBy('th_idi_fecha_fin_idioma', 'DESC')->listar();
 
+         if (empty($datos)) {
+            $texto = '<div  class="alert alert-info mb-0"><p>No hay información adicional registrada.</p></div>';
+        } else {
         $texto = '<div class="row g-3">';
 
         foreach ($datos as $key => $value) {
@@ -94,6 +97,7 @@ class th_pos_idiomasC
         }
 
         $texto .= '</div>';
+        }
 
         return $texto;
     }

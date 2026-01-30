@@ -34,11 +34,15 @@ class th_pos_referencias_laboralesC
     {
         $datos = $this->modelo->where('th_pos_id', $id)->where('th_refl_estado', 1)->orderBy('th_refl_nombre_referencia')->listar();
 
-        $texto = '<div class="row g-3">';
 
-        foreach ($datos as $key => $value) {
+        if (empty($datos)) {
+            $texto = '<div class="alert alert-info mb-0">No hay información adicional registrada.</div>';
+        } else {
+            $texto = '<div class="row g-3">';
 
-            $texto .= <<<HTML
+            foreach ($datos as $key => $value) {
+
+                $texto .= <<<HTML
                             <div class="col-md-6 mb-col">
                                 <div class="cert-card p-3 h-100 position-relative shadow-sm">
                                     
@@ -76,9 +80,9 @@ class th_pos_referencias_laboralesC
                                 </div>
                             </div>
                         HTML;
+            }
+            $texto .= '</div>';
         }
-
-        $texto .= '</div>';
 
         return $texto;
     }

@@ -35,11 +35,12 @@ class th_pos_certificaciones_capacitacionesC
         // Usamos la función con INNER JOIN que creamos en el modelo
         $datos = $this->modelo->listar_certificaciones_postulante($id);
 
-        $texto = '<div class="row g-3">';
 
         if (empty($datos)) {
-            $texto .= '<div class="col-12 text-center text-muted"><p>No se encontraron certificaciones registradas.</p></div>';
+            $texto = '<div  class="alert alert-info mb-0"><p>No se encontraron certificaciones registradas.</p></div>';
         } else {
+            $texto = '<div class="row g-3">';
+
             foreach ($datos as $key => $value) {
                 $texto .= <<<HTML
             <div class="col-md-6 mb-col">
@@ -85,9 +86,9 @@ class th_pos_certificaciones_capacitacionesC
             </div>
 HTML;
             }
+            $texto .= '</div>';
         }
 
-        $texto .= '</div>';
         return $texto;
     }
 

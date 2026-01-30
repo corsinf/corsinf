@@ -35,7 +35,7 @@ class th_pos_discapacidadC
         $texto = '<div class="row g-3">';
 
         if (empty($datos)) {
-            return '<div class="alert alert-info border-0 shadow-sm" style="border-radius: 12px;">No registra discapacidad.</div>';
+            return '<div class="alert alert-info border-0 shadow-sm" >No registra discapacidad.</div>';
         }
 
         foreach ($datos as $value) {

@@ -34,12 +34,13 @@ class th_pos_documentosC
     {
         $datos = $this->modelo->listar_por_id($id);
 
-        $texto = '<div class="row g-3">';
 
         if (empty($datos)) {
-            $texto .= '<div class="col-12 text-center text-muted">No hay documentos registrados.</div>';
+            $texto = '<div class="alert alert-info mb-0">No hay documentos registrados.</div>';
         } else {
             foreach ($datos as $key => $value) {
+                $texto = '<div class="row g-3">';
+
 
                 // Corregido: Usar el alias 'estado' definido en el SQL
                 $documentos_repetidos = '';
@@ -84,9 +85,10 @@ class th_pos_documentosC
                 </div>
 HTML;
             }
+
+            $texto .= '</div>';
         }
 
-        $texto .= '</div>';
 
         return $texto;
     }

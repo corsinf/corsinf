@@ -45,9 +45,13 @@ class th_pos_habilidadesC
     {
         $datos = $this->modelo->where('th_pos_id', $id)->where('th_tiph_id', 2)->orderBy('th_hab_nombre', 'ASC')->listarJoin();
 
-        $texto = '<div class="d-flex flex-wrap gap-2 p-2">'; // Contenedor Flex para que se alineen solas
-        foreach ($datos as $key => $value) {
-            $texto .= <<<HTML
+        if (empty($datos)) {
+            $texto = '<div  class="alert alert-info mb-0"><p>No hay información adicional registrada.</p></div>';
+        } else {
+
+            $texto = '<div class="d-flex flex-wrap gap-2 p-2">'; // Contenedor Flex para que se alineen solas
+            foreach ($datos as $key => $value) {
+                $texto .= <<<HTML
                             <div class="badge rounded-pill d-flex align-items-center border-0" 
                                 style="background-color: #e8f5e9; color: #2e7d32; padding: 0.5rem 0.8rem; font-size: 0.85rem;">
                                 
@@ -66,9 +70,10 @@ class th_pos_habilidadesC
                                 
                             </div>
                         HTML;
-        }
+            }
 
-        $texto .= '</div>';
+            $texto .= '</div>';
+        }
 
         return $texto;
     }

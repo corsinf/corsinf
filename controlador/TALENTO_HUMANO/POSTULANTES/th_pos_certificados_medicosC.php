@@ -36,20 +36,22 @@ class th_pos_certificados_medicosC
 
         $datos = $this->modelo->where('th_pos_id', $id)->where('th_cer_estado', 1)->orderBy('th_cer_fecha_fin_certificado', 'DESC')->listar();
 
+        if (empty($datos)) {
+            $texto = '<div  class="alert alert-info mb-0"><p>No hay información adicional registrada.</p></div>';
+        } else {
+            $texto = '<div class="row g-3">';
 
-        $texto = '<div class="row g-3">';
+            foreach ($datos as $key => $value) {
+                // Lógica de fechas
+                $fecha_inicio = date('d/m/Y', strtotime($value['th_cer_fecha_inicio_certificado']));
+                $raw_fecha_fin = $value['th_cer_fecha_fin_certificado'];
 
-        foreach ($datos as $key => $value) {
-            // Lógica de fechas
-            $fecha_inicio = date('d/m/Y', strtotime($value['th_cer_fecha_inicio_certificado']));
-            $raw_fecha_fin = $value['th_cer_fecha_fin_certificado'];
+                $es_permanente = ($raw_fecha_fin == '1900-01-01' || strpos($raw_fecha_fin, '01/01/1900') !== false);
+                $fecha_fin_txt = $es_permanente
+                    ? '<span class="fw-bolder text-success">PERMANENTE</span>'
+                    : date('d/m/Y', strtotime($raw_fecha_fin));
 
-            $es_permanente = ($raw_fecha_fin == '1900-01-01' || strpos($raw_fecha_fin, '01/01/1900') !== false);
-            $fecha_fin_txt = $es_permanente
-                ? '<span class="fw-bolder text-success">PERMANENTE</span>'
-                : date('d/m/Y', strtotime($raw_fecha_fin));
-
-            $texto .= <<<HTML
+                $texto .= <<<HTML
                         <div class="col-md-6 mb-col">
                             <div class="cert-card p-3 h-100 position-relative shadow-sm">
                                 
@@ -89,9 +91,10 @@ class th_pos_certificados_medicosC
                             </div>
                         </div>
                     HTML;
-        }
+            }
 
-        $texto .= '</div>';
+            $texto .= '</div>';
+        }
 
 
         return $texto;
