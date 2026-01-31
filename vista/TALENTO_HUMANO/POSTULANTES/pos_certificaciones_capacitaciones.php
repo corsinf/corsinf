@@ -370,7 +370,7 @@
 
                     <div class="row mb-3">
                         <div class="col-md-12">
-                            <label for="txt_nombre_curso" class="form-label fw-semibold fs-7">Nombre del Evento</label>
+                            <label for="txt_nombre_curso" class="form-label fw-semibold fs-7">Nombre del Evento </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-book-bookmark'></i></span>
                                 <textarea class="form-control form-control-sm no_caracteres" name="txt_nombre_curso" id="txt_nombre_curso" rows="2" maxlength="200" oninput="texto_mayusculas(this);" placeholder="Ej: CERTIFICACIÓN EN AWS CLOUD PRACTITIONER..."></textarea>
@@ -419,7 +419,7 @@
 
                     <div class="p-3 bg-light rounded-3 border border-dashed mb-3">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="text-muted fs-7 mb-0 fw-bold text-uppercase">Periodo de Estudios </h6>
+                            <h6 class="text-muted fs-7 mb-0 fw-bold text-uppercase">Periodo de Evento </h6>
                             <div class="form-check form-switch">
                                 <input type="checkbox" class="form-check-input" name="cbx_fecha_final_capacitacion" id="cbx_fecha_final_capacitacion" onchange="checkbox_actualidad_certificaciones();">
                                 <label for="cbx_fecha_final_capacitacion" class="form-check-label fs-7 fw-semibold text-primary">Cursando actualmente</label>
@@ -443,7 +443,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="p-3 bg-light rounded-3 border border-dashed">
-                                <label for="txt_ruta_archivo" class="form-label fw-semibold text-dark fs-7">Documento de Respaldo (PDF)</label>
+                                <label for="txt_ruta_archivo" class="form-label fw-semibold text-dark fs-7">Documento de Respaldo (PDF) </label>
                                 <div class="input-group input-group-sm">
                                     <input type="file" class="form-control" name="txt_ruta_archivo" id="txt_ruta_archivo" accept=".pdf">
                                 </div>
