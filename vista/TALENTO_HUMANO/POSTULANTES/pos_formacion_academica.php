@@ -422,6 +422,9 @@
                 txt_fecha_final_academico: {
                     required: "Por favor ingrese la fecha en la que finalizó o finalizará sus estudios",
                 },
+                ddl_pais: {
+                    required: "Por favor seleccione el pais",
+                },
             },
 
             highlight: function(element) {

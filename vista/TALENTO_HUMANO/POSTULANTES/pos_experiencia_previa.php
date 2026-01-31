@@ -265,9 +265,10 @@
     }
 </script>
 
-
+<!--
 <div id="pnl_informacion_adicional">
 </div>
+-->
 
 <div id="pnl_experiencia_laboral">
 </div>

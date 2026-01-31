@@ -15,11 +15,14 @@ class th_pos_certificaciones_capacitacionesM extends BaseModel
         'th_cert_estado',
         'th_cert_fecha_creacion',
         'th_cert_fecha_modificacion',
+        'th_cert_duracion_horas',
+        'th_cert_fecha_desde',
+        'th_cert_fecha_hasta',
         'id_certificado',
         'id_evento_cert',
         'id_pais',
+        'th_cert_sigue_cursando',
     ];
-
 
     public function listar_certificaciones_postulante($id_postulante)
     {
@@ -32,12 +35,16 @@ class th_pos_certificaciones_capacitacionesM extends BaseModel
         t.th_cert_nombre_curso,
         t.th_cert_ruta_archivo,
         t.th_cert_estado AS estado,
+        t.th_cert_duracion_horas,
+        t.th_cert_fecha_desde,
+        t.th_cert_fecha_hasta,
+        t.th_cert_sigue_cursando,
         t.id_pais,
         p.nombre AS nombre_pais,
         t.id_evento_cert,
         ec.descripcion AS nombre_evento_certificado,
         t.id_certificado,
-        tc.descripcion AS nombre_certificado
+        tc.descripcion AS nombre_certificado 
     FROM th_pos_certificaciones_capacitaciones t
     INNER JOIN th_cat_pais p 
         ON t.id_pais = p.id_pais
@@ -52,6 +59,7 @@ class th_pos_certificaciones_capacitacionesM extends BaseModel
 
         return $this->db->datos($sql);
     }
+
     public function listar_certificacion_postulante_id($id)
     {
         $id = intval($id);
@@ -63,6 +71,10 @@ class th_pos_certificaciones_capacitacionesM extends BaseModel
         t.th_cert_nombre_curso,
         t.th_cert_ruta_archivo,
         t.th_cert_estado AS estado,
+        t.th_cert_duracion_horas,
+        t.th_cert_fecha_desde,
+        t.th_cert_fecha_hasta,
+        t.th_cert_sigue_cursando,
         t.id_pais,
         p.nombre AS nombre_pais,
         t.id_evento_cert,
@@ -78,7 +90,6 @@ class th_pos_certificaciones_capacitacionesM extends BaseModel
         ON t.id_certificado = tc.id_certificado
     WHERE t.th_cert_id = $id
     AND t.th_cert_estado = 1
-    ORDER BY t.th_cert_fecha_creacion DESC
     ";
 
         return $this->db->datos($sql);

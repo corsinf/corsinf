@@ -32,16 +32,19 @@ class th_pos_certificaciones_capacitacionesC
     //Funcion para listar la formacion academica del postulante
     function listar($id)
     {
-        // Usamos la función con INNER JOIN que creamos en el modelo
         $datos = $this->modelo->listar_certificaciones_postulante($id);
 
-
         if (empty($datos)) {
-            $texto = '<div  class="alert alert-info mb-0"><p>No se encontraron certificaciones registradas.</p></div>';
+            $texto = '<div class="alert alert-info mb-0"><p>No se encontraron certificaciones registradas.</p></div>';
         } else {
             $texto = '<div class="row g-3">';
 
             foreach ($datos as $key => $value) {
+                // Lógica para mostrar fechas o mensaje de "Cursando"
+                $periodo = ($value['th_cert_sigue_cursando'] == 1)
+                    ? 'Actualmente cursando'
+                    : 'Desde: ' . $value['th_cert_fecha_desde'] . ' | Hasta: ' . $value['th_cert_fecha_hasta'];
+
                 $texto .= <<<HTML
             <div class="col-md-6 mb-col">
                 <div class="cert-card p-3 h-100 position-relative shadow-sm border-start border-primary border-3">
@@ -64,8 +67,12 @@ class th_pos_certificaciones_capacitacionesC
                             
                             <p class="m-0 text-muted" style="font-size: 0.75rem;">
                                 <i class="bx bx-award me-1"></i>{$value['nombre_certificado']} | 
+                                <i class="bx bx-time me-1"></i>{$value['th_cert_duracion_horas']} Horas |
                                 <i class="bx bx-map-pin me-1"></i>{$value['nombre_pais']}
                             </p>
+                            <small class="text-muted" style="font-size: 0.7rem;">
+                                <i class="bx bx-calendar me-1"></i>{$periodo}
+                            </small>
                         </div>
 
                         <div class="mt-auto pt-2 d-flex justify-content-between align-items-end">
@@ -88,16 +95,14 @@ HTML;
             }
             $texto .= '</div>';
         }
-
         return $texto;
     }
 
-
-    //Buscando registros por id de la formacion academica
     function listar_modal($id)
     {
         if ($id == '') {
-            $datos = $this->modelo->where('th_cert_estado', 1)->listar();
+            // Por seguridad, si no hay ID, limitamos la búsqueda o devolvemos vacío
+            $datos = [];
         } else {
             $datos = $this->modelo->listar_certificacion_postulante_id($id);
         }
@@ -106,39 +111,44 @@ HTML;
 
     function insertar_editar($file, $parametros)
     {
-        // print_r($file);
-        // exit();
-        // die();
+
+        // Manejar el checkbox de "sigue cursando"
+        $sigue_cursando = isset($parametros['cbx_fecha_final_capacitacion']) && $parametros['cbx_fecha_final_capacitacion'] == '1' ? 1 : 0;
+
+        // Si está cursando actualmente, la fecha final debe ser vacía
+        $fecha_final = '';
+        if ($sigue_cursando == 0 && isset($parametros['txt_fecha_final_capacitacion'])) {
+            $fecha_final = $parametros['txt_fecha_final_capacitacion'];
+        }
         $datos = array(
-            array('campo' => 'th_cert_nombre_curso', 'dato' => $parametros['txt_nombre_curso']),
-            // array('campo' => 'th_cert_ruta_archivo', 'dato' => $parametros['txt_ruta_archivo']),
             array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
+            array('campo' => 'th_cert_nombre_curso', 'dato' => $parametros['txt_nombre_curso']),
+            array('campo' => 'th_cert_duracion_horas', 'dato' => $parametros['txt_duracion_horas'] ?? 0),
+            array('campo' => 'th_cert_fecha_desde', 'dato' => $parametros['txt_fecha_inicio_capacitacion']),
+            array('campo' => 'th_cert_fecha_hasta', 'dato' => $parametros['txt_fecha_final_capacitacion']),
+            array('campo' => 'th_cert_sigue_cursando', 'dato' => $sigue_cursando),
             array('campo' => 'id_certificado', 'dato' => $parametros['ddl_certificado']),
             array('campo' => 'id_evento_cert', 'dato' => $parametros['ddl_evento_cert']),
             array('campo' => 'id_pais', 'dato' => $parametros['ddl_pais_cerficacion']),
         );
 
-
         $id_certificaciones_capacitaciones = $parametros['txt_certificaciones_capacitaciones_id'];
 
         if ($id_certificaciones_capacitaciones == '') {
-            $datos = $this->modelo->insertar_id($datos);
-            $this->guardar_archivo($file, $parametros, $datos);
+            $id_nuevo = $this->modelo->insertar_id($datos);
+            $this->guardar_archivo($file, $parametros, $id_nuevo);
             return 1;
         } else {
-
             $where = array(
                 array('campo' => 'th_cert_id', 'dato' => $id_certificaciones_capacitaciones),
             );
+            $res = $this->modelo->editar($datos, $where);
 
-            $datos = $this->modelo->editar($datos, $where);
-
-            if ($file['txt_ruta_archivo']['tmp_name'] != '' && $file['txt_ruta_archivo']['tmp_name'] != null) {
-                $datos = $this->guardar_archivo($file, $parametros, $id_certificaciones_capacitaciones);
+            if (isset($file['txt_ruta_archivo']['tmp_name']) && $file['txt_ruta_archivo']['tmp_name'] != '') {
+                $this->guardar_archivo($file, $parametros, $id_certificaciones_capacitaciones);
             }
+            return $res;
         }
-
-        return $datos;
     }
 
 
