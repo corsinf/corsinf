@@ -39,15 +39,21 @@ class th_pos_certificaciones_capacitacionesC
         } else {
             $texto = '<div class="row g-3">';
 
-            foreach ($datos as $key => $value) {
-                // Lógica para mostrar fechas o mensaje de "Cursando"
-                $periodo = ($value['th_cert_sigue_cursando'] == 1)
-                    ? 'Actualmente cursando'
-                    : 'Desde: ' . $value['th_cert_fecha_desde'] . ' | Hasta: ' . $value['th_cert_fecha_hasta'];
+            foreach ($datos as $value) {
+                // Lógica de fechas
+                $fecha_desde = !empty($value['th_cert_fecha_desde'])
+                    ? date('d/m/Y', strtotime($value['th_cert_fecha_desde']))
+                    : '';
+
+                $es_actualidad = ($value['th_cert_sigue_cursando'] == 1 || $value['th_cert_fecha_hasta'] == '1900-01-01');
+
+                $fecha_hasta = ($es_actualidad)
+                    ? '<span class="fw-bold text-primary">Actualidad</span>'
+                    : (!empty($value['th_cert_fecha_hasta']) ? date('d/m/Y', strtotime($value['th_cert_fecha_hasta'])) : '');
 
                 $texto .= <<<HTML
             <div class="col-md-6 mb-col">
-                <div class="cert-card p-3 h-100 position-relative shadow-sm border-start border-primary border-3">
+                <div class="cert-card p-3 h-100 position-relative shadow-sm">
                     
                     <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
                             onclick="abrir_modal_certificaciones_capacitaciones('{$value['_id']}')" 
@@ -57,36 +63,42 @@ class th_pos_certificaciones_capacitacionesC
 
                     <div class="d-flex flex-column h-100">
                         <div class="mb-2">
-                            <span class="badge bg-light text-primary mb-1" style="font-size: 0.65rem; text-transform: uppercase;">
-                                {$value['nombre_evento_certificado']}
-                            </span>
+                            <span class="cert-badge mb-1">Capacitación / Certificación</span>
                             
-                            <h6 class="fw-bold text-dark mb-1" style="line-height: 1.2;">
+                            <h6 class="fw-bold text-dark cert-title mb-1">
                                 {$value['th_cert_nombre_curso']}
                             </h6>
                             
-                            <p class="m-0 text-muted" style="font-size: 0.75rem;">
-                                <i class="bx bx-award me-1"></i>{$value['nombre_certificado']} | 
-                                <i class="bx bx-time me-1"></i>{$value['th_cert_duracion_horas']} Horas |
-                                <i class="bx bx-map-pin me-1"></i>{$value['nombre_pais']}
+                            <p class="cert-doctor mb-1 text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.3px;">
+                                <i class="bx bx-bookmark-alt me-1"></i>{$value['nombre_evento_certificado']}
                             </p>
-                            <small class="text-muted" style="font-size: 0.7rem;">
-                                <i class="bx bx-calendar me-1"></i>{$periodo}
-                            </small>
+
+                            <p class="m-0 text-muted" style="font-size: 0.75rem;">
+                                <i class="bx bx-award me-1"></i>Logro: <strong>{$value['nombre_certificado']}</strong>
+                            </p>
+                            <p class="m-0 text-muted" style="font-size: 0.75rem;">
+                                <i class="bx bx-map-pin me-1"></i>País: <strong>{$value['nombre_pais']}</strong>
+                            </p>
                         </div>
 
-                        <div class="mt-auto pt-2 d-flex justify-content-between align-items-end">
-                            <div class="cert-date-range">
-                                <span class="text-success" style="font-size: 0.7rem;">
-                                    <i class="bx bxs-check-shield me-1"></i>Vigente
-                                </span>
+                        <div class="mt-auto pt-2">
+                            <div class="d-flex align-items-center justify-content-between p-2" 
+                                 style="background: rgba(13, 110, 253, 0.05); border-radius: 8px; border: 1px dashed rgba(13, 110, 253, 0.3);">
+                                
+                                <div class="cert-date-range">
+                                    <div class="cert-label-small" style="color: #0d6efd;">Periodo y Carga Horaria</div>
+                                    <span class="text-dark" style="font-size: 0.65rem;">
+                                        <i class="bx bx-calendar me-1"></i>{$fecha_desde} — {$fecha_hasta} | 
+                                        <i class="bx bx-time-five me-1"></i>{$value['th_cert_duracion_horas']} Horas
+                                    </span>
+                                </div>
+
+                                <button onclick="ruta_iframe_certificaciones('{$value['th_cert_ruta_archivo']}');" 
+                                        data-bs-toggle="modal" data-bs-target="#modal_ver_pdf_certificaciones"
+                                        class="btn btn-dark btn-xs py-1 px-2" style="font-size: 0.65rem;">
+                                    DOCUMENTO
+                                </button>
                             </div>
-                            
-                            <button data-bs-toggle="modal" data-bs-target="#modal_ver_pdf_certificaciones" 
-                                    onclick="definir_ruta_iframe_certificaciones('{$value['th_cert_ruta_archivo']}');" 
-                                    class="btn btn-dark btn-xs py-1 px-3">
-                                <i class="bx bx-show me-1"></i> VER PDF
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -113,7 +125,7 @@ HTML;
     {
 
         // Manejar el checkbox de "sigue cursando"
-        $sigue_cursando = isset($parametros['cbx_fecha_final_capacitacion']) && $parametros['cbx_fecha_final_capacitacion'] == '1' ? 1 : 0;
+        $sigue_cursando = (isset($parametros['cbx_fecha_final_capacitacion']) && $parametros['cbx_fecha_final_capacitacion'] == '1') ? 1 : 0;
 
         // Si está cursando actualmente, la fecha final debe ser vacía
         $fecha_final = '';

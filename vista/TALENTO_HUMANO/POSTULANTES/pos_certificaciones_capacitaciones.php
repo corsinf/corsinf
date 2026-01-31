@@ -70,19 +70,16 @@
                     selected: true
                 }));
 
-                // Manejar fecha de finalización o si está cursando actualmente
                 var fecha_fin = response[0].th_cert_fecha_hasta;
                 var sigue_cursando = response[0].th_cert_sigue_cursando;
 
-                if (fecha_fin === '' || fecha_fin === null || sigue_cursando == 1 || sigue_cursando == '1') {
-                    // Está cursando actualmente
+                if (fecha_fin === '' || fecha_fin === null || fecha_fin === '1900-01-01' || sigue_cursando == 1 || sigue_cursando == '1') {
                     $('#txt_fecha_final_capacitacion').val('');
                     $('#txt_fecha_final_capacitacion').prop('readonly', true);
                     $('#cbx_fecha_final_capacitacion').prop('checked', true);
                     $('#txt_fecha_final_capacitacion').rules("remove", "required");
-                    $('#txt_fecha_final_capacitacion').addClass('is-valid');
+                    $('#txt_fecha_final_capacitacion').removeClass('is-invalid').addClass('is-valid');
                 } else {
-                    // Ya finalizó
                     $('#txt_fecha_final_capacitacion').val(fecha_fin);
                     $('#txt_fecha_final_capacitacion').prop('readonly', false);
                     $('#cbx_fecha_final_capacitacion').prop('checked', false);
@@ -333,7 +330,8 @@
         validar_fechas_certificaciones();
     }
 
-    function definir_ruta_iframe_certificaciones(url) {
+    function ruta_iframe_certificaciones(url) {
+        $('#modal_ver_pdf_certificaciones').modal('show');
         var cambiar_ruta = $('#iframe_certificaciones_capacitaciones_pdf').attr('src', url);
     }
 

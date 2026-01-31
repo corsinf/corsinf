@@ -29,7 +29,6 @@ class th_pos_formacion_academicaC
         $this->modelo = new th_pos_formacion_academicaM();
     }
 
-    //Funcion para listar la formacion academica del postulante
     function listar($id)
     {
         $datos = $this->modelo->listar_formacion_academica_con_nivel_id($id);
