@@ -89,8 +89,12 @@
     }
 
     function insertar_editar_certificaciones_capacitaciones() {
+        if ($('#cbx_fecha_final_capacitacion').is(':checked')) {
+            $('#hidden_cbx_fecha_final_academico').val('1');
+        } else {
+            $('#hidden_cbx_fecha_final_academico').val('0');
+        }
         var form_data = new FormData(document.getElementById("form_certificaciones_capacitaciones")); // Captura todos los campos y archivos
-
         var txt_id_certificaciones_capacitaciones = $('#txt_certificaciones_capacitaciones_id').val();
         var ddl_pais_cerficacion = $('#ddl_pais_cerficacion').val();
         var ddl_certificado = $('#ddl_certificado').val();

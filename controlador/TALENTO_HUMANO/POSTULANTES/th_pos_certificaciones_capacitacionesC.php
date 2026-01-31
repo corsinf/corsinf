@@ -124,13 +124,15 @@ HTML;
     function insertar_editar($file, $parametros)
     {
 
-        // Manejar el checkbox de "sigue cursando"
-        $sigue_cursando = (isset($parametros['cbx_fecha_final_capacitacion']) && $parametros['cbx_fecha_final_capacitacion'] == '1') ? 1 : 0;
+        $fecha_hasta = $parametros['txt_fecha_final_capacitacion'];
 
-        // Si está cursando actualmente, la fecha final debe ser vacía
-        $fecha_final = '';
-        if ($sigue_cursando == 0 && isset($parametros['txt_fecha_final_capacitacion'])) {
-            $fecha_final = $parametros['txt_fecha_final_capacitacion'];
+        // Determinamos si es actualidad por el checkbox O por la fecha específica
+        $sigue_cursando = 0;
+        if ((isset($parametros['cbx_fecha_final_capacitacion']) && $parametros['cbx_fecha_final_capacitacion'] == '1') ||
+            $fecha_hasta == '1900-01-01' || $fecha_hasta == ''
+        ) {
+            $sigue_cursando = 1;
+            $fecha_hasta = '1900-01-01'; // Normalizamos para la base de datos
         }
         $datos = array(
             array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
