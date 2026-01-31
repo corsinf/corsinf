@@ -1,7 +1,18 @@
 <script>
     $(document).ready(function() {
         cargar_datos_idiomas('<?= $id_postulante ?>');
+        cargar_selected_idiomas();
     });
+
+    function cargar_selected_idiomas() {
+        url_CertificacionC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_tipo_certficacionC.php?buscar=true';
+        url_IdiomaC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_idiomasC.php?buscar=true';
+        url_IdiomaNivelC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_idiomas_nivelC.php?buscar=true';
+
+        cargar_select2_url('ddl_certificacion_idioma', url_CertificacionC, '', '#modal_agregar_idioma');
+        cargar_select2_url('ddl_idiomas', url_IdiomaC, '', '#modal_agregar_idioma');
+        cargar_select2_url('ddl_idiomas_nivel', url_IdiomaNivelC, '', '#modal_agregar_idioma');
+    }
 
     //Idiomas
     function cargar_datos_idiomas(id) {
@@ -27,35 +38,83 @@
             },
             dataType: 'json',
             success: function(response) {
-                $('#ddl_seleccionar_idioma').val(response[0].th_idi_nombre_idioma);
-                $('#ddl_dominio_idioma').val(response[0].th_idi_nivel);
-                $('#txt_institucion_1').val(response[0].th_idi_institucion);
-                $('#txt_fecha_inicio_idioma').val(response[0].th_idi_fecha_inicio_idioma);
-                $('#txt_fecha_fin_idioma').val(response[0].th_idi_fecha_fin_idioma);
-                $('#txt_idiomas_id').val(response[0]._id);
+                var datos = response[0];
 
+                $('#ddl_idiomas').empty().append($('<option>', {
+                    value: datos.id_idiomas,
+                    text: datos.nombre_idioma,
+                    selected: true
+                })).trigger('change');
+
+                $('#ddl_idiomas_nivel').empty().append($('<option>', {
+                    value: datos.id_idiomas_nivel,
+                    text: datos.nivel_idioma_descripcion,
+                    selected: true
+                })).trigger('change');
+
+                $('#ddl_certificacion_idioma').empty().append($('<option>', {
+                    value: datos.id_certificacion,
+                    text: datos.nombre_certificacion,
+                    selected: true
+                })).trigger('change');
+
+                $('#txt_institucion_1').val(datos.th_idi_institucion);
+                $('#txt_fecha_inicio_idioma').val(datos.th_idi_fecha_inicio_idioma);
+                $('#txt_idiomas_id').val(datos._id);
+
+                if (datos.th_idi_actualidad == 1 || datos.th_idi_fecha_fin_idioma == '1900-01-01') {
+                    $('#cbx_fecha_final_idioma').prop('checked', true);
+
+                    // Asignar fecha actual
+                    var hoy = new Date();
+                    var dia = String(hoy.getDate()).padStart(2, '0');
+                    var mes = String(hoy.getMonth() + 1).padStart(2, '0');
+                    var year = hoy.getFullYear();
+                    var fecha_actual = year + '-' + mes + '-' + dia;
+                    $('#txt_fecha_fin_idioma').val(fecha_actual);
+
+                    $('#txt_fecha_fin_idioma').prop('disabled', true);
+                    $('#txt_fecha_fin_idioma').rules("remove", "required");
+                    $('#txt_fecha_fin_idioma').removeClass('is-invalid').addClass('is-valid');
+                } else {
+                    $('#cbx_fecha_final_idioma').prop('checked', false);
+                    $('#txt_fecha_fin_idioma').val(datos.th_idi_fecha_fin_idioma);
+                    $('#txt_fecha_fin_idioma').prop('disabled', false);
+                }
             }
         });
     }
 
     function insertar_editar_idiomas() {
-        var ddl_seleccionar_idioma = $('#ddl_seleccionar_idioma').val();
-        var ddl_dominio_idioma = $('#ddl_dominio_idioma').val();
+        var ddl_idiomas = $('#ddl_idiomas').val();
+        var ddl_idiomas_nivel = $('#ddl_idiomas_nivel').val();
+        var ddl_certificacion_idioma = $('#ddl_certificacion_idioma').val();
         var txt_institucion_1 = $('#txt_institucion_1').val();
         var txt_fecha_inicio_idioma = $('#txt_fecha_inicio_idioma').val();
-        var txt_fecha_fin_idioma = $('#txt_fecha_fin_idioma').val();
         var id_postulante = $('#txt_postulante_id').val();
         var txt_idi_idiomas_id = $('#txt_idiomas_id').val();
+        var cbx_actualidad = $('#cbx_fecha_final_idioma').is(':checked') ? '1' : '0';
+
+        var txt_fecha_fin_idioma = '';
+        if (cbx_actualidad === '1') {
+            txt_fecha_fin_idioma = '1900-01-01';
+        } else {
+            txt_fecha_fin_idioma = $('#txt_fecha_fin_idioma').val();
+        }
+
         var parametros_idiomas = {
             'id_postulante': id_postulante,
-            'ddl_seleccionar_idioma': ddl_seleccionar_idioma,
-            'ddl_dominio_idioma': ddl_dominio_idioma,
+            'ddl_idiomas': ddl_idiomas,
+            'ddl_idiomas_nivel': ddl_idiomas_nivel,
+            'ddl_certificacion_idioma': ddl_certificacion_idioma,
             'txt_institucion_1': txt_institucion_1,
             'txt_fecha_inicio_idioma': txt_fecha_inicio_idioma,
             'txt_fecha_fin_idioma': txt_fecha_fin_idioma,
+            'cbx_fecha_final_idioma': cbx_actualidad,
             '_id': txt_idi_idiomas_id
         }
-        if ($("#form_agregar_idioma").valid()) {
+
+        if (validar_fechas_idioma() && $("#form_agregar_idioma").valid()) {
             insertar_idiomas(parametros_idiomas);
         }
     }
@@ -68,7 +127,6 @@
             url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_idiomasC.php?insertar=true',
             type: 'post',
             dataType: 'json',
-
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
@@ -130,66 +188,106 @@
     function limpiar_campos_idiomas_modal() {
         $('#form_agregar_idioma').validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
-        $('#ddl_seleccionar_idioma').val('');
-        $('#ddl_dominio_idioma').val('');
+        $('#cbx_fecha_final_idioma').prop('checked', false);
+        $('#ddl_idiomas').val(null).trigger('change');
+        $('#ddl_idiomas_nivel').val(null).trigger('change');
+        $('#ddl_certificacion_idioma').val(null).trigger('change');
         $('#txt_institucion_1').val('');
         $('#txt_fecha_inicio_idioma').val('');
         $('#txt_fecha_fin_idioma').val('');
+        $('#txt_fecha_fin_idioma').prop('disabled', false); // IMPORTANTE: habilitar el campo
         $('#txt_idiomas_id').val('');
+
         //Cambiar texto
         $('#lbl_nombre_idioma').html('Agregar Idioma');
         $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Agregar');
         $('#btn_eliminar_idiomas').hide();
     }
 
-    //Funcion para validar las fechas de ingreso
     function validar_fechas_idioma() {
         var fecha_inicio = $('#txt_fecha_inicio_idioma').val();
         var fecha_final = $('#txt_fecha_fin_idioma').val();
-        var hoy = new Date();
-        var fecha_actual = hoy.toISOString().split('T')[0];
+        var hoy = new Date().toISOString().split('T')[0];
+        var es_actualidad = $('#cbx_fecha_final_idioma').is(':checked');
 
-        //Funcion para validar que la fecha final no sea menor a la fecha de inicio
-        if (fecha_inicio && fecha_final) {
-            if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
+        if (fecha_inicio && Date.parse(fecha_inicio) > Date.parse(hoy)) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "La fecha de inicio no puede ser mayor a la fecha actual."
+            });
+            $('.form-control').removeClass('is-valid is-invalid');
+            $('#txt_fecha_inicio_idioma').val('');
+            return false; 
+        }
+
+        if (!es_actualidad && fecha_final) {
+            if (Date.parse(fecha_final) > Date.parse(hoy)) {
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "La fecha final no puede ser menor a la fecha de inicio.",
+                    text: "La fecha final no puede ser mayor a la fecha actual."
                 });
-                reiniciar_campos_fecha('#txt_fecha_fin_idioma');
-                return;
+                $('.form-control').removeClass('is-valid is-invalid');
+                $('#txt_fecha_fin_idioma').val('');
+                return false; 
+            }
+
+            if (fecha_inicio && Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "La fecha final no puede ser menor a la fecha de inicio."
+                });
+                $('.form-control').removeClass('is-valid is-invalid');
+                $('#txt_fecha_fin_idioma').val('');
+                return false; 
             }
         }
 
-        // Validar que la fecha de inicio no sea mayor a la fecha actual
-        if (fecha_inicio && Date.parse(fecha_inicio) > Date.parse(fecha_actual)) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "La fecha de inicio no puede ser mayor a la fecha actual.",
+        return true; 
+    }
+
+    function checkbox_actualidad_form_idioma() {
+        var campo_fecha_fin = $('#txt_fecha_fin_idioma');
+        var switch_actualidad = $('#cbx_fecha_final_idioma');
+
+        if (switch_actualidad.is(':checked')) {
+            var hoy = new Date();
+            var dia = String(hoy.getDate()).padStart(2, '0');
+            var mes = String(hoy.getMonth() + 1).padStart(2, '0');
+            var year = hoy.getFullYear();
+            var fecha_actual = year + '-' + mes + '-' + dia;
+
+            campo_fecha_fin.val(fecha_actual);
+
+            campo_fecha_fin.prop('disabled', true);
+            campo_fecha_fin.rules("remove", "required");
+
+            var validator = $("#form_agregar_idioma").validate();
+            validator.successList.push(campo_fecha_fin[0]);
+            validator.showErrors();
+
+            campo_fecha_fin.addClass('is-valid').removeClass('is-invalid');
+            $('label.error[for="txt_fecha_fin_idioma"]').hide();
+
+        } else {
+            if (campo_fecha_fin.prop('disabled')) {
+                campo_fecha_fin.val('');
+            }
+
+            campo_fecha_fin.prop('disabled', false);
+            campo_fecha_fin.rules("add", {
+                required: true,
+                messages: {
+                    required: "Por favor escriba la fecha de fin de los estudios"
+                }
             });
-            reiniciar_campos_fecha('#txt_fecha_inicio_idioma');
-            return;
+
+            campo_fecha_fin.removeClass('is-valid is-invalid');
         }
 
-        // Validar que la fecha final no sea mayor a la fecha actual
-        if (fecha_final && Date.parse(fecha_final) > Date.parse(fecha_actual)) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "La fecha final no puede ser mayor a la fecha actual.",
-            });
-            reiniciar_campos_fecha('#txt_fecha_fin_idioma');
-            return;
-        }
-
-        //Función para reiniciar campos
-        function reiniciar_campos_fecha(campo) {
-            $(campo).val('');
-            $(campo).removeClass('is-valid is-invalid');
-            $('.form-control').removeClass('is-valid is-invalid');
-        }
+        validar_fechas_idioma();
     }
 </script>
 
@@ -218,34 +316,23 @@
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label for="ddl_seleccionar_idioma" class="form-label fw-semibold fs-7">Idioma </label>
-                            <select class="form-select form-select-sm select2-validation" id="ddl_seleccionar_idioma" name="ddl_seleccionar_idioma" style="width: 100%;">
-                                <option selected disabled value="">-- Seleccionar Idioma --</option>
-                                <option value="Español">Español</option>
-                                <option value="Inglés">Inglés</option>
-                                <option value="Francés">Francés</option>
-                                <option value="Alemán">Alemán</option>
-                                <option value="Chino">Chino</option>
-                                <option value="Italiano">Italiano</option>
+                            <label for="ddl_idiomas" class="form-label fw-semibold fs-7">Idiomas </label>
+                            <select class="form-select select2-validation" id="ddl_idiomas" name="ddl_idiomas" required>
+                                <option value="">-- Seleccione Idioma --</option>
                             </select>
+                            <label class="error" style="display: none;" for="ddl_idiomas"></label>
                         </div>
                         <div class="col-md-6">
-                            <label for="ddl_dominio_idioma" class="form-label fw-semibold fs-7">Nivel de Dominio </label>
-                            <select class="form-select form-select-sm select2-validation" id="ddl_dominio_idioma" name="ddl_dominio_idioma" style="width: 100%;" required>
-                                <option selected disabled value="">-- Seleccionar Nivel --</option>
-                                <option value="Nativo">Nativo</option>
-                                <option value="A1: Principiante">A1: Principiante</option>
-                                <option value="A2: Básico">A2: Básico</option>
-                                <option value="B1: Pre-intermedio">B1: Pre-intermedio</option>
-                                <option value="B2: Intermedio">B2: Intermedio</option>
-                                <option value="C1: Intermedio-Alto">C1: Intermedio-Alto</option>
-                                <option value="C2: Avanzado">C2: Avanzado</option>
+                            <label for="ddl_idiomas_nivel" class="form-label fw-semibold fs-7">Nivel </label>
+                            <select class="form-select select2-validation" id="ddl_idiomas_nivel" name="ddl_idiomas_nivel" required>
+                                <option value="">-- Seleccione el Nivel --</option>
                             </select>
+                            <label class="error" style="display: none;" for="ddl_idiomas_nivel"></label>
                         </div>
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label for="txt_institucion_1" class="form-label fw-semibold fs-7">Institución de enseñanza </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-buildings'></i></span>
@@ -253,18 +340,32 @@
                             </div>
                             <label class="error" style="display: none;" for="txt_institucion_1"></label>
                         </div>
+                        <div class="col-md-6">
+                            <label for="ddl_certificacion_idioma" class="form-label fw-semibold fs-7">Cerficación </label>
+                            <select class="form-select select2-validation" id="ddl_certificacion_idioma" name="ddl_certificacion_idioma" required>
+                                <option value="">-- Seleccione certificado --</option>
+                            </select>
+                            <label class="error" style="display: none;" for="ddl_certificacion_idioma"></label>
+                        </div>
                     </div>
 
                     <div class="p-3 bg-light rounded-3 border border-dashed">
-                        <h6 class="text-muted fs-7 mb-2 fw-bold text-uppercase">Periodo de Estudio</h6>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="text-muted fs-7 mb-0 fw-bold text-uppercase">Periodo de Estudios </h6>
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" name="cbx_fecha_final_idioma" id="cbx_fecha_final_idioma" onchange="checkbox_actualidad_form_idioma();">
+                                <label for="cbx_fecha_final_idioma" class="form-check-label fs-7 fw-semibold text-primary">Cursando actualmente</label>
+                            </div>
+                            <label class="error" style="display: none;" for="cbx_fecha_final_idioma"></label>
+                        </div>
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="txt_fecha_inicio_idioma" class="form-label fs-7 mb-1">Fecha Inicio </label>
-                                <input type="date" class="form-control form-control-sm" name="txt_fecha_inicio_idioma" id="txt_fecha_inicio_idioma" onblur="txt_fecha_fin_idioma_1();">
+                                <input type="date" class="form-control form-control-sm" name="txt_fecha_inicio_idioma" id="txt_fecha_inicio_idioma">
                             </div>
                             <div class="col-md-6">
                                 <label for="txt_fecha_fin_idioma" class="form-label fs-7 mb-1">Fecha Finalización </label>
-                                <input type="date" class="form-control form-control-sm" name="txt_fecha_fin_idioma" id="txt_fecha_fin_idioma" onblur="txt_fecha_fin_idioma_1();">
+                                <input type="date" class="form-control form-control-sm" name="txt_fecha_fin_idioma" id="txt_fecha_fin_idioma">
                             </div>
                         </div>
                         <div class="form-text text-xs mt-2"><i class='bx bx-calendar-check'></i> Indica el tiempo que tomó tu formación.</div>
@@ -294,18 +395,22 @@
 <script>
     $(document).ready(function() {
 
-        agregar_asterisco_campo_obligatorio('ddl_seleccionar_idioma');
-        agregar_asterisco_campo_obligatorio('ddl_dominio_idioma');
+        agregar_asterisco_campo_obligatorio('ddl_idiomas');
+        agregar_asterisco_campo_obligatorio('ddl_idiomas_nivel');
+        agregar_asterisco_campo_obligatorio('ddl_certificacion_idioma');
         agregar_asterisco_campo_obligatorio('txt_institucion_1');
         agregar_asterisco_campo_obligatorio('txt_fecha_inicio_idioma');
         agregar_asterisco_campo_obligatorio('txt_fecha_fin_idioma');
         //Validación Idiomas
         $("#form_agregar_idioma").validate({
             rules: {
-                ddl_seleccionar_idioma: {
+                ddl_idiomas: {
                     required: true,
                 },
-                ddl_dominio_idioma: {
+                ddl_idiomas_nivel: {
+                    required: true,
+                },
+                ddl_certificacion_idioma: {
                     required: true,
                 },
                 txt_institucion_1: {
@@ -319,11 +424,14 @@
                 },
             },
             messages: {
-                ddl_seleccionar_idioma: {
+                ddl_idiomas: {
                     required: "Por favor seleccione un idioma",
                 },
-                ddl_dominio_idioma: {
-                    required: "Por favor seleccione su dominio con el idioma",
+                ddl_idiomas_nivel: {
+                    required: "Por favor seleccione su nivel",
+                },
+                ddl_certificacion_idioma: {
+                    required: "Por favor seleccione un cerficado",
                 },
                 txt_institucion_1: {
                     required: "Por favor escriba la institución donde recibió su certificado",
@@ -349,39 +457,4 @@
             }
         });
     })
-
-    function txt_fecha_fin_idioma_1() {
-        if ($('#txt_fecha_fin_idioma').is(':checked')) {
-            var hoy = new Date();
-            var dia = String(hoy.getDate()).padStart(2, '0');
-            var mes = String(hoy.getMonth() + 1).padStart(2, '0');
-            var year = hoy.getFullYear();
-            var fecha_actual = year + '-' + mes + '-' + dia;
-
-            // Configurar automáticamente la fecha final como "hoy"
-            $('#txt_fecha_fin_idioma').val(fecha_actual);
-            $('#txt_fecha_fin_idioma').prop('disabled', true);
-            $('#txt_fecha_fin_idioma').rules("remove", "required");
-
-            // Agregar clase 'is-valid' para mostrar el campo como válido
-            $('#txt_fecha_fin_idioma').addClass('is-valid');
-            $('#txt_fecha_fin_idioma').removeClass('is-invalid');
-
-        } else {
-            if ($('#txt_fecha_fin_idioma').prop('disabled')) {
-                $('#txt_fecha_fin_idioma').val('');
-            }
-
-            $('#txt_fecha_fin_idioma').prop('disabled', false);
-            $('#txt_fecha_fin_idioma').rules("add", {
-                required: true
-            });
-            $('#txt_fecha_fin_idioma').removeClass('is-valid');
-            $('#form_agregar_idioma').validate().resetForm();
-            $('.form-control').removeClass('is-valid is-invalid');
-        }
-
-        // Validar las fechas (llama a tu función de validación)
-        validar_fechas_idioma();
-    }
 </script>
