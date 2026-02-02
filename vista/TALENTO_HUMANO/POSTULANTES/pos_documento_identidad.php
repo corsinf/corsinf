@@ -111,7 +111,7 @@
                         cargar_datos_documentos_identidad('<?= $id_postulante ?>');
                         limpiar_parametros_documentos_identidad();
                         $('#modal_agregar_documentos_identidad').modal('hide');
-                    }
+                    }  
                 }
             });
         }
