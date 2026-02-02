@@ -51,7 +51,8 @@ namespace CorsinfSDKHik.ConfigDB
                 "th_acc_hor_suplementarias_min," +
                 "th_acc_hor_extraordinarias_min," +
                 "th_acc_horas_trabajadasJornada_min," +
-                "th_acc_horario_jornada) VALUES (@th_cardNo," +
+                "th_acc_horario_jornada," +
+                "th_acc_hora_ingreso) VALUES (@th_cardNo," +
                 "@th_dis_id," +
                 "@th_acc_tipo_registro," +
                 "@th_acc_hora," +
@@ -72,7 +73,8 @@ namespace CorsinfSDKHik.ConfigDB
                 "@th_acc_hor_suplementarias_min," +
                 "@th_acc_hor_extraordinarias_min," +
                 "@th_acc_horas_trabajadasJornada_min," +
-                "@th_acc_horario_jornada) ";
+                "@th_acc_horario_jornada," +
+                "@th_acc_hora_ingreso) ";
             try
             {
                 var cmd = new SqlCommand(querySQL, conn);
@@ -101,6 +103,7 @@ namespace CorsinfSDKHik.ConfigDB
                     cmd.Parameters.AddWithValue("@th_acc_hor_extraordinarias_min", registro.th_acc_hor_extraordinarias_min);
                     cmd.Parameters.AddWithValue("@th_acc_horas_trabajadasJornada_min", registro.th_acc_horas_trabajadasJornada_min);
                     cmd.Parameters.AddWithValue("@th_acc_horario_jornada", registro.th_acc_horario_jornada ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@th_acc_hora_ingreso", registro.th_acc_hora_ingreso ?? (object)DBNull.Value);
 
                 }
 

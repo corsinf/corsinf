@@ -31,6 +31,7 @@ namespace CorsinfSDKHik.Modelos
         public int th_acc_hor_extraordinarias_min { get; set; }
         public int th_acc_horas_trabajadasJornada_min { get; set; }
         public string th_acc_horario_jornada { get; set; }
+        public string th_acc_hora_ingreso { get; set; }
 
 
     }

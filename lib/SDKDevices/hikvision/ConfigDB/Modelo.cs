@@ -365,6 +365,7 @@ namespace CorsinfSDKHik.ConfigDB
                 _InsertData.InsertTabla(conn, data);
                 //revisa las faltas del dia de ayer
                 ValidaFaltas(conn);
+                validarMes(conn);
 
                 TimeSpan ts = TimeSpan.Parse(array?[0]?["hora"]?.ToString() ?? "");
                 int MinutosMarcacion = Convert.ToInt32(ts.TotalMinutes);
@@ -391,6 +392,7 @@ namespace CorsinfSDKHik.ConfigDB
                     Acceso.th_per_id = Convert.ToInt32(idPersona);
                     Acceso.th_acc_fecha = FechaMarcacion;
                     Acceso.th_acc_dia = nombreDia;
+                    Acceso.th_acc_hora_ingreso = ts.ToString();
 
                     int rangoValidoIngreso = horariosEncontradas.entrada_min + horariosEncontradas.tolerancia_ini;
                     int rangoValidoSalida = horariosEncontradas.salida_min - horariosEncontradas.tolerancia_fin;
@@ -455,6 +457,7 @@ namespace CorsinfSDKHik.ConfigDB
                             Acceso.th_acc_justificacion_min = 0;
                             Acceso.th_acc_hor_faltantesJornada_min = horariosEncontradas.salida_min - horariosEncontradas.entrada_min - horariosEncontradas.tiempo_descanso;
                             Acceso.th_acc_horario_jornada = ConvertirConTimeSpan(horariosEncontradas.entrada_min) + " - " + ConvertirConTimeSpan(horariosEncontradas.salida_min);
+                            Acceso.th_acc_hora_ingreso = ts.ToString();
                             _InsertData.InsertarAccesos(conn, Acceso);
 
                         }
@@ -485,7 +488,7 @@ namespace CorsinfSDKHik.ConfigDB
                                 {
                                     Acceso.th_acc_detalle_registro = "Marcacion inicial fuera de rango";
                                     Acceso.th_acc_horas_trabajadasJornada_min = 0;
-
+                                    Acceso.th_acc_hora_ingreso = ts.ToString();
                                     Acceso.th_acc_hor_faltantesJornada_min = (horariosEncontradas.salida_min - horariosEncontradas.tiempo_descanso) - (MinutosMarcacion - totalAtrazo);
                                 }
                                 else
@@ -571,7 +574,12 @@ namespace CorsinfSDKHik.ConfigDB
                         Acceso.th_acc_atraso_min = totalAtrazo;
                         Acceso.th_acc_almuerzo_min = horariosEncontradas.tiempo_descanso;
                         Acceso.th_acc_justificacion_min = 0;
-                        
+                        Acceso.th_acc_hora_ingreso = ts.ToString();
+                        if (Lista != null && !string.IsNullOrEmpty(Lista[0].th_acc_hora_ingreso))
+                        {
+                            Acceso.th_acc_hora_ingreso = Lista[0].th_acc_hora_ingreso;
+                        }
+
                         Acceso.th_acc_hor_faltantesJornada_min = (horariosEncontradas.salida_min - horariosEncontradas.tiempo_descanso) - MinutosMarcacion;
                         
                         Acceso.th_acc_horas_trabajadasJornada_min = MinutosMarcacion - (horariosEncontradas.entrada_min+totalAtrazo);
@@ -706,6 +714,30 @@ namespace CorsinfSDKHik.ConfigDB
                     }
                 }
             }
+        }
+
+        public void validarMes(SqlConnection conn)
+        {
+            DateTime hoy = DateTime.Now;
+            int dia = (int)hoy.DayOfWeek;
+            String diaVar = dia.ToString();
+
+            DateTime ayer = DateTime.Now;
+            string mesHoy = ayer.ToString("MM");
+            //validar si existen datos del dia anterior
+            List<ControlAccesosModelo> lis = _SelectData.UltimoRegistroEntradaCC(conn);
+            if (lis.Count()>0)
+            {
+                String fechaUltimo = lis[0].th_acc_fecha;
+                String[] partes = fechaUltimo.Split('/');
+                String mesUltimo = partes[1]; 
+                if (mesUltimo!= mesHoy)
+                {
+                    _SelectData.renombrarTablas(conn);
+                    _empresaDal.validarTablas(conn,esquema,hoy.ToString());
+                }
+            }
+
         }
 
       
