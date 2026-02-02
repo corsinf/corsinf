@@ -348,12 +348,15 @@
                     </div>
 
                     <div class="row mb-2">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label for="txt_responsabilidades" class="form-label fw-semibold fs-7">Descripción de Responsabilidades </label>
                             <textarea class="form-control no_caracteres" name="txt_responsabilidades" id="txt_responsabilidades" rows="3" maxlength="300" placeholder="Describe brevemente tus funciones principales y éxitos alcanzados..."></textarea>
                             <div class="form-text text-end text-xs">Máximo 300 caracteres.</div>
                         </div>
-                        <div class="col-md-6">
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-12">
                             <label for="txt_logros" class="form-label fw-semibold fs-7">Descripción de Logros </label>
                             <textarea class="form-control no_caracteres" name="txt_logros" id="txt_logros" rows="3" maxlength="300" placeholder="Describe brevemente tus funciones principales y éxitos alcanzados..."></textarea>
                             <div class="form-text text-end text-xs">Máximo 300 caracteres.</div>

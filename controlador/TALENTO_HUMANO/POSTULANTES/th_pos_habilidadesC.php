@@ -82,9 +82,12 @@ class th_pos_habilidadesC
     {
         $datos = $this->modelo->where('th_pos_id', $id)->where('th_tiph_id', 1)->orderBy('th_hab_nombre', 'ASC')->listarJoin();
 
-        $texto = '<div class="d-flex flex-wrap gap-2 p-2">';
-        foreach ($datos as $key => $value) {
-            $texto .= <<<HTML
+        if (empty($datos)) {
+            $texto = '<div  class="alert alert-info mb-0"><p>No hay información adicional registrada.</p></div>';
+        } else {
+            $texto = '<div class="d-flex flex-wrap gap-2 p-2">';
+            foreach ($datos as $key => $value) {
+                $texto .= <<<HTML
                             <div class="badge rounded-pill d-flex align-items-center" 
                                 style="background-color: #e7f1ff; color: #0d6efd; border: 1px solid #cfe2ff; padding: 8px 12px; font-weight: 500;">
                                 
@@ -102,8 +105,9 @@ class th_pos_habilidadesC
                                 </button>
                             </div>
                         HTML;
+            }
+            $texto .= '</div>';
         }
-        $texto .= '</div>';
 
         return $texto;
     }
