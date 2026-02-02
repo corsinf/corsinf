@@ -30,7 +30,7 @@ class th_pos_discapacidadC
 
     function listar($id)
     {
-        $datos = $this->modelo->listar_por_persona($id);
+        $datos = $this->modelo->listar_discapacidad_postulante($id);
 
         $texto = '<div class="row g-3">';
 
@@ -93,7 +93,7 @@ class th_pos_discapacidadC
 
     function listar_modal($id)
     {
-        return $this->modelo->listar_por_id($id);
+        return $this->modelo->listar_discapacidad_postulante(null,$id);
     }
 
     function guardar($parametros)

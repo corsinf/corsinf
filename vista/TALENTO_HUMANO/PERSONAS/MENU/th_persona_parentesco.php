@@ -364,7 +364,7 @@
                                 <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento_pariente" id="txt_fecha_nacimiento_pariente" onchange="calcular_edad_pariente()">
                             </div>
                             <div class="col-md-6">
-                                <label for="txt_edad_pariente" class="form-label fs-7 mb-1">Edad Calculada</label>
+                                <label for="txt_edad_pariente" class="form-label fs-7 mb-1">Edad Calculada </label>
                                 <input type="number" class="form-control form-control-sm bg-white" name="txt_edad_pariente" id="txt_edad_pariente" readonly placeholder="0">
                             </div>
                         </div>

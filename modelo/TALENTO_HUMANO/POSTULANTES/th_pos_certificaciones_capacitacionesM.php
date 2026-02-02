@@ -24,10 +24,8 @@ class th_pos_certificaciones_capacitacionesM extends BaseModel
         'th_cert_sigue_cursando',
     ];
 
-    public function listar_certificaciones_postulante($id_postulante)
+    public function listar_certificaciones_postulante($th_pos_id = null, $th_cert_id = null)
     {
-        $id_postulante = intval($id_postulante);
-
         $sql = "
     SELECT 
         t.th_cert_id AS _id,
@@ -52,45 +50,22 @@ class th_pos_certificaciones_capacitacionesM extends BaseModel
         ON t.id_evento_cert = ec.id_evento_cert
     INNER JOIN th_cat_tipo_certificado tc 
         ON t.id_certificado = tc.id_certificado
-    WHERE t.th_pos_id = $id_postulante
-    AND t.th_cert_estado = 1
-    ORDER BY t.th_cert_fecha_creacion DESC
+    WHERE t.th_cert_estado = 1
     ";
 
-        return $this->db->datos($sql);
-    }
+        // Filtro por ID de Postulante (listado de la tabla)
+        if (!empty($th_pos_id)) {
+            $th_pos_id = intval($th_pos_id);
+            $sql .= " AND t.th_pos_id = $th_pos_id";
+        }
 
-    public function listar_certificacion_postulante_id($id)
-    {
-        $id = intval($id);
+        // Filtro por ID de Certificación (para cargar el modal de edición)
+        if (!empty($th_cert_id)) {
+            $th_cert_id = intval($th_cert_id);
+            $sql .= " AND t.th_cert_id = $th_cert_id";
+        }
 
-        $sql = "
-    SELECT 
-        t.th_cert_id AS _id,
-        t.th_pos_id,
-        t.th_cert_nombre_curso,
-        t.th_cert_ruta_archivo,
-        t.th_cert_estado AS estado,
-        t.th_cert_duracion_horas,
-        t.th_cert_fecha_desde,
-        t.th_cert_fecha_hasta,
-        t.th_cert_sigue_cursando,
-        t.id_pais,
-        p.nombre AS nombre_pais,
-        t.id_evento_cert,
-        ec.descripcion AS nombre_evento_certificado,
-        t.id_certificado,
-        tc.descripcion AS nombre_certificado
-    FROM th_pos_certificaciones_capacitaciones t
-    INNER JOIN th_cat_pais p 
-        ON t.id_pais = p.id_pais
-    INNER JOIN th_cat_tipo_evento_certificado ec 
-        ON t.id_evento_cert = ec.id_evento_cert
-    INNER JOIN th_cat_tipo_certificado tc 
-        ON t.id_certificado = tc.id_certificado
-    WHERE t.th_cert_id = $id
-    AND t.th_cert_estado = 1
-    ";
+        $sql .= " ORDER BY t.th_cert_fecha_creacion DESC";
 
         return $this->db->datos($sql);
     }

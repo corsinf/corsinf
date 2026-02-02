@@ -31,7 +31,7 @@ class th_pos_formacion_academicaC
 
     function listar($id)
     {
-        $datos = $this->modelo->listar_formacion_academica_con_nivel_id($id);
+        $datos = $this->modelo->listar_formacion_academica_postulante($id);
 
         if (empty($datos)) {
             $texto = '<div  class="alert alert-info mb-0"><p>No hay información adicional registrada.</p></div>';
@@ -125,7 +125,7 @@ class th_pos_formacion_academicaC
         if ($id == '') {
             $datos = $this->modelo->where('th_fora_estado', 1)->listar();
         } else {
-            $datos = $this->modelo->listar_formacion_academica_con_nivel($id);
+            $datos = $this->modelo->listar_formacion_academica_postulante(null, $id);
         }
         return $datos;
     }

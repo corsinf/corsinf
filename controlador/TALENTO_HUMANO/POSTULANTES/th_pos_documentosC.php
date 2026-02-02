@@ -32,14 +32,14 @@ class th_pos_documentosC
     //Funcion para listar los documentos de identificación del postulante
     function listar($id)
     {
-        $datos = $this->modelo->listar_por_id($id);
+        $datos = $this->modelo->listar_documentos_postulante($id);
 
 
         if (empty($datos)) {
             $texto = '<div class="alert alert-info mb-0">No hay documentos registrados.</div>';
         } else {
+            $texto = '<div class="row g-3">';
             foreach ($datos as $key => $value) {
-                $texto = '<div class="row g-3">';
 
 
                 // Corregido: Usar el alias 'estado' definido en el SQL
@@ -99,7 +99,7 @@ HTML;
         if ($id == '') {
             $datos = $this->modelo->where('th_poi_estado', 1)->listar();
         } else {
-            $datos = $this->modelo->listar_por_id_modal($id);
+            $datos = $this->modelo->listar_documentos_postulante(null, $id);
         }
         return $datos;
     }

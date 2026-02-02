@@ -176,7 +176,7 @@
                 <div class="modal-body">
                     <div class="row mb-2">
                         <div class="col-md-12">
-                            <label for="ddl_comision" class="form-label fw-semibold fs-7">Comisión</label>
+                            <label for="ddl_comision" class="form-label fw-semibold fs-7">Comisión </label>
                             <select class="form-select select2-validation" id="ddl_comision" name="ddl_comision" required style="width: 100%;">
                                 <option selected disabled value="">-- Seleccione una Comisión --</option>
                             </select>

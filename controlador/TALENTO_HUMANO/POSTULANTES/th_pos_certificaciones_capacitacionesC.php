@@ -116,7 +116,7 @@ HTML;
             // Por seguridad, si no hay ID, limitamos la búsqueda o devolvemos vacío
             $datos = [];
         } else {
-            $datos = $this->modelo->listar_certificacion_postulante_id($id);
+            $datos = $this->modelo->listar_certificaciones_postulante(null, $id);
         }
         return $datos;
     }
