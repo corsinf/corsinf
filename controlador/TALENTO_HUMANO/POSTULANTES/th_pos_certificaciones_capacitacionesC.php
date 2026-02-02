@@ -32,103 +32,137 @@ class th_pos_certificaciones_capacitacionesC
     //Funcion para listar la formacion academica del postulante
     function listar($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_cert_estado', 1)->orderBy('th_cert_nombre_curso')->listar();
+        $datos = $this->modelo->listar_certificaciones_postulante($id);
 
-        $texto = '<div class="row g-3">';
+        if (empty($datos)) {
+            $texto = '<div class="alert alert-info mb-0"><p>No se encontraron certificaciones registradas.</p></div>';
+        } else {
+            $texto = '<div class="row g-3">';
 
-        foreach ($datos as $key => $value) {
+            foreach ($datos as $value) {
+                // Lógica de fechas
+                $fecha_desde = !empty($value['th_cert_fecha_desde'])
+                    ? date('d/m/Y', strtotime($value['th_cert_fecha_desde']))
+                    : '';
 
-            $texto .= <<<HTML
-                            <div class="col-md-6 mb-col">
-                                <div class="cert-card p-3 h-100 position-relative shadow-sm">
-                                    
-                                    <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
-                                            onclick="abrir_modal_certificaciones_capacitaciones('{$value['_id']}')" 
-                                            title="Editar Certificación">
-                                        <i class="bx bx-pencil"></i>
-                                    </button>
+                $es_actualidad = ($value['th_cert_sigue_cursando'] == 1 || $value['th_cert_fecha_hasta'] == '1900-01-01');
 
-                                    <div class="d-flex flex-column h-100">
-                                        <div class="mb-2">
-                                            <span class="cert-badge mb-1">Capacitación</span>
-                                            
-                                            <h6 class="fw-bold text-dark cert-title mb-1">
-                                                {$value['th_cert_nombre_curso']}
-                                            </h6>
-                                            
-                                            <p class="cert-doctor m-0">
-                                                <i class="bx bx-award me-1"></i>Certificado de Logro Profesional
-                                            </p>
-                                        </div>
+                $fecha_hasta = ($es_actualidad)
+                    ? '<span class="fw-bold text-primary">Actualidad</span>'
+                    : (!empty($value['th_cert_fecha_hasta']) ? date('d/m/Y', strtotime($value['th_cert_fecha_hasta'])) : '');
 
-                                        <div class="mt-auto pt-2 d-flex justify-content-between align-items-end">
-                                            <div class="cert-date-range">
-                                                <div class="cert-label-small" style="color: #0dcaf_f;">Archivo</div>
-                                                <span class="text-muted" style="font-size: 0.7rem;">
-                                                    <i class="bx bx-file me-1"></i>Documento PDF
-                                                </span>
-                                            </div>
-                                            
-                                            <button data-bs-toggle="modal" data-bs-target="#modal_ver_pdf_certificaciones" 
-                                                    onclick="definir_ruta_iframe_certificaciones('{$value['th_cert_ruta_archivo']}');" 
-                                                    class="btn btn-dark btn-xs py-1 px-3 btn-cert-action">
-                                                DOCUMENTO
-                                            </button>
-                                        </div>
-                                    </div>
+                $texto .= <<<HTML
+            <div class="col-md-6 mb-col">
+                <div class="cert-card p-3 h-100 position-relative shadow-sm">
+                    
+                    <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
+                            onclick="abrir_modal_certificaciones_capacitaciones('{$value['_id']}')" 
+                            title="Editar Certificación">
+                        <i class="bx bx-pencil text-primary"></i>
+                    </button>
+
+                    <div class="d-flex flex-column h-100">
+                        <div class="mb-2">
+                            <span class="cert-badge mb-1">Capacitación / Certificación</span>
+                            
+                            <h6 class="fw-bold text-dark cert-title mb-1">
+                                {$value['th_cert_nombre_curso']}
+                            </h6>
+                            
+                            <p class="cert-doctor mb-1 text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.3px;">
+                                <i class="bx bx-bookmark-alt me-1"></i>{$value['nombre_evento_certificado']}
+                            </p>
+
+                            <p class="m-0 text-muted" style="font-size: 0.75rem;">
+                                <i class="bx bx-award me-1"></i>Logro: <strong>{$value['nombre_certificado']}</strong>
+                            </p>
+                            <p class="m-0 text-muted" style="font-size: 0.75rem;">
+                                <i class="bx bx-map-pin me-1"></i>País: <strong>{$value['nombre_pais']}</strong>
+                            </p>
+                        </div>
+
+                        <div class="mt-auto pt-2">
+                            <div class="d-flex align-items-center justify-content-between p-2" 
+                                 style="background: rgba(13, 110, 253, 0.05); border-radius: 8px; border: 1px dashed rgba(13, 110, 253, 0.3);">
+                                
+                                <div class="cert-date-range">
+                                    <div class="cert-label-small" style="color: #0d6efd;">Periodo y Carga Horaria</div>
+                                    <span class="text-dark" style="font-size: 0.65rem;">
+                                        <i class="bx bx-calendar me-1"></i>{$fecha_desde} — {$fecha_hasta} | 
+                                        <i class="bx bx-time-five me-1"></i>{$value['th_cert_duracion_horas']} Horas
+                                    </span>
                                 </div>
+
+                                <button onclick="ruta_iframe_certificaciones('{$value['th_cert_ruta_archivo']}');" 
+                                        data-bs-toggle="modal" data-bs-target="#modal_ver_pdf_certificaciones"
+                                        class="btn btn-dark btn-xs py-1 px-2" style="font-size: 0.65rem;">
+                                    DOCUMENTO
+                                </button>
                             </div>
-                        HTML;
+                        </div>
+                    </div>
+                </div>
+            </div>
+HTML;
+            }
+            $texto .= '</div>';
         }
-
-        $texto .= '</div>';
-
         return $texto;
     }
 
-    //Buscando registros por id de la formacion academica
     function listar_modal($id)
     {
         if ($id == '') {
-            $datos = $this->modelo->where('th_cert_estado', 1)->listar();
+            // Por seguridad, si no hay ID, limitamos la búsqueda o devolvemos vacío
+            $datos = [];
         } else {
-            $datos = $this->modelo->where('th_cert_id', $id)->listar();
+            $datos = $this->modelo->listar_certificaciones_postulante(null, $id);
         }
         return $datos;
     }
 
     function insertar_editar($file, $parametros)
     {
-        // print_r($file);
-        // exit();
-        // die();
-        $datos = array(
-            array('campo' => 'th_cert_nombre_curso', 'dato' => $parametros['txt_nombre_curso']),
-            // array('campo' => 'th_cert_ruta_archivo', 'dato' => $parametros['txt_ruta_archivo']),
-            array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
-        );
 
+        $fecha_hasta = $parametros['txt_fecha_final_capacitacion'];
+
+        // Determinamos si es actualidad por el checkbox O por la fecha específica
+        $sigue_cursando = 0;
+        if ((isset($parametros['cbx_fecha_final_capacitacion']) && $parametros['cbx_fecha_final_capacitacion'] == '1') ||
+            $fecha_hasta == '1900-01-01' || $fecha_hasta == ''
+        ) {
+            $sigue_cursando = 1;
+            $fecha_hasta = '1900-01-01'; // Normalizamos para la base de datos
+        }
+        $datos = array(
+            array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
+            array('campo' => 'th_cert_nombre_curso', 'dato' => $parametros['txt_nombre_curso']),
+            array('campo' => 'th_cert_duracion_horas', 'dato' => $parametros['txt_duracion_horas'] ?? 0),
+            array('campo' => 'th_cert_fecha_desde', 'dato' => $parametros['txt_fecha_inicio_capacitacion']),
+            array('campo' => 'th_cert_fecha_hasta', 'dato' => $parametros['txt_fecha_final_capacitacion']),
+            array('campo' => 'th_cert_sigue_cursando', 'dato' => $sigue_cursando),
+            array('campo' => 'id_certificado', 'dato' => $parametros['ddl_certificado']),
+            array('campo' => 'id_evento_cert', 'dato' => $parametros['ddl_evento_cert']),
+            array('campo' => 'id_pais', 'dato' => $parametros['ddl_pais_cerficacion']),
+        );
 
         $id_certificaciones_capacitaciones = $parametros['txt_certificaciones_capacitaciones_id'];
 
         if ($id_certificaciones_capacitaciones == '') {
-            $datos = $this->modelo->insertar_id($datos);
-            $this->guardar_archivo($file, $parametros, $datos);
+            $id_nuevo = $this->modelo->insertar_id($datos);
+            $this->guardar_archivo($file, $parametros, $id_nuevo);
             return 1;
         } else {
-
             $where = array(
                 array('campo' => 'th_cert_id', 'dato' => $id_certificaciones_capacitaciones),
             );
+            $res = $this->modelo->editar($datos, $where);
 
-            $datos = $this->modelo->editar($datos, $where);
-
-            if ($file['txt_ruta_archivo']['tmp_name'] != '' && $file['txt_ruta_archivo']['tmp_name'] != null) {
-                $datos = $this->guardar_archivo($file, $parametros, $id_certificaciones_capacitaciones);
+            if (isset($file['txt_ruta_archivo']['tmp_name']) && $file['txt_ruta_archivo']['tmp_name'] != '') {
+                $this->guardar_archivo($file, $parametros, $id_certificaciones_capacitaciones);
             }
+            return $res;
         }
-
-        return $datos;
     }
 
 

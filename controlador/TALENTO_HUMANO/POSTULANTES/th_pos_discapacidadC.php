@@ -30,12 +30,12 @@ class th_pos_discapacidadC
 
     function listar($id)
     {
-        $datos = $this->modelo->listar_por_persona($id);
+        $datos = $this->modelo->listar_discapacidad_postulante($id);
 
         $texto = '<div class="row g-3">';
 
         if (empty($datos)) {
-            return '<div class="alert alert-info border-0 shadow-sm" style="border-radius: 12px;">No registra discapacidad.</div>';
+            return '<div class="alert alert-info border-0 shadow-sm" >No registra discapacidad.</div>';
         }
 
         foreach ($datos as $value) {
@@ -93,7 +93,7 @@ class th_pos_discapacidadC
 
     function listar_modal($id)
     {
-        return $this->modelo->listar_por_id($id);
+        return $this->modelo->listar_discapacidad_postulante(null,$id);
     }
 
     function guardar($parametros)

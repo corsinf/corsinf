@@ -5,7 +5,9 @@
 
         function cargar_selects2() {
             url_nivelAcademicoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_pos_nivel_academicoC.php?buscar=true';
+            url_PaisC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_paisC.php?buscar=true';
             cargar_select2_url('ddl_nivel_academico', url_nivelAcademicoC, '', '#modal_agregar_formacion');
+            cargar_select2_url('ddl_pais', url_PaisC, '', '#modal_agregar_formacion');
         }
     });
 
@@ -44,6 +46,11 @@
                     text: response[0].nivel_academico_descripcion,
                     selected: true
                 }));
+                $('#ddl_pais').append($('<option>', {
+                    value: response[0].id_pais,
+                    text: response[0].pais_nombre,
+                    selected: true
+                }));
 
                 var fecha_fin = response[0].th_fora_fecha_fin_formacion;
                 if (fecha_fin === '') {
@@ -77,6 +84,7 @@
 
         var txt_th_fora_registro_senescyt = $('#txt_th_fora_registro_senescyt').val();
         var ddl_nivel_academico = $('#ddl_nivel_academico').val();
+        var ddl_pais = $('#ddl_pais').val();
 
         var parametros_formacion_academica = {
             '_id': txt_id_formacion_academica,
@@ -87,6 +95,7 @@
             'txt_fecha_final_academico': txt_fecha_final_academico,
             'txt_fora_registro_senescyt': txt_th_fora_registro_senescyt,
             'ddl_nivel_academico': ddl_nivel_academico,
+            'ddl_pais': ddl_pais,
         }
 
         if ($("#form_formacion_academica").valid()) {
@@ -180,6 +189,7 @@
         $('#btn_eliminar_formacion_academica').hide();
 
         $('#ddl_nivel_academico').val(null).trigger('change');
+        $('#ddl_pais').val(null).trigger('change');
         $('#txt_th_fora_registro_senescyt').val('');
 
         $('.select2-selection').removeClass('is-valid is-invalid');
@@ -300,13 +310,21 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label for="txt_institucion" class="form-label fw-semibold fs-7">Institución Educativa </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-buildings'></i></span>
                                 <input type="text" class="form-control no_caracteres" name="txt_institucion" id="txt_institucion" maxlength="100" placeholder="Ej: Universidad Central del Ecuador">
                             </div>
                             <label class="error" style="display: none;" for="txt_institucion"></label>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="ddl_pais" class="form-label fw-semibold fs-7">Pais </label>
+                            <select class="form-select select2-validation" name="ddl_pais" id="ddl_pais" style="width: 100%;">
+                                <option value="">-- Seleccione --</option>
+                            </select>
+                            <label class="error" style="display: none;" for="ddl_pais"></label>
                         </div>
                     </div>
 
@@ -358,6 +376,7 @@
         agregar_asterisco_campo_obligatorio('txt_fecha_inicio_academico');
         agregar_asterisco_campo_obligatorio('txt_fecha_final_academico');
         agregar_asterisco_campo_obligatorio('ddl_nivel_academico');
+        agregar_asterisco_campo_obligatorio('ddl_pais');
         agregar_asterisco_campo_obligatorio('txt_th_fora_registro_senescyt');
 
         //Para validar los select2
@@ -383,6 +402,9 @@
                 ddl_nivel_academico: {
                     required: true,
                 },
+                ddl_pais: {
+                    required: true,
+                },
                 txt_th_fora_registro_senescyt: {
                     required: true,
                 },
@@ -399,6 +421,9 @@
                 },
                 txt_fecha_final_academico: {
                     required: "Por favor ingrese la fecha en la que finalizó o finalizará sus estudios",
+                },
+                ddl_pais: {
+                    required: "Por favor seleccione el pais",
                 },
             },
 

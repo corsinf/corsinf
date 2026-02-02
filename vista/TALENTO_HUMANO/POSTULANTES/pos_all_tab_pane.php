@@ -201,12 +201,12 @@
                  <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_idiomas.php'); ?>
 
              </div>
-             <!-- Aptitudes -->
+             <!-- Competencias laborales -->
              <div class="card-body">
                  <div class="mb-1">
                      <div class="row">
                          <div class="col-6 d-flex align-items-center">
-                             <h6 class="mb-0 fw-bold text-primary">Aptitudes</h6>
+                             <h6 class="mb-0 fw-bold text-primary">Competencias laborales</h6>
                          </div>
                          <div class="col-6 d-flex justify-content-end">
                              <a href="#"

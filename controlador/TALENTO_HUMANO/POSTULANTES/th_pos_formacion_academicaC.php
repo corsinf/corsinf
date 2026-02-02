@@ -29,33 +29,38 @@ class th_pos_formacion_academicaC
         $this->modelo = new th_pos_formacion_academicaM();
     }
 
-    //Funcion para listar la formacion academica del postulante
     function listar($id)
     {
-        $datos = $this->modelo->listar_formacion_academica_con_nivel_id($id);
+        $datos = $this->modelo->listar_formacion_academica_postulante($id);
 
-        $texto = '<div class="row g-3">';
+        if (empty($datos)) {
+            $texto = '<div  class="alert alert-info mb-0"><p>No hay información adicional registrada.</p></div>';
+        } else {
+            $texto = '<div class="row g-3">';
 
-        foreach ($datos as $value) {
+            foreach ($datos as $value) {
 
-            // Lógica de fechas
-            $fecha_inicio_estudio = !empty($value['th_fora_fecha_inicio_formacion'])
-                ? date('d/m/Y', strtotime($value['th_fora_fecha_inicio_formacion']))
-                : '';
+                // Lógica de fechas
+                $fecha_inicio_estudio = !empty($value['th_fora_fecha_inicio_formacion'])
+                    ? date('d/m/Y', strtotime($value['th_fora_fecha_inicio_formacion']))
+                    : '';
 
-            $fecha_fin_estudio = empty($value['th_fora_fecha_fin_formacion'])
-                ? '<span class="fw-bold text-primary">Actualidad</span>'
-                : date('d/m/Y', strtotime($value['th_fora_fecha_fin_formacion']));
+                $fecha_fin_estudio = empty($value['th_fora_fecha_fin_formacion'])
+                    ? '<span class="fw-bold text-primary">Actualidad</span>'
+                    : date('d/m/Y', strtotime($value['th_fora_fecha_fin_formacion']));
 
-            $nivel = !empty($value['nivel_academico_descripcion'])
-                ? $value['nivel_academico_descripcion']
-                : 'No especificado';
+                $nivel = !empty($value['nivel_academico_descripcion'])
+                    ? $value['nivel_academico_descripcion']
+                    : 'No especificado';
+                $pais = !empty($value['pais_nombre'])
+                    ? $value['pais_nombre']
+                    : 'No especificado';
 
-            $senescyt = !empty($value['th_fora_registro_senescyt'])
-                ? " | SENESCYT: {$value['th_fora_registro_senescyt']}"
-                : '';
+                $senescyt = !empty($value['th_fora_registro_senescyt'])
+                    ? " | SENESCYT: {$value['th_fora_registro_senescyt']}"
+                    : '';
 
-            $texto .= <<<HTML
+                $texto .= <<<HTML
                             <div class="col-md-6 mb-col">
                                 <div class="cert-card p-3 h-100 position-relative shadow-sm">
                                     
@@ -80,6 +85,9 @@ class th_pos_formacion_academicaC
                                             <p class="m-0 text-muted" style="font-size: 0.75rem;">
                                                 <i class="bx bx-graduation me-1"></i>Nivel: <strong>{$nivel}</strong>
                                             </p>
+                                            <p class="m-0 text-muted" style="font-size: 0.75rem;">
+                                                <i class="bx bx-graduation me-1"></i>Pais: <strong>{$pais}</strong>
+                                            </p>
                                         </div>
 
                                         <div class="mt-auto pt-2">
@@ -102,9 +110,9 @@ class th_pos_formacion_academicaC
                                 </div>
                             </div>
                         HTML;
+            }
+            $texto .= '</div>';
         }
-
-        $texto .= '</div>';
 
         return $texto;
     }
@@ -117,7 +125,7 @@ class th_pos_formacion_academicaC
         if ($id == '') {
             $datos = $this->modelo->where('th_fora_estado', 1)->listar();
         } else {
-            $datos = $this->modelo->listar_formacion_academica_con_nivel($id);
+            $datos = $this->modelo->listar_formacion_academica_postulante(null, $id);
         }
         return $datos;
     }
@@ -132,6 +140,7 @@ class th_pos_formacion_academicaC
             array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']),
             array('campo' => 'th_fora_registro_senescyt', 'dato' => $parametros['txt_fora_registro_senescyt']),
             array('campo' => 'id_nivel_academico', 'dato' => $parametros['ddl_nivel_academico']),
+            array('campo' => 'id_pais', 'dato' => $parametros['ddl_pais']),
         );
 
         if ($parametros['_id'] == '') {

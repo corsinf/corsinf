@@ -213,7 +213,7 @@
 </div>
 
 <div class="modal fade" id="modal_agregar_certificados_medicos" tabindex="-1" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg">
 
             <div class="modal-header bg-dark bg-opacity-10">
@@ -221,7 +221,7 @@
                     <h5 class="modal-title fw-bold text-primary" id="lbl_titulo_certificados_medicos">
                         <i class='bx bx-pulse me-2'></i>Antecedentes Médicos
                     </h5>
-                    <small class="text-muted">Registra enfermedades crónicas o condiciones preexistentes.</small>
+                    <small class="text-muted">Registra información relevante sobre tu salud.</small>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_certificados_medicos()"></button>
             </div>
@@ -230,57 +230,43 @@
                 <div class="modal-body">
 
                     <input type="hidden" name="txt_certificados_medicos_id" id="txt_certificados_medicos_id">
-                    <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
 
-                    <div class="row mb-col mb-3">
-                        <label for="txt_med_motivo_certificado" class="form-label fw-semibold fs-7">Enfermedad o Patología </label>
+                    <div class="mb-4">
+                        <label for="th_cer_motivo_certificado" class="form-label fw-semibold fs-7">Diagnóstico / Enfermedad</label>
                         <div class="input-group input-group-sm">
                             <span class="input-group-text bg-white text-muted"><i class='bx bx-notepad'></i></span>
-                            <input type="text" class="form-control form-control-sm" name="txt_med_motivo_certificado" id="txt_med_motivo_certificado" maxlength="50" placeholder="Ej: Diabetes Tipo 2, Hipertensión, Alergia a Penicilina...">
-                        </div>
-                        <label class="error" style="display: none;" for="txt_med_motivo_certificado"></label>
-                    </div>
-
-                    <div class="row mb-col mb-3">
-                        <div class="col-md-6">
-                            <label for="txt_med_nom_medico" class="form-label fw-semibold fs-7">Médico que certifica </label>
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-light"><i class='bx bx-user-pin'></i></span>
-                                <input type="text" class="form-control" name="txt_med_nom_medico" id="txt_med_nom_medico" maxlength="50" placeholder="Nombre del doctor/a">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="txt_med_ins_medico" class="form-label fw-semibold fs-7">Institución de Salud </label>
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-light"><i class='bx bx-buildings'></i></span>
-                                <input type="text" class="form-control form-control-sm" name="txt_med_ins_medico" id="txt_med_ins_medico" maxlength="50" placeholder="Ej: Hospital IESS, Clínica...">
-                            </div>
+                            <input type="text" class="form-control form-control-sm" name="th_cer_motivo_certificado" id="th_cer_motivo_certificado" maxlength="100" placeholder="Ej: Hipertensión, Asma, etc.">
                         </div>
                     </div>
 
-                    <div class="p-3 bg-light rounded-3 mb-col border border-dashed mb-3">
-                        <h6 class="text-muted fs-7 mb-2 fw-bold text-uppercase ls-1">Vigencia del Documento </h6>
-                        <div class="row g-3 mb-col">
-                            <div class="col-md-6">
-                                <label for="txt_med_fecha_inicio_certificado" class="form-label fs-7 mb-1">Fecha Emisión/Diagnóstico </label>
-                                <input type="date" class="form-control form-control-sm" name="txt_med_fecha_inicio_certificado" id="txt_med_fecha_inicio_certificado" onblur="txt_fecha_fin_certificado_1();" onkeydown="saltar_input(event, 'txt_med_fecha_fin_certificado')">
+                    <div class="p-3 bg-light rounded-3 border mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="text-muted fs-7 mb-0 fw-bold text-uppercase">Condiciones Especiales</h6>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <label for="th_cer_alergia_req" class="fs-7 fw-semibold text-dark">¿Posee alguna Alergia?</label>
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" name="th_cer_alergia_req" id="th_cer_alergia_req">
+                                <label class="form-check-label fs-7 fw-semibold text-primary" for="th_cer_alergia_req">Sí</label>
                             </div>
-                            <div class="col-md-6">
-                                <label for="txt_med_fecha_fin_certificado" class="form-label fs-7 mb-1">
-                                    Válido hasta <small class="text-muted fw-normal">(Opcional)</small>
-                                    <i class='bx bx-info-circle text-primary' data-bs-toggle="tooltip" title="Dejar vacío si es permanente"></i>
-                                </label>
-                                <input type="date" class="form-control form-control-sm" name="txt_med_fecha_fin_certificado" id="txt_med_fecha_fin_certificado" onblur="txt_fecha_fin_certificado_1();" onkeydown="saltar_input(event, 'txt_ruta_certificados_medicos')">
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label for="th_cer_tratamiento_req" class="fs-7 fw-semibold text-dark">¿Requiere Tratamiento Continuo?</label>
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" name="th_cer_tratamiento_req" id="th_cer_tratamiento_req">
+                                <label class="form-check-label fs-7 fw-semibold text-primary" for="th_cer_tratamiento_req">Sí</label>
                             </div>
                         </div>
                     </div>
 
-                    <div class="mb-col mb-3">
-                        <label for="txt_ruta_certificados_medicos" class="form-label fw-semibold">Adjuntar Respaldo (PDF) </label>
-                        <input type="file" class="form-control form-control-sm" name="txt_ruta_certificados_medicos" id="txt_ruta_certificados_medicos" accept=".pdf">
-                        <input type="text" class="form-control" name="txt_ruta_guardada_certificados_medicos" id="txt_ruta_guardada_certificados_medicos" hidden>
-                        <div class="form-text text-xs"><i class='bx bx-upload'></i> Sube el certificado escaneado. Máximo 5MB.</div>
+                    <div class="mb-2">
+                        <label for="th_cer_ruta_certficado" class="form-label fw-semibold fs-7">Adjuntar Examen Médico <small class="text-muted fw-normal">(Opcional)</small></label>
+                        <input type="file" class="form-control form-control-sm" name="th_cer_ruta_certficado" id="th_cer_ruta_certficado" accept=".pdf">
+                        <input type="hidden" name="txt_ruta_guardada_medico" id="txt_ruta_guardada_medico">
+                        <div class="form-text text-xs"><i class='bx bx-upload'></i> Formato PDF. Máximo 5MB.</div>
                     </div>
 
                 </div>
@@ -292,7 +278,7 @@
 
                     <div class="ms-auto">
                         <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" onclick="limpiar_parametros_certificados_medicos()">Cancelar</button>
-                        <button type="button" class="btn btn-primary btn-sm px-4" id="btn_guardar_certificados_medicos" onclick="insertar_editar_certificados_medicos(); validar_fechas_certificados_medicos()">
+                        <button type="button" class="btn btn-primary btn-sm px-4" id="btn_guardar_certificados_medicos" onclick="insertar_editar_certificados_medicos();">
                             <i class="bx bx-save"></i> Guardar
                         </button>
                     </div>
@@ -354,9 +340,9 @@
 <script>
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('txt_med_motivo_certificado');
-        agregar_asterisco_campo_obligatorio('txt_med_nom_medico');
-        agregar_asterisco_campo_obligatorio('txt_med_ins_medico');
-        agregar_asterisco_campo_obligatorio('txt_med_fecha_inicio_certificado');
+        //agregar_asterisco_campo_obligatorio('txt_med_nom_medico');
+        //agregar_asterisco_campo_obligatorio('txt_med_ins_medico');
+        //agregar_asterisco_campo_obligatorio('txt_med_fecha_inicio_certificado');
         // agregar_asterisco_campo_obligatorio('txt_med_fecha_fin_certificado');
         agregar_asterisco_campo_obligatorio('txt_ruta_certificados_medicos');
         //Validación de campos certificados medicos
