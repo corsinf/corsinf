@@ -250,7 +250,7 @@ namespace CorsinfSDKHik.ConfigDB
             String SqlText = "SELECT th_acc_id,th_cardNo,th_dis_id,th_acc_tipo_registro,th_acc_hora,th_acc_fecha,th_acc_fecha_hora,th_acc_fecha_creacion,th_acc_fecha_modificacion," +
                 "th_per_id,th_acc_puerto,th_acc_tipo_origen,th_act_id,th_acc_detalle_registro,th_acc_dia,th_acc_atraso_min,th_acc_almuerzo_min,th_acc_justificacion_min," +
                 "th_acc_hor_faltantesJornada_min,th_acc_hor_suplementarias_min,th_acc_hor_extraordinarias_min,th_acc_horas_trabajadasJornada_min,th_acc_horario_jornada" +
-                " FROM " + esquema + ".th_control_acceso " +
+                ",th_acc_hora_ingreso FROM " + esquema + ".th_control_acceso " +
                 "WHERE th_acc_fecha = @Fecha ";
 
             if (!string.IsNullOrEmpty(CardNo))
@@ -299,6 +299,7 @@ namespace CorsinfSDKHik.ConfigDB
                         data.th_acc_hor_extraordinarias_min = (int)reader["th_acc_hor_extraordinarias_min"];
                         data.th_acc_horas_trabajadasJornada_min = (int)reader["th_acc_horas_trabajadasJornada_min"];
                         data.th_acc_horario_jornada = reader["th_acc_horario_jornada"].ToString() ?? "";
+                        data.th_acc_hora_ingreso = reader["th_acc_hora_ingreso"].ToString() ?? "";
                         // Agregar a la lista
                         RegistroEntrada.Add(data);
                     }
@@ -307,5 +308,105 @@ namespace CorsinfSDKHik.ConfigDB
 
             return RegistroEntrada;
         }
+
+        public List<ControlAccesosModelo> UltimoRegistroEntradaCC(SqlConnection conn, String FechaMarcacion="", string CardNo = "")
+        {
+
+            configConsulta();
+            List<ControlAccesosModelo> RegistroEntrada = new List<ControlAccesosModelo>();
+
+            String SqlText = "SELECT TOP 1 th_acc_id,th_cardNo,th_dis_id,th_acc_tipo_registro,th_acc_hora,th_acc_fecha,th_acc_fecha_hora,th_acc_fecha_creacion,th_acc_fecha_modificacion," +
+                "th_per_id,th_acc_puerto,th_acc_tipo_origen,th_act_id,th_acc_detalle_registro,th_acc_dia,th_acc_atraso_min,th_acc_almuerzo_min,th_acc_justificacion_min," +
+                "th_acc_hor_faltantesJornada_min,th_acc_hor_suplementarias_min,th_acc_hor_extraordinarias_min,th_acc_horas_trabajadasJornada_min,th_acc_horario_jornada" +
+                ",th_acc_hora_ingreso FROM " + esquema + ".th_control_acceso " +
+                "WHERE 1 = 1 ";
+
+            if (!string.IsNullOrEmpty(CardNo))
+            {
+                SqlText += " AND th_cardNo = @CardNo";
+            }
+            if (!string.IsNullOrEmpty(FechaMarcacion))
+            {
+                SqlText += " AND th_acc_fecha = @Fecha";
+            }
+
+            SqlText += " ORDER BY th_acc_id DESC;";
+
+            using (SqlCommand sql = new SqlCommand(SqlText, conn))
+            {
+                // Usar parámetros para evitar SQL Injection
+                sql.Parameters.AddWithValue("@Fecha", FechaMarcacion);
+                if (!string.IsNullOrEmpty(CardNo))
+                {
+                    sql.Parameters.AddWithValue("@CardNo", CardNo);
+                }
+
+                using (SqlDataReader reader = sql.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        // Crear un nuevo objeto para cada registro
+                        ControlAccesosModelo data = new ControlAccesosModelo();
+
+                        data.th_acc_id = (int)reader["th_acc_id"];
+                        data.th_cardNo = reader["th_cardNo"].ToString() ?? "";
+                        data.th_dis_id = reader["th_dis_id"].ToString() ?? "";
+                        data.th_acc_tipo_registro = reader["th_acc_tipo_registro"].ToString() ?? "";
+                        data.th_acc_hora = reader["th_acc_hora"].ToString() ?? "";
+                        data.th_acc_fecha = reader["th_acc_fecha"].ToString() ?? "";
+                        data.th_acc_fecha_hora = reader["th_acc_fecha_hora"].ToString() ?? "";
+                        data.th_acc_fecha_creacion = reader["th_acc_fecha_creacion"].ToString() ?? "";
+                        data.th_acc_fecha_modificacion = reader["th_acc_fecha_modificacion"].ToString() ?? "";
+                        data.th_per_id = (int)reader["th_per_id"];
+                        data.th_acc_puerto = reader["th_acc_puerto"].ToString() ?? "";
+                        data.th_acc_tipo_origen = reader["th_acc_tipo_registro"].ToString() ?? "";
+                        data.th_act_id = (int)reader["th_act_id"];
+                        data.th_acc_detalle_registro = reader["th_acc_detalle_registro"].ToString() ?? "";
+                        data.th_acc_dia = reader["th_acc_dia"].ToString() ?? "";
+                        data.th_acc_atraso_min = (int)reader["th_acc_atraso_min"];
+                        data.th_acc_almuerzo_min = (int)reader["th_acc_almuerzo_min"];
+                        data.th_acc_justificacion_min = (int)reader["th_acc_justificacion_min"];
+                        data.th_acc_hor_faltantesJornada_min = (int)reader["th_acc_hor_faltantesJornada_min"];
+                        data.th_acc_hor_suplementarias_min = (int)reader["th_acc_hor_suplementarias_min"];
+                        data.th_acc_hor_extraordinarias_min = (int)reader["th_acc_hor_extraordinarias_min"];
+                        data.th_acc_horas_trabajadasJornada_min = (int)reader["th_acc_horas_trabajadasJornada_min"];
+                        data.th_acc_horario_jornada = reader["th_acc_horario_jornada"].ToString() ?? "";
+                        data.th_acc_hora_ingreso = reader["th_acc_hora_ingreso"].ToString() ?? "";
+                        // Agregar a la lista
+                        RegistroEntrada.Add(data);
+                    }
+                }
+            }
+
+            return RegistroEntrada;
+        }
+
+        public Boolean renombrarTablas(SqlConnection conn)
+        {
+            configConsulta();
+            DateTime ayer = DateTime.Now.AddMonths(-1);
+            string mesHoy = ayer.ToString("yyyyMM");
+            String[] tabla = { "th_control_acceso", "asis_atrasos", "asis_descansos", "asis_faltas", "asis_extraordinarias", "th_log_dispositivos"};
+           
+
+                try
+                {
+                    foreach (var item in tabla)
+                    {
+                        String SqlText = "EXEC sp_rename '" + esquema + "."+ item + "', '"+ item + "_" + mesHoy + "', 'OBJECT';";
+
+                        SqlCommand sql = new SqlCommand(SqlText, conn);
+                        sql.ExecuteNonQuery();
+                    }
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
+        }
     }
 }
+

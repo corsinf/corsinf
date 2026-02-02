@@ -67,6 +67,7 @@ namespace CorsinfSDKHik.ConfigDB
             CreateTblDescanso(esquema, fecha, conn);
         }
 
+
         public int ExisteTabla(SqlConnection conn,String esquema,String tabla)
         {
             int Contador = 0;
@@ -120,7 +121,8 @@ namespace CorsinfSDKHik.ConfigDB
                         "th_acc_hor_suplementarias_min  INT, " +
                         "th_acc_hor_extraordinarias_min  INT, " +
                         "th_acc_horas_trabajadasJornada_min INT," +
-                        " th_acc_horario_jornada NVARCHAR(MAX)" +
+                        "th_acc_horario_jornada NVARCHAR(MAX)," +
+                        "th_acc_hora_ingreso time" +
                         ");";
                     SqlCommand sql = new SqlCommand(SqlText, conn);
                     sql.ExecuteNonQuery();
