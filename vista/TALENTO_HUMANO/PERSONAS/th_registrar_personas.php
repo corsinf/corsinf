@@ -137,17 +137,7 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
         url_departamentosC = '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true';
         cargar_select2_url('ddl_departamentos', url_departamentosC);
 
-        url_etniaC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_etniaC.php?buscar=true';
-        cargar_select2_url('ddl_etnia', url_etniaC);
-
-        url_religionC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_religionC.php?buscar=true';
-        cargar_select2_url('ddl_religion', url_religionC);
-
-        url_orientacion_sexualC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_orientacion_sexualC.php?buscar=true';
-        cargar_select2_url('ddl_orientacion_sexual', url_orientacion_sexualC);
-
-        url_identidad_generoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_identidad_generoC.php?buscar=true';
-        cargar_select2_url('ddl_identidad_genero', url_identidad_generoC);
+        cargar_select2_persona();
 
     }
 

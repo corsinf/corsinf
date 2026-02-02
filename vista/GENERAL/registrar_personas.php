@@ -21,30 +21,38 @@
                 $('#txt_primer_apellido').val(response[0].primer_apellido);
                 $('#txt_segundo_apellido').val(response[0].segundo_apellido);
                 $('#txt_fecha_nacimiento').val(response[0].fecha_nacimiento);
-                $('#ddl_nacionalidad').val(response[0].nacionalidad);
+                // $('#ddl_nacionalidad').val(response[0].nacionalidad);
                 $('#txt_cedula').val(response[0].cedula);
-                $('#ddl_estado_civil').val(response[0].estado_civil);
-                $('#ddl_sexo').val(response[0].sexo);
+                // $('#ddl_estado_civil').val(response[0].estado_civil);
+                // $('#ddl_sexo').val(response[0].sexo);
                 $('#txt_telefono_1').val(response[0].telefono_1);
                 $('#txt_telefono_2').val(response[0].telefono_2);
                 $('#txt_correo').val(response[0].correo);
                 $('#txt_codigo_postal').val(response[0].postal);
                 $('#txt_direccion').val(response[0].direccion);
                 $('#txt_observaciones').val(response[0].observaciones);
-                $('#ddl_tipo_sangre').val(response[0].tipo_sangre);
+                // $('#ddl_tipo_sangre').val(response[0].tipo_sangre);
 
                 calcular_edad('txt_edad', response[0].fecha_nacimiento);
 
                 if (response[0].id_provincia != null) {
-                    //Cargar Selects de provincia-ciudad-parroquia
-                    url_provinciaC = '../controlador/GENERAL/th_provinciasC.php?listar=true';
-                    cargar_select2_con_id('ddl_provincias', url_provinciaC, response[0].id_provincia, 'th_prov_nombre');
+                    $('#ddl_provincias').append($('<option>', {
+                        value: response[0].id_provincia,
+                        text: response[0].th_prov_nombre,
+                        selected: true
+                    }));
 
-                    url_ciudadC = '../controlador/GENERAL/th_ciudadC.php?listar=true';
-                    cargar_select2_con_id('ddl_ciudad', url_ciudadC, response[0].id_ciudad, 'th_ciu_nombre');
+                    $('#ddl_ciudad').append($('<option>', {
+                        value: response[0].id_ciudad,
+                        text: response[0].th_ciu_nombre,
+                        selected: true
+                    }));
 
-                    url_parroquiaC = '../controlador/GENERAL/th_parroquiasC.php?listar=true';
-                    cargar_select2_con_id('ddl_parroquia', url_parroquiaC, response[0].id_parroquia, 'th_parr_nombre');
+                    $('#ddl_parroquia').append($('<option>', {
+                        value: response[0].id_parroquia,
+                        text: response[0].th_parr_nombre,
+                        selected: true
+                    }));
                 }
 
                 $('#ddl_etnia').append($('<option>', {
@@ -52,21 +60,49 @@
                     text: response[0].descripcion_etnia,
                     selected: true
                 }));
+
                 $('#ddl_religion').append($('<option>', {
                     value: response[0].id_religion,
                     text: response[0].descripcion_religion,
                     selected: true
                 }));
+
                 $('#ddl_identidad_genero').append($('<option>', {
                     value: response[0].id_identidad_genero,
                     text: response[0].descripcion_identidad_genero,
                     selected: true
                 }));
+
                 $('#ddl_orientacion_sexual').append($('<option>', {
                     value: response[0].id_orientacion_sexual,
                     text: response[0].descripcion_orientacion_sexual,
                     selected: true
                 }));
+
+                $('#ddl_nacionalidad').append($('<option>', {
+                    value: response[0].id_pais,
+                    text: response[0].nacionalidad,
+                    selected: true
+                }));
+
+                $('#ddl_tipo_sangre').append($('<option>', {
+                    value: response[0].id_tipo_sangre,
+                    text: response[0].tipo_sangre,
+                    selected: true
+                }));
+
+                $('#ddl_estado_civil').append($('<option>', {
+                    value: response[0].id_estado_civil,
+                    text: response[0].estado_civil,
+                    selected: true
+                }));
+
+                $('#ddl_sexo').append($('<option>', {
+                    value: response[0].id_sexo,
+                    text: response[0].sexo,
+                    selected: true
+                }));
+
                 $('#txt_per_correo_personal_1').val(response[0].correo_personal_1);
                 $('#txt_per_correo_personal_2').val(response[0].correo_personal_2);
 
@@ -80,6 +116,9 @@
 
                 $('input[name="txt_persona_id"]').val(response[0].th_per_id);
                 $('input[name="txt_persona_cedula"]').val(response[0].cedula);
+
+                $('#txt_calle_primaria').val(response[0].calle_primaria);
+                $('#txt_calle_secundaria').val(response[0].calle_secundaria);
             },
         });
     }
@@ -111,6 +150,8 @@
             'ddl_identidad_genero': $('#ddl_identidad_genero').val(),
             'txt_per_correo_personal_1': $('#txt_per_correo_personal_1').val(),
             'txt_per_correo_personal_2': $('#txt_per_correo_personal_2').val(),
+            'txt_calle_primaria': $('#txt_calle_primaria').val(),
+            'txt_calle_secundaria': $('#txt_calle_secundaria').val(),
         };
     }
 
@@ -148,6 +189,32 @@
                 }
             }
         });
+    }
+
+    function cargar_select2_persona() {
+        url_etniaC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_etniaC.php?buscar=true';
+        cargar_select2_url('ddl_etnia', url_etniaC);
+
+        url_religionC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_religionC.php?buscar=true';
+        cargar_select2_url('ddl_religion', url_religionC);
+
+        url_orientacion_sexualC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_orientacion_sexualC.php?buscar=true';
+        cargar_select2_url('ddl_orientacion_sexual', url_orientacion_sexualC);
+
+        url_identidad_generoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_identidad_generoC.php?buscar=true';
+        cargar_select2_url('ddl_identidad_genero', url_identidad_generoC);
+
+        url_nacionalidadC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_paisC.php?buscar_nacionalidad=true';
+        cargar_select2_url('ddl_nacionalidad', url_nacionalidadC, '-- Seleccione --', null, 2);
+
+        url_tipo_sangreC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_tipo_sangreC.php?buscar=true';
+        cargar_select2_url('ddl_tipo_sangre', url_tipo_sangreC);
+
+        url_tipo_estado_civilC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_tipo_estado_civilC.php?buscar=true';
+        cargar_select2_url('ddl_estado_civil', url_tipo_estado_civilC);
+
+        url_tipo_sexoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_tipo_sexoC.php?buscar=true';
+        cargar_select2_url('ddl_sexo', url_tipo_sexoC);
     }
 </script>
 
@@ -246,13 +313,7 @@
                     <div class="col-md-4">
                         <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad </label>
                         <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
-                            <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
-                            <option value="Ecuatoriano">Ecuatoriano</option>
-                            <option value="Colombiano">Colombiano</option>
-                            <option value="Venezolano">Venezolano</option>
-                            <option value="Peruano">Peruano</option>
-                            <option value="Cubano">Cubano</option>
-                            <option value="Paraguayo">Paraguayo</option>
+
                         </select>
                     </div>
                     <div class="col-md-4">
@@ -267,17 +328,9 @@
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label for="ddl_tipo_sangre" class="form-label form-label-sm">Tipo Sangre </label>
+                        <label for="ddl_tipo_sangre" class="form-label form-label-sm">Grupo Sanguíneo </label>
                         <select class="form-select form-select-sm" id="ddl_tipo_sangre" name="ddl_tipo_sangre">
-                            <option selected disabled value="">-- Selecciona una opción --</option>
-                            <option value="A+">A+</option>
-                            <option value="A-">A-</option>
-                            <option value="B+">B+</option>
-                            <option value="B-">B-</option>
-                            <option value="O+">O+</option>
-                            <option value="O-">O-</option>
-                            <option value="AB+">AB+</option>
-                            <option value="AB-">AB-</option>
+
                         </select>
                     </div>
                 </div>
@@ -308,9 +361,35 @@
                 <?php include_once('../vista/GENERAL/provincias_ciudades_parroquias.php'); ?>
 
                 <div class="row mb-col">
+                    <div class="col-md-6">
+                        <label for="txt_calle_primaria" class="form-label form-label-sm">Calle Principal </label>
+                        <input type="text" class="form-control form-control-sm" name="txt_calle_primaria" id="txt_calle_primaria" maxlength="200" oninput="texto_mayusculas(this);">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="txt_calle_secundaria" class="form-label form-label-sm">Calle Secundaria </label>
+                        <input type="text" class="form-control form-control-sm" name="txt_calle_secundaria" id="txt_calle_secundaria" maxlength="200" oninput="texto_mayusculas(this);">
+                    </div>
+                </div>
+
+                <div class="row mb-col">
                     <div class="col-md-12">
-                        <label for="txt_direccion" class="form-label form-label-sm">Dirección Exacta </label>
-                        <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" maxlength="200" oninput="texto_mayusculas(this);">
+                        <label for="txt_direccion" class="form-label form-label-sm">
+                            Dirección Exacta
+                            <i class='bx bx-info-circle text-primary'
+                                data-bs-toggle="tooltip"
+                                title="Ingrese referencias adicionales como edificio, piso, departamento, conjunto o puntos de referencia.">
+                            </i>
+                        </label>
+
+                        <textarea
+                            class="form-control form-control-sm"
+                            name="txt_direccion"
+                            id="txt_direccion"
+                            rows="3"
+                            maxlength="300"
+                            placeholder="Ej: Edif. Torres del Norte, piso 3, dpto. 302. Frente al parque central."
+                            oninput="texto_mayusculas(this);"></textarea>
                     </div>
                 </div>
 
