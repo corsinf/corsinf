@@ -87,6 +87,8 @@
                 $('#txt_porcentaje').val(response[0].th_pos_dis_porcentaje);
                 $('#txt_escala').val(response[0].th_pos_dis_escala);
                 $('#txt_discapacidad_id').val(response[0]._id);
+                $('#txt_sustituto').val(response[0].sustituto);
+
 
                 cargar_discapacidad_escalas(response[0].id_discapacidad);
             }
@@ -101,6 +103,7 @@
             ddl_discapacidad_escala: $('#ddl_discapacidad_escala').val(),
             txt_porcentaje: $('#txt_porcentaje').val(),
             txt_escala: $('#txt_escala').val(),
+            txt_sustituto: $('#txt_sustituto').val(),
             _id: $('#txt_discapacidad_id').val()
         };
 
@@ -212,6 +215,7 @@
         $('#txt_porcentaje').val('');
         $('#txt_escala').val('');
         $('#txt_discapacidad_id').val('');
+        $('#txt_sustituto').val('');
 
         $('#ddl_discapacidad_escala').val(null).trigger('change');
         $('#ddl_discapacidad').val(null).trigger('change');
@@ -269,9 +273,22 @@
                             <label for="txt_porcentaje" class="form-label fw-semibold fs-7">Porcentaje (%) </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><strong>%</strong></span>
-                                <input type="number" class="form-control" id="txt_porcentaje" name="txt_porcentaje" min="0" max="100" required placeholder="0 - 100">
+                                <input type="number" class="form-control form-control-sm" id="txt_porcentaje" name="txt_porcentaje" min="0" max="100" required placeholder="0 - 100">
                             </div>
                             <label class="error" style="display: none;" for="txt_porcentaje"></label>
+                        </div>
+                    </div>
+
+
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="txt_sustituto" class="form-label fw-semibold fs-7">Sustituto
+                                <i class='bx bx-info-circle text-primary' data-bs-toggle="tooltip"
+                                    title="Opcional. Ingrese el nombre del sustituto registrado, si aplica.">
+                                </i>
+
+                            </label>
+                            <input type="text" class="form-control form-control-sm" id="txt_sustituto" name="txt_sustituto" placeholder="Nombre del sustituto" oninput="texto_mayusculas(this);">
                         </div>
                     </div>
                 </div>
