@@ -50,7 +50,8 @@
                     $('#txt_fecha_final_laboral').val(fecha_fin_laboral);
                 }
 
-                $('#txt_responsabilidades_logros').val(response[0].th_expl_responsabilidades_logros);
+                $('#txt_responsabilidades').val(response[0].th_expl_responsabilidades);
+                $('#txt_logros').val(response[0].th_expl_logros);
                 $('#txt_experiencia_id').val(response[0]._id);
                 $('#txt_sueldo').val(response[0].th_expl_sueldo);
             }
@@ -70,7 +71,8 @@
             txt_fecha_final_laboral = $('#txt_fecha_final_laboral').val();
         }
 
-        var txt_responsabilidades_logros = $('#txt_responsabilidades_logros').val();
+        var txt_responsabilidades = $('#txt_responsabilidades').val();
+        var txt_logros = $('#txt_logros').val();
         var txt_id_postulante = '<?= $id_postulante ?>';
         var txt_id_experiencia_laboral = $('#txt_experiencia_id').val();
         var txt_sueldo = $('#txt_sueldo').val();
@@ -84,7 +86,8 @@
             'txt_fecha_inicio_laboral': txt_fecha_inicio_laboral,
             'txt_fecha_final_laboral': txt_fecha_final_laboral,
             'cbx_fecha_final_laboral': cbx_fecha_final_laboral,
-            'txt_responsabilidades_logros': txt_responsabilidades_logros,
+            'txt_responsabilidades': txt_responsabilidades,
+            'txt_logros': txt_logros,
             'txt_sueldo': txt_sueldo,
         }
 
@@ -179,7 +182,8 @@
         $('#txt_fecha_final_laboral').val('');
         $('#txt_fecha_final_laboral').prop('disabled', false);
         $('#cbx_fecha_final_laboral').prop('checked', false);
-        $('#txt_responsabilidades_logros').val('');
+        $('#txt_responsabilidades').val('');
+        $('#txt_logros').val('');
         $('#txt_experiencia_id').val('')
         $('#txt_sueldo').val('')
         //Cambiar texto
@@ -344,9 +348,14 @@
                     </div>
 
                     <div class="row mb-2">
-                        <div class="col-md-12">
-                            <label for="txt_responsabilidades_logros" class="form-label fw-semibold fs-7">Descripción de Responsabilidades y/o Logros </label>
-                            <textarea class="form-control no_caracteres" name="txt_responsabilidades_logros" id="txt_responsabilidades_logros" rows="3" maxlength="300" placeholder="Describe brevemente tus funciones principales y éxitos alcanzados..."></textarea>
+                        <div class="col-md-6">
+                            <label for="txt_responsabilidades" class="form-label fw-semibold fs-7">Descripción de Responsabilidades </label>
+                            <textarea class="form-control no_caracteres" name="txt_responsabilidades" id="txt_responsabilidades" rows="3" maxlength="300" placeholder="Describe brevemente tus funciones principales y éxitos alcanzados..."></textarea>
+                            <div class="form-text text-end text-xs">Máximo 300 caracteres.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="txt_logros" class="form-label fw-semibold fs-7">Descripción de Logros </label>
+                            <textarea class="form-control no_caracteres" name="txt_logros" id="txt_logros" rows="3" maxlength="300" placeholder="Describe brevemente tus funciones principales y éxitos alcanzados..."></textarea>
                             <div class="form-text text-end text-xs">Máximo 300 caracteres.</div>
                         </div>
                     </div>
@@ -377,7 +386,8 @@
         agregar_asterisco_campo_obligatorio('txt_cargos_ocupados');
         agregar_asterisco_campo_obligatorio('txt_fecha_inicio_laboral');
         agregar_asterisco_campo_obligatorio('txt_fecha_final_laboral');
-        agregar_asterisco_campo_obligatorio('txt_responsabilidades_logros');
+        agregar_asterisco_campo_obligatorio('txt_responsabilidades');
+        agregar_asterisco_campo_obligatorio('txt_logros');
         agregar_asterisco_campo_obligatorio('txt_sueldo');
 
         //! Validación Experiencia Laboral
@@ -395,7 +405,10 @@
                 txt_fecha_final_laboral: {
                     required: true,
                 },
-                txt_responsabilidades_logros: {
+                txt_responsabilidades: {
+                    required: true,
+                },
+                txt_logros: {
                     required: true,
                 },
                 txt_sueldo: {
@@ -415,8 +428,11 @@
                 txt_fecha_final_laboral: {
                     required: "Por favor ingrese la fecha de finalización o seleccione 'Actualidad' si sigue trabajando.",
                 },
-                txt_responsabilidades_logros: {
-                    required: "Por favor ingrese sus responsabilidades y logros",
+                txt_responsabilidades: {
+                    required: "Por favor ingrese sus responsabilidades",
+                },
+                txt_logros: {
+                    required: "Por favor ingrese sus logros",
                 },
             },
 
