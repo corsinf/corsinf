@@ -46,8 +46,8 @@ class th_per_vehiculosM extends BaseModel
     }
 
     public function listar_vehiculos_por_persona_con_tipo($th_per_id = null)
-{
-    $sql = "
+    {
+        $sql = "
         SELECT
             pv.th_per_veh_id AS _id,
             pv.th_per_id,
@@ -65,14 +65,13 @@ class th_per_vehiculosM extends BaseModel
         WHERE pv.th_per_veh_estado = 1
     ";
 
-    if (!empty($th_per_id)) {
-        $th_per_id = intval($th_per_id);
-        $sql .= " AND pv.th_per_id = $th_per_id";
+        if (!empty($th_per_id)) {
+            $th_per_id = intval($th_per_id);
+            $sql .= " AND pv.th_per_id = $th_per_id";
+        }
+
+        $sql .= " ORDER BY pv.th_per_veh_placa_original ASC";
+
+        return $this->db->datos($sql);
     }
-
-    $sql .= " ORDER BY pv.th_per_veh_placa_original ASC";
-
-    return $this->db->datos($sql);
-}
-
 }

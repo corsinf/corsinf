@@ -1,7 +1,7 @@
 <script>
     $(document).ready(function() {
 
-        cargar_datos_comision(<?= $id_persona ?>);
+        cargar_datos_comision('<?= $id_persona ?>');
         cargar_selects_comision();
 
     });
@@ -71,7 +71,7 @@
                 if (response == 1) {
                     Swal.fire('', 'Operación realizada con éxito.', 'success');
                     $('#modal_agregar_comision').modal('hide');
-                    cargar_datos_comision(<?= $id_persona ?>);
+                    cargar_datos_comision('<?= $id_persona ?>');
                     limpiar_campos_comision_modal();
                 } else if (response == -2) {
                     Swal.fire(
@@ -136,7 +136,7 @@
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro eliminado.', 'success');
                     $('#modal_agregar_comision').modal('hide');
-                    cargar_datos_comision(<?= $id_persona ?>);
+                    cargar_datos_comision('<?= $id_persona ?>');
                     limpiar_campos_comision_modal();
                 }
             }

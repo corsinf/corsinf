@@ -400,6 +400,13 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
 
                                     <?php if (isset($_GET['_persona_nomina']) && $_GET['_persona_nomina'] == 'true'): ?>
 
+                                        <button class="nav-link py-2 px-3 border shadow-sm" data-bs-toggle="pill" data-bs-target="#tab_bancos" type="button" role="tab">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bx bxs-building-house me-3 fs-5"></i>
+                                                <span>Bancos</span>
+                                            </div>
+                                        </button>
+
                                         <button class="nav-link py-2 px-3 border shadow-sm" data-bs-toggle="pill" data-bs-target="#tab_departamento" type="button" role="tab">
                                             <div class="d-flex align-items-center">
                                                 <i class="bx bxs-building-house me-3 fs-5"></i>
@@ -519,6 +526,37 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
                                 </div>
 
                                 <?php if (isset($_GET['_persona_nomina']) && $_GET['_persona_nomina'] == 'true') { ?>
+                                    <!-- Octava Sección, Bancos -->
+                                    <div class="tab-pane fade" id="tab_bancos" role="tabpanel">
+                                        <!-- <div class="card"> -->
+                                        <div class="d-flex flex-column mx-4">
+                                            <div class="card-body">
+                                                <div class="mb-2">
+                                                    <div class="row">
+                                                        <div class="col-6 d-flex align-items-center">
+                                                            <h6 class="mb-0 fw-bold text-primary">Bancos:</h6>
+                                                        </div>
+                                                        <div class="col-6 d-flex justify-content-end">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal_agregar_bancos">
+                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                                                <span>Agregar</span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <hr>
+
+                                                <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_bancos.php'); ?>
+
+                                            </div>
+                                        </div>
+                                        <!-- </div> -->
+                                    </div>
+
                                     <!-- Segunda Sección, Departamentos -->
                                     <div class="tab-pane fade" id="tab_departamento" role="tabpanel">
                                         <!-- <div class="card"> -->

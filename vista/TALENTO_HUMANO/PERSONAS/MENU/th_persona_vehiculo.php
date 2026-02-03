@@ -202,7 +202,8 @@
                                 name="txt_placa_original"
                                 id="txt_placa_original"
                                 maxlength="20"
-                                placeholder="Ej: ABC-1234">
+                                placeholder="Ej: ABC-1234"
+                                oninput="texto_mayusculas(this);">
                         </div>
                     </div>
 

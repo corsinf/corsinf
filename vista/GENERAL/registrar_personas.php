@@ -305,7 +305,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="">
         <div class="card mb-4 border-0 shadow-sm">
             <div class="card-header bg-light text-primary"><strong><i class="fas fa-info-circle"></i> Información Socio-Demográfica</strong></div>
             <div class="card-body">
