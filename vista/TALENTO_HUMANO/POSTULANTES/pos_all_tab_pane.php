@@ -7,6 +7,7 @@
     }
     ?>
 
+ <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_referencias_laborales_modal.php'); ?>
  <!-- Primera Sección, Historial Laboral -->
  <div class="tab-pane fade <?= $tab_pane_postulante_activo ?>" id="tab_experiencia" role="tabpanel">
      <!-- Aqui viene un card cuando sea postulante -->
@@ -195,7 +196,7 @@
                          </div>
                      </div>
                  </div>
-                 
+
                  <hr>
 
                  <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_idiomas.php'); ?>
