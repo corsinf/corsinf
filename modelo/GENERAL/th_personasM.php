@@ -87,10 +87,14 @@ class th_personasM extends BaseModel
                 p.th_per_primer_apellido             AS primer_apellido,
                 p.th_per_segundo_apellido            AS segundo_apellido,
                 p.th_per_cedula                      AS cedula,
-                p.th_per_estado_civil                AS estado_civil,
-                p.th_per_sexo                        AS sexo,
+                p.th_per_estado_civil                AS id_estado_civil,
+                eci.descripcion                      AS estado_civil,
+                p.th_per_sexo                        AS id_sexo,
+                ts.descripcion                       AS sexo,
                 p.th_per_fecha_nacimiento            AS fecha_nacimiento,
-                p.th_per_nacionalidad                AS nacionalidad,
+                p.th_per_nacionalidad                AS id_pais,
+                pais.nombre                          AS nombre_pais,
+                pais.nacionalidad                    AS nacionalidad,
                 p.th_per_telefono_1                  AS telefono_1,
                 p.th_per_telefono_2                  AS telefono_2,
                 p.th_per_correo                      AS correo,
@@ -110,7 +114,8 @@ class th_personasM extends BaseModel
                 p.PERFIL                             AS PERFIL,
                 p.th_per_codigo_sap                  AS th_per_codigo_sap,
                 p.th_per_unidad_org_sap              AS th_per_unidad_org_sap,
-                p.th_per_tipo_sangre                 AS tipo_sangre,
+                p.th_per_tipo_sangre                 AS id_tipo_sangre,
+                tsangre.descripcion                  AS tipo_sangre,    
                 p.th_per_nombres_completos           AS th_per_nombres_completos,
                 p.th_per_codigo_externo_1            AS th_per_codigo_externo_1,
                 p.th_per_codigo_externo_2            AS th_per_codigo_externo_2,
@@ -129,6 +134,8 @@ class th_personasM extends BaseModel
                 rel.descripcion                      AS descripcion_religion,
                 ide_gen.descripcion                  AS descripcion_identidad_genero,
                 p.th_pos_id                          AS id_postulante,
+                p.th_per_calle_primaria              AS calle_primaria,
+                p.th_per_calle_secundaria            AS calle_secundaria,
                 RTRIM(
                     CONCAT(
                         COALESCE(p.th_per_primer_apellido, ''), ' ',
@@ -152,6 +159,14 @@ class th_personasM extends BaseModel
                 ON p.id_religion = rel.id_religion
             LEFT JOIN th_cat_identidad_genero ide_gen
                 ON p.id_identidad_genero = ide_gen.id_identidad_genero
+            LEFT JOIN th_cat_pais pais
+                ON p.th_per_nacionalidad = pais.id_pais
+            LEFT JOIN th_cat_tipo_sangre tsangre
+                ON p.th_per_tipo_sangre = tsangre.id_tipo_sangre
+            LEFT JOIN th_cat_tipo_estado_civil eci
+                ON p.th_per_estado_civil = eci.id_tipo_estado_civil
+            LEFT JOIN th_cat_tipo_sexo ts
+                ON p.th_per_sexo = ts.id_sexo
             WHERE {$condicion}
             ORDER BY p.th_per_primer_apellido, p.th_per_primer_nombre;";
 

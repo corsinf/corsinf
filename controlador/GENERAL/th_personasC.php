@@ -94,6 +94,9 @@ class th_personasC
                 array('campo' => 'th_prov_id', 'dato' => !empty($parametros['ddl_provincias']) ? $parametros['ddl_provincias'] : null),
                 array('campo' => 'th_ciu_id', 'dato' => !empty($parametros['ddl_ciudad']) ? $parametros['ddl_ciudad'] : null),
                 array('campo' => 'th_parr_id', 'dato' => !empty($parametros['ddl_parroquia']) ? $parametros['ddl_parroquia'] : null),
+                
+                array('campo' => 'th_per_calle_primaria', 'dato' => trim($parametros['txt_calle_primaria'] ?? '')),
+                array('campo' => 'th_per_calle_secundaria', 'dato' => trim($parametros['txt_calle_secundaria'] ?? '')),
 
                 // Información adicional
                 array('campo' => 'th_per_tipo_sangre', 'dato' => !empty($parametros['ddl_tipo_sangre']) ? $parametros['ddl_tipo_sangre'] : null),

@@ -61,6 +61,10 @@ class th_pos_discapacidadC
                                             <p class="cert-doctor m-0">
                                                 <i class="bx bx-layer me-1"></i>Escala: {$value['escala_discapacidad']}
                                             </p>
+
+                                            <p class="cert-doctor m-0">
+                                                <i class="bx bx-user me-1"></i>Sustituto: {$value['sustituto']}
+                                            </p>
                                         </div>
 
                                         <div class="mt-auto pt-2">
@@ -123,6 +127,8 @@ class th_pos_discapacidadC
             ['campo' => 'id_discapacidad', 'dato' => $id_discapacidad],
             ['campo' => 'id_escala_dis', 'dato' => $id_escala],
             ['campo' => 'th_pos_dis_porcentaje', 'dato' => $parametros['txt_porcentaje']],
+            ['campo' => 'th_pos_dis_sustituto', 'dato' => $parametros['txt_sustituto']],
+            ['campo' => 'th_pos_dis_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')],
         ];
 
         if ($id_registro == '') {

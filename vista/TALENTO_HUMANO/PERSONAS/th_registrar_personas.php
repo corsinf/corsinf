@@ -57,7 +57,13 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
             }
             recargar_persona_postulante('<?= $id_postulante ?>', '<?= $id_persona ?>');
         <?php } ?>
-    })
+    });
+
+    $(document).on('shown.bs.tab', '[data-bs-toggle="pill"]', function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 300);
+    });
 
     function validar_persona_acceso(id_persona, id_postulante) {
         $.ajax({
@@ -137,17 +143,7 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
         url_departamentosC = '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true';
         cargar_select2_url('ddl_departamentos', url_departamentosC);
 
-        url_etniaC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_etniaC.php?buscar=true';
-        cargar_select2_url('ddl_etnia', url_etniaC);
-
-        url_religionC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_religionC.php?buscar=true';
-        cargar_select2_url('ddl_religion', url_religionC);
-
-        url_orientacion_sexualC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_orientacion_sexualC.php?buscar=true';
-        cargar_select2_url('ddl_orientacion_sexual', url_orientacion_sexualC);
-
-        url_identidad_generoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_identidad_generoC.php?buscar=true';
-        cargar_select2_url('ddl_identidad_genero', url_identidad_generoC);
+        cargar_select2_persona();
 
     }
 
@@ -439,13 +435,6 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
                                             </div>
                                         </button>
 
-                                        <button class="nav-link py-2 px-3 border shadow-sm" data-bs-toggle="pill" data-bs-target="#tab_contrato_trabajo" type="button" role="tab">
-                                            <div class="d-flex align-items-center">
-                                                <i class="bx bxs-info-circle me-3 fs-5"></i>
-                                                <span>Contrato de Trabajo</span>
-                                            </div>
-                                        </button>
-
                                         <button class="nav-link py-2 px-3 border shadow-sm" data-bs-toggle="pill" data-bs-target="#tab_informacion_adicional" type="button" role="tab">
                                             <div class="d-flex align-items-center">
                                                 <i class="bx bxs-info-circle me-3 fs-5"></i>
@@ -547,7 +536,7 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
 
                                     <!-- Tercera Sección, Estado Labaral -->
                                     <div class="tab-pane fade" id="tab_estado_laboral" role="tabpanel">
-                                        <!-- <div class="card"> -->
+
                                         <div class="d-flex flex-column mx-4">
                                             <!-- Idiomas -->
                                             <div class="card-body">
@@ -577,7 +566,35 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
                                             </div>
 
                                         </div>
-                                        <!-- </div> -->
+
+                                        <!-- Septima Sección, Contratos de Trabajo -->
+                                        <div class="d-flex flex-column mx-4">
+                                            <div class="card-body">
+                                                <div class="mb-2">
+                                                    <div class="row">
+                                                        <div class="col-7 d-flex align-items-center">
+                                                            <h6 class="mb-0 fw-bold text-primary">Contratos de Trabajo:
+                                                            </h6>
+                                                        </div>
+                                                        <div
+                                                            class="col-5 d-flex justify-content-end align-items-center">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal_agregar_contratos">
+                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                                                <span class="">Agregar</span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr class="my-0 mb-3">
+
+                                                <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_contratos_trabajo.php'); ?>
+
+                                            </div>
+                                        </div>
+
                                     </div>
                                     <!-- Cuarta Sección, Vehiculos -->
                                     <div class="tab-pane fade" id="tab_vehiculos" role="tabpanel">
@@ -674,36 +691,6 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
                                             </div>
                                         </div>
                                         <!-- </div> -->
-                                    </div>
-
-                                    <!-- Septima Sección, Contratos de Trabajo -->
-                                    <div class="tab-pane fade" id="tab_contrato_trabajo" role="tabpanel">
-                                        <div class="d-flex flex-column mx-4">
-                                            <div class="card-body">
-                                                <div class="mb-2">
-                                                    <div class="row">
-                                                        <div class="col-7 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Contratos de Trabajo:
-                                                            </h6>
-                                                        </div>
-                                                        <div
-                                                            class="col-5 d-flex justify-content-end align-items-center">
-                                                            <a href="#"
-                                                                class="text-success icon-hover d-flex align-items-center"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#modal_agregar_contratos">
-                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span class="">Agregar</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr class="my-0 mb-3">
-
-                                                <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_contratos_trabajo.php'); ?>
-
-                                            </div>
-                                        </div>
                                     </div>
 
                                     <!-- Octava Sección, Información Adicional: -->

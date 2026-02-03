@@ -49,41 +49,41 @@ class th_pos_documentosC
                 }
 
                 $texto .= <<<HTML
-                <div class="col-md-6 mb-col">
-                    <div class="cert-card p-3 h-100 position-relative shadow-sm">
-                        
-                        <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
-                                onclick="abrir_modal_documentos_identidad('{$value['_id']}');" 
-                                title="Editar Identificación">
-                            <i class="bx bx-pencil"></i>
-                        </button>
+                                <div class="col-md-6 mb-col">
+                                    <div class="cert-card p-3 h-100 position-relative shadow-sm">
+                                        
+                                        <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
+                                                onclick="abrir_modal_documentos_identidad('{$value['_id']}');" 
+                                                title="Editar Identificación">
+                                            <i class="bx bx-pencil"></i>
+                                        </button>
 
-                        <div class="d-flex flex-column h-100">
-                            <div class="mb-2">
-                                <span class="cert-badge mb-1">Documento</span>
-                                <h6 class="fw-bold text-dark cert-title mb-1">
-                                    {$value['nombre_documento']}
-                                </h6>
-                            </div>
+                                        <div class="d-flex flex-column h-100">
+                                            <div class="mb-2">
+                                                <span class="cert-badge mb-1">Documento</span>
+                                                <h6 class="fw-bold text-dark cert-title mb-1">
+                                                    {$value['nombre_documento']}
+                                                </h6>
+                                            </div>
 
-                            <div class="mt-auto pt-2 d-flex justify-content-between align-items-end">
-                                <div class="cert-date-range">
-                                    <span class="text-success" style="font-size: 0.7rem;">
-                                        <i class="bx bxs-check-shield me-1"></i>Activo
-                                    </span>
+                                            <div class="mt-auto pt-2 d-flex justify-content-between align-items-end">
+                                                <div class="cert-date-range">
+                                                    <span class="text-success" style="font-size: 0.7rem;">
+                                                        <i class="bx bxs-check-shield me-1"></i>Activo
+                                                    </span>
+                                                </div>
+                                                
+                                                <button onclick="ruta_iframe_documento_identificacion('{$value['th_poi_ruta_archivo']}');" 
+                                                        class="btn btn-dark btn-xs py-1 px-3 btn-cert-action">
+                                                    DOCUMENTO
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {$documentos_repetidos}
+                                    </div>
                                 </div>
-                                
-                                <button onclick="ruta_iframe_documento_identificacion('{$value['th_poi_ruta_archivo']}');" 
-                                        class="btn btn-dark btn-xs py-1 px-3 btn-cert-action">
-                                    DOCUMENTO
-                                </button>
-                            </div>
-                        </div>
-
-                        {$documentos_repetidos}
-                    </div>
-                </div>
-HTML;
+                            HTML;
             }
 
             $texto .= '</div>';
@@ -114,9 +114,16 @@ HTML;
         $id_documentos_identidad = $parametros['txt_documentos_identificacion_id'];
 
         if ($id_documentos_identidad == '') {
-            $datos = $this->modelo->insertar_id($datos);
-            $this->guardar_archivo($file, $parametros, $datos);
-            return 1;
+            if (count($this->modelo->where('th_pos_id', $parametros['txt_postulante_id'])
+                ->where('id_documento', $parametros['ddl_tipo_documento_identidad'])
+                ->where('th_poi_estado', 1)
+                ->listar()) == 0) {
+                $datos = $this->modelo->insertar_id($datos);
+                $this->guardar_archivo($file, $parametros, $datos);
+                return 1;
+            } else {
+                return -1;
+            }
         } else {
 
             $where = array(
