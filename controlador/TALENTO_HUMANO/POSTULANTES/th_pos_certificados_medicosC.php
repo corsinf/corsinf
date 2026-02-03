@@ -30,72 +30,69 @@ class th_pos_certificados_medicosC
         $this->modelo = new th_pos_certificados_medicosM();
     }
 
-    //Funcion para listar los certidicados médicos del postulante
     function listar($id)
     {
-
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_cer_estado', 1)->orderBy('th_cer_fecha_fin_certificado', 'DESC')->listar();
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_cer_estado', 1)->listar();
 
         if (empty($datos)) {
-            $texto = '<div  class="alert alert-info mb-0"><p>No hay información adicional registrada.</p></div>';
+            $texto = '<div class="alert alert-info mb-0"><p>No hay información adicional registrada.</p></div>';
         } else {
             $texto = '<div class="row g-3">';
 
             foreach ($datos as $key => $value) {
-                // Lógica de fechas
-                $fecha_inicio = date('d/m/Y', strtotime($value['th_cer_fecha_inicio_certificado']));
-                $raw_fecha_fin = $value['th_cer_fecha_fin_certificado'];
 
-                $es_permanente = ($raw_fecha_fin == '1900-01-01' || strpos($raw_fecha_fin, '01/01/1900') !== false);
-                $fecha_fin_txt = $es_permanente
-                    ? '<span class="fw-bolder text-success">PERMANENTE</span>'
-                    : date('d/m/Y', strtotime($raw_fecha_fin));
+                $alergia = $value['th_cer_alergia_req'] == 1 ? 'Sí' : 'No';
+                $tratamiento = $value['th_cer_tratamiento_req'] == 1 ? 'Sí' : 'No';
+
+                $btn_documento = '';
+                if (!empty($value['th_cer_ruta_certficado'])) {
+                    $btn_documento = <<<HTML
+                    <button onclick="ruta_iframe_certificados_medicos('{$value['th_cer_ruta_certficado']}');" 
+                            class="btn btn-dark btn-xs py-1 px-3 btn-cert-action">
+                        DOCUMENTO
+                    </button>
+                HTML;
+                }
 
                 $texto .= <<<HTML
-                        <div class="col-md-6 mb-col">
-                            <div class="cert-card p-3 h-100 position-relative shadow-sm">
+                <div class="col-md-6 mb-col">
+                    <div class="cert-card p-3 h-100 position-relative shadow-sm">
+                        
+                        <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
+                                onclick="abrir_modal_certificados_medicos('{$value['_id']}');" 
+                                title="Editar Certificado">
+                            <i class="bx bx-edit-alt"></i>
+                        </button>
+
+                        <div class="d-flex flex-column h-100">
+                            <div class="mb-2">
+                                <span class="cert-badge mb-1">Certificado</span>
                                 
-                                <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
-                                        onclick="abrir_modal_certificados_medicos('{$value['_id']}');" 
-                                        title="Editar Certificado">
-                                    <i class="bx bx-edit-alt"></i>
-                                </button>
+                                <h6 class="fw-bold text-dark cert-title mb-1">
+                                    {$value['th_cer_motivo_certificado']}
+                                </h6>
 
-                                <div class="d-flex flex-column h-100">
-                                    <div class="mb-2">
-                                        <span class="cert-badge mb-1">Certificado</span>
-                                        
-                                        <h6 class="fw-bold text-dark cert-title mb-1">
-                                            {$value['th_cer_motivo_certificado']}
-                                        </h6>
-                                        
-                                        <p class="cert-doctor m-0">
-                                            <i class="bx bx-user-circle me-1"></i>{$value['th_cer_nom_medico']}
-                                        </p>
-                                    </div>
-
-                                    <div class="mt-auto pt-2 d-flex justify-content-between align-items-end">
-                                        <div class="cert-date-range">
-                                            <div class="cert-label-small">Vigencia</div>
-                                            <span class="text-dark" style="font-size: 0.72rem;">
-                                                <i class="bx bx-calendar-alt me-1"></i>{$fecha_inicio} — {$fecha_fin_txt}
-                                            </span>
-                                        </div>
-                                        
-                                        <button onclick="ruta_iframe_certificados_medicos('{$value['th_cer_ruta_certficado']}');" 
-                                                class="btn btn-dark btn-xs py-1 px-3 btn-cert-action">
-                                            DOCUMENTO
-                                        </button>
-                                    </div>
+                                <div class="mt-2 d-flex flex-column gap-1">
+                                    <span class="text-muted" style="font-size: 0.72rem;">
+                                        <i class="bx bx-alert-triangle me-1"></i>¿Alergia? <strong class="text-dark">{$alergia}</strong>
+                                    </span>
+                                    <span class="text-muted" style="font-size: 0.72rem;">
+                                        <i class="bx bx-medical me-1"></i>¿Tratamiento Continuo? <strong class="text-dark">{$tratamiento}</strong>
+                                    </span>
                                 </div>
                             </div>
+
+                            <div class="mt-auto pt-2 d-flex justify-content-end align-items-end">
+                                {$btn_documento}
+                            </div>
                         </div>
-                    HTML;
+                    </div>
+                </div>
+            HTML;
             }
 
             $texto .= '</div>';
         }
-
 
         return $texto;
     }
@@ -113,37 +110,48 @@ class th_pos_certificados_medicosC
 
     function insertar_editar($file, $parametros)
     {
+        // Checkbox: si no viene en POST vale null, así que lo convertimos a 1 o 0
+        $alergia = isset($parametros['th_cer_alergia_req']) ? 1 : 0;
+        $tratamiento = isset($parametros['th_cer_tratamiento_req']) ? 1 : 0;
+
         $datos = array(
-            array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
-            array('campo' => 'th_cer_motivo_certificado', 'dato' => $parametros['txt_med_motivo_certificado']),
-            array('campo' => 'th_cer_nom_medico', 'dato' => $parametros['txt_med_nom_medico']),
-            array('campo' => 'th_cer_ins_medico', 'dato' => $parametros['txt_med_ins_medico']),
-            array('campo' => 'th_cer_fecha_inicio_certificado', 'dato' => $parametros['txt_med_fecha_inicio_certificado']),
-            array('campo' => 'th_cer_fecha_fin_certificado', 'dato' => $parametros['txt_med_fecha_fin_certificado']),
+            array('campo' => 'th_pos_id',                        'dato' => $parametros['txt_postulante_id']),
+            array('campo' => 'th_cer_motivo_certificado',        'dato' => $parametros['th_cer_motivo_certificado']),
+            array('campo' => 'th_cer_alergia_req',               'dato' => $alergia),
+            array('campo' => 'th_cer_tratamiento_req',           'dato' => $tratamiento),
+            // Campos que no existen en el modal → NULL
+            array('campo' => 'th_cer_nom_medico',                'dato' => null),
+            array('campo' => 'th_cer_ins_medico',                'dato' => null),
+            array('campo' => 'th_cer_fecha_inicio_certificado',  'dato' => null),
+            array('campo' => 'th_cer_fecha_fin_certificado',     'dato' => null),
         );
 
         $id_certificados_medicos = $parametros['txt_certificados_medicos_id'];
 
         if ($id_certificados_medicos == '') {
-            $datos = $this->modelo->insertar_id($datos);
-            $this->guardar_archivo($file, $parametros, $datos);
+            // INSERTAR
+            $id_nuevo = $this->modelo->insertar_id($datos);
+            // Solo guardar archivo si el usuario subió uno
+            if (!empty($file['th_cer_ruta_certficado']['tmp_name'])) {
+                $this->guardar_archivo($file, $parametros, $id_nuevo);
+            }
             return 1;
         } else {
-
+            // EDITAR
             $where = array(
                 array('campo' => 'th_cer_id', 'dato' => $id_certificados_medicos),
             );
 
-            $datos = $this->modelo->editar($datos, $where);
+            $this->modelo->editar($datos, $where);
 
-            if ($file['txt_ruta_certificados_medicos']['tmp_name'] != '' && $file['txt_ruta_certificados_medicos']['tmp_name'] != null) {
-                $datos = $this->guardar_archivo($file, $parametros, $id_certificados_medicos);
+            // Solo reemplazar archivo si subió uno nuevo
+            if (!empty($file['th_cer_ruta_certficado']['tmp_name'])) {
+                $this->guardar_archivo($file, $parametros, $id_certificados_medicos);
             }
+
+            return 1;
         }
-
-        return $datos;
     }
-
     function eliminar($id)
     {
         $datos_archivo = $this->modelo->where('th_cer_id', $id)->where('th_cer_estado', 1)->listar();
@@ -182,8 +190,8 @@ class th_pos_certificados_medicosC
         }
 
         if ($this->validar_formato_archivo($file) === 1) {
-            $uploadfile_temporal = $file['txt_ruta_certificados_medicos']['tmp_name'];
-            $extension = pathinfo($file['txt_ruta_certificados_medicos']['name'], PATHINFO_EXTENSION);
+            $uploadfile_temporal = $file['th_cer_ruta_certficado']['tmp_name'];
+            $extension = pathinfo($file['th_cer_ruta_certficado']['name'], PATHINFO_EXTENSION);
             //Para referencias laborales
             $nombre = 'certificados_medicos_' . $id_insertar_editar . '.' . $extension;
             $nuevo_nom = $ruta . $nombre;
@@ -220,7 +228,7 @@ class th_pos_certificados_medicosC
 
     private function validar_formato_archivo($file)
     {
-        switch ($file['txt_ruta_certificados_medicos']['type']) {
+        switch ($file['th_cer_ruta_certficado']['type']) {
             case 'application/pdf':
                 return 1;
                 break;

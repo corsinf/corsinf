@@ -28,29 +28,16 @@
             dataType: 'json',
             success: function(response) {
                 $('#txt_certificados_medicos_id').val(response[0]._id);
-                $('#txt_med_motivo_certificado').val(response[0].th_cer_motivo_certificado);
-                $('#txt_med_nom_medico').val(response[0].th_cer_nom_medico);
-                $('#txt_med_ins_medico').val(response[0].th_cer_ins_medico);
-                $('#txt_med_fecha_inicio_certificado').val(response[0].th_cer_fecha_inicio_certificado);
-                $('#txt_med_fecha_fin_certificado').val(response[0].th_cer_fecha_fin_certificado);
-                $('#txt_ruta_guardada_certificados_medicos').val(response[0].th_cer_ruta_certficado);
+                $('#th_cer_motivo_certificado').val(response[0].th_cer_motivo_certificado);
+                $('#th_cer_alergia_req').prop('checked', response[0].th_cer_alergia_req == 1);
+                $('#th_cer_tratamiento_req').prop('checked', response[0].th_cer_tratamiento_req == 1);
+                $('#txt_ruta_guardada_medico').val(response[0].th_cer_ruta_certficado);
             }
         });
     }
 
     function insertar_editar_certificados_medicos() {
         var form_data = new FormData(document.getElementById("form_certificados_medicos"));
-        var txt_id_certificados_medicos = $('#txt_certificados_medicos_id').val();
-
-        if ($('#txt_ruta_certificados_medicos').val() === '' && txt_id_certificados_medicos != '') {
-            var txt_ruta_certificados_medicos = $('#txt_ruta_guardada_certificados_medicos').val()
-            $('#txt_ruta_certificados_medicos').rules("remove", "required");
-        } else {
-            var txt_ruta_certificados_medicos = $('#txt_ruta_certificados_medicos').val();
-            $('#txt_ruta_certificados_medicos').rules("add", {
-                required: true
-            });
-        }
 
         if ($("#form_certificados_medicos").valid()) {
             $.ajax({
@@ -59,10 +46,8 @@
                 data: form_data,
                 contentType: false,
                 processData: false,
-
                 dataType: 'json',
                 success: function(response) {
-                    //console.log(response);
                     if (response == -1) {
                         Swal.fire({
                             title: '',
@@ -139,21 +124,18 @@
     }
 
     function limpiar_parametros_certificados_medicos() {
-        //certificaciones capacitaciones
-        $('#txt_med_motivo_certificado').val('');
-        $('#txt_med_nom_medico').val('');
-        $('#txt_med_ins_medico').val('');
-        $('#txt_med_fecha_inicio_certificado').val('');
-        $('#txt_med_fecha_fin_certificado').val('');
-        $('#txt_ruta_certificados_medicos').val('');
         $('#txt_certificados_medicos_id').val('');
-        $('#txt_ruta_guardada_certificados_medicos').val('');
-        //Limpiar validaciones
+        $('#th_cer_motivo_certificado').val('');
+        $('#th_cer_alergia_req').prop('checked', false);
+        $('#th_cer_tratamiento_req').prop('checked', false);
+        $('#th_cer_ruta_certficado').val('');
+        $('#txt_ruta_guardada_medico').val('');
+        // Limpiar validaciones
         $("#form_certificados_medicos").validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
-        //Cambiar texto
+        // Cambiar texto
         $('#lbl_titulo_certificados_medicos').html('Agregar Certificado Médico');
-        $('#btn_guardar_certificados_medicos').html('<i class="bx bx-save"></i>Agregar');
+        $('#btn_guardar_certificados_medicos').html('<i class="bx bx-save"></i> Agregar');
         $('#btn_eliminar_certificado_medico').hide();
     }
 
@@ -230,6 +212,7 @@
                 <div class="modal-body">
 
                     <input type="hidden" name="txt_certificados_medicos_id" id="txt_certificados_medicos_id">
+                    <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
 
                     <div class="mb-4">
@@ -344,14 +327,13 @@
         //agregar_asterisco_campo_obligatorio('txt_med_ins_medico');
         //agregar_asterisco_campo_obligatorio('txt_med_fecha_inicio_certificado');
         // agregar_asterisco_campo_obligatorio('txt_med_fecha_fin_certificado');
-        agregar_asterisco_campo_obligatorio('txt_ruta_certificados_medicos');
         //Validación de campos certificados medicos
         $("#form_certificados_medicos").validate({
             rules: {
                 txt_med_motivo_certificado: {
                     required: true,
                 },
-                txt_med_nom_medico: {
+                /*txt_med_nom_medico: {
                     required: true,
                 },
                 txt_med_ins_medico: {
@@ -359,13 +341,11 @@
                 },
                 txt_med_fecha_inicio_certificado: {
                     required: true,
-                },
+                },*/
                 // txt_med_fecha_fin_certificado: {
                 //     required: true,
                 // },
-                txt_ruta_certificados_medicos: {
-                    required: true,
-                }
+
 
             },
 
@@ -373,21 +353,7 @@
                 txt_med_motivo_certificado: {
                     required: "Por favor, escriba el motivo del certificado médico",
                 },
-                txt_med_nom_medico: {
-                    required: "Por favor, escriba el nombre del médico tratante",
-                },
-                txt_med_ins_medico: {
-                    required: "Por favor, escriba el nombre de la institución médica",
-                },
-                txt_med_fecha_inicio_certificado: {
-                    required: "Por favor, seleccione la fecha de inicio del certificado médico",
-                },
-                txt_med_fecha_fin_certificado: {
-                    required: "Por favor, seleccione la fecha de fin del certificado médico",
-                },
-                txt_ruta_certificados_medicos: {
-                    required: "Por favor, seleccione el certificado médico",
-                }
+
             },
 
             highlight: function(element) {

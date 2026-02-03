@@ -18,15 +18,7 @@ class th_pos_certificados_medicosM extends BaseModel
         'th_cer_fecha_creacion',
         'th_cer_fecha_modificacion',
         'th_cer_estado',
-       
+        'th_cer_tratamiento_req',
+        'th_cer_alergia_req',
     ];
-
-    // function select_all(){
-    //     $sql = "SELECT * FROM th_pos_idiomas";
-
-    //     $datos = $this->db->datos($sql);
-    //     return $datos;
-
-    // }
 }
-
