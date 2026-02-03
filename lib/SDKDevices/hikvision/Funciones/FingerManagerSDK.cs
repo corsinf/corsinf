@@ -532,7 +532,7 @@ namespace CorsinfSDKHik.Funciones
                 szInfoBuf = szInfoBuf + "SavePath:" + path;
             }
 
-            msj += "\"hora\":\"" + DateTime.Now.ToString("HH:mm:ss") + "\",";
+            msj += "\"hora\":\"" + DateTime.Now.ToString("HH:mm") + "\",";
             msj += "\"fecha\":\"" + DateTime.Now.ToString() + "\",}]";
             //xmlDoc.LoadXml(receivedXml); // Cargar el XML en XmlDocument
             //string jsonText = JsonConvert.SerializeXmlNode(xmlDoc); // Convertir a JSON             
