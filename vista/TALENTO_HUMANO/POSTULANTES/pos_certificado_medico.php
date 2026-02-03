@@ -201,7 +201,7 @@
             <div class="modal-header bg-dark bg-opacity-10">
                 <div>
                     <h5 class="modal-title fw-bold text-primary" id="lbl_titulo_certificados_medicos">
-                        <i class='bx bx-pulse me-2'></i>Antecedentes Médicos
+                        <i class='bx bx-pulse me-2'></i>Enfermedades Crónicas
                     </h5>
                     <small class="text-muted">Registra información relevante sobre tu salud.</small>
                 </div>

@@ -124,7 +124,7 @@
                  <div class="mb-2">
                      <div class="row">
                          <div class="col-7 d-flex align-items-center">
-                             <h6 class="mb-0 fw-bold text-primary">Antecedentes Médicos:
+                             <h6 class="mb-0 fw-bold text-primary">Enfermedades Crónicas:
                              </h6>
                          </div>
                          <div

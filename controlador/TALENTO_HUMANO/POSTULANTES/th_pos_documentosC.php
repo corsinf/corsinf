@@ -106,6 +106,10 @@ class th_pos_documentosC
 
     function insertar_editar($file, $parametros)
     {
+
+        /*if ($parametros['txt_postulante_cedula'] == "") {
+            return -3;
+        }*/
         $datos = array(
             array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
             array('campo' => 'id_documento', 'dato' => $parametros['ddl_tipo_documento_identidad']),
