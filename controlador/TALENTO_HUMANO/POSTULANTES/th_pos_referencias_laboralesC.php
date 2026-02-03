@@ -104,6 +104,10 @@ class th_pos_referencias_laboralesC
         // exit();
         // die();
 
+        if ($parametros['txt_postulante_cedula'] == "") {
+            return -5;
+        }
+
         $datos = array(
             array('campo' => 'th_refl_nombre_referencia', 'dato' => $parametros['txt_nombre_referencia']),
             array('campo' => 'th_refl_telefono_referencia', 'dato' => $parametros['txt_telefono_referencia']),

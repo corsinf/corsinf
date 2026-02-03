@@ -6,6 +6,8 @@
         $('#ddl_discapacidad').on('change', function() {
             let id_discapacidad = $(this).val();
             cargar_discapacidad_escalas(id_discapacidad);
+            $('#ddl_discapacidad_escala').val('').trigger('change.select2');
+
         });
     });
 

@@ -110,6 +110,10 @@ class th_pos_certificados_medicosC
 
     function insertar_editar($file, $parametros)
     {
+
+        if ($parametros['txt_postulante_cedula'] == "") {
+            return -5;
+        }
         // Checkbox: si no viene en POST vale null, así que lo convertimos a 1 o 0
         $alergia = isset($parametros['th_cer_alergia_req']) ? 1 : 0;
         $tratamiento = isset($parametros['th_cer_tratamiento_req']) ? 1 : 0;
