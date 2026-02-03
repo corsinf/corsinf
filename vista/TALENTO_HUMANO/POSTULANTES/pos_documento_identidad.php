@@ -111,7 +111,25 @@
                         cargar_datos_documentos_identidad('<?= $id_postulante ?>');
                         limpiar_parametros_documentos_identidad();
                         $('#modal_agregar_documentos_identidad').modal('hide');
-                    }  
+                    } else if (response == -5) {
+                        Swal.fire({
+                            title: 'Cédula Requerida',
+                            text: 'Para registrar documentos, primero debe ingresar su número de cédula en la sección de Información Personal.',
+                            icon: 'warning',
+                            allowOutsideClick: false,
+                            showConfirmButton: true,
+                            confirmButtonText: 'Ir a Información Personal',
+                            confirmButtonColor: '#0d6efd'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $('#modal_agregar_documentos_identidad').modal('hide');
+                                $('.nav-link:contains("Información Personal")').tab('show');
+                                setTimeout(() => {
+                                    $('input[name*="cedula"], #txt_cedula').focus();
+                                }, 300);
+                            }
+                        });
+                    }
                 }
             });
         }

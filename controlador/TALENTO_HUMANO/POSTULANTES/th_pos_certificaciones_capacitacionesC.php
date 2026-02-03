@@ -123,6 +123,9 @@ HTML;
 
     function insertar_editar($file, $parametros)
     {
+        if ($parametros['txt_postulante_cedula'] == "") {
+            return -5;
+        }
 
         $fecha_hasta = $parametros['txt_fecha_final_capacitacion'];
 
