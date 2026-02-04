@@ -251,7 +251,7 @@
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-light text-muted"><i class='bx bx-hash'></i></span>
                                 <input type="text"
-                                    class="form-control form-control-sm"
+                                    class="form-control form-control-sm no_caracteres"
                                     name="txt_numero_cuenta"
                                     id="txt_numero_cuenta"
                                     maxlength="100"
