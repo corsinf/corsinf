@@ -385,7 +385,7 @@
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label for="ddl_seccion" class="form-label fw-semibold fs-7">Sección / Departamento </label>
+                            <label for="ddl_seccion" class="form-label fw-semibold fs-7">Sección / Área </label>
                             <select class="form-select select2-validation" id="ddl_seccion" name="ddl_seccion" required style="width: 100%;">
                                 <option selected disabled value="">-- Seleccione una Sección --</option>
                             </select>
