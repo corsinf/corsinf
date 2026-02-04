@@ -165,11 +165,17 @@ class th_postulantesM extends BaseModel
             pos.id_orientacion_sexual,
             pos.id_identidad_genero,
             pos.id_religion,
+            pos.id_origen_indigena,
 
             et.descripcion                       AS descripcion_etnia,
             ori_sex.descripcion                  AS descripcion_orientacion_sexual,
             rel.descripcion                      AS descripcion_religion,
             ide_gen.descripcion                  AS descripcion_identidad_genero,
+            tip_sex.descripcion                  AS descripcion_sexo,
+            est_civ.descripcion                  AS descripcion_estado_civil,
+            tip_ori_ind.descripcion              AS descripcion_origen_indigena,
+            pa.nacionalidad                      AS descripcion_nacionalidad,
+            tip_sag.descripcion                  AS descripcion_tipo_sangre,
 
             RTRIM(
                 CONCAT(
@@ -198,6 +204,16 @@ class th_postulantesM extends BaseModel
             ON pos.id_religion = rel.id_religion
         LEFT JOIN th_cat_identidad_genero ide_gen
             ON pos.id_identidad_genero = ide_gen.id_identidad_genero
+        LEFT JOIN th_cat_tipo_sexo tip_sex
+            ON pos.th_pos_sexo = tip_sex.id_sexo
+        LEFT JOIN th_cat_tipo_estado_civil est_civ
+            ON pos.th_pos_estado_civil = est_civ.id_tipo_estado_civil
+        LEFT JOIN th_cat_tipo_origen_indigena tip_ori_ind
+            ON pos.id_origen_indigena = tip_ori_ind.id_origen_indigena
+        LEFT JOIN th_cat_pais pa
+            ON pos.th_pos_nacionalidad = pa.id_pais
+        LEFT JOIN th_cat_tipo_sangre tip_sag
+            ON pos.th_pos_tipo_sangre = tip_sag.id_tipo_sangre
         WHERE {$condicion}
         ORDER BY pos.th_pos_primer_apellido, pos.th_pos_primer_nombre";
 

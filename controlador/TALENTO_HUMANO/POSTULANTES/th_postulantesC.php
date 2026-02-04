@@ -106,6 +106,7 @@ class th_postulantesC
             array('campo' => 'id_religion', 'dato' => !empty($parametros['ddl_religion']) ? $parametros['ddl_religion'] : null),
             array('campo' => 'id_orientacion_sexual', 'dato' => !empty($parametros['ddl_orientacion_sexual']) ? $parametros['ddl_orientacion_sexual'] : null),
             array('campo' => 'id_identidad_genero', 'dato' => !empty($parametros['ddl_identidad_genero']) ? $parametros['ddl_identidad_genero'] : null),
+            array('campo' => 'id_origen_indigena', 'dato' => !empty($parametros['ddl_origen_indigena']) ? $parametros['ddl_origen_indigena'] : null),
             array('campo' => 'th_pos_correo_personal_1', 'dato' => !empty($parametros['txt_per_correo_personal_1']) ? $parametros['txt_per_correo_personal_1'] : null),
             array('campo' => 'th_pos_correo_personal_2', 'dato' => !empty($parametros['txt_per_correo_personal_2']) ? $parametros['txt_per_correo_personal_2'] : null),
         );
