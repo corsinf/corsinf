@@ -17,5 +17,6 @@ class th_pos_referencias_laboralesM extends BaseModel
         'th_refl_fecha_modificacion',
         'th_refl_correo',
         'th_refl_nombre_empresa',
+        'th_expl_id',
     ];
 }

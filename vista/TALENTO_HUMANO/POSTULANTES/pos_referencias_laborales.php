@@ -33,6 +33,16 @@
                 $('#txt_ruta_guardada_carta_recomendacion').val(response[0].th_refl_carta_recomendacion);
                 $('#txt_referencia_correo').val(response[0].th_refl_correo);
                 $('#txt_referencia_nombre_empresa').val(response[0].th_refl_nombre_empresa);
+
+
+
+                if (response[0].th_expl_id != null) {
+                    $('#txt_referencia_nombre_empresa').prop('readonly', true);
+                    $('#txt_referencia_experiencia_id').val(response[0].th_expl_id);
+                } else {
+                    $('#txt_referencia_nombre_empresa').prop('readonly', false);
+                    $('#txt_referencia_experiencia_id').val('');
+                }
             }
         });
     }
@@ -88,6 +98,7 @@
                         });
                     } else if (response == 1) {
                         Swal.fire('', 'Operación realizada con éxito.', 'success');
+                        cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
                         cargar_datos_referencias_laborales('<?= $id_postulante ?>');
                         limpiar_parametros_referencias_laborales();
                         $('#modal_agregar_referencia_laboral').modal('hide');
@@ -118,6 +129,9 @@
     //Funcion para editar el registro de referencias laborales
     function abrir_modal_referencias_laborales(id) {
         cargar_datos_modal_referencias_laborales(id);
+
+
+
         $('#modal_agregar_referencia_laboral').modal('show');
         $('#lbl_titulo_referencia_laboral').html('Editar Referencia Laboral');
         $('#btn_guardar_referencia_laboral').html('<i class="bx bx-save"></i>Editar');
@@ -153,6 +167,7 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
+                    cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
                     cargar_datos_referencias_laborales('<?= $id_postulante ?>');
                     limpiar_parametros_referencias_laborales();
                     $('#modal_agregar_referencia_laboral').modal('hide');
@@ -170,6 +185,7 @@
         $('#txt_ruta_guardada_carta_recomendacion').val('');
         $('#txt_referencia_correo').val('');
         $('#txt_referencia_nombre_empresa').val('');
+        $('#txt_referencia_experiencia_id').val('');
         //Limpiar validaciones
         $("#form_referencias_laborales").validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
@@ -213,6 +229,7 @@
                     <input type="hidden" name="txt_referencias_laborales_id" id="txt_referencias_laborales_id">
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
+                    <input type="hidden" name="txt_referencia_experiencia_id" id="txt_referencia_experiencia_id">
 
                     <div class="row mb-3">
                         <div class="col-md-12">

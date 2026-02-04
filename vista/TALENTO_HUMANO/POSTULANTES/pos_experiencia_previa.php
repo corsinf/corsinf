@@ -109,7 +109,26 @@
 
             success: function(response) {
                 if (response == 1) {
-                    Swal.fire('', 'Operacion realizada con exito.', 'success');
+                    Swal.fire({
+                        title: '¡Excelente!',
+                        html: `
+            <div class="text-center">
+                <p class="mb-3">Operación realizada con éxito.</p>
+                <div class="p-3 rounded-3" style="background-color: #f0fdf4; border: 1px dashed #22c55e;">
+                    <i class="bx bx-info-circle text-success fs-4 mb-2"></i>
+                    <p class="small text-muted mb-0">
+                        Recuerda que puedes gestionar todas tus <b>referencias laborales</b> directamente desde cada tarjeta de experiencia usando el botón:
+                    </p>
+                    <span class="badge bg-success mt-2" style="font-size: 0.65rem; letter-spacing: 0.5px;">
+                        AGREGAR REFERENCIA
+                    </span>
+                </div>
+            </div>
+        `,
+                        icon: 'success',
+                        confirmButtonText: 'Entendido',
+                        confirmButtonColor: '#198754'
+                    });
                     cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
                     limpiar_campos_experiencia_laboral_modal();
                     $('#modal_agregar_experiencia').modal('hide');
@@ -252,7 +271,27 @@
 <script>
     $(document).ready(function() {
         cargar_datos_info_adicional(<?= $id_persona ?>);
+
+
     });
+
+    function modal_referencia_experiencia(th_expl_id, empresa = '') {
+
+        $('#txt_referencia_experiencia_id').val(th_expl_id);
+        $('#txt_referencia_nombre_empresa').val(empresa).prop('readonly', true);
+        $('#modal_agregar_referencia_laboral').modal('show');
+
+    }
+
+
+    function abrir_modal_experiencia_referencias_laborales(th_ref_id, th_expl_id) {
+
+        $('#txt_referencia_experiencia_id').val(th_expl_id);
+        abrir_modal_referencias_laborales(th_ref_id);
+        $('#modal_agregar_referencia_laboral').modal('show');
+
+    }
+
 
     function cargar_datos_info_adicional(id) {
         $.ajax({
@@ -269,13 +308,11 @@
     }
 </script>
 
-<!--
-<div id="pnl_informacion_adicional">
-</div>
--->
+
 
 <div id="pnl_experiencia_laboral">
 </div>
+
 
 <!-- Modal para agregar experiencia laboral-->
 <div class="modal fade" id="modal_agregar_experiencia" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">

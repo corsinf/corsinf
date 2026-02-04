@@ -59,7 +59,9 @@ class th_pos_referencias_laboralesC
                                             <h6 class="fw-bold text-dark cert-title mb-1">
                                                 {$value['th_refl_nombre_referencia']}
                                             </h6>
-                                            
+                                               <p class="cert-doctor m-0">
+                                                <i class="bx bx-buildings me-1"></i>{$value['th_refl_nombre_empresa']}
+                                            </p>
                                             <p class="cert-doctor m-0">
                                                 <i class="bx bx-phone me-1"></i>{$value['th_refl_telefono_referencia']}
                                             </p>
@@ -115,6 +117,7 @@ class th_pos_referencias_laboralesC
             array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
             array('campo' => 'th_refl_correo', 'dato' => $parametros['txt_referencia_correo']),
             array('campo' => 'th_refl_nombre_empresa', 'dato' => $parametros['txt_referencia_nombre_empresa']),
+            array('campo' => 'th_expl_id', 'dato' => !empty($parametros['txt_referencia_experiencia_id']) ? $parametros['txt_referencia_experiencia_id'] : null),
         );
 
         $id_referencias_laboral = $parametros['txt_referencias_laborales_id'];

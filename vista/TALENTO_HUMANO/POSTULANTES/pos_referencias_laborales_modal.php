@@ -19,6 +19,7 @@
                     <input type="hidden" name="txt_referencias_laborales_id" id="txt_referencias_laborales_id">
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
+                    <input type="hidden" name="txt_referencia_experiencia_id" id="txt_referencia_experiencia_id">
 
                     <div class="row mb-3">
                         <div class="col-md-12">
@@ -85,22 +86,3 @@
     </div>
 </div>
 
-
-// eliminar cuando reutilices
-<script>
-    function abrir_modal_ejemplo() {
-
-        document.activeElement?.blur();
-
-        $('#modal_agregar_experiencia').one('hidden.bs.modal', function() {
-            $('#modal_agregar_referencia_laboral').modal({
-                backdrop: 'static',
-                keyboard: false
-            }).modal('show');
-        });
-
-        $('#modal_agregar_experiencia').modal('hide');
-        // $('#modal_agregar_referencia_laboral').modal('show');
-
-    }
-</script>

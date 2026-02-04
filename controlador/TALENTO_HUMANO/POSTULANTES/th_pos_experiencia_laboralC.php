@@ -1,6 +1,7 @@
 <?php
 require_once(dirname(__DIR__, 3)  . '/modelo/TALENTO_HUMANO/POSTULANTES/th_pos_experiencia_laboralM.php');
 require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/th_per_informacion_adicionalM.php');
+require_once(dirname(__DIR__, 3)  . '/modelo/TALENTO_HUMANO/POSTULANTES/th_pos_referencias_laboralesM.php');
 
 $controlador = new th_pos_experiencia_laboralC();
 
@@ -25,11 +26,13 @@ class th_pos_experiencia_laboralC
 {
     private $modelo;
     private $th_per_informacion_adicional;
+    private $th_pos_referencias_laborales;
 
     function __construct()
     {
         $this->modelo = new th_pos_experiencia_laboralM();
         $this->th_per_informacion_adicional = new th_per_informacion_adicionalM();
+        $this->th_pos_referencias_laborales = new th_pos_referencias_laboralesM();
     }
 
     //Funcion para listar la experiencia previa del postulante
@@ -47,7 +50,39 @@ class th_pos_experiencia_laboralC
             $texto = '<div class="row g-3">';
 
             foreach ($datos as $key => $value) {
-                // Formato de fechas
+                // Buscamos las referencias asociadas
+                $referencias = $this->th_pos_referencias_laborales
+                    ->where('th_expl_id', $value['_id'])
+                    ->where('th_refl_estado', 1)
+                    ->listar();
+
+                $html_referencias = "";
+
+                // SI EXISTEN REFERENCIAS, SOLO TOMAMOS LA PRIMERA [0]
+                if (!empty($referencias)) {
+                    $ref = $referencias[0]; // Accedemos solo al primer elemento
+
+                    $html_referencias = <<<HTML
+                <div class="d-flex align-items-center justify-content-between bg-white border rounded-2 p-2 mb-1 shadow-xs">
+                    <div style="line-height: 1.1;">
+                        <div class="fw-bold text-primary" style="font-size: 0.65rem;">
+                            <i class="bx bx-user me-1"></i>{$ref['th_refl_nombre_referencia']}
+                        </div>
+                        <div class="text-muted" style="font-size: 0.6rem;">
+                            <i class="bx bx-phone me-1"></i>{$ref['th_refl_telefono_referencia']}
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-link text-info p-0" 
+                onclick="abrir_modal_experiencia_referencias_laborales('{$ref['_id']}','{$value['_id']}');" 
+                title="Ver Detalles">
+            <i class="bx bx-pencil" style="font-size: 1rem;"></i>
+        </button>
+                </div>
+HTML;
+                } else {
+                    $html_referencias = '<p class="text-muted mb-0 text-center" style="font-size: 0.65rem; font-style: italic;">Sin referencias</p>';
+                }
+
                 $fecha_inicio_experiencia = date('d/m/Y', strtotime($value['th_expl_fecha_inicio_experiencia']));
                 $fecha_fin_experiencia = $value['th_expl_cbx_fecha_fin_experiencia'] == 1
                     ? '<span class="fw-bold text-success">Actualidad</span>'
@@ -58,7 +93,6 @@ class th_pos_experiencia_laboralC
                 $texto .= <<<HTML
             <div class="col-md-6 mb-col">
                 <div class="cert-card p-3 h-100 position-relative shadow-sm">
-                    
                     <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
                             onclick="abrir_modal_experiencia_laboral('{$value['_id']}');" 
                             title="Editar Experiencia">
@@ -68,45 +102,21 @@ class th_pos_experiencia_laboralC
                     <div class="d-flex flex-column h-100">
                         <div class="mb-2">
                             <span class="cert-badge mb-1" style="background-color: #e8f5e9; color: #2e7d32;">Experiencia Laboral</span>
-                            
-                            <h6 class="fw-bold text-dark cert-title mb-1">
-                                {$value['th_expl_nombre_empresa']}
-                            </h6>
-                            
+                            <h6 class="fw-bold text-dark cert-title mb-1">{$value['th_expl_nombre_empresa']}</h6>
                             <p class="cert-doctor mb-2">
                                 <i class="bx bx-briefcase-alt-2 me-1"></i><strong>{$value['th_expl_cargos_ocupados']}</strong>
                             </p>
-
-                            <div class="mb-2">
-                                <p class="text-dark fw-bold mb-0" style="font-size: 0.72rem;">
-                                    <i class="bx bx-list-check me-1"></i>Responsabilidades:
-                                </p>
-                                <p class="text-muted mb-0" style="font-size: 0.7rem; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                                    {$value['th_expl_responsabilidades']}
-                                </p>
-                            </div>
-
-                            <div class="mb-2">
-                                <p class="text-dark fw-bold mb-0" style="font-size: 0.72rem;">
-                                    <i class="bx bx-trophy me-1"></i>Logros obtenidos:
-                                </p>
-                                <p class="text-muted mb-0" style="font-size: 0.7rem; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                                    {$value['th_expl_logros']}
-                                </p>
-                            </div>
                         </div>
 
-                        <div class="mt-auto pt-2">
-                            <div class="d-flex align-items-center justify-content-between p-2" 
+                        <div class="mt-auto">
+                            <div class="d-flex align-items-center justify-content-between p-2 mb-2" 
                                  style="background: rgba(25, 135, 84, 0.05); border-radius: 8px; border: 1px dashed rgba(25, 135, 84, 0.2);">
-                                
                                 <div class="cert-date-range">
                                     <div class="cert-label-small" style="color: #198754;">Periodo</div>
                                     <span class="text-dark" style="font-size: 0.65rem;">
                                         <i class="bx bx-calendar me-1"></i>{$fecha_inicio_experiencia} — {$fecha_fin_experiencia}
                                     </span>
                                 </div>
-
                                 <div class="text-end">
                                     <div class="cert-label-small" style="color: #198754;">Sueldo</div>
                                     <span class="fw-bold" style="font-size: 0.9rem; color: #198754;">
@@ -114,13 +124,27 @@ class th_pos_experiencia_laboralC
                                     </span>
                                 </div>
                             </div>
+
+                            <div class="mb-2 p-2 rounded-2" style="background-color: #f8f9fa; border: 1px solid #edf2f7;">
+                                <label class="fw-bold text-uppercase text-muted mb-1 d-block" style="font-size: 0.55rem; letter-spacing: 0.5px;">Referencia Principal</label>
+                                <div id="pnl_referencias_laborales_{$value['_id']}">
+                                    {$html_referencias}
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <button onclick="modal_referencia_experiencia('{$value['_id']}','{$value['th_expl_nombre_empresa']}');" 
+                                        class="btn btn-success btn-xs py-1 px-3 btn-cert-action" 
+                                        style="font-size: 0.65rem; letter-spacing: 0.5px;">
+                                    AGREGAR REFERENCIA
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 HTML;
             }
-
             $texto .= '</div>';
         }
         return $texto;
@@ -139,6 +163,7 @@ HTML;
 
     function insertar_editar($parametros)
     {
+
         $datos = array(
             array('campo' => 'th_expl_nombre_empresa', 'dato' => $parametros['txt_nombre_empresa']),
             array('campo' => 'th_expl_cargos_ocupados', 'dato' => $parametros['txt_cargos_ocupados']),
