@@ -99,7 +99,7 @@
     function abrir_modal_certificados_medicos(id) {
         cargar_datos_modal_certificados_medicos(id);
         $('#modal_agregar_certificados_medicos').modal('show');
-        $('#lbl_titulo_certificados_medicos').html('Editar Certificado Médico');
+        $('#lbl_titulo_certificados_medicos').html('Editar Enfermedades Crónicas');
         $('#btn_guardar_certificados_medicos').html('<i class="bx bx-save"></i>Editar');
         $('#btn_eliminar_certificado_medico').show();
     }
@@ -152,7 +152,7 @@
         $("#form_certificados_medicos").validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
         // Cambiar texto
-        $('#lbl_titulo_certificados_medicos').html('Agregar Certificado Médico');
+        $('#lbl_titulo_certificados_medicos').html('Agregar Enfermedades Crónicas');
         $('#btn_guardar_certificados_medicos').html('<i class="bx bx-save"></i> Agregar');
         $('#btn_eliminar_certificado_medico').hide();
     }
@@ -369,7 +369,7 @@
 
             messages: {
                 txt_med_motivo_certificado: {
-                    required: "Por favor, escriba el motivo del certificado médico",
+                    required: "Por favor, escriba el motivo del Enfermedades Crónicas",
                 },
 
             },
