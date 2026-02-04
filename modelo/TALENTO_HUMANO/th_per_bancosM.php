@@ -16,6 +16,7 @@ class th_per_bancosM extends BaseModel
         'th_ban_estado AS estado',
         'th_ban_fecha_creacion AS fecha_creacion',
         'th_ban_fecha_modificacion AS fecha_modificacion',
+        'id_forma_pago',
     ];
 
 
@@ -29,13 +30,17 @@ class th_per_bancosM extends BaseModel
                 pb.th_ban_numero_cuenta,
                 pb.es_principal,
                 pb.th_ban_fecha_modificacion,
+                pb.id_forma_pago,
                 b.descripcion AS banco_descripcion,
-                tc.descripcion AS tipo_cuenta_descripcion
+                tc.descripcion AS tipo_cuenta_descripcion,
+                for_pag.descripcion AS forma_pago_descripcion
             FROM th_per_bancos pb
             LEFT JOIN th_cat_bancos b 
                 ON pb.id_banco = b.id_banco
             LEFT JOIN th_cat_tipo_cuenta_banco tc 
                 ON pb.id_tipo_cuenta = tc.id_tipo_cuenta
+            LEFT JOIN th_cat_tipo_forma_pago for_pag 
+                ON pb.id_forma_pago = for_pag.id_forma_pago
             WHERE pb.th_ban_estado = 1 ";
 
         // Filtro por ID específico de registro de banco

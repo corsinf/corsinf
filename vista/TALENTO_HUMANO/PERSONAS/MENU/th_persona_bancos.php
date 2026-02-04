@@ -12,6 +12,9 @@
 
         let url_tipo_cuenta_bancosC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_tipo_cuenta_bancoC.php?buscar=true';
         cargar_select2_url('ddl_tipo_cuenta', url_tipo_cuenta_bancosC, '');
+
+        let url_forma_pagoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_tipo_forma_pagoC.php?buscar=true';
+        cargar_select2_url('ddl_forma_pago', url_forma_pagoC, '');
     }
 
     function cargar_datos_bancos(id) {
@@ -50,6 +53,12 @@
                 $('#ddl_tipo_cuenta').append($('<option>', {
                     value: datos.id_tipo_cuenta,
                     text: datos.tipo_cuenta_descripcion,
+                    selected: true
+                }));
+
+                $('#ddl_forma_pago').append($('<option>', {
+                    value: datos.id_forma_pago,
+                    text: datos.forma_pago_descripcion,
                     selected: true
                 }));
 
@@ -194,6 +203,7 @@
         // Limpiar Selects (vaciamos y disparamos el cambio)
         $('#ddl_bancos').val(null).trigger('change');
         $('#ddl_tipo_cuenta').val(null).trigger('change');
+        $('#ddl_forma_pago').val(null).trigger('change');
 
         // Desmarcar el checkbox de Principal
         $('#cbx_es_principal').prop('checked', false);
@@ -259,7 +269,16 @@
                                     oninput="texto_mayusculas(this);">
                             </div>
                         </div>
-
+                        <div class="col-md-4">
+                            <label for="ddl_forma_pago" class="form-label fw-semibold fs-7">Forma de pago </label>
+                            <div class="input-group input-group-sm">
+                                <select class="form-select select2-validation" id="ddl_forma_pago" name="ddl_forma_pago" required>
+                                </select>
+                            </div>
+                            <label class="error" style="display: none;" for="ddl_forma_pago"></label>
+                        </div>
+                    </div>
+                    <div class="row mb-col mb-3">
                         <div class="col-md-4">
                             <div class="p-2 border rounded bg-light bg-opacity-50">
                                 <label class="form-label fw-semibold fs-7 mb-1 d-block text-center">¿Es Principal? </label>

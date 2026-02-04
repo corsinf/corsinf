@@ -44,6 +44,7 @@ class th_per_bancosC
                 $banco = !empty($value['banco_descripcion']) ? $value['banco_descripcion'] : 'Banco no especificado';
                 $tipo_cuenta = !empty($value['tipo_cuenta_descripcion']) ? $value['tipo_cuenta_descripcion'] : 'N/A';
                 $numero_cuenta = !empty($value['th_ban_numero_cuenta']) ? $value['th_ban_numero_cuenta'] : 'Sin número';
+                $forma_pago = !empty($value['forma_pago_descripcion']) ? $value['forma_pago_descripcion'] : 'Sin Forma Pago';
 
                 // Estilo condicional para el registro principal
                 $es_principal = ($value['es_principal'] == 1);
@@ -82,6 +83,9 @@ class th_per_bancosC
 
                                         <p class="m-0 text-muted" style="font-size: 0.75rem;">
                                             <i class="bx bx-wallet me-1"></i>Tipo: <strong>{$tipo_cuenta}</strong>
+                                        </p>
+                                        <p class="m-0 text-muted" style="font-size: 0.75rem;">
+                                            <i class="bx bx-wallet me-1"></i>Forma de Pago: <strong>{$forma_pago}</strong>
                                         </p>
                                     </div>
 
@@ -126,6 +130,7 @@ class th_per_bancosC
             array('campo' => 'id_banco', 'dato' => $parametros['ddl_bancos']),
             array('campo' => 'th_per_id', 'dato' => $parametros['per_id']),
             array('campo' => 'id_tipo_cuenta', 'dato' => $parametros['ddl_tipo_cuenta']),
+            array('campo' => 'id_forma_pago', 'dato' => $parametros['ddl_forma_pago']),
             array('campo' => 'th_ban_numero_cuenta', 'dato' => strtoupper($parametros['txt_numero_cuenta'])),
             array('campo' => 'es_principal', 'dato' => $parametros['cbx_es_principal']),
             array('campo' => 'th_ban_fecha_modificacion', 'dato' => date("Y-m-d H:i:s")),
