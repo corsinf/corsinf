@@ -90,6 +90,7 @@ class th_postulantesC
             array('campo' => 'th_pos_segundo_apellido', 'dato' => $parametros['txt_segundo_apellido']),
             array('campo' => 'th_pos_cedula', 'dato' => $parametros['txt_cedula']),
             array('campo' => 'th_pos_sexo', 'dato' => $parametros['ddl_sexo']),
+            array('campo' => 'th_pos_tipo_sangre', 'dato' => $parametros['ddl_tipo_sangre']),
             array('campo' => 'th_prov_id', 'dato' => $parametros['ddl_provincias']),
             array('campo' => 'th_ciu_id', 'dato' => $parametros['ddl_ciudad']),
             array('campo' => 'th_parr_id', 'dato' => $parametros['ddl_parroquia']),
