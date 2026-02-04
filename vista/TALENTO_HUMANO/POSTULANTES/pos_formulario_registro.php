@@ -29,6 +29,18 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
         url_identidad_generoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_identidad_generoC.php?buscar=true';
         cargar_select2_url('ddl_identidad_genero', url_identidad_generoC);
 
+        url_nacionalidadC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_paisC.php?buscar_nacionalidad=true';
+        cargar_select2_url('ddl_nacionalidad', url_nacionalidadC, '-- Seleccione --', null, 2);
+
+        url_tipo_sangreC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_tipo_sangreC.php?buscar=true';
+        cargar_select2_url('ddl_tipo_sangre', url_tipo_sangreC);
+
+        url_tipo_estado_civilC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_tipo_estado_civilC.php?buscar=true';
+        cargar_select2_url('ddl_estado_civil', url_tipo_estado_civilC);
+
+        url_tipo_sexoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_tipo_sexoC.php?buscar=true';
+        cargar_select2_url('ddl_sexo', url_tipo_sexoC);
+
     }
 
 
@@ -59,10 +71,10 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
                 $('#txt_primer_apellido').val(response[0].th_pos_primer_apellido);
                 $('#txt_segundo_apellido').val(response[0].th_pos_segundo_apellido);
                 $('#txt_fecha_nacimiento').val(response[0].th_pos_fecha_nacimiento);
-                $('#ddl_nacionalidad').val(response[0].th_pos_nacionalidad);
+                //$('#ddl_nacionalidad').val(response[0].th_pos_nacionalidad);
                 $('#txt_cedula').val(response[0].th_pos_cedula);
-                $('#ddl_estado_civil').val(response[0].th_pos_estado_civil);
-                $('#ddl_sexo').val(response[0].th_pos_sexo);
+                //$('#ddl_estado_civil').val(response[0].th_pos_estado_civil);
+                //$('#ddl_sexo').val(response[0].th_pos_sexo);
                 $('#txt_telefono_1').val(response[0].th_pos_telefono_1);
                 $('#txt_telefono_2').val(response[0].th_pos_telefono_2);
                 $('#txt_correo').val(response[0].th_pos_correo);
@@ -98,6 +110,29 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
                 $('#ddl_orientacion_sexual').append($('<option>', {
                     value: response[0].id_orientacion_sexual,
                     text: response[0].descripcion_orientacion_sexual,
+                    selected: true
+                }));
+                $('#ddl_nacionalidad').append($('<option>', {
+                    value: response[0].id_pais,
+                    text: response[0].nacionalidad,
+                    selected: true
+                }));
+
+                $('#ddl_tipo_sangre').append($('<option>', {
+                    value: response[0].id_tipo_sangre,
+                    text: response[0].tipo_sangre,
+                    selected: true
+                }));
+
+                $('#ddl_estado_civil').append($('<option>', {
+                    value: response[0].id_estado_civil,
+                    text: response[0].estado_civil,
+                    selected: true
+                }));
+
+                $('#ddl_sexo').append($('<option>', {
+                    value: response[0].id_sexo,
+                    text: response[0].sexo,
                     selected: true
                 }));
                 $('#txt_per_correo_personal_1').val(response[0].th_pos_correo_personal_1);
@@ -146,6 +181,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
         var ddl_nacionalidad = $('#ddl_nacionalidad').val();
         var txt_cedula = $('#txt_cedula').val();
         var ddl_estado_civil = $('#ddl_estado_civil').val();
+        var ddl_tipo_sangre = $('#ddl_tipo_sangre').val();
         var ddl_sexo = $('#ddl_sexo').val();
         var txt_telefono_1 = $('#txt_telefono_1').val();
         var txt_telefono_2 = $('#txt_telefono_2').val();
@@ -173,6 +209,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
             'txt_cedula': txt_cedula,
             'ddl_estado_civil': ddl_estado_civil,
             'ddl_sexo': ddl_sexo,
+            'ddl_tipo_sangre': ddl_tipo_sangre,
             'txt_telefono_1': txt_telefono_1,
             'txt_telefono_2': txt_telefono_2,
             'txt_correo': txt_correo,
@@ -340,26 +377,27 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
     </div>
 
     <div class="row mb-col">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad </label>
             <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
-                <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
-                <option value="Ecuatoriano">Ecuatoriano</option>
-                <option value="Colombiano">Colombiano</option>
-                <option value="Peruano">Peruano</option>
-                <option value="Venezolano">Venezolano</option>
-                <option value="Paraguayo">Paraguayo</option>
+
             </select>
         </div>
-        <div class="col-md-6">
-            <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil</label>
+        <div class="col-md-4">
+            <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil </label>
             <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
                 <option selected disabled value="">-- Selecciona un Estado Civil --</option>
-                <option value="Soltero">Soltero/a</option>
-                <option value="Casado">Casado/a</option>
-                <option value="Divorciado">Divorciado/a</option>
-                <option value="Viudo">Viudo/a</option>
-                <option value="Union">Unión de hecho</option>
+                <option value="Soltero/a">Soltero/a</option>
+                <option value="Casado/a">Casado/a</option>
+                <option value="Divorciado/a">Divorciado/a</option>
+                <option value="Viudo/a">Viudo/a</option>
+                <option value="Unión de hecho">Unión de hecho</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="ddl_tipo_sangre" class="form-label form-label-sm">Grupo Sanguíneo </label>
+            <select class="form-select form-select-sm" id="ddl_tipo_sangre" name="ddl_tipo_sangre">
+
             </select>
         </div>
 
