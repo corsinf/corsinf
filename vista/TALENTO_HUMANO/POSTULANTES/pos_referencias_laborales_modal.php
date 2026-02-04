@@ -32,7 +32,7 @@
                         </div>
                     </div>
 
-                    <div class="row mb-3">
+                    <div id="pnl_referencia_empresa" class="row mb-3" style="display: none;">
                         <div class="col-md-12">
                             <label for="txt_referencia_nombre_empresa" class="form-label fw-semibold fs-7">Empresa / Institución </label>
                             <div class="input-group input-group-sm">
@@ -85,4 +85,3 @@
         </div>
     </div>
 </div>
-

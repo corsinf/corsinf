@@ -18,6 +18,30 @@
             }
         });
     }
+    //Experiencia Laboral
+    function cargar_datos_experiencia_laboral_referencias(id) {
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_referencias_laboralesC.php?listar_modal_experiencia_referencias=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            // Cambiamos a text para recibir el HTML directo o maneja el JSON adecuadamente
+            dataType: 'json',
+            success: function(response) {
+                // Si el controlador hizo json_encode($texto), 'response' ya es el string
+                if (response) {
+                    $('#pnl_experencia_referencias_laborales').html(response);
+                } else {
+                    $('#pnl_experencia_referencias_laborales').html('<div class="alert alert-warning py-2 fs-7">No se pudo cargar la información.</div>');
+                }
+            },
+            error: function(e) {
+                console.log(e.responseText); // Esto te dirá en consola si hay un error de PHP
+                $('#pnl_experencia_referencias_laborales').html("Error al cargar datos.");
+            }
+        });
+    }
 
     function cargar_datos_modal_experiencia_laboral(id) {
         $.ajax({
@@ -54,6 +78,9 @@
                 $('#txt_logros').val(response[0].th_expl_logros);
                 $('#txt_experiencia_id').val(response[0]._id);
                 $('#txt_sueldo').val(response[0].th_expl_sueldo);
+
+                cargar_datos_experiencia_laboral_referencias(response[0]._id);
+
             }
         });
     }
@@ -129,6 +156,7 @@
                         confirmButtonText: 'Entendido',
                         confirmButtonColor: '#198754'
                     });
+                    cargar_datos_referencias_laborales('<?= $id_postulante ?>');
                     cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
                     limpiar_campos_experiencia_laboral_modal();
                     $('#modal_agregar_experiencia').modal('hide');
@@ -279,7 +307,7 @@
     function modal_referencia_experiencia(th_expl_id, empresa = '') {
 
         $('#txt_referencia_experiencia_id').val(th_expl_id);
-        $('#txt_referencia_nombre_empresa').val(empresa).prop('readonly', true);
+        $('#txt_referencia_nombre_empresa').val('');
         $('#modal_agregar_referencia_laboral').modal('show');
 
     }
@@ -310,7 +338,20 @@
 </script>
 
 
+<style>
+    #scroll_referencias::-webkit-scrollbar {
+        width: 6px;
+    }
 
+    #scroll_referencias::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 10px;
+    }
+
+    #scroll_referencias::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+</style>
 <div id="pnl_experiencia_laboral">
 </div>
 
@@ -400,9 +441,20 @@
                             <div class="form-text text-end text-xs">Máximo 300 caracteres.</div>
                         </div>
                     </div>
-
+                    <div class="row mb-2">
+                        <div class="col-md-12">
+                            <div class="d-flex align-items-center mb-2 border-bottom pb-1">
+                                <i class='bx bx- id-card me-2 text-primary'></i>
+                                <h6 class="text-primary fs-7 mb-0 fw-bold text-uppercase">Referencias de esta Experiencia</h6>
+                            </div>
+                            <div id="pnl_experencia_referencias_laborales" class="bg-white rounded border p-2" style="min-height: 50px;">
+                                <div class="text-center">
+                                    <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
                 <div class="modal-footer bg-light border-top-0 d-flex justify-content-between">
                     <button type="button" style="display: none;" class="btn btn-outline-danger btn-sm" id="btn_eliminar_experiencia" onclick="delete_datos_experiencia_laboral();">
                         <i class="bx bx-trash"></i> Eliminar
