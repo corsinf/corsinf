@@ -393,9 +393,9 @@
 
                         </div>
                         <div class="col-md-6">
-                            <label for="ddl_nomina" class="form-label fw-semibold fs-7">Nómina </label>
+                            <label for="ddl_nomina" class="form-label fw-semibold fs-7">Figura Legal </label>
                             <select class="form-select select2-validation" id="ddl_nomina" name="ddl_nomina" required style="width: 100%;">
-                                <option selected disabled value="">-- Seleccione una Nómina --</option>
+                                <option selected disabled value="">-- Seleccione una Figura Legal --</option>
                             </select>
                             <label class="error" style="display: none;" for="ddl_nomina"></label>
 
