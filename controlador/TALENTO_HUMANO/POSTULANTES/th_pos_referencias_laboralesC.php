@@ -7,6 +7,10 @@ if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id']));
 }
 
+if (isset($_GET['listar_modal_experiencia_referencias'])) {
+    echo json_encode($controlador->listar_modal_experiencia_referencias($_POST['id']));
+}
+
 if (isset($_GET['listar_modal'])) {
     echo json_encode($controlador->listar_modal($_POST['id']));
 }
@@ -30,72 +34,116 @@ class th_pos_referencias_laboralesC
     }
 
     //Funcion para listar la formacion academica del postulante
-    function listar($id)
+    function listar_modal_experiencia_referencias($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)
+        // Buscamos solo las referencias de esta experiencia específica
+        $datos = $this->modelo->where('th_expl_id', $id)
             ->where('th_refl_estado', 1)
             ->orderBy('th_refl_nombre_referencia')
             ->listar();
 
+
         if (empty($datos)) {
-            $texto = '<div class="alert alert-info mb-0">No hay información adicional registrada.</div>';
-        } else {
-            $texto = '<div class="row g-3">';
+            return '<div class="alert alert-info py-2 fs-7 mb-0 text-center">Sin referencias.</div>';
+        }
 
-            foreach ($datos as $key => $value) {
+        $texto = '<div id="scroll_referencias" style="max-height: 200px; overflow-y: auto; padding: 5px;">';
 
-                // VALIDACIÓN DE RUTA DE DOCUMENTO
-                $boton_documento = "";
-                if (!empty($value['th_refl_carta_recomendacion']) && $value['th_refl_carta_recomendacion'] !== 'null') {
-                    $boton_documento = <<<HTML
-                <button onclick="definir_ruta_iframe_referencias_laborales('{$value['th_refl_carta_recomendacion']}');" 
-                        class="btn btn-dark btn-xs py-1 px-3 btn-cert-action">
-                    DOCUMENTO
+        foreach ($datos as $value) {
+            $id_ref = $value['_id']; // ID de la referencia
+
+            $texto .= <<<HTML
+        <div class="d-flex align-items-center justify-content-between bg-white border rounded p-2 mb-2 shadow-sm">
+            <div style="line-height: 1.2;">
+                <div class="fw-bold text-dark" style="font-size: 0.75rem;">
+                    <i class="bx bx-user me-1 text-primary"></i>{$value['th_refl_nombre_referencia']}
+                </div>
+                <div class="text-muted" style="font-size: 0.7rem;">
+                    <i class="bx bx-phone me-1"></i>{$value['th_refl_telefono_referencia']}
+                </div>
+            </div>
+            <div>
+                <button type="button" class="btn btn-link text-info p-0" 
+                        onclick="abrir_modal_referencias_laborales('{$id_ref}');" 
+                        title="Editar Referencia">
+                    <i class="bx bx-pencil" style="font-size: 1rem;"></i>
                 </button>
+            </div>
+        </div>
 HTML;
-                }
+        }
 
-                $texto .= <<<HTML
-            <div class="col-md-6 mb-col">
-                <div class="cert-card p-3 h-100 position-relative shadow-sm">
-                    
-                    <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
-                            onclick="abrir_modal_referencias_laborales('{$value['_id']}')" 
-                            title="Editar Referencia">
-                        <i class="bx bx-pencil"></i>
-                    </button>
+        $texto .= '</div>';
+        return $texto;
+    }
 
-                    <div class="d-flex flex-column h-100">
-                        <div class="mb-2">
-                            <span class="cert-badge mb-1">Referencia</span>
-                            
-                            <h6 class="fw-bold text-dark cert-title mb-1">
-                                {$value['th_refl_nombre_referencia']}
-                            </h6>
-                            <p class="cert-doctor m-0">
-                                <i class="bx bx-buildings me-1"></i>{$value['th_refl_nombre_empresa']}
-                            </p>
-                            <p class="cert-doctor m-0">
-                                <i class="bx bx-phone me-1"></i>{$value['th_refl_telefono_referencia']}
-                            </p>
+    public function listar($id)
+    {
+        // Llamamos a la nueva función del modelo
+        $datos = $this->modelo->listar_referencias_completo($id);
+
+        if (empty($datos)) {
+            return '<div class="alert alert-info mb-0">No hay información adicional registrada.</div>';
+        }
+
+        $texto = '<div class="row g-3">';
+
+        foreach ($datos as $value) {
+
+            // Validación de documento
+            $boton_documento = "";
+            if (!empty($value['th_refl_carta_recomendacion']) && $value['th_refl_carta_recomendacion'] !== 'null') {
+                $boton_documento = <<<HTML
+            <button onclick="definir_ruta_iframe_referencias_laborales('{$value['th_refl_carta_recomendacion']}');" 
+                    class="btn btn-dark btn-xs py-1 px-3 btn-cert-action">
+                DOCUMENTO
+            </button>
+HTML;
+            }
+
+            // Lógica de Badge (Laboral o Personal)
+            $tipo_referencia = (!empty($value['th_expl_id'])) ? 'Laboral' : 'Personal';
+            $badge_class = (!empty($value['th_expl_id'])) ? 'bg-primary' : 'bg-secondary';
+
+            $texto .= <<<HTML
+        <div class="col-md-6 mb-col">
+            <div class="cert-card p-3 h-100 position-relative shadow-sm">
+                
+                <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
+                        onclick="abrir_modal_referencias_laborales('{$value['_id']}')" 
+                        title="Editar Referencia">
+                    <i class="bx bx-pencil"></i>
+                </button>
+
+                <div class="d-flex flex-column h-100">
+                    <div class="mb-2">
+                        <span class="badge {$badge_class} mb-2" style="font-size: 0.6rem;">{$tipo_referencia}</span>
+                        
+                        <h6 class="fw-bold text-dark cert-title mb-1">
+                            {$value['th_refl_nombre_referencia']}
+                        </h6>
+                        <p class="cert-doctor m-0 text-truncate" title="{$value['nombre_empresa_final']}">
+                            <i class="bx bx-buildings me-1"></i>{$value['nombre_empresa_final']}
+                        </p>
+                        <p class="cert-doctor m-0">
+                            <i class="bx bx-phone me-1"></i>{$value['th_refl_telefono_referencia']}
+                        </p>
+                    </div>
+
+                    <div class="mt-auto pt-2 d-flex justify-content-between align-items-end border-top">
+                        <div class="cert-date-range">
+                            <div class="cert-label-small">Contacto</div>
+                            <span class="text-muted" style="font-size: 0.7rem;">{$value['th_refl_correo']}</span>
                         </div>
-
-                        <div class="mt-auto pt-2 d-flex justify-content-between align-items-end">
-                            <div class="cert-date-range">
-                                <div class="cert-label-small">Contacto</div>
-                                <span class="text-muted" style="font-size: 0.7rem;">Laboral / Personal</span>
-                            </div>
-                            
-                            {$boton_documento}
-                        </div>
+                        
+                        {$boton_documento}
                     </div>
                 </div>
             </div>
+        </div>
 HTML;
-            }
-            $texto .= '</div>';
         }
-
+        $texto .= '</div>';
         return $texto;
     }
 

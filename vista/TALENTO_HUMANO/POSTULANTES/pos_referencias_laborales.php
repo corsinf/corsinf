@@ -33,13 +33,12 @@
                 $('#txt_ruta_guardada_carta_recomendacion').val(response[0].th_refl_carta_recomendacion);
                 $('#txt_referencia_correo').val(response[0].th_refl_correo);
                 $('#txt_referencia_nombre_empresa').val(response[0].th_refl_nombre_empresa);
-
-
-
                 if (response[0].th_expl_id != null) {
+                    $('#pnl_referencia_empresa').slideUp();
                     $('#txt_referencia_nombre_empresa').prop('readonly', true);
                     $('#txt_referencia_experiencia_id').val(response[0].th_expl_id);
                 } else {
+                    $('#pnl_referencia_empresa').slideDown();
                     $('#txt_referencia_nombre_empresa').prop('readonly', false);
                     $('#txt_referencia_experiencia_id').val('');
                 }
@@ -124,9 +123,9 @@
     //Funcion para editar el registro de referencias laborales
     function abrir_modal_referencias_laborales(id) {
         cargar_datos_modal_referencias_laborales(id);
-
-
-
+        if ($('#modal_agregar_experiencia').is(':visible')) {
+            $('#modal_agregar_experiencia').modal('hide');
+        }
         $('#modal_agregar_referencia_laboral').modal('show');
         $('#lbl_titulo_referencia_laboral').html('Editar Referencia Laboral');
         $('#btn_guardar_referencia_laboral').html('<i class="bx bx-save"></i>Editar');
@@ -203,7 +202,7 @@
 <div id="pnl_referencias_laborales">
 </div>
 
-<!-- Modal para agregar referencias laborales-->
+<!-- Modal para agregar referencias laborales
 <div class="modal fade" id="modal_agregar_referencia_laboral" tabindex="-1" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow-lg">
@@ -237,7 +236,7 @@
                         </div>
                     </div>
 
-                    <div class="row mb-3">
+                    <div id="pnl_referencia_empresa" class="row mb-3" style="display: none;">
                         <div class="col-md-12">
                             <label for="txt_referencia_nombre_empresa" class="form-label fw-semibold fs-7">Empresa / Institución </label>
                             <div class="input-group input-group-sm">
@@ -290,7 +289,7 @@
         </div>
     </div>
 </div>
-
+-->
 <div class="modal fade" id="modal_ver_pdf_referencias_laborales" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content border-0 shadow-lg">

@@ -3,6 +3,7 @@
 date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_acceso_calculosM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_accesoM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_reporte_camposM.php');
 require_once(dirname(__DIR__, 2) . '/lib/spout_excel/vendor/box/spout/src/Spout/Autoloader/autoload.php');
 
@@ -45,6 +46,19 @@ if (isset($_GET['descargar_excel_general'])) {
     $controlador->descargar_excel_general($nombreArchivo, $parametros);
 }
 
+if (isset($_GET['descargar_excel_general_'])) {
+    $parametros = [
+        'txt_fecha_inicio' => $_GET['txt_fecha_inicio'] ?? '',
+        'txt_fecha_fin' => $_GET['txt_fecha_fin'] ?? '',
+        'ddl_departamentos' => $_GET['ddl_departamentos'] ?? '',
+        '_id' => $_GET['_id'] ?? '',
+
+    ];
+    $nombreArchivo = $parametros['txt_fecha_inicio'] . "_" . $parametros['txt_fecha_fin'] . "_" . $parametros['ddl_departamentos'] . ".xlsx";
+    $controlador->descargar_excel_general_($nombreArchivo, $parametros);
+}
+
+
 if (isset($_GET['informacion_marcacion'])) {
     echo json_encode($controlador->mostrar_informacion_marcacion($_POST['id_marcacion'] ?? ''));
 }
@@ -52,12 +66,14 @@ if (isset($_GET['informacion_marcacion'])) {
 class th_control_acceso_calculosC
 {
     private $modelo;
+    private $control_acceso;
     private $encabezados;
 
     function __construct()
     {
         $this->modelo = new th_control_acceso_calculosM();
         $this->encabezados = new th_reporte_camposM();
+        $this->control_acceso = new th_control_accesoM();
     }
 
     //Usa para el boton de descargar Excel
@@ -463,4 +479,248 @@ class th_control_acceso_calculosC
         $writer->close();
         exit();
     }
+
+    function descargar_excel_general_($nombreArchivo = 'Reporte.xlsx', $parametros = [])
+    {
+
+        $txt_fecha_inicio   = $parametros['txt_fecha_inicio'] ?? '';
+        $txt_fecha_fin      = $parametros['txt_fecha_fin'] ?? '';
+        $ddl_departamentos  = $parametros['ddl_departamentos'] ?? '';
+        $ddl_personas =  $parametros['ddl_personas'] ?? '';   
+        $orden = $parametros['tipo_ordenamiento'] ?? '';  
+        $id                 = $parametros['_id'] ?? '';
+
+        // Mapa de encabezados a claves reales en datos
+        $encabezado = [
+            'APELLIDOS',
+            'NOMBRES',
+            'Empleado',
+            'Cedula',
+            'Correo Institucional',
+            'Departamento',
+            'Dia',
+            'Fecha',
+            'Horario Contrato',
+            'Turno',
+            'Entrada Inicio Turno',
+            'Entrada Fin Turno',
+            'RegEntrada',
+            'Hora Entrada',
+            'Hora Ajustada',
+            'Atrasos',
+            'Tiempo Atrasado',
+            'Ausente',
+            'Salida Inicio Turno',
+            'Salida Fin Turno',
+            'RegSalida',
+            'Hora Salida',
+            'Salidas Temprano',
+            'Dias Trabajados',
+            'Cumplimiento de jornada (8 horas)',
+            'Horas faltantes por cumplir jornada',
+            'Horas excedentes',
+            'SalidasTemprano',
+            'Suplem 25%',
+            'Extra 100%',
+            'Descanso en minutos',
+            'Rango Descanso',
+            'Horas trabajadas',
+        ];
+
+        //
+
+        $fecha_obj = new DateTime($txt_fecha_inicio);
+        $mesdesde =  $fecha_obj->format('Y').''. $fecha_obj->format('m');
+
+        $fecha_obj = new DateTime($txt_fecha_fin);
+        $mesHasta =  $fecha_obj->format('Y').''. $fecha_obj->format('m');
+
+        // print_r($mesdesde.'-'.$mesHasta);die();
+        $array_table = array();
+        if($mesdesde==$mesHasta)
+        {
+            $array_table[] =  array('tbl'=>'th_control_acceso','inicio'=>$txt_fecha_inicio,'fin'=>$txt_fecha_fin);
+        }else
+        {
+            $inicio = new DateTime($txt_fecha_inicio);
+            $fin = new DateTime($txt_fecha_fin);
+
+            $inicio->modify('first day of this month');
+            $fin->modify('first day of next month');
+
+            $intervalo = DateInterval::createFromDateString('1 month');
+            $periodo = new DatePeriod($inicio, $intervalo, $fin);
+
+            $meses = [];
+            $num_meses = 1;
+            foreach ($periodo as $dt) {
+                $periodo = $dt->format('Ym');
+                $hoy = date('Ym');
+                if($periodo!=$hoy)
+                {
+                    $periodo_ = $dt->format('Y-m');
+                    $ultimoDia = clone $dt;
+                    $ultimoDia->modify('last day of this month');
+                    $fecha_ultima = $ultimoDia->format('Y-m-d');
+                    $fecha_primero =  $dt->format('Y-m-d');
+                    if($num_meses>1) {$fecha_ini = $fecha_primero; }
+
+                    array_push($array_table, array('tbl'=>'th_control_acceso_'.$periodo,'inicio'=>$fecha_inicio,'fin'=>$fecha_ultima));
+                    $num_meses++;
+                }else
+                {
+                    $hoy = date('Y-m');
+                    array_push($array_table, array('tbl'=>'th_control_acceso','inicio'=>$hoy.'-01','fin'=>$txt_fecha_fin));
+                }
+            }
+        }
+
+        // print_r($array_table);die();
+        $list_dato = array();
+        foreach ($array_table as $key => $value) {
+            $data = $this->traer_datos($value['tbl'],$value['inicio'],$value['fin'],$ddl_personas,$ddl_departamentos,$orden);
+            // print_r($data);die();
+            foreach ($data as $key2 => $value2) {
+                array_push($list_dato, $value2);
+            }
+        }
+        $resultado = array();
+        foreach ($list_dato as $key => $value) {
+            $dateTime = new DateTime($value['Fecha']);
+            $dia = (int)$dateTime->format('w');
+            // print_r($value);die();
+            $horario = $this->control_acceso->lista_detalle_turnos_x_persona($value['card'],$dia);
+            // print_r($horario);die();
+            if(count($horario)>0)
+            {
+                $horario[0]['Ausente'] = 'NO';
+                $resultado[] = array_merge($value, $horario[0]);
+            }
+        }
+       
+
+
+              
+        // print_r($list_dato);die();
+
+
+
+        // // Obtener datos filtrados de acuerdo a parámetros
+        // $datos = $this->modelo->listar_asistencia_por_fecha_departamento(
+        //     $txt_fecha_inicio,
+        //     $txt_fecha_fin,
+        //     $ddl_departamentos
+        // );
+
+        // Limpiar buffer para evitar errores al descargar
+        // if (ob_get_length()) {
+        //     ob_end_clean();
+        // }
+
+        // print_r($list_dato); exit(); die();
+
+        // Preparar headers para descarga Excel
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . $nombreArchivo . '"');
+        header('Cache-Control: max-age=0');
+
+        // Crear escritor XLSX (Spout)
+        $writer = WriterEntityFactory::createXLSXWriter();
+        $writer->openToBrowser($nombreArchivo);
+
+        // Estilo para encabezado
+        $estilo = (new StyleBuilder())
+            ->setFontBold()
+            ->setFontSize(12)
+            ->setFontColor(Color::BLACK)
+            ->setBackgroundColor(Color::YELLOW)
+            ->setCellAlignment(CellAlignment::CENTER)
+            ->build();
+
+        // Crear fila encabezado con estilo
+        $cells = [];
+        foreach ($encabezado as $titulo) {
+            $cells[] = WriterEntityFactory::createCell($titulo);
+        }
+        $writer->addRow(WriterEntityFactory::createRow($cells, $estilo));
+
+
+        // Agregar datos filas filtradas según encabezados
+        foreach ($resultado as $key => $dato) {
+
+           
+           // // print_r($dato);die();
+           //  print_r($dato); exit(); die();
+
+            // $es_feriado = $dato['es_feriado'] ?? '';
+
+            // $regentrada = $dato['regentrada'] ?? '';
+
+            // if($es_feriado == "SI" && $regentrada == ""){
+            //     $regentrada = "FERIADO";
+            // }
+
+            $res = ((int) $dato['RegistroSalida']-(int)$dato['salida_min']);
+            $filas_datos = [
+                $dato['APELLIDOS'],
+                $dato['NOMBRES'],
+                $dato['empleado'],
+                $dato['Cedula'],
+                $dato['Correo'],
+                $dato['Departamento'],
+                $dato['dia'],
+                $dato['Fecha'],
+                (string) $dato['Horario'],
+                $dato['turno'],
+                $this->minutos_a_horas_mm($dato['entrada_tiempo_marcacion_valida_inicio']),
+                $this->minutos_a_horas_mm($dato['entrada_tiempo_marcacion_valida_fin']),
+                substr($dato['RegistroIng'],0,5),
+                $this->minutos_a_horas_mm($dato['entrada_tiempo_marcacion_valida_inicio']),
+                $this->minutos_a_horas_mm($dato['entrada_min']),
+                ($dato['Atrasos']>0) ?'SI':'NO',
+                $this->minutos_a_horas_mm($dato['Atrasos']),
+                $dato['Ausente'],
+                $this->minutos_a_horas_mm($dato['salida_tiempo_marcacion_valida_inicio']),
+                $this->minutos_a_horas_mm($dato['salida_tiempo_marcacion_valida_fin']),
+                substr($dato['RegistroSalida'],0,5),                
+                $this->minutos_a_horas_mm($dato['salida_min']),                
+                ($dato['TotalMarcaciones'] % 2 === 0 ) ? "NO" : "SI",
+                1,
+                ($dato['Horas_trabajadas']==0) ? 'SI':'NO',
+                $this->minutos_a_horas_mm($dato['Horas_faltantes']),
+                ($res>0) ? $this->minutos_a_horas_mm($res) : '00:00',
+                ($dato['RegistroSalida'] < $dato['salida_tiempo_marcacion_valida_inicio'] && $dato['TotalMarcaciones'] % 2 === 0 ) ? 'SI': "NO",
+                $this->minutos_a_horas_mm($dato['Suplem']),
+                $this->minutos_a_horas_mm($dato['Extra']),
+                $this->minutos_a_horas_mm($dato['tiempo_descanso']),
+                ($this->minutos_a_horas_mm($dato['descanso_inicio']).'-'.$this->minutos_a_horas_mm($dato['descanso_fin'])),
+                $dato['Horas_trabajadas'],
+            ];
+
+            $writer->addRow(WriterEntityFactory::createRowFromArray($filas_datos));
+        }
+
+        $writer->close();
+        exit();
+    }
+
+    function traer_datos($tabla,$fecha_ini, $fecha_final,$usuario,$departamento,$orden)
+    {        
+       return $this->control_acceso->listar_marcaciones($tabla,$fecha_ini, $fecha_final,$usuario,$departamento,$orden);
+    }
+
+    function convertir_a_minutos($hora_hhmm)
+    {
+        list($horas, $minutos) = explode(':', $hora_hhmm);
+        return (int)$horas * 60 + (int)$minutos;
+    }
+
+    function minutos_a_horas_mm($min)
+    {
+        $dt = new DateTime('00:00');
+        $dt->add(new DateInterval("PT{$min}M"));
+        return $dt->format('H:i');
+    }
+
+
 }
