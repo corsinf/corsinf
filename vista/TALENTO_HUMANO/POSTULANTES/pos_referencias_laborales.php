@@ -55,11 +55,6 @@
         if ($('#txt_copia_carta_recomendacion').val() === '' && txt_id_referencias_laborales != '') {
             var txt_copia_carta_recomendacion = $('#txt_ruta_guardada_carta_recomendacion').val()
             $('#txt_copia_carta_recomendacion').rules("remove", "required");
-        } else {
-            var txt_copia_carta_recomendacion = $('#txt_copia_carta_recomendacion').val();
-            $('#txt_copia_carta_recomendacion').rules("add", {
-                required: true
-            });
         }
 
         // console.log([...form_data]);
@@ -344,7 +339,6 @@
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('txt_nombre_referencia');
         agregar_asterisco_campo_obligatorio('txt_telefono_referencia');
-        agregar_asterisco_campo_obligatorio('txt_copia_carta_recomendacion');
         agregar_asterisco_campo_obligatorio('txt_referencia_correo');
         agregar_asterisco_campo_obligatorio('txt_referencia_nombre_empresa');
 
@@ -355,9 +349,6 @@
                     required: true,
                 },
                 txt_telefono_referencia: {
-                    required: true,
-                },
-                txt_copia_carta_recomendacion: {
                     required: true,
                 },
                 txt_referencia_correo: {
@@ -373,9 +364,6 @@
                 },
                 txt_telefono_referencia: {
                     required: "Por favor ingrese el teléfono de su referencia laboral",
-                },
-                txt_copia_carta_recomendacion: {
-                    required: "Por favor suba la carta de recomendación",
                 },
                 txt_referencia_correo: {
                     required: "Por favor ingrese el correo de su referencia laboral",

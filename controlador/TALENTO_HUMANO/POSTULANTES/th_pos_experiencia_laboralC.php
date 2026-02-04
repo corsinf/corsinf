@@ -230,6 +230,26 @@ HTML;
         $experiencias = $this->modelo
             ->listar_experiencia_laboral_postulante($id_postulante);
 
+        $referencias = $this->th_pos_referencias_laborales
+            ->where('th_expl_id', $id)
+            ->where('th_refl_estado', 1)
+            ->listar();
+
+        if (!empty($referencias)) {
+            foreach ($referencias as $ref) {
+                $datos = array(
+                    array('campo' => 'th_refl_estado', 'dato' => 0),
+                );
+
+                $where = array(
+                    array('campo' => 'th_refl_id', 'dato' => strval($ref['_id'])),
+                );
+
+                // Editamos cada referencia individualmente
+                $this->th_pos_referencias_laborales->editar($datos, $where);
+            }
+        }
+
         $resultado = $this->calcular_experiencia_y_remuneracion($experiencias);
 
         $texto = $resultado['resumen_general']['tiempo_total']['texto'];

@@ -183,6 +183,7 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
+                    cargar_datos_referencias_laborales('<?= $id_postulante ?>');
                     cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
                     limpiar_campos_experiencia_laboral_modal();
                     $('#modal_agregar_experiencia').modal('hide');
