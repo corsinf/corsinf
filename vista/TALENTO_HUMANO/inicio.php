@@ -38,6 +38,10 @@ if ($_GET['acc'] == 'th_reporte_general') {
 	include('TALENTO_HUMANO/REPORTES/th_reporte_general.php');
 }
 
+if ($_GET['acc'] == 'th_reporte_general_') {
+	include('TALENTO_HUMANO/REPORTES/th_reporte_general_.php');
+}
+
 //Departamentos
 if ($_GET['acc'] == 'th_departamentos') {
 	include('TALENTO_HUMANO/DEPARTAMENTOS/th_departamentos.php');
