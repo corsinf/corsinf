@@ -40,10 +40,10 @@
                 }
             },
             minimumInputLength: 0,
-            placeholder: "Seleccione un requisito",
+            placeholder: "-- SELECCIONE --",
             language: {
                 noResults: function() {
-                    return "No hay requisitos disponibles para asignar";
+                    return "No hay escalas disponibles para esta discapacidad";
                 },
                 searching: function() {
                     return "Buscando...";
