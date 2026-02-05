@@ -318,6 +318,7 @@
 
         agregar_asterisco_campo_obligatorio('ddl_bancos');
         agregar_asterisco_campo_obligatorio('ddl_tipo_cuenta');
+        agregar_asterisco_campo_obligatorio('ddl_forma_pago');
         agregar_asterisco_campo_obligatorio('txt_numero_cuenta');
 
         //Para validar los select2
@@ -334,6 +335,9 @@
                 ddl_tipo_cuenta: {
                     required: true
                 },
+                ddl_forma_pago: {
+                    required: true
+                },
                 txt_numero_cuenta: {
                     required: true
                 },
@@ -344,6 +348,9 @@
                 },
                 ddl_tipo_cuenta: {
                     required: "Por favor seleccione un Tipo de Cuenta"
+                },
+                ddl_forma_pago: {
+                    required: "Por favor seleccione una Forma de Pago"
                 },
                 txt_numero_cuenta: {
                     required: "Por favor ingrese el número de cuenta"
