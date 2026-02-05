@@ -32,6 +32,7 @@
                 $('#th_cer_alergia_req').prop('checked', response[0].th_cer_alergia_req == 1);
                 $('#th_cer_tratamiento_req').prop('checked', response[0].th_cer_tratamiento_req == 1);
                 $('#txt_ruta_guardada_medico').val(response[0].th_cer_ruta_certficado);
+                $('#txt_observaciones_medico').val(response[0].th_cer_observaciones);
             }
         });
     }
@@ -148,6 +149,7 @@
         $('#th_cer_tratamiento_req').prop('checked', false);
         $('#th_cer_ruta_certficado').val('');
         $('#txt_ruta_guardada_medico').val('');
+        $('#txt_observaciones_medico').val('');
         // Limpiar validaciones
         $("#form_certificados_medicos").validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
@@ -269,6 +271,11 @@
                         <input type="hidden" name="txt_ruta_guardada_medico" id="txt_ruta_guardada_medico">
                         <div class="form-text text-xs"><i class='bx bx-upload'></i> Formato PDF. Máximo 5MB.</div>
                     </div>
+                    <div class="mb-2">
+                        <label for="txt_observaciones_medico" class="form-label fw-semibold fs-7">Observaciones </label>
+                        <textarea class="form-control form-control-sm no_caracteres" name="txt_observaciones_medico" id="txt_observaciones_medico" rows="2" maxlength="500" placeholder="Describe la Institución Auspiciante." oninput="texto_mayusculas(this);"></textarea>
+                        <div class="form-text text-end text-xs">Máximo 500 caracteres.</div>
+                    </div>
 
                 </div>
 
@@ -340,47 +347,34 @@
 
 <script>
     $(document).ready(function() {
-        agregar_asterisco_campo_obligatorio('txt_med_motivo_certificado');
-        //agregar_asterisco_campo_obligatorio('txt_med_nom_medico');
-        //agregar_asterisco_campo_obligatorio('txt_med_ins_medico');
-        //agregar_asterisco_campo_obligatorio('txt_med_fecha_inicio_certificado');
-        // agregar_asterisco_campo_obligatorio('txt_med_fecha_fin_certificado');
-        //Validación de campos certificados medicos
+        agregar_asterisco_campo_obligatorio('th_cer_motivo_certificado');
+        agregar_asterisco_campo_obligatorio('txt_observaciones_medico');
+
         $("#form_certificados_medicos").validate({
             rules: {
-                txt_med_motivo_certificado: {
+                th_cer_motivo_certificado: {
                     required: true,
                 },
-                /*txt_med_nom_medico: {
+                txt_observaciones_medico: {
                     required: true,
                 },
-                txt_med_ins_medico: {
-                    required: true,
-                },
-                txt_med_fecha_inicio_certificado: {
-                    required: true,
-                },*/
-                // txt_med_fecha_fin_certificado: {
-                //     required: true,
-                // },
-
 
             },
 
             messages: {
-                txt_med_motivo_certificado: {
+                th_cer_motivo_certificado: {
                     required: "Por favor, escriba el motivo del Enfermedades Crónicas",
                 },
-
+                txt_observaciones_medico: {
+                    required: "Por favor, escriba una observación",
+                },
             },
 
             highlight: function(element) {
-                // Agrega la clase 'is-invalid' al input que falla la validación
                 $(element).addClass('is-invalid');
                 $(element).removeClass('is-valid');
             },
             unhighlight: function(element) {
-                // Elimina la clase 'is-invalid' si la validación pasa
                 $(element).removeClass('is-invalid');
                 $(element).addClass('is-valid');
             }

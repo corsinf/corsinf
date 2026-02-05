@@ -12,9 +12,10 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
 
 <script type="text/javascript">
     $(document).ready(function() {
-        cargar_selects2();
+        //cargar_selects2();
     })
 
+    /*
     function cargar_selects2() {
 
         url_etniaC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_etniaC.php?buscar=true';
@@ -45,6 +46,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
         cargar_select2_url('ddl_origen_indigena', url_origen_indigenaC, '', '#modal_informacion_personal');
 
     }
+        */
 
 
     function cargarDatos(id, id_persona) {
@@ -326,7 +328,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
         });
     }
 </script>
-
+<?php include_once('../vista/GENERAL/ddls_postulantes.php'); ?>
 <form id="form_registrar_postulantes" class="modal_general_provincias">
     <div class="row mb-col pt-3">
         <div class="col-md-3">

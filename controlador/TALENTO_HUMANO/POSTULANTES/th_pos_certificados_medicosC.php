@@ -79,6 +79,10 @@ class th_pos_certificados_medicosC
                                     <span class="text-muted" style="font-size: 0.72rem;">
                                         <i class="bx bx-medical me-1"></i>¿Tratamiento Continuo? <strong class="text-dark">{$tratamiento}</strong>
                                     </span>
+                                    <p class="m-0 text-muted text-truncate" style="font-size: 0.75rem; max-width: 250px;" title="{$value['th_cer_observaciones']}">
+                                        <i class="bx bx-map-pin me-1"></i>
+                                        Observación <strong>{$value['th_cer_observaciones']}</strong>
+                                    </p>
                                 </div>
                             </div>
 
@@ -121,6 +125,7 @@ class th_pos_certificados_medicosC
         $datos = array(
             array('campo' => 'th_pos_id',                        'dato' => $parametros['txt_postulante_id']),
             array('campo' => 'th_cer_motivo_certificado',        'dato' => $parametros['th_cer_motivo_certificado']),
+            array('campo' => 'th_cer_observaciones',        'dato' => $parametros['txt_observaciones_medico']),
             array('campo' => 'th_cer_alergia_req',               'dato' => $alergia),
             array('campo' => 'th_cer_tratamiento_req',           'dato' => $tratamiento),
             // Campos que no existen en el modal → NULL

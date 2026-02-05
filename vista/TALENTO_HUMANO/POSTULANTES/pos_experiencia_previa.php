@@ -398,7 +398,7 @@
                             <label for="txt_nombre_empresa" class="form-label fw-semibold fs-7">Nombre Empresa </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-buildings'></i></span>
-                                <input type="text" class="form-control no_caracteres" name="txt_nombre_empresa" id="txt_nombre_empresa" maxlength="100" placeholder="Ej: Corporación XYZ">
+                                <input type="text" class="form-control no_caracteres" name="txt_nombre_empresa" id="txt_nombre_empresa" oninput="texto_mayusculas(this);" maxlength="100" placeholder="Ej: Corporación XYZ">
                             </div>
                             <label class="error" style="display: none;" for="txt_nombre_empresa"></label>
                         </div>
@@ -406,7 +406,7 @@
                             <label for="txt_cargos_ocupados" class="form-label fw-semibold fs-7">Cargo Ocupado </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-user'></i></span>
-                                <input type="text" class="form-control no_caracteres" name="txt_cargos_ocupados" id="txt_cargos_ocupados" maxlength="100" placeholder="Ej: Analista de Sistemas">
+                                <input type="text" class="form-control no_caracteres" name="txt_cargos_ocupados" id="txt_cargos_ocupados" maxlength="100" oninput="texto_mayusculas(this);" placeholder="Ej: Analista de Sistemas">
                             </div>
                             <label class="error" style="display: none;" for="txt_cargos_ocupados"></label>
                         </div>

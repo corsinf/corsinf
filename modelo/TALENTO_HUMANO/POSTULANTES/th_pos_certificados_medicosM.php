@@ -20,5 +20,6 @@ class th_pos_certificados_medicosM extends BaseModel
         'th_cer_estado',
         'th_cer_tratamiento_req',
         'th_cer_alergia_req',
+        'th_cer_observaciones',
     ];
 }
