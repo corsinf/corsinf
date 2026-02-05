@@ -237,7 +237,7 @@
                             <label for="txt_autoridad_emisora" class="form-label fw-semibold fs-7">Autoridad Emisora </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-buildings'></i></span>
-                                <input type="text" class="form-control" id="txt_autoridad_emisora" name="txt_autoridad_emisora" placeholder="Ej: ANT, CTE...">
+                                <input type="text" class="form-control" id="txt_autoridad_emisora" name="txt_autoridad_emisora" placeholder="Ej: ANT, CTE..." oninput="texto_mayusculas(this);">
                             </div>
                             <label class="error" style="display: none;" for="txt_autoridad_emisora"></label>
                         </div>
@@ -245,7 +245,7 @@
                             <label for="txt_escuela" class="form-label fw-semibold fs-7">Escuela de Conducción </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-buildings'></i></span>
-                                <input type="text" class="form-control" id="txt_escuela" name="txt_escuela" placeholder="Nombre de la institución">
+                                <input type="text" class="form-control" id="txt_escuela" name="txt_escuela" placeholder="Nombre de la institución" oninput="texto_mayusculas(this);">
                             </div>
                             <label class="error" style="display: none;" for="txt_escuela"></label>
                         </div>

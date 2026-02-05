@@ -124,6 +124,8 @@ class th_personasM extends BaseModel
                 ciu.th_ciu_nombre                    AS th_ciu_nombre,
                 parr.th_parr_nombre                  AS th_parr_nombre,
                 p.id_etnia,
+                p.id_origen_indigena,
+                tip_ori_ind.descripcion              AS descripcion_origen_indigena,
                 p.id_orientacion_sexual,
                 p.id_identidad_genero,
                 p.id_religion,
@@ -153,6 +155,8 @@ class th_personasM extends BaseModel
                 ON p.th_parr_id = parr.th_parr_id
             LEFT JOIN th_cat_etnia et
                 ON p.id_etnia = et.id_etnia
+            LEFT JOIN th_cat_tipo_origen_indigena tip_ori_ind
+                ON p.id_origen_indigena = tip_ori_ind.id_origen_indigena
             LEFT JOIN th_cat_orientacion_sexual ori_sex
                 ON p.id_orientacion_sexual = ori_sex.id_orientacion_sexual
             LEFT JOIN th_cat_religion rel

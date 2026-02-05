@@ -94,7 +94,7 @@ class th_personasC
                 array('campo' => 'th_prov_id', 'dato' => !empty($parametros['ddl_provincias']) ? $parametros['ddl_provincias'] : null),
                 array('campo' => 'th_ciu_id', 'dato' => !empty($parametros['ddl_ciudad']) ? $parametros['ddl_ciudad'] : null),
                 array('campo' => 'th_parr_id', 'dato' => !empty($parametros['ddl_parroquia']) ? $parametros['ddl_parroquia'] : null),
-                
+
                 array('campo' => 'th_per_calle_primaria', 'dato' => trim($parametros['txt_calle_primaria'] ?? '')),
                 array('campo' => 'th_per_calle_secundaria', 'dato' => trim($parametros['txt_calle_secundaria'] ?? '')),
 
@@ -103,6 +103,7 @@ class th_personasC
                 array('campo' => 'th_per_observaciones', 'dato' => trim($parametros['txt_observaciones'] ?? '')),
 
                 array('campo' => 'id_etnia', 'dato' => !empty($parametros['ddl_etnia']) ? $parametros['ddl_etnia'] : null),
+                array('campo' => 'id_origen_indigena', 'dato' => !empty($parametros['ddl_origen_indigena']) ? $parametros['ddl_origen_indigena'] : null),
                 array('campo' => 'id_religion', 'dato' => !empty($parametros['ddl_religion']) ? $parametros['ddl_religion'] : null),
                 array('campo' => 'id_orientacion_sexual', 'dato' => !empty($parametros['ddl_orientacion_sexual']) ? $parametros['ddl_orientacion_sexual'] : null),
                 array('campo' => 'id_identidad_genero', 'dato' => !empty($parametros['ddl_identidad_genero']) ? $parametros['ddl_identidad_genero'] : null),

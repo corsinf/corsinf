@@ -103,6 +103,12 @@
                     selected: true
                 }));
 
+                $('#ddl_origen_indigena').append($('<option>', {
+                    value: response[0].id_origen_indigena,
+                    text: response[0].descripcion_origen_indigena,
+                    selected: true
+                }));
+
                 $('#txt_per_correo_personal_1').val(response[0].correo_personal_1);
                 $('#txt_per_correo_personal_2').val(response[0].correo_personal_2);
 
@@ -145,6 +151,7 @@
             'txt_observaciones': $('#txt_observaciones').val(),
             'ddl_tipo_sangre': $('#ddl_tipo_sangre').val(),
             'ddl_etnia': $('#ddl_etnia').val(),
+            'ddl_origen_indigena': $('#ddl_origen_indigena').val(),
             'ddl_religion': $('#ddl_religion').val(),
             'ddl_orientacion_sexual': $('#ddl_orientacion_sexual').val(),
             'ddl_identidad_genero': $('#ddl_identidad_genero').val(),
@@ -215,6 +222,9 @@
 
         url_tipo_sexoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_tipo_sexoC.php?buscar=true';
         cargar_select2_url('ddl_sexo', url_tipo_sexoC);
+
+        url_origen_indigenaC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_tipo_origen_indigenaC.php?buscar=true';
+        cargar_select2_url('ddl_origen_indigena', url_origen_indigenaC);
     }
 </script>
 
@@ -335,21 +345,28 @@
                     </div>
                 </div>
                 <div class="row mb-col">
+                    <div class="col-md-4">
+                        <label for="ddl_orientacion_sexual" class="form-label form-label-sm">Orientación Sexual </label>
+                        <select class="form-select form-select-sm select2-validation" id="ddl_orientacion_sexual" name="ddl_orientacion_sexual"></select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="ddl_religion" class="form-label form-label-sm">Religión </label>
+                        <select class="form-select form-select-sm select2-validation" id="ddl_religion" name="ddl_religion"></select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="ddl_identidad_genero" class="form-label form-label-sm">Identidad Genero </label>
+                        <select class="form-select form-select-sm select2-validation" id="ddl_identidad_genero" name="ddl_identidad_genero"></select>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-md-3">
                         <label for="ddl_etnia" class="form-label form-label-sm">Etnía </label>
                         <select class="form-select form-select-sm select2-validation" id="ddl_etnia" name="ddl_etnia"></select>
                     </div>
-                    <div class="col-md-3">
-                        <label for="ddl_orientacion_sexual" class="form-label form-label-sm">Orientación Sexual </label>
-                        <select class="form-select form-select-sm select2-validation" id="ddl_orientacion_sexual" name="ddl_orientacion_sexual"></select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="ddl_religion" class="form-label form-label-sm">Religión </label>
-                        <select class="form-select form-select-sm select2-validation" id="ddl_religion" name="ddl_religion"></select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="ddl_identidad_genero" class="form-label form-label-sm">Identidad Genero </label>
-                        <select class="form-select form-select-sm select2-validation" id="ddl_identidad_genero" name="ddl_identidad_genero"></select>
+                    <div class="col-md-9">
+                        <label for="ddl_origen_indigena" class="form-label form-label-sm">Origen Indígena </label>
+                        <select class="form-select form-select-sm select2-validation" id="ddl_origen_indigena" name="ddl_origen_indigena"></select>
                     </div>
                 </div>
             </div>
