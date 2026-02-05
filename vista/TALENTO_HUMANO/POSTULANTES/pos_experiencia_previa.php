@@ -2,10 +2,10 @@
     $(document).ready(function() {
         cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
         // console.log('Cargando experiencia laboral del postulante ID: <?= $id_postulante ?>');
+        cargar_selects_experiencia_previa();
     });
-    cargar_selects2();
 
-    function cargar_selects2() {
+    function cargar_selects_experiencia_previa() {
         url_nomina = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_nominaC.php?buscar=true';
         cargar_select2_url('ddl_nomina_experiencia', url_nomina, '', '#modal_agregar_experiencia');
     }
