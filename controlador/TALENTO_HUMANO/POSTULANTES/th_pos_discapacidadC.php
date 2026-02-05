@@ -62,9 +62,6 @@ class th_pos_discapacidadC
                                                 <i class="bx bx-layer me-1"></i>Escala: {$value['escala_discapacidad']}
                                             </p>
                                             <p class="cert-doctor m-0">
-                                                <i class="bx bx-layer me-1"></i>Porcentaje: {$value['descripcion_dis_porcentaje']}
-                                            </p>
-                                            <p class="cert-doctor m-0">
                                                 <i class="bx bx-layer me-1"></i>Gravedad: {$value['descripcion_dis_gravedad']}
                                             </p>
                                             <p class="cert-doctor m-0">
@@ -79,7 +76,7 @@ class th_pos_discapacidadC
                                                 <div class="cert-date-range">
                                                     <div class="cert-label-small" style="color: #0d6efd;">Porcentaje</div>
                                                     <span class="fw-bold" style="font-size: 1.2rem; color: #0d6efd;">
-                                                        {$value['th_pos_dis_porcentaje']}<small class="fw-normal">%</small>
+                                                        {$value['descripcion_dis_porcentaje']}<small class="fw-normal"></small>
                                                     </span>
                                                 </div>
 
@@ -131,7 +128,6 @@ class th_pos_discapacidadC
             ['campo' => 'th_pos_id', 'dato' => $id_postulante],
             ['campo' => 'id_discapacidad', 'dato' => $id_discapacidad],
             ['campo' => 'id_escala_dis', 'dato' => $id_escala],
-            ['campo' => 'th_pos_dis_porcentaje', 'dato' => $parametros['txt_porcentaje']],
             ['campo' => 'th_pos_dis_sustituto', 'dato' => $parametros['txt_sustituto']],
             ['campo' => 'id_dis_gravedad', 'dato' => $parametros['ddl_discapacidad_gravedad']],
             ['campo' => 'id_dis_porcentaje', 'dato' => $parametros['ddl_discapacidad_porcentaje']],

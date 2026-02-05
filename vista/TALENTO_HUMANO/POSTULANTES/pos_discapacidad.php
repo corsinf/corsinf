@@ -100,7 +100,6 @@
                     text: response[0].descripcion_dis_gravedad,
                     selected: true
                 }));
-                $('#txt_porcentaje').val(response[0].th_pos_dis_porcentaje);
                 $('#txt_escala').val(response[0].th_pos_dis_escala);
                 $('#txt_discapacidad_id').val(response[0]._id);
                 $('#txt_sustituto').val(response[0].sustituto);
@@ -119,7 +118,6 @@
             ddl_discapacidad_escala: $('#ddl_discapacidad_escala').val(),
             ddl_discapacidad_gravedad: $('#ddl_discapacidad_gravedad').val(),
             ddl_discapacidad_porcentaje: $('#ddl_discapacidad_porcentaje').val(),
-            txt_porcentaje: $('#txt_porcentaje').val(),
             txt_escala: $('#txt_escala').val(),
             txt_sustituto: $('#txt_sustituto').val(),
             _id: $('#txt_discapacidad_id').val()
@@ -230,7 +228,6 @@
     function limpiar_campos_discapacidad() {
         $('#form_discapacidad').validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
-        $('#txt_porcentaje').val('');
         $('#txt_escala').val('');
         $('#txt_discapacidad_id').val('');
         $('#txt_sustituto').val('');
@@ -305,17 +302,7 @@
                         </div>
 
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label for="txt_porcentaje" class="form-label fw-semibold fs-7">Porcentaje (%) </label>
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-white text-muted"><strong>%</strong></span>
-                                <input type="number" class="form-control form-control-sm" id="txt_porcentaje" name="txt_porcentaje" min="0" max="100" required placeholder="0 - 100">
-                            </div>
-                            <label class="error" style="display: none;" for="txt_porcentaje"></label>
-                        </div>
-                    </div>
-
+                 
 
                     <div class="row mb-3">
                         <div class="col-md-12">
@@ -356,7 +343,6 @@
         agregar_asterisco_campo_obligatorio('ddl_discapacidad_escala');
         agregar_asterisco_campo_obligatorio('ddl_discapacidad_porcentaje');
         agregar_asterisco_campo_obligatorio('ddl_discapacidad_gravedad');
-        agregar_asterisco_campo_obligatorio('txt_porcentaje');
 
 
         //Para validar los select2
@@ -378,12 +364,7 @@
                 ddl_discapacidad_gravedad: {
                     required: true
                 },
-                txt_porcentaje: {
-                    required: true,
-                    number: true,
-                    min: 0,
-                    max: 100
-                }
+              
             },
             messages: {
                 ddl_discapacidad: {
@@ -397,11 +378,6 @@
                 },
                 ddl_discapacidad_gravedad: {
                     required: "Seleccione una discapacidad escalada"
-                },
-                txt_porcentaje: {
-                    required: "Ingrese el porcentaje",
-                    min: "Mínimo 0",
-                    max: "Máximo 100"
                 }
             },
 
