@@ -291,15 +291,15 @@
                         <div class="col-md-6">
                             <label for="ddl_discapacidad_porcentaje" class="form-label fw-semibold fs-7">Porcentaje </label>
                             <select class="form-select select2-validation" id="ddl_discapacidad_porcentaje" name="ddl_discapacidad_porcentaje" required>
-                                <option value="">-- Seleccione tipo --</option>
+                                <option value="">-- Seleccione porcentaje --</option>
                             </select>
                             <label class="error" style="display: none;" for="ddl_discapacidad_porcentaje"></label>
                         </div>
 
                         <div class="col-md-6">
-                            <label for="ddl_discapacidad_gravedad" class="form-label fw-semibold fs-7">Gravedad <i class='bx bx-info-circle text-primary' data-bs-toggle="tooltip" title="Primero seleccionar un Tipo de Discapacidad"></i> </label>
+                            <label for="ddl_discapacidad_gravedad" class="form-label fw-semibold fs-7">Gravedad </label>
                             <select class="form-select select2-validation" id="ddl_discapacidad_gravedad" name="ddl_discapacidad_gravedad" required>
-                                <option value="">-- Seleccione escala --</option>
+                                <option value="">-- Seleccione gravedad --</option>
                             </select>
                             <label class="error" style="display: none;" for="ddl_discapacidad_gravedad"></label>
                         </div>
