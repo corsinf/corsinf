@@ -662,6 +662,33 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
 
                                             </div>
                                         </div>
+
+                                        <div class="d-flex flex-column mx-4">
+                                            <div class="card-body">
+                                                <div class="mb-2">
+                                                    <div class="row">
+                                                        <div class="col-6 d-flex align-items-center">
+                                                            <h6 class="mb-0 fw-bold text-primary">Lincencia de Transporte:</h6>
+                                                        </div>
+                                                        <div class="col-6 d-flex justify-content-end">
+                                                            <a href="#"
+                                                                class="text-success icon-hover d-flex align-items-center"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal_agregar_licencias_transportes">
+                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                                                <span>Agregar</span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <hr>
+
+                                                <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_licencias_transporte.php'); ?>
+
+                                            </div>
+                                        </div>
+
                                         <!-- </div> -->
                                     </div>
 

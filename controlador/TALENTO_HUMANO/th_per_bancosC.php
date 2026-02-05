@@ -64,7 +64,7 @@ class th_per_bancosC
                                 <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
                                         onclick="abrir_modal_bancos('{$value['_id']}');" 
                                         title="Editar Banco">
-                                    <i class="bx bx-pencil text-primary"></i>
+                                    <i class="bx bx-pencil"></i>
                                 </button>
 
                                 <div class="d-flex flex-column h-100">
