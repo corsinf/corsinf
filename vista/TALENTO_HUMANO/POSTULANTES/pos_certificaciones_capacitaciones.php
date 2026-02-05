@@ -422,6 +422,14 @@
                         </div>
                     </div>
 
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="txt_institucion_auspiciante" class="form-label fw-semibold fs-7">Institución Auspiciante </label>
+                            <textarea class="form-control form-control-sm no_caracteres" name="txt_institucion_auspiciante" id="txt_institucion_auspiciante" rows="2" maxlength="200" placeholder="Describe la Institución Auspiciante." oninput="texto_mayusculas(this);"></textarea>
+                            <div class="form-text text-end text-xs">Máximo 300 caracteres.</div>
+                        </div>
+                    </div>
+
                     <div class="p-3 bg-light rounded-3 border border-dashed mb-3">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <h6 class="text-muted fs-7 mb-0 fw-bold text-uppercase">Periodo de Evento </h6>
@@ -459,14 +467,6 @@
                                     <i class='bx bx-cloud-upload me-1'></i> Adjunta el certificado escaneado. Asegúrate de que el archivo sea legible y no supere los 5MB.
                                 </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="row mb-2">
-                        <div class="col-md-12">
-                            <label for="txt_institucion_auspiciante" class="form-label fw-semibold fs-7">Institución Auspiciante </label>
-                            <textarea class="form-control no_caracteres" name="txt_institucion_auspiciante" id="txt_institucion_auspiciante" rows="3" maxlength="200" placeholder="Describe la Institución Auspiciante."></textarea>
-                            <div class="form-text text-end text-xs">Máximo 300 caracteres.</div>
                         </div>
                     </div>
 
