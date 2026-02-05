@@ -336,7 +336,7 @@
                             <label for="txt_institucion_1" class="form-label fw-semibold fs-7">Institución </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-buildings'></i></span>
-                                <input type="text" class="form-control no_caracteres" name="txt_institucion_1" id="txt_institucion_1" maxlength="100" placeholder="Ej: Alianza Francesa, British Council...">
+                                <input type="text" class="form-control no_caracteres" name="txt_institucion_1" id="txt_institucion_1" maxlength="100" oninput="texto_mayusculas(this);" placeholder="Ej: Alianza Francesa, British Council...">
                             </div>
                             <label class="error" style="display: none;" for="txt_institucion_1"></label>
                         </div>

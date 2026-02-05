@@ -254,7 +254,7 @@
                             <label for="txt_nombre_empresa_contrato" class="form-label fw-semibold fs-7">Nombre de la Empresa </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-buildings'></i></span>
-                                <input type="text" class="form-control no_caracteres" name="txt_nombre_empresa_contrato" id="txt_nombre_empresa_contrato" maxlength="100" placeholder="Nombre de la institución">
+                                <input type="text" class="form-control no_caracteres" name="txt_nombre_empresa_contrato" id="txt_nombre_empresa_contrato" maxlength="100" oninput="texto_mayusculas(this);" placeholder="Nombre de la institución">
                             </div>
                             <label class="error" style="display: none;" for="txt_nombre_empresa_contrato"></label>
                         </div>
@@ -262,7 +262,7 @@
                             <label for="txt_tipo_contrato" class="form-label fw-semibold fs-7">Tipo de Contrato </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-spreadsheet'></i></span>
-                                <input type="text" class="form-control no_caracteres" name="txt_tipo_contrato" id="txt_tipo_contrato" maxlength="100" placeholder="Ej: Indefinido, Eventual, Por obra...">
+                                <input type="text" class="form-control no_caracteres" name="txt_tipo_contrato" id="txt_tipo_contrato" maxlength="100" oninput="texto_mayusculas(this);" placeholder="Ej: Indefinido, Eventual, Por obra...">
                             </div>
                             <label class="error" style="display: none;" for="txt_tipo_contrato"></label>
                         </div>

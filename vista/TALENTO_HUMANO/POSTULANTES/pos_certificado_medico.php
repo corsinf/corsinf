@@ -237,7 +237,7 @@
                         <label for="th_cer_motivo_certificado" class="form-label fw-semibold fs-7">Diagnóstico / Enfermedad</label>
                         <div class="input-group input-group-sm">
                             <span class="input-group-text bg-white text-muted"><i class='bx bx-notepad'></i></span>
-                            <input type="text" class="form-control form-control-sm" name="th_cer_motivo_certificado" id="th_cer_motivo_certificado" maxlength="100" placeholder="Ej: Hipertensión, Asma, etc.">
+                            <input type="text" class="form-control form-control-sm" name="th_cer_motivo_certificado" id="th_cer_motivo_certificado" maxlength="100" oninput="texto_mayusculas(this);" placeholder="Ej: Hipertensión, Asma, etc.">
                         </div>
                     </div>
 

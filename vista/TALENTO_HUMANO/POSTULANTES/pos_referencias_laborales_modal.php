@@ -27,7 +27,7 @@
                             <label for="txt_nombre_referencia" class="form-label fw-semibold fs-7">Nombre del Jefe o Contacto </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-user'></i></span>
-                                <input type="text" class="form-control no_caracteres" name="txt_nombre_referencia" id="txt_nombre_referencia" maxlength="50" placeholder="Ej: Ing. Juan Pérez">
+                                <input type="text" class="form-control no_caracteres" name="txt_nombre_referencia" id="txt_nombre_referencia" maxlength="50" oninput="texto_mayusculas(this);" placeholder="Ej: Ing. Juan Pérez">
                             </div>
                             <label class="error" style="display: none;" for="txt_nombre_referencia"></label>
                         </div>

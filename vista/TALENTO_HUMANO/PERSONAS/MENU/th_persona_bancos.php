@@ -256,7 +256,7 @@
                     </div>
 
                     <div class="row mb-col mb-3 align-items-end">
-                        <div class="col-md-8">
+                        <div class="col-md-6">
                             <label for="txt_numero_cuenta" class="form-label fw-semibold fs-7">Número de Cuenta </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-light text-muted"><i class='bx bx-hash'></i></span>
@@ -269,7 +269,7 @@
                                     oninput="texto_mayusculas(this);">
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label for="ddl_forma_pago" class="form-label fw-semibold fs-7">Forma de pago </label>
                             <div class="input-group input-group-sm">
                                 <select class="form-select select2-validation" id="ddl_forma_pago" name="ddl_forma_pago" required>
@@ -279,7 +279,7 @@
                         </div>
                     </div>
                     <div class="row mb-col mb-3">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="p-2 border rounded bg-light bg-opacity-50">
                                 <label class="form-label fw-semibold fs-7 mb-1 d-block text-center">¿Es Principal? </label>
                                 <div class="form-check form-switch d-flex justify-content-center">

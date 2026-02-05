@@ -415,24 +415,23 @@
                     </div>
 
                     <div class="p-3 bg-light rounded-3 border border-dashed mb-3">
-                        <h6 class="text-muted fs-7 mb-2 fw-bold text-uppercase ls-1">Periodo de Gestión </h6>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="text-muted fs-7 mb-0 fw-bold text-uppercase ls-1">Periodo de Gestión</h6>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="cbx_fecha_salida_estado" onchange="checkbox_actualidad_est_lab();">
+                                <label class="form-check-label fs-7 fw-semibold text-primary" for="cbx_fecha_salida_estado">Indefinido</label>
+                            </div>
+                        </div>
+
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label for="txt_fecha_contratacion_estado" class="form-label fs-7 mb-1">Fecha de Contratación </label>
+                                <label for="txt_fecha_contratacion_estado" class="form-label fs-7 mb-1">Fecha de Contratación</label>
                                 <input type="date" class="form-control form-control-sm" name="txt_fecha_contratacion_estado" id="txt_fecha_contratacion_estado" onchange="validar_fechas_est_lab();">
                             </div>
                             <div class="col-md-6">
-                                <label for="txt_fecha_salida_estado" class="form-label fs-7 mb-1">Fecha de Salida </label>
-                                <div class="input-group input-group-sm">
-                                    <input type="date" class="form-control" name="txt_fecha_salida_estado" id="txt_fecha_salida_estado" onchange="validar_fechas_est_lab();">
-                                    <div class="input-group-text bg-white border-start-0">
-                                        <div class="form-check form-switch mb-0">
-                                            <input class="form-check-input" type="checkbox" id="cbx_fecha_salida_estado" onchange="checkbox_actualidad_est_lab();">
-                                            <label class="form-check-label text-xs fw-bold text-primary" for="cbx_fecha_salida_estado">Indefinido</label>
-                                        </div>
-                                    </div>
-                                    <label class="error" style="display: none;" for="txt_fecha_salida_estado"></label>
-                                </div>
+                                <label for="txt_fecha_salida_estado" class="form-label fs-7 mb-1">Fecha de Salida</label>
+                                <input type="date" class="form-control form-control-sm" name="txt_fecha_salida_estado" id="txt_fecha_salida_estado" onchange="validar_fechas_est_lab();">
+                                <label class="error" style="display: none;" for="txt_fecha_salida_estado"></label>
                             </div>
                         </div>
                     </div>

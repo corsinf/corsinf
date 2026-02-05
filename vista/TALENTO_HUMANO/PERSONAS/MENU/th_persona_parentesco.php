@@ -320,7 +320,7 @@
                             <label for="txt_nombres_pariente" class="form-label fw-semibold fs-7">Nombres </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-user'></i></span>
-                                <input type="text" class="form-control" name="txt_nombres_pariente" id="txt_nombres_pariente" required placeholder="Nombres completos">
+                                <input type="text" class="form-control" name="txt_nombres_pariente" id="txt_nombres_pariente" oninput="texto_mayusculas(this);" required placeholder="Nombres completos">
                             </div>
                             <label class="error" style="display: none;" for="txt_nombres_pariente"></label>
 
@@ -329,7 +329,7 @@
                             <label for="txt_apellidos_pariente" class="form-label fw-semibold fs-7">Apellidos </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-user'></i></span>
-                                <input type="text" class="form-control" name="txt_apellidos_pariente" id="txt_apellidos_pariente" required placeholder="Apellidos completos">
+                                <input type="text" class="form-control" name="txt_apellidos_pariente" id="txt_apellidos_pariente" oninput="texto_mayusculas(this);" required placeholder="Apellidos completos">
                             </div>
                             <label class="error" style="display: none;" for="txt_apellidos_pariente"></label>
 

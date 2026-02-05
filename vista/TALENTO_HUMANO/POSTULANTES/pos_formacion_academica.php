@@ -283,7 +283,7 @@
                             <label for="txt_titulo_obtenido" class="form-label fw-semibold fs-7">Título Obtenido </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-certification'></i></span>
-                                <input type="text" class="form-control no_caracteres" name="txt_titulo_obtenido" id="txt_titulo_obtenido" maxlength="100" placeholder="Ej: Ingeniero en Sistemas, Bachiller en Ciencias...">
+                                <input type="text" class="form-control no_caracteres" name="txt_titulo_obtenido" id="txt_titulo_obtenido" maxlength="100" oninput="texto_mayusculas(this);" placeholder="Ej: Ingeniero en Sistemas, Bachiller en Ciencias...">
                             </div>
                             <label class="error" style="display: none;" for="txt_titulo_obtenido"></label>
 
@@ -314,7 +314,7 @@
                             <label for="txt_institucion" class="form-label fw-semibold fs-7">Institución Educativa </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-buildings'></i></span>
-                                <input type="text" class="form-control no_caracteres" name="txt_institucion" id="txt_institucion" maxlength="100" placeholder="Ej: Universidad Central del Ecuador">
+                                <input type="text" class="form-control no_caracteres" name="txt_institucion" id="txt_institucion" maxlength="100" oninput="texto_mayusculas(this);" placeholder="Ej: Universidad Central del Ecuador">
                             </div>
                             <label class="error" style="display: none;" for="txt_institucion"></label>
                         </div>
