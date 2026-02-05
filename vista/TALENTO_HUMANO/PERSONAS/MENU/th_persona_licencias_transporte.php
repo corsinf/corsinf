@@ -48,7 +48,6 @@
 
                 $('#txt_id_licencia_transporte').val(datos._id);
                 $('#txt_numero_licencia').val(datos.numero_licencia);
-                $('#ddl_estado_licencia').val(datos.estado_licencia);
                 $('#txt_autoridad_emisora').val(datos.autoridad_emisora);
                 $('#txt_escuela').val(datos.escuela);
                 $('#txt_fecha_expedicion').val(datos.fecha_expedicion);
@@ -58,6 +57,13 @@
                 $('#ddl_licencia_transporte').append($('<option>', {
                     value: datos.id_licencia_transporte,
                     text: datos.tipo_licencia_transporte,
+                    selected: true
+                }));
+
+                // Cargar Banco
+                $('#ddl_estado_licencia').append($('<option>', {
+                    value: datos.estado_licencia,
+                    text: datos.estado_licencia,
                     selected: true
                 }));
             }
