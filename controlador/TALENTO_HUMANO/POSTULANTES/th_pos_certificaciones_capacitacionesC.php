@@ -79,6 +79,10 @@ class th_pos_certificaciones_capacitacionesC
                             <p class="m-0 text-muted" style="font-size: 0.75rem;">
                                 <i class="bx bx-map-pin me-1"></i>País: <strong>{$value['nombre_pais']}</strong>
                             </p>
+                            <p class="m-0 text-muted text-truncate" style="font-size: 0.75rem; max-width: 250px;" title="{$value['th_cert_institucion_auspiciante']}">
+                                <i class="bx bx-map-pin me-1"></i>
+                                Institución Auspiciante <strong>{$value['th_cert_institucion_auspiciante']}</strong>
+                            </p>
                         </div>
 
                         <div class="mt-auto pt-2">
@@ -147,6 +151,7 @@ HTML;
             array('campo' => 'id_certificado', 'dato' => $parametros['ddl_certificado']),
             array('campo' => 'id_evento_cert', 'dato' => $parametros['ddl_evento_cert']),
             array('campo' => 'id_pais', 'dato' => $parametros['ddl_pais_cerficacion']),
+            array('campo' => 'th_cert_institucion_auspiciante', 'dato' => $parametros['txt_institucion_auspiciante']),
         );
 
         $id_certificaciones_capacitaciones = $parametros['txt_certificaciones_capacitaciones_id'];

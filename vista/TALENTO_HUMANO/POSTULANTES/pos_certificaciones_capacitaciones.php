@@ -53,6 +53,8 @@
                 // Fecha de inicio
                 $('#txt_fecha_inicio_capacitacion').val(response[0].th_cert_fecha_desde);
 
+                $('#txt_institucion_auspiciante').val(response[0].th_cert_institucion_auspiciante);
+
                 // Cargar selects
                 $('#ddl_pais_cerficacion').append($('<option>', {
                     value: response[0].id_pais,
@@ -219,28 +221,11 @@
     function limpiar_parametros_certificaciones_capacitaciones() {
         //certificaciones capacitaciones
         $('#txt_nombre_curso').val('');
-        $('#txt_ruta_archivo').val('');
-        $('#txt_certificaciones_capacitaciones_id').val('');
-        $('#txt_ruta_guardada_certificaciones_capacitaciones').val('');
-        $('#ddl_pais_cerficacion').val(null).trigger('change');
-        $('#ddl_evento_cert').val(null).trigger('change');
-        $('#ddl_certificado').val(null).trigger('change');
-        //Limpiar validaciones
-        $("#form_certificaciones_capacitaciones").validate().resetForm();
-        $('.form-control').removeClass('is-valid is-invalid');
-        //Cambiar texto
-        $('#lbl_titulo_certificaciones_capacitaciones').html('Agregar Certificado y/o Capacitación');
-        $('#btn_guardar_certificaciones_capacitaciones').html('<i class="bx bx-save"></i>Agregar');
-        $('#btn_eliminar_certificaciones').hide();
-    }
-
-    function limpiar_parametros_certificaciones_capacitaciones() {
-        //certificaciones capacitaciones
-        $('#txt_nombre_curso').val('');
         $('#txt_duracion_horas').val('');
         $('#txt_ruta_archivo').val('');
         $('#txt_certificaciones_capacitaciones_id').val('');
         $('#txt_ruta_guardada_certificaciones_capacitaciones').val('');
+        $('#txt_institucion_auspiciante').val('');
         $('#txt_fecha_inicio_capacitacion').val('');
         $('#txt_fecha_final_capacitacion').val('');
         $('#cbx_fecha_final_capacitacion').prop('checked', false);
@@ -476,6 +461,15 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-12">
+                            <label for="txt_institucion_auspiciante" class="form-label fw-semibold fs-7">Institución Auspiciante </label>
+                            <textarea class="form-control no_caracteres" name="txt_institucion_auspiciante" id="txt_institucion_auspiciante" rows="3" maxlength="200" placeholder="Describe la Institución Auspiciante."></textarea>
+                            <div class="form-text text-end text-xs">Máximo 300 caracteres.</div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="modal-footer bg-light border-top-0 d-flex justify-content-between">

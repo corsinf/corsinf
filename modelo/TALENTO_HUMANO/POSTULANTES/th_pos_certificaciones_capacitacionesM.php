@@ -22,6 +22,7 @@ class th_pos_certificaciones_capacitacionesM extends BaseModel
         'id_evento_cert',
         'id_pais',
         'th_cert_sigue_cursando',
+        'th_cert_institucion_auspiciante',
     ];
 
     public function listar_certificaciones_postulante($th_pos_id = null, $th_cert_id = null)
@@ -38,6 +39,7 @@ class th_pos_certificaciones_capacitacionesM extends BaseModel
         t.th_cert_fecha_hasta,
         t.th_cert_sigue_cursando,
         t.id_pais,
+        t.th_cert_institucion_auspiciante,
         p.nombre AS nombre_pais,
         t.id_evento_cert,
         ec.descripcion AS nombre_evento_certificado,
