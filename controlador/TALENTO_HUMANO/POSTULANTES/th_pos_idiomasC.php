@@ -35,7 +35,22 @@ class th_pos_idiomasC
         $datos = $this->modelo->listar_idiomas_completo($id);
 
         if (empty($datos)) {
-            $texto = '<div class="alert alert-info mb-0"><p>No hay información adicional registrada.</p></div>';
+            return <<<HTML
+                        <div class="d-flex align-items-center bg-white border border-start-0 shadow-sm rounded-3" 
+                            style="border-left: 4px solid !important; padding: 12px 24px; max-width: 600px;">
+                        
+                        <i class='bx bx-data me-3 text-primary' style='font-size: 28px;'></i>
+
+                        <div class="lh-sm">
+                            <div class="text-dark fw-bold mb-1" style="font-size: 1rem;">
+                            Sin registros en este apartado
+                            </div>
+                            <div class="text-secondary" style="font-size: 0.85rem;">
+                            No hemos encontrado información disponible para mostrar en esta sección.
+                            </div>
+                        </div>
+                        </div>
+                    HTML;
         } else {
             $texto = '<div class="row g-3">';
 
@@ -53,59 +68,59 @@ class th_pos_idiomasC
                     : (!empty($value['th_idi_fecha_fin_idioma']) ? date('d/m/Y', strtotime($value['th_idi_fecha_fin_idioma'])) : '');
 
                 $texto .= <<<HTML
-            <div class="col-md-6 mb-col">
-                <div class="cert-card p-3 h-100 position-relative shadow-sm">
-                    
-                    <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
-                            onclick="abrir_modal_idiomas('{$value['_id']}');" 
-                            title="Editar Idioma">
-                        <i class="bx bx-pencil text-primary"></i>
-                    </button>
+                                <div class="col-md-6 mb-col">
+                                    <div class="cert-card p-3 h-100 position-relative shadow-sm">
+                                        
+                                        <button class="btn btn-sm btn-edit-minimal position-absolute top-0 end-0 m-2" 
+                                                onclick="abrir_modal_idiomas('{$value['_id']}');" 
+                                                title="Editar Idioma">
+                                            <i class="bx bx-pencil text-primary"></i>
+                                        </button>
 
-                    <div class="d-flex flex-column h-100">
-                        <div class="mb-2">
-                            <span class="cert-badge mb-1" style="background-color: #f3e5f5; color: #6610f2;">Dominio de Idioma</span>
-                            
-                            <h6 class="fw-bold text-dark cert-title mb-1">
-                                {$value['nombre_idioma']}
-                            </h6>
-                            
-                            <p class="cert-doctor m-0" style="font-size: 0.8rem;">
-                                <i class="bx bx-medal me-1"></i>Nivel: <strong>{$value['nivel_idioma_descripcion']}</strong>
-                            </p>
-                            
-                            <p class="text-muted m-0" style="font-size: 0.75rem;">
-                                <i class="bx bx-buildings me-1"></i>Institución: <strong>{$value['th_idi_institucion']}</strong>
-                            </p>
+                                        <div class="d-flex flex-column h-100">
+                                            <div class="mb-2">
+                                                <span class="cert-badge mb-1" style="background-color: #f3e5f5; color: #6610f2;">Dominio de Idioma</span>
+                                                
+                                                <h6 class="fw-bold text-dark cert-title mb-1">
+                                                    {$value['nombre_idioma']}
+                                                </h6>
+                                                
+                                                <p class="cert-doctor m-0" style="font-size: 0.8rem;">
+                                                    <i class="bx bx-medal me-1"></i>Nivel: <strong>{$value['nivel_idioma_descripcion']}</strong>
+                                                </p>
+                                                
+                                                <p class="text-muted m-0" style="font-size: 0.75rem;">
+                                                    <i class="bx bx-buildings me-1"></i>Institución: <strong>{$value['th_idi_institucion']}</strong>
+                                                </p>
 
-                            <p class="text-muted m-0" style="font-size: 0.75rem;">
-                                <i class="bx bx-certification me-1"></i>Certificado: <strong>{$value['nombre_certificacion']}</strong>
-                            </p>
-                        </div>
+                                                <p class="text-muted m-0" style="font-size: 0.75rem;">
+                                                    <i class="bx bx-certification me-1"></i>Certificado: <strong>{$value['nombre_certificacion']}</strong>
+                                                </p>
+                                            </div>
 
-                        <div class="mt-auto pt-2">
-                            <div class="d-flex align-items-center justify-content-between p-2" 
-                                 style="background: rgba(102, 16, 242, 0.05); border-radius: 8px; border: 1px dashed rgba(102, 16, 242, 0.2);">
-                                
-                                <div class="cert-date-range">
-                                    <div class="cert-label-small" style="color: #6610f2;">Periodo de estudio</div>
-                                    <span class="text-dark" style="font-size: 0.7rem;">
-                                        <i class="bx bx-calendar me-1"></i>{$fecha_inicio_idioma} — {$fecha_fin_idioma}
-                                    </span>
+                                            <div class="mt-auto pt-2">
+                                                <div class="d-flex align-items-center justify-content-between p-2" 
+                                                    style="background: rgba(102, 16, 242, 0.05); border-radius: 8px; border: 1px dashed rgba(102, 16, 242, 0.2);">
+                                                    
+                                                    <div class="cert-date-range">
+                                                        <div class="cert-label-small" style="color: #6610f2;">Periodo de estudio</div>
+                                                        <span class="text-dark" style="font-size: 0.7rem;">
+                                                            <i class="bx bx-calendar me-1"></i>{$fecha_inicio_idioma} — {$fecha_fin_idioma}
+                                                        </span>
+                                                    </div>
+
+                                                    <div style="color: #6610f2; opacity: 0.5;">
+                                                        <i class="bx bx-world bx-sm"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div style="color: #6610f2; opacity: 0.5;">
-                                    <i class="bx bx-world bx-sm"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-HTML;
+                            HTML;
             }
 
-            $texto .= '</div>'; // Cerramos el div row g-3
+            $texto .= '</div>';
         }
 
         return $texto;
@@ -116,7 +131,7 @@ HTML;
         if ($id == '') {
             $datos = $this->modelo->where('th_idi_estado', 1)->listar();
         } else {
-            $datos = $this->modelo->listar_idiomas_completo(null,$id);
+            $datos = $this->modelo->listar_idiomas_completo(null, $id);
         }
         return $datos;
     }
