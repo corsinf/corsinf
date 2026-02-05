@@ -14,6 +14,10 @@
     function cargar_selects_discapacidad() {
         let url = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_discapacidadC.php?buscar=true';
         cargar_select2_url('ddl_discapacidad', url, '', '#modal_agregar_discapacidad');
+        let url_dis_porcentaje = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_discapacidad_porcentajeC.php?buscar=true';
+        cargar_select2_url('ddl_discapacidad_porcentaje', url_dis_porcentaje, '', '#modal_agregar_discapacidad');
+        let url_dis_gravedad = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_discapacidad_gravedadC.php?buscar=true';
+        cargar_select2_url('ddl_discapacidad_gravedad', url_dis_gravedad, '', '#modal_agregar_discapacidad');
     }
 
     function cargar_discapacidad_escalas(id_discapacidad) {
@@ -86,6 +90,16 @@
                     text: response[0].escala_discapacidad,
                     selected: true
                 }));
+                $('#ddl_discapacidad_porcentaje').append($('<option>', {
+                    value: response[0].id_dis_porcentaje,
+                    text: response[0].descripcion_dis_porcentaje,
+                    selected: true
+                }));
+                $('#ddl_discapacidad_gravedad').append($('<option>', {
+                    value: response[0].id_dis_gravedad,
+                    text: response[0].descripcion_dis_gravedad,
+                    selected: true
+                }));
                 $('#txt_porcentaje').val(response[0].th_pos_dis_porcentaje);
                 $('#txt_escala').val(response[0].th_pos_dis_escala);
                 $('#txt_discapacidad_id').val(response[0]._id);
@@ -103,6 +117,8 @@
             pos_id: '<?= $id_postulante ?>',
             ddl_discapacidad: $('#ddl_discapacidad').val(),
             ddl_discapacidad_escala: $('#ddl_discapacidad_escala').val(),
+            ddl_discapacidad_gravedad: $('#ddl_discapacidad_gravedad').val(),
+            ddl_discapacidad_porcentaje: $('#ddl_discapacidad_porcentaje').val(),
             txt_porcentaje: $('#txt_porcentaje').val(),
             txt_escala: $('#txt_escala').val(),
             txt_sustituto: $('#txt_sustituto').val(),
@@ -220,6 +236,8 @@
         $('#txt_sustituto').val('');
 
         $('#ddl_discapacidad_escala').val(null).trigger('change');
+        $('#ddl_discapacidad_porcentaje').val(null).trigger('change');
+        $('#ddl_discapacidad_gravedad').val(null).trigger('change');
         $('#ddl_discapacidad').val(null).trigger('change');
 
         $('.select2-selection').removeClass('is-valid is-invalid');
@@ -269,7 +287,24 @@
                         </div>
 
                     </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="ddl_discapacidad_porcentaje" class="form-label fw-semibold fs-7">Porcentaje </label>
+                            <select class="form-select select2-validation" id="ddl_discapacidad_porcentaje" name="ddl_discapacidad_porcentaje" required>
+                                <option value="">-- Seleccione tipo --</option>
+                            </select>
+                            <label class="error" style="display: none;" for="ddl_discapacidad_porcentaje"></label>
+                        </div>
 
+                        <div class="col-md-6">
+                            <label for="ddl_discapacidad_gravedad" class="form-label fw-semibold fs-7">Gravedad <i class='bx bx-info-circle text-primary' data-bs-toggle="tooltip" title="Primero seleccionar un Tipo de Discapacidad"></i> </label>
+                            <select class="form-select select2-validation" id="ddl_discapacidad_gravedad" name="ddl_discapacidad_gravedad" required>
+                                <option value="">-- Seleccione escala --</option>
+                            </select>
+                            <label class="error" style="display: none;" for="ddl_discapacidad_gravedad"></label>
+                        </div>
+
+                    </div>
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <label for="txt_porcentaje" class="form-label fw-semibold fs-7">Porcentaje (%) </label>
@@ -319,6 +354,8 @@
 
         agregar_asterisco_campo_obligatorio('ddl_discapacidad');
         agregar_asterisco_campo_obligatorio('ddl_discapacidad_escala');
+        agregar_asterisco_campo_obligatorio('ddl_discapacidad_porcentaje');
+        agregar_asterisco_campo_obligatorio('ddl_discapacidad_gravedad');
         agregar_asterisco_campo_obligatorio('txt_porcentaje');
 
 
@@ -335,6 +372,12 @@
                 ddl_discapacidad_escala: {
                     required: true
                 },
+                ddl_discapacidad_porcentaje: {
+                    required: true
+                },
+                ddl_discapacidad_gravedad: {
+                    required: true
+                },
                 txt_porcentaje: {
                     required: true,
                     number: true,
@@ -347,6 +390,12 @@
                     required: "Seleccione una discapacidad"
                 },
                 ddl_discapacidad_escala: {
+                    required: "Seleccione una discapacidad escalada"
+                },
+                ddl_discapacidad_porcentaje: {
+                    required: "Seleccione una discapacidad escalada"
+                },
+                ddl_discapacidad_gravedad: {
                     required: "Seleccione una discapacidad escalada"
                 },
                 txt_porcentaje: {

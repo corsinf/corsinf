@@ -61,7 +61,12 @@ class th_pos_discapacidadC
                                             <p class="cert-doctor m-0">
                                                 <i class="bx bx-layer me-1"></i>Escala: {$value['escala_discapacidad']}
                                             </p>
-
+                                            <p class="cert-doctor m-0">
+                                                <i class="bx bx-layer me-1"></i>Porcentaje: {$value['descripcion_dis_porcentaje']}
+                                            </p>
+                                            <p class="cert-doctor m-0">
+                                                <i class="bx bx-layer me-1"></i>Gravedad: {$value['descripcion_dis_gravedad']}
+                                            </p>
                                             <p class="cert-doctor m-0">
                                                 <i class="bx bx-user me-1"></i>Sustituto: {$value['sustituto']}
                                             </p>
@@ -97,7 +102,7 @@ class th_pos_discapacidadC
 
     function listar_modal($id)
     {
-        return $this->modelo->listar_discapacidad_postulante(null,$id);
+        return $this->modelo->listar_discapacidad_postulante(null, $id);
     }
 
     function guardar($parametros)
@@ -128,6 +133,8 @@ class th_pos_discapacidadC
             ['campo' => 'id_escala_dis', 'dato' => $id_escala],
             ['campo' => 'th_pos_dis_porcentaje', 'dato' => $parametros['txt_porcentaje']],
             ['campo' => 'th_pos_dis_sustituto', 'dato' => $parametros['txt_sustituto']],
+            ['campo' => 'id_dis_gravedad', 'dato' => $parametros['ddl_discapacidad_gravedad']],
+            ['campo' => 'id_dis_porcentaje', 'dato' => $parametros['ddl_discapacidad_porcentaje']],
             ['campo' => 'th_pos_dis_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')],
         ];
 

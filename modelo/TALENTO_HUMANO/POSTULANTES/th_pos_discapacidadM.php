@@ -15,7 +15,9 @@ class th_pos_discapacidadM extends BaseModel
         'th_pos_dis_estado',
         'th_pos_dis_fecha_creacion',
         'th_pos_dis_fecha_modificacion',
-        'th_pos_dis_sustituto AS sustituto'
+        'th_pos_dis_sustituto AS sustituto',
+        'id_dis_gravedad',
+        'id_dis_porcentaje',
     ];
 
     public function listar_discapacidad_postulante($th_pos_id = null, $th_pos_dis_id = null)
@@ -30,12 +32,20 @@ class th_pos_discapacidadM extends BaseModel
                 d.descripcion AS discapacidad,
                 pd.th_pos_dis_porcentaje,
                 pd.th_pos_dis_escala,
-                pd.th_pos_dis_sustituto AS sustituto
+                pd.th_pos_dis_sustituto AS sustituto,
+                pd.id_dis_gravedad,
+                pd.id_dis_porcentaje,
+                dis_gra.descripcion AS descripcion_dis_gravedad,
+                dis_por.descripcion AS descripcion_dis_porcentaje
             FROM th_pos_discapacidad pd
-            INNER JOIN th_cat_discapacidad d
+            LEFT JOIN th_cat_discapacidad d
                 ON pd.id_discapacidad = d.id_discapacidad
-            INNER JOIN th_cat_discapacidad_escala e
+            LEFT JOIN th_cat_discapacidad_escala e
                 ON pd.id_escala_dis = e.id_escala_dis
+            LEFT JOIN th_cat_discapacidad_gravedad dis_gra
+                ON pd.id_dis_gravedad = dis_gra.id_dis_gravedad
+            LEFT JOIN th_cat_discapacidad_porcentaje dis_por
+                ON pd.id_dis_porcentaje = dis_por.id_dis_porcentaje
             WHERE th_pos_dis_estado = 1 
             ";
 
