@@ -20,6 +20,7 @@
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
                     <input type="hidden" name="txt_referencia_experiencia_id" id="txt_referencia_experiencia_id">
+                    <input type="hidden" name="txt_referencia_modal" id="txt_referencia_modal">
 
                     <div class="row mb-3">
                         <div class="col-md-12">

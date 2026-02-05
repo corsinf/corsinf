@@ -121,10 +121,13 @@
     }
 
     //Funcion para editar el registro de referencias laborales
-    function abrir_modal_referencias_laborales(id) {
+    function abrir_modal_referencias_laborales(id, referencia_modal = 0) {
         cargar_datos_modal_referencias_laborales(id);
         if ($('#modal_agregar_experiencia').is(':visible')) {
             $('#modal_agregar_experiencia').modal('hide');
+        }
+        if (referencia_modal == 1) {
+            $('#txt_referencia_modal').val(1);
         }
         $('#modal_agregar_referencia_laboral').modal('show');
         $('#lbl_titulo_referencia_laboral').html('Editar Referencia Laboral');
@@ -171,7 +174,15 @@
     }
 
     function limpiar_parametros_referencias_laborales() {
-        //certificaciones capacitaciones
+        let ref_exp_id = $('#txt_referencia_experiencia_id').val();
+        let referencia_modal = $('#txt_referencia_modal').val();
+
+        console.log(ref_exp_id + "" + referencia_modal);
+
+
+        if (ref_exp_id > 0 && referencia_modal == 1) {
+            abrir_modal_experiencia_laboral(ref_exp_id);
+        }
         $('#txt_nombre_referencia').val('');
         $('#txt_telefono_referencia').val('');
         $('#txt_copia_carta_recomendacion').val('');
@@ -180,6 +191,7 @@
         $('#txt_referencia_correo').val('');
         $('#txt_referencia_nombre_empresa').val('');
         $('#txt_referencia_experiencia_id').val('');
+        $('#txt_referencia_modal').val('');
         //Limpiar validaciones
         $("#form_referencias_laborales").validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
@@ -187,6 +199,7 @@
         $('#lbl_titulo_referencia_laboral').html('Agregar Referencia Laboral');
         $('#btn_guardar_referencia_laboral').html('<i class="bx bx-save"></i>Agregar');
         $('#btn_eliminar_referencia_laboral').hide();
+
     }
 
     function definir_ruta_iframe_referencias_laborales(url) {

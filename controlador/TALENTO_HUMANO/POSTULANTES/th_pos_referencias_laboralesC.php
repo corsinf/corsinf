@@ -64,7 +64,7 @@ class th_pos_referencias_laboralesC
             </div>
             <div>
                 <button type="button" class="btn btn-link text-info p-0" 
-                        onclick="abrir_modal_referencias_laborales('{$id_ref}');" 
+                        onclick="abrir_modal_referencias_laborales('{$id_ref}','1');" 
                         title="Editar Referencia">
                     <i class="bx bx-pencil" style="font-size: 1rem;"></i>
                 </button>
