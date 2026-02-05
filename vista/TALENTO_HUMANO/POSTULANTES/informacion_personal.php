@@ -243,6 +243,7 @@ if (isset($_GET['id_persona'])) {
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('txt_primer_apellido');
         agregar_asterisco_campo_obligatorio('txt_segundo_apellido');
+        agregar_asterisco_campo_obligatorio('txt_observaciones');
         agregar_asterisco_campo_obligatorio('txt_primer_nombre');
         agregar_asterisco_campo_obligatorio('txt_segundo_nombre');
         agregar_asterisco_campo_obligatorio('txt_cedula');

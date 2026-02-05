@@ -110,6 +110,7 @@ class th_postulantesC
             array('campo' => 'id_origen_indigena', 'dato' => !empty($parametros['ddl_origen_indigena']) ? $parametros['ddl_origen_indigena'] : null),
             array('campo' => 'th_pos_correo_personal_1', 'dato' => !empty($parametros['txt_per_correo_personal_1']) ? $parametros['txt_per_correo_personal_1'] : null),
             array('campo' => 'th_pos_correo_personal_2', 'dato' => !empty($parametros['txt_per_correo_personal_2']) ? $parametros['txt_per_correo_personal_2'] : null),
+            array('campo' => 'th_pos_observaciones', 'dato' => !empty($parametros['txt_observaciones']) ? $parametros['txt_observaciones'] : null),
         );
 
         if ($parametros['_id'] == '') {

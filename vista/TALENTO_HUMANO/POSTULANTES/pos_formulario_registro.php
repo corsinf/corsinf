@@ -30,7 +30,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
         cargar_select2_url('ddl_identidad_genero', url_identidad_generoC, '', '#modal_informacion_personal');
 
         url_nacionalidadC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_paisC.php?buscar_nacionalidad=true';
-        cargar_select2_url('ddl_nacionalidad', url_nacionalidadC,'', '#modal_informacion_personal');
+        cargar_select2_url('ddl_nacionalidad', url_nacionalidadC, '', '#modal_informacion_personal');
 
         url_tipo_sangreC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_tipo_sangreC.php?buscar=true';
         cargar_select2_url('ddl_tipo_sangre', url_tipo_sangreC, '', '#modal_informacion_personal');
@@ -80,6 +80,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
                 $('#txt_correo').val(response[0].th_pos_correo);
                 $('#txt_codigo_postal').val(response[0].th_pos_postal);
                 $('#txt_direccion').val(response[0].th_pos_direccion);
+                $('#txt_observaciones').val(response[0].th_pos_observaciones);
 
                 calcular_edad('txt_edad', response[0].th_pos_fecha_nacimiento);
 
@@ -203,6 +204,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
         var ddl_origen_indigena = $('#ddl_origen_indigena').val();
         var txt_per_correo_personal_1 = $('#txt_per_correo_personal_1').val();
         var txt_per_correo_personal_2 = $('#txt_per_correo_personal_2').val();
+        var txt_observaciones = $('#txt_observaciones').val();
 
         var parametros = {
             '_id': '<?= $id_postulante ?>',
@@ -231,6 +233,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
             'ddl_identidad_genero': ddl_identidad_genero,
             'txt_per_correo_personal_1': txt_per_correo_personal_1,
             'txt_per_correo_personal_2': txt_per_correo_personal_2,
+            'txt_observaciones': txt_observaciones,
 
         };
 
@@ -454,6 +457,13 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
         <div class="col-md-6">
             <label for="txt_per_correo_personal_2" class="form-label form-label-sm">Correo Personal Alternativo</label>
             <input type="email" class="form-control form-control-sm" name="txt_per_correo_personal_2" id="txt_per_correo_personal_2" value="" maxlength="100">
+        </div>
+    </div>
+    <div class="row mb-col">
+        <div class="col-md-12">
+            <label for="txt_observaciones" class="form-label fw-semibold fs-7">Observaciones </label>
+            <textarea class="form-control form-control-sm no_caracteres" name="txt_observaciones" id="txt_observaciones" rows="2" maxlength="500" placeholder="Describe la Institución Auspiciante." oninput="texto_mayusculas(this);"></textarea>
+            <div class="form-text text-end text-xs">Máximo 500 caracteres.</div>
         </div>
     </div>
 
