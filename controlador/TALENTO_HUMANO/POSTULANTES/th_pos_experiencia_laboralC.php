@@ -38,11 +38,7 @@ class th_pos_experiencia_laboralC
     //Funcion para listar la experiencia previa del postulante
     function listar($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)
-            ->where('th_expl_estado', 1)
-            ->orderBy('th_expl_cbx_fecha_fin_experiencia', 'DESC')
-            ->orderBy('th_expl_fecha_fin_experiencia', 'DESC')
-            ->listar();
+        $datos = $this->modelo->listar_experiencia_laboral_postulante($id);
 
         if (empty($datos)) {
             $texto = '<div class="alert alert-info mb-0"><p>No hay información adicional registrada.</p></div>';
@@ -106,6 +102,11 @@ HTML;
                             <p class="cert-doctor mb-2">
                                 <i class="bx bx-briefcase-alt-2 me-1"></i><strong>{$value['th_expl_cargos_ocupados']}</strong>
                             </p>
+                           <p class="cert-doctor mb-2 text-truncate" 
+                            style="max-width: 200px; display: block;" 
+                            title="{$value['descripcion_nomina']}">
+                                Figura Legal: <strong>{$value['descripcion_nomina']}</strong>
+                            </p>
                         </div>
 
                         <div class="mt-auto">
@@ -156,7 +157,7 @@ HTML;
         if ($id == '') {
             $datos = $this->modelo->where('th_expl_estado', 1)->listar();
         } else {
-            $datos = $this->modelo->where('th_expl_id', $id)->listar();
+            $datos = $this->modelo->listar_experiencia_laboral_postulante(null, $id);
         }
         return $datos;
     }
@@ -174,6 +175,7 @@ HTML;
             array('campo' => 'th_expl_logros', 'dato' => $parametros['txt_logros']),
             array('campo' => 'th_expl_sueldo', 'dato' => $parametros['txt_sueldo']),
             array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']),
+            array('campo' => 'id_nomina', 'dato' => $parametros['ddl_nomina_experiencia']),
 
         );
         if ($parametros['_id'] == '') {

@@ -3,6 +3,12 @@
         cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
         // console.log('Cargando experiencia laboral del postulante ID: <?= $id_postulante ?>');
     });
+    cargar_selects2();
+
+    function cargar_selects2() {
+        url_nomina = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_nominaC.php?buscar=true';
+        cargar_select2_url('ddl_nomina_experiencia', url_nomina, '', '#modal_agregar_experiencia');
+    }
 
     //Experiencia Laboral
     function cargar_datos_experiencia_laboral(id) {
@@ -58,6 +64,12 @@
 
                 var fecha_fin_laboral = response[0].th_expl_fecha_fin_experiencia;
 
+                $('#ddl_nomina_experiencia').append($('<option>', {
+                    value: response[0].id_nomina,
+                    text: response[0].descripcion_nomina,
+                    selected: true
+                }));
+
                 if (fecha_fin_laboral === '') {
                     var hoy = new Date();
                     var dia = String(hoy.getDate()).padStart(2, '0');
@@ -89,6 +101,7 @@
         var txt_nombre_empresa = $('#txt_nombre_empresa').val();
         var txt_cargos_ocupados = $('#txt_cargos_ocupados').val();
         var txt_fecha_inicio_laboral = $('#txt_fecha_inicio_laboral').val();
+        var ddl_nomina_experiencia = $('#ddl_nomina_experiencia').val();
         var cbx_fecha_final_laboral = $('#cbx_fecha_final_laboral').prop('checked') ? 1 : 0;
         var txt_fecha_final_laboral = '';
 
@@ -116,6 +129,7 @@
             'txt_responsabilidades': txt_responsabilidades,
             'txt_logros': txt_logros,
             'txt_sueldo': txt_sueldo,
+            'ddl_nomina_experiencia': ddl_nomina_experiencia,
         }
 
         if ($("#form_experiencia_laboral").valid()) {
@@ -171,6 +185,7 @@
     //* Función para editar el registro de formación academica
     function abrir_modal_experiencia_laboral(id) {
         cargar_datos_modal_experiencia_laboral(id);
+        $('#pnl_experencia_referencias_laborales').slideDown();
         $('#modal_agregar_experiencia').modal('show');
         $('#lbl_titulo_experiencia_laboral').html('Editar Experiencia Laboral');
         $('#btn_guardar_experiencia').html('<i class="bx bx-save"></i>Editar');
@@ -229,11 +244,13 @@
         $('#txt_fecha_inicio_laboral').val('');
         $('#txt_fecha_final_laboral').val('');
         $('#txt_fecha_final_laboral').prop('disabled', false);
+        $('#ddl_nomina_experiencia').val(null).trigger('change');
         $('#cbx_fecha_final_laboral').prop('checked', false);
         $('#txt_responsabilidades').val('');
         $('#txt_logros').val('');
         $('#txt_experiencia_id').val('')
-        $('#txt_sueldo').val('')
+        $('#txt_sueldo').val('');
+        $('#pnl_experencia_referencias_laborales').slideUp();
         //Cambiar texto
         $('#lbl_titulo_experiencia_laboral').html('Agregar Experiencia Laboral');
         $('#btn_guardar_experiencia').html('<i class="bx bx-save"></i>Agregar');
@@ -403,6 +420,13 @@
                                 <input type="number" class="form-control" name="txt_sueldo" id="txt_sueldo" step="0.01" min="0" placeholder="0.00">
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <label for="ddl_nomina_experiencia" class="form-label fw-semibold fs-7">Figura Legal </label>
+                            <select class="form-select select2-validation" name="ddl_nomina_experiencia" id="ddl_nomina_experiencia" style="width: 100%;">
+                                <option value="">-- Seleccione --</option>
+                            </select>
+                            <label class="error" style="display: none;" for="ddl_nomina_experiencia"></label>
+                        </div>
                     </div>
 
                     <div class="p-3 bg-light rounded-3 border border-dashed mb-3">
@@ -447,7 +471,7 @@
                                 <i class='bx bx- id-card me-2 text-primary'></i>
                                 <h6 class="text-primary fs-7 mb-0 fw-bold text-uppercase">Referencias de esta Experiencia</h6>
                             </div>
-                            <div id="pnl_experencia_referencias_laborales" class="bg-white rounded border p-2" style="min-height: 50px;">
+                            <div id="pnl_experencia_referencias_laborales" class="bg-white rounded border p-2" style="min-height: 50px;" style="display: none;">
                                 <div class="text-center">
                                     <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
                                 </div>
@@ -477,6 +501,7 @@
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('txt_nombre_empresa');
         agregar_asterisco_campo_obligatorio('txt_cargos_ocupados');
+        agregar_asterisco_campo_obligatorio('ddl_nomina_experiencia');
         agregar_asterisco_campo_obligatorio('txt_fecha_inicio_laboral');
         agregar_asterisco_campo_obligatorio('txt_fecha_final_laboral');
         agregar_asterisco_campo_obligatorio('txt_responsabilidades');
@@ -490,6 +515,9 @@
                     required: true,
                 },
                 txt_cargos_ocupados: {
+                    required: true,
+                },
+                ddl_nomina_experiencia: {
                     required: true,
                 },
                 txt_fecha_inicio_laboral: {
@@ -514,6 +542,9 @@
                 },
                 txt_cargos_ocupados: {
                     required: "Por favor ingrese los cargos ocupados",
+                },
+                ddl_nomina_experiencia: {
+                    required: "Por favor seleccione la figura legal",
                 },
                 txt_fecha_inicio_laboral: {
                     required: "Por favor ingrese la fecha en la que iniciaron sus funciones",
