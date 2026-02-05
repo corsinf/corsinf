@@ -47,7 +47,6 @@
                 let datos = response[0];
 
                 $('#txt_id_licencia_transporte').val(datos._id);
-                $('#txt_numero_licencia').val(datos.numero_licencia);
                 $('#txt_autoridad_emisora').val(datos.autoridad_emisora);
                 $('#txt_escuela').val(datos.escuela);
                 $('#txt_fecha_expedicion').val(datos.fecha_expedicion);
@@ -180,7 +179,6 @@
 
 
         // Limpiar Inputs de texto
-        $('#txt_numero_licencia').val('');
         $('#txt_autoridad_emisora').val('');
         $('#txt_escuela').val('');
         $('#txt_fecha_expedicion').val('');
@@ -220,29 +218,17 @@
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label for="txt_numero_licencia" class="form-label fw-semibold fs-7">Número de Licencia </label>
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-white text-muted"><i class='bx bx-id-card'></i></span>
-                                <input type="text" class="form-control" id="txt_numero_licencia" name="txt_numero_licencia" required placeholder="Ej: 1712345678">
-                            </div>
-                            <label class="error" style="display: none;" for="txt_numero_licencia"></label>
-
+                            <label for="ddl_estado_licencia" class="form-label fw-semibold fs-7">Estado </label>
+                            <select class="form-select form-select-sm select2-validation" id="ddl_estado_licencia" name="ddl_estado_licencia" required style="width: 100%;">
+                            </select>
+                            <label class="error" style="display: none;" for="ddl_estado_licencia"></label>
                         </div>
+
                         <div class="col-md-6">
                             <label for="ddl_licencia_transporte" class="form-label fw-semibold fs-7">Tipo de Licencia de Transporte </label>
                             <select class="form-select form-select-sm select2-validation" id="ddl_licencia_transporte" name="ddl_licencia_transporte" required style="width: 100%;">
                             </select>
                             <label class="error" style="display: none;" for="ddl_licencia_transporte"></label>
-
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="ddl_estado_licencia" class="form-label fw-semibold fs-7">Estado </label>
-                            <select class="form-select form-select-sm select2-validation" id="ddl_estado_licencia" name="ddl_estado_licencia" required style="width: 100%;">
-                                <option value="1">Activo</option>
-                                <option value="0">Inactivo</option>
-                            </select>
-                            <label class="error" style="display: none;" for="ddl_estado_licencia"></label>
                         </div>
                     </div>
 
@@ -303,7 +289,6 @@
 <script>
     $(document).ready(function() {
 
-        agregar_asterisco_campo_obligatorio('txt_numero_licencia');
         agregar_asterisco_campo_obligatorio('ddl_licencia_transporte');
         agregar_asterisco_campo_obligatorio('ddl_estado_licencia');
         agregar_asterisco_campo_obligatorio('txt_autoridad_emisora');
@@ -320,9 +305,6 @@
 
         $("#form_licencias_transportes").validate({
             rules: {
-                txt_numero_licencia: {
-                    required: true
-                },
                 ddl_licencia_transporte: {
                     required: true
                 },
@@ -343,9 +325,6 @@
                 },
             },
             messages: {
-                txt_numero_licencia: {
-                    required: "Por favor ingrese el número de licencia."
-                },
                 ddl_licencia_transporte: {
                     required: "Por favor seleccione el tipo de licencia."
                 },

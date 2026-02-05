@@ -130,7 +130,6 @@ class th_per_licencias_transportesC
         $datos = array(
             array('campo' => 'id_licencia_transporte', 'dato' => $parametros['ddl_licencia_transporte']),
             array('campo' => 'th_per_id', 'dato' => $parametros['per_id']),
-            array('campo' => 'th_lic_numero', 'dato' => $parametros['txt_numero_licencia']),
             array('campo' => 'th_lic_fecha_expedicion', 'dato' => $parametros['txt_fecha_expedicion']),
             array('campo' => 'th_lic_fecha_vencimiento', 'dato' => $parametros['txt_fecha_vencimiento']),
             array('campo' => 'th_lic_autoridad_emisora', 'dato' => $parametros['txt_autoridad_emisora']),

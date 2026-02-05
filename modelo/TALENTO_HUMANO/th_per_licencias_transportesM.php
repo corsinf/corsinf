@@ -10,7 +10,6 @@ class th_per_licencias_transportesM extends BaseModel
     protected $camposPermitidos = [
         'id_licencia_transporte AS id_licencia_transporte',
         'th_per_id AS id_persona',
-        'th_lic_numero AS numero_licencia',
         'th_lic_fecha_expedicion AS fecha_expedicion',
         'th_lic_fecha_vencimiento AS fecha_vencimiento',
         'th_lic_autoridad_emisora AS autoridad_emisora',
@@ -31,7 +30,6 @@ class th_per_licencias_transportesM extends BaseModel
                 clt.descripcion AS tipo_licencia_transporte,
                 clt.categoria AS categoria,
                 lt.th_per_id AS id_persona,
-                lt.th_lic_numero AS numero_licencia,
                 lt.th_lic_fecha_expedicion AS fecha_expedicion,
                 lt.th_lic_fecha_vencimiento AS fecha_vencimiento,
                 lt.th_lic_autoridad_emisora AS autoridad_emisora,
