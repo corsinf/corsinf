@@ -12,10 +12,9 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
 
 <script type="text/javascript">
     $(document).ready(function() {
-        //cargar_selects2();
+        cargar_selects2();
     })
 
-    /*
     function cargar_selects2() {
 
         url_etniaC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_etniaC.php?buscar=true';
@@ -31,7 +30,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
         cargar_select2_url('ddl_identidad_genero', url_identidad_generoC, '', '#modal_informacion_personal');
 
         url_nacionalidadC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_paisC.php?buscar_nacionalidad=true';
-        cargar_select2_url('ddl_nacionalidad', url_nacionalidadC, '', '#modal_informacion_personal');
+        cargar_select2_url('ddl_nacionalidad', url_nacionalidadC, '', '#modal_informacion_personal', 2);
 
         url_tipo_sangreC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_tipo_sangreC.php?buscar=true';
         cargar_select2_url('ddl_tipo_sangre', url_tipo_sangreC, '', '#modal_informacion_personal');
@@ -46,8 +45,6 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
         cargar_select2_url('ddl_origen_indigena', url_origen_indigenaC, '', '#modal_informacion_personal');
 
     }
-        */
-
 
     function cargarDatos(id, id_persona) {
         $.ajax({
@@ -328,7 +325,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
         });
     }
 </script>
-<?php include_once('../vista/GENERAL/ddls_postulantes.php'); ?>
+
 <form id="form_registrar_postulantes" class="modal_general_provincias">
     <div class="row mb-col pt-3">
         <div class="col-md-3">

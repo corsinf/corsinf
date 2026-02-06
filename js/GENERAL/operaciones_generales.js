@@ -386,7 +386,7 @@ function reajustarDataTable() {
 
 function cargar_select2_url(ddl, url_controlador, placeholder = '-- Seleccione --', dropdownParent = null, minimumInputLength = 0) {
     if (placeholder == '') {
-        placeholder = '-- Seleccione --'
+        placeholder = '-- Seleccione --';
     }
 
     let configuracion = {
@@ -395,13 +395,13 @@ function cargar_select2_url(ddl, url_controlador, placeholder = '-- Seleccione -
                 return `Por favor ingresa ${minimumInputLength} o más caracteres`;
             },
             noResults: function () {
-                return "No se encontraron resultados";
+                return 'No se encontraron resultados';
             },
             searching: function () {
-                return "Buscando...";
+                return 'Buscando...';
             },
             errorLoading: function () {
-                return "No se encontraron resultados";
+                return 'No se encontraron resultados';
             }
         },
         minimumInputLength: minimumInputLength,
@@ -412,29 +412,36 @@ function cargar_select2_url(ddl, url_controlador, placeholder = '-- Seleccione -
             dataType: 'json',
             delay: 250,
             processResults: function (data) {
-                //console.log(data.length);
                 return { results: data };
             },
             cache: true
         }
     };
 
-    if (dropdownParent) {
+    // Validar que el modal exista en la vista
+    if (dropdownParent && $(dropdownParent).length > 0) {
         configuracion.dropdownParent = $(dropdownParent);
     }
 
-    $('#' + ddl).select2(configuracion)
+    // Inicializar Select2
+    let $ddl = $('#' + ddl);
+
+    // Evitar múltiples eventos
+    $ddl.off('select2:open');
+
+    $ddl.select2(configuracion)
         .on('select2:open', function () {
             let input = $('.select2-search__field');
 
-            input.on('input', function () {
+            input.off('input').on('input', function () {
                 if ($(this).val().trim() === '') {
-                    $('#' + ddl).select2('close');
-                    $('#' + ddl).select2('open');
+                    $ddl.select2('close');
+                    $ddl.select2('open');
                 }
             });
         });
 }
+
 
 function cargar_select2_con_id(ddl, url_controlador, id_seleccionado, texto) {
     if (id_seleccionado == null || id_seleccionado == '') {
