@@ -40,6 +40,25 @@ class th_pos_contratos_trabajoC
     {
         $datos = $this->modelo->where('th_per_id', $id)->where('th_ctr_estado', 1)->listar();
 
+        if (empty($datos)) {
+            return <<<HTML
+                        <div class="d-flex align-items-center bg-white border border-start-0 shadow-sm rounded-3" 
+                            style="border-left: 4px solid !important; padding: 12px 24px; max-width: 600px;">
+                        
+                        <i class='bx bx-data me-3 text-primary' style='font-size: 28px;'></i>
+
+                        <div class="lh-sm">
+                            <div class="text-dark fw-bold mb-1" style="font-size: 1rem;">
+                            Sin registros en este apartado
+                            </div>
+                            <div class="text-secondary" style="font-size: 0.85rem;">
+                            No hemos encontrado información disponible para mostrar en esta sección.
+                            </div>
+                        </div>
+                        </div>
+                    HTML;
+        }
+
         $texto = '<div class="row g-3">';
 
         foreach ($datos as $key => $value) {

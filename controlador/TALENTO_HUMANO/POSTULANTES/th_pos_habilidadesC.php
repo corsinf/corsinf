@@ -46,7 +46,22 @@ class th_pos_habilidadesC
         $datos = $this->modelo->where('th_pos_id', $id)->where('th_tiph_id', 2)->orderBy('th_hab_nombre', 'ASC')->listarJoin();
 
         if (empty($datos)) {
-            $texto = '<div  class="alert alert-info mb-0"><p>No hay información adicional registrada.</p></div>';
+            return <<<HTML
+                        <div class="d-flex align-items-center bg-white border border-start-0 shadow-sm rounded-3" 
+                            style="border-left: 4px solid !important; padding: 12px 24px; max-width: 600px;">
+                        
+                        <i class='bx bx-data me-3 text-primary' style='font-size: 28px;'></i>
+
+                        <div class="lh-sm">
+                            <div class="text-dark fw-bold mb-1" style="font-size: 1rem;">
+                            Sin registros en este apartado
+                            </div>
+                            <div class="text-secondary" style="font-size: 0.85rem;">
+                            No hemos encontrado información disponible para mostrar en esta sección.
+                            </div>
+                        </div>
+                        </div>
+                    HTML;
         } else {
 
             $texto = '<div class="d-flex flex-wrap gap-2 p-2">'; // Contenedor Flex para que se alineen solas
@@ -83,7 +98,22 @@ class th_pos_habilidadesC
         $datos = $this->modelo->where('th_pos_id', $id)->where('th_tiph_id', 1)->orderBy('th_hab_nombre', 'ASC')->listarJoin();
 
         if (empty($datos)) {
-            $texto = '<div  class="alert alert-info mb-0"><p>No hay información adicional registrada.</p></div>';
+            return <<<HTML
+                        <div class="d-flex align-items-center bg-white border border-start-0 shadow-sm rounded-3" 
+                            style="border-left: 4px solid !important; padding: 12px 24px; max-width: 600px;">
+                        
+                        <i class='bx bx-data me-3 text-primary' style='font-size: 28px;'></i>
+
+                        <div class="lh-sm">
+                            <div class="text-dark fw-bold mb-1" style="font-size: 1rem;">
+                            Sin registros en este apartado
+                            </div>
+                            <div class="text-secondary" style="font-size: 0.85rem;">
+                            No hemos encontrado información disponible para mostrar en esta sección.
+                            </div>
+                        </div>
+                        </div>
+                    HTML;
         } else {
             $texto = '<div class="d-flex flex-wrap gap-2 p-2">';
             foreach ($datos as $key => $value) {
