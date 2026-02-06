@@ -123,7 +123,7 @@
                             confirmButtonColor: '#0d6efd'
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                $('#modal_agregar_certificaciones').modal('hide');
+                                $('#modal_agregar_contratos').modal('hide');
                                 $('.nav-link:contains("Información Personal")').tab('show');
                                 setTimeout(() => {
                                     $('input[name*="cedula"], #txt_cedula').focus();
