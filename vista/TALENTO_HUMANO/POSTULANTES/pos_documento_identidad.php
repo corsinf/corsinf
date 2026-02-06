@@ -126,6 +126,7 @@
                                 $('.nav-link:contains("Información Personal")').tab('show');
                                 setTimeout(() => {
                                     $('input[name*="cedula"], #txt_cedula').focus();
+                                    $("#registrar_personas").validate().element("#txt_cedula");
                                 }, 300);
                             }
                         });

@@ -129,7 +129,9 @@ class th_pos_contratos_trabajoC
         // die();
 
         // $in_cbx_fecha_fin_experiencia = (isset($parametros['cbx_fecha_fin_experiencia']) && $parametros['cbx_fecha_fin_experiencia'] == 'true') ? 1 : 0;
-
+        if ($parametros['txt_persona_cedula'] == "") {
+            return -5;
+        }
         $datos = array(
             array('campo' => 'th_ctr_nombre_empresa', 'dato' => $parametros['txt_nombre_empresa_contrato']),
             array('campo' => 'th_ctr_tipo_contrato', 'dato' => $parametros['txt_tipo_contrato']),

@@ -295,9 +295,8 @@
                             <label for="ddl_sexo" class="form-label form-label-sm">Sexo </label>
                             <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo">
                                 <option selected disabled value="">Seleccione...</option>
-                                <option value="Masculino">Masculino</option>
-                                <option value="Femenino">Femenino</option>
                             </select>
+                            <span id="error_ddl_sexo" class="text-danger small"></span>
                         </div>
                         <div class="col-md-3">
                             <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento </label>
@@ -464,5 +463,6 @@
         //agregar_asterisco_campo_obligatorio('ddl_parroquia');
         agregar_asterisco_campo_obligatorio('txt_codigo_postal');
         //agregar_asterisco_campo_obligatorio('txt_direccion');
+
     });
 </script>

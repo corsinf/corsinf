@@ -981,6 +981,18 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
                     required: "Por favor ingrese una dirección",
                 },
             },
+            errorPlacement: function(error, element) {
+                if (element.hasClass("select2-hidden-accessible")) {
+                    // Si es Select2, busca el contenedor y coloca el error después
+                    error.insertAfter(element.next(".select2-container"));
+                } else if (element.parent(".input-group").length) {
+                    // Si el input tiene un botón (como el de Código Postal), pon el error al final
+                    error.insertAfter(element.parent());
+                } else {
+                    // Comportamiento normal para el resto
+                    error.insertAfter(element);
+                }
+            },
             highlight: function(element) {
                 let $element = $(element);
 
