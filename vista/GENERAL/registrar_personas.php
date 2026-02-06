@@ -294,9 +294,8 @@
                         <div class="col-md-3">
                             <label for="ddl_sexo" class="form-label form-label-sm">Sexo </label>
                             <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo">
-                                <option selected disabled value="">Seleccione...</option>
                             </select>
-                            <span id="error_ddl_sexo" class="text-danger small"></span>
+                            <label class="error" style="display: none;" for="ddl_sexo"></label>
                         </div>
                         <div class="col-md-3">
                             <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento </label>
