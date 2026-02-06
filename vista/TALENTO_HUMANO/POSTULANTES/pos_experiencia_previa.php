@@ -3,6 +3,7 @@
         cargar_datos_experiencia_laboral('<?= $id_postulante ?>');
         // console.log('Cargando experiencia laboral del postulante ID: <?= $id_postulante ?>');
         cargar_selects_experiencia_previa();
+        $('#pnl_experencia_referencias_laborales').slideUp();
     });
 
     function cargar_selects_experiencia_previa() {
