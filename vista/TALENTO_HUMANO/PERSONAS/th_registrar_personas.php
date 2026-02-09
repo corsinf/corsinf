@@ -233,13 +233,26 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
             var descripcion = $.trim($('#txt_descripcion').val() || '');
             if (!enviarCred) {
                 if (asunto === '') {
-                    alert('Ingresa el asunto.');
-                    $('#txt_asunto').focus();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Atención',
+                        text: 'Por favor, ingresa el asunto.',
+                        confirmButtonColor: '#3085d6',
+                    }).then(() => {
+                        $('#txt_asunto').focus();
+                    });
                     return;
                 }
+
                 if (descripcion === '') {
-                    alert('Ingresa la descripción.');
-                    $('#txt_descripcion').focus();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Atención',
+                        text: 'Por favor, ingresa la descripción.',
+                        confirmButtonColor: '#3085d6',
+                    }).then(() => {
+                        $('#txt_descripcion').focus();
+                    });
                     return;
                 }
             }

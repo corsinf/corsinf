@@ -52,8 +52,6 @@ class th_logs_correosC
 
     function enviar_correo($parametros)
     {
-
-        // Validar parámetros requeridos
         if (!isset($parametros['per_id']) || !isset($parametros['enviar_credenciales'])) {
             return [
                 'total'     => 0,
@@ -68,9 +66,8 @@ class th_logs_correosC
         $fallidos = 0;
         $detalle = [];
 
-        // Validar variables de sesión
         $empresa       = $_SESSION['INICIO']["RAZON_SOCIAL"] ?? 'Sistema';
-        $support       = $_SESSION['INICIO']["EMAIL"] ?? 'soporte@corsinf.com';
+        $support       = 'soporte@corsinf.com';
         $id_remitente  = $_SESSION['INICIO']["ID_USUARIO"] ?? null;
 
         $id_dep = $parametros['id_dep'] ?? '';
@@ -83,13 +80,12 @@ class th_logs_correosC
             if ($parametros['personas'] == 'nomina') {
                 $personas_correos =  $this->personas->listar_personas_departamentos($id_dep, $per_id);
 
-                /************************************************************************ */
                 $clave = $this->codigo_globales->generar_clave_digitos();
                 $clave_enc = $this->codigo_globales->enciptar_clave($clave);
 
                 $datos = array(
-                    array('campo' => 'POLITICAS_ACEPTACION', 'dato' => '0'), // Politicas de aceptación
-                    array('campo' => 'PASS', 'dato' => $clave_enc), // Politicas de aceptación
+                    array('campo' => 'POLITICAS_ACEPTACION', 'dato' => '0'),
+                    array('campo' => 'PASS', 'dato' => $clave_enc),
                 );
 
                 $where = array(
@@ -97,8 +93,6 @@ class th_logs_correosC
                 );
 
                 $this->personas->editar($datos, $where);
-                /************************************************************************ */
-
 
                 $personas_correos =  $this->personas->listar_personas_departamentos($id_dep, $per_id);
             } else {
@@ -120,7 +114,6 @@ class th_logs_correosC
                 $correo = trim($value['th_per_correo'] ?? '');
                 $usuario = trim($value['nombre_completo'] ?? '');
                 $password = $this->codigo_globales->desenciptar_clave(trim($value['PASS'] ?? ''));
-
 
                 $id_destinatario = $value['th_per_id'] ?? null;
 
@@ -151,7 +144,6 @@ class th_logs_correosC
                     );
                 }
 
-                // Validar correo
                 if (!filter_var($correo, FILTER_VALIDATE_EMAIL) || empty($correo)) {
                     $fallidos++;
                     $estado_envio = 0;
@@ -164,7 +156,7 @@ class th_logs_correosC
                     ];
                 } else {
                     try {
-                        $envio = $this->email->enviar_email(
+                        $envio = $this->email->enviar_email_errores(
                             $correo,
                             $htmlBody,
                             $titulo_correo,
@@ -174,7 +166,10 @@ class th_logs_correosC
                             true
                         );
 
-                        if ($envio) {
+                        $envio_exitoso = is_array($envio) ? $envio['status'] : $envio;
+                        $error_mensaje = is_array($envio) && isset($envio['error']) ? $envio['error'] : '';
+
+                        if ($envio_exitoso) {
                             $enviados++;
                             $estado_envio = 1;
                             $detalle_log = 'Correo enviado correctamente';
@@ -187,7 +182,9 @@ class th_logs_correosC
                         } else {
                             $fallidos++;
                             $estado_envio = 0;
-                            $detalle_log = 'Error al enviar correo';
+                            $detalle_log = !empty($error_mensaje)
+                                ? substr($error_mensaje, 0, 500)
+                                : 'Error desconocido al enviar correo';
 
                             $detalle[] = [
                                 'correo' => $correo,
@@ -198,7 +195,7 @@ class th_logs_correosC
                     } catch (Exception $e) {
                         $fallidos++;
                         $estado_envio = 0;
-                        $detalle_log = 'Excepción: ' . $e->getMessage();
+                        $detalle_log = substr('Excepción: ' . $e->getMessage(), 0, 500);
 
                         $detalle[] = [
                             'correo' => $correo,
@@ -207,6 +204,7 @@ class th_logs_correosC
                         ];
                     }
                 }
+
                 try {
                     $this->insertar_editar([
                         'correo_destino'      => $correo,
