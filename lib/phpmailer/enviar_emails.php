@@ -31,7 +31,6 @@ class enviar_emails
         $user =  'soporte@corsinf.com';
         $secure = 'ssl';
         $respuesta = true;
-        $correo_respaldo = 'soporte@corsinf.com';
 
         $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
         $empresa = $this->modelo->datos_empresa($id_empresa);
@@ -100,7 +99,6 @@ class enviar_emails
         $user =  $parametros['usuario'];
         $secure = $parametros['secure'];
         $respuesta = true;
-        $correo_respaldo = $parametros['usuario'];
 
         $to = explode(';', $to_correo);
         // print_r($to);die();
@@ -150,7 +148,6 @@ class enviar_emails
         $pass = '62839300';
         $user = 'soporte@corsinf.com';
         $secure = 'ssl';
-        $correo_respaldo = 'soporte@corsinf.com';
 
         // Obtener configuración SMTP de la empresa
         if (isset($_SESSION['INICIO']['ID_EMPRESA'])) {
