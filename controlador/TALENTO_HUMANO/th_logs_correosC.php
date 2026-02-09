@@ -441,6 +441,10 @@ class th_logs_correosC
             Soporte: <a href="mailto:' . htmlspecialchars($supportEmail) . '" style="color:#2c3e50;font-weight:600;">' . htmlspecialchars($supportEmail) . '</a>
             </p>
 
+            <p style="margin:0;text-align:center;font-size:12px;color:#6c757d;">
+            Usuario: <a href="mailto:' . htmlspecialchars($_SESSION['INICIO']['EMAIL'] ?? '') . '" style="color:#2c3e50;font-weight:600;">' . htmlspecialchars($_SESSION['INICIO']['EMAIL'] ?? '') . '</a>
+            </p>
+
             </td>
             </tr>
 
