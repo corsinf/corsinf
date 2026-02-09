@@ -141,7 +141,7 @@ class enviar_emails
     }
 
 
-    function enviar_email_errores($to_correo, $cuerpo_correo, $titulo_correo, $correo_respaldo = 'soporte@corsinf.com', $archivos = false, $nombre = 'Email envio', $HTML = false)
+    function enviar_email_errores($to_correo, $cuerpo_correo, $titulo_correo, $correo_respaldo = 'soporte@corsinf.com', $archivos = null, $nombre = 'Email envio', $HTML = false)
     {
         $host = 'corsinf.com';
         $port = 465;
@@ -149,20 +149,36 @@ class enviar_emails
         $user = 'soporte@corsinf.com';
         $secure = 'ssl';
 
-        // Obtener configuración SMTP de la empresa
         if (isset($_SESSION['INICIO']['ID_EMPRESA'])) {
             $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
             $empresa = $this->modelo->datos_empresa($id_empresa);
 
-            if (count($empresa) > 0) {
-                $host = $empresa[0]['smtp_host'];
-                $port = $empresa[0]['smtp_port'];
-                $pass = $empresa[0]['smtp_pass'];
-                $user = $empresa[0]['smtp_usuario'];
-                $secure = $empresa[0]['smtp_secure'];
-                $correo_respaldo = $empresa[0]['smtp_usuario'];
+            if (!empty($empresa) && isset($empresa[0])) {
+
+                $smtp = $empresa[0];
+
+                if (
+                    !empty($smtp['smtp_host']) &&
+                    !empty($smtp['smtp_port']) &&
+                    !empty($smtp['smtp_pass']) &&
+                    !empty($smtp['smtp_usuario']) &&
+                    !empty($smtp['smtp_secure'])
+                ) {
+
+                    $host   = $smtp['smtp_host'];
+                    $port   = $smtp['smtp_port'];
+                    $pass   = $smtp['smtp_pass'];
+                    $user   = $smtp['smtp_usuario'];
+                    $secure = $smtp['smtp_secure'];
+                    $correo_respaldo = $smtp['smtp_usuario'];
+                } else {
+                    throw new Exception('Configuración SMTP incompleta para la empresa.');
+                }
+            } else {
+                throw new Exception('No se encontraron datos de la empresa.');
             }
         }
+
 
         $to = explode(';', $to_correo);
         $respuesta = ['status' => true, 'error' => '', 'detalles' => []];

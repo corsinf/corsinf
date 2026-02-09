@@ -289,39 +289,53 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
                 },
                 success: function(response) {
 
-                    if (response && response.total !== undefined) {
+                    let detalleHtml = '';
 
-                        let mensaje = `
-            <b>Total:</b> ${response.total}<br>
-            <b>Enviados:</b> ${response.enviados}<br>
-            <b>Fallidos:</b> ${response.fallidos}
-        `;
-
-                        // Si quieres mostrar el detalle de fallidos
-                        if (response.fallidos > 0) {
-                            mensaje += '<hr><b>Correos con error:</b><br>';
-
-                            response.detalle.forEach(item => {
-                                if (item.estado === 'ERROR') {
-                                    mensaje += `• ${item.correo}<br>`;
-                                }
-                            });
-                        }
-
-                        Swal.fire({
-                            icon: response.fallidos > 0 ? 'warning' : 'success',
-                            title: 'Resultado del envío',
-                            html: mensaje,
-                            confirmButtonText: 'Aceptar',
-                            allowOutsideClick: false,
-                        })
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Respuesta inválida del servidor'
-                        });
+                    if (response.detalle && response.detalle.length > 0) {
+                        detalleHtml = `
+                                        <hr style="margin:12px 0">
+                                        <details style="text-align:left">
+                                            <summary style="cursor:pointer;font-weight:600">
+                                                Detalle de correos fallidos/enviados
+                                            </summary>
+                                            <ul style="margin-top:8px;padding-left:18px">
+                                                ${response.detalle.map(d => `
+                                                    <li style="margin-bottom:6px">
+                                                        <span style="font-weight:600">${d.correo}</span><br>
+                                                        <span style="color:#666;font-size:13px">${d.mensaje}</span>
+                                                    </li>
+                                                `).join('')}
+                                            </ul>
+                                        </details>
+                                    `;
                     }
+
+                    let mensaje = `
+                                    <div style="text-align:left;font-size:14px">
+                                        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                                            <span>Total procesados</span>
+                                            <b>${response.total}</b>
+                                        </div>
+                                        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                                            <span>Enviados</span>
+                                            <b style="color:#2e7d32">${response.enviados}</b>
+                                        </div>
+                                        <div style="display:flex;justify-content:space-between">
+                                            <span>Fallidos</span>
+                                            <b style="color:#c62828">${response.fallidos}</b>
+                                        </div>
+                                        ${detalleHtml}
+                                    </div>
+                                `;
+
+                    Swal.fire({
+                        icon: response.fallidos > 0 ? 'warning' : 'success',
+                        title: 'Resultado del envío',
+                        html: mensaje,
+                        confirmButtonText: 'Aceptar',
+                        width: 480,
+                        allowOutsideClick: false,
+                    });
                 },
                 error: function(xhr, status, error) {
                     Swal.fire('Error', 'Error en la conexión: ' + error, 'error');

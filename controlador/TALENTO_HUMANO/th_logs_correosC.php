@@ -66,14 +66,22 @@ class th_logs_correosC
         $fallidos = 0;
         $detalle = [];
 
-        $empresa       = $_SESSION['INICIO']["RAZON_SOCIAL"] ?? 'Sistema';
-        $support       = 'soporte@corsinf.com';
-        $id_remitente  = $_SESSION['INICIO']["ID_USUARIO"] ?? null;
+        $empresa             = $_SESSION['INICIO']['RAZON_SOCIAL'] ?? 'Sistema';
+        $support_por_defecto = 'soporte@corsinf.com';
+        $id_remitente        = $_SESSION['INICIO']['ID_USUARIO'] ?? null;
 
         $id_dep = $parametros['id_dep'] ?? '';
         $per_id = $parametros['per_id'];
-        $loginUrl = 'https://corsinf.com:447/corsinf/login.php';
-        $logoUrl  = 'https://corsinf.com:447/corsinf/img/Firmas/banner_2.jpg';
+
+        $baseUrl = 'https://corsinf.com:447/corsinf/';
+
+        $loginUrl = $baseUrl . 'login.php';
+
+        $logoPath = $_SESSION['INICIO']['LOGO'] ?? '';
+
+        $logoUrl = $logoPath !== ''
+            ? $baseUrl . ltrim($logoPath, './')
+            : $baseUrl . 'img/empresa/apudata.png';
 
         try {
 
@@ -128,7 +136,7 @@ class th_logs_correosC
                         $descripcion,
                         $usuario,
                         $logoUrl,
-                        $support
+                        $support_por_defecto
                     );
                 } else {
                     $titulo_correo = "Bienvenido a $empresa";
@@ -140,7 +148,7 @@ class th_logs_correosC
                         $usuario,
                         $loginUrl,
                         $logoUrl,
-                        $support
+                        $support_por_defecto
                     );
                 }
 
@@ -160,7 +168,7 @@ class th_logs_correosC
                             $correo,
                             $htmlBody,
                             $titulo_correo,
-                            $support,
+                            '',
                             false,
                             $empresa,
                             true
