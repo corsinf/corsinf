@@ -2,7 +2,7 @@
 
 require_once(dirname(__DIR__, 2) . '/GENERAL/BaseModel.php');
 
-class th_contr_niveles_cargoM extends BaseModel
+class th_cat_rango_profesionalM extends BaseModel
 {
     protected $tabla = 'th_cat_rango_profesional';
 

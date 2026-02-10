@@ -325,8 +325,8 @@ if ($_GET['acc'] == 'th_registrar_requisitos_detalles') {
 }
 
 
-if ($_GET['acc'] == 'th_contr_niveles_cargo') {
-	include('TALENTO_HUMANO/CONTRATACION/CARGO_NIVELES/th_contr_niveles_cargo.php');
+if ($_GET['acc'] == 'th_cat_rango_profesional') {
+	include('TALENTO_HUMANO/CONTRATACION/CARGO_NIVELES/th_cat_rango_profesional.php');
 }
 
 if ($_GET['acc'] == 'th_registrar_niveles_cargo') {

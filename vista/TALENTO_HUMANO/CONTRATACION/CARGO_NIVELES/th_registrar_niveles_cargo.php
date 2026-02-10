@@ -37,7 +37,7 @@ $(document).ready(function() {
 // Cargar nivel por id
 function cargar_nivel(id) {
     $.ajax({
-        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_niveles_cargoC.php?listar=true',
+        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_rango_profesionalC.php?listar=true',
         type: 'post',
         data: {
             id: id
@@ -69,7 +69,7 @@ function guardar_actualizar_nivel() {
     };
 
     $.ajax({
-        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_niveles_cargoC.php?insertar_editar=true',
+        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_rango_profesionalC.php?insertar_editar=true',
         type: 'post',
         data: {
             parametros: parametros
@@ -111,7 +111,7 @@ function eliminar_nivel() {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_niveles_cargoC.php?eliminar=true',
+                url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_rango_profesionalC.php?eliminar=true',
                 type: 'post',
                 data: {
                     id: id

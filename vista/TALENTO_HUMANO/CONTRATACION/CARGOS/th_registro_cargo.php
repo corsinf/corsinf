@@ -75,7 +75,7 @@ $(document).ready(function() {
     function cargar_selects2() {
         url_departamentosC = '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true';
         cargar_select2_url('ddl_departamentos', url_departamentosC);
-        url_nivelesC = '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_niveles_cargoC.php?buscar=true';
+        url_nivelesC = '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_rango_profesionalC.php?buscar=true';
         cargar_select2_url('ddl_niveles', url_nivelesC);
         var url_cargos = '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargosC.php?buscar=true';
         cargar_select2_url('ddl_subordinacion', url_cargos, '', '#modal_aspectos_intrinsecos');

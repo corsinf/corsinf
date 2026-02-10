@@ -25,7 +25,7 @@ $(document).ready(function() {
             url: '../assets/plugins/datatable/spanish.json'
         },
         ajax: {
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_niveles_cargoC.php?listar=true',
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_rango_profesionalC.php?listar=true',
             dataSrc: ''
         },
         columns: [{
