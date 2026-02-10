@@ -157,7 +157,7 @@ $(document).ready(function() {
     function cargar_selects2() {
         var url_plazas = '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_plazasC.php?buscar_todas=true';
         var url_etapas =
-            '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_etapas_procesoC.php?buscar=true';
+            '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_etapas_procesoC.php?buscar=true';
 
         cargar_select2_url('ddl_plaza', url_plazas);
         cargar_select2_url('ddl_etapa', url_etapas);

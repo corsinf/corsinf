@@ -1,9 +1,9 @@
 <?php
 date_default_timezone_set('America/Guayaquil');
 
-require_once(dirname(__DIR__, 3)  . '/modelo/TALENTO_HUMANO/CONTRATACION/th_contr_etapas_procesoM.php');
+require_once(dirname(__DIR__, 3)  . '/modelo/TALENTO_HUMANO/CONTRATACION/th_cat_etapas_procesoM.php');
 
-$controlador = new th_contr_etapas_procesoC();
+$controlador = new th_cat_etapas_procesoC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
@@ -38,13 +38,13 @@ if (isset($_GET['buscar'])) {
 }
 
 
-class th_contr_etapas_procesoC
+class th_cat_etapas_procesoC
 {
     private $modelo;
 
     function __construct()
     {
-        $this->modelo = new th_contr_etapas_procesoM();
+        $this->modelo = new th_cat_etapas_procesoM();
     }
 
     function listar($id = '')

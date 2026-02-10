@@ -24,7 +24,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 </nav>
 
                 <!-- Botón Regresar -->
-                <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_etapas_proceso"
+                <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_cat_etapas_proceso"
                     class="btn btn-outline-dark btn-sm ms-3">
                     <i class="bx bx-arrow-back"></i> Regresar
                 </a>
@@ -133,10 +133,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 <script type="text/javascript">
 $(function() {
-    const URL_LISTAR = '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_etapas_procesoC.php?listar=true';
+    const URL_LISTAR = '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_etapas_procesoC.php?listar=true';
     const URL_PLAZAS = '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_plazasC.php?listar=true';
     const URL_ORDENAR =
-        '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_etapas_procesoC.php?organizar=true';
+        '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_etapas_procesoC.php?organizar=true';
 
     // Init
     cargarPlazas();

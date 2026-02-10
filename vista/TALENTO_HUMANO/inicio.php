@@ -282,8 +282,8 @@ if ($_GET['acc'] == 'th_registro_requisito') {
 
 
 
-if ($_GET['acc'] == 'th_contr_etapas_proceso') {
-	include('TALENTO_HUMANO/CONTRATACION/ETAPAS_PROCESO/th_contr_etapas_proceso.php');
+if ($_GET['acc'] == 'th_cat_etapas_proceso') {
+	include('TALENTO_HUMANO/CONTRATACION/ETAPAS_PROCESO/th_cat_etapas_proceso.php');
 }
 
 if ($_GET['acc'] == 'th_registro_etapa_proceso') {

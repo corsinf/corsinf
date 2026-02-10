@@ -136,7 +136,7 @@ FROM th_contr_plazas cp
  LEFT JOIN th_contr_plaza_requisitos cpr ON cp.th_pla_id = cpr.th_pla_id
  LEFT JOIN th_cat_requisitos cr ON cpr.th_req_id = cr.th_req_id
  LEFT JOIN th_contr_plaza_etapas cpe ON cp.th_pla_id = cpe.th_pla_id
- LEFT JOIN th_contr_etapas_proceso cet ON cpe.th_eta_id = cet.th_etapa_id
+ LEFT JOIN th_cat_etapas_proceso cet ON cpe.th_eta_id = cet.th_etapa_id
  WHERE cp.th_pla_id = $pla_id
   AND cp.th_pla_estado = 1
  GROUP BY
@@ -168,7 +168,7 @@ public function listar_etapas_por_plaza($pla_id)
             pe.th_pla_eta_estado,
             pe.th_pla_eta_fecha_creacion,
             pe.th_pla_eta_modificacion
-        FROM th_contr_etapas_proceso e
+        FROM th_cat_etapas_proceso e
         INNER JOIN th_contr_plaza_etapas pe
             ON pe.th_eta_id = e.th_etapa_id
         WHERE pe.th_pla_id = {$pla_id}

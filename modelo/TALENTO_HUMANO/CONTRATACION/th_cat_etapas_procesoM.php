@@ -2,7 +2,7 @@
 
 require_once(dirname(__DIR__, 2) . '/GENERAL/BaseModel.php');
 
-class th_contr_etapas_procesoM extends BaseModel
+class th_cat_etapas_procesoM extends BaseModel
 {
     // Nombre real de la tabla en la base de datos
     protected $tabla = 'th_cat_etapas_proceso';

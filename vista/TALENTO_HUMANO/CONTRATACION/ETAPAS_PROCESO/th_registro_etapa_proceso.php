@@ -80,7 +80,7 @@ if (isset($_GET['_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_etapas_procesoC.php?listar=true',
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_etapas_procesoC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -129,7 +129,7 @@ if (isset($_GET['_id'])) {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_etapas_procesoC.php?insertar_editar=true',
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_etapas_procesoC.php?insertar_editar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -173,7 +173,7 @@ if (isset($_GET['_id'])) {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_etapas_procesoC.php?insertar_editar=true',
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_etapas_procesoC.php?insertar_editar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -237,7 +237,7 @@ if (isset($_GET['_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_etapas_procesoC.php?eliminar=true',
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_etapas_procesoC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

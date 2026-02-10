@@ -23,7 +23,7 @@ class th_contr_plaza_etapas_procesoM extends BaseModel
 
     $sql = "
         SELECT e.*
-        FROM th_contr_etapas_proceso e
+        FROM th_cat_etapas_proceso e
         LEFT JOIN th_contr_plaza_etapas pe
             ON pe.th_eta_id = e.th_etapa_id
             AND pe.th_pla_id = $pla_id
@@ -57,7 +57,7 @@ class th_contr_plaza_etapas_procesoM extends BaseModel
             e.th_etapa_estado,
             e.th_etapa_fecha_creacion
         FROM th_contr_plaza_etapas pe
-        INNER JOIN th_contr_etapas_proceso e ON pe.th_eta_id = e.th_etapa_id
+        INNER JOIN th_cat_etapas_proceso e ON pe.th_eta_id = e.th_etapa_id
         WHERE pe.th_pla_id = {$pla_id}
           AND pe.th_pla_eta_estado = 1
           AND e.th_etapa_estado = 1

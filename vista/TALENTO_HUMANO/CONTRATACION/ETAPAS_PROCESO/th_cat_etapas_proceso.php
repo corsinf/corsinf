@@ -27,7 +27,7 @@ $(document).ready(function() {
             url: '../assets/plugins/datatable/spanish.json'
         },
         ajax: {
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_etapas_procesoC.php?listar=true',
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_etapas_procesoC.php?listar=true',
             dataSrc: ''
         },
         columns: [{

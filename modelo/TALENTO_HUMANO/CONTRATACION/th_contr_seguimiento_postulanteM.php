@@ -80,7 +80,7 @@ class th_contr_seguimiento_postulanteM extends BaseModel
         FROM th_contr_seguimiento_postulante s
         INNER JOIN th_contr_postulaciones po 
             ON s.th_posu_id = po.th_posu_id
-        INNER JOIN th_contr_etapas_proceso e 
+        INNER JOIN th_cat_etapas_proceso e 
             ON s.th_etapa_id = e.th_etapa_id
         LEFT JOIN th_postulantes pos 
             ON po.th_postulante_id = pos.th_pos_id
@@ -132,7 +132,7 @@ public function listar_etapas_faltantes_postulantes($plaza_id, $postulantes_ids 
         INNER JOIN th_contr_plaza_etapas pe
             ON pe.th_pla_id = p.th_pla_id
             AND pe.th_pla_eta_estado = 1
-        INNER JOIN th_contr_etapas_proceso e
+        INNER JOIN th_cat_etapas_proceso e
             ON e.th_etapa_id = pe.th_eta_id
         LEFT JOIN th_contr_seguimiento_postulante sp
             ON sp.th_posu_id = p.th_posu_id
@@ -211,7 +211,7 @@ public function listar_seguimiento_postulante_plaza($id_plaza = '', $id_etapa = 
         FROM th_contr_seguimiento_postulante s
         INNER JOIN th_contr_postulaciones po 
             ON s.th_posu_id = po.th_posu_id
-        INNER JOIN th_contr_etapas_proceso e 
+        INNER JOIN th_cat_etapas_proceso e 
             ON s.th_etapa_id = e.th_etapa_id
         LEFT JOIN th_postulantes pos 
             ON po.th_postulante_id = pos.th_pos_id
