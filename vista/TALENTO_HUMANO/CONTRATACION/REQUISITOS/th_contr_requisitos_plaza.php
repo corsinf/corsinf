@@ -37,7 +37,7 @@ $(document).ready(function() {
                 url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
-                url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_requisitosC.php?listar=true',
+                url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_requisitosC.php?listar=true',
                 type: 'POST', // importante: usar POST si tu backend espera POST
                 data: function(d) {
                     d.id = id_plaza; // enviamos el id de la plaza al servidor
@@ -138,7 +138,7 @@ $(document).ready(function() {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_requisitosC.php?insertar_editar=true',
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_requisitosC.php?insertar_editar=true',
             type: 'post',
             dataType: 'json',
             success: function(res) {
@@ -146,7 +146,7 @@ $(document).ready(function() {
                     Swal.fire('', 'Requisito creado con éxito.', 'success').then(function() {
                         // volver a la lista de requisitos de la plaza (o recargar)
                         window.location.href =
-                            '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_requisitos_plaza&_id=' +
+                            '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_cat_requisitos_plaza&_id=' +
                             (parametros.th_pla_id || '');
                     });
                 } else {
@@ -166,14 +166,14 @@ $(document).ready(function() {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_requisitosC.php?insertar_editar=true',
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_requisitosC.php?insertar_editar=true',
             type: 'post',
             dataType: 'json',
             success: function(res) {
                 if (res == 1) {
                     Swal.fire('', 'Requisito actualizado con éxito.', 'success').then(function() {
                         window.location.href =
-                            '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_requisitos_plaza&_id=' +
+                            '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_cat_requisitos_plaza&_id=' +
                             (parametros.th_pla_id || '');
                     });
                 } else {
@@ -209,7 +209,7 @@ $(document).ready(function() {
                     data: {
                         _id: id
                     },
-                    url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_requisitosC.php?eliminar=true',
+                    url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_requisitosC.php?eliminar=true',
                     type: 'post',
                     dataType: 'json',
                     success: function(res) {
@@ -220,7 +220,7 @@ $(document).ready(function() {
                                     var plaza = $('#txt_th_pla_id').val() || $(
                                         '#ddl_th_pla_id').val() || '';
                                     window.location.href =
-                                        '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_requisitos_plaza&_id=' +
+                                        '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_cat_requisitos_plaza&_id=' +
                                         id;
                                 });
                         } else {
@@ -291,7 +291,7 @@ function cargar_requisito(id) {
         data: {
             id: id
         },
-        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_requisitosC.php?listar_requisito=true',
+        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_requisitosC.php?listar_requisito=true',
         type: 'post',
         dataType: 'json',
         success: function(response) {

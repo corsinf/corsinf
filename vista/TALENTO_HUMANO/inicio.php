@@ -268,12 +268,12 @@ if ($_GET['acc'] == 'th_registro_postulaciones') {
 
 
 
-if ($_GET['acc'] == 'th_contr_requisitos_plaza') {
-	include('TALENTO_HUMANO/CONTRATACION/REQUISITOS/th_contr_requisitos_plaza.php');
+if ($_GET['acc'] == 'th_cat_requisitos_plaza') {
+	include('TALENTO_HUMANO/CONTRATACION/REQUISITOS/th_cat_requisitos_plaza.php');
 }
 
-if ($_GET['acc'] == 'th_contr_requisitos') {
-	include('TALENTO_HUMANO/CONTRATACION/REQUISITOS/th_contr_requisitos.php');
+if ($_GET['acc'] == 'th_cat_requisitos') {
+	include('TALENTO_HUMANO/CONTRATACION/REQUISITOS/th_cat_requisitos.php');
 }
 
 if ($_GET['acc'] == 'th_registro_requisito') {
@@ -317,8 +317,8 @@ if ($_GET['acc'] == 'th_registrar_cargo_requisitos') {
 }
 
 
-if ($_GET['acc'] == 'th_contr_requisitos_detalles') {
-	include('TALENTO_HUMANO/CONTRATACION/REQUISITOS_DETALLE/th_contr_requisitos_detalles.php');
+if ($_GET['acc'] == 'th_cat_requisitos_detalles') {
+	include('TALENTO_HUMANO/CONTRATACION/REQUISITOS_DETALLE/th_cat_requisitos_detalles.php');
 }
 if ($_GET['acc'] == 'th_registrar_requisitos_detalles') {
 	include('TALENTO_HUMANO/CONTRATACION/REQUISITOS_DETALLE/th_registrar_requisitos_detalles.php');

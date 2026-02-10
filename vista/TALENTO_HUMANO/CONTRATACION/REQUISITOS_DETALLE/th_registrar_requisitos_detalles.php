@@ -35,7 +35,7 @@ $(document).ready(function() {
 /* Cargar detalle para modificar */
 function cargar_detalle(id) {
     $.ajax({
-        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_requisitos_detallesC.php?listar=true',
+        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_requisitos_detallesC.php?listar=true',
         type: 'post',
         data: {
             id: id
@@ -70,7 +70,7 @@ function guardar_actualizar_detalle() {
     };
 
     $.ajax({
-        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_requisitos_detallesC.php?insertar_editar=true',
+        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_requisitos_detallesC.php?insertar_editar=true',
         type: 'post',
         data: {
             parametros: parametros
@@ -80,7 +80,7 @@ function guardar_actualizar_detalle() {
             if (r == 1) {
                 Swal.fire("", "Operación realizada con éxito", "success")
                     .then(() => location.href =
-                        "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_requisitos_detalles");
+                        "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_cat_requisitos_detalles");
             } else if (r == -2) {
                 Swal.fire("Atención", "Ya existe un detalle con ese nombre.", "warning");
             } else {
@@ -108,7 +108,7 @@ function eliminar_detalle() {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_requisitos_detallesC.php?eliminar=true',
+                url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_requisitos_detallesC.php?eliminar=true',
                 type: 'post',
                 data: {
                     id: id
@@ -118,7 +118,7 @@ function eliminar_detalle() {
                     if (resp == 1) {
                         Swal.fire('Eliminado', 'Registro eliminado.', 'success')
                             .then(() => location.href =
-                                "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_requisitos_detalles"
+                                "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_cat_requisitos_detalles"
                             );
                     } else {
                         Swal.fire('Error', 'No se pudo eliminar.', 'error');
@@ -149,7 +149,7 @@ function eliminar_detalle() {
                     </div>
 
                     <div>
-                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_requisitos_detalles"
+                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_cat_requisitos_detalles"
                             class="btn btn-outline-dark btn-sm">
                             <i class="bx bx-arrow-back"></i> Regresar
                         </a>

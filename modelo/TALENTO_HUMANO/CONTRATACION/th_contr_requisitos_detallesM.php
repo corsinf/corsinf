@@ -2,7 +2,7 @@
 
 require_once(dirname(__DIR__, 2) . '/GENERAL/BaseModel.php');
 
-class th_contr_requisitos_detallesM extends BaseModel
+class th_cat_requisitos_detallesM extends BaseModel
 {
     // Nombre real de la tabla
     protected $tabla = 'th_cat_requisitos_detalles';

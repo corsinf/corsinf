@@ -25,7 +25,7 @@ class th_contr_plaza_requisitosM extends BaseModel
 
     $sql = "
         SELECT r.*
-        FROM th_contr_requisitos r
+        FROM th_cat_requisitos r
         LEFT JOIN th_contr_plaza_requisitos pr
             ON pr.th_req_id = r.th_req_id
             AND pr.th_pla_id = $pla_id
@@ -51,7 +51,7 @@ function listar_requisitos_por_plaza($pla_id)
         pr.th_car_estado,
         pr.th_pr_fecha_creacion
     FROM th_contr_plaza_requisitos pr
-    INNER JOIN th_contr_requisitos r
+    INNER JOIN th_cat_requisitos r
         ON pr.th_req_id = r.th_req_id
     WHERE pr.th_pla_id = '$pla_id'
       AND pr.th_car_estado = 1

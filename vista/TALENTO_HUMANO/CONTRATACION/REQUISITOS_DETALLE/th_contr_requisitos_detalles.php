@@ -17,7 +17,7 @@ $(document).ready(function() {
             url: '../assets/plugins/datatable/spanish.json'
         },
         ajax: {
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_requisitos_detallesC.php?listar=true',
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_requisitos_detallesC.php?listar=true',
             dataSrc: ''
         },
         columns: [{

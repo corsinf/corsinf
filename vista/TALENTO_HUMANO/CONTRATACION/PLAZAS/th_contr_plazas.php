@@ -81,7 +81,7 @@ if (isset($_GET['_id'])) {
             },
 
             ajax: {
-                url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_requisitosC.php?listar=true',
+                url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_requisitosC.php?listar=true',
                 dataSrc: ''
             },
 

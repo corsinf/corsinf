@@ -29,7 +29,7 @@ $(document).ready(function() {
             data: {
                 id: id
             },
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_requisitosC.php?listar=true',
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_requisitosC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -75,7 +75,7 @@ $(document).ready(function() {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_requisitosC.php?insertar_editar=true',
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_requisitosC.php?insertar_editar=true',
             type: 'post',
             dataType: 'json',
             success: function(res) {
@@ -103,7 +103,7 @@ $(document).ready(function() {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_requisitosC.php?insertar_editar=true',
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_requisitosC.php?insertar_editar=true',
             type: 'post',
             dataType: 'json',
             success: function(res) {
@@ -145,7 +145,7 @@ $(document).ready(function() {
                     data: {
                         _id: id
                     },
-                    url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_requisitosC.php?eliminar=true',
+                    url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_requisitosC.php?eliminar=true',
                     type: 'post',
                     dataType: 'json',
                     success: function(res) {
@@ -223,7 +223,7 @@ function cargar_requisito(id) {
         data: {
             id: id
         },
-        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_requisitosC.php?listar_requisito=true',
+        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_requisitosC.php?listar_requisito=true',
         type: 'post',
         dataType: 'json',
         success: function(response) {

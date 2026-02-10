@@ -73,7 +73,7 @@ $(document).ready(function() {
                                     class="btn btn-success btn-sm">
                                     <i class="bx bx-plus me-0 pb-1"></i> Nuevo Requisito
                                 </a>
-                                <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_requisitos_detalles"
+                                <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_cat_requisitos_detalles"
                                     class="btn btn-success btn-sm">
                                     <i class="bx bx-plus me-0 pb-1"></i> Lista de requisitos detalles
                                 </a>

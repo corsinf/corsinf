@@ -1,9 +1,9 @@
 <?php
 date_default_timezone_set('America/Guayaquil');
 
-require_once(dirname(__DIR__, 3)  . '/modelo/TALENTO_HUMANO/CONTRATACION/th_contr_requisitosM.php');
+require_once(dirname(__DIR__, 3)  . '/modelo/TALENTO_HUMANO/CONTRATACION/th_cat_requisitosM.php');
 
-$controlador = new th_contr_requisitosC();
+$controlador = new th_cat_requisitosC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
@@ -35,13 +35,13 @@ if (isset($_GET['buscar'])) {
 }
 
 
-class  th_contr_requisitosC
+class  th_cat_requisitosC
 {
     private $modelo;
 
     function __construct()
     {
-        $this->modelo = new th_contr_requisitosM();
+        $this->modelo = new th_cat_requisitosM();
     }
 
     function listar($id = '')

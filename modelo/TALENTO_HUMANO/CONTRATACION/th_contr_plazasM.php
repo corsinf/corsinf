@@ -134,7 +134,7 @@ FROM th_contr_plazas cp
  LEFT JOIN th_contr_plaza_cargo cpc ON cp.th_pla_id = cpc.th_pla_id
  LEFT JOIN th_contr_cargos c ON c.th_car_id = cpc.th_car_id
  LEFT JOIN th_contr_plaza_requisitos cpr ON cp.th_pla_id = cpr.th_pla_id
- LEFT JOIN th_contr_requisitos cr ON cpr.th_req_id = cr.th_req_id
+ LEFT JOIN th_cat_requisitos cr ON cpr.th_req_id = cr.th_req_id
  LEFT JOIN th_contr_plaza_etapas cpe ON cp.th_pla_id = cpe.th_pla_id
  LEFT JOIN th_contr_etapas_proceso cet ON cpe.th_eta_id = cet.th_etapa_id
  WHERE cp.th_pla_id = $pla_id
