@@ -15,7 +15,7 @@ class th_contr_cargosM extends BaseModel
     'th_car_nombre AS nombre',
     'th_car_descripcion AS descripcion',
     'th_dep_id AS dep_id',
-    'th_niv_id AS niv_id',
+    'id_rango_profesional AS niv_id',
     'th_car_estado AS estado',
     'th_car_fecha_creacion AS fecha_creacion',
     'th_car_fecha_modificacion AS fecha_modificacion'
@@ -34,8 +34,8 @@ function listar_cargos_con_departamentos($id_cargo = null)
             c.th_car_id AS _id,
             c.th_car_nombre AS nombre,
             c.th_car_descripcion AS descripcion,
-            n.th_niv_nombre AS nivel,
-            n.th_niv_id,
+            n.nombre AS nivel,
+            n.id_rango_profesional,
             c.th_car_estado,
             c.th_car_fecha_creacion,
             c.th_car_fecha_modificacion,
@@ -43,7 +43,7 @@ function listar_cargos_con_departamentos($id_cargo = null)
             d.th_dep_nombre AS departamento
         FROM th_contr_cargos c
         LEFT JOIN th_departamentos d ON c.th_dep_id = d.th_dep_id
-        LEFT JOIN th_contr_niveles_cargo n ON c.th_niv_id = n.th_niv_id
+        LEFT JOIN th_cat_rango_profesional n ON c.th_niv_id = n.id_rango_profesional
         WHERE c.th_car_estado = 1 {$filtro}
         ORDER BY c.th_car_fecha_creacion DESC;
     ";

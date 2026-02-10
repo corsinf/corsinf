@@ -51,10 +51,10 @@ class th_contr_cargo_requisitosC
     function listar($id = '')
     {
         if (!empty($id)) {
-            $datos = $this->modelo->where('th_car_req_estado', 1)->where('th_car_req_id', $id)->listar();
+            $datos = $this->modelo->where('estado', 1)->where('id_cargo_requisitos', $id)->listar();
             return $datos;
         } else {
-            $datos = $this->modelo->where('th_car_req_estado', 1)->listar();
+            $datos = $this->modelo->where('estado', 1)->listar();
             return $datos;
         }
     }
@@ -64,21 +64,21 @@ class th_contr_cargo_requisitosC
     {
 
         // aceptar ambos nombres de campos para compatibilidad con vistas antiguas/nuevas
-        $nombre = trim($parametros['th_car_req_nombre'] ?? $parametros['th_car_req_nombre'] ?? '');
-        $descripcion = $parametros['th_car_req_descripcion'] ?? $parametros['th_car_req_descripcion'] ?? null;
+        $nombre = trim($parametros['nombre'] ?? $parametros['nombre'] ?? '');
+        $descripcion = $parametros['descripcion'] ?? $parametros['descripcion'] ?? null;
 
         $datos = array(
-            array('campo' => 'th_car_req_nombre', 'dato' => $nombre),
-            array('campo' => 'th_car_req_descripcion', 'dato' => $descripcion),
-            array('campo' => 'th_car_req_estado', 'dato' => 1),
-            array('campo' => 'th_car_req_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+            array('campo' => 'nombre', 'dato' => $nombre),
+            array('campo' => 'descripcion', 'dato' => $descripcion),
+            array('campo' => 'estado', 'dato' => 1),
+            array('campo' => 'fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
         );
 
         // insertar
         if (empty($parametros['_id'])) {
             // validar duplicado por nombre (solo activos)
-            if (count($this->modelo->where('th_car_req_nombre', $nombre)->where('th_car_req_estado', 1)->listar()) == 0) {
-                $datos[] = array('campo' => 'th_car_req_fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
+            if (count($this->modelo->where('nombre', $nombre)->where('estado', 1)->listar()) == 0) {
+                $datos[] = array('campo' => 'fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
                 $id = $this->modelo->insertar_id($datos);
                 return ($id) ? 1 : 0; // manteniendo convención: 1=ok, 0=falla
             } else {
@@ -86,8 +86,8 @@ class th_contr_cargo_requisitosC
             }
         } else {
             // editar: validar que no exista otro con mismo nombre
-            if (count($this->modelo->where('th_car_req_nombre', $nombre)->where('th_car_req_id !', $parametros['_id'])->listar()) == 0) {
-                $where[0]['campo'] = 'th_car_req_id';
+            if (count($this->modelo->where('nombre', $nombre)->where('id_cargo_requisitos !', $parametros['_id'])->listar()) == 0) {
+                $where[0]['campo'] = 'id_cargo_requisitos';
                 $where[0]['dato']  = $parametros['_id'];
                 $res = $this->modelo->editar($datos, $where);
                 return $res;
@@ -103,11 +103,11 @@ class th_contr_cargo_requisitosC
     function eliminar($id)
     {
         $datos = array(
-            array('campo' => 'th_car_req_estado', 'dato' => 0),
-            array('campo' => 'th_car_req_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+            array('campo' => 'estado', 'dato' => 0),
+            array('campo' => 'fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
         );
 
-        $where[0]['campo'] = 'th_car_req_id';
+        $where[0]['campo'] = 'id_cargo_requisitos';
         $where[0]['dato']  = $id;
 
         $res = $this->modelo->editar($datos, $where);
@@ -118,12 +118,12 @@ class th_contr_cargo_requisitosC
     function buscar($parametros)
     {
         $lista = array();
-        $concat = "th_car_req_nombre, th_car_req_descripcion";
-        $datos = $this->modelo->where('th_car_req_estado', 1)->like($concat, $parametros['query']);
+        $concat = "nombre, descripcion";
+        $datos = $this->modelo->where('estado', 1)->like($concat, $parametros['query']);
 
         foreach ($datos as $value) {
-            $text = $value['th_car_req_nombre'];
-            $lista[] = array('id' => $value['th_car_req_id'], 'text' => $text);
+            $text = $value['nombre'];
+            $lista[] = array('id' => $value['id_cargo_requisitos'], 'text' => $text);
         }
 
         return $lista;

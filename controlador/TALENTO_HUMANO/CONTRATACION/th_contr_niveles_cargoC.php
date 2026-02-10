@@ -40,9 +40,9 @@ class th_contr_niveles_cargoC
     function listar($id = '')
     {
         if ($id === '') {
-            $datos = $this->modelo->where('th_niv_estado', 1)->listar();
+            $datos = $this->modelo->where('estado', 1)->listar();
         } else {
-            $datos = $this->modelo->where('th_niv_id', $id)->where('th_niv_estado', 1)->listar();
+            $datos = $this->modelo->where('id', $id)->where('estado', 1)->listar();
         }
         return $datos;
     }
@@ -50,24 +50,24 @@ class th_contr_niveles_cargoC
     function insertar_editar($parametros)
     {
         // normalizadores
-        $nombre = isset($parametros['txt_th_niv_nombre']) ? trim($parametros['txt_th_niv_nombre']) : '';
-        $descripcion = $parametros['txt_th_niv_descripcion'] ?? '';
-        $estado = isset($parametros['chk_th_niv_estado']) ? ($parametros['chk_th_niv_estado'] ? 1 : 0) : 1;
+        $nombre = isset($parametros['txt_nombre']) ? trim($parametros['txt_nombre']) : '';
+        $descripcion = $parametros['txt_descripcion'] ?? '';
+        $estado = isset($parametros['chk_estado']) ? ($parametros['chk_estado'] ? 1 : 0) : 1;
 
         // preparar datos comunes
         $datos = array(
-            array('campo' => 'th_niv_nombre', 'dato' => $nombre),
-            array('campo' => 'th_niv_descripcion', 'dato' => $descripcion),
-            array('campo' => 'th_niv_estado', 'dato' => $estado),
-            array('campo' => 'th_niv_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+            array('campo' => 'nombre', 'dato' => $nombre),
+            array('campo' => 'descripcion', 'dato' => $descripcion),
+            array('campo' => 'estado', 'dato' => $estado),
+            array('campo' => 'fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
         );
 
         // Inserción
         if (empty($parametros['_id'])) {
             // validar duplicado (mismo nombre activo)
-            $dup = $this->modelo->where('th_niv_nombre', $nombre)->where('th_niv_estado', 1)->listar();
+            $dup = $this->modelo->where('nombre', $nombre)->where('estado', 1)->listar();
             if (count($dup) == 0) {
-                $datos[] = array('campo' => 'th_niv_fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
+                $datos[] = array('campo' => 'fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
                 $id = $this->modelo->insertar_id($datos);
                 return 1; // coherente con tus otros controladores
             } else {
@@ -75,11 +75,11 @@ class th_contr_niveles_cargoC
             }
         } else {
             // Edición: validar duplicado en otro id
-            $dup = $this->modelo->where('th_niv_nombre', $nombre)
-                               ->where('th_niv_id !', $parametros['_id'])
+            $dup = $this->modelo->where('nombre', $nombre)
+                               ->where('id !', $parametros['_id'])
                                ->listar();
             if (count($dup) == 0) {
-                $where[0]['campo'] = 'th_niv_id';
+                $where[0]['campo'] = 'id';
                 $where[0]['dato']  = $parametros['_id'];
 
                 $res = $this->modelo->editar($datos, $where);
@@ -93,11 +93,11 @@ class th_contr_niveles_cargoC
     function eliminar($id)
     {
         $datos = array(
-            array('campo' => 'th_niv_estado', 'dato' => 0),
-            array('campo' => 'th_niv_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+            array('campo' => 'estado', 'dato' => 0),
+            array('campo' => 'fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
         );
 
-        $where[0]['campo'] = 'th_niv_id';
+        $where[0]['campo'] = 'id';
         $where[0]['dato']  = $id;
 
         $res = $this->modelo->editar($datos, $where);
@@ -107,12 +107,12 @@ class th_contr_niveles_cargoC
     function buscar($parametros)
     {
         $lista = array();
-        $concat = "th_niv_nombre, th_niv_descripcion";
-        $datos = $this->modelo->where('th_niv_estado', 1)->like($concat, $parametros['query']);
+        $concat = "nombre, descripcion";
+        $datos = $this->modelo->where('estado', 1)->like($concat, $parametros['query']);
 
         foreach ($datos as $key => $value) {
-            $text = $value['th_niv_nombre'];
-            $lista[] = array('id' => ($value['th_niv_id']), 'text' => ($text) /*, 'data' => $value */);
+            $text = $value['nombre'];
+            $lista[] = array('id' => ($value['id']), 'text' => ($text) /*, 'data' => $value */);
         }
 
         return $lista;

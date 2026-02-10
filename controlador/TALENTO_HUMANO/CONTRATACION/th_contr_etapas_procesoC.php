@@ -50,9 +50,9 @@ class th_contr_etapas_procesoC
     function listar($id = '')
     {
         if($id == ''){
-            $datos = $this->modelo->where('th_etapa_estado',1)->listar();
+            $datos = $this->modelo->where('estado',1)->listar();
         }else{
-             $datos = $this->modelo->where('th_etapa_id',$id)->where('th_etapa_estado',1)->listar();
+             $datos = $this->modelo->where('id',$id)->where('estado',1)->listar();
         }
         return $datos;
     }
@@ -65,25 +65,25 @@ class th_contr_etapas_procesoC
         
         
         $datos = array(
-            array('campo' => 'th_etapa_nombre', 'dato' => $parametros['txt_th_etapa_nombre'] ?? ''),
-            array('campo' => 'th_etapa_tipo', 'dato' => $ddl_etapa_tipo),
-            array('campo' => 'th_etapa_orden', 'dato' => ($parametros['txt_th_etapa_orden'] ?? '') !== '' ? (int)$parametros['txt_th_etapa_orden'] : null),
-            array('campo' => 'th_etapa_obligatoria', 'dato' => isset($parametros['chk_th_etapa_obligatoria']) ? ($parametros['chk_th_etapa_obligatoria'] ? 1 : 0) : 0),
-            array('campo' => 'th_etapa_descripcion', 'dato' => $parametros['txt_th_etapa_descripcion'] ?? ''),
-            array('campo' => 'th_etapa_estado', 'dato' => 1),
+            array('campo' => 'nombre', 'dato' => $parametros['txt_nombre'] ?? ''),
+            array('campo' => 'tipo', 'dato' => $ddl_etapa_tipo),
+            array('campo' => 'orden', 'dato' => ($parametros['txt_orden'] ?? '') !== '' ? (int)$parametros['txt_orden'] : null),
+            array('campo' => 'obligatoria', 'dato' => isset($parametros['chk_obligatoria']) ? ($parametros['chk_obligatoria'] ? 1 : 0) : 0),
+            array('campo' => 'descripcion', 'dato' => $parametros['txt_descripcion'] ?? ''),
+            array('campo' => 'estado', 'dato' => 1),
         );
 
         // Inserción (sin validar duplicados)
         if (empty($parametros['_id'])) {
             // agregar fecha de creación
-            $datos[] = array('campo' => 'th_etapa_fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
+            $datos[] = array('campo' => 'fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
             // insertar y obtener id
             $id = $this->modelo->insertar_id($datos);
             // devolver 1 si se insertó correctamente (manteniendo coherencia con tu JS)
             return ($id) ? 1 : 0;
         } else {
             // Edición: actualizar por id
-            $where[0]['campo'] = 'th_etapa_id';
+            $where[0]['campo'] = 'id';
             $where[0]['dato'] = $parametros['_id'];
             $res = $this->modelo->editar($datos, $where);
              return ($parametros['_id']) ? 1 : 0;
@@ -95,10 +95,10 @@ class th_contr_etapas_procesoC
     function eliminar($id)
     {
         $datos = array(
-            array('campo' => 'th_etapa_estado', 'dato' => 0),
+            array('campo' => 'estado', 'dato' => 0),
         );
 
-        $where[0]['campo'] = 'th_etapa_id';
+        $where[0]['campo'] = 'id';
         $where[0]['dato'] = $id;
 
         $datos = $this->modelo->editar($datos, $where);
@@ -109,12 +109,12 @@ class th_contr_etapas_procesoC
     function buscar($parametros)
     {
         $lista = array();
-        $concat = "th_etapa_nombre, th_etapa_descripcion";
-        $datos = $this->modelo->where('th_etapa_estado', 1)->like($concat, $parametros['query']);
+        $concat = "nombre, descripcion";
+        $datos = $this->modelo->where('estado', 1)->like($concat, $parametros['query']);
 
         foreach ($datos as $key => $value) {
-            $text = $value['th_etapa_nombre'];
-            $lista[] = array('id' => ($value['th_etapa_id']), 'text' => ($text)/*, 'data' => $value */);
+            $text = $value['nombre'];
+            $lista[] = array('id' => ($value['id']), 'text' => ($text)/*, 'data' => $value */);
         }
 
         return $lista;
@@ -149,12 +149,12 @@ class th_contr_etapas_procesoC
 public function actualizar_orden($id, $orden)
 {
     $datos = [
-        ['campo' => 'th_etapa_orden', 'dato' => (int)$orden],
-        ['campo' => 'th_etapa_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')]
+        ['campo' => 'orden', 'dato' => (int)$orden],
+        ['campo' => 'fecha_modificacion', 'dato' => date('Y-m-d H:i:s')]
     ];
 
     $where = [
-        ['campo' => 'th_etapa_id', 'dato' => (int)$id]
+        ['campo' => 'id', 'dato' => (int)$id]
     ];
 
     return $this->modelo->editar($datos, $where);

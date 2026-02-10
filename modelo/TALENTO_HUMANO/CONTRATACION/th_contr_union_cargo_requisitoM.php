@@ -13,7 +13,7 @@ class th_contr_union_cargo_requisitoM extends BaseModel
     // Campos permitidos para insertar o actualizar
     protected $camposPermitidos = [
         'th_car_id',
-        'th_car_req_id',
+        'id',
         'th_carreq_estado',
         'th_carreq_fecha_creacion',
         'th_carreq_fecha_modificacion'
@@ -25,9 +25,9 @@ class th_contr_union_cargo_requisitoM extends BaseModel
 
     $sql = "
         SELECT r.*
-        FROM th_contr_cargo_requisitos r 
+        FROM th_cat_cargo_requisitos r 
         LEFT JOIN th_contr_union_cargo_requisito u  
-        ON u.th_car_req_id = r.th_car_req_id
+        ON u.th_car_req_id = r.id_cargo_requisitos
         AND u.th_car_id = $car_id
 		AND u.th_carreq_estado = 1
         WHERE u.th_car_req_id IS NULL;
@@ -43,19 +43,19 @@ public function listar_requisitos_asignados($car_id)
     $sql = "
         SELECT 
             u.th_carreq_id,               
-            r.th_car_req_id,                    
-            r.th_car_req_nombre AS nombre,
-            r.th_car_req_descripcion AS descripcion,
+            r.id_cargo_requisitos,                    
+            r.nombre AS nombre,
+            r.descripcion AS descripcion,
             u.th_carreq_estado,
             u.th_carreq_fecha_creacion,
             u.th_carreq_fecha_modificacion
         FROM th_contr_union_cargo_requisito u
-        INNER JOIN th_contr_cargo_requisitos r 
-            ON r.th_car_req_id = u.th_car_req_id
+        INNER JOIN th_cat_cargo_requisitos r 
+            ON r.id_cargo_requisitos = u.th_car_req_id
         WHERE u.th_car_id = {$car_id}
           AND u.th_carreq_estado = 1
-          AND r.th_car_req_estado = 1
-        ORDER BY r.th_car_req_nombre;
+          AND r.estado = 1
+        ORDER BY r.nombre;
     ";
 
     return $this->db->datos($sql);

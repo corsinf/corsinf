@@ -205,16 +205,6 @@ if (isset($_GET['_id'])) {
                                     </section>
                                 </div>
                                 <div class="tab-pane fade" id="tab_requisitos_cargo">
-                                    <div class="d-flex gap-2 mb-2">
-                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_cargo_requisitos"
-                                            class="btn btn-success btn-sm">
-                                            <i class="bx bx-plus me-0 pb-1"></i> Nuevo Requisito
-                                        </a>
-                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_requisitos_detalles"
-                                            class="btn btn-success btn-sm">
-                                            <i class="bx bx-plus me-0 pb-1"></i> Lista de requisitos detalles
-                                        </a>
-                                    </div>
                                     <section class="content pt-2">
                                         <div class="container-fluid">
                                             <div class="table-responsive">
@@ -233,13 +223,6 @@ if (isset($_GET['_id'])) {
                                     </section>
                                 </div>
                                 <div class="tab-pane fade" id="tab_niveles_cargo">
-                                    <div class="d-flex gap-2">
-                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_niveles_cargo"
-                                            class="btn btn-success btn-sm">
-                                            <i class="bx bx-plus me-0 pb-1"></i> Nuevo Nivel
-                                        </a>
-                                    </div>
-
                                     <section class="content pt-2">
                                         <div class="container-fluid">
                                             <div class="table-responsive">

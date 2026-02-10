@@ -19,7 +19,7 @@ if (isset($_GET['_id'])) {
         tbl_plazas = $('#tbl_plazas').DataTable($.extend({}, configuracion_datatable('Nombre', 'cuidad',
             'telefono'), {
             reponsive: true,
-             dom: 'frtip',
+            dom: 'frtip',
             buttons: [{
                 extend: 'colvis',
                 text: '<i class="bx bx-columns"></i> Columnas',
@@ -62,7 +62,7 @@ if (isset($_GET['_id'])) {
 
     });
 </script>
-
+<!--
 <script type="text/javascript">
     $(document).ready(function() {
 
@@ -119,74 +119,75 @@ if (isset($_GET['_id'])) {
 </script>
 
 <script type="text/javascript">
-let tbl_etapas;
+    let tbl_etapas;
 
-$(document).ready(function() {
+    $(document).ready(function() {
 
-    // Inicializar datatable de etapas
-    tbl_etapas = $('#tbl_etapas').DataTable($.extend({}, configuracion_datatable('Nombre', 'tipo',
-        'orden'), {
-        responsive: true,
-        dom: 'frtip',
+        // Inicializar datatable de etapas
+        tbl_etapas = $('#tbl_etapas').DataTable($.extend({}, configuracion_datatable('Nombre', 'tipo',
+            'orden'), {
+            responsive: true,
+            dom: 'frtip',
             buttons: [{
                 extend: 'colvis',
                 text: '<i class="bx bx-columns"></i> Columnas',
                 className: 'btn btn-outline-secondary btn-sm'
             }],
-        language: {
-            url: '../assets/plugins/datatable/spanish.json'
-        },
-        ajax: {
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_etapas_procesoC.php?listar=true',
-            dataSrc: ''
-        },
-        columns: [{
-                data: null,
-                render: function(data, type, item) {
-                    // link al formulario de registro/modificación (ajusta acc si lo tienes distinto)
-                    href =
-                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_etapa_proceso&_id=${item._id}`;
-                    return `<a href="${href}"><u>${item.nombre}</u></a>`;
-                }
+            language: {
+                url: '../assets/plugins/datatable/spanish.json'
             },
-            {
-                data: 'tipo',
-                render: function(data) {
-                    return data ? data.replace(/_/g, ' ') : '';
-                }
+            ajax: {
+                url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_etapas_procesoC.php?listar=true',
+                dataSrc: ''
             },
-            {
-                data: 'orden',
-                render: function(data) {
-                    return data !== null && data !== undefined ? data : '';
+            columns: [{
+                    data: null,
+                    render: function(data, type, item) {
+                        // link al formulario de registro/modificación (ajusta acc si lo tienes distinto)
+                        href =
+                            `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_etapa_proceso&_id=${item._id}`;
+                        return `<a href="${href}"><u>${item.nombre}</u></a>`;
+                    }
+                },
+                {
+                    data: 'tipo',
+                    render: function(data) {
+                        return data ? data.replace(/_/g, ' ') : '';
+                    }
+                },
+                {
+                    data: 'orden',
+                    render: function(data) {
+                        return data !== null && data !== undefined ? data : '';
+                    }
+                },
+                {
+                    data: 'obligatoria',
+                    render: function(data) {
+                        return (data == 1 || data === true || data === '1') ?
+                            '<span class="badge bg-success">Sí</span>' :
+                            '<span class="badge bg-secondary">No</span>';
+                    }
+                },
+                {
+                    data: 'descripcion',
+                    render: function(data, type, item) {
+                        if (!data) return '';
+                        // Acortar descripción en la tabla
+                        return data.length > 120 ? data.substring(0, 117) + '...' : data;
+                    }
                 }
-            },
-            {
-                data: 'obligatoria',
-                render: function(data) {
-                    return (data == 1 || data === true || data === '1') ?
-                        '<span class="badge bg-success">Sí</span>' :
-                        '<span class="badge bg-secondary">No</span>';
-                }
-            },
-            {
-                data: 'descripcion',
-                render: function(data, type, item) {
-                    if (!data) return '';
-                    // Acortar descripción en la tabla
-                    return data.length > 120 ? data.substring(0, 117) + '...' : data;
-                }
-            }
-        ],
-        order: [
-            [0, 'asc']
-        ]
-    }));
+            ],
+            order: [
+                [0, 'asc']
+            ]
+        }));
 
 
 
-});
+    });
 </script>
+-->
 
 <div class="page-wrapper">
     <div class="page-content">
@@ -223,6 +224,7 @@ $(document).ready(function() {
                                         Plazas
                                     </a>
                                 </li>
+                                <!--
                                 <li class="nav-item">
                                     <a class="nav-link" data-bs-toggle="tab" href="#tab_requisitos">
                                         Requisitos de la plaza
@@ -233,6 +235,7 @@ $(document).ready(function() {
                                         Etapas de selección
                                     </a>
                                 </li>
+-->
                             </ul>
 
                             <div class="tab-content py-3">
@@ -258,7 +261,7 @@ $(document).ready(function() {
                                     </div>
                                 </div>
 
-                                <!-- TAB REQUISITOS -->
+                                <!-- TAB REQUISITOS 
                                 <div class="tab-pane fade" id="tab_requisitos">
                                     <div class="card-title d-flex align-items-center w-100 justify-content-between">
                                         <h5 class="mb-0 text-primary">Listado de requisitos</h5>
@@ -323,6 +326,7 @@ $(document).ready(function() {
                                     </section>
 
                                 </div>
+                                -->
 
                             </div>
 

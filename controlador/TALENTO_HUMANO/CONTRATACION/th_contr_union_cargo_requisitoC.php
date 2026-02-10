@@ -109,13 +109,13 @@ class th_contr_union_cargo_requisitoC
 
     foreach ($datos as $req) {
 
-        $nombre      = $req['th_car_req_nombre'] ?? '';
+        $nombre      = $req['nombre'] ?? '';
         $texto       = trim($nombre); // igual que tu ejemplo tipo-texto
 
         // filtro por búsqueda
         if ($query === '' || stripos($texto, $query) !== false) {
             $lista[] = [
-                'id'   => $req['th_car_req_id'],
+                'id'   => $req['id_cargo_requisitos'],
                 'text' => $texto
             ];
         }

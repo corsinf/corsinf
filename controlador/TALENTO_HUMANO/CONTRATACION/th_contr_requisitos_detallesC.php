@@ -46,19 +46,21 @@ class th_contr_requisitos_detallesC
     function listar($id = '')
     {
         if (!empty($id)) {
-            $datos = $this->modelo->where('th_reqdet_id', $id)->listar();
+            $datos = $this->modelo->where('id_requisitos_detalle', $id)->listar();
             return $datos;
         } else {
             // por defecto solo activos
-            $datos = $this->modelo->where('th_reqdet_estado', 1)->listar();
+            $datos = $this->modelo->where('estado', 1)->listar();
             return $datos;
         }
     }
 
-    
+
     function insertar_editar($parametros)
     {
-        $toInt = function ($v) { return ($v === '' || $v === null) ? null : (int)$v; };
+        $toInt = function ($v) {
+            return ($v === '' || $v === null) ? null : (int)$v;
+        };
 
         // Normalizar inputs
         $nombre = trim($parametros['txt_th_reqdet_nombre'] ?? '');
@@ -69,18 +71,18 @@ class th_contr_requisitos_detallesC
 
         // Preparar datos
         $datos = array(
-            array('campo' => 'th_reqdet_nombre', 'dato' => $nombre),
-            array('campo' => 'th_reqdet_descripcion', 'dato' => $descripcion),
-            array('campo' => 'th_reqdet_tipo_dato', 'dato' => $tipo_dato),
-            array('campo' => 'th_reqdet_obligatorio', 'dato' => $obligatorio),
-            array('campo' => 'th_reqdet_estado', 'dato' => $estado),
-            array('campo' => 'th_reqdet_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+            array('campo' => 'nombre', 'dato' => $nombre),
+            array('campo' => 'descripcion', 'dato' => $descripcion),
+            array('campo' => 'tipo_dato', 'dato' => $tipo_dato),
+            array('campo' => 'obligatorio', 'dato' => $obligatorio),
+            array('campo' => 'estado', 'dato' => $estado),
+            array('campo' => 'fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
         );
 
         if (empty($parametros['_id'])) {
             // validar duplicado por nombre (solo activos)
-            if (count($this->modelo->where('th_reqdet_nombre', $nombre)->where('th_reqdet_estado', 1)->listar()) == 0) {
-                $datos[] = array('campo' => 'th_reqdet_fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
+            if (count($this->modelo->where('nombre', $nombre)->where('estado', 1)->listar()) == 0) {
+                $datos[] = array('campo' => 'fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
                 $id = $this->modelo->insertar_id($datos);
                 return ($id) ? 1 : 0; // manteniendo convención: 1=ok, 0=falla
             } else {
@@ -88,8 +90,8 @@ class th_contr_requisitos_detallesC
             }
         } else {
             // editar: validar que no exista otro con mismo nombre
-            if (count($this->modelo->where('th_reqdet_nombre', $nombre)->where('th_reqdet_id !', $parametros['_id'])->listar()) == 0) {
-                $where[0]['campo'] = 'th_reqdet_id';
+            if (count($this->modelo->where('nombre', $nombre)->where('id_requisitos_detalle !', $parametros['_id'])->listar()) == 0) {
+                $where[0]['campo'] = 'id_requisitos_detalle';
                 $where[0]['dato']  = $parametros['_id'];
                 $res = $this->modelo->editar($datos, $where);
                 return $res;
@@ -101,36 +103,36 @@ class th_contr_requisitos_detallesC
         return -2;
     }
 
-   
+
     function eliminar($id)
     {
         $datos = array(
-            array('campo' => 'th_reqdet_estado', 'dato' => 0),
-            array('campo' => 'th_reqdet_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+            array('campo' => 'estado', 'dato' => 0),
+            array('campo' => 'fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
         );
 
-        $where[0]['campo'] = 'th_reqdet_id';
+        $where[0]['campo'] = 'id_requisitos_detalle';
         $where[0]['dato']  = $id;
 
         $res = $this->modelo->editar($datos, $where);
         return $res;
     }
 
-   
+
     function buscar($parametros)
     {
         $lista = array();
-        $concat = "th_reqdet_nombre, th_reqdet_descripcion";
+        $concat = "nombre, descripcion";
 
         $query = $parametros['query'] ?? '';
 
-        $builder = $this->modelo->where('th_reqdet_estado', 1);
+        $builder = $this->modelo->where('estado', 1);
 
         $datos = $builder->like($concat, $query);
 
         foreach ($datos as $value) {
-            $text = $value['th_reqdet_nombre'];
-            $lista[] = array('id' => $value['th_reqdet_id'], 'text' => $text);
+            $text = $value['nombre'];
+            $lista[] = array('id' => $value['id_requisitos_detalle'], 'text' => $text);
         }
 
         return $lista;
