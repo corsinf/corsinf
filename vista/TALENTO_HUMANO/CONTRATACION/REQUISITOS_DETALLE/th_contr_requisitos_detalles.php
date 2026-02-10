@@ -81,7 +81,7 @@ $(document).ready(function() {
                                     <i class="bx bx-plus me-0 pb-1"></i> Nuevo Detalle
                                 </a>
 
-                                <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_cargo_requisitos"
+                                <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_cat_cargo_requisitos"
                                     class="btn btn-secondary btn-sm">
                                     <i class="bx bx-arrow-back me-0 pb-1"></i> Volver a Requisitos
                                 </a>

@@ -21,7 +21,7 @@ function guardar_actualizar() {
     };
 
     $.ajax({
-        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_requisitosC.php?insertar_editar=true',
+        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_cargo_requisitosC.php?insertar_editar=true',
         type: 'post',
         data: {
             parametros: parametros
@@ -50,7 +50,7 @@ function eliminar_requisito() {
         data: {
             id: id
         },
-        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_requisitosC.php?eliminar=true',
+        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_cargo_requisitosC.php?eliminar=true',
         type: 'post',
         dataType: 'json',
         success: function(response) {
@@ -113,7 +113,7 @@ function eliminar_cargo_requisito(id) {
 
 function cargar_requisito(id) {
     $.ajax({
-        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_requisitosC.php?listar=true',
+        url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_cargo_requisitosC.php?listar=true',
         type: 'post',
         data: {
             id: id

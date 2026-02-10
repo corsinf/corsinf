@@ -481,7 +481,7 @@ if (isset($_GET['_id'])) {
     /* Cargar requisito para modificar */
     function cargar_requisito(id) {
         $.ajax({
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_requisitosC.php?listar=true',
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_cargo_requisitosC.php?listar=true',
             type: 'post',
             data: {
                 id: id
@@ -508,7 +508,7 @@ if (isset($_GET['_id'])) {
         };
 
         $.ajax({
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_requisitosC.php?insertar_editar=true',
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_cargo_requisitosC.php?insertar_editar=true',
             type: 'post',
             data: {
                 parametros: parametros
@@ -518,7 +518,7 @@ if (isset($_GET['_id'])) {
                 if (r == 1) {
                     Swal.fire("", "Registrado correctamente", "success")
                         .then(() => location.href =
-                            "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_cargo_requisitos");
+                            "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_cat_cargo_requisitos");
                 } else if (r == -2) {
                     Swal.fire("Error", "Nombre ya existe", "warning");
                 } else {
@@ -537,14 +537,14 @@ if (isset($_GET['_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_requisitosC.php?eliminar=true',
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_cargo_requisitosC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro eliminado.', 'success').then(function() {
                         location.href =
-                            '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_cargo_requisitos';
+                            '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_cat_cargo_requisitos';
                     });
                 } else {
                     Swal.fire('', response.msg || 'No se pudo eliminar.', 'error');

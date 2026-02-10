@@ -309,8 +309,8 @@ if ($_GET['acc'] == 'th_contr_proceso_contratacion') {
 
 
 
-if ($_GET['acc'] == 'th_contr_cargo_requisitos') {
-	include('TALENTO_HUMANO/CONTRATACION/CARGO_REQUISITOS/th_contr_cargo_requisitos.php');
+if ($_GET['acc'] == 'th_cat_cargo_requisitos') {
+	include('TALENTO_HUMANO/CONTRATACION/CARGO_REQUISITOS/th_cat_cargo_requisitos.php');
 }
 if ($_GET['acc'] == 'th_registrar_cargo_requisitos') {
 	include('TALENTO_HUMANO/CONTRATACION/CARGO_REQUISITOS/th_registrar_cargo_requisitos.php');
