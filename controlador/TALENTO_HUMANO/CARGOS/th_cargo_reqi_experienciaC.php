@@ -71,23 +71,17 @@ HTML,
             $label_anios = ($anios == 1) ? 'AÑO' : 'AÑOS';
 
             $texto .= <<<HTML
-        <li class="mb-1">
-            <div class="d-flex align-items-center">
-                <div class="d-flex align-items-center overflow-hidden">
-                    <i class='bx bxs-circle me-2 text-dark' style="font-size: 8px;"></i>
-                    
-                    <h6 class="mb-0 fw-bold text-dark text-truncate" style="font-size: 0.85rem;">
-                        {$anios} {$label_anios}
-                    </h6>
-                </div>
-                
-                <div class="d-flex gap-1 ms-3">
-                    <button type="button" class="btn btn-danger btn-xs" onclick="delete_datos_experiencia_necesaria('{$id_reg}')">
-                        <i class="bx bx-trash fs-7 fw-bold"></i>
-                    </button>
-                </div>
-            </div>
-        </li>
+       <li class="py-2 border-bottom">
+    <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+            <i class='bx bx-check-circle text-success me-2' style="font-size: 18px;"></i>
+            <span class="text-dark" style="font-size: 0.9rem;">{$anios} {$label_anios}</span>
+        </div>
+        <button type="button" class="btn btn-danger btn-sm py-0 px-2" onclick="delete_datos_experiencia_necesaria('{$id_reg}')" style="font-size: 0.75rem;">
+            <i class="bx bx-trash" style="font-size: 14px;"></i>
+        </button>
+    </div>
+</li>
 HTML;
         }
 

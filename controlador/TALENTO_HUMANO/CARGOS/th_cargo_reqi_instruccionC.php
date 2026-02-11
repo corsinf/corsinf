@@ -46,55 +46,48 @@ class  th_cargo_reqi_instruccionC
 
 
     function listar_modal($id = '')
-    {
-        $datos = [];
-        if ($id !== '') {
-            $datos = $this->modelo->listar_cargo_instruccion(null, $id);
-        }
-
-        if (empty($datos)) {
-            return
-                <<<HTML
-            <div class="d-flex align-items-center bg-light border-start border-secondary border-3 p-2 shadow-sm rounded-2">
-              <i class='bx bx-info-circle me-2 text-secondary' style='font-size: 20px;'></i>
-                <div class="lh-1">
-                    <div class="text-dark fw-bold small">Sin instrucción registrada</div>
-                    <div class="text-muted" style="font-size: 0.75rem;">No se ha definido el nivel académico.</div>
-                </div>
-            </div>
-            HTML;
-        }
-
-        $texto = '<ul class="list-unstyled mb-0">';
-        foreach ($datos as $value) {
-            $id_reg = $value['_id'];
-            $descripcion = $value['nivel_academico_descripcion'];
-
-            $texto .= <<<HTML
-        <li class="mb-1">
-            <div class="d-flex align-items-center ">
-                <div class="d-flex align-items-center overflow-hidden">
-                    <i class='bx bxs-circle me-2 text-dark' style="font-size: 8px;"></i>
-                    
-                   <h6 class="mb-0 fw-bold text-dark text-truncate" style="font-size: 0.85rem;">
-                        {$descripcion}
-                    </h6>
-                </div>
-                
-                <div class="d-flex gap-1 ms-3">
-                    <button type="button" class="btn btn-danger btn-xs" onclick="delete_datos_instruccion_basica('{$id_reg}')">
-                        <i class="bx bx-trash fs-7 fw-bold"></i>
-                    </button>
-                </div>
-            </div>
-        </li>
-HTML;
-        }
-        $texto .= '</ul>';
-
-        return $texto;
+{
+    $datos = [];
+    if ($id !== '') {
+        $datos = $this->modelo->listar_cargo_instruccion(null, $id);
     }
 
+    if (empty($datos)) {
+        return
+            <<<HTML
+        <div class="d-flex align-items-center bg-light border-start border-secondary border-3 p-2 shadow-sm rounded-2">
+          <i class='bx bx-info-circle me-2 text-secondary' style='font-size: 20px;'></i>
+            <div class="lh-1">
+                <div class="text-dark fw-bold small">Sin instrucción registrada</div>
+                <div class="text-muted" style="font-size: 0.75rem;">No se ha definido el nivel académico.</div>
+            </div>
+        </div>
+        HTML;
+    }
+
+    $texto = '<ul class="list-unstyled mb-0">';
+    foreach ($datos as $value) {
+        $id_reg = $value['_id'];
+        $descripcion = $value['nivel_academico_descripcion'];
+
+        $texto .= <<<HTML
+    <li class="py-2 border-bottom">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <i class='bx bx-check-circle text-success me-2' style="font-size: 18px;"></i>
+                <span class="text-dark" style="font-size: 0.9rem;">{$descripcion}</span>
+            </div>
+            <button type="button" class="btn btn-danger btn-sm py-0 px-2" onclick="delete_datos_instruccion_basica('{$id_reg}')" style="font-size: 0.75rem;">
+                <i class="bx bx-trash" style="font-size: 14px;"></i>
+            </button>
+        </div>
+    </li>
+HTML;
+    }
+    $texto .= '</ul>';
+
+    return $texto;
+}
     function listar($id = '', $instruccion_id = '')
     {
         if ($id !== '') {
