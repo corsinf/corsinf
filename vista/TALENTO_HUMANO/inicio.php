@@ -243,12 +243,12 @@ if ($_GET['acc'] == 'th_registrar_plaza_cargo') {
 
 
 
-if ($_GET['acc'] == 'th_contr_cargos') {
-	include('TALENTO_HUMANO/CONTRATACION/CARGOS/th_contr_cargos.php');
+if ($_GET['acc'] == 'th_cat_cargos') {
+	include('TALENTO_HUMANO/CARGOS/th_cat_cargos.php');
 }
 
 if ($_GET['acc'] == 'th_registro_cargo') {
-	include('TALENTO_HUMANO/CONTRATACION/CARGOS/th_registro_cargo.php');
+	include('TALENTO_HUMANO/CARGOS/th_registro_cargo.php');
 }
 
 
