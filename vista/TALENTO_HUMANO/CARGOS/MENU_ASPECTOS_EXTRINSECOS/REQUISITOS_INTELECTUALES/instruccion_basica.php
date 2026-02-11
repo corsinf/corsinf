@@ -2,7 +2,7 @@
     let tbl_instruccion_basica;
     $(document).ready(function() {
         cargar_selects_ins_basica('<?= $_id ?>');
-        cargar_tabla_instruccion_basica();
+        cargar_instrucciones_basicas('<?= $_id ?>');
 
     });
 
@@ -43,58 +43,20 @@
         });
     }
 
-    function cargar_tabla_instruccion_basica() {
-
-        let id_cargo = <?= $_id ?>;
-
-        tbl_instruccion_basica = $('#tbl_instruccion_basica').DataTable({
-            responsive: true,
-            destroy: true,
-            stateSave: true,
-            language: {
-                url: '../assets/plugins/datatable/spanish.json'
+    function cargar_instrucciones_basicas(id) {
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_instruccionC.php?listar_modal=true',
+            type: 'post',
+            data: {
+                id: id
             },
-            ajax: {
-                url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_instruccionC.php?listar=true',
-                type: 'POST',
-                data: function(d) {
-                    d.id = id_cargo;
-                },
-                dataSrc: ''
-            },
-            columns: [{
-                    data: 'nivel_academico_descripcion'
-                },
-                {
-                    data: null,
-                    orderable: false,
-                    className: 'text-center',
-                    render: function(data, type, item) {
-                        return `
-                        <div class="d-flex justify-content-center gap-1">
-                            <button type="button" class="btn btn-warning btn-xs" onclick="abrir_modal_instruccion_basica('${item._id}')">
-                                <i class="bx bx-edit fs-7 me-0 fw-bold"></i>
-                            </button>
-                            <button type="button" class="btn btn-danger btn-xs" onclick="delete_datos_instruccion_basica('${item._id}')">
-                                <i class="bx bx-trash fs-7 me-0 fw-bold"></i>
-                            </button>
-                        </div>
-                    `;
-                    }
-                }
-
-            ],
-            order: [
-                [1, 'asc']
-            ]
+            dataType: 'json',
+            success: function(response) {
+                $('#pnl_instruccion_basica').hide().html(response).fadeIn(400);
+            }
         });
     }
-    /*
-    function cargar_selects_ins_basica() {
-        url_nivel_academicoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_pos_nivel_academicoC.php?buscar=true';
-        cargar_select2_url('ddl_nivel_academico', url_nivel_academicoC, '', '#modal_instruccion_basica');
-    }
-   */
+
     function cargar_datos_modal_instruccion_basica(id) {
         $.ajax({
             url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_instruccionC.php?listar=true', // Ajustar ruta si es distinta
@@ -147,7 +109,7 @@
                     Swal.fire('', 'Operación realizada con éxito.', 'success');
                     $('#modal_instruccion_basica').modal('hide');
                     limpiar_campos_instruccion_basica_modal();
-                    cargar_tabla_instruccion_basica();
+                    cargar_instrucciones_basicas(<?= $_id ?>);
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
                 }
@@ -186,7 +148,7 @@
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
                     $('#modal_instruccion_basica').modal('hide');
                     limpiar_campos_instruccion_basica_modal();
-                    cargar_tabla_instruccion_basica();
+                    cargar_instrucciones_basicas(<?= $_id ?>);
                 }
             }
         });
@@ -217,7 +179,11 @@
     }
 </script>
 
+<div class="" id="pnl_instruccion_basica">
 
+</div>
+
+<!--
 <section class="content pt-2">
     <div class="container-fluid">
         <div class="table-responsive">
@@ -233,8 +199,10 @@
                 </tbody>
             </table>
         </div>
-    </div><!-- /.container-fluid -->
+    </div> /.container-fluid
 </section>
+
+ -->
 
 
 <div class="modal fade" id="modal_instruccion_basica" tabindex="-1" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -244,9 +212,9 @@
             <div class="modal-header bg-dark bg-opacity-10">
                 <div>
                     <h5 class="modal-title fw-bold text-primary" id="lbl_titulo_instruccion_basica">
-                        <i class='bx bx-briefcase me-2'></i>Estado Laboral Interno
+                        <i class='bx bx-briefcase me-2'></i>Instrucción Basica
                     </h5>
-                    <small class="text-muted">Gestiona la situación contractual, cargos y remuneraciones.</small>
+                    <small class="text-muted">Gestiona el nivel académico y la formación mínima requerida para este cargo.</small>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_instruccion_basica_modal()"></button>
             </div>

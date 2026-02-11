@@ -1,47 +1,17 @@
-<div class="tab-pane fade show active" id="tab_requisitos_intelectuales" role="tabpanel">
-    <ul class="nav nav-tabs nav-tabs-custom mb-4" id="subMenuIntelectuales" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="tab-instruccion-btn" data-bs-toggle="tab"
-                data-bs-target="#tab_instruccion_basica" type="button" role="tab">
-                <i class="bx bx-book-open me-1"></i>
-                Instrucción Básica Necesaria
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="tab-experiencia-btn" data-bs-toggle="tab"
-                data-bs-target="#tab_experiencia_necesaria" type="button" role="tab">
-                <i class="bx bx-briefcase me-1"></i>
-                Experiencia Necesaria
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="tab-iniciativa-btn" data-bs-toggle="tab"
-                data-bs-target="#tab_iniciativa_necesaria" type="button" role="tab">
-                <i class="bx bx-bulb me-1"></i>
-                Iniciativa Necesaria
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="tab-aptitudes-btn" data-bs-toggle="tab"
-                data-bs-target="#tab_aptitudes_necesarias" type="button" role="tab">
-                <i class="bx bx-star me-1"></i>
-                Aptitudes Necesarias
-            </button>
-        </li>
-    </ul>
+<div class="tab-content" id="subMenuIntelectualesContent">
+    <!-- SIN NAVEGACIÓN DE TABS, TODO VISIBLE -->
 
-    <!-- Contenido de los sub-tabs -->
-    <div class="tab-content" id="subMenuIntelectualesContent">
-        <!-- Tab: Instrucción Básica -->
-        <div class="tab-pane fade show active" id="tab_instruccion_basica" role="tabpanel">
-            <div class="row">
+    <div class="container-fluid">
+
+        <!-- SECCIÓN 1: INSTRUCCIÓN BÁSICA -->
+        <div class="mb-5">
+            <div class="row mb-3">
                 <div class="col-6 d-flex align-items-center">
+                    <h4><i class="bx bx-book-open me-2"></i>Instrucción Básica Necesaria</h4>
                 </div>
                 <div class="col-6 d-flex justify-content-end">
-                    <a href="#"
-                        class="text-success icon-hover d-flex align-items-center"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modal_instruccion_basica">
+                    <a href="#" class="text-success icon-hover d-flex align-items-center"
+                        data-bs-toggle="modal" data-bs-target="#modal_instruccion_basica">
                         <i class='bx bx-plus-circle bx-sm me-1'></i>
                         <span>Agregar</span>
                     </a>
@@ -50,19 +20,62 @@
             <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/REQUISITOS_INTELECTUALES/instruccion_basica.php'); ?>
         </div>
 
-        <!-- Tab: Experiencia Necesaria -->
-        <div class="tab-pane fade" id="tab_experiencia_necesaria" role="tabpanel">
+        <hr class="my-4">
+
+        <!-- SECCIÓN 2: EXPERIENCIA NECESARIA -->
+        <div class="mb-5">
+            <div class="row mb-3">
+                <div class="col-6 d-flex align-items-center">
+                    <h4><i class="bx bx-briefcase me-2"></i>Experiencia Necesaria</h4>
+                </div>
+                <div class="col-6 d-flex justify-content-end">
+                    <a href="#" class="text-success icon-hover d-flex align-items-center"
+                        data-bs-toggle="modal" data-bs-target="#modal_experiencia_necesaria">
+                        <i class='bx bx-plus-circle bx-sm me-1'></i>
+                        <span>Agregar</span>
+                    </a>
+                </div>
+            </div>
             <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/REQUISITOS_INTELECTUALES/experiencia_necesaria.php'); ?>
         </div>
 
-        <!-- Tab: Iniciativa Necesaria -->
-        <div class="tab-pane fade" id="tab_iniciativa_necesaria" role="tabpanel">
+        <hr class="my-4">
+
+        <!-- SECCIÓN 3: INICIATIVA NECESARIA -->
+        <div class="mb-5">
+            <div class="row mb-3">
+                <div class="col-6 d-flex align-items-center">
+                    <h4><i class="bx bx-bulb me-2"></i>Iniciativa Necesaria</h4>
+                </div>
+                <div class="col-6 d-flex justify-content-end">
+                    <a href="#" class="text-success icon-hover d-flex align-items-center"
+                        data-bs-toggle="modal" data-bs-target="#modal_iniciativa_necesaria">
+                        <i class='bx bx-plus-circle bx-sm me-1'></i>
+                        <span>Agregar</span>
+                    </a>
+                </div>
+            </div>
             <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/REQUISITOS_INTELECTUALES/iniciativa_necesaria.php'); ?>
         </div>
 
-        <!-- Tab: Aptitudes Necesarias -->
-        <div class="tab-pane fade" id="tab_aptitudes_necesarias" role="tabpanel">
+        <hr class="my-4">
+
+        <!-- SECCIÓN 4: APTITUDES NECESARIAS -->
+        <div class="mb-5">
+            <div class="row mb-3">
+                <div class="col-6 d-flex align-items-center">
+                    <h4><i class="bx bx-star me-2"></i>Aptitudes Necesarias</h4>
+                </div>
+                <div class="col-6 d-flex justify-content-end">
+                    <a href="#" class="text-success icon-hover d-flex align-items-center"
+                        data-bs-toggle="modal" data-bs-target="#modal_aptitudes_necesarias">
+                        <i class='bx bx-plus-circle bx-sm me-1'></i>
+                        <span>Agregar</span>
+                    </a>
+                </div>
+            </div>
             <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/REQUISITOS_INTELECTUALES/aptitudes_necesarias.php'); ?>
         </div>
+
     </div>
 </div>
