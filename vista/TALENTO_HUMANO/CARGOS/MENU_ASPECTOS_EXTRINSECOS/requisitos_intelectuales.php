@@ -34,6 +34,19 @@
     <div class="tab-content" id="subMenuIntelectualesContent">
         <!-- Tab: Instrucción Básica -->
         <div class="tab-pane fade show active" id="tab_instruccion_basica" role="tabpanel">
+            <div class="row">
+                <div class="col-6 d-flex align-items-center">
+                </div>
+                <div class="col-6 d-flex justify-content-end">
+                    <a href="#"
+                        class="text-success icon-hover d-flex align-items-center"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modal_instruccion_basica">
+                        <i class='bx bx-plus-circle bx-sm me-1'></i>
+                        <span>Agregar</span>
+                    </a>
+                </div>
+            </div>
             <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/REQUISITOS_INTELECTUALES/instruccion_basica.php'); ?>
         </div>
 
