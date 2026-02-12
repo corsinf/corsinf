@@ -2247,7 +2247,6 @@ if (isset($_GET['_id'])) {
 
                                                 <div class="row">
 
-                                                    <!-- 🔹 MENÚ LATERAL -->
                                                     <div class="col-md-3 bg-light border-end">
                                                         <div class="p-3">
                                                             <div class="nav flex-column nav-pills gap-2"
@@ -2291,7 +2290,6 @@ if (isset($_GET['_id'])) {
                                                         </div>
                                                     </div>
 
-                                                    <!-- 🔹 CONTENIDO DERECHO -->
                                                     <div class="col-md-9 bg-white">
                                                         <div class="tab-content p-4" id="v-pills-tabContent">
 
@@ -2300,369 +2298,370 @@ if (isset($_GET['_id'])) {
                                                                 role="tabpanel">
                                                                 <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/requisitos_intelectuales.php'); ?>
                                                             </div>
-
-                                                            <div class="tab-pane fade"
-                                                                id="tab_requisitos_fisicos"
-                                                                role="tabpanel">
-                                                            </div>
-
-                                                            <div class="tab-pane fade"
-                                                                id="tab_responsabilidades_implicitas"
-                                                                role="tabpanel">
-                                                            </div>
-
-                                                            <div class="tab-pane fade"
-                                                                id="tab_condiciones_trabajo"
-                                                                role="tabpanel">
-                                                            </div>
-
                                                         </div>
                                                     </div>
 
-                                                </div>
+                                                    <div class="tab-pane fade" id="tab_requisitos_fisicos" role="tabpanel">
+                                                        <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/requisitos_fisicos.php'); ?>
+                                                    </div>
 
+                                                    <div class="tab-pane fade"
+                                                        id="tab_responsabilidades_implicitas"
+                                                        role="tabpanel">
+                                                    </div>
+
+                                                    <div class="tab-pane fade"
+                                                        id="tab_condiciones_trabajo"
+                                                        role="tabpanel">
+                                                    </div>
+
+                                                </div>
                                             </div>
-                                        </section>
+
                                     </div>
 
+                                </div>
+                                </section>
+                            </div>
 
 
 
 
-                                    <div class="tab-pane fade" id="complianceprofile" role="tabpanel">
-                                        <section class="content pt-0">
-                                            <div class="container-fluid">
 
-                                                <!-- Encabezado -->
-                                                <div class="row mb-3 align-items-center">
-                                                    <div class="col-md-8">
-                                                        <h5 class="fw-bold text-primary mb-1">
-                                                            <i class="bx bx-check-shield me-2"></i>Compliance del Cargo
-                                                        </h5>
-                                                        <small class="text-muted">
-                                                            <i class="bi bi-clipboard-check me-1"></i>
-                                                            Estado de cumplimiento de requisitos y documentación
-                                                        </small>
-                                                    </div>
-                                                    <?php if (isset($_GET['_id'])) { ?>
-                                                        <div class="col-md-4 d-flex justify-content-end gap-2">
-                                                            <button type="button" class="btn btn-success btn-sm shadow-sm"
-                                                                onclick="abrir_modal_funciones()">
-                                                                <i class="bx bx-plus-circle me-1"></i> Funciones
-                                                            </button>
+                            <div class="tab-pane fade" id="complianceprofile" role="tabpanel">
+                                <section class="content pt-0">
+                                    <div class="container-fluid">
 
-                                                            <button type="button" class="btn btn-success btn-sm shadow-sm"
-                                                                onclick="abrir_modal_compliance()">
-                                                                <i class="bx bx-plus-circle me-1"></i> Actualizar Compliance
-                                                            </button>
-                                                        </div>
-                                                    <?php } ?>
-                                                </div>
-                                                <?php if (isset($_GET['_id'])) { ?>
-                                                    <!-- Tarjeta Principal de Compliance -->
-                                                    <div class="card border-0 shadow-sm">
-                                                        <div class="card-body p-4">
-
-                                                            <!-- Indicador de Progreso Principal -->
-                                                            <div class="row mb-4">
-                                                                <div class="col-12">
-                                                                    <div class="text-center p-4 bg-light rounded-3 border">
-                                                                        <h3 class="fw-bold text-primary mb-2"
-                                                                            id="comp_porcentaje">
-                                                                            0%</h3>
-                                                                        <p class="text-muted mb-3 small">Porcentaje de
-                                                                            Completitud
-                                                                        </p>
-
-                                                                        <div class="progress" style="height: 25px;">
-                                                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-                                                                                id="comp_progress_bar" role="progressbar"
-                                                                                style="width: 0%;" aria-valuenow="0"
-                                                                                aria-valuemin="0" aria-valuemax="100">
-                                                                                <span class="fw-bold"
-                                                                                    id="comp_progress_text">0%</span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <!-- Estadísticas Rápidas -->
-                                                            <div class="row g-3 mb-4">
-
-                                                                <!-- Requisitos Totales -->
-                                                                <div class="col-md-4">
-                                                                    <div
-                                                                        class="card border-primary border-2 h-100 shadow-sm">
-                                                                        <div class="card-body text-center p-3">
-                                                                            <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2"
-                                                                                style="width: 50px; height: 50px;">
-                                                                                <i class="bi bi-list-check text-primary"
-                                                                                    style="font-size: 1.5rem;"></i>
-                                                                            </div>
-                                                                            <h4 class="fw-bold text-primary mb-1"
-                                                                                id="comp_totales">
-                                                                                0</h4>
-                                                                            <small class="text-muted">Requisitos
-                                                                                Totales</small>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <!-- Requisitos Completados -->
-                                                                <div class="col-md-4">
-                                                                    <div
-                                                                        class="card border-success border-2 h-100 shadow-sm">
-                                                                        <div class="card-body text-center p-3">
-                                                                            <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2"
-                                                                                style="width: 50px; height: 50px;">
-                                                                                <i class="bi bi-check-circle-fill text-success"
-                                                                                    style="font-size: 1.5rem;"></i>
-                                                                            </div>
-                                                                            <h4 class="fw-bold text-success mb-1"
-                                                                                id="comp_completados">
-                                                                                0</h4>
-                                                                            <small class="text-muted">Completados</small>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <!-- Requisitos Faltantes -->
-                                                                <div class="col-md-4">
-                                                                    <div
-                                                                        class="card border-danger border-2 h-100 shadow-sm">
-                                                                        <div class="card-body text-center p-3">
-                                                                            <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2"
-                                                                                style="width: 50px; height: 50px;">
-                                                                                <i class="bi bi-exclamation-circle-fill text-danger"
-                                                                                    style="font-size: 1.5rem;"></i>
-                                                                            </div>
-                                                                            <h4 class="fw-bold text-danger mb-1"
-                                                                                id="comp_faltantes">0
-                                                                            </h4>
-                                                                            <small class="text-muted">Faltantes</small>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-
-                                                            <!-- Información Adicional -->
-                                                            <div class="row g-3">
-
-                                                                <!-- Última Revisión y Estado -->
-                                                                <div class="col-md-6">
-                                                                    <div
-                                                                        class="p-3 bg-light rounded border-start border-info border-4">
-                                                                        <div class="d-flex align-items-center mb-2">
-                                                                            <i class="bi bi-calendar-check text-info me-2"
-                                                                                style="font-size: 1.2rem;"></i>
-                                                                            <strong class="text-dark">Última
-                                                                                Revisión:</strong>
-                                                                        </div>
-                                                                        <p class="mb-0 text-muted small"
-                                                                            id="comp_ultima_revision">
-                                                                            <em>No registrada</em>
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div
-                                                                        class="p-3 bg-light rounded border-start border-warning border-4">
-                                                                        <div class="d-flex align-items-center mb-2">
-                                                                            <i class="bi bi-flag text-warning me-2"
-                                                                                style="font-size: 1.2rem;"></i>
-                                                                            <strong class="text-dark">Estado:</strong>
-                                                                        </div>
-                                                                        <span class="badge bg-secondary"
-                                                                            id="comp_estado_badge">
-                                                                            <i class="bi bi-circle-fill me-1"></i>Sin estado
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-
-                                                                <!-- Observaciones -->
-                                                                <div class="col-12">
-                                                                    <div
-                                                                        class="p-3 bg-light rounded border-start border-primary border-4">
-                                                                        <div class="d-flex align-items-center mb-2">
-                                                                            <i class="bi bi-chat-left-text text-primary me-2"
-                                                                                style="font-size: 1.2rem;"></i>
-                                                                            <strong
-                                                                                class="text-dark">Observaciones:</strong>
-                                                                        </div>
-                                                                        <p class="mb-0 text-muted small"
-                                                                            id="comp_observaciones">
-                                                                            <em>Sin observaciones registradas</em>
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-
-                                                            <!-- Badge de Resumen -->
-                                                            <div class="mt-3 pt-3 border-top text-center">
-                                                                <span
-                                                                    class="badge rounded-pill bg-info-subtle text-info px-3 py-2 me-2"
-                                                                    id="badge_resumen">
-                                                                    <i class="bi bi-graph-up me-1"></i>
-                                                                    Completados: 0 de 0 (0%)
-                                                                </span>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                <?php } ?>
-
-
-
+                                        <!-- Encabezado -->
+                                        <div class="row mb-3 align-items-center">
+                                            <div class="col-md-8">
+                                                <h5 class="fw-bold text-primary mb-1">
+                                                    <i class="bx bx-check-shield me-2"></i>Compliance del Cargo
+                                                </h5>
+                                                <small class="text-muted">
+                                                    <i class="bi bi-clipboard-check me-1"></i>
+                                                    Estado de cumplimiento de requisitos y documentación
+                                                </small>
                                             </div>
                                             <?php if (isset($_GET['_id'])) { ?>
-                                                <div class="row mb-3 align-items-center">
-                                                    <div class="col-md-8">
-                                                        <h5 class="fw-bold text-primary mb-1">
-                                                            <i class="bx bx-list-check me-2"></i>Funciones del Cargo
-                                                        </h5>
-                                                        <small class="text-muted">
-                                                            <i class="bi bi-briefcase me-1"></i>
-                                                            Listado de funciones y responsabilidades del cargo
-                                                        </small>
-                                                    </div>
+                                                <div class="col-md-4 d-flex justify-content-end gap-2">
+                                                    <button type="button" class="btn btn-success btn-sm shadow-sm"
+                                                        onclick="abrir_modal_funciones()">
+                                                        <i class="bx bx-plus-circle me-1"></i> Funciones
+                                                    </button>
+
+                                                    <button type="button" class="btn btn-success btn-sm shadow-sm"
+                                                        onclick="abrir_modal_compliance()">
+                                                        <i class="bx bx-plus-circle me-1"></i> Actualizar Compliance
+                                                    </button>
                                                 </div>
+                                            <?php } ?>
+                                        </div>
+                                        <?php if (isset($_GET['_id'])) { ?>
+                                            <!-- Tarjeta Principal de Compliance -->
+                                            <div class="card border-0 shadow-sm">
+                                                <div class="card-body p-4">
 
-                                                <!-- Tarjeta con Tabla -->
-                                                <div class="card border-0 shadow-sm">
-                                                    <div class="card-body p-0">
+                                                    <!-- Indicador de Progreso Principal -->
+                                                    <div class="row mb-4">
+                                                        <div class="col-12">
+                                                            <div class="text-center p-4 bg-light rounded-3 border">
+                                                                <h3 class="fw-bold text-primary mb-2"
+                                                                    id="comp_porcentaje">
+                                                                    0%</h3>
+                                                                <p class="text-muted mb-3 small">Porcentaje de
+                                                                    Completitud
+                                                                </p>
 
-                                                        <!-- Tabla de Funciones -->
-                                                        <div class="table-responsive">
-                                                            <table class="table table-hover table-striped mb-0"
-                                                                id="tabla_funciones">
-                                                                <thead class="bg-light">
-                                                                    <tr>
-                                                                        <th class="text-center" style="width: 50px;">#</th>
-                                                                        <th><i class="bx bx-notepad me-1"></i> Función</th>
-                                                                        <th><i class="bx bx-time me-1"></i> Frecuencia</th>
-                                                                        <th class="text-center"><i
-                                                                                class="bx bx-pie-chart-alt-2 me-1"></i> %
-                                                                            Tiempo</th>
-                                                                        <th class="text-center"><i
-                                                                                class="bx bx-star me-1"></i>
-                                                                            Tipo</th>
-                                                                        <th class="text-center"><i
-                                                                                class="bx bx-cog me-1"></i>
-                                                                            Acciones</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody id="tbody_funciones">
-                                                                    <!-- Se cargará dinámicamente -->
-                                                                    <tr>
-                                                                        <td colspan="6" class="text-center py-4 text-muted">
-                                                                            <i class="bx bx-loader bx-spin"
-                                                                                style="font-size: 2rem;"></i>
-                                                                            <p class="mb-0 mt-2">Cargando funciones...</p>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-
-                                                        <!-- Footer con estadísticas -->
-                                                        <div class="card-footer bg-light">
-                                                            <div class="row text-center">
-                                                                <div class="col-md-3">
-                                                                    <small class="text-muted d-block">Total
-                                                                        Funciones</small>
-                                                                    <strong class="text-primary" id="stat_total">0</strong>
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <small class="text-muted d-block">Principales</small>
-                                                                    <strong class="text-warning"
-                                                                        id="stat_principales">0</strong>
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <small class="text-muted d-block">Secundarias</small>
-                                                                    <strong class="text-info"
-                                                                        id="stat_secundarias">0</strong>
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <small class="text-muted d-block">% Asignado</small>
-                                                                    <strong class="text-success"
-                                                                        id="stat_porcentaje_total">0%</strong>
+                                                                <div class="progress" style="height: 25px;">
+                                                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                                                        id="comp_progress_bar" role="progressbar"
+                                                                        style="width: 0%;" aria-valuenow="0"
+                                                                        aria-valuemin="0" aria-valuemax="100">
+                                                                        <span class="fw-bold"
+                                                                            id="comp_progress_text">0%</span>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                <?php } ?>
-                                        </section>
-                                    </div>
-                                    <div class="tab-pane fade" id="competencias" role="tabpanel">
 
-                                        <section class="content pt-0">
-                                            <div class="container-fluid">
+                                                    <!-- Estadísticas Rápidas -->
+                                                    <div class="row g-3 mb-4">
 
-                                                <div class="row mb-3 align-items-center">
-
-                                                    <!-- Título -->
-                                                    <div class="col-md-8">
-                                                        <h5 class="fw-bold text-primary mb-1">
-                                                            <i class="bx bx-check-shield me-2"></i> Competencias
-                                                        </h5>
-
-                                                        <small class="text-muted">
-                                                            <i class="bi bi-clipboard-check me-1"></i>
-                                                            Estado de cumplimiento de habilidades y competencias
-                                                        </small>
-                                                    </div>
-                                                    <?php if (isset($_GET['_id'])) { ?>
-                                                        <!-- Botonera -->
-                                                        <div class="col-md-4 d-flex justify-content-end gap-2"
-                                                            id="pnl_competencias_botonera">
-                                                            <button type="button" class="btn btn-success btn-sm shadow-sm"
-                                                                id="btn_abrir_modal_competencias"
-                                                                onclick="abrir_modal_competencias()">
-                                                                <i class="bx bx-plus-circle me-1"></i> Competencias
-                                                            </button>
-                                                        </div>
-                                                    <?php } ?>
-
-                                                </div>
-                                                <?php if (isset($_GET['_id'])) { ?>
-                                                    <!-- Aquí puedes colocar la tabla -->
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="table-responsive">
-                                                                <table id="tbl_competencias"
-                                                                    class="table table-bordered table-striped w-100">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Competencia</th>
-                                                                            <th>Nivel Requerido</th>
-                                                                            <th>Ponderación</th>
-                                                                            <th>Crítica</th>
-                                                                            <th>Acciones</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody></tbody>
-                                                                </table>
+                                                        <!-- Requisitos Totales -->
+                                                        <div class="col-md-4">
+                                                            <div
+                                                                class="card border-primary border-2 h-100 shadow-sm">
+                                                                <div class="card-body text-center p-3">
+                                                                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2"
+                                                                        style="width: 50px; height: 50px;">
+                                                                        <i class="bi bi-list-check text-primary"
+                                                                            style="font-size: 1.5rem;"></i>
+                                                                    </div>
+                                                                    <h4 class="fw-bold text-primary mb-1"
+                                                                        id="comp_totales">
+                                                                        0</h4>
+                                                                    <small class="text-muted">Requisitos
+                                                                        Totales</small>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                <?php } ?>
 
+                                                        <!-- Requisitos Completados -->
+                                                        <div class="col-md-4">
+                                                            <div
+                                                                class="card border-success border-2 h-100 shadow-sm">
+                                                                <div class="card-body text-center p-3">
+                                                                    <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2"
+                                                                        style="width: 50px; height: 50px;">
+                                                                        <i class="bi bi-check-circle-fill text-success"
+                                                                            style="font-size: 1.5rem;"></i>
+                                                                    </div>
+                                                                    <h4 class="fw-bold text-success mb-1"
+                                                                        id="comp_completados">
+                                                                        0</h4>
+                                                                    <small class="text-muted">Completados</small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Requisitos Faltantes -->
+                                                        <div class="col-md-4">
+                                                            <div
+                                                                class="card border-danger border-2 h-100 shadow-sm">
+                                                                <div class="card-body text-center p-3">
+                                                                    <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2"
+                                                                        style="width: 50px; height: 50px;">
+                                                                        <i class="bi bi-exclamation-circle-fill text-danger"
+                                                                            style="font-size: 1.5rem;"></i>
+                                                                    </div>
+                                                                    <h4 class="fw-bold text-danger mb-1"
+                                                                        id="comp_faltantes">0
+                                                                    </h4>
+                                                                    <small class="text-muted">Faltantes</small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <!-- Información Adicional -->
+                                                    <div class="row g-3">
+
+                                                        <!-- Última Revisión y Estado -->
+                                                        <div class="col-md-6">
+                                                            <div
+                                                                class="p-3 bg-light rounded border-start border-info border-4">
+                                                                <div class="d-flex align-items-center mb-2">
+                                                                    <i class="bi bi-calendar-check text-info me-2"
+                                                                        style="font-size: 1.2rem;"></i>
+                                                                    <strong class="text-dark">Última
+                                                                        Revisión:</strong>
+                                                                </div>
+                                                                <p class="mb-0 text-muted small"
+                                                                    id="comp_ultima_revision">
+                                                                    <em>No registrada</em>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div
+                                                                class="p-3 bg-light rounded border-start border-warning border-4">
+                                                                <div class="d-flex align-items-center mb-2">
+                                                                    <i class="bi bi-flag text-warning me-2"
+                                                                        style="font-size: 1.2rem;"></i>
+                                                                    <strong class="text-dark">Estado:</strong>
+                                                                </div>
+                                                                <span class="badge bg-secondary"
+                                                                    id="comp_estado_badge">
+                                                                    <i class="bi bi-circle-fill me-1"></i>Sin estado
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Observaciones -->
+                                                        <div class="col-12">
+                                                            <div
+                                                                class="p-3 bg-light rounded border-start border-primary border-4">
+                                                                <div class="d-flex align-items-center mb-2">
+                                                                    <i class="bi bi-chat-left-text text-primary me-2"
+                                                                        style="font-size: 1.2rem;"></i>
+                                                                    <strong
+                                                                        class="text-dark">Observaciones:</strong>
+                                                                </div>
+                                                                <p class="mb-0 text-muted small"
+                                                                    id="comp_observaciones">
+                                                                    <em>Sin observaciones registradas</em>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <!-- Badge de Resumen -->
+                                                    <div class="mt-3 pt-3 border-top text-center">
+                                                        <span
+                                                            class="badge rounded-pill bg-info-subtle text-info px-3 py-2 me-2"
+                                                            id="badge_resumen">
+                                                            <i class="bi bi-graph-up me-1"></i>
+                                                            Completados: 0 de 0 (0%)
+                                                        </span>
+                                                    </div>
+
+                                                </div>
                                             </div>
-                                        </section>
+                                        <?php } ?>
+
+
+
                                     </div>
-                                </div>
+                                    <?php if (isset($_GET['_id'])) { ?>
+                                        <div class="row mb-3 align-items-center">
+                                            <div class="col-md-8">
+                                                <h5 class="fw-bold text-primary mb-1">
+                                                    <i class="bx bx-list-check me-2"></i>Funciones del Cargo
+                                                </h5>
+                                                <small class="text-muted">
+                                                    <i class="bi bi-briefcase me-1"></i>
+                                                    Listado de funciones y responsabilidades del cargo
+                                                </small>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tarjeta con Tabla -->
+                                        <div class="card border-0 shadow-sm">
+                                            <div class="card-body p-0">
+
+                                                <!-- Tabla de Funciones -->
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover table-striped mb-0"
+                                                        id="tabla_funciones">
+                                                        <thead class="bg-light">
+                                                            <tr>
+                                                                <th class="text-center" style="width: 50px;">#</th>
+                                                                <th><i class="bx bx-notepad me-1"></i> Función</th>
+                                                                <th><i class="bx bx-time me-1"></i> Frecuencia</th>
+                                                                <th class="text-center"><i
+                                                                        class="bx bx-pie-chart-alt-2 me-1"></i> %
+                                                                    Tiempo</th>
+                                                                <th class="text-center"><i
+                                                                        class="bx bx-star me-1"></i>
+                                                                    Tipo</th>
+                                                                <th class="text-center"><i
+                                                                        class="bx bx-cog me-1"></i>
+                                                                    Acciones</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbody_funciones">
+                                                            <!-- Se cargará dinámicamente -->
+                                                            <tr>
+                                                                <td colspan="6" class="text-center py-4 text-muted">
+                                                                    <i class="bx bx-loader bx-spin"
+                                                                        style="font-size: 2rem;"></i>
+                                                                    <p class="mb-0 mt-2">Cargando funciones...</p>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <!-- Footer con estadísticas -->
+                                                <div class="card-footer bg-light">
+                                                    <div class="row text-center">
+                                                        <div class="col-md-3">
+                                                            <small class="text-muted d-block">Total
+                                                                Funciones</small>
+                                                            <strong class="text-primary" id="stat_total">0</strong>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <small class="text-muted d-block">Principales</small>
+                                                            <strong class="text-warning"
+                                                                id="stat_principales">0</strong>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <small class="text-muted d-block">Secundarias</small>
+                                                            <strong class="text-info"
+                                                                id="stat_secundarias">0</strong>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <small class="text-muted d-block">% Asignado</small>
+                                                            <strong class="text-success"
+                                                                id="stat_porcentaje_total">0%</strong>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+                                </section>
+                            </div>
+                            <div class="tab-pane fade" id="competencias" role="tabpanel">
+
+                                <section class="content pt-0">
+                                    <div class="container-fluid">
+
+                                        <div class="row mb-3 align-items-center">
+
+                                            <!-- Título -->
+                                            <div class="col-md-8">
+                                                <h5 class="fw-bold text-primary mb-1">
+                                                    <i class="bx bx-check-shield me-2"></i> Competencias
+                                                </h5>
+
+                                                <small class="text-muted">
+                                                    <i class="bi bi-clipboard-check me-1"></i>
+                                                    Estado de cumplimiento de habilidades y competencias
+                                                </small>
+                                            </div>
+                                            <?php if (isset($_GET['_id'])) { ?>
+                                                <!-- Botonera -->
+                                                <div class="col-md-4 d-flex justify-content-end gap-2"
+                                                    id="pnl_competencias_botonera">
+                                                    <button type="button" class="btn btn-success btn-sm shadow-sm"
+                                                        id="btn_abrir_modal_competencias"
+                                                        onclick="abrir_modal_competencias()">
+                                                        <i class="bx bx-plus-circle me-1"></i> Competencias
+                                                    </button>
+                                                </div>
+                                            <?php } ?>
+
+                                        </div>
+                                        <?php if (isset($_GET['_id'])) { ?>
+                                            <!-- Aquí puedes colocar la tabla -->
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="table-responsive">
+                                                        <table id="tbl_competencias"
+                                                            class="table table-bordered table-striped w-100">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Competencia</th>
+                                                                    <th>Nivel Requerido</th>
+                                                                    <th>Ponderación</th>
+                                                                    <th>Crítica</th>
+                                                                    <th>Acciones</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+
+                                    </div>
+                                </section>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!--end row-->
     </div>
+</div>
+<!--end row-->
+</div>
 </div>
 
 
