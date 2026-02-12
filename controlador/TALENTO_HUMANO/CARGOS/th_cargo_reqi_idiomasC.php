@@ -73,7 +73,7 @@ class th_cargo_reqi_idiomasC
                 <div class="d-flex align-items-center">
                     <i class='bx bx-check-circle text-success me-2' style="font-size: 18px;"></i>
                     <div>
-                        <span class="text-dark fw-semibold" style="font-size: 0.9rem;">{$idioma}</span>
+                        <span class="text-dark" style="font-size: 0.9rem;">{$idioma}</span>
                         <span class="badge bg-primary ms-2" style="font-size: 0.7rem;">{$nivel}</span>
                     </div>
                 </div>
