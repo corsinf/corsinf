@@ -16,13 +16,6 @@
 
                 let btnAgregarExperiencia = $('#pnl_btn_experiencia_necesaria');
 
-                /*if (response.total_registros > 0) {
-                    btnAgregarExperiencia.addClass('d-none').removeClass('d-flex');
-                    console.log("si hay");
-                } else {
-                    btnAgregarExperiencia.removeClass('d-none').addClass('d-flex');
-                    console.log("No hay");
-                }*/
 
             }
         });
