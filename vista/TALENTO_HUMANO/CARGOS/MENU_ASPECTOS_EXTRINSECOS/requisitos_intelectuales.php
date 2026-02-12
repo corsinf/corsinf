@@ -24,7 +24,7 @@
             <div class="col-6 d-flex align-items-center">
                 <h4><i class="bx bx-briefcase me-2"></i>Experiencia Necesaria</h4>
             </div>
-            <div id="pnl_btn_experiencia_necesaria" class="col-6 justify-content-end d-none">
+            <div class="col-6 d-flex justify-content-end">
                 <a href="#" class="text-success icon-hover d-flex align-items-center"
                     data-bs-toggle="modal" data-bs-target="#modal_experiencia_necesaria">
                     <i class='bx bx-plus-circle bx-sm me-1'></i>

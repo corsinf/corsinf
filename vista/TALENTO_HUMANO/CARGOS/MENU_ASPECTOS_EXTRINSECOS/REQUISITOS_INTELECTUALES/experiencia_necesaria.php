@@ -12,10 +12,8 @@
             },
             dataType: 'json',
             success: function(response) {
+
                 $('#pnl_experiencia_necesaria').hide().html(response.html).fadeIn(400);
-
-                let btnAgregarExperiencia = $('#pnl_btn_experiencia_necesaria');
-
 
             }
         });
