@@ -196,7 +196,7 @@
                 <div class="modal-body">
                     <div class="row g-3 mb-3">
                         <div class="col-md-12">
-                            <label for="ddl_req_fisico" class="form-label fw-semibold fs-7">Tipo de Requisito Físico</label>
+                            <label for="ddl_req_fisico" class="form-label fw-semibold fs-7">Tipo de Requisito Físico </label>
                             <select class="form-select select2-validation" id="ddl_req_fisico" name="ddl_req_fisico" required style="width: 100%;">
                                 <option selected value="">-- Seleccione un tipo --</option>
                             </select>
@@ -206,7 +206,7 @@
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-12">
-                            <label for="ddl_req_fisico_det" class="form-label fw-semibold fs-7">Detalle del Requisito Físico</label>
+                            <label for="ddl_req_fisico_det" class="form-label fw-semibold fs-7">Detalle del Requisito Físico </label>
                             <select class="form-select select2-validation" id="ddl_req_fisico_det" name="ddl_req_fisico_det" required style="width: 100%;" disabled>
                                 <option selected value="">-- Seleccione primero un tipo --</option>
                             </select>

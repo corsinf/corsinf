@@ -142,7 +142,7 @@
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-12">
-                            <label for="txt_anios_experiencia" class="form-label fw-semibold fs-7">Años de Experiencia</label>
+                            <label for="txt_anios_experiencia" class="form-label fw-semibold fs-7">Años de Experiencia </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-white text-muted"><i class='bx bx-time-five'></i></span>
                                 <input type="number"

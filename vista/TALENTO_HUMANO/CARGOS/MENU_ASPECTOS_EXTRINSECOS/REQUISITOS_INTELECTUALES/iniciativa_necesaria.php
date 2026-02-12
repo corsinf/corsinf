@@ -171,7 +171,7 @@
                 <div class="modal-body">
                     <div class="row g-3 mb-3">
                         <div class="col-md-12">
-                            <label for="ddl_iniciativas" class="form-label fw-semibold fs-7">Iniciativa</label>
+                            <label for="ddl_iniciativas" class="form-label fw-semibold fs-7">Iniciativa </label>
                             <select class="form-select select2-validation" id="ddl_iniciativas" name="ddl_iniciativas" required style="width: 100%;">
                                 <option selected value="">-- Seleccione una iniciativa --</option>
                             </select>
