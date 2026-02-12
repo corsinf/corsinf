@@ -2308,6 +2308,7 @@ if (isset($_GET['_id'])) {
                                                     <div class="tab-pane fade"
                                                         id="tab_responsabilidades_implicitas"
                                                         role="tabpanel">
+                                                        <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/responsabilidades_implicitas.php'); ?>
                                                     </div>
 
                                                     <div class="tab-pane fade"
