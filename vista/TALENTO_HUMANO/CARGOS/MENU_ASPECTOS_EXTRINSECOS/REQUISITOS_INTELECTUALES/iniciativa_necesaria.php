@@ -55,7 +55,6 @@
 
                 if (response.total > 0) {
                     btnAgregar.addClass('d-none').removeClass('d-flex');
-                    console.log("si hay");
                     
                 } else {
                     btnAgregar.removeClass('d-none').addClass('d-flex');

@@ -24,7 +24,7 @@
             <div class="col-6 d-flex align-items-center">
                 <h4><i class="bx bx-briefcase me-2"></i>Experiencia Necesaria</h4>
             </div>
-            <div class="col-6 d-flex justify-content-end">
+            <div id="pnl_btn_experiencia_necesaria" class="col-6 justify-content-end d-none">
                 <a href="#" class="text-success icon-hover d-flex align-items-center"
                     data-bs-toggle="modal" data-bs-target="#modal_experiencia_necesaria">
                     <i class='bx bx-plus-circle bx-sm me-1'></i>
@@ -78,7 +78,7 @@
     <div class="mb-5">
         <div class="row mb-3">
             <div class="col-6 d-flex align-items-center">
-                <h4><i class="bx bx-star me-2"></i>Iniciativa Necesaria</h4>
+                <h4><i class="bx bx-bulb me-2"></i>Iniciativa Necesaria</h4>
             </div>
             <div id="pnl_iniciativa_necesaria" class="col-6 justify-content-end d-none">
                 <a href="#" class="text-success icon-hover d-flex align-items-center"

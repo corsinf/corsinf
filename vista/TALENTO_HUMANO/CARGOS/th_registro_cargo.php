@@ -480,6 +480,7 @@ if (isset($_GET['_id'])) {
 
     /* Cargar requisito para modificar */
     function cargar_requisito(id) {
+        /*
         $.ajax({
             url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_requisitosC.php?listar=true',
             type: 'post',
@@ -495,6 +496,7 @@ if (isset($_GET['_id'])) {
                 $("#txt_descripcion").val(r.descripcion);
             }
         });
+        */
     }
 
     /* Guardar o editar según exista ID */
@@ -2314,7 +2316,7 @@ if (isset($_GET['_id'])) {
                                                     <div class="tab-pane fade"
                                                         id="tab_condiciones_trabajo"
                                                         role="tabpanel">
-                                                         <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/condiciones_trabajo.php'); ?>
+                                                        <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/condiciones_trabajo.php'); ?>
                                                     </div>
 
                                                 </div>

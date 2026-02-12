@@ -2,8 +2,8 @@
 
     <div class="mb-5">
         <div class="row mb-3">
-            <div class="col-6 d-flex align-items-center">
-                <h4><i class="bx bx-body me-2"></i>Ambiente de Trabajo</h4>
+           <div class="col-6 d-flex align-items-center">
+                <h4><i class="bx bx-cloud-light-rain me-2"></i>Ambiente de Trabajo</h4>
             </div>
             <div class="col-6 d-flex justify-content-end">
                 <a href="#" class="text-success icon-hover d-flex align-items-center"
@@ -17,8 +17,8 @@
     </div>
     <div class="mb-5">
         <div class="row mb-3">
-            <div class="col-6 d-flex align-items-center">
-                <h4><i class="bx bx-body me-2"></i>Riesgos Inherentes</h4>
+           <div class="col-6 d-flex align-items-center">
+                <h4><i class="bx bx-error-circle me-2"></i>Riesgos Inherentes</h4>
             </div>
             <div class="col-6 d-flex justify-content-end">
                 <a href="#" class="text-success icon-hover d-flex align-items-center"

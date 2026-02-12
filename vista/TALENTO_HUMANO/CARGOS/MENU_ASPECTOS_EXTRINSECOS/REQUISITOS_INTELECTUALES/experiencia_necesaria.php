@@ -13,6 +13,17 @@
             dataType: 'json',
             success: function(response) {
                 $('#pnl_experiencia_necesaria').hide().html(response.html).fadeIn(400);
+
+                let btnAgregarExperiencia = $('#pnl_btn_experiencia_necesaria');
+
+                /*if (response.total_registros > 0) {
+                    btnAgregarExperiencia.addClass('d-none').removeClass('d-flex');
+                    console.log("si hay");
+                } else {
+                    btnAgregarExperiencia.removeClass('d-none').addClass('d-flex');
+                    console.log("No hay");
+                }*/
+
             }
         });
     }
@@ -22,16 +33,17 @@
         var id_experiencia = $('#th_reqi_instruccion_id').val();
         var id_cargo = '<?= $_id ?>';
 
-        if (anios == '' || anios < 0) {
-            Swal.fire('Atención', 'Ingrese una cantidad válida de años.', 'warning');
-            return;
-        }
-
         var parametros = {
             'th_reqe_anios': anios,
             'id_cargo': id_cargo,
             '_id': id_experiencia,
         };
+
+        if ($("#form_experiencia_necesaria").valid()) {
+
+        } else {
+            return;
+        }
 
         $.ajax({
             data: {
@@ -180,7 +192,7 @@
             },
             messages: {
                 txt_anios_experiencia: {
-                    required: "Seleccione el nivel académico"
+                    required: "Ingrese los años de experiencia"
                 }
             },
             errorPlacement: function(error, element) {

@@ -2,7 +2,7 @@
     <div class="mb-5">
         <div class="row mb-3">
             <div class="col-6 d-flex align-items-center">
-                <h4><i class="bx bx-body me-2"></i>Responsabilidades Implícitas</h4>
+                <h4><i class="bx bx-list-check me-2"></i>Responsabilidades Implícitas</h4>
             </div>
             <div class="col-6 d-flex justify-content-end">
                 <a href="#" class="text-success icon-hover d-flex align-items-center"

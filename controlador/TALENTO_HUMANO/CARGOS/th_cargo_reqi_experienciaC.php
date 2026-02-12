@@ -47,6 +47,8 @@ class th_cargo_reqi_experienciaC
     {
         $datos = $this->modelo->where('id_cargo', $id)->where('th_reqe_estado', 1)->listar();
 
+        $total_registros = count($datos);
+
         if (empty($datos)) {
             return [
                 'html' => <<<HTML
@@ -89,7 +91,7 @@ HTML;
 
         return [
             'html' => $texto,
-            'tiene_registros' => true
+            'total_registros' => $total_registros
         ];
     }
 
