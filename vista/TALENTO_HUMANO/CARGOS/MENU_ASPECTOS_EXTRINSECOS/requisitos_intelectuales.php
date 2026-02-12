@@ -76,6 +76,24 @@
             </div>
             <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/REQUISITOS_INTELECTUALES/aptitudes_necesarias.php'); ?>
         </div>
+        <hr class="my-4">
+
+        <!-- SECCIÓN 4: Iniciativa Necesaria -->
+        <div class="mb-5">
+            <div class="row mb-3">
+                <div class="col-6 d-flex align-items-center">
+                    <h4><i class="bx bx-star me-2"></i>Iniciativa Necesaria</h4>
+                </div>
+                <div id="pnl_iniciativa_necesaria" class="col-6 justify-content-end d-none">
+                    <a href="#" class="text-success icon-hover d-flex align-items-center"
+                        data-bs-toggle="modal" data-bs-target="#modal_agregar_iniciativa">
+                        <i class='bx bx-plus-circle bx-sm me-1'></i>
+                        <span>Agregar</span>
+                    </a>
+                </div>
+            </div>
+            <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/REQUISITOS_INTELECTUALES/iniciativa_necesaria.php'); ?>
+        </div>
 
     </div>
 </div>

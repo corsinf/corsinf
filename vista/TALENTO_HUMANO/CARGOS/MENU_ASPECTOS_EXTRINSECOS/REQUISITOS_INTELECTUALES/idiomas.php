@@ -206,14 +206,14 @@
                 <div class="modal-body">
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label for="ddl_idiomas" class="form-label fw-semibold fs-7">Idioma</label>
+                            <label for="ddl_idiomas" class="form-label fw-semibold fs-7">Idioma </label>
                             <select class="form-select select2-validation" id="ddl_idiomas" name="ddl_idiomas" required style="width: 100%;">
                                 <option selected value="">-- Seleccione un idioma --</option>
                             </select>
                             <label class="error" style="display: none;" for="ddl_idiomas"></label>
                         </div>
                         <div class="col-md-6">
-                            <label for="ddl_idiomas_nivel" class="form-label fw-semibold fs-7">Nivel</label>
+                            <label for="ddl_idiomas_nivel" class="form-label fw-semibold fs-7">Nivel </label>
                             <select class="form-select select2-validation" id="ddl_idiomas_nivel" name="ddl_idiomas_nivel" required style="width: 100%;">
                                 <option selected value="">-- Seleccione un nivel --</option>
                             </select>

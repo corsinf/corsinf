@@ -192,7 +192,7 @@
                 <div class="modal-body">
                     <div class="row g-3 mb-3">
                         <div class="col-md-12">
-                            <label for="ddl_habilidades" class="form-label fw-semibold fs-7">Habilidad/Aptitud</label>
+                            <label for="ddl_habilidades" class="form-label fw-semibold fs-7">Habilidad/Aptitud </label>
                             <select class="form-select select2-validation" id="ddl_habilidades" name="ddl_habilidades" required style="width: 100%;">
                                 <option selected value="">-- Seleccione una habilidad --</option>
                             </select>
