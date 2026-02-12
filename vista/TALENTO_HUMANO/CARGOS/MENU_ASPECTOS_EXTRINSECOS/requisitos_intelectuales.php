@@ -41,21 +41,21 @@
 
         <hr class="my-4">
 
-        <!-- SECCIÓN 3: INICIATIVA NECESARIA -->
+        <!-- SECCIÓN 3: Idiomas -->
         <div class="mb-5">
             <div class="row mb-3">
                 <div class="col-6 d-flex align-items-center">
-                    <h4><i class="bx bx-bulb me-2"></i>Iniciativa Necesaria</h4>
+                    <h4><i class="bx bx-bulb me-2"></i>Idiomas</h4>
                 </div>
                 <div class="col-6 d-flex justify-content-end">
                     <a href="#" class="text-success icon-hover d-flex align-items-center"
-                        data-bs-toggle="modal" data-bs-target="#modal_iniciativa_necesaria">
+                        data-bs-toggle="modal" data-bs-target="#modal_agregar_idioma">
                         <i class='bx bx-plus-circle bx-sm me-1'></i>
                         <span>Agregar</span>
                     </a>
                 </div>
             </div>
-            <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/REQUISITOS_INTELECTUALES/iniciativa_necesaria.php'); ?>
+            <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/REQUISITOS_INTELECTUALES/idiomas.php'); ?>
         </div>
 
         <hr class="my-4">
@@ -68,7 +68,7 @@
                 </div>
                 <div class="col-6 d-flex justify-content-end">
                     <a href="#" class="text-success icon-hover d-flex align-items-center"
-                        data-bs-toggle="modal" data-bs-target="#modal_aptitudes_necesarias">
+                        data-bs-toggle="modal" data-bs-target="#modal_agregar_aptitud">
                         <i class='bx bx-plus-circle bx-sm me-1'></i>
                         <span>Agregar</span>
                     </a>
