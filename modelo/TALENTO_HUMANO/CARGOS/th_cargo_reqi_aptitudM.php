@@ -25,7 +25,8 @@ class th_cargo_reqi_aptitudM extends BaseModel
                 ra.th_reqa_estado,
                 ra.th_reqa_fecha_creacion,
                 ra.th_reqa_fecha_modificacion,
-                h.th_hab_nombre AS habilidad_nombre
+                h.th_hab_nombre AS habilidad_nombre,
+                h.th_tiph_id 
             FROM th_cargo_reqi_aptitud ra
             LEFT JOIN th_cat_habilidades h 
                 ON ra.th_hab_id = h.th_hab_id
@@ -46,7 +47,7 @@ class th_cargo_reqi_aptitudM extends BaseModel
         return $this->db->datos($sql);
     }
 
-    public function listar_habilidades_no_asignadas($id_cargo)
+    public function listar_habilidades_tenicas_no_asignadas($id_cargo)
     {
         $id = intval($id_cargo);
 
@@ -54,13 +55,36 @@ class th_cargo_reqi_aptitudM extends BaseModel
         SELECT 
             h.th_hab_id,
             h.th_hab_nombre,
-            h.th_hab_estado
+            h.th_hab_estado,
+            h.th_tiph_id
         FROM th_cat_habilidades h
         LEFT JOIN th_cargo_reqi_aptitud ra
             ON ra.th_hab_id = h.th_hab_id
             AND ra.id_cargo = $id
             AND ra.th_reqa_estado = 1
-        WHERE h.th_hab_estado = 1
+        WHERE h.th_hab_estado = 1 AND h.th_tiph_id = 1
+          AND ra.th_hab_id IS NULL
+        ORDER BY h.th_hab_nombre;
+        ";
+
+        return $this->db->datos($sql);
+    }
+    public function listar_habilidades_blandas_no_asignadas($id_cargo)
+    {
+        $id = intval($id_cargo);
+
+        $sql = "
+        SELECT 
+            h.th_hab_id,
+            h.th_hab_nombre,
+            h.th_hab_estado,
+            h.th_tiph_id
+        FROM th_cat_habilidades h
+        LEFT JOIN th_cargo_reqi_aptitud ra
+            ON ra.th_hab_id = h.th_hab_id
+            AND ra.id_cargo = $id
+            AND ra.th_reqa_estado = 1
+        WHERE h.th_hab_estado = 1 AND h.th_tiph_id = 2
           AND ra.th_hab_id IS NULL
         ORDER BY h.th_hab_nombre;
         ";
