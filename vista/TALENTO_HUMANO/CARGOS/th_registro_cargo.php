@@ -77,7 +77,7 @@ if (isset($_GET['_id'])) {
             cargar_select2_url('ddl_departamentos', url_departamentosC);
             url_nivelesC = '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_rango_profesionalC.php?buscar=true';
             cargar_select2_url('ddl_niveles', url_nivelesC);
-            var url_cargos = '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargosC.php?buscar=true';
+            var url_cargos = '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_cargosC.php?buscar=true';
             cargar_select2_url('ddl_subordinacion', url_cargos, '', '#modal_aspectos_intrinsecos');
             cargar_select2_url('ddl_supervision', url_cargos, '', '#modal_aspectos_intrinsecos');
             cargar_select2_url('ddl_comunicaciones', url_cargos, '', '#modal_aspectos_intrinsecos');
@@ -327,10 +327,10 @@ if (isset($_GET['_id'])) {
             dataType: 'json',
             success: function(response) {
                 if (parametros._id !== '') {
-                    location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_cargos';
+                    location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_cat_cargos';
                     if (response == 1) {
                         Swal.fire('', 'Operación realizada con éxito.', 'success').then(function() {
-                            location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_cargos';
+                            location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_cat_cargos';
                         });
                     }
                 } else {
@@ -378,7 +378,7 @@ if (isset($_GET['_id'])) {
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_cargos';
+                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_cat_cargos';
                     });
                 }
             }
@@ -1954,7 +1954,7 @@ if (isset($_GET['_id'])) {
 
                             <div class="row m-2">
                                 <div class="col-sm-12">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_cargos"
+                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_cat_cargos"
                                         class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i>
                                         Regresar</a>
                                 </div>
@@ -2032,7 +2032,7 @@ if (isset($_GET['_id'])) {
                                                         <div class="col-md-12">
                                                             <label for="txt_th_car_nombre" class="form-label">Nombre </label>
                                                             <input type="text" class="form-control form-control-sm no_caracteres"
-                                                                id="txt_th_car_nombre" name="txt_th_car_nombre" maxlength="100">
+                                                                id="txt_th_car_nombre" name="txt_th_car_nombre" maxlength="100" oninput="texto_mayusculas(this);">
                                                             <span id="error_txt_th_car_nombre" class="text-danger"></span>
                                                         </div>
                                                     </div>
@@ -2040,9 +2040,11 @@ if (isset($_GET['_id'])) {
                                                     <div class="row mb-col">
                                                         <div class="col-md-12">
                                                             <label for="txt_th_car_descripcion" class="form-label">Descripción </label>
-                                                            <input type="text" class="form-control form-control-sm no_caracteres"
-                                                                id="txt_th_car_descripcion" name="txt_th_car_descripcion"
-                                                                oninput="texto_minusculas(this);">
+                                                            <textarea class="form-control form-control-sm no_caracteres"
+                                                                id="txt_th_car_descripcion"
+                                                                name="txt_th_car_descripcion"
+                                                                rows="3"
+                                                                ></textarea>
                                                         </div>
                                                     </div>
 
