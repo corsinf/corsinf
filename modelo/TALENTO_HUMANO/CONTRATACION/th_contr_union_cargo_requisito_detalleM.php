@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @deprecated Archivo dado de baja el 13/02/2026.
+ * @note Este archivo se mantiene como respaldo, pero ya no se utilizará en producción.
+ * @warning No modificar este archivo. Para cambios, referirse a la nueva implementación.
+ */
+
 require_once(dirname(__DIR__, 2) . '/GENERAL/BaseModel.php');
 
 class th_contr_union_cargo_requisito_detalleM extends BaseModel
@@ -26,7 +32,7 @@ class th_contr_union_cargo_requisito_detalleM extends BaseModel
     {
         $id = intval($th_car_req_id);
 
-    $sql = "
+        $sql = "
         SELECT d.id_requisitos_detalle,
                d.nombre,
                d.descripcion,
@@ -75,6 +81,4 @@ class th_contr_union_cargo_requisito_detalleM extends BaseModel
 
         return $this->db->datos($sql);
     }
-
-    
 }
