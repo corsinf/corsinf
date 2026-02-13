@@ -242,7 +242,7 @@ if (isset($_GET['_id'])) {
 
                                 <!-- TAB PLAZAS -->
                                 <div class="tab-pane fade show active" id="tab_plazas">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_proceso_contratacion"
+                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=cn_registrar_plaza"
                                         class="btn btn-success btn-sm mb-3">
                                         <i class="bx bx-plus"></i> Generar Plaza
                                     </a>

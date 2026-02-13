@@ -214,13 +214,13 @@ if ($_GET['acc'] == 'th_recalcular') {
  */
 
 
-if ($_GET['acc'] == 'th_contr_plazas') {
-	include('TALENTO_HUMANO/CONTRATACION/PLAZAS/th_contr_plazas.php');
+if ($_GET['acc'] == 'cn_plazas') {
+	include('TALENTO_HUMANO/CONTRATACION/PLAZAS/cn_plazas.php');
 }
 
 
-if ($_GET['acc'] == 'th_registro_plaza') {
-	include('TALENTO_HUMANO/CONTRATACION/PLAZAS/th_registro_plaza.php');
+if ($_GET['acc'] == 'cn_registrar_plaza') {
+	include('TALENTO_HUMANO/CONTRATACION/PLAZAS/cn_registrar_plaza.php');
 }
 
 if ($_GET['acc'] == 'th_informacion_plaza') {
