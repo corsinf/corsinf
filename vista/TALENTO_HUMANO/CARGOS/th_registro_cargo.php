@@ -13,54 +13,6 @@ if (isset($_GET['_id'])) {
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script type="text/javascript">
-    function eliminar_cargo_requisito(id) {
-        if (!id) {
-            console.error("ID no encontrado");
-            return;
-        }
-
-        Swal.fire({
-            title: '¿Eliminar requisito?',
-            text: 'Se eliminará del listado de la plaza.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-
-            if (result.isConfirmed) {
-
-                $.ajax({
-                    url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_union_cargo_requisitoC.php?eliminar=true',
-                    type: 'POST',
-                    data: {
-                        id: id
-                    },
-                    dataType: 'json',
-
-                    success: function(resp) {
-                        if (resp == 1 || resp === true) {
-                            Swal.fire('', 'Requisito del Cargo eliminado.', 'success');
-
-                            // recargar DataTable
-                            $('#tbl_req_detalles').DataTable().ajax.reload(null, false);
-                        } else {
-                            Swal.fire('', 'No se pudo eliminar.', 'error');
-                        }
-                    },
-
-                    error: function(err) {
-                        console.error(err);
-                        Swal.fire('', 'Error en el servidor.', 'error');
-                    }
-                });
-
-            }
-
-        });
-    }
-
-
     $(document).ready(function() {
         <?php if (isset($_GET['_id'])) { ?>
             cargar_cargo(<?= $_id ?>);
@@ -278,6 +230,7 @@ if (isset($_GET['_id'])) {
 
     });
 </script>
+
 <script type="text/javascript">
     $(document).ready(function() {
         <?php if (isset($_GET['_id'])) { ?>
@@ -385,280 +338,6 @@ if (isset($_GET['_id'])) {
         });
     }
 </script>
-
-
-<script>
-    $(document).ready(function() {
-
-        // Si existe ID cargamos para editar
-        <?php if ($_id != '') { ?>
-            cargar_requisito(<?= $_id ?>);
-            cargar_requisitos_cargo(<?= $_id ?>);
-        <?php } ?>
-
-        function cargar_requisitos_cargo(id_cargo) {
-
-            // Si ya existe el DataTable, lo destruimos para evitar duplicados
-            if ($.fn.dataTable.isDataTable('#tbl_req_detalles')) {
-                $('#tbl_req_detalles').DataTable().clear().destroy();
-                $('#tbl_req_detalles').empty(); // opcional: limpia el tbody
-            }
-
-            tbl_req_detalles = $('#tbl_req_detalles').DataTable($.extend({}, configuracion_datatable('Nombre',
-                'tipo',
-                'fecha'), {
-                responsive: true,
-                language: {
-                    url: '../assets/plugins/datatable/spanish.json'
-                },
-                ajax: {
-                    url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_union_cargo_requisitoC.php?listar=true',
-                    type: 'POST',
-                    data: function(d) {
-                        d.id = id_cargo;
-                    },
-                    dataSrc: ''
-
-                },
-                columns: [{
-                    data: 'nombre',
-
-                }, {
-                    data: 'descripcion',
-                    render: function(data, type, item) {
-                        if (!data) return '';
-                        return data.length > 25 ? data.substring(0, 25) + '...' : data;
-                    }
-                }, {
-                    data: 'obligatorio',
-                    render: function(data, type, item) {
-                        var is = (data == 1 || data === true || data === '1');
-                        return `<span class="badge bg-${is ? 'danger' : 'secondary'}">${is ? 'Obligatorio' : 'Opcional'}</span>`;
-                    },
-                    className: 'text-center'
-                }, {
-                    data: null,
-                    orderable: false,
-                    searchable: false,
-                    className: 'text-center',
-                    render: function(data, type, item) {
-                        var id = item.th_carreq_id;
-                        return `
-                <button class="btn btn-danger btn-sm"
-                        onclick="eliminar_cargo_requisito(${id})"
-                        title="Eliminar Etapa">
-                    <i class="bx bx-trash"></i>
-                </button>
-            `;
-                    }
-                }],
-                order: [
-                    [0, 'asc']
-                ]
-            }));
-
-        }
-
-        // Validación del formulario
-        $("#form_requisito").validate({
-            ignore: [],
-            rules: {
-                txt_nombre: {
-                    required: true
-                }
-            },
-            messages: {
-                txt_nombre: {
-                    required: "Ingrese el nombre del requisito"
-                }
-            },
-            highlight: r => $(r).addClass('is-invalid').removeClass('is-valid'),
-            unhighlight: r => $(r).addClass('is-valid').removeClass('is-invalid'),
-            submitHandler: () => false
-        });
-    });
-
-    /* Cargar requisito para modificar */
-    function cargar_requisito(id) {
-        /*
-        $.ajax({
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_requisitosC.php?listar=true',
-            type: 'post',
-            data: {
-                id: id
-            },
-            dataType: 'json',
-            success: function(response) {
-                if (!response || !response[0]) return;
-                var r = response[0];
-                $("#txt_id").val(r._id);
-                $("#txt_nombre").val(r.nombre);
-                $("#txt_descripcion").val(r.descripcion);
-            }
-        });
-        */
-    }
-
-    /* Guardar o editar según exista ID */
-    function guardar_actualizar() {
-        if (!$("#form_requisito").valid()) return;
-
-        let parametros = {
-            _id: $("#txt_id").val(),
-            th_car_req_nombre: $("#txt_nombre").val(),
-            th_car_req_descripcion: $("#txt_descripcion").val()
-        };
-
-        $.ajax({
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_requisitosC.php?insertar_editar=true',
-            type: 'post',
-            data: {
-                parametros: parametros
-            },
-            dataType: 'json',
-            success: function(r) {
-                if (r == 1) {
-                    Swal.fire("", "Registrado correctamente", "success")
-                        .then(() => location.href =
-                            "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_cargo_requisitos");
-                } else if (r == -2) {
-                    Swal.fire("Error", "Nombre ya existe", "warning");
-                } else {
-                    Swal.fire("Error", r.msg, "error");
-                }
-            }
-        });
-    }
-
-
-    function eliminar_requisito() {
-
-        let id = $("#txt_id").val();
-        if (id == "") return Swal.fire("", "No hay ID para eliminar", "info");
-        $.ajax({
-            data: {
-                id: id
-            },
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_cargo_requisitosC.php?eliminar=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                if (response == 1) {
-                    Swal.fire('Eliminado!', 'Registro eliminado.', 'success').then(function() {
-                        location.href =
-                            '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_cargo_requisitos';
-                    });
-                } else {
-                    Swal.fire('', response.msg || 'No se pudo eliminar.', 'error');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Status: ' + status);
-                console.error('Error: ' + error);
-                console.error('XHR Response: ' + xhr.responseText);
-                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
-            }
-        });
-    }
-
-
-    function abrir_modal_cargo_requisitos() {
-
-        var modal = new bootstrap.Modal(
-            document.getElementById('modal_cargo_requisito'), {
-                backdrop: 'static',
-                keyboard: false
-            }
-        );
-        cargar_cargo_requisitos(<?= $_id ?>);
-
-        modal.show();
-    }
-
-    function cargar_cargo_requisitos(id_cargo) {
-        // Si select2 ya está inicializado, destruirlo
-        if ($('#ddl_cargo_requisito').hasClass("select2-hidden-accessible")) {
-            $('#ddl_cargo_requisito').select2('destroy');
-        }
-
-        $('#ddl_cargo_requisito').select2({
-            dropdownParent: $('#modal_cargo_requisito'),
-            ajax: {
-                url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_union_cargo_requisitoC.php?buscar=true',
-                dataType: 'json',
-                data: function(params) {
-                    return {
-                        q: params.term, // texto buscado
-                        th_car_id: id_cargo // ID de la plaza
-                    };
-                },
-                processResults: function(data) {
-                    return {
-                        results: data
-                    };
-                }
-            },
-            minimumInputLength: 0,
-            placeholder: "Seleccione un requisito",
-            language: {
-                noResults: function() {
-                    return "No hay requisitos disponibles para asignar";
-                },
-                searching: function() {
-                    return "Buscando...";
-                }
-            }
-        });
-    }
-
-
-
-    function insertar_cargo_requisito() {
-        $.ajax({
-            data: {
-                parametros: Parametros_Car_Req()
-            },
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_union_cargo_requisitoC.php?insertar_editar=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(res) {
-                if (res > 0) {
-                    Swal.fire('', 'Plaza creada con éxito.', 'success').then(function() {
-                        $('#modal_cargo_requisito').modal('hide');
-                        $('#tbl_req_detalles').DataTable().ajax.reload(null, false);
-                        $('#ddl_cargo_requisito').empty().append(
-                            '<option value="" selected hidden>-- Seleccione el requisito detalle --</option>'
-                        );
-                    });
-                } else if (res == -2) {
-                    Swal.fire('', res.msg || 'Error al guardar plaza.', 'error');
-                } else {
-                    Swal.fire('', res.msg || 'Error al guardar plaza.', 'error');
-                }
-            },
-            error: function(xhr) {
-                console.error(xhr.responseText);
-                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
-            }
-        });
-
-        $('#txt_th_pla_titulo').on('input', function() {
-            $(this).removeClass('is-invalid');
-            $('#error_txt_th_pla_titulo').text('');
-        });
-
-    }
-
-    function Parametros_Car_Req() {
-
-        return {
-            th_car_id: "<?= isset($_id) ? $_id : '' ?>",
-            ddl_cargo_requisito: $('#ddl_cargo_requisito').val()
-        };
-
-    }
-</script>
-
 
 <script>
     function abrir_modal_aspectos_intrinsecos() {
@@ -1998,6 +1677,7 @@ if (isset($_GET['_id'])) {
                                                 </div>
                                             </a>
                                         </li>
+                                        <!--
                                         <li class="nav-item" role="presentation">
                                             <a class="nav-link" data-bs-toggle="tab" href="#complianceprofile" role="tab"
                                                 aria-selected="false">
@@ -2018,6 +1698,7 @@ if (isset($_GET['_id'])) {
                                                 </div>
                                             </a>
                                         </li>
+-->
                                     <?php } ?>
                                 </ul>
 
@@ -2044,7 +1725,7 @@ if (isset($_GET['_id'])) {
                                                                 id="txt_th_car_descripcion"
                                                                 name="txt_th_car_descripcion"
                                                                 rows="3"
-                                                                ></textarea>
+                                                                maxlength="400"></textarea>
                                                         </div>
                                                     </div>
 
