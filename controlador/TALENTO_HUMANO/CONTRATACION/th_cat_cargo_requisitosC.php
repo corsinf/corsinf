@@ -1,4 +1,12 @@
 <?php
+
+/**
+ * @deprecated Archivo dado de baja el 13/02/2026.
+ * @note Este archivo se mantiene como respaldo, pero ya no se utilizará en producción.
+ * @warning No modificar este archivo. Para cambios, referirse a la nueva implementación.
+ */
+
+
 date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 3)  . '/modelo/TALENTO_HUMANO/CONTRATACION/th_cat_cargo_requisitosM.php');
@@ -47,7 +55,7 @@ class th_cat_cargo_requisitosC
         $this->modelo = new th_cat_cargo_requisitosM();
     }
 
-  
+
     function listar($id = '')
     {
         if (!empty($id)) {
@@ -59,7 +67,7 @@ class th_cat_cargo_requisitosC
         }
     }
 
-    
+
     function insertar_editar($parametros)
     {
 
@@ -99,7 +107,7 @@ class th_cat_cargo_requisitosC
         return -2;
     }
 
-    
+
     function eliminar($id)
     {
         $datos = array(
@@ -114,7 +122,7 @@ class th_cat_cargo_requisitosC
         return $res;
     }
 
-   
+
     function buscar($parametros)
     {
         $lista = array();
@@ -128,8 +136,5 @@ class th_cat_cargo_requisitosC
 
         return $lista;
     }
-    function buscar_cargo_requisito($parametros)
-    {
-        
-    }
+    function buscar_cargo_requisito($parametros) {}
 }
