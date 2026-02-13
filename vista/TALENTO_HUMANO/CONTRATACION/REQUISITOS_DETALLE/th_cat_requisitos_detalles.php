@@ -1,55 +1,65 @@
 <?php
+
+/**
+ * @deprecated Archivo dado de baja el 13/02/2026.
+ * @note Este archivo se mantiene como respaldo, pero ya no se utilizará en producción.
+ * @warning No modificar este archivo. Para cambios, referirse a la nueva implementación.
+ */
+
+
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 $_id = '';
-if (isset($_GET['_id'])) { $_id = $_GET['_id']; }
+if (isset($_GET['_id'])) {
+    $_id = $_GET['_id'];
+}
 ?>
 
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script type="text/javascript">
-$(document).ready(function() {
+    $(document).ready(function() {
 
-    tbl_req_detalles = $('#tbl_req_detalles').DataTable($.extend({}, configuracion_datatable('Nombre', 'tipo',
-        'fecha'), {
-        responsive: true,
-        language: {
-            url: '../assets/plugins/datatable/spanish.json'
-        },
-        ajax: {
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_requisitos_detallesC.php?listar=true',
-            dataSrc: ''
-        },
-        columns: [{
-            data: null,
-            render: function(data, type, item) {
-                // link al formulario de registro/modificación (ajusta acc si lo tienes distinto)
-                const id = item.th_reqdet_id || item._id || '';
-                const href =
-                    `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_requisitos_detalles&_id=${id}`;
-                return `<a href="${href}"><u>${item.nombre || 'Sin nombre'}</u></a>`;
-            }
-        }, {
-            data: 'descripcion',
-            render: function(data, type, item) {
-                if (!data) return '';
-                // Si supera 120 caracteres se recorta y agrega "..."
-                return data.length > 120 ? data.substring(0, 117) + '...' : data;
-            }
-        }, {
-            data: 'obligatorio',
-            render: function(data, type, item) {
-                var is = (data == 1 || data === true || data === '1');
-                return `<span class="badge bg-${is ? 'danger' : 'secondary'}">${is ? 'Obligatorio' : 'Opcional'}</span>`;
+        tbl_req_detalles = $('#tbl_req_detalles').DataTable($.extend({}, configuracion_datatable('Nombre', 'tipo',
+            'fecha'), {
+            responsive: true,
+            language: {
+                url: '../assets/plugins/datatable/spanish.json'
             },
-            className: 'text-center'
-        }],
-        order: [
-            [0, 'asc']
-        ]
-    }));
+            ajax: {
+                url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_cat_requisitos_detallesC.php?listar=true',
+                dataSrc: ''
+            },
+            columns: [{
+                data: null,
+                render: function(data, type, item) {
+                    // link al formulario de registro/modificación (ajusta acc si lo tienes distinto)
+                    const id = item.th_reqdet_id || item._id || '';
+                    const href =
+                        `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_requisitos_detalles&_id=${id}`;
+                    return `<a href="${href}"><u>${item.nombre || 'Sin nombre'}</u></a>`;
+                }
+            }, {
+                data: 'descripcion',
+                render: function(data, type, item) {
+                    if (!data) return '';
+                    // Si supera 120 caracteres se recorta y agrega "..."
+                    return data.length > 120 ? data.substring(0, 117) + '...' : data;
+                }
+            }, {
+                data: 'obligatorio',
+                render: function(data, type, item) {
+                    var is = (data == 1 || data === true || data === '1');
+                    return `<span class="badge bg-${is ? 'danger' : 'secondary'}">${is ? 'Obligatorio' : 'Opcional'}</span>`;
+                },
+                className: 'text-center'
+            }],
+            order: [
+                [0, 'asc']
+            ]
+        }));
 
-});
+    });
 </script>
 
 <div class="page-wrapper">

@@ -1,4 +1,12 @@
 <?php
+
+/**
+ * @deprecated Archivo dado de baja el 13/02/2026.
+ * @note Este archivo se mantiene como respaldo, pero ya no se utilizará en producción.
+ * @warning No modificar este archivo. Para cambios, referirse a la nueva implementación.
+ */
+
+
 date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 3)  . '/modelo/TALENTO_HUMANO/CONTRATACION/th_cat_requisitos_detallesM.php');
