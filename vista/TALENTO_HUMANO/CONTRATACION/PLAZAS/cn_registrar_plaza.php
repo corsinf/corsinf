@@ -32,6 +32,8 @@ if (isset($_GET['_id'])) {
     $(document).ready(function() {
         <?php if (isset($_GET['_id'])) { ?>
 
+            cargar_plaza(<?= $_id ?>);
+
         <?php } ?>
         cargar_selects2_plaza();
 
@@ -52,10 +54,11 @@ if (isset($_GET['_id'])) {
 
     function formatDateToInput(dateStr) {
         if (!dateStr) return '';
+        // Solo retorna la parte de fecha YYYY-MM-DD
         dateStr = dateStr.replace('.000', '').trim();
-        if (dateStr.indexOf(' ') !== -1) return dateStr.slice(0, 16).replace(' ', 'T');
-        if (dateStr.indexOf('T') !== -1) return dateStr.slice(0, 16);
-        return dateStr;
+        if (dateStr.indexOf('T') !== -1) return dateStr.slice(0, 10);
+        if (dateStr.indexOf(' ') !== -1) return dateStr.slice(0, 10);
+        return dateStr.slice(0, 10);
     }
 
     function boolVal(val) {
@@ -89,7 +92,7 @@ if (isset($_GET['_id'])) {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_plazasC.php?insertar_editar=true',
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/cn_plazaC.php?insertar_editar=true',
             type: 'post',
             dataType: 'json',
             success: function(res) {
@@ -116,14 +119,14 @@ if (isset($_GET['_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_plazasC.php?listar=true',
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/cn_plazaC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
                 if (!response || !response[0]) return;
                 var r = response[0];
 
-                $('#txt_cn_pla_id').val(r.cn_pla_id);
+                $('#txt_cn_pla_id').val(r._id);
                 $('#txt_cn_pla_titulo').val(r.cn_pla_titulo);
                 $('#txt_cn_pla_descripcion').val(r.cn_pla_descripcion);
                 $('#txt_cn_pla_num_vacantes').val(r.cn_pla_num_vacantes);
@@ -136,22 +139,24 @@ if (isset($_GET['_id'])) {
                 $('#cbx_cn_pla_prioridad_interna').prop('checked', boolVal(r.cn_pla_req_prioridad_interna));
                 $('#cbx_cn_pla_req_documentos').prop('checked', boolVal(r.cn_pla_req_documentos));
 
-                var tipoNorm = String(r.id_tipo_seleccion || '').trim();
-                $('#ddl_id_tipo_seleccion').val(['Interna', 'Externa', 'Mixta'].includes(tipoNorm) ? tipoNorm : '');
-
                 $('#ddl_cargo').append($('<option>', {
                     value: r.id_cargo,
-                    text: r.cargo_nombre,
+                    text: r.descripcion_cargo,
                     selected: true
                 }));
                 $('#ddl_th_dep_id').append($('<option>', {
                     value: r.th_dep_id,
-                    text: r.dep_nombre,
+                    text: r.descripcion_departamento,
                     selected: true
                 }));
                 $('#ddl_id_nomina').append($('<option>', {
                     value: r.id_nomina,
-                    text: r.nomina_nombre,
+                    text: r.descripcion_nomina,
+                    selected: true
+                }));
+                $('#ddl_id_tipo_seleccion').append($('<option>', {
+                    value: r.id_tipo_seleccion,
+                    text: r.descripcion_tipo_seleccion,
                     selected: true
                 }));
                 $('#ddl_cn_pla_responsable').append($('<option>', {
@@ -167,101 +172,155 @@ if (isset($_GET['_id'])) {
         });
     }
 
+    // ─── FECHAS ────────────────────────────────────────────────────────────────
+    // Valida en tiempo real: borra y marca solo el campo con el problema
+    function validarFechaPublicacion() {
+        const $pub = $('#txt_cn_pla_fecha_publicacion');
+        const pubStr = $pub.val();
+        if (!pubStr) return true;
 
-    function validarFechas() {
-        const pubStr = $('#txt_cn_pla_fecha_publicacion').val();
-        const cierreStr = $('#txt_cn_pla_fecha_cierre').val();
-        if (!pubStr || !cierreStr) return true;
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+        const fechaPub = new Date(pubStr + 'T00:00:00');
 
-        const fechaPub = new Date(pubStr);
-        const fechaCierre = new Date(cierreStr);
-        const ahora = new Date();
-        ahora.setSeconds(0, 0);
-
-        if (fechaPub < ahora) {
+        if (fechaPub < hoy) {
+            $pub.addClass('is-invalid').removeClass('is-valid').val('');
             Swal.fire({
-                    icon: 'warning',
-                    title: 'Fecha inválida',
-                    text: 'La fecha de publicación no puede ser anterior a hoy.',
-                    confirmButtonText: 'Entendido'
-                })
-                .then(() => {
-                    $('#txt_cn_pla_fecha_publicacion').val('').addClass('is-invalid').removeClass('is-valid').focus();
-                });
+                icon: 'warning',
+                title: 'Fecha inválida',
+                text: 'La fecha de publicación no puede ser anterior a hoy.',
+                confirmButtonText: 'Entendido'
+            }).then(() => $pub.focus());
             return false;
         }
-        if (fechaCierre < ahora) {
+
+        $pub.removeClass('is-invalid').addClass('is-valid');
+        // Revalidar cierre por si ya estaba ingresado
+        validarFechaCierre();
+        return true;
+    }
+
+    function validarFechaCierre() {
+        const $pub = $('#txt_cn_pla_fecha_publicacion');
+        const $cierre = $('#txt_cn_pla_fecha_cierre');
+        const pubStr = $pub.val();
+        const cierreStr = $cierre.val();
+        if (!cierreStr) return true;
+
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+        const fechaCierre = new Date(cierreStr + 'T00:00:00');
+
+        if (fechaCierre < hoy) {
+            $cierre.addClass('is-invalid').removeClass('is-valid').val('');
             Swal.fire({
-                    icon: 'warning',
-                    title: 'Fecha inválida',
-                    text: 'La fecha de cierre no puede ser anterior a hoy.',
-                    confirmButtonText: 'Entendido'
-                })
-                .then(() => {
-                    $('#txt_cn_pla_fecha_cierre').val('').addClass('is-invalid').removeClass('is-valid').focus();
-                });
+                icon: 'warning',
+                title: 'Fecha inválida',
+                text: 'La fecha de cierre no puede ser anterior a hoy.',
+                confirmButtonText: 'Entendido'
+            }).then(() => $cierre.focus());
             return false;
         }
-        if (fechaCierre < fechaPub) {
-            Swal.fire({
+
+        if (pubStr) {
+            const fechaPub = new Date(pubStr + 'T00:00:00');
+            if (fechaCierre < fechaPub) {
+                $cierre.addClass('is-invalid').removeClass('is-valid').val('');
+                Swal.fire({
                     icon: 'error',
                     title: 'Rango incorrecto',
                     text: 'La fecha de cierre no puede ser menor que la de publicación.',
                     confirmButtonText: 'Corregir'
-                })
-                .then(() => {
-                    $('#txt_cn_pla_fecha_cierre').val('').addClass('is-invalid').removeClass('is-valid').focus();
-                });
-            return false;
+                }).then(() => $cierre.focus());
+                return false;
+            }
         }
+
+        $cierre.removeClass('is-invalid').addClass('is-valid');
         return true;
     }
 
-    function validarSalarios() {
+    function validarFechas() {
+        return validarFechaPublicacion() && validarFechaCierre();
+    }
+
+    // ─── SALARIOS ──────────────────────────────────────────────────────────────
+    function validarSalarioMin() {
         const $min = $('#txt_cn_pla_salario_min');
         const $max = $('#txt_cn_pla_salario_max');
-        $min.removeClass('is-invalid is-valid');
-        $max.removeClass('is-invalid is-valid');
-
-        if ($min.val() === '' || $max.val() === '') return true;
+        if ($min.val() === '') return true;
 
         const min = parseFloat($min.val());
-        const max = parseFloat($max.val());
 
         if (min < 0) {
-            $min.addClass('is-invalid').val('').focus();
+            $min.addClass('is-invalid').removeClass('is-valid').val('');
             Swal.fire({
                 icon: 'warning',
                 title: 'Valor inválido',
                 text: 'El salario mínimo no puede ser negativo.',
                 confirmButtonText: 'Entendido'
-            });
+            }).then(() => $min.focus());
             return false;
         }
+
+        // Si el máximo ya tiene valor, verificar rango
+        if ($max.val() !== '') {
+            const max = parseFloat($max.val());
+            if (min > max) {
+                $min.addClass('is-invalid').removeClass('is-valid').val('');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Rango incorrecto',
+                    text: 'El salario mínimo no puede ser mayor que el máximo.',
+                    confirmButtonText: 'Corregir'
+                }).then(() => $min.focus());
+                return false;
+            }
+        }
+
+        $min.removeClass('is-invalid').addClass('is-valid');
+        return true;
+    }
+
+    function validarSalarioMax() {
+        const $min = $('#txt_cn_pla_salario_min');
+        const $max = $('#txt_cn_pla_salario_max');
+        if ($max.val() === '') return true;
+
+        const max = parseFloat($max.val());
+
         if (max < 0) {
-            $max.addClass('is-invalid').val('').focus();
+            $max.addClass('is-invalid').removeClass('is-valid').val('');
             Swal.fire({
                 icon: 'warning',
                 title: 'Valor inválido',
                 text: 'El salario máximo no puede ser negativo.',
                 confirmButtonText: 'Entendido'
-            });
-            return false;
-        }
-        if (min > max) {
-            $min.addClass('is-invalid').val('').focus();
-            Swal.fire({
-                icon: 'error',
-                title: 'Rango incorrecto',
-                text: 'El salario mínimo no puede ser mayor que el máximo.',
-                confirmButtonText: 'Corregir'
-            });
+            }).then(() => $max.focus());
             return false;
         }
 
-        $min.addClass('is-valid');
-        $max.addClass('is-valid');
+        // Si el mínimo ya tiene valor, verificar rango
+        if ($min.val() !== '') {
+            const min = parseFloat($min.val());
+            if (max < min) {
+                $max.addClass('is-invalid').removeClass('is-valid').val('');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Rango incorrecto',
+                    text: 'El salario máximo no puede ser menor que el mínimo.',
+                    confirmButtonText: 'Corregir'
+                }).then(() => $max.focus());
+                return false;
+            }
+        }
+
+        $max.removeClass('is-invalid').addClass('is-valid');
         return true;
+    }
+
+    function validarSalarios() {
+        return validarSalarioMin() && validarSalarioMax();
     }
 
     function guardar_plaza() {
@@ -346,7 +405,7 @@ if (isset($_GET['_id'])) {
                                             <input type="hidden" id="txt_cn_pla_id" name="txt_cn_pla_id" value="" />
 
                                             <div class="row pt-3 mb-2">
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <label for="txt_cn_pla_titulo" class="form-label">Título de la Plaza </label>
                                                     <input type="text"
                                                         class="form-control form-control-sm"
@@ -355,11 +414,19 @@ if (isset($_GET['_id'])) {
                                                         maxlength="150"
                                                         autocomplete="off" />
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <label for="ddl_cargo" class="form-label">Cargo </label>
                                                     <select class="form-select form-select-sm select2-validation"
                                                         id="ddl_cargo"
                                                         name="ddl_cargo">
+                                                        <option value="" selected hidden>-- Seleccione --</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="ddl_th_dep_id" class="form-label">Departamento </label>
+                                                    <select class="form-select form-select-sm select2-validation"
+                                                        id="ddl_th_dep_id"
+                                                        name="ddl_th_dep_id">
                                                         <option value="" selected hidden>-- Seleccione --</option>
                                                     </select>
                                                 </div>
@@ -377,17 +444,7 @@ if (isset($_GET['_id'])) {
                                                 </div>
                                             </div>
 
-                                            <div class="row mb-2">
 
-                                                <div class="col-md-6">
-                                                    <label for="ddl_th_dep_id" class="form-label">Departamento </label>
-                                                    <select class="form-select form-select-sm select2-validation"
-                                                        id="ddl_th_dep_id"
-                                                        name="ddl_th_dep_id">
-                                                        <option value="" selected hidden>-- Seleccione --</option>
-                                                    </select>
-                                                </div>
-                                            </div>
 
                                             <div class="row mb-2">
                                                 <div class="col-md-4">
@@ -399,15 +456,6 @@ if (isset($_GET['_id'])) {
                                                     </select>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="txt_cn_pla_num_vacantes" class="form-label">Número de Vacantes</label>
-                                                    <input type="number"
-                                                        min="1"
-                                                        class="form-control form-control-sm"
-                                                        id="txt_cn_pla_num_vacantes"
-                                                        name="txt_cn_pla_num_vacantes"
-                                                        placeholder="Ej: 1" />
-                                                </div>
-                                                <div class="col-md-4">
                                                     <label for="ddl_id_nomina" class="form-label">Figura Legal </label>
                                                     <select class="form-select form-select-sm select2-validation"
                                                         id="ddl_id_nomina"
@@ -415,22 +463,38 @@ if (isset($_GET['_id'])) {
                                                         <option value="" selected hidden>-- Seleccione --</option>
                                                     </select>
                                                 </div>
+                                                <div class="col-md-4">
+                                                    <label for="txt_cn_pla_num_vacantes" class="form-label">Número de Vacantes </label>
+                                                    <input type="number"
+                                                        min="1"
+                                                        class="form-control form-control-sm"
+                                                        id="txt_cn_pla_num_vacantes"
+                                                        name="txt_cn_pla_num_vacantes"
+                                                        placeholder="Ej: 1" />
+                                                </div>
                                             </div>
 
-                                            <div class="row mb-2">
-                                                <div class="col-md-6">
-                                                    <label for="txt_cn_pla_fecha_publicacion" class="form-label">Fecha de Publicación </label>
-                                                    <input type="datetime-local"
-                                                        class="form-control form-control-sm"
-                                                        id="txt_cn_pla_fecha_publicacion"
-                                                        name="txt_cn_pla_fecha_publicacion" />
+                                            <div class="p-3 bg-light rounded-3 border border-dashed mb-3">
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <h6 class="text-muted fs-7 mb-0 fw-bold text-uppercase ls-1">Periodo de Publicación</h6>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <label for="txt_cn_pla_fecha_cierre" class="form-label">Fecha de Cierre </label>
-                                                    <input type="datetime-local"
-                                                        class="form-control form-control-sm"
-                                                        id="txt_cn_pla_fecha_cierre"
-                                                        name="txt_cn_pla_fecha_cierre" />
+
+                                                <div class="row g-3">
+                                                    <div class="col-md-6">
+                                                        <label for="txt_cn_pla_fecha_publicacion" class="form-label fs-7 mb-1 fw-bold">Fecha de Publicación </label>
+                                                        <input type="date"
+                                                            class="form-control form-control-sm"
+                                                            id="txt_cn_pla_fecha_publicacion"
+                                                            name="txt_cn_pla_fecha_publicacion" />
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label for="txt_cn_pla_fecha_cierre" class="form-label fs-7 mb-1 fw-bold">Fecha de Cierre </label>
+                                                        <input type="date"
+                                                            class="form-control form-control-sm"
+                                                            id="txt_cn_pla_fecha_cierre"
+                                                            name="txt_cn_pla_fecha_cierre" />
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -458,7 +522,7 @@ if (isset($_GET['_id'])) {
                                             </div>
 
                                             <div class="row mb-2">
-                                                <div class="col-md-12">
+                                                <div class="col-md-6">
                                                     <label for="ddl_cn_pla_responsable" class="form-label">Persona Responsable </label>
                                                     <select class="form-select form-select-sm select2-validation"
                                                         id="ddl_cn_pla_responsable"
@@ -469,35 +533,39 @@ if (isset($_GET['_id'])) {
                                                 </div>
                                             </div>
 
-                                            <div class="row mb-2">
-                                                <div class="col-md-4">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            id="cbx_cn_pla_req_disponibilidad"
-                                                            name="cbx_cn_pla_req_disponibilidad" />
-                                                        <label class="form-check-label" for="cbx_cn_pla_req_disponibilidad">
-                                                            Disponibilidad de Tiempo Completo
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            id="cbx_cn_pla_prioridad_interna"
-                                                            name="cbx_cn_pla_prioridad_interna" />
-                                                        <label class="form-check-label" for="cbx_cn_pla_prioridad_interna">
-                                                            Prioridad Interna
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            id="cbx_cn_pla_req_documentos"
-                                                            name="cbx_cn_pla_req_documentos" />
-                                                        <label class="form-check-label" for="cbx_cn_pla_req_documentos">
-                                                            Requiere Documentos
-                                                        </label>
+                                            <div class="row mb-3">
+                                                <div class="col-md-12">
+                                                    <label class="form-label fw-semibold fs-7 mb-2 text-muted text-uppercase ls-1">Requerimientos Adicionales</label>
+
+                                                    <div class="d-flex flex-wrap gap-4 p-2 border rounded bg-white">
+
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="cbx_cn_pla_req_disponibilidad"
+                                                                name="cbx_cn_pla_req_disponibilidad" />
+                                                            <label class="form-check-label fs-7" for="cbx_cn_pla_req_disponibilidad">
+                                                                Disponibilidad Tiempo Completo
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="cbx_cn_pla_prioridad_interna"
+                                                                name="cbx_cn_pla_prioridad_interna" />
+                                                            <label class="form-check-label fs-7" for="cbx_cn_pla_prioridad_interna">
+                                                                Prioridad Interna
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="cbx_cn_pla_req_documentos"
+                                                                name="cbx_cn_pla_req_documentos" />
+                                                            <label class="form-check-label fs-7" for="cbx_cn_pla_req_documentos">
+                                                                Requiere Documentos
+                                                            </label>
+                                                        </div>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -542,18 +610,27 @@ if (isset($_GET['_id'])) {
 <script>
     $(document).ready(function() {
 
-
         $('#paso-1').addClass('active');
 
         let idPlaza = Number(localStorage.getItem('plaza_id'));
         if (idPlaza > 0) cargar_plaza(idPlaza);
 
-        $('#txt_cn_pla_fecha_publicacion, #txt_cn_pla_fecha_cierre').on('change', function() {
-            validarFechas();
+        // ── Fechas: validación en tiempo real por campo ──────────────────────
+        $('#txt_cn_pla_fecha_publicacion').on('change', function() {
+            validarFechaPublicacion();
         });
 
-        $('#txt_cn_pla_salario_min, #txt_cn_pla_salario_max').on('change', function() {
-            validarSalarios();
+        $('#txt_cn_pla_fecha_cierre').on('change', function() {
+            validarFechaCierre();
+        });
+
+        // ── Salarios: validación en tiempo real por campo ────────────────────
+        $('#txt_cn_pla_salario_min').on('change', function() {
+            validarSalarioMin();
+        });
+
+        $('#txt_cn_pla_salario_max').on('change', function() {
+            validarSalarioMax();
         });
 
         $('#txt_cn_pla_salario_min, #txt_cn_pla_salario_max').on('input', function() {
@@ -569,6 +646,8 @@ if (isset($_GET['_id'])) {
         agregar_asterisco_campo_obligatorio('ddl_id_nomina');
         agregar_asterisco_campo_obligatorio('txt_cn_pla_fecha_publicacion');
         agregar_asterisco_campo_obligatorio('txt_cn_pla_fecha_cierre');
+        agregar_asterisco_campo_obligatorio('txt_cn_pla_salario_min');
+        agregar_asterisco_campo_obligatorio('txt_cn_pla_salario_max');
         agregar_asterisco_campo_obligatorio('ddl_cn_pla_responsable');
 
         $('#btn_eliminar_todo').on('click', function() {
