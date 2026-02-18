@@ -221,6 +221,7 @@ if (isset($_GET['_id'])) {
                                 </ul>
                             </div>
                             <div class="tab-content py-3">
+                                <!-- SECCION 1: CARGO -->
                                 <div class="tab-pane fade show active" id="primaryhome" role="tabpanel">
                                     <section class="content pt-0">
                                         <div class="container-fluid">
@@ -265,12 +266,16 @@ if (isset($_GET['_id'])) {
 
                                         </div>
                                     </section>
-                                </div><!-- /.container-fluid -->
+                                </div>
+
+                                <!-- SECCION 2: ASPECTOS INTRINSECOS -->
                                 <div class="tab-pane fade" id="aspectos_intrinsecos" role="tabpanel">
                                     <section class="content pt-0">
                                         <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_INTRINSECOS/aspectos_intrinsecos.php'); ?>
                                     </section>
                                 </div>
+
+                                <!-- SECCION 3: ASPECTOS EXTRINSECOS -->
                                 <div class="tab-pane fade" id="tab_aspectos_extrinsecos" role="tabpanel">
                                     <section class="content pt-0">
                                         <div class="container-fluid">
@@ -352,11 +357,15 @@ if (isset($_GET['_id'])) {
                                         </div>
                                     </section>
                                 </div>
+
+                                <!-- SECCION 4: COMPLIANCE -->
                                 <div class="tab-pane fade" id="tab_compliance" role="tabpanel">
                                     <section class="content pt-0">
                                         <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_COMPLIANCE/compliance.php'); ?>
                                     </section>
                                 </div>
+
+                                <!-- SECCION 5: COMPETENCIAS -->
                                 <div class="tab-pane fade" id="tab_competencias" role="tabpanel">
                                     <section class="content pt-0">
                                         <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_COMPENTENCIAS/competencias.php'); ?>
