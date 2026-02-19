@@ -10,7 +10,8 @@ if (isset($_GET['listar'])) {
 }
 
 if (isset($_GET['listar_modal'])) {
-    echo json_encode($controlador->listar_modal($_POST['id']));
+     $boton = !(isset($_POST['button_delete']) && $_POST['button_delete'] === 'false');
+    echo json_encode($controlador->listar_modal($_POST['id'], $boton));
 }
 
 if (isset($_GET['insertar_editar'])) {
