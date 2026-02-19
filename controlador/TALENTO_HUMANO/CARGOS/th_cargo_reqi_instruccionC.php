@@ -11,6 +11,7 @@ if (isset($_GET['listar'])) {
 
 if (isset($_GET['listar_modal'])) {
     $boton = !(isset($_POST['button_delete']) && $_POST['button_delete'] === 'false');
+
     echo json_encode($controlador->listar_modal($_POST['id'], $boton));
 }
 
@@ -46,6 +47,7 @@ class  th_cargo_reqi_instruccionC
 
     function listar_modal($id = '', $button_delete = true)
     {
+
         $datos = [];
         if ($id !== '') {
             $datos = $this->modelo->listar_cargo_instruccion(null, $id);

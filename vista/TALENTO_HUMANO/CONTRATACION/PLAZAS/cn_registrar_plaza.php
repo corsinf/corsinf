@@ -8,99 +8,57 @@ if (isset($_GET['_id'])) {
 if (isset($_GET['_id_cargo'])) {
     $_id_cargo = $_GET['_id_cargo'];
 }
+
+$es_plaza = true;
+
 ?>
 
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
-
-<style>
-    #tab_content_smart .tab-pane {
-        display: none;
-        height: auto !important;
-        max-height: none !important;
-        overflow: visible !important;
-    }
-
-    #tab_content_smart .tab-pane.active {
-        display: block;
-    }
-
-    #smartwizard_seleccion,
-    #smartwizard_seleccion>.tab-content {
-        overflow: visible !important;
-        height: auto !important;
-    }
-
-    #smartwizard_seleccion .nav .nav-link {
-        color: #6c757d;
-        pointer-events: none;
-        border-bottom: 3px solid transparent;
-        transition: color 0.2s, border-color 0.2s;
-    }
-
-    #smartwizard_seleccion .nav .nav-link.active {
-        color: #0d6efd;
-        font-weight: bold;
-        border-bottom: 3px solid #0d6efd;
-    }
-
-    #smartwizard_seleccion .nav {
-        border-bottom: 1px solid #dee2e6;
-        margin-bottom: 1.5rem;
-    }
-
-    #v-pills-tab-plaza .nav-link {
-        pointer-events: auto !important;
-        cursor: pointer !important;
-    }
-
-    #v-pills-tab-plaza .nav-link.active {
-        color: #fff !important;
-        background-color: #0d6efd !important;
-        border-color: #0d6efd !important;
-    }
-
-    #v-pills-tab-plaza .nav-link:not(.active) {
-        color: #212529 !important;
-    }
-</style>
 
 <script>
     $(document).ready(function() {
         <?php if (isset($_GET['_id'])) { ?>
             cargar_plaza(<?= $_id ?>);
         <?php } ?>
-        cargar_selects2_plaza();
 
-        function cargar_selects2_plaza() {
-            cargar_select2_url('ddl_id_tipo_seleccion', '../controlador/TALENTO_HUMANO/CATALOGOS/cn_cat_tipo_seleccionC.php?buscar=true');
-            cargar_select2_url('ddl_cargo', '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_cargoC.php?buscar=true');
-            cargar_select2_url('ddl_th_dep_id', '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true');
-            cargar_select2_url('ddl_id_nomina', '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_nominaC.php?buscar=true');
-            cargar_select2_url('ddl_cn_pla_responsable', '../controlador/TALENTO_HUMANO/th_personasC.php?busca_persona_nomina=true');
-        }
+        smartwizard_cargar_plaza();
+        cargar_selects2_plaza();
 
         $('#ddl_cargo').on('change', function() {
             let id_cargo = $(this).val();
-            cargar_descripcion_cargo(id_cargo);
-        })
+            $('#txt_id_cargo').val(id_cargo);
 
-        function cargar_descripcion_cargo(id_cargo) {
-            $.ajax({
-                data: {
-                    id: id_cargo
-                },
-                url: '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_cargoC.php?listar=true',
-                type: 'post',
-                dataType: 'json',
-                success: function(response) {
-                    if (response && response.length > 0) {
-                        $('#txt_cn_pla_descripcion').val(response[0].descripcion);
-                    }
-                }
-            });
-        }
+            cargar_descripcion_cargo(id_cargo);
+
+            //Todo lo que tiene que ver con el cargo
+            cargar_instrucciones_basicas(id_cargo, false)
+        })
     });
+
+    function cargar_selects2_plaza() {
+        cargar_select2_url('ddl_id_tipo_seleccion', '../controlador/TALENTO_HUMANO/CATALOGOS/cn_cat_tipo_seleccionC.php?buscar=true');
+        cargar_select2_url('ddl_cargo', '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_cargoC.php?buscar=true');
+        cargar_select2_url('ddl_th_dep_id', '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true');
+        cargar_select2_url('ddl_id_nomina', '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_nominaC.php?buscar=true');
+        cargar_select2_url('ddl_cn_pla_responsable', '../controlador/TALENTO_HUMANO/th_personasC.php?busca_persona_nomina=true');
+    }
+
+    function cargar_descripcion_cargo(id_cargo) {
+        $.ajax({
+            data: {
+                id: id_cargo
+            },
+            url: '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_cargoC.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if (response && response.length > 0) {
+                    $('#txt_cn_pla_descripcion').val(response[0].descripcion);
+                }
+            }
+        });
+    }
 
     // ─── Utilidades ────────────────────────────────────────────────────────────
     function formatDateToInput(dateStr) {
@@ -138,39 +96,65 @@ if (isset($_GET['_id_cargo'])) {
     }
 
     // ─── Wizard: navegación entre pasos ────────────────────────────────────────
-    var totalPasos = 2;
+    function smartwizard_cargar_plaza() {
+        var btnSiguiente = $('<button></button>').text('Siguiente').addClass('btn btn-info').on('click', function() {
+            if (valida_formulario('smartwizard_plaza')) {
+                $('#smartwizard_plaza').smartWizard("next");
+            } else {
+                Swal.fire('', 'Llene todo los campos', 'info')
+            }
+        });
+        var btnAtras = $('<button></button>').text('Atras').addClass('btn btn-info').on('click', function() {
+            $('#smartwizard_plaza').smartWizard("prev");
+            return true;
+        });
 
-    function irPaso(numero) {
-        $('#tab_content_smart .tab-pane').removeClass('active');
-        $('#smartwizard_seleccion .nav .nav-link').removeClass('active');
-        $('#paso-' + numero).addClass('active');
-        $('#smartwizard_seleccion .nav .nav-link[href="#paso-' + numero + '"]').addClass('active');
-        actualizarBotones(numero);
+
+        $("#smartwizard_plaza").on("showStep", function(e, anchorObject, stepNumber, stepDirection, stepPosition) {
+            $("#prev-btn").removeClass('disabled');
+            $("#next-btn").removeClass('disabled');
+            if (stepPosition === 'first') {
+                $("#prev-btn").addClass('disabled');
+            } else if (stepPosition === 'last') {
+                $("#next-btn").addClass('disabled');
+            } else {
+                $("#prev-btn").removeClass('disabled');
+                $("#next-btn").removeClass('disabled');
+            }
+        });
+        // Smart Wizard
+        $('#smartwizard_plaza').smartWizard({
+            selected: 0,
+            theme: 'arrows',
+            transition: {
+                animation: 'slide-horizontal', // Effect on navigation, none/fade/slide-horizontal/slide-vertical/slide-swing
+            },
+            toolbarSettings: {
+                toolbarPosition: '',
+                toolbarExtraButtons: [btnAtras, btnSiguiente],
+                showNextButton: false, // Oculta el botón predeterminado "Next"
+                showPreviousButton: false,
+            },
+        });
     }
 
-    function actualizarBotones(pasoActual) {
-        // Botón Anterior
-        $('.btn-wizard-prev').toggleClass('d-none', pasoActual === 1);
-        // Botón Siguiente (solo visible si no es el último paso y la plaza ya fue guardada)
-        var hayPlaza = ($('#txt_cn_pla_id').val() !== '');
-        $('.btn-wizard-next').toggleClass('d-none', pasoActual === totalPasos || !hayPlaza);
-        // Botón Guardar (solo en paso 1)
-        $('.btn-wizard-save').toggleClass('d-none', pasoActual !== 1);
-    }
+    function valida_formulario(formulario) {
+        var pasoActual = $('#' + formulario).smartWizard('getStepIndex');
+        var pasoValido = true;
+        // Verificar campos requeridos en el paso actual
 
-    function pasoAnterior() {
-        var actual = pasActual();
-        if (actual > 1) irPaso(actual - 1);
-    }
+        $('#' + formulario + ' [data-step="' + pasoActual + '"] [required]').each(function() {
+            //console.log(this)
+            if (!this.checkValidity()) {
+                pasoValido = false;
+                num_form = pasoActual + 1;
+                $('#form-step-' + num_form).addClass('was-validated');
+                console.log()
+                return false; // Salir del bucle si se encuentra un campo no válido
+            }
+        });
 
-    function pasoSiguiente() {
-        var actual = pasActual();
-        if (actual < totalPasos) irPaso(actual + 1);
-    }
-
-    function pasActual() {
-        var activo = $('#tab_content_smart .tab-pane.active').attr('id'); // "paso-N"
-        return parseInt(activo.replace('paso-', ''));
+        return pasoValido;
     }
 
     // ─── AJAX ──────────────────────────────────────────────────────────────────
@@ -185,9 +169,7 @@ if (isset($_GET['_id_cargo'])) {
             success: function(res) {
                 if (res > 0) {
                     Swal.fire('', 'Plaza guardada con éxito.', 'success').then(function() {
-                        localStorage.setItem('plaza_id', res);
                         $('#txt_cn_pla_id').val(res);
-                        irPaso(2);
                     });
                 } else if (res == -2) {
                     Swal.fire('', 'Ya existe una plaza con ese título.', 'warning');
@@ -404,35 +386,6 @@ if (isset($_GET['_id_cargo'])) {
             });
     }
 </script>
-<script>
-    // Reemplaza tu segundo bloque $(document).ready de los pills por esto:
-    $(document).ready(function() {
-
-        function activarPillPlaza(btn) {
-            $('#v-pills-tab-plaza button').removeClass('active');
-            $('#v-pills-tabContent-plaza .tab-pane').removeClass('show active');
-            $(btn).addClass('active');
-            var target = $(btn).attr('data-bs-target');
-            $(target).addClass('show active');
-        }
-
-        // Click en los pills
-        $(document).on('click', '#v-pills-tab-plaza button', function() {
-            activarPillPlaza(this);
-        });
-
-        // ⚠️ CLAVE: sobreescribir irPaso para activar el primer pill al ir al paso 2
-        var irPasoOriginal = irPaso;
-        irPaso = function(numero) {
-            irPasoOriginal(numero);
-            if (numero === 2) {
-                var primerPill = $('#v-pills-tab-plaza button:first-child');
-                activarPillPlaza(primerPill);
-            }
-        };
-
-    });
-</script>
 
 <div class="page-wrapper">
     <div class="page-content">
@@ -461,266 +414,45 @@ if (isset($_GET['_id_cargo'])) {
                                     <h5 class="mb-0 text-primary">Proceso de Selección de Personal</h5>
                                 </div>
                             </div>
-                            <div class="col-6 text-end">
-                                <button class="btn btn-outline-primary btn-sm">
-                                    <i class="bx bx-list-ol"></i> Historial
-                                </button>
-                                <button class="btn btn-outline-danger btn-sm" id="btn_eliminar_todo">
-                                    <i class="bx bx-trash"></i> Eliminar Todo
-                                </button>
-                            </div>
                         </div>
 
-                        <div id="smartwizard_seleccion">
-
-                            <!-- Nav pasos -->
+                        <div id="smartwizard_plaza">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#paso-1">
-                                        <strong>Paso 1</strong><br>Crear Plaza
-                                    </a>
+                                    <a class="nav-link" href="#step-1"> <strong>Step 1</strong>
+                                        <br>This is step description</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#paso-2">
-                                        <strong>Paso 2</strong><br>Requisitos
-                                    </a>
+                                    <a class="nav-link" href="#step-2"> <strong>Step 2</strong>
+                                        <br>This is step description</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#step-3"> <strong>Step 3</strong>
+                                        <br>This is step description</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#step-4"> <strong>Step 4</strong>
+                                        <br>This is step description</a>
                                 </li>
                             </ul>
+                            <div class="tab-content">
+                                <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
 
-                            <div class="tab-content" id="tab_content_smart">
+                                    <?php include_once('../vista/TALENTO_HUMANO/CONTRATACION/PLAZAS/WIZART_REGISTRAR_PLAZA/plaza_paso1.php'); ?>
 
-                                <!-- ── PASO 1 ─────────────────────────────── -->
-                                <div id="paso-1" class="tab-pane" role="tabpanel">
-                                    <div class="container-fluid">
-                                        <form id="form_plaza">
-                                            <input type="hidden" id="txt_cn_pla_id" name="txt_cn_pla_id" value="" />
-
-                                            <div class="row pt-3 mb-2">
-                                                <div class="col-md-4">
-                                                    <label for="txt_cn_pla_titulo" class="form-label">Título de la Plaza </label>
-                                                    <input type="text" class="form-control form-control-sm"
-                                                        id="txt_cn_pla_titulo" name="txt_cn_pla_titulo"
-                                                        maxlength="150" autocomplete="off" />
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label for="ddl_cargo" class="form-label">Cargo </label>
-                                                    <select class="form-select form-select-sm select2-validation" id="ddl_cargo" name="ddl_cargo">
-                                                        <option value="" selected hidden>-- Seleccione --</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label for="ddl_th_dep_id" class="form-label">Departamento </label>
-                                                    <select class="form-select form-select-sm select2-validation" id="ddl_th_dep_id" name="ddl_th_dep_id">
-                                                        <option value="" selected hidden>-- Seleccione --</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-2">
-                                                <div class="col-md-12">
-                                                    <label for="txt_cn_pla_descripcion" class="form-label">Descripción del Puesto </label>
-                                                    <textarea class="form-control form-control-sm"
-                                                        id="txt_cn_pla_descripcion" name="txt_cn_pla_descripcion"
-                                                        rows="3" placeholder="Describa responsabilidades y funciones..."></textarea>
-                                                    <small class="text-muted">Visible para postulantes</small>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-2">
-                                                <div class="col-md-4">
-                                                    <label for="ddl_id_tipo_seleccion" class="form-label">Tipo de Selección </label>
-                                                    <select class="form-select form-select-sm select2-validation" id="ddl_id_tipo_seleccion" name="ddl_id_tipo_seleccion">
-                                                        <option value="" selected hidden>-- Seleccione --</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label for="ddl_id_nomina" class="form-label">Figura Legal </label>
-                                                    <select class="form-select form-select-sm select2-validation" id="ddl_id_nomina" name="ddl_id_nomina">
-                                                        <option value="" selected hidden>-- Seleccione --</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label for="txt_cn_pla_num_vacantes" class="form-label">Número de Vacantes </label>
-                                                    <input type="number" min="1" class="form-control form-control-sm"
-                                                        id="txt_cn_pla_num_vacantes" name="txt_cn_pla_num_vacantes" placeholder="Ej: 1" />
-                                                </div>
-                                            </div>
-
-                                            <div class="p-3 bg-light rounded-3 border border-dashed mb-3">
-                                                <h6 class="text-muted fs-7 mb-2 fw-bold text-uppercase ls-1">Periodo de Publicación</h6>
-                                                <div class="row g-3">
-                                                    <div class="col-md-6">
-                                                        <label for="txt_cn_pla_fecha_publicacion" class="form-label fs-7 mb-1 fw-bold">Fecha de Publicación </label>
-                                                        <input type="date" class="form-control form-control-sm"
-                                                            id="txt_cn_pla_fecha_publicacion" name="txt_cn_pla_fecha_publicacion" />
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label for="txt_cn_pla_fecha_cierre" class="form-label fs-7 mb-1 fw-bold">Fecha de Cierre </label>
-                                                        <input type="date" class="form-control form-control-sm"
-                                                            id="txt_cn_pla_fecha_cierre" name="txt_cn_pla_fecha_cierre" />
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-2">
-                                                <div class="col-md-6">
-                                                    <label for="txt_cn_pla_salario_min" class="form-label">Salario Mínimo </label>
-                                                    <input type="number" step="0.01" min="0" class="form-control form-control-sm"
-                                                        id="txt_cn_pla_salario_min" name="txt_cn_pla_salario_min" placeholder="0.00" />
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="txt_cn_pla_salario_max" class="form-label">Salario Máximo </label>
-                                                    <input type="number" step="0.01" min="0" class="form-control form-control-sm"
-                                                        id="txt_cn_pla_salario_max" name="txt_cn_pla_salario_max" placeholder="0.00" />
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-2">
-                                                <div class="col-md-6">
-                                                    <label for="ddl_cn_pla_responsable" class="form-label">Persona Responsable </label>
-                                                    <select class="form-select form-select-sm select2-validation" id="ddl_cn_pla_responsable" name="ddl_cn_pla_responsable">
-                                                        <option value="" selected hidden>-- Seleccione --</option>
-                                                    </select>
-                                                    <small class="text-muted">Solo personas activas en nómina</small>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-3">
-                                                <div class="col-md-12">
-                                                    <label class="form-label fw-semibold fs-7 mb-2 text-muted text-uppercase ls-1">Requerimientos Adicionales</label>
-                                                    <div class="d-flex flex-wrap gap-4 p-2 border rounded bg-white">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="cbx_cn_pla_req_disponibilidad" name="cbx_cn_pla_req_disponibilidad" />
-                                                            <label class="form-check-label fs-7" for="cbx_cn_pla_req_disponibilidad">Disponibilidad Tiempo Completo</label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="cbx_cn_pla_prioridad_interna" name="cbx_cn_pla_prioridad_interna" />
-                                                            <label class="form-check-label fs-7" for="cbx_cn_pla_prioridad_interna">Prioridad Interna</label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="cbx_cn_pla_req_documentos" name="cbx_cn_pla_req_documentos" />
-                                                            <label class="form-check-label fs-7" for="cbx_cn_pla_req_documentos">Requiere Documentos</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-2">
-                                                <div class="col-md-12">
-                                                    <label for="txt_cn_pla_observaciones" class="form-label">Observaciones</label>
-                                                    <textarea class="form-control form-control-sm"
-                                                        id="txt_cn_pla_observaciones" name="txt_cn_pla_observaciones"
-                                                        rows="2" placeholder="Notas internas..."></textarea>
-                                                    <small class="text-muted">Solo visible internamente</small>
-                                                </div>
-                                            </div>
-
-                                        </form>
-                                    </div>
                                 </div>
+                                <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
 
-                                <!-- ── PASO 2 ─────────────────────────────── -->
-                                <div id="paso-2" class="tab-pane" role="tabpanel">
-                                    <section class="py-1">
-                                        <div class="row g-0 shadow-sm border rounded-3">
-                                            <div class="col-md-3 bg-light border-end">
-                                                <div class="nav flex-column nav-pills gap-2 p-2"
-                                                    id="v-pills-tab-plaza"
-                                                    role="tablist" aria-orientation="vertical">
+                                    <?php include_once('../vista/TALENTO_HUMANO/CARGOS/seccion_aspectos_extrinsecos.php'); ?>
 
-                                                    <button class="nav-link py-3 px-3 border shadow-sm"
-                                                        data-bs-target="#plaza_req_intelectuales"
-                                                        type="button">
-                                                        <div class="d-flex align-items-center">
-                                                            <i class="bx bx-brain me-3 fs-5"></i>
-                                                            <span>Requisitos Intelectuales</span>
-                                                        </div>
-                                                    </button>
-                                                    <button class="nav-link py-3 px-3 border shadow-sm"
-                                                        data-bs-target="#plaza_req_fisicos"
-                                                        type="button">
-                                                        <div class="d-flex align-items-center">
-                                                            <i class="bx bx-body me-3 fs-5"></i>
-                                                            <span>Requisitos Físicos</span>
-                                                        </div>
-                                                    </button>
-                                                    <button class="nav-link py-3 px-3 border shadow-sm"
-                                                        data-bs-target="#plaza_resp_implicitas"
-                                                        type="button">
-                                                        <div class="d-flex align-items-center">
-                                                            <i class="bx bx-list-check me-3 fs-5"></i>
-                                                            <span>Resp. Implícitas</span>
-                                                        </div>
-                                                    </button>
-                                                    <button class="nav-link py-3 px-3 border shadow-sm"
-                                                        data-bs-target="#plaza_cond_trabajo"
-                                                        type="button">
-                                                        <div class="d-flex align-items-center">
-                                                            <i class="bx bx-briefcase-alt me-3 fs-5"></i>
-                                                            <span>Condiciones de Trabajo</span>
-                                                        </div>
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-9 bg-white">
-                                                <div class="tab-content p-3"
-                                                    id="v-pills-tabContent-plaza"
-                                                    style="min-height: 400px;">
-
-                                                    <div class="tab-pane" id="plaza_req_intelectuales" role="tabpanel">
-                                                        <?php include_once('../vista/TALENTO_HUMANO/CONTRATACION/PLAZAS/MENU_CARGO_ASPECTOS_EXTRINSECOS/requisitos_intelectuales.php'); ?>
-                                                    </div>
-                                                    <div class="tab-pane" id="plaza_req_fisicos" role="tabpanel">
-                                                        <?php include_once('../vista/TALENTO_HUMANO/CONTRATACION/PLAZAS/MENU_CARGO_ASPECTOS_EXTRINSECOS/requisitos_fisicos.php'); ?>
-                                                    </div>
-                                                    <div class="tab-pane" id="plaza_resp_implicitas" role="tabpanel">
-                                                        <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/responsabilidades_implicitas.php'); ?>
-                                                    </div>
-                                                    <div class="tab-pane" id="plaza_cond_trabajo" role="tabpanel">
-                                                        <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/condiciones_trabajo.php'); ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
                                 </div>
-
+                                <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
+                                <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
+                                    <h3>Step 4 Content</h3>
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                                </div>
                             </div>
-                            <!-- /tab-content -->
-
-                            <!-- ── Barra de navegación inferior ──────────── -->
-                            <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
-
-                                <!-- Anterior -->
-                                <button type="button"
-                                    class="btn btn-outline-secondary btn-sm btn-wizard-prev d-none"
-                                    onclick="pasoAnterior()">
-                                    <i class="bx bx-chevron-left"></i> Anterior
-                                </button>
-                                <span class="btn-wizard-prev d-none"></span><!-- placeholder para flex cuando está oculto -->
-
-                                <!-- Derecha: Guardar (paso 1) + Siguiente (pasos intermedios) -->
-                                <div class="d-flex gap-2">
-                                    <button type="button"
-                                        class="btn btn-primary btn-sm btn-wizard-save"
-                                        onclick="guardar_plaza()">
-                                        <i class="bx bx-save"></i> Guardar y Continuar
-                                    </button>
-                                    <button type="button"
-                                        class="btn btn-primary btn-sm btn-wizard-next d-none"
-                                        onclick="pasoSiguiente()">
-                                        Siguiente <i class="bx bx-chevron-right"></i>
-                                    </button>
-                                </div>
-
-                            </div>
-
                         </div>
-                        <!-- /smartwizard_seleccion -->
 
                     </div>
                 </div>
@@ -732,15 +464,6 @@ if (isset($_GET['_id_cargo'])) {
 
 <script>
     $(document).ready(function() {
-
-        // Arrancar en paso 1; si ya hay plaza ir al 2
-        var idPlaza = Number(localStorage.getItem('plaza_id'));
-        if (idPlaza > 0) {
-            cargar_plaza(idPlaza);
-            irPaso(2);
-        } else {
-            irPaso(1);
-        }
 
         // Fechas
         $('#txt_cn_pla_fecha_publicacion').on('change', function() {
@@ -768,24 +491,6 @@ if (isset($_GET['_id_cargo'])) {
             'txt_cn_pla_salario_min', 'txt_cn_pla_salario_max', 'ddl_cn_pla_responsable'
         ].forEach(function(id) {
             agregar_asterisco_campo_obligatorio(id);
-        });
-
-        // Eliminar todo
-        $('#btn_eliminar_todo').on('click', function() {
-            Swal.fire({
-                    title: '¿Eliminar todo?',
-                    text: 'Se limpiará el almacenamiento local y se recargará la página.',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Sí, eliminar',
-                    cancelButtonText: 'Cancelar'
-                })
-                .then((result) => {
-                    if (result.isConfirmed) {
-                        localStorage.clear();
-                        location.reload();
-                    }
-                });
         });
 
         // Validación jQuery Validate
@@ -912,3 +617,18 @@ if (isset($_GET['_id_cargo'])) {
 
     });
 </script>
+
+<!-- Para los navs del menu -->
+<link rel="stylesheet" href="../assets/css/css-navs-menus.css">
+
+<style>
+    /* Hace que la fila brille un poco al pasar el mouse */
+    .table-hover tbody tr:hover {
+        background-color: #fbfbfb !important;
+    }
+
+    /* Quita el borde superior de la primera fila para que encaje en el rounded */
+    .table tbody tr:first-child td {
+        border-top: 0;
+    }
+</style>

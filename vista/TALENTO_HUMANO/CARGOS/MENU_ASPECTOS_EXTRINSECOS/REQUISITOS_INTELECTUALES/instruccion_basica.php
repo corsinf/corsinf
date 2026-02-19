@@ -1,11 +1,9 @@
 <script>
     let tbl_instruccion_basica;
     $(document).ready(function() {
-        cargar_selects_ins_basica('<?= $_id ?>');
-        cargar_instrucciones_basicas('<?= $_id ?>');
-
+        id_cargo = $('#txt_id_cargo').val();
+        cargar_instrucciones_basicas(id_cargo);
     });
-
 
     function cargar_selects_ins_basica(car_id) {
         // Si select2 ya está inicializado, destruirlo
@@ -43,12 +41,15 @@
         });
     }
 
-    function cargar_instrucciones_basicas(id) {
+    function cargar_instrucciones_basicas(id, button = true) {
+        cargar_selects_ins_basica(id);
+
         $.ajax({
             url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_instruccionC.php?listar_modal=true',
             type: 'post',
             data: {
-                id: id
+                id: id,
+                button_delete: button
             },
             dataType: 'json',
             success: function(response) {
@@ -82,8 +83,7 @@
     function insertar_editar_instruccion_basica() {
         var ddl_nivel_academico = $('#ddl_nivel_academico').val();
         var th_reqi_instruccion_id = $('#th_reqi_instruccion_id').val();
-
-        var id_cargo = '<?= $_id ?>';
+        var id_cargo = $('#txt_id_cargo').val();
 
         var parametros = {
             'id_nivel_academico': ddl_nivel_academico,
@@ -97,6 +97,8 @@
     }
 
     function insertar_instruccion_basica(parametros) {
+        var id_cargo = $('#txt_id_cargo').val();
+
         $.ajax({
             data: {
                 parametros: parametros
@@ -109,7 +111,7 @@
                     Swal.fire('', 'Operación realizada con éxito.', 'success');
                     $('#modal_instruccion_basica').modal('hide');
                     limpiar_campos_instruccion_basica_modal();
-                    cargar_instrucciones_basicas(<?= $_id ?>);
+                    cargar_instrucciones_basicas(id_cargo);
                 } else {
                     Swal.fire('', 'Operación fallida', 'warning');
                 }
@@ -136,6 +138,8 @@
     }
 
     function eliminar_instruccion_basica(id) {
+        var id_cargo = $('#txt_id_cargo').val();
+
         $.ajax({
             data: {
                 id: id
@@ -148,7 +152,7 @@
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
                     $('#modal_instruccion_basica').modal('hide');
                     limpiar_campos_instruccion_basica_modal();
-                    cargar_instrucciones_basicas(<?= $_id ?>);
+                    cargar_instrucciones_basicas(id_cargo);
                 }
             }
         });
@@ -179,6 +183,7 @@
     }
 </script>
 
+<input type="hidden" name="txt_id_cargo" id="txt_id_cargo" value="<?= $_id ?>">
 <div class="" id="pnl_instruccion_basica">
 
 </div>
@@ -236,10 +241,16 @@
                     </div>
                     <div class="modal-footer bg-light border-top-0 d-flex justify-content-between">
                         <div class="ms-auto">
-                            <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" onclick="limpiar_campos_instruccion_basica_modal()">Cancelar</button>
-                            <button type="button" class="btn btn-primary btn-sm px-4" id="btn_guardar_instruccion_basica" onclick="insertar_editar_instruccion_basica() ">
-                                <i class="bx bx-save"></i> Guardar
-                            </button>
+                            <?php if ($es_plaza) { ?>
+                                <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" onclick="limpiar_campos_instruccion_basica_modal()">funciona</button>
+
+                            <?php } else { ?>
+                                <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" onclick="limpiar_campos_instruccion_basica_modal()">Cancelar</button>
+                                <button type="button" class="btn btn-primary btn-sm px-4" id="btn_guardar_instruccion_basica" onclick="insertar_editar_instruccion_basica() ">
+                                    <i class="bx bx-save"></i> Guardar
+                                </button>
+                            <?php } ?>
+
                         </div>
                     </div>
                 </div>
