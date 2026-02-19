@@ -57,6 +57,7 @@ class cn_plazaC
             $ts = strtotime($val);
             return $ts ? date('Y-m-d H:i:s', $ts) : null;
         };
+        
         $toInt   = function ($v) { return ($v === '' || $v === null) ? null : (int)$v; };
         $toFloat = function ($v) { return ($v === '' || $v === null) ? null : (float)$v; };
         $toBool  = function ($v) { return ($v === 1 || $v === '1' || $v === true || $v === 'true') ? 1 : 0; };
@@ -83,7 +84,6 @@ class cn_plazaC
         ];
 
         if (empty($parametros['_id'])) {
-            $datos[] = ['campo' => 'cn_pla_fecha_creacion', 'dato' => date('Y-m-d H:i:s')];
             $id = $this->modelo->insertar_id($datos);
             return $id ? $id : 0;
         } else {

@@ -1,13 +1,14 @@
 <?php
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
-$_id = '';
-$_id_cargo = '';
-if (isset($_GET['_id'])) {
-    $_id = $_GET['_id'];
+
+//No eliminar
+$_id = ''; // Este es el id que se usa para cargo 
+
+$_id_plaza = '';
+if (isset($_GET['_id_plaza'])) {
+    $_id_plaza = $_GET['_id_plaza'];
 }
-if (isset($_GET['_id_cargo'])) {
-    $_id_cargo = $_GET['_id_cargo'];
-}
+
 
 $es_plaza = true;
 
@@ -18,8 +19,9 @@ $es_plaza = true;
 
 <script>
     $(document).ready(function() {
-        <?php if (isset($_GET['_id'])) { ?>
-            cargar_plaza(<?= $_id ?>);
+        <?php if (isset($_GET['_id_plaza'])) { ?>
+            var id_plaza = $('#txt_cn_pla_id').val();
+            cargar_plaza(id_plaza);
         <?php } ?>
 
         smartwizard_cargar_plaza();
@@ -29,10 +31,9 @@ $es_plaza = true;
             let id_cargo = $(this).val();
             $('#txt_id_cargo').val(id_cargo);
 
-            cargar_descripcion_cargo(id_cargo);
+            cargar_propiedades_cargo(id_cargo);
+            cargar_requisitos_cargo(id_cargo);
 
-            //Todo lo que tiene que ver con el cargo
-            cargar_instrucciones_basicas(id_cargo, false)
         })
     });
 
@@ -44,7 +45,19 @@ $es_plaza = true;
         cargar_select2_url('ddl_cn_pla_responsable', '../controlador/TALENTO_HUMANO/th_personasC.php?busca_persona_nomina=true');
     }
 
-    function cargar_descripcion_cargo(id_cargo) {
+    //Todo lo que tiene que ver con el cargo
+    function cargar_requisitos_cargo(id_cargo) {
+        //Requisitos intelectuales
+        cargar_aptitudes(id_cargo, false);
+        cargar_pnl_experiencia_necesaria(id_cargo, false);
+        cargar_idiomas(id_cargo, false);
+        cargar_iniciativas(id_cargo, false);
+        cargar_instrucciones_basicas(id_cargo, false);
+
+        //Requisitos fisicos
+    }
+
+    function cargar_propiedades_cargo(id_cargo) {
         $.ajax({
             data: {
                 id: id_cargo
@@ -97,18 +110,50 @@ $es_plaza = true;
 
     // ─── Wizard: navegación entre pasos ────────────────────────────────────────
     function smartwizard_cargar_plaza() {
-        var btnSiguiente = $('<button></button>').text('Siguiente').addClass('btn btn-info').on('click', function() {
-            if (valida_formulario('smartwizard_plaza')) {
-                $('#smartwizard_plaza').smartWizard("next");
-            } else {
-                Swal.fire('', 'Llene todo los campos', 'info')
-            }
-        });
+
+        var btnSiguiente = $('<button></button>')
+            .text('Siguiente')
+            .addClass('btn btn-info')
+            .on('click', function() {
+
+                var wizard = $('#smartwizard_plaza');
+                var pasoActual = wizard.smartWizard("getStepIndex");
+                var form = $('#form_plaza');
+
+                var step = wizard.find('.tab-pane').eq(pasoActual);
+                var inputs = step.find(':input');
+
+                var valido = true;
+
+                inputs.each(function() {
+                    if (!form.validate().element(this)) {
+                        valido = false;
+                    }
+                });
+
+                if (!valido) {
+                    //Swal.fire('', 'Complete los campos obligatorios', 'info');
+                    return;
+                }
+
+                // Insertar en el primer paso
+                if (pasoActual === 0) {
+
+                    if (!validarFechas() || !validarSalarios()) return;
+                    insertar_plaza();
+                    wizard.smartWizard("next");
+
+                    return; // IMPORTANTE para que no siga ejecutando nada más
+                } else {
+                    wizard.smartWizard("next");
+                }
+
+            });
+
         var btnAtras = $('<button></button>').text('Atras').addClass('btn btn-info').on('click', function() {
             $('#smartwizard_plaza').smartWizard("prev");
             return true;
         });
-
 
         $("#smartwizard_plaza").on("showStep", function(e, anchorObject, stepNumber, stepDirection, stepPosition) {
             $("#prev-btn").removeClass('disabled');
@@ -122,6 +167,7 @@ $es_plaza = true;
                 $("#next-btn").removeClass('disabled');
             }
         });
+
         // Smart Wizard
         $('#smartwizard_plaza').smartWizard({
             selected: 0,
@@ -138,27 +184,10 @@ $es_plaza = true;
         });
     }
 
-    function valida_formulario(formulario) {
-        var pasoActual = $('#' + formulario).smartWizard('getStepIndex');
-        var pasoValido = true;
-        // Verificar campos requeridos en el paso actual
-
-        $('#' + formulario + ' [data-step="' + pasoActual + '"] [required]').each(function() {
-            //console.log(this)
-            if (!this.checkValidity()) {
-                pasoValido = false;
-                num_form = pasoActual + 1;
-                $('#form-step-' + num_form).addClass('was-validated');
-                console.log()
-                return false; // Salir del bucle si se encuentra un campo no válido
-            }
-        });
-
-        return pasoValido;
-    }
-
     // ─── AJAX ──────────────────────────────────────────────────────────────────
     function insertar_plaza(parametros) {
+        parametros = ParametrosPlaza();
+
         $.ajax({
             data: {
                 parametros: parametros
@@ -170,6 +199,17 @@ $es_plaza = true;
                 if (res > 0) {
                     Swal.fire('', 'Plaza guardada con éxito.', 'success').then(function() {
                         $('#txt_cn_pla_id').val(res);
+
+                        <?php if ($_id_plaza == '') { ?>
+                            let nueva_Url = `../vista/inicio.php?mod=1011&acc=cn_registrar_plaza&_id_plaza=${res}#step-2`;
+                            // Cambia la URL sin recargar
+                            window.history.replaceState(null, '', nueva_Url);
+
+                            // Recarga real solo una vez
+                            location.reload();
+                            return;
+                        <?php } ?>
+
                     });
                 } else if (res == -2) {
                     Swal.fire('', 'Ya existe una plaza con ese título.', 'warning');
@@ -214,21 +254,29 @@ $es_plaza = true;
                     text: r.descripcion_cargo,
                     selected: true
                 }));
+
+                // ── Para cargar las propiedades del cargo ───────────────
+                cargar_requisitos_cargo(r.id_cargo);
+                // ────────────────────────────────────────────────────────
+
                 $('#ddl_th_dep_id').append($('<option>', {
                     value: r.th_dep_id,
                     text: r.descripcion_departamento,
                     selected: true
                 }));
+
                 $('#ddl_id_nomina').append($('<option>', {
                     value: r.id_nomina,
                     text: r.descripcion_nomina,
                     selected: true
                 }));
+
                 $('#ddl_id_tipo_seleccion').append($('<option>', {
                     value: r.id_tipo_seleccion,
                     text: r.descripcion_tipo_seleccion,
                     selected: true
                 }));
+
                 $('#ddl_cn_pla_responsable').append($('<option>', {
                     value: r.th_per_id_responsable,
                     text: r.per_cedula + ' - ' + r.per_nombre_completo,
@@ -363,40 +411,18 @@ $es_plaza = true;
     function validarSalarios() {
         return validarSalarioMin() && validarSalarioMax();
     }
-
-    function guardar_plaza() {
-        if (!$('#form_plaza').valid()) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validación',
-                text: 'Complete todos los campos requeridos.'
-            });
-            return;
-        }
-        if (!validarFechas() || !validarSalarios()) return;
-        Swal.fire({
-                title: '¿Guardar plaza?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, guardar',
-                cancelButtonText: 'Cancelar'
-            })
-            .then((r) => {
-                if (r.isConfirmed) insertar_plaza(ParametrosPlaza());
-            });
-    }
 </script>
 
 <div class="page-wrapper">
     <div class="page-content">
 
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Recursos Humanos</div>
+            <div class="breadcrumb-title pe-3">Plaza</div>
             <div class="ps-3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Proceso de Selección</li>
+                        <li class="breadcrumb-item active" aria-current="page">Proceso</li>
                     </ol>
                 </nav>
             </div>
@@ -407,47 +433,62 @@ $es_plaza = true;
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
 
-                        <div class="row mb-3">
-                            <div class="col-6">
-                                <div class="card-title d-flex align-items-center">
-                                    <i class="bx bxs-briefcase me-1 font-22 text-primary"></i>
-                                    <h5 class="mb-0 text-primary">Proceso de Selección de Personal</h5>
+                        <div class="card-title d-flex align-items-center">
+
+                            <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
+                            </div>
+                            <h5 class="mb-0 text-primary">
+                                <?php
+                                if ($_id_plaza == '') {
+                                    echo 'Registrar Plaza';
+                                } else {
+                                    echo 'Modificar Plaza';
+                                }
+                                ?>
+                            </h5>
+
+                            <div class="row m-2">
+                                <div class="col-sm-12">
+                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=cn_plazas" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                                 </div>
                             </div>
                         </div>
 
+                        <hr>
+
                         <div id="smartwizard_plaza">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#step-1"> <strong>Step 1</strong>
+                                    <a class="nav-link" href="#step-1"> <strong>Paso 1</strong>
+                                        <br>Plaza</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#step-2"> <strong>Paso 2</strong>
+                                        <br>Requisitos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#step-3"> <strong>Paso 3</strong>
                                         <br>This is step description</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#step-2"> <strong>Step 2</strong>
-                                        <br>This is step description</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#step-3"> <strong>Step 3</strong>
-                                        <br>This is step description</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#step-4"> <strong>Step 4</strong>
+                                    <a class="nav-link" href="#step-4"> <strong>Paso 4</strong>
                                         <br>This is step description</a>
                                 </li>
                             </ul>
                             <div class="tab-content">
-                                <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
+                                <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1" data-step="0">
+
 
                                     <?php include_once('../vista/TALENTO_HUMANO/CONTRATACION/PLAZAS/WIZART_REGISTRAR_PLAZA/plaza_paso1.php'); ?>
 
                                 </div>
-                                <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
+                                <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2" data-step="2">
 
                                     <?php include_once('../vista/TALENTO_HUMANO/CARGOS/seccion_aspectos_extrinsecos.php'); ?>
 
                                 </div>
-                                <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
-                                <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
+                                <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3" data-step="3">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
+                                <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4" data-step="4">
                                     <h3>Step 4 Content</h3>
                                     Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
                                 </div>

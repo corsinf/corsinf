@@ -1,23 +1,23 @@
   <div class="container-fluid">
       <form id="form_plaza">
-          <input type="hidden" id="txt_cn_pla_id" name="txt_cn_pla_id" value="" />
+          <input type="hidden" id="txt_cn_pla_id" name="txt_cn_pla_id" value="<?= $_id_plaza ?>" />
 
           <div class="row pt-3 mb-2">
               <div class="col-md-4">
                   <label for="txt_cn_pla_titulo" class="form-label">Título de la Plaza </label>
                   <input type="text" class="form-control form-control-sm"
                       id="txt_cn_pla_titulo" name="txt_cn_pla_titulo"
-                      maxlength="150" autocomplete="off" />
+                      maxlength="150" autocomplete="off" required />
               </div>
               <div class="col-md-4">
                   <label for="ddl_cargo" class="form-label">Cargo </label>
-                  <select class="form-select form-select-sm select2-validation" id="ddl_cargo" name="ddl_cargo">
+                  <select class="form-select form-select-sm select2-validation" id="ddl_cargo" name="ddl_cargo" required>
                       <option value="" selected hidden>-- Seleccione --</option>
                   </select>
               </div>
               <div class="col-md-4">
                   <label for="ddl_th_dep_id" class="form-label">Departamento </label>
-                  <select class="form-select form-select-sm select2-validation" id="ddl_th_dep_id" name="ddl_th_dep_id">
+                  <select class="form-select form-select-sm select2-validation" id="ddl_th_dep_id" name="ddl_th_dep_id" required>
                       <option value="" selected hidden>-- Seleccione --</option>
                   </select>
               </div>
@@ -28,7 +28,7 @@
                   <label for="txt_cn_pla_descripcion" class="form-label">Descripción del Puesto </label>
                   <textarea class="form-control form-control-sm"
                       id="txt_cn_pla_descripcion" name="txt_cn_pla_descripcion"
-                      rows="3" placeholder="Describa responsabilidades y funciones..."></textarea>
+                      rows="3" placeholder="Describa responsabilidades y funciones..." required></textarea>
                   <small class="text-muted">Visible para postulantes</small>
               </div>
           </div>
