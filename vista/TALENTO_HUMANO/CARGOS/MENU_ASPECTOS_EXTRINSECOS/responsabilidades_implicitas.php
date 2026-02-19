@@ -1,17 +1,21 @@
-<div class="container-fluid">
-    <div class="mb-5">
-        <div class="row mb-3">
-            <div class="col-6 d-flex align-items-center">
-                <h4><i class="bx bx-list-check me-2"></i>Responsabilidades Implícitas</h4>
-            </div>
-            <div class="col-6 d-flex justify-content-end">
-                <a href="#" class="text-success icon-hover d-flex align-items-center"
-                    data-bs-toggle="modal" data-bs-target="#modal_responsabilidad">
-                    <i class='bx bx-plus-circle bx-sm me-1'></i>
-                    <span>Agregar</span>
-                </a>
-            </div>
-            <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/RESPONSABILIDADES_IMPLICITAS/resposabilidades_implicitas.php'); ?>
+<div class="mb-4">
+    <div class="d-flex justify-content-between align-items-end pb-2 mb-3">
+        <div class="d-flex align-items-center">
+            <h5 class="mb-0 fw-bold text-dark">
+                <i class="bx bx-list-check me-2 text-primary"></i>
+                Responsabilidades Implícitas
+            </h5>
         </div>
+        <div>
+            <a href="#" class="btn btn-outline-success btn-xs d-flex align-items-center fw-semibold px-3"
+                data-bs-toggle="modal" data-bs-target="#modal_responsabilidad">
+                <i class='bx bx-plus-circle me-1'></i>
+                Agregar
+            </a>
+        </div>
+    </div>
+
+    <div class="px-1">
+        <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/RESPONSABILIDADES_IMPLICITAS/responsabilidades_implicitas.php'); ?>
     </div>
 </div>

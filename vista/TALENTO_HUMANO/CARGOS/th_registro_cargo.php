@@ -299,7 +299,7 @@ if (isset($_GET['_id'])) {
                                                     <button class="nav-link py-3 px-3 border shadow-sm transition-all" data-bs-toggle="pill" data-bs-target="#tab_responsabilidades_implicitas" type="button" role="tab">
                                                         <div class="d-flex align-items-center">
                                                             <i class="bx bx-list-check me-3 fs-5"></i>
-                                                            <span>Resp. Implícitas</span>
+                                                            <span>Responsabilidades</span>
                                                         </div>
                                                     </button>
 

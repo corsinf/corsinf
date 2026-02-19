@@ -157,7 +157,7 @@
                 <div class="modal-body">
                     <div class="row g-3 mb-3">
                         <div class="col-md-12">
-                            <label for="ddl_req_res_det" class="form-label fw-semibold fs-7">Responsabilidad</label>
+                            <label for="ddl_req_res_det" class="form-label fw-semibold fs-7">Responsabilidad </label>
                             <select class="form-select select2-validation" id="ddl_req_res_det" name="ddl_req_res_det" required style="width: 100%;">
                                 <option selected value="">-- Seleccione una responsabilidad --</option>
                             </select>

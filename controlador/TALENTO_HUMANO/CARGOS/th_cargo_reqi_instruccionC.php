@@ -43,7 +43,7 @@ class  th_cargo_reqi_instruccionC
         $this->modelo = new th_cargo_reqi_instruccionM();
     }
 
-    function listar_modal($id = '', $button_delete = false)
+    function listar_modal($id = '', $button_delete = true)
     {
         $datos = [];
         if ($id !== '') {

@@ -31,6 +31,8 @@ if (isset($_GET['buscar_riesgos'])) {
     exit;
 }
 
+
+
 class th_cargo_reqct_riesgosC
 {
     private $modelo;
@@ -40,7 +42,7 @@ class th_cargo_reqct_riesgosC
         $this->modelo = new th_cargo_reqct_riesgosM();
     }
 
-    function listar_modal($id = '')
+    function listar_modal($id = '', $button_delete = true)
     {
         $datos = [];
         if ($id !== '') {
@@ -49,35 +51,61 @@ class th_cargo_reqct_riesgosC
 
         if (empty($datos)) {
             return <<<HTML
-            <div class="d-flex align-items-center bg-light border-start border-secondary border-3 p-2 shadow-sm rounded-2">
-              <i class='bx bx-info-circle me-2 text-secondary' style='font-size: 20px;'></i>
-                <div class="lh-1">
-                    <div class="text-dark fw-bold small">Sin riesgos registrados</div>
-                    <div class="text-muted" style="font-size: 0.75rem;">No se han definido riesgos para este cargo.</div>
-                </div>
-            </div>
-            HTML;
+                        <div class="d-flex align-items-center bg-light border-start border-secondary border-3 p-2 shadow-sm rounded-2">
+                            <i class='bx bx-info-circle me-2 text-secondary' style='font-size: 20px;'></i>
+                            <div class="lh-1">
+                                <div class="text-dark fw-bold small">Sin riesgos registrados</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">No se han definido riesgos para este cargo.</div>
+                            </div>
+                        </div>
+                    HTML;
         }
 
-        $texto = '<ul class="list-unstyled mb-0">';
+        $texto = '<div class="border rounded bg-white shadow-sm overflow-hidden">';
+        $texto .= '<table class="table table-hover table-sm mb-0 align-middle">';
+        $texto .= '<tbody>';
+
         foreach ($datos as $value) {
             $id_reg      = $value['_id'];
             $descripcion = $value['req_riesgo_descripcion'];
+
+            $button = '';
+            if ($button_delete) {
+                $button = <<<HTML
+                                <td class="text-end pe-2 py-1" style="width: 40px;">
+                                    <button type="button" 
+                                            class="btn btn-outline-danger btn-xss py-0 px-2" 
+                                            onclick="delete_datos_riesgo('{$id_reg}')"
+                                            style="transition: all 0.2s;">
+                                        <i class="bx bx-trash fs-8 me-0 icon-center-adjust"></i>
+                                    </button>
+                                </td>
+                            HTML;
+            }
+
             $texto .= <<<HTML
-            <li class="py-2 border-bottom">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
-                      <i class='bx bx-check-circle text-success me-2' style="font-size: 18px;"></i>
-                        <span class="text-dark" style="font-size: 0.9rem;">{$descripcion}</span>
-                    </div>
-                    <button type="button" class="btn btn-danger btn-sm py-0 px-2" onclick="delete_datos_riesgo('{$id_reg}')" style="font-size: 0.75rem;">
-                        <i class="bx bx-trash" style="font-size: 14px;"></i>
-                    </button>
-                </div>
-            </li>
-            HTML;
+                            <tr class="position-relative" style="transition: all 0.2s;">
+                                <td class="p-0" style="width: 3px; background-color: #198754; opacity: 0.6;"></td>
+                                
+                                <td class="ps-2 py-1" style="width: 30px;">
+                                    <div class="d-flex align-items-center justify-content-center bg-light rounded text-success" style="width: 22px; height: 22px;">
+                                        <i class='bx bx-check' style="font-size: 14px;"></i>
+                                    </div>
+                                </td>
+                                
+                                <td class="py-1">
+                                    <div class="text-dark fw-medium" style="font-size: 0.8rem; line-height: 1.2;">
+                                        {$descripcion}
+                                    </div>
+                                </td>
+                                
+                                {$button}
+
+                            </tr>
+                        HTML;
         }
-        $texto .= '</ul>';
+
+        $texto .= '</tbody></table></div>';
 
         return $texto;
     }

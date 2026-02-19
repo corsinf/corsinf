@@ -89,7 +89,6 @@ class th_cargo_reqi_experienciaC
                             HTML;
             }
 
-
             $texto .= <<<HTML
                             <tr class="position-relative" style="transition: all 0.2s;">
                                 <td class="p-0" style="width: 3px; background-color: #198754; opacity: 0.6;"></td>
