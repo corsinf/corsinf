@@ -15,18 +15,27 @@
                 url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_aptitudC.php?buscar_habilidades_tecnicas=true',
                 dataType: 'json',
                 data: function(params) {
-                    return { q: params.term, car_id: car_id };
+                    return {
+                        q: params.term,
+                        car_id: car_id
+                    };
                 },
                 processResults: function(data) {
-                    return { results: data };
+                    return {
+                        results: data
+                    };
                 }
             },
             minimumInputLength: 0,
             allowClear: true,
             placeholder: "-- SELECCIONE --",
             language: {
-                noResults: function() { return "No hay opciones disponibles"; },
-                searching: function() { return "Buscando..."; }
+                noResults: function() {
+                    return "No hay opciones disponibles";
+                },
+                searching: function() {
+                    return "Buscando...";
+                }
             }
         });
 
@@ -34,24 +43,34 @@
         if ($('#ddl_habilidades_blandas').hasClass("select2-hidden-accessible")) {
             $('#ddl_habilidades_blandas').select2('destroy');
         }
+        
         $('#ddl_habilidades_blandas').select2({
             dropdownParent: $('#modal_agregar_aptitud'),
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_aptitudC.php?buscar_habilidades_blandas=true',
                 dataType: 'json',
                 data: function(params) {
-                    return { q: params.term, car_id: car_id };
+                    return {
+                        q: params.term,
+                        car_id: car_id
+                    };
                 },
                 processResults: function(data) {
-                    return { results: data };
+                    return {
+                        results: data
+                    };
                 }
             },
             minimumInputLength: 0,
             allowClear: true,
             placeholder: "-- SELECCIONE --",
             language: {
-                noResults: function() { return "No hay opciones disponibles"; },
-                searching: function() { return "Buscando..."; }
+                noResults: function() {
+                    return "No hay opciones disponibles";
+                },
+                searching: function() {
+                    return "Buscando...";
+                }
             }
         });
     }
@@ -60,7 +79,9 @@
         $.ajax({
             url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_aptitudC.php?listar_modal=true',
             type: 'post',
-            data: { id: id },
+            data: {
+                id: id
+            },
             dataType: 'json',
             success: function(response) {
                 $('#pnl_aptitudes').hide().html(response).fadeIn(400);
@@ -73,15 +94,17 @@
         $.ajax({
             url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_aptitudC.php?listar=true',
             type: 'post',
-            data: { aptitud_id: id },
+            data: {
+                aptitud_id: id
+            },
             dataType: 'json',
             success: function(response) {
                 if (response && response.length > 0) {
                     var item = response[0];
                     // th_tiph_id: 1 = técnica, 2 = blanda
-                    var ddlTarget = (item.th_tiph_id == 1)
-                        ? '#ddl_habilidades_tecnicas'
-                        : '#ddl_habilidades_blandas';
+                    var ddlTarget = (item.th_tiph_id == 1) ?
+                        '#ddl_habilidades_tecnicas' :
+                        '#ddl_habilidades_blandas';
 
                     $(ddlTarget).append($('<option>', {
                         value: item.th_hab_id,
@@ -97,7 +120,7 @@
 
     function insertar_editar_aptitud() {
         var tecnica = $('#ddl_habilidades_tecnicas').val();
-        var blanda  = $('#ddl_habilidades_blandas').val();
+        var blanda = $('#ddl_habilidades_blandas').val();
 
         // Validación: al menos uno debe estar seleccionado
         if (!tecnica && !blanda) {
@@ -106,10 +129,10 @@
         }
 
         var parametros = {
-            'th_hab_id_tecnica': tecnica  || '',
-            'th_hab_id_blanda':  blanda   || '',
-            'id_cargo':          '<?= $_id ?>',
-            '_id':               $('#th_reqa_experiencia_id').val()
+            'th_hab_id_tecnica': tecnica || '',
+            'th_hab_id_blanda': blanda || '',
+            'id_cargo': '<?= $_id ?>',
+            '_id': $('#th_reqa_experiencia_id').val()
         };
 
         insertar_aptitud(parametros);
@@ -117,7 +140,9 @@
 
     function insertar_aptitud(parametros) {
         $.ajax({
-            data: { parametros: parametros },
+            data: {
+                parametros: parametros
+            },
             url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_aptitudC.php?insertar_editar=true',
             type: 'post',
             dataType: 'json',
@@ -145,13 +170,17 @@
             confirmButtonText: 'Sí',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
-            if (result.value) { eliminar_aptitud(id); }
+            if (result.value) {
+                eliminar_aptitud(id);
+            }
         });
     }
 
     function eliminar_aptitud(id) {
         $.ajax({
-            data: { id: id },
+            data: {
+                id: id
+            },
             url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_aptitudC.php?eliminar=true',
             type: 'post',
             dataType: 'json',

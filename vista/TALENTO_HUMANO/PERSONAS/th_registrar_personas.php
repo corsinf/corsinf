@@ -1057,31 +1057,5 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
     });
 </script>
 
-
-<style>
-    /* CSS para que se vea profesional */
-    .nav-pills .nav-link {
-        color: #4b5563;
-        background-color: #ffffff;
-        border: 1px solid #e5e7eb !important;
-        transition: all 0.2s ease;
-        text-align: left;
-    }
-
-    .nav-pills .nav-link:hover {
-        background-color: #f3f4f6;
-        color: #2563eb;
-        border-color: #2563eb !important;
-    }
-
-    .nav-pills .nav-link.active {
-        background-color: #2563eb !important;
-        color: #ffffff !important;
-        border-color: #2563eb !important;
-        font-weight: 600;
-    }
-
-    .bg-light {
-        background-color: #f9fafb !important;
-    }
-</style>
+<!-- Para los navs del menu -->
+<link rel="stylesheet" href="../assets/css/css-navs-menus.css">

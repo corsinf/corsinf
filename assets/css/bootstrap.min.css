@@ -9018,6 +9018,10 @@ fieldset:disabled .btn {
     font-size: 0.85rem !important
 }
 
+.fs-8 {
+    font-size: 0.79rem !important
+}
+
 .fst-italic {
     font-style: italic !important
 }

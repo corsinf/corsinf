@@ -14,7 +14,6 @@ if (isset($_GET['listar_modal'])) {
     echo json_encode($controlador->listar_modal($_POST['id']));
 }
 
-
 if (isset($_GET['insertar_editar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
@@ -22,6 +21,8 @@ if (isset($_GET['insertar_editar'])) {
 if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
+
+
 
 class th_cargo_reqi_experienciaC
 {
@@ -43,7 +44,8 @@ class th_cargo_reqi_experienciaC
         }
         return $datos;
     }
-    function listar_modal($id = '')
+
+    function listar_modal($id = '', $button_delete = true)
     {
         $datos = $this->modelo->where('id_cargo', $id)->where('th_reqe_estado', 1)->listar();
 
@@ -52,42 +54,65 @@ class th_cargo_reqi_experienciaC
         if (empty($datos)) {
             return [
                 'html' => <<<HTML
-            <div class="d-flex align-items-center bg-light border-start border-secondary border-3 p-2 shadow-sm rounded-2">
-                <i class='bx bx-info-circle me-2 text-secondary' style='font-size: 20px;'></i>
-                <div class="lh-1">
-                    <div class="text-dark fw-bold small">Sin experiencia registrada</div>
-                    <div class="text-muted" style="font-size: 0.75rem;">No se han definido años de experiencia.</div>
-                </div>
-            </div>
-HTML,
+                                <div class="d-flex align-items-center bg-light border-start border-secondary border-3 p-2 shadow-sm rounded-2">
+                                    <i class='bx bx-info-circle me-2 text-secondary' style='font-size: 20px;'></i>
+                                    <div class="lh-1">
+                                        <div class="text-dark fw-bold small">Sin experiencia registrada</div>
+                                        <div class="text-muted" style="font-size: 0.75rem;">No se han definido años de experiencia.</div>
+                                    </div>
+                                </div>
+                            HTML,
                 'tiene_registros' => false
             ];
         }
 
-        // Iniciamos la lista sin estilos de bullet por defecto para controlarlos con Boxicons
-        $texto = '<ul class="list-unstyled mb-0">';
+        $texto = '<div class="border rounded bg-white shadow-sm overflow-hidden">';
+        $texto .= '<table class="table table-hover table-sm mb-0 align-middle">';
+        $texto .= '<tbody>';
 
         foreach ($datos as $value) {
             $id_reg = $value['_id'];
             $anios = $value['th_reqe_anios'];
             $label_anios = ($anios == 1) ? 'AÑO' : 'AÑOS';
 
+            $button = '';
+            if ($button_delete) {
+                $button = <<<HTML
+                                <td class="text-end pe-2 py-1" style="width: 40px;">
+                                    <button type="button" 
+                                            class="btn btn-outline-danger btn-xss py-0 px-2" 
+                                            onclick="delete_datos_experiencia_necesaria('{$id_reg}')"
+                                            style="transition: all 0.2s;">
+                                        <i class="bx bx-trash fs-8 me-0 icon-center-adjust"></i>
+                                    </button>
+                                </td>
+                            HTML;
+            }
+
+
             $texto .= <<<HTML
-       <li class="py-2 border-bottom">
-    <div class="d-flex align-items-center justify-content-between">
-        <div class="d-flex align-items-center">
-            <i class='bx bx-check-circle text-success me-2' style="font-size: 18px;"></i>
-            <span class="text-dark" style="font-size: 0.9rem;">{$anios} {$label_anios}</span>
-        </div>
-        <button type="button" class="btn btn-danger btn-sm py-0 px-2" onclick="delete_datos_experiencia_necesaria('{$id_reg}')" style="font-size: 0.75rem;">
-            <i class="bx bx-trash" style="font-size: 14px;"></i>
-        </button>
-    </div>
-</li>
-HTML;
+                            <tr class="position-relative" style="transition: all 0.2s;">
+                                <td class="p-0" style="width: 3px; background-color: #198754; opacity: 0.6;"></td>
+                                
+                                <td class="ps-2 py-1" style="width: 30px;">
+                                    <div class="d-flex align-items-center justify-content-center bg-light rounded text-success" style="width: 22px; height: 22px;">
+                                        <i class='bx bx-check' style="font-size: 14px;"></i>
+                                    </div>
+                                </td>
+                                
+                                <td class="py-1">
+                                    <div class="text-dark fw-medium" style="font-size: 0.8rem; line-height: 1.2;">
+                                        {$anios} {$label_anios}
+                                    </div>
+                                </td>
+
+                                {$button}
+                            
+                            </tr>
+                        HTML;
         }
 
-        $texto .= '</ul>';
+        $texto .= '</tbody></table></div>';
 
         return [
             'html' => $texto,

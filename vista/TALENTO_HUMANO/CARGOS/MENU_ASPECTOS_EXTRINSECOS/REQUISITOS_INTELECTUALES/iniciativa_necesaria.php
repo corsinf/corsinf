@@ -55,7 +55,7 @@
 
                 if (response.total > 0) {
                     btnAgregar.addClass('d-none').removeClass('d-flex');
-                    
+
                 } else {
                     btnAgregar.removeClass('d-none').addClass('d-flex');
                 }

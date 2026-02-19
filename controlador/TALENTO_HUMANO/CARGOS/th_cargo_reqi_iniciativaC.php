@@ -32,6 +32,8 @@ if (isset($_GET['buscar_iniciativas'])) {
     exit;
 }
 
+
+
 class th_cargo_reqi_iniciativaC
 {
     private $modelo;
@@ -41,7 +43,7 @@ class th_cargo_reqi_iniciativaC
         $this->modelo = new th_cargo_reqi_iniciativaM();
     }
 
-    function listar_modal($id = '')
+    function listar_modal($id = '', $button_delete = true)
     {
         $datos = [];
         if ($id !== '') {
@@ -53,38 +55,64 @@ class th_cargo_reqi_iniciativaC
         if (empty($datos)) {
             return [
                 'html' => <<<HTML
-            <div class="d-flex align-items-center py-2 ps-2 border-start border-2 border-secondary bg-light-subtle rounded-1">
-                <i class='bx bx-info-circle me-2 text-secondary' style="font-size: 16px;"></i>
-                <div class="lh-1">
-                    <div class="text-dark fw-bold" style="font-size: 0.8rem;">Sin iniciativas registradas</div>
-                </div>
-            </div>
-HTML,
+                                <div class="d-flex align-items-center bg-light border-start border-secondary border-3 p-2 shadow-sm rounded-2">
+                                    <i class='bx bx-info-circle me-2 text-secondary' style='font-size: 20px;'></i>
+                                    <div class="lh-1">
+                                        <div class="text-dark fw-bold small">Sin iniciativas registradas</div>
+                                        <div class="text-muted" style="font-size: 0.75rem;">No se han definido iniciativas requeridas.</div>
+                                    </div>
+                                </div>
+                            HTML,
+
                 'total' => $total_registros
             ];
         }
+        $texto = '<div class="border rounded bg-white shadow-sm overflow-hidden">';
+        $texto .= '<table class="table table-hover table-sm mb-0 align-middle">';
+        $texto .= '<tbody>';
 
-        $texto = '<ul class="list-unstyled mb-0">';
         foreach ($datos as $value) {
             $id_cargo = $value['id_cargo'];
             $id_iniciativa = $value['id_req_iniciativa'];
             $descripcion = $value['iniciativa_descripcion'];
 
+            $button = '';
+            if ($button_delete) {
+                $button = <<<HTML
+                                <td class="text-end pe-2 py-1" style="width: 40px;">
+                                    <button type="button" 
+                                            class="btn btn-outline-danger btn-xss py-0 px-2" 
+                                            onclick="delete_datos_iniciativa('{$id_cargo}', '{$id_iniciativa}')"
+                                            style="transition: all 0.2s;">
+                                        <i class="bx bx-trash fs-8 me-0 icon-center-adjust"></i>
+                                    </button>
+                                </td>
+                            HTML;
+            }
+
             $texto .= <<<HTML
-        <li class="py-2 border-bottom">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center">
-                   <i class='bx bx-check-circle text-success me-2' style="font-size: 18px;"></i>
-                    <span class="text-dark" style="font-size: 0.9rem;">{$descripcion}</span>
-                </div>
-                <button type="button" class="btn btn-danger btn-sm py-0 px-2" onclick="delete_datos_iniciativa('{$id_cargo}', '{$id_iniciativa}')" style="font-size: 0.75rem;">
-                    <i class="bx bx-trash" style="font-size: 14px;"></i>
-                </button>
-            </div>
-        </li>
-HTML;
+                            <tr class="position-relative" style="transition: all 0.2s;">
+                                <td class="p-0" style="width: 3px; background-color: #198754; opacity: 0.6;"></td>
+                                
+                                <td class="ps-2 py-1" style="width: 30px;">
+                                    <div class="d-flex align-items-center justify-content-center bg-light rounded text-success" style="width: 22px; height: 22px;">
+                                        <i class='bx bx-check' style="font-size: 14px;"></i>
+                                    </div>
+                                </td>
+                                
+                                <td class="py-1">
+                                    <div class="text-dark fw-medium" style="font-size: 0.8rem; line-height: 1.2;">
+                                        {$descripcion}
+                                    </div>
+                                </td>
+                                
+                                {$button}
+
+                            </tr>
+                    HTML;
         }
-        $texto .= '</ul>';
+
+        $texto .= '</tbody></table></div>';
 
         return [
             'html' => $texto,
