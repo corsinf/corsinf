@@ -1,0 +1,171 @@
+<?php
+date_default_timezone_set('America/Guayaquil');
+
+require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/PLAZAS/th_plaza_reqr_responsabilidadesM.php');
+
+$controlador = new th_plaza_reqr_responsabilidadesC();
+
+if (isset($_GET['listar'])) {
+    echo json_encode($controlador->listar($_POST['id'] ?? '', $_POST['reqr_id'] ?? ''));
+}
+
+if (isset($_GET['listar_modal'])) {
+    echo json_encode($controlador->listar_modal($_POST['id']));
+}
+
+if (isset($_GET['insertar_editar'])) {
+    echo json_encode($controlador->insertar_editar($_POST['parametros']));
+}
+
+if (isset($_GET['eliminar'])) {
+    echo json_encode($controlador->eliminar($_POST['id']));
+}
+
+if (isset($_GET['buscar_responsabilidades_detalle'])) {
+    $parametros = array(
+        'pla_id' => isset($_GET['pla_id']) ? $_GET['pla_id'] : 0,
+        'query'  => isset($_GET['q'])      ? $_GET['q']      : ''
+    );
+    $datos = $controlador->buscar_detalles_no_asignados($parametros);
+    echo json_encode($datos);
+    exit;
+}
+
+
+
+class th_plaza_reqr_responsabilidadesC
+{
+    private $modelo;
+
+    function __construct()
+    {
+        $this->modelo = new th_plaza_reqr_responsabilidadesM();
+    }
+
+    function listar_modal($id = '', $button_delete = true)
+    {
+        $datos = [];
+        if ($id !== '') {
+            $datos = $this->modelo->listar_plaza_responsabilidades(null, $id);
+        }
+
+        if (empty($datos)) {
+            return <<<HTML
+                        <div class="d-flex align-items-center bg-light border-start border-secondary border-3 p-2 shadow-sm rounded-2">
+                            <i class='bx bx-info-circle me-2 text-secondary' style='font-size: 20px;'></i>
+                            <div class="lh-1">
+                                <div class="text-dark fw-bold small">Sin responsabilidades registradas</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">No se han definido responsabilidades para esta plaza.</div>
+                            </div>
+                        </div>
+                    HTML;
+        }
+
+        $texto = '<div class="border rounded bg-white shadow-sm overflow-hidden">';
+        $texto .= '<table class="table table-hover table-sm mb-0 align-middle">';
+        $texto .= '<tbody>';
+
+        foreach ($datos as $value) {
+            $id_reg      = $value['_id'];
+            $descripcion = $value['req_res_det_descripcion'];
+
+            $button = '';
+            if ($button_delete) {
+                $button = <<<HTML
+                                <td class="text-end pe-2 py-1" style="width: 40px;">
+                                    <button type="button" 
+                                            class="btn btn-outline-danger btn-xss py-0 px-2" 
+                                            onclick="delete_datos_responsabilidad('{$id_reg}')"
+                                            style="transition: all 0.2s;">
+                                        <i class="bx bx-trash fs-8 me-0 icon-center-adjust"></i>
+                                    </button>
+                                </td>
+                            HTML;
+            }
+
+            $texto .= <<<HTML
+                            <tr class="position-relative" style="transition: all 0.2; cursor: default;">
+                                <td class="p-0" style="width: 3px; background-color: #198754; opacity: 0.6;"></td>
+                                
+                                <td class="ps-2 py-1" style="width: 30px;">
+                                    <div class="d-flex align-items-center justify-content-center bg-light rounded text-success" style="width: 22px; height: 22px;">
+                                        <i class='bx bx-check' style="font-size: 14px;"></i>
+                                    </div>
+                                </td>
+                                
+                                <td class="py-1">
+                                    <div class="text-dark fw-medium" style="font-size: 0.8rem; line-height: 1.3;">
+                                        {$descripcion}
+                                    </div>
+                                </td>
+                                
+                                {$button}
+
+                            </tr>
+                        HTML;
+        }
+
+        $texto .= '</tbody></table></div>';
+
+        return $texto;
+    }
+
+    function listar($id = '', $reqr_id = '')
+    {
+        if ($id !== '') {
+            $datos = $this->modelo->listar_plaza_responsabilidades(null, $id);
+        }
+        if ($reqr_id !== '') {
+            $datos = $this->modelo->listar_plaza_responsabilidades($reqr_id);
+        }
+        return $datos;
+    }
+
+    function insertar_editar($parametros)
+    {
+        $id = $parametros['_id'];
+        $datos = array(
+            array('campo' => 'cn_pla_id',              'dato' => $parametros['cn_pla_id']),
+            array('campo' => 'id_req_res_det',          'dato' => $parametros['id_req_res_det']),
+            array('campo' => 'cn_reqr_estado',          'dato' => 1),
+            array('campo' => 'cn_reqr_fecha_creacion',  'dato' => date('Y-m-d H:i:s')),
+        );
+        if ($id == '') {
+            $datos = $this->modelo->insertar($datos);
+        } else {
+            $datos[] = ['campo' => 'cn_reqr_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')];
+            $where[0]['campo'] = 'cn_reqr_id';
+            $where[0]['dato']  = $id;
+            $datos = $this->modelo->editar($datos, $where);
+        }
+        return $datos;
+    }
+
+    function eliminar($id)
+    {
+        $datos = array(
+            array('campo' => 'cn_reqr_id', 'dato' => $id),
+        );
+        return $this->modelo->eliminar($datos);
+    }
+
+    public function buscar_detalles_no_asignados($parametros)
+    {
+        $lista  = [];
+        $pla_id = isset($parametros['pla_id']) ? (int)$parametros['pla_id'] : 0;
+        $query  = isset($parametros['query'])  ? trim($parametros['query'])  : '';
+
+        if ($pla_id <= 0) {
+            return $lista;
+        }
+
+        $datos = $this->modelo->listar_detalles_no_asignados($pla_id, $query);
+        foreach ($datos as $item) {
+            $lista[] = [
+                'id'   => $item['id_req_res_det'],
+                'text' => trim($item['descripcion'])
+            ];
+        }
+        return $lista;
+    }
+}
