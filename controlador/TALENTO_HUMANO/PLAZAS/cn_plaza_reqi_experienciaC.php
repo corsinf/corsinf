@@ -1,9 +1,9 @@
 <?php
 date_default_timezone_set('America/Guayaquil');
 
-require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/PLAZAS/th_plaza_reqi_experienciaM.php');
+require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/PLAZAS/cn_plaza_reqi_experienciaM.php');
 
-$controlador = new th_plaza_reqi_experienciaC();
+$controlador = new cn_plaza_reqi_experienciaC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? '', $_POST['pla_id'] ?? ''));
@@ -24,13 +24,13 @@ if (isset($_GET['eliminar'])) {
 
 
 
-class th_plaza_reqi_experienciaC
+class cn_plaza_reqi_experienciaC
 {
     private $modelo;
 
     function __construct()
     {
-        $this->modelo = new th_plaza_reqi_experienciaM();
+        $this->modelo = new cn_plaza_reqi_experienciaM();
     }
 
     function listar($id = '', $pla_id = '')
@@ -124,7 +124,7 @@ class th_plaza_reqi_experienciaC
         $id = $parametros['_id'];
         $datos = array(
             array('campo' => 'cn_pla_id',      'dato' => $parametros['cn_pla_id']),
-            array('campo' => 'cn_reqe_anios',   'dato' => $parametros['cn_reqe_anios']),
+            array('campo' => 'cn_reqe_anios',   'dato' => $parametros['th_reqe_anios']),
             array('campo' => 'cn_reqe_estado',  'dato' => 1),
         );
 
