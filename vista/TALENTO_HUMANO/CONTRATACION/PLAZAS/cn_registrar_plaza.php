@@ -236,7 +236,7 @@ $es_plaza = true;
                 var r = response[0];
 
                 $('#txt_cn_pla_id').val(r._id);
-                $('#txt_id_cargo').val(r.id_cargo);
+                $('input[name="txt_id_cargo"]').val(r.id_cargo);
                 $('#txt_cn_pla_titulo').val(r.cn_pla_titulo);
                 $('#txt_cn_pla_descripcion').val(r.cn_pla_descripcion);
                 $('#txt_cn_pla_num_vacantes').val(r.cn_pla_num_vacantes);
