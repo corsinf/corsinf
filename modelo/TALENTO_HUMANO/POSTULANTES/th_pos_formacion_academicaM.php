@@ -23,27 +23,31 @@ class th_pos_formacion_academicaM extends BaseModel
 
     public function listar_formacion_academica_postulante($th_pos_id = null, $th_fora_id = null)
     {
-        $sql = "
-    SELECT
-        fa.th_fora_id AS _id,
-        fa.th_pos_id,
-        fa.th_fora_titulo_obtenido,
-        fa.th_fora_institución,
-        fa.th_fora_fecha_inicio_formacion,
-        fa.th_fora_fecha_fin_formacion,
-        fa.th_fora_registro_senescyt,
-        fa.id_nivel_academico,
-        fa.id_pais,
-        fa.th_fora_estado,
-        na.descripcion AS nivel_academico_descripcion,
-        pa.nombre AS pais_nombre
-    FROM th_pos_formacion_academica fa
-    LEFT JOIN th_cat_pos_nivel_academico na
-        ON fa.id_nivel_academico = na.id_nivel_academico
-    LEFT JOIN th_cat_pais pa
-        ON fa.id_pais = pa.id_pais
-    WHERE fa.th_fora_estado = 1
-    ";
+        $sql =
+            "SELECT
+                fa.th_fora_id AS _id,
+                fa.th_pos_id,
+                fa.th_fora_titulo_obtenido,
+                fa.th_fora_institución,
+                fa.th_fora_fecha_inicio_formacion,
+                fa.th_fora_fecha_fin_formacion,
+                fa.th_fora_registro_senescyt,
+                fa.id_nivel_academico,
+                fa.id_pais,
+                fa.th_fora_estado,
+                na.descripcion AS nivel_academico_descripcion,
+                pa.nombre AS pais_nombre,
+                ae.descripcion AS area_estudio_descripcion,
+                fa.id_area_estudio
+            FROM th_pos_formacion_academica fa
+            LEFT JOIN th_cat_pos_nivel_academico na
+                ON fa.id_nivel_academico = na.id_nivel_academico
+            LEFT JOIN th_cat_pais pa
+                ON fa.id_pais = pa.id_pais
+            LEFT JOIN th_cat_area_estudio ae
+                ON fa.id_area_estudio = ae.id_area_estudio
+            WHERE fa.th_fora_estado = 1
+            ";
 
         // Filtro por ID de Postulante (para el listado de la tabla)
         if (!empty($th_pos_id)) {

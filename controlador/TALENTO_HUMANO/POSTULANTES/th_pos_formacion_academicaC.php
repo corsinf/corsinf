@@ -67,6 +67,7 @@ class th_pos_formacion_academicaC
                 $nivel = !empty($value['nivel_academico_descripcion'])
                     ? $value['nivel_academico_descripcion']
                     : 'No especificado';
+
                 $pais = !empty($value['pais_nombre'])
                     ? $value['pais_nombre']
                     : 'No especificado';
@@ -74,6 +75,10 @@ class th_pos_formacion_academicaC
                 $senescyt = !empty($value['th_fora_registro_senescyt'])
                     ? " | SENESCYT: {$value['th_fora_registro_senescyt']}"
                     : '';
+                    
+                $area_estudio = !empty($value['area_estudio_descripcion'])
+                    ? $value['area_estudio_descripcion']
+                    : 'No especificado';
 
                 $texto .= <<<HTML
                             <div class="col-md-6 mb-col">
@@ -98,8 +103,13 @@ class th_pos_formacion_academicaC
                                             </p>
 
                                             <p class="m-0 text-muted" style="font-size: 0.75rem;">
+                                                <i class="bx bx-graduation me-1"></i>Área Estudio: <strong>{$area_estudio}</strong>
+                                            </p>
+
+                                            <p class="m-0 text-muted" style="font-size: 0.75rem;">
                                                 <i class="bx bx-graduation me-1"></i>Nivel: <strong>{$nivel}</strong>
                                             </p>
+
                                             <p class="m-0 text-muted" style="font-size: 0.75rem;">
                                                 <i class="bx bx-graduation me-1"></i>Pais: <strong>{$pais}</strong>
                                             </p>
@@ -156,6 +166,7 @@ class th_pos_formacion_academicaC
             array('campo' => 'th_fora_registro_senescyt', 'dato' => $parametros['txt_fora_registro_senescyt']),
             array('campo' => 'id_nivel_academico', 'dato' => $parametros['ddl_nivel_academico']),
             array('campo' => 'id_pais', 'dato' => $parametros['ddl_pais']),
+            array('campo' => 'id_area_estudio', 'dato' => $parametros['ddl_area_estudio']),
         );
 
         if ($parametros['_id'] == '') {
