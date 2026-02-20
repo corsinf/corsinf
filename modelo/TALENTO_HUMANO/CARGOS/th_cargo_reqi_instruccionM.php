@@ -48,24 +48,50 @@ class th_cargo_reqi_instruccionM extends BaseModel
     }
 
 
-    public function listar_niveles_no_asignados($id_cargo)
+    public function listar_niveles_no_asignados($id_cargo, $id_plaza = 0)
     {
-        $id = intval($id_cargo);
+        $id_c = intval($id_cargo);
+        $id_p = intval($id_plaza);
 
-        $sql = "
-        SELECT 
-            na.id_nivel_academico,
-            na.descripcion,
-            na.estado
-        FROM th_cat_pos_nivel_academico na
-        LEFT JOIN th_cargo_reqi_instruccion ri
-            ON ri.id_nivel_academico = na.id_nivel_academico
-            AND ri.id_cargo = $id
-            AND ri.th_reqi_estado = 1
-        WHERE na.estado = 1
-          AND ri.id_nivel_academico IS NULL
-        ORDER BY na.id_nivel_academico;
+        if ($id_p != 0) {
+            // CON PLAZA: mostrar solo los del cargo que NO están aún en la plaza
+            $sql = "
+    SELECT 
+        na.id_nivel_academico,
+        na.descripcion,
+        na.estado
+    FROM th_cat_pos_nivel_academico na
+    LEFT JOIN th_cargo_reqi_instruccion ri_cargo
+        ON ri_cargo.id_nivel_academico = na.id_nivel_academico
+        AND ri_cargo.id_cargo = $id_c
+        AND ri_cargo.th_reqi_estado = 1
+    LEFT JOIN cn_plaza_reqi_instruccion ri_plaza
+        ON ri_plaza.id_nivel_academico = na.id_nivel_academico
+        AND ri_plaza.cn_pla_id = $id_p
+        AND ri_plaza.cn_reqi_estado = 1
+        AND $id_p > 0
+    WHERE na.estado = 1
+      AND ri_cargo.id_nivel_academico IS NULL
+      AND ($id_p = 0 OR ri_plaza.id_nivel_academico IS NULL)
+    ORDER BY na.id_nivel_academico;
     ";
+        } else {
+            // SIN PLAZA: comportamiento original — niveles NO asignados al cargo
+            $sql = "
+            SELECT 
+                na.id_nivel_academico,
+                na.descripcion,
+                na.estado
+            FROM th_cat_pos_nivel_academico na
+            LEFT JOIN th_cargo_reqi_instruccion ri_cargo
+                ON ri_cargo.id_nivel_academico = na.id_nivel_academico
+                AND ri_cargo.id_cargo = $id_c
+                AND ri_cargo.th_reqi_estado = 1
+            WHERE na.estado = 1
+              AND ri_cargo.id_nivel_academico IS NULL
+            ORDER BY na.id_nivel_academico
+        ";
+        }
 
         return $this->db->datos($sql);
     }

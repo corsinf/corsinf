@@ -1,12 +1,25 @@
 <script>
-    let tbl_instruccion_basica;
     $(document).ready(function() {
-        id_cargo = $('#txt_id_cargo').val();
+        <?php if ($es_plaza) { ?>
+            var pla_id = '<?= $_id_plaza ?>';
+        <?php } else { ?>
+            var pla_id = 0;
+        <?php } ?>
+        var id_cargo = $('#txt_id_cargo').val();
         cargar_instrucciones_basicas(id_cargo);
+        <?php if ($es_plaza) { ?>
+            cargar_plaza_instrucciones_basicas('<?= $_id_plaza ?>');
+        <?php } ?>
     });
 
-    function cargar_selects_ins_basica(car_id) {
-        // Si select2 ya está inicializado, destruirlo
+    function cargar_selects_ins_basica(car_id, pla_id) {
+        var id_cargo = $('#txt_id_cargo').val();
+        var pla_id = 0;
+        <?php if ($es_plaza) { ?>
+            pla_id = '<?= $_id_plaza ?>';
+        <?php } ?>
+
+
         if ($('#ddl_nivel_academico').hasClass("select2-hidden-accessible")) {
             $('#ddl_nivel_academico').select2('destroy');
         }
@@ -19,7 +32,8 @@
                 data: function(params) {
                     return {
                         q: params.term,
-                        car_id: car_id
+                        car_id: id_cargo,
+                        pla_id: pla_id,
                     };
                 },
                 processResults: function(data) {
@@ -182,32 +196,117 @@
         $('.select2-selection').removeClass('is-valid is-invalid');
     }
 </script>
+<?php if ($es_plaza) { ?>
+    <script>
+        function cargar_plaza_instrucciones_basicas(id, button = true) {
+            var id_cargo = $('#txt_id_cargo').val();
+            cargar_selects_ins_basica(id_cargo, id);
+            $.ajax({
+                url: '../controlador/TALENTO_HUMANO/PLAZAS/cn_plaza_reqi_instruccionC.php?listar_modal=true',
+                type: 'post',
+                data: {
+                    id: id,
+                    button_delete: button
+                },
+                dataType: 'json',
+                success: function(response) {
+                    $('#pnl_plaza_instruccion_basica').hide().html(response).fadeIn(400);
+                }
+            });
+        }
+
+        function insertar_editar_instruccion_basica_plaza() {
+            var ddl_nivel_academico = $('#ddl_nivel_academico').val();
+            var th_reqi_instruccion_id = $('#th_reqi_instruccion_id').val();
+            var cn_pla_id = '<?= $_id_plaza ?>';
+
+            var parametros = {
+                'id_nivel_academico': ddl_nivel_academico,
+                'cn_pla_id': cn_pla_id,
+                '_id': th_reqi_instruccion_id,
+            }
+
+            if ($("#form_instruccion_basica").valid()) {
+                insertar_instruccion_basica_plaza(parametros);
+            }
+        }
+
+        function insertar_instruccion_basica_plaza(parametros) {
+
+            $.ajax({
+                data: {
+                    parametros: parametros
+                },
+                url: '../controlador/TALENTO_HUMANO/PLAZAS/cn_plaza_reqi_instruccionC.php?insertar_editar=true',
+                type: 'post',
+                dataType: 'json',
+                success: function(response) {
+                    if (response == 1) {
+                        Swal.fire('', 'Operación realizada con éxito.', 'success');
+                        $('#modal_instruccion_basica').modal('hide');
+                        limpiar_campos_instruccion_basica_modal();
+                        cargar_plaza_instrucciones_basicas('<?= $_id_plaza ?>');
+                    } else {
+                        Swal.fire('', 'Operación fallida', 'warning');
+                    }
+                }
+            });
+        }
+
+
+        function delete_datos_instruccion_basica(id) {
+
+            Swal.fire({
+                title: '¿Eliminar Registro?',
+                text: "¿Está seguro de eliminar este requisito de instrucción?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.value) {
+                    eliminar_instruccion_basica(id);
+                }
+            })
+        }
+
+        function eliminar_instruccion_basica(id) {
+
+            $.ajax({
+                data: {
+                    id: id
+                },
+                url: '../controlador/TALENTO_HUMANO/PLAZAS/cn_plaza_reqi_instruccionC.php?eliminar=true',
+                type: 'post',
+                dataType: 'json',
+                success: function(response) {
+                    if (response == 1) {
+                        Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
+                        $('#modal_instruccion_basica').modal('hide');
+                        limpiar_campos_instruccion_basica_modal();
+                        cargar_plaza_instrucciones_basicas('<?= $_id_plaza ?>');
+                    }
+                }
+            });
+        }
+    </script>
+<?php } ?>
 
 <input type="hidden" name="txt_id_cargo" id="txt_id_cargo" value="<?= $_id ?>">
+<input type="hidden" name="txt_id_plaza_cargo" id="txt_id_plaza_cargo" value="">
 <div class="" id="pnl_instruccion_basica">
 
 </div>
 
-<!--
-<section class="content pt-2">
-    <div class="container-fluid">
-        <div class="table-responsive">
-            <table class="table table-striped responsive " id="tbl_instruccion_basica" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Nivel Acedemico</th>
-                        <th width="10%">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                </tbody>
-            </table>
-        </div>
-    </div> /.container-fluid
-</section>
-
- -->
+<?php if ($es_plaza) { ?>
+    </br>
+    <strong>Requisitos Adicionales</strong>
+    </br>
+    <div class="" id="pnl_plaza_instruccion_basica">
+    </div>
+<?php } ?>
 
 
 <div class="modal fade" id="modal_instruccion_basica" tabindex="-1" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -219,7 +318,6 @@
                     <h5 class="modal-title fw-bold text-primary" id="lbl_titulo_instruccion_basica">
                         <i class='bx bx-briefcase me-2'></i>Instrucción Basica
                     </h5>
-                    <small class="text-muted">Gestiona el nivel académico y la formación mínima requerida para este cargo.</small>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_instruccion_basica_modal()"></button>
             </div>
@@ -243,7 +341,9 @@
                         <div class="ms-auto">
                             <?php if ($es_plaza) { ?>
                                 <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" onclick="limpiar_campos_instruccion_basica_modal()">funciona</button>
-
+                                <button type="button" class="btn btn-primary btn-sm px-4" id="btn_guardar_instruccion_basica_plaza" onclick="insertar_editar_instruccion_basica_plaza() ">
+                                    <i class="bx bx-save"></i> Guardar
+                                </button>
                             <?php } else { ?>
                                 <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" onclick="limpiar_campos_instruccion_basica_modal()">Cancelar</button>
                                 <button type="button" class="btn btn-primary btn-sm px-4" id="btn_guardar_instruccion_basica" onclick="insertar_editar_instruccion_basica() ">

@@ -1,9 +1,9 @@
 <?php
 date_default_timezone_set('America/Guayaquil');
 
-require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/PLAZAS/th_plaza_reqi_instruccionM.php');
+require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/PLAZAS/cn_plaza_reqi_instruccionM.php');
 
-$controlador = new th_plaza_reqi_instruccionC();
+$controlador = new cn_plaza_reqi_instruccionC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? '', $_POST['instruccion_id'] ?? ''));
@@ -35,13 +35,13 @@ if (isset($_GET['buscar_nivel_academico'])) {
 
 
 
-class th_plaza_reqi_instruccionC
+class cn_plaza_reqi_instruccionC
 {
     private $modelo;
 
     function __construct()
     {
-        $this->modelo = new th_plaza_reqi_instruccionM();
+        $this->modelo = new cn_plaza_reqi_instruccionM();
     }
 
     function listar_modal($id = '', $button_delete = true)

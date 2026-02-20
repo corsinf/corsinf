@@ -26,7 +26,8 @@ if (isset($_GET['eliminar'])) {
 if (isset($_GET['buscar_nivel_academico'])) {
     $parametros = array(
         'query' => isset($_GET['q']) ? $_GET['q'] : '',
-        'car_id' => isset($_GET['car_id']) ? $_GET['car_id'] : 0
+        'car_id' => isset($_GET['car_id']) ? $_GET['car_id'] : 0,
+        'pla_id' => isset($_GET['pla_id']) ? $_GET['pla_id'] : 0,
     );
 
     $datos = $controlador->buscar_niveles_academicos($parametros);
@@ -160,22 +161,22 @@ class  th_cargo_reqi_instruccionC
 
     public function buscar_niveles_academicos($parametros)
     {
-        $lista = [];
 
+        $lista = [];
         $query = isset($parametros['query']) ? trim($parametros['query']) : '';
         $car_id = isset($parametros['car_id']) ? (int)$parametros['car_id'] : 0;
+        $pla_id = isset($parametros['pla_id']) ? (int)$parametros['pla_id'] : 0;
 
         if ($car_id <= 0) {
             return $lista;
         }
 
-        // Obtiene los niveles académicos NO asignados al cargo
-        $datos = $this->modelo->listar_niveles_no_asignados($car_id);
+        // Una sola llamada que ya trae filtrado lo de Cargo y Plaza (si existe)
+        $datos = $this->modelo->listar_niveles_no_asignados($car_id, $pla_id);
 
         foreach ($datos as $item) {
             $texto = trim($item['descripcion']);
 
-            // Filtro manual por si el Select2 envía texto de búsqueda
             if ($query === '' || stripos($texto, $query) !== false) {
                 $lista[] = [
                     'id'   => $item['id_nivel_academico'],
