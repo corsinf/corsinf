@@ -1,9 +1,9 @@
 <?php
 date_default_timezone_set('America/Guayaquil');
 
-require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/PLAZAS/th_plaza_reqi_aptitudM.php');
+require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/PLAZAS/cn_plaza_reqi_aptitudM.php');
 
-$controlador = new th_plaza_reqi_aptitudC();
+$controlador = new cn_plaza_reqi_aptitudC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? '', $_POST['aptitud_id'] ?? ''));
@@ -46,13 +46,13 @@ if (isset($_GET['buscar_habilidades_blandas'])) {
 
 
 
-class th_plaza_reqi_aptitudC
+class cn_plaza_reqi_aptitudC
 {
     private $modelo;
 
     function __construct()
     {
-        $this->modelo = new th_plaza_reqi_aptitudM();
+        $this->modelo = new cn_plaza_reqi_aptitudM();
     }
 
     function listar_modal($id = '', $button_delete = true)

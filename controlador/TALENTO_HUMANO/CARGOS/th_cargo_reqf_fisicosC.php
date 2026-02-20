@@ -31,13 +31,13 @@ if (isset($_GET['buscar_req_fisicos_cabecera'])) {
 if (isset($_GET['buscar_req_fisicos_detalle'])) {
     $parametros = array(
         'car_id'        => isset($_GET['car_id'])        ? $_GET['car_id']        : 0,
+        'pla_id'        => isset($_GET['pla_id'])        ? $_GET['pla_id']        : 0,
         'id_req_fisico' => isset($_GET['id_req_fisico']) ? $_GET['id_req_fisico'] : 0
     );
     $datos = $controlador->buscar_detalles_no_asignados($parametros);
     echo json_encode($datos);
     exit;
 }
-
 
 
 class th_cargo_reqf_fisicosC
@@ -73,10 +73,9 @@ class th_cargo_reqf_fisicosC
             $grupos[$value['req_fisico_descripcion']][] = $value;
         }
 
-        $texto = ''; // Contenedor principal
+        $texto = '';
 
         foreach ($grupos as $cabecera => $items) {
-            // Cabecera del Grupo Físico
             $texto .= <<<HTML
                             <div class="fw-bold text-primary mt-3 mb-1 d-flex align-items-center" style="font-size: 0.85rem; letter-spacing: 0.5px;">
                                 <i class='bx bx-category me-2'></i>
@@ -148,9 +147,9 @@ class th_cargo_reqf_fisicosC
     {
         $id = $parametros['_id'];
         $datos = array(
-            array('campo' => 'id_cargo',         'dato' => $parametros['id_cargo']),
+            array('campo' => 'id_cargo',          'dato' => $parametros['id_cargo']),
             array('campo' => 'id_req_fisico_det', 'dato' => $parametros['id_req_fisico_det']),
-            array('campo' => 'th_reqf_estado',   'dato' => 1),
+            array('campo' => 'th_reqf_estado',    'dato' => 1),
             array('campo' => 'th_reqf_fecha_creacion', 'dato' => date('Y-m-d H:i:s')),
         );
         if ($id == '') {
@@ -189,13 +188,14 @@ class th_cargo_reqf_fisicosC
     {
         $lista         = [];
         $car_id        = isset($parametros['car_id'])        ? (int)$parametros['car_id']        : 0;
+        $pla_id        = isset($parametros['pla_id'])        ? (int)$parametros['pla_id']        : 0;
         $id_req_fisico = isset($parametros['id_req_fisico']) ? (int)$parametros['id_req_fisico'] : 0;
 
         if ($car_id <= 0 || $id_req_fisico <= 0) {
             return $lista;
         }
 
-        $datos = $this->modelo->listar_detalles_no_asignados($car_id, $id_req_fisico);
+        $datos = $this->modelo->listar_detalles_no_asignados($car_id, $id_req_fisico, $pla_id);
         foreach ($datos as $item) {
             $lista[] = [
                 'id'   => $item['id_req_fisico_det'],

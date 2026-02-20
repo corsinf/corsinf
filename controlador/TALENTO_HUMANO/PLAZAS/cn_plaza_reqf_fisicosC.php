@@ -1,9 +1,9 @@
 <?php
 date_default_timezone_set('America/Guayaquil');
 
-require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/PLAZAS/th_plaza_reqf_fisicosM.php');
+require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/PLAZAS/cn_plaza_reqf_fisicosM.php');
 
-$controlador = new th_plaza_reqf_fisicosC();
+$controlador = new cn_plaza_reqf_fisicosC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? '', $_POST['reqf_id'] ?? ''));
@@ -40,13 +40,13 @@ if (isset($_GET['buscar_req_fisicos_detalle'])) {
 
 
 
-class th_plaza_reqf_fisicosC
+class cn_plaza_reqf_fisicosC
 {
     private $modelo;
 
     function __construct()
     {
-        $this->modelo = new th_plaza_reqf_fisicosM();
+        $this->modelo = new cn_plaza_reqf_fisicosM();
     }
 
     function listar_modal($id = '', $button_delete = true)
