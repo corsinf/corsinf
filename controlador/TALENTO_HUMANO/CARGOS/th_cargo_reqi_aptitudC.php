@@ -10,7 +10,7 @@ if (isset($_GET['listar'])) {
 }
 
 if (isset($_GET['listar_modal'])) {
-     $boton = !(isset($_POST['button_delete']) && $_POST['button_delete'] === 'false');
+    $boton = !(isset($_POST['button_delete']) && $_POST['button_delete'] === 'false');
     echo json_encode($controlador->listar_modal($_POST['id'], $boton));
 }
 
@@ -24,8 +24,9 @@ if (isset($_GET['eliminar'])) {
 
 if (isset($_GET['buscar_habilidades_tecnicas'])) {
     $parametros = array(
-        'query' => isset($_GET['q']) ? $_GET['q'] : '',
-        'car_id' => isset($_GET['car_id']) ? $_GET['car_id'] : 0
+        'query'  => isset($_GET['q'])      ? $_GET['q']      : '',
+        'car_id' => isset($_GET['car_id']) ? $_GET['car_id'] : 0,
+        'pla_id' => isset($_GET['pla_id']) ? $_GET['pla_id'] : 0,
     );
 
     $datos = $controlador->buscar_habilidades_tecnicas($parametros);
@@ -35,15 +36,15 @@ if (isset($_GET['buscar_habilidades_tecnicas'])) {
 
 if (isset($_GET['buscar_habilidades_blandas'])) {
     $parametros = array(
-        'query' => isset($_GET['q']) ? $_GET['q'] : '',
-        'car_id' => isset($_GET['car_id']) ? $_GET['car_id'] : 0
+        'query'  => isset($_GET['q'])      ? $_GET['q']      : '',
+        'car_id' => isset($_GET['car_id']) ? $_GET['car_id'] : 0,
+        'pla_id' => isset($_GET['pla_id']) ? $_GET['pla_id'] : 0,
     );
 
     $datos = $controlador->buscar_habilidades_blandas($parametros);
     echo json_encode($datos);
     exit;
 }
-
 
 
 class th_cargo_reqi_aptitudC
@@ -62,7 +63,6 @@ class th_cargo_reqi_aptitudC
             $datos = $this->modelo->listar_cargo_aptitudes(null, $id);
         }
 
-        // Grupos fijos — siempre se muestran los dos aunque estén vacíos
         $grupos = [
             'APTITUDES TÉCNICAS' => [
                 'color' => 'text-primary',
@@ -84,7 +84,6 @@ class th_cargo_reqi_aptitudC
             }
         }
 
-        // Si los dos grupos están vacíos → mensaje general
         $total = array_sum(array_map(fn($g) => count($g['items']), $grupos));
         if ($total === 0) {
             return <<<HTML
@@ -101,11 +100,10 @@ class th_cargo_reqi_aptitudC
         $texto = '';
 
         foreach ($grupos as $cabecera => $config) {
-            $color = $config['color']; // Clase de color (ej: text-primary)
+            $color = $config['color'];
             $icono = $config['icono'];
             $items = $config['items'];
 
-            // Cabecera del Grupo
             $texto .= <<<HTML
                             <div class="fw-bold {$color} mt-3 mb-1 d-flex align-items-center" style="font-size: 0.85rem; letter-spacing: 0.5px;">
                                 <i class='bx {$icono} me-2'></i>
@@ -116,7 +114,6 @@ class th_cargo_reqi_aptitudC
                                     <tbody>
                         HTML;
 
-            // Caso: No hay habilidades
             if (empty($items)) {
                 $texto .= <<<HTML
                                 <tr>
@@ -130,7 +127,6 @@ class th_cargo_reqi_aptitudC
                                 </tr>
                             HTML;
             } else {
-                // Caso: Hay items
                 foreach ($items as $item) {
                     $id_reg    = $item['_id'];
                     $habilidad = htmlspecialchars($item['habilidad_nombre']);
@@ -191,28 +187,25 @@ class th_cargo_reqi_aptitudC
 
     function insertar_editar($parametros)
     {
-        $id           = $parametros['_id'];
-        $id_cargo     = $parametros['id_cargo'];
-        $hab_tecnica  = $parametros['th_hab_id_tecnica'] ?? '';
-        $hab_blanda   = $parametros['th_hab_id_blanda']  ?? '';
+        $id          = $parametros['_id'];
+        $id_cargo    = $parametros['id_cargo'];
+        $hab_tecnica = $parametros['th_hab_id_tecnica'] ?? '';
+        $hab_blanda  = $parametros['th_hab_id_blanda']  ?? '';
 
-        // Si es edición (viene _id), actualizamos el registro puntual
         if ($id !== '') {
-            // Detectamos cuál DDL viene con valor para editar
             $hab_id = ($hab_tecnica !== '') ? $hab_tecnica : $hab_blanda;
 
             $datos = array(
-                array('campo' => 'id_cargo',                    'dato' => $id_cargo),
-                array('campo' => 'th_hab_id',                   'dato' => $hab_id),
-                array('campo' => 'th_reqa_estado',              'dato' => 1),
-                array('campo' => 'th_reqa_fecha_modificacion',  'dato' => date('Y-m-d H:i:s')),
+                array('campo' => 'id_cargo',                   'dato' => $id_cargo),
+                array('campo' => 'th_hab_id',                  'dato' => $hab_id),
+                array('campo' => 'th_reqa_estado',             'dato' => 1),
+                array('campo' => 'th_reqa_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
             );
             $where[0]['campo'] = 'th_reqa_experiencia_id';
             $where[0]['dato']  = $id;
             return $this->modelo->editar($datos, $where);
         }
 
-        // Si es inserción, guardamos los que vengan (uno o ambos)
         $resultado = 0;
 
         if ($hab_tecnica !== '') {
@@ -235,7 +228,6 @@ class th_cargo_reqi_aptitudC
             $resultado = $this->modelo->insertar($datos);
         }
 
-        // Retorna 1 si al menos una inserción fue exitosa
         return $resultado;
     }
 
@@ -250,16 +242,16 @@ class th_cargo_reqi_aptitudC
 
     public function buscar_habilidades_tecnicas($parametros)
     {
-        $lista = [];
-
-        $query = isset($parametros['query']) ? trim($parametros['query']) : '';
+        $lista  = [];
+        $query  = isset($parametros['query'])  ? trim($parametros['query'])  : '';
         $car_id = isset($parametros['car_id']) ? (int)$parametros['car_id'] : 0;
+        $pla_id = isset($parametros['pla_id']) ? (int)$parametros['pla_id'] : 0;
 
         if ($car_id <= 0) {
             return $lista;
         }
 
-        $datos = $this->modelo->listar_habilidades_tenicas_no_asignadas($car_id);
+        $datos = $this->modelo->listar_habilidades_tenicas_no_asignadas($car_id, $pla_id);
 
         foreach ($datos as $item) {
             $texto = trim($item['th_hab_nombre']);
@@ -277,16 +269,16 @@ class th_cargo_reqi_aptitudC
 
     public function buscar_habilidades_blandas($parametros)
     {
-        $lista = [];
-
-        $query = isset($parametros['query']) ? trim($parametros['query']) : '';
+        $lista  = [];
+        $query  = isset($parametros['query'])  ? trim($parametros['query'])  : '';
         $car_id = isset($parametros['car_id']) ? (int)$parametros['car_id'] : 0;
+        $pla_id = isset($parametros['pla_id']) ? (int)$parametros['pla_id'] : 0;
 
         if ($car_id <= 0) {
             return $lista;
         }
 
-        $datos = $this->modelo->listar_habilidades_blandas_no_asignadas($car_id);
+        $datos = $this->modelo->listar_habilidades_blandas_no_asignadas($car_id, $pla_id);
 
         foreach ($datos as $item) {
             $texto = trim($item['th_hab_nombre']);
