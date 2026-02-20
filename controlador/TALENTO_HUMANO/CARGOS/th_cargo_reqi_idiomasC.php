@@ -11,6 +11,7 @@ if (isset($_GET['listar'])) {
 
 if (isset($_GET['listar_modal'])) {
     $boton = !(isset($_POST['button_delete']) && $_POST['button_delete'] === 'false');
+
     echo json_encode($controlador->listar_modal($_POST['id'], $boton));
 }
 
@@ -24,15 +25,15 @@ if (isset($_GET['eliminar'])) {
 
 if (isset($_GET['buscar_idiomas'])) {
     $parametros = array(
-        'query' => isset($_GET['q']) ? $_GET['q'] : '',
-        'car_id' => isset($_GET['car_id']) ? $_GET['car_id'] : 0
+        'query'   => isset($_GET['q']) ? $_GET['q'] : '',
+        'car_id'  => isset($_GET['car_id']) ? $_GET['car_id'] : 0,
+        'pla_id'  => isset($_GET['pla_id']) ? $_GET['pla_id'] : 0,
     );
 
     $datos = $controlador->buscar_idiomas($parametros);
     echo json_encode($datos);
     exit;
 }
-
 
 
 class th_cargo_reqi_idiomasC
@@ -54,14 +55,14 @@ class th_cargo_reqi_idiomasC
         if (empty($datos)) {
             return
                 <<<HTML
-            <div class="d-flex align-items-center bg-light border-start border-secondary border-3 p-2 shadow-sm rounded-2">
-              <i class='bx bx-info-circle me-2 text-secondary' style='font-size: 20px;'></i>
-                <div class="lh-1">
-                    <div class="text-dark fw-bold small">Sin idiomas registrados</div>
-                    <div class="text-muted" style="font-size: 0.75rem;">No se han definido requisitos de idiomas.</div>
-                </div>
-            </div>
-            HTML;
+                    <div class="d-flex align-items-center bg-light border-start border-secondary border-3 p-2 shadow-sm rounded-2">
+                    <i class='bx bx-info-circle me-2 text-secondary' style='font-size: 20px;'></i>
+                        <div class="lh-1">
+                            <div class="text-dark fw-bold small">Sin idiomas registrados</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">No se han definido requisitos de idiomas.</div>
+                        </div>
+                    </div>
+                HTML;
         }
 
         $texto = '<div class="border rounded bg-white shadow-sm overflow-hidden">';
@@ -69,9 +70,9 @@ class th_cargo_reqi_idiomasC
         $texto .= '<tbody>';
 
         foreach ($datos as $value) {
-            $id_reg = $value['_id'];
-            $idioma = $value['idioma_descripcion'];
-            $nivel = $value['nivel_descripcion'];
+            $id_reg  = $value['_id'];
+            $idioma  = $value['idioma_descripcion'];
+            $nivel   = $value['nivel_descripcion'];
 
             $button = '';
             if ($button_delete) {
@@ -134,10 +135,10 @@ class th_cargo_reqi_idiomasC
     {
         $id = $parametros['_id'];
         $datos = array(
-            array('campo' => 'id_cargo', 'dato' =>  $parametros['id_cargo']),
-            array('campo' => 'id_idiomas', 'dato' => $parametros['id_idiomas']),
-            array('campo' => 'id_idiomas_nivel', 'dato' => $parametros['id_idiomas_nivel']),
-            array('campo' => 'th_reqid_estado', 'dato' => 1),
+            array('campo' => 'id_cargo',         'dato' => $parametros['id_cargo']),
+            array('campo' => 'id_idiomas',        'dato' => $parametros['id_idiomas']),
+            array('campo' => 'id_idiomas_nivel',  'dato' => $parametros['id_idiomas_nivel']),
+            array('campo' => 'th_reqid_estado',   'dato' => 1),
             array('campo' => 'th_reqid_fecha_creacion', 'dato' => date('Y-m-d H:i:s')),
         );
         if ($id == '') {
@@ -145,7 +146,7 @@ class th_cargo_reqi_idiomasC
         } else {
             $datos[] = ['campo' => 'th_reqid_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')];
             $where[0]['campo'] = 'th_reqid_experiencia_id';
-            $where[0]['dato'] = $id;
+            $where[0]['dato']  = $id;
             $datos = $this->modelo->editar($datos, $where);
         }
 
@@ -163,16 +164,16 @@ class th_cargo_reqi_idiomasC
 
     public function buscar_idiomas($parametros)
     {
-        $lista = [];
-
-        $query = isset($parametros['query']) ? trim($parametros['query']) : '';
+        $lista  = [];
+        $query  = isset($parametros['query'])  ? trim($parametros['query'])  : '';
         $car_id = isset($parametros['car_id']) ? (int)$parametros['car_id'] : 0;
+        $pla_id = isset($parametros['pla_id']) ? (int)$parametros['pla_id'] : 0;
 
         if ($car_id <= 0) {
             return $lista;
         }
 
-        $datos = $this->modelo->listar_idiomas_no_asignados($car_id);
+        $datos = $this->modelo->listar_idiomas_no_asignados($car_id, $pla_id);
 
         foreach ($datos as $item) {
             $texto = trim($item['descripcion']);
