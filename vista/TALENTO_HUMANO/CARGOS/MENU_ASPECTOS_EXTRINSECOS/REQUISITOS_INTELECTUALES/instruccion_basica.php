@@ -1,10 +1,5 @@
 <script>
     $(document).ready(function() {
-        <?php if ($es_plaza) { ?>
-            var pla_id = '<?= $_id_plaza ?>';
-        <?php } else { ?>
-            var pla_id = 0;
-        <?php } ?>
         var id_cargo = $('#txt_id_cargo').val();
         cargar_instrucciones_basicas(id_cargo);
         <?php if ($es_plaza) { ?>
@@ -295,7 +290,6 @@
 <?php } ?>
 
 <input type="hidden" name="txt_id_cargo" id="txt_id_cargo" value="<?= $_id ?>">
-<input type="hidden" name="txt_id_plaza_cargo" id="txt_id_plaza_cargo" value="">
 <div class="" id="pnl_instruccion_basica">
 
 </div>

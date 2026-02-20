@@ -2,7 +2,7 @@
 
 require_once(dirname(__DIR__, 2) . '/GENERAL/BaseModel.php');
 
-class th_plaza_reqi_idiomasM extends BaseModel
+class cn_plaza_reqi_idiomasM extends BaseModel
 {
     protected $tabla = 'cn_plaza_reqi_idiomas';
 

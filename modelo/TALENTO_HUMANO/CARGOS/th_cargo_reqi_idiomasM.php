@@ -51,24 +51,48 @@ class th_cargo_reqi_idiomasM extends BaseModel
         return $this->db->datos($sql);
     }
 
-    public function listar_idiomas_no_asignados($id_cargo)
+    public function listar_idiomas_no_asignados($id_cargo, $id_plaza = 0)
     {
-        $id = intval($id_cargo);
+        $id_c = intval($id_cargo);
+        $id_p = intval($id_plaza);
 
-        $sql = "
+        if ($id_p != 0) {
+            $sql = "
+    SELECT 
+        i.id_idiomas,
+        i.descripcion,
+        i.estado
+    FROM th_cat_idiomas i
+    LEFT JOIN th_cargo_reqi_idiomas ri_cargo
+        ON ri_cargo.id_idiomas = i.id_idiomas
+        AND ri_cargo.id_cargo = $id_c
+        AND ri_cargo.th_reqid_estado = 1
+    LEFT JOIN cn_plaza_reqi_idiomas ri_plaza
+        ON ri_plaza.id_idiomas = i.id_idiomas
+        AND ri_plaza.cn_pla_id = $id_p
+        AND ri_plaza.cn_reqid_estado = 1
+        AND $id_p > 0
+    WHERE i.estado = 1
+      AND ri_cargo.id_idiomas IS NULL
+      AND ($id_p = 0 OR ri_plaza.id_idiomas IS NULL)
+    ORDER BY i.id_idiomas;
+    ";
+        } else {
+            $sql = "
         SELECT 
             i.id_idiomas,
             i.descripcion,
             i.estado
         FROM th_cat_idiomas i
-        LEFT JOIN th_cargo_reqi_idiomas ri
-            ON ri.id_idiomas = i.id_idiomas
-            AND ri.id_cargo = $id
-            AND ri.th_reqid_estado = 1
+        LEFT JOIN th_cargo_reqi_idiomas ri_cargo
+            ON ri_cargo.id_idiomas = i.id_idiomas
+            AND ri_cargo.id_cargo = $id_c
+            AND ri_cargo.th_reqid_estado = 1
         WHERE i.estado = 1
-          AND ri.id_idiomas IS NULL
+          AND ri_cargo.id_idiomas IS NULL
         ORDER BY i.descripcion;
         ";
+        }
 
         return $this->db->datos($sql);
     }

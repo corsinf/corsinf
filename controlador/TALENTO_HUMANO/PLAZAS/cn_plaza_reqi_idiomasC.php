@@ -1,9 +1,9 @@
 <?php
 date_default_timezone_set('America/Guayaquil');
 
-require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/PLAZAS/th_plaza_reqi_idiomasM.php');
+require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/PLAZAS/cn_plaza_reqi_idiomasM.php');
 
-$controlador = new th_plaza_reqi_idiomasC();
+$controlador = new cn_plaza_reqi_idiomasC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? '', $_POST['idioma_id'] ?? ''));
@@ -35,13 +35,13 @@ if (isset($_GET['buscar_idiomas'])) {
 
 
 
-class th_plaza_reqi_idiomasC
+class cn_plaza_reqi_idiomasC
 {
     private $modelo;
 
     function __construct()
     {
-        $this->modelo = new th_plaza_reqi_idiomasM();
+        $this->modelo = new cn_plaza_reqi_idiomasM();
     }
 
     function listar_modal($id = '', $button_delete = true)

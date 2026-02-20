@@ -49,7 +49,7 @@ $es_plaza = true;
     function cargar_requisitos_cargo(id_cargo) {
         //Requisitos intelectuales
         cargar_aptitudes(id_cargo, false);
-        cargar_pnl_experiencia_necesaria(id_cargo, false);
+        cargar_experiencias_necesarias(id_cargo, false);
         cargar_idiomas(id_cargo, false);
         cargar_iniciativas(id_cargo, false);
         cargar_instrucciones_basicas(id_cargo, false);
