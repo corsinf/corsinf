@@ -5,9 +5,13 @@
 
         function cargar_selects2() {
             url_nivelAcademicoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_pos_nivel_academicoC.php?buscar=true';
-            url_PaisC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_paisC.php?buscar=true';
             cargar_select2_url('ddl_nivel_academico', url_nivelAcademicoC, '', '#modal_agregar_formacion');
+
+            url_PaisC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_paisC.php?buscar=true';
             cargar_select2_url('ddl_pais', url_PaisC, '', '#modal_agregar_formacion');
+
+            url_area_estudioC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_area_estudioC.php?buscar=true';
+            cargar_select2_url('ddl_area_estudio', url_area_estudioC, '', '#modal_agregar_formacion');
         }
     });
 
@@ -85,6 +89,7 @@
         var txt_th_fora_registro_senescyt = $('#txt_th_fora_registro_senescyt').val();
         var ddl_nivel_academico = $('#ddl_nivel_academico').val();
         var ddl_pais = $('#ddl_pais').val();
+        var ddl_area_estudio = $('#ddl_area_estudio').val();
 
         var parametros_formacion_academica = {
             '_id': txt_id_formacion_academica,
@@ -96,6 +101,7 @@
             'txt_fora_registro_senescyt': txt_th_fora_registro_senescyt,
             'ddl_nivel_academico': ddl_nivel_academico,
             'ddl_pais': ddl_pais,
+            'ddl_area_estudio': ddl_area_estudio,
         }
 
         if ($("#form_formacion_academica").valid()) {
@@ -190,6 +196,8 @@
 
         $('#ddl_nivel_academico').val(null).trigger('change');
         $('#ddl_pais').val(null).trigger('change');
+        $('#ddl_area_estudio').val(null).trigger('change');
+
         $('#txt_th_fora_registro_senescyt').val('');
 
         $('.select2-selection').removeClass('is-valid is-invalid');
@@ -291,6 +299,17 @@
                     </div>
 
                     <div class="row g-3 mb-3">
+                        <div class="col-md-12">
+                            <label for="txt_institucion" class="form-label fw-semibold fs-7">Institución Educativa </label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white text-muted"><i class='bx bx-buildings'></i></span>
+                                <input type="text" class="form-control no_caracteres" name="txt_institucion" id="txt_institucion" maxlength="100" oninput="texto_mayusculas(this);" placeholder="Ej: Universidad Central del Ecuador">
+                            </div>
+                            <label class="error" style="display: none;" for="txt_institucion"></label>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
                         <div class="col-md-6">
                             <label for="ddl_nivel_academico" class="form-label fw-semibold fs-7">Nivel Académico </label>
                             <select class="form-select select2-validation" name="ddl_nivel_academico" id="ddl_nivel_academico" style="width: 100%;">
@@ -298,6 +317,19 @@
                             </select>
                             <label class="error" style="display: none;" for="ddl_nivel_academico"></label>
                         </div>
+
+                        <div class="col-md-6">
+                            <label for="ddl_area_estudio" class="form-label fw-semibold fs-7">Área de Estudio </label>
+                            <select class="form-select select2-validation" name="ddl_area_estudio" id="ddl_area_estudio" style="width: 100%;">
+                                <option value="">-- Seleccione --</option>
+                            </select>
+                            <label class="error" style="display: none;" for="ddl_area_estudio"></label>
+                        </div>
+
+                    </div>
+
+                    <div class="row mb-3">
+
                         <div class="col-md-6">
                             <label for="txt_th_fora_registro_senescyt" class="form-label fw-semibold fs-7">Registro SENESCYT </label>
                             <div class="input-group input-group-sm">
@@ -306,17 +338,6 @@
                             </div>
                             <label class="error" style="display: none;" for="txt_th_fora_registro_senescyt"></label>
 
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="txt_institucion" class="form-label fw-semibold fs-7">Institución Educativa </label>
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-white text-muted"><i class='bx bx-buildings'></i></span>
-                                <input type="text" class="form-control no_caracteres" name="txt_institucion" id="txt_institucion" maxlength="100" oninput="texto_mayusculas(this);" placeholder="Ej: Universidad Central del Ecuador">
-                            </div>
-                            <label class="error" style="display: none;" for="txt_institucion"></label>
                         </div>
 
                         <div class="col-md-6">
@@ -378,6 +399,7 @@
         agregar_asterisco_campo_obligatorio('ddl_nivel_academico');
         agregar_asterisco_campo_obligatorio('ddl_pais');
         agregar_asterisco_campo_obligatorio('txt_th_fora_registro_senescyt');
+        agregar_asterisco_campo_obligatorio('ddl_area_estudio');
 
         //Para validar los select2
         $(".select2-validation").on("select2:select", function(e) {
@@ -403,6 +425,9 @@
                     required: true,
                 },
                 ddl_pais: {
+                    required: true,
+                },
+                ddl_area_estudio: {
                     required: true,
                 },
                 txt_th_fora_registro_senescyt: {
