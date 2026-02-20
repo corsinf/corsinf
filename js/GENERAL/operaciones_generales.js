@@ -384,7 +384,7 @@ function reajustarDataTable() {
 
 //Funcion para cargar datos en un select2, es una funcion simple cuando se quiere cargar los datos
 
-function cargar_select2_url(ddl, url_controlador, placeholder = '-- Seleccione --', dropdownParent = null, minimumInputLength = 0) {
+function cargar_select2_url(ddl, url_controlador, placeholder = '-- Seleccione --', dropdownParent = null, minimumInputLength = 0, extraData = {}) {
     if (placeholder == '') {
         placeholder = '-- Seleccione --';
     }
@@ -411,6 +411,12 @@ function cargar_select2_url(ddl, url_controlador, placeholder = '-- Seleccione -
             url: url_controlador,
             dataType: 'json',
             delay: 250,
+            data: function (params) {
+                return {
+                    q: params.term,   // texto buscado
+                    ...extraData      // parámetros adicionales
+                };
+            },
             processResults: function (data) {
                 return { results: data };
             },

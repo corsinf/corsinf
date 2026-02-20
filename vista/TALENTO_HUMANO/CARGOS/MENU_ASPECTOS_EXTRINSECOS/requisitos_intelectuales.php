@@ -23,6 +23,31 @@
 
     <hr class="my-4" style="opacity: 0.6; background-color: #2563eb; height: 2px; border: none;">
 
+    <!-- SECCIÓN 5: ÁREA DE ESTUDIO -->
+    <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-end mb-3">
+            <div class="d-flex align-items-center">
+                <h5 class="mb-0 fw-bold text-dark">
+                    <i class="bx bx-book-open me-2 text-primary"></i>
+                    Área de Estudio
+                </h5>
+            </div>
+            <div>
+                <a href="#" class="btn btn-outline-success btn-xs d-flex align-items-center fw-semibold px-3"
+                    data-bs-toggle="modal" data-bs-target="#modal_area_estudios">
+                    <i class='bx bx-plus-circle me-1'></i>
+                    Agregar
+                </a>
+            </div>
+        </div>
+
+        <div class="px-1">
+            <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_EXTRINSECOS/REQUISITOS_INTELECTUALES/area_estudio.php'); ?>
+        </div>
+    </div>
+
+    <hr class="my-4" style="opacity: 0.6; background-color: #2563eb; height: 2px; border: none;">
+
     <!-- SECCIÓN 2: EXPERIENCIA NECESARIA -->
     <div class="mb-4">
         <div class="d-flex justify-content-between align-items-end mb-3">
