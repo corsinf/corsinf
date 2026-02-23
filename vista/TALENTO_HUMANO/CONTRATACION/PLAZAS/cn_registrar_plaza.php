@@ -35,22 +35,13 @@ $es_plaza = true;
             cargar_requisitos_cargo(id_cargo);
 
         })
-
-        // setTimeout(function() {
-        //     alert('showStep: ');
-        //     ajustarAlturaContenedor();
-
-        // }, 5000);
-
     });
 
     //Para que redimencione el contenedor del smart wizard al cargar los datos de la plaza y los requisitos del cargo
     $(window).on('load', function() {
-
         $(document).ajaxStop(function() {
             ajustarAlturaContenedor();
         });
-
     });
 
     function cargar_selects2_plaza() {
@@ -526,7 +517,6 @@ $es_plaza = true;
                             <div class="tab-content" id="tab_content_smart">
                                 <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1" data-step="0">
 
-                                    <button onclick="ajustarAlturaContenedor();">adf</button>
                                     <?php include_once('../vista/TALENTO_HUMANO/CONTRATACION/PLAZAS/WIZART_REGISTRAR_PLAZA/plaza_paso1.php'); ?>
 
                                 </div>
