@@ -58,6 +58,8 @@ $es_plaza = true;
         //Responsabilidades Implícitas
         cargar_responsabilidades(id_cargo, false);
         //Ambiente de Trabajo
+        cargar_riesgos(id_cargo, false);
+        
     }
 
     function cargar_propiedades_cargo(id_cargo) {

@@ -21,16 +21,16 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
 
-if (isset($_GET['buscar_riesgos'])) {
+if (isset($_GET['buscar_riesgos_car_pla'])) {
     $parametros = array(
+        'query'  => isset($_GET['q'])      ? $_GET['q']      : '',
         'car_id' => isset($_GET['car_id']) ? $_GET['car_id'] : 0,
-        'query'  => isset($_GET['q'])      ? $_GET['q']      : ''
+        'pla_id' => isset($_GET['pla_id']) ? $_GET['pla_id'] : 0,
     );
-    $datos = $controlador->buscar_riesgos_no_asignados($parametros);
+    $datos = $controlador->buscar_riesgos_car_pla($parametros);
     echo json_encode($datos);
     exit;
 }
-
 
 
 class th_cargo_reqct_riesgosC
@@ -149,23 +149,30 @@ class th_cargo_reqct_riesgosC
         return $this->modelo->eliminar($datos);
     }
 
-    public function buscar_riesgos_no_asignados($parametros)
+    public function buscar_riesgos_car_pla($parametros)
     {
         $lista  = [];
+        $query  = isset($parametros['query'])  ? trim($parametros['query'])  : '';
         $car_id = isset($parametros['car_id']) ? (int)$parametros['car_id'] : 0;
-        $query  = isset($parametros['query'])  ? trim($parametros['query']) : '';
+        $pla_id = isset($parametros['pla_id']) ? (int)$parametros['pla_id'] : 0;
 
         if ($car_id <= 0) {
             return $lista;
         }
 
-        $datos = $this->modelo->listar_riesgos_no_asignados($car_id, $query);
+        $datos = $this->modelo->listar_catalogo_riesgos($car_id, $pla_id);
+
         foreach ($datos as $item) {
-            $lista[] = [
-                'id'   => $item['id_req_riesgo'],
-                'text' => trim($item['descripcion'])
-            ];
+            $texto = trim($item['descripcion']);
+
+            if ($query === '' || stripos($texto, $query) !== false) {
+                $lista[] = [
+                    'id'   => $item['id_req_riesgo'],
+                    'text' => $texto
+                ];
+            }
         }
+
         return $lista;
     }
 }

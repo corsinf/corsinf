@@ -1,9 +1,9 @@
 <?php
 date_default_timezone_set('America/Guayaquil');
 
-require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/PLAZAS/th_plaza_reqct_riesgosM.php');
+require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/PLAZAS/cn_plaza_reqct_riesgosM.php');
 
-$controlador = new th_plaza_reqct_riesgosC();
+$controlador = new cn_plaza_reqct_riesgosC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? '', $_POST['riesgo_id'] ?? ''));
@@ -36,13 +36,13 @@ if (isset($_GET['buscar_riesgo'])) {
 
 
 
-class th_plaza_reqct_riesgosC
+class cn_plaza_reqct_riesgosC
 {
     private $modelo;
 
     function __construct()
     {
-        $this->modelo = new th_plaza_reqct_riesgosM();
+        $this->modelo = new cn_plaza_reqct_riesgosM();
     }
 
     function listar_modal($id = '', $button_delete = true)
