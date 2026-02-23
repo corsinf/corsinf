@@ -174,7 +174,7 @@
             var id_cargo = $('#txt_id_cargo').val();
             cargar_selects_area_estudios(id_cargo, id);
             $.ajax({
-                url: '../controlador/TALENTO_HUMANO/PLAZAS/cn_plaza_reqi_instruccionC.php?listar_modal=true',
+                url: '../controlador/TALENTO_HUMANO/PLAZAS/cn_plaza_reqi_area_estudioC.php?listar_modal=true',
                 type: 'post',
                 data: {
                     id: id,
@@ -193,7 +193,7 @@
             var cn_pla_id = '<?= $_id_plaza ?>';
 
             var parametros = {
-                'id_nivel_academico': ddl_area_estudio,
+                'id_area_estudio': ddl_area_estudio,
                 'cn_pla_id': cn_pla_id,
                 '_id': id_reqi_cargo_estudio,
             }
@@ -209,7 +209,7 @@
                 data: {
                     parametros: parametros
                 },
-                url: '../controlador/TALENTO_HUMANO/PLAZAS/cn_plaza_reqi_instruccionC.php?insertar_editar=true',
+                url: '../controlador/TALENTO_HUMANO/PLAZAS/cn_plaza_reqi_area_estudioC.php?insertar_editar=true',
                 type: 'post',
                 dataType: 'json',
                 success: function(response) {

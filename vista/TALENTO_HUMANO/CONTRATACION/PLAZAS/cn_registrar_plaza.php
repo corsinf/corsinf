@@ -53,6 +53,7 @@ $es_plaza = true;
         cargar_idiomas(id_cargo, false);
         cargar_iniciativas(id_cargo, false);
         cargar_instrucciones_basicas(id_cargo, false);
+        cargar_area_estudios(id_cargo, false);
         //Requisitos fisicos
         cargar_reqf_fisicos(id_cargo, false);
         //Responsabilidades Implícitas
