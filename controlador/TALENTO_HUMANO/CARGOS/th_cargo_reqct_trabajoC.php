@@ -10,7 +10,8 @@ if (isset($_GET['listar'])) {
 }
 
 if (isset($_GET['listar_modal'])) {
-    echo json_encode($controlador->listar_modal($_POST['id']));
+    $boton = !(isset($_POST['button_delete']) && $_POST['button_delete'] === 'false');
+    echo json_encode($controlador->listar_modal($_POST['id'], $boton));
 }
 
 if (isset($_GET['insertar_editar'])) {
@@ -21,15 +22,17 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
 
-if (isset($_GET['buscar_trabajo'])) {
+if (isset($_GET['buscar_trabajo_car_pla'])) {
     $parametros = array(
+        'query'  => isset($_GET['q'])      ? $_GET['q']      : '',
         'car_id' => isset($_GET['car_id']) ? $_GET['car_id'] : 0,
-        'query'  => isset($_GET['q'])      ? $_GET['q']      : ''
+        'pla_id' => isset($_GET['pla_id']) ? $_GET['pla_id'] : 0,
     );
-    $datos = $controlador->buscar_trabajo_no_asignado($parametros);
+    $datos = $controlador->buscar_trabajo_car_pla($parametros);
     echo json_encode($datos);
     exit;
 }
+
 
 class th_cargo_reqct_trabajoC
 {
@@ -147,23 +150,30 @@ class th_cargo_reqct_trabajoC
         return $this->modelo->eliminar($datos);
     }
 
-    public function buscar_trabajo_no_asignado($parametros)
+    public function buscar_trabajo_car_pla($parametros)
     {
         $lista  = [];
+        $query  = isset($parametros['query'])  ? trim($parametros['query'])  : '';
         $car_id = isset($parametros['car_id']) ? (int)$parametros['car_id'] : 0;
-        $query  = isset($parametros['query'])  ? trim($parametros['query']) : '';
+        $pla_id = isset($parametros['pla_id']) ? (int)$parametros['pla_id'] : 0;
 
         if ($car_id <= 0) {
             return $lista;
         }
 
-        $datos = $this->modelo->listar_trabajo_no_asignado($car_id, $query);
+        $datos = $this->modelo->listar_catalogo_trabajo($car_id, $pla_id);
+
         foreach ($datos as $item) {
-            $lista[] = [
-                'id'   => $item['id_req_trabajo'],
-                'text' => trim($item['descripcion'])
-            ];
+            $texto = trim($item['descripcion']);
+
+            if ($query === '' || stripos($texto, $query) !== false) {
+                $lista[] = [
+                    'id'   => $item['id_req_trabajo'],
+                    'text' => $texto
+                ];
+            }
         }
+
         return $lista;
     }
 }

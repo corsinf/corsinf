@@ -46,28 +46,41 @@ class th_cargo_reqct_trabajoM extends BaseModel
         return $this->db->datos($sql);
     }
 
-    public function listar_trabajo_no_asignado($id_cargo, $query = '')
+    public function listar_catalogo_trabajo($id_cargo, $id_plaza = 0)
     {
-        $id_cargo = intval($id_cargo);
+        $id_c = intval($id_cargo);
+        $id_p = intval($id_plaza);
 
-        $sql = "SELECT 
-                    rd.id_req_trabajo,
-                    rd.descripcion,
-                    rd.estado
-                FROM th_cat_reqct_trabajo_detalle rd
-                LEFT JOIN th_cargo_reqct_trabajo rt
-                    ON rt.id_req_trabajo = rd.id_req_trabajo
-                    AND rt.id_cargo = $id_cargo
-                    AND rt.th_reqct_estado = 1
-                WHERE rd.estado = 1
-                  AND rt.id_req_trabajo IS NULL";
+        $sql = "
+            SELECT 
+                rd.id_req_trabajo,
+                rd.descripcion,
+                rd.estado
+            FROM _contratacion.th_cat_reqct_trabajo_detalle rd
+            WHERE rd.estado = 1
 
-        if ($query !== '') {
-            $sql .= " AND rd.descripcion LIKE '%$query%'";
-        }
+            AND NOT EXISTS (
+                SELECT 1
+                FROM _contratacion.th_cargo_reqct_trabajo rt
+                WHERE rt.id_req_trabajo = rd.id_req_trabajo
+                AND rt.id_cargo = $id_c
+                AND rt.th_reqct_estado = 1
+            )
 
-        $sql .= " ORDER BY rd.descripcion ASC";
+            AND (
+                $id_p = 0
+                OR NOT EXISTS (
+                    SELECT 1
+                    FROM _contratacion.cn_plaza_reqct_trabajo pt
+                    WHERE pt.id_req_trabajo = rd.id_req_trabajo
+                    AND pt.cn_pla_id = $id_p
+                    AND pt.cn_reqct_estado = 1
+                )
+            )
 
-        return $this->db->datos($sql);
+            ORDER BY rd.descripcion ASC
+        ";
+
+        return $this->db->datos($sql, false, false, true);
     }
 }

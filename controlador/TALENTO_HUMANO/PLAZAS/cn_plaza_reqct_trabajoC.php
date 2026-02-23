@@ -1,9 +1,9 @@
 <?php
 date_default_timezone_set('America/Guayaquil');
 
-require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/PLAZAS/th_plaza_reqct_trabajoM.php');
+require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/PLAZAS/cn_plaza_reqct_trabajoM.php');
 
-$controlador = new th_plaza_reqct_trabajoC();
+$controlador = new cn_plaza_reqct_trabajoC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? '', $_POST['trabajo_id'] ?? ''));
@@ -36,13 +36,13 @@ if (isset($_GET['buscar_trabajo'])) {
 
 
 
-class th_plaza_reqct_trabajoC
+class cn_plaza_reqct_trabajoC
 {
     private $modelo;
 
     function __construct()
     {
-        $this->modelo = new th_plaza_reqct_trabajoM();
+        $this->modelo = new cn_plaza_reqct_trabajoM();
     }
 
     function listar_modal($id = '', $button_delete = true)
