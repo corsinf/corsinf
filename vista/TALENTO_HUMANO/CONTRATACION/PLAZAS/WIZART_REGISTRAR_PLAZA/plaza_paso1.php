@@ -256,6 +256,12 @@
                   $('#cbx_cn_pla_prioridad_interna').prop('checked', boolVal(r.cn_pla_req_prioridad_interna));
                   $('#cbx_cn_pla_req_documentos').prop('checked', boolVal(r.cn_pla_req_documentos));
 
+                  if (r.id_tipo_seleccion == 3) {
+                      $('#pnl_prioridad_interna').show();
+                  } else {
+                      $('#pnl_prioridad_interna').hide();
+                      $('#cbx_cn_pla_prioridad_interna').prop('checked', false);
+                  }
 
                   $('#ddl_cargo').append($('<option>', {
                       value: r.id_cargo,
