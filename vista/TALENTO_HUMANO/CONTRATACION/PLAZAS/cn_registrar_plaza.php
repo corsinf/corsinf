@@ -17,6 +17,121 @@ $es_plaza = true;
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
+<script>
+    $(document).ready(function() {
+
+        smartwizard_cargar_plaza();
+
+    });
+
+    //Para que redimencione el contenedor del smart wizard al cargar los datos de la plaza y los requisitos del cargo
+    $(window).on('load', function() {
+
+        $(document).ajaxStop(function() {
+            ajustarAlturaContenedor();
+        });
+
+    });
+
+    // ─── Wizard: navegación entre pasos ────────────────────────────────────────
+    function smartwizard_cargar_plaza() {
+
+        var btnSiguiente = $('<button></button>')
+            .text('Siguiente')
+            .addClass('btn btn-info')
+            .on('click', function() {
+
+                var wizard = $('#smartwizard_plaza');
+                var pasoActual = wizard.smartWizard("getStepIndex");
+
+                var form = obtener_formulario_paso(pasoActual);
+                var valido = true;
+
+                // Validar solo si el paso tiene formulario
+                if (form !== null) {
+
+                    var inputs = form.find(':input');
+
+                    inputs.each(function() {
+                        if (!form.validate().element(this)) {
+                            valido = false;
+                        }
+                    });
+
+                    if (!valido) return;
+                }
+
+                // Lógica específica por paso
+                if (pasoActual === 0) {
+
+                    if (!validarFechas() || !validarSalarios()) return;
+
+                    insertar_plaza();
+                    wizard.smartWizard("next");
+                    return;
+                }
+
+                if (pasoActual === 1) {
+                    // guardar_requisitos();
+                    wizard.smartWizard("next");
+                    return;
+                }
+
+                wizard.smartWizard("next");
+            });
+
+        var btnAtras = $('<button></button>').text('Atras').addClass('btn btn-info').on('click', function() {
+            $('#smartwizard_plaza').smartWizard("prev");
+            return true;
+        });
+
+        $("#smartwizard_plaza").on("showStep", function(e, anchorObject, stepNumber, stepDirection, stepPosition) {
+            $("#prev-btn").removeClass('disabled');
+            $("#next-btn").removeClass('disabled');
+            if (stepPosition === 'first') {
+                $("#prev-btn").addClass('disabled');
+            } else if (stepPosition === 'last') {
+                $("#next-btn").addClass('disabled');
+            } else {
+                $("#prev-btn").removeClass('disabled');
+                $("#next-btn").removeClass('disabled');
+            }
+        });
+
+        // Smart Wizard
+        $('#smartwizard_plaza').smartWizard({
+            selected: 0,
+            theme: 'arrows',
+            transition: {
+                animation: 'slide-horizontal', // Effect on navigation, none/fade/slide-horizontal/slide-vertical/slide-swing
+            },
+            toolbarSettings: {
+                toolbarPosition: '',
+                toolbarExtraButtons: [btnAtras, btnSiguiente],
+                showNextButton: false, // Oculta el botón predeterminado "Next"
+                showPreviousButton: false,
+            },
+        });
+    }
+
+    function obtener_formulario_paso(pasoActual) {
+        switch (pasoActual) {
+            case 0:
+                return $('#form_plaza');
+            case 1:
+                return null;
+            case 3:
+                return null;
+            default:
+                return null;
+        }
+    }
+
+    function ajustarAlturaContenedor() {
+        $('#tab_content_smart').css('height', 'auto');
+    }
+</script>
+
 
 <div class="page-wrapper">
     <div class="page-content">
