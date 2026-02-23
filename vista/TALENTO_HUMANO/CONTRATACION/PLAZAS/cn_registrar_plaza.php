@@ -56,6 +56,8 @@ $es_plaza = true;
         //Requisitos fisicos
         cargar_reqf_fisicos(id_cargo, false);
         //Responsabilidades Implícitas
+        cargar_responsabilidades(id_cargo, false);
+        //Ambiente de Trabajo
     }
 
     function cargar_propiedades_cargo(id_cargo) {

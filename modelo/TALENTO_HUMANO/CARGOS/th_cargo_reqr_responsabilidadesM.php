@@ -46,28 +46,41 @@ class th_cargo_reqr_responsabilidadesM extends BaseModel
         return $this->db->datos($sql);
     }
 
-    public function listar_detalles_no_asignados($id_cargo, $query = '')
+    public function listar_catalogo_responsabilidades($id_cargo, $id_plaza = 0)
     {
-        $id_cargo = intval($id_cargo);
+        $id_c = intval($id_cargo);
+        $id_p = intval($id_plaza);
 
-        $sql = "SELECT 
-                    rrd.id_req_res_det,
-                    rrd.descripcion,
-                    rrd.estado
-                FROM th_cat_reqr_responsabilidades_detalle rrd
-                LEFT JOIN th_cargo_reqr_responsabilidades rr
-                    ON rr.id_req_res_det = rrd.id_req_res_det
-                    AND rr.id_cargo = $id_cargo
-                    AND rr.th_reqr_estado = 1
-                WHERE rrd.estado = 1
-                  AND rr.id_req_res_det IS NULL";
+        $sql = "
+            SELECT 
+                rrd.id_req_res_det,
+                rrd.descripcion,
+                rrd.estado
+            FROM _contratacion.th_cat_reqr_responsabilidades_detalle rrd
+            WHERE rrd.estado = 1
 
-        if ($query !== '') {
-            $sql .= " AND rrd.descripcion LIKE '%$query%'";
-        }
+            AND NOT EXISTS (
+                SELECT 1
+                FROM _contratacion.th_cargo_reqr_responsabilidades rr
+                WHERE rr.id_req_res_det = rrd.id_req_res_det
+                AND rr.id_cargo = $id_c
+                AND rr.th_reqr_estado = 1
+            )
 
-        $sql .= " ORDER BY rrd.descripcion ASC";
+            AND (
+                $id_p = 0
+                OR NOT EXISTS (
+                    SELECT 1
+                    FROM _contratacion.cn_plaza_reqr_responsabilidades pr
+                    WHERE pr.id_req_res_det = rrd.id_req_res_det
+                    AND pr.cn_pla_id = $id_p
+                    AND pr.cn_reqr_estado = 1
+                )
+            )
 
-        return $this->db->datos($sql);
+            ORDER BY rrd.descripcion ASC
+        ";
+
+         return $this->db->datos($sql, false, false, true);
     }
 }
