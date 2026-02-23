@@ -68,44 +68,37 @@ class th_cargo_reqf_fisicosM extends BaseModel
         $id_req_fisico = intval($id_req_fisico);
         $id_p          = intval($id_plaza);
 
-        if ($id_p != 0) {
-            $sql = "
-            SELECT 
-                rfd.id_req_fisico_det,
-                rfd.descripcion,
-                rfd.estado
-            FROM th_cat_reqf_fisicos_detalle rfd
-            LEFT JOIN th_cargo_reqf_fisicos rf_cargo
-                ON rf_cargo.id_req_fisico_det = rfd.id_req_fisico_det
-                AND rf_cargo.id_cargo = $id_cargo
-                AND rf_cargo.th_reqf_estado = 1
-            LEFT JOIN cn_plaza_reqf_fisicos rf_plaza
-                ON rf_plaza.id_req_fisico_det = rfd.id_req_fisico_det
+        $sql = "
+        SELECT 
+            rfd.id_req_fisico_det,
+            rfd.descripcion,
+            rfd.estado
+        FROM _contratacion.th_cat_reqf_fisicos_detalle rfd
+        WHERE rfd.estado = 1
+          AND rfd.id_req_fisico = $id_req_fisico
+
+        AND NOT EXISTS (
+            SELECT 1
+            FROM _contratacion.th_cargo_reqf_fisicos rf_cargo
+            WHERE rf_cargo.id_req_fisico_det = rfd.id_req_fisico_det
+            AND rf_cargo.id_cargo = $id_cargo
+            AND rf_cargo.th_reqf_estado = 1
+        )
+
+        AND (
+            $id_p = 0
+            OR NOT EXISTS (
+                SELECT 1
+                FROM _contratacion.cn_plaza_reqf_fisicos rf_plaza
+                WHERE rf_plaza.id_req_fisico_det = rfd.id_req_fisico_det
                 AND rf_plaza.cn_pla_id = $id_p
                 AND rf_plaza.cn_reqf_estado = 1
-                AND $id_p > 0
-            WHERE rfd.estado = 1
-              AND rfd.id_req_fisico = $id_req_fisico
-              AND rf_cargo.id_req_fisico_det IS NULL
-              AND ($id_p = 0 OR rf_plaza.id_req_fisico_det IS NULL)
-            ORDER BY rfd.descripcion ASC";
-        } else {
-            $sql = "
-            SELECT 
-                rfd.id_req_fisico_det,
-                rfd.descripcion,
-                rfd.estado
-            FROM th_cat_reqf_fisicos_detalle rfd
-            LEFT JOIN th_cargo_reqf_fisicos rf_cargo
-                ON rf_cargo.id_req_fisico_det = rfd.id_req_fisico_det
-                AND rf_cargo.id_cargo = $id_cargo
-                AND rf_cargo.th_reqf_estado = 1
-            WHERE rfd.estado = 1
-              AND rfd.id_req_fisico = $id_req_fisico
-              AND rf_cargo.id_req_fisico_det IS NULL
-            ORDER BY rfd.descripcion ASC";
-        }
+            )
+        )
 
-        return $this->db->datos($sql);
+        ORDER BY rfd.descripcion ASC
+    ";
+
+         return $this->db->datos($sql, false, false, true);
     }
 }

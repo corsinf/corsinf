@@ -6,68 +6,43 @@
         <?php if ($es_plaza) { ?>
             cargar_plaza_reqf_fisicos('<?= $_id_plaza ?>');
         <?php } ?>
-    });
+        $(document).ready(function() {
+            var id_cargo = $('#txt_id_cargo').val();
+            cargar_selects_reqf_fisico(id_cargo);
+            cargar_reqf_fisicos(id_cargo);
+            <?php if ($es_plaza) { ?>
+                cargar_plaza_reqf_fisicos('<?= $_id_plaza ?>');
+            <?php } ?>
 
-    function cargar_selects_reqf_fisico(car_id, pla_id) {
-        var id_cargo = $('#txt_id_cargo').val();
-        var pla_id = 0;
-        <?php if ($es_plaza) { ?>
-            pla_id = '<?= $_id_plaza ?>';
-        <?php } ?>
+            $('#ddl_req_fisico').off('change').on('change', function() {
+                var id_req_fisico = $(this).val(); 
+                var id_cargo = $('#txt_id_cargo').val();
+                var pla_id = 0;
+                <?php if ($es_plaza) { ?>
+                    pla_id = '<?= $_id_plaza ?>';
+                <?php } ?>
 
-        url_req_fisicoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_reqf_fisicosC.php?buscar=true';
-        cargar_select2_url('ddl_req_fisico', url_req_fisicoC, '', '#modal_reqf_fisico');
+                if (id_req_fisico && id_req_fisico !== '') {
+                    var data_extra = {
+                        'car_id': id_cargo,
+                        'pla_id': pla_id,
+                        'id_req_fisico': id_req_fisico 
+                    };
 
-        if ($('#ddl_req_fisico_det').hasClass("select2-hidden-accessible")) {
-            $('#ddl_req_fisico_det').select2('destroy');
-        }
+                    var url = '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqf_fisicosC.php?buscar_req_fisicos_detalle=true';
+                    cargar_select2_url('ddl_req_fisico_det', url, '', '#modal_reqf_fisico', 0, data_extra);
 
-        $('#ddl_req_fisico').on('select2:select', function() {
-            var id_req_fisico = $(this).val();
-
-            if ($('#ddl_req_fisico_det').hasClass("select2-hidden-accessible")) {
-                $('#ddl_req_fisico_det').select2('destroy');
-            }
-            $('#ddl_req_fisico_det').val(null).prop('disabled', false).trigger('change');
-
-            $('#ddl_req_fisico_det').select2({
-                dropdownParent: $('#modal_reqf_fisico'),
-                ajax: {
-                    url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqf_fisicosC.php?buscar_req_fisicos_detalle=true',
-                    dataType: 'json',
-                    data: function(params) {
-                        return {
-                            q: params.term,
-                            car_id: id_cargo,
-                            pla_id: pla_id,
-                            id_req_fisico: id_req_fisico
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: data
-                        };
-                    }
-                },
-                minimumInputLength: 0,
-                placeholder: "-- SELECCIONE --",
-                language: {
-                    noResults: function() {
-                        return "No hay opciones disponibles";
-                    },
-                    searching: function() {
-                        return "Buscando...";
-                    }
+                    $('#ddl_req_fisico_det').prop('disabled', false);
+                } else {
+                    $('#ddl_req_fisico_det').val(null).prop('disabled', true).trigger('change');
                 }
             });
         });
+    });
 
-        $('#ddl_req_fisico').on('select2:clear select2:unselect', function() {
-            if ($('#ddl_req_fisico_det').hasClass("select2-hidden-accessible")) {
-                $('#ddl_req_fisico_det').select2('destroy');
-            }
-            $('#ddl_req_fisico_det').val(null).prop('disabled', true).trigger('change');
-        });
+    function cargar_selects_reqf_fisico(car_id, pla_id) {
+        url_req_fisicoC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_reqf_fisicosC.php?buscar=true';
+        cargar_select2_url('ddl_req_fisico', url_req_fisicoC, '', '#modal_reqf_fisico');
     }
 
     function cargar_reqf_fisicos(id, button = true) {

@@ -4,39 +4,20 @@
         cargar_iniciativas('<?= $_id ?>');
     });
 
-    function cargar_selects_iniciativa(car_id) {
-        if ($('#ddl_iniciativas').hasClass("select2-hidden-accessible")) {
-            $('#ddl_iniciativas').select2('destroy');
-        }
+    function cargar_selects_iniciativa(car_id, pla_id) {
+        var id_cargo = $('#txt_id_cargo').val();
+        var pla_id = 0;
+        <?php if ($es_plaza) { ?>
+            pla_id = '<?= $_id_plaza ?>';
+        <?php } ?>
 
-        $('#ddl_iniciativas').select2({
-            dropdownParent: $('#modal_agregar_iniciativa'),
-            ajax: {
-                url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_iniciativaC.php?buscar_iniciativas=true',
-                dataType: 'json',
-                data: function(params) {
-                    return {
-                        q: params.term,
-                        car_id: car_id
-                    };
-                },
-                processResults: function(data) {
-                    return {
-                        results: data
-                    };
-                }
-            },
-            minimumInputLength: 0,
-            placeholder: "-- SELECCIONE --",
-            language: {
-                noResults: function() {
-                    return "No hay opciones disponibles";
-                },
-                searching: function() {
-                    return "Buscando...";
-                }
-            }
-        });
+        data_extra = {
+            'car_id': id_cargo,
+            'pla_id': pla_id
+        };
+
+        url_iniciativaC = '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_iniciativaC.php?buscar_iniciativas=true';
+        cargar_select2_url('ddl_iniciativas', url_iniciativaC, '', '#modal_agregar_iniciativa', 0, data_extra);
     }
 
     function cargar_iniciativas(id) {

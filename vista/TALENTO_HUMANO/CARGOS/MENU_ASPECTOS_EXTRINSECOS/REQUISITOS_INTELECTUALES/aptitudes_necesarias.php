@@ -15,73 +15,16 @@
             pla_id = '<?= $_id_plaza ?>';
         <?php } ?>
 
-        if ($('#ddl_habilidades_tecnicas').hasClass("select2-hidden-accessible")) {
-            $('#ddl_habilidades_tecnicas').select2('destroy');
-        }
-        $('#ddl_habilidades_tecnicas').select2({
-            dropdownParent: $('#modal_agregar_aptitud'),
-            ajax: {
-                url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_aptitudC.php?buscar_habilidades_tecnicas=true',
-                dataType: 'json',
-                data: function(params) {
-                    return {
-                        q: params.term,
-                        car_id: id_cargo,
-                        pla_id: pla_id,
-                    };
-                },
-                processResults: function(data) {
-                    return {
-                        results: data
-                    };
-                }
-            },
-            minimumInputLength: 0,
-            allowClear: true,
-            placeholder: "-- SELECCIONE --",
-            language: {
-                noResults: function() {
-                    return "No hay opciones disponibles";
-                },
-                searching: function() {
-                    return "Buscando...";
-                }
-            }
-        });
+        data_extra = {
+            'car_id': id_cargo,
+            'pla_id': pla_id
+        };
 
-        if ($('#ddl_habilidades_blandas').hasClass("select2-hidden-accessible")) {
-            $('#ddl_habilidades_blandas').select2('destroy');
-        }
-        $('#ddl_habilidades_blandas').select2({
-            dropdownParent: $('#modal_agregar_aptitud'),
-            ajax: {
-                url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_aptitudC.php?buscar_habilidades_blandas=true',
-                dataType: 'json',
-                data: function(params) {
-                    return {
-                        q: params.term,
-                        car_id: id_cargo,
-                        pla_id: pla_id,
-                    };
-                },
-                processResults: function(data) {
-                    return {
-                        results: data
-                    };
-                }
-            },
-            minimumInputLength: 0,
-            allowClear: true,
-            placeholder: "-- SELECCIONE --",
-            language: {
-                noResults: function() {
-                    return "No hay opciones disponibles";
-                },
-                searching: function() {
-                    return "Buscando...";
-                }
-            }
-        });
+        url_tecnicasC = '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_aptitudC.php?buscar_habilidades_tecnicas=true';
+        cargar_select2_url('ddl_habilidades_tecnicas', url_tecnicasC, '', '#modal_agregar_aptitud', 0, data_extra);
+
+        url_blandasC = '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_aptitudC.php?buscar_habilidades_blandas=true';
+        cargar_select2_url('ddl_habilidades_blandas', url_blandasC, '', '#modal_agregar_aptitud', 0, data_extra);
     }
 
     function cargar_aptitudes(id, button = true) {

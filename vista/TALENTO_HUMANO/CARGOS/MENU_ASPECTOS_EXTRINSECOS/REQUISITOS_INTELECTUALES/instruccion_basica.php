@@ -14,40 +14,13 @@
             pla_id = '<?= $_id_plaza ?>';
         <?php } ?>
 
+        data_extra = {
+            'car_id': id_cargo,
+            'pla_id': pla_id
+        };
 
-        if ($('#ddl_nivel_academico').hasClass("select2-hidden-accessible")) {
-            $('#ddl_nivel_academico').select2('destroy');
-        }
-
-        $('#ddl_nivel_academico').select2({
-            dropdownParent: $('#modal_instruccion_basica'),
-            ajax: {
-                url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_instruccionC.php?buscar_nivel_academico=true',
-                dataType: 'json',
-                data: function(params) {
-                    return {
-                        q: params.term,
-                        car_id: id_cargo,
-                        pla_id: pla_id,
-                    };
-                },
-                processResults: function(data) {
-                    return {
-                        results: data
-                    };
-                }
-            },
-            minimumInputLength: 0,
-            placeholder: "-- SELECCIONE --",
-            language: {
-                noResults: function() {
-                    return "No hay opciones disponibles";
-                },
-                searching: function() {
-                    return "Buscando...";
-                }
-            }
-        });
+        url_instruccionC = '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_instruccionC.php?buscar_nivel_academico=true';
+        cargar_select2_url('ddl_nivel_academico', url_instruccionC, '', '#modal_instruccion_basica', 0, data_extra);
     }
 
     function cargar_instrucciones_basicas(id, button = true) {

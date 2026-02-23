@@ -14,39 +14,13 @@
             pla_id = '<?= $_id_plaza ?>';
         <?php } ?>
 
-        if ($('#ddl_idiomas').hasClass("select2-hidden-accessible")) {
-            $('#ddl_idiomas').select2('destroy');
-        }
+        data_extra = {
+            'car_id': id_cargo,
+            'pla_id': pla_id
+        };
 
-        $('#ddl_idiomas').select2({
-            dropdownParent: $('#modal_agregar_idioma'),
-            ajax: {
-                url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_idiomasC.php?buscar_idiomas=true',
-                dataType: 'json',
-                data: function(params) {
-                    return {
-                        q: params.term,
-                        car_id: id_cargo,
-                        pla_id: pla_id,
-                    };
-                },
-                processResults: function(data) {
-                    return {
-                        results: data
-                    };
-                }
-            },
-            minimumInputLength: 0,
-            placeholder: "-- SELECCIONE --",
-            language: {
-                noResults: function() {
-                    return "No hay opciones disponibles";
-                },
-                searching: function() {
-                    return "Buscando...";
-                }
-            }
-        });
+        url_idiomaC = '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_idiomasC.php?buscar_idiomas=true';
+        cargar_select2_url('ddl_idiomas', url_idiomaC, '', '#modal_agregar_idioma', 0, data_extra);
 
         cargar_select2_url('ddl_idiomas_nivel', url_IdiomaNivelC, '', '#modal_agregar_idioma');
     }

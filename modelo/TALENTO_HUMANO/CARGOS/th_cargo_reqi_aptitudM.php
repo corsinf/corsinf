@@ -52,47 +52,38 @@ class th_cargo_reqi_aptitudM extends BaseModel
         $id_c = intval($id_cargo);
         $id_p = intval($id_plaza);
 
-        if ($id_p != 0) {
-            $sql = "
-            SELECT 
-                h.th_hab_id,
-                h.th_hab_nombre,
-                h.th_hab_estado,
-                h.th_tiph_id
-            FROM th_cat_habilidades h
-            LEFT JOIN th_cargo_reqi_aptitud ra_cargo
-                ON ra_cargo.th_hab_id = h.th_hab_id
-                AND ra_cargo.id_cargo = $id_c
-                AND ra_cargo.th_reqa_estado = 1
-            LEFT JOIN cn_plaza_reqi_aptitud ra_plaza
-                ON ra_plaza.cn_hab_id = h.th_hab_id
+        $sql = "
+        SELECT 
+            h.th_hab_id,
+            h.th_hab_nombre,
+            h.th_hab_estado,
+            h.th_tiph_id
+        FROM _talentoh.th_cat_habilidades h
+        WHERE h.th_hab_estado = 1 AND h.th_tiph_id = 1
+
+        AND NOT EXISTS (
+            SELECT 1
+            FROM _contratacion.th_cargo_reqi_aptitud ra_cargo
+            WHERE ra_cargo.th_hab_id = h.th_hab_id
+            AND ra_cargo.id_cargo = $id_c
+            AND ra_cargo.th_reqa_estado = 1
+        )
+
+        AND (
+            $id_p = 0
+            OR NOT EXISTS (
+                SELECT 1
+                FROM _contratacion.cn_plaza_reqi_aptitud ra_plaza
+                WHERE ra_plaza.cn_hab_id = h.th_hab_id
                 AND ra_plaza.cn_pla_id = $id_p
                 AND ra_plaza.cn_reqa_estado = 1
-                AND $id_p > 0
-            WHERE h.th_hab_estado = 1 AND h.th_tiph_id = 1
-              AND ra_cargo.th_hab_id IS NULL
-              AND ($id_p = 0 OR ra_plaza.cn_hab_id IS NULL)
-            ORDER BY h.th_hab_nombre;
-            ";
-        } else {
-            $sql = "
-            SELECT 
-                h.th_hab_id,
-                h.th_hab_nombre,
-                h.th_hab_estado,
-                h.th_tiph_id
-            FROM th_cat_habilidades h
-            LEFT JOIN th_cargo_reqi_aptitud ra_cargo
-                ON ra_cargo.th_hab_id = h.th_hab_id
-                AND ra_cargo.id_cargo = $id_c
-                AND ra_cargo.th_reqa_estado = 1
-            WHERE h.th_hab_estado = 1 AND h.th_tiph_id = 1
-              AND ra_cargo.th_hab_id IS NULL
-            ORDER BY h.th_hab_nombre;
-            ";
-        }
+            )
+        )
 
-        return $this->db->datos($sql);
+        ORDER BY h.th_hab_nombre
+    ";
+
+        return $this->db->datos($sql, false, false, true);
     }
 
     public function listar_habilidades_blandas_no_asignadas($id_cargo, $id_plaza = 0)
@@ -100,46 +91,37 @@ class th_cargo_reqi_aptitudM extends BaseModel
         $id_c = intval($id_cargo);
         $id_p = intval($id_plaza);
 
-        if ($id_p != 0) {
-            $sql = "
-            SELECT 
-                h.th_hab_id,
-                h.th_hab_nombre,
-                h.th_hab_estado,
-                h.th_tiph_id
-            FROM th_cat_habilidades h
-            LEFT JOIN th_cargo_reqi_aptitud ra_cargo
-                ON ra_cargo.th_hab_id = h.th_hab_id
-                AND ra_cargo.id_cargo = $id_c
-                AND ra_cargo.th_reqa_estado = 1
-            LEFT JOIN cn_plaza_reqi_aptitud ra_plaza
-                ON ra_plaza.cn_hab_id = h.th_hab_id
+        $sql = "
+        SELECT 
+            h.th_hab_id,
+            h.th_hab_nombre,
+            h.th_hab_estado,
+            h.th_tiph_id
+        FROM _talentoh.th_cat_habilidades h
+        WHERE h.th_hab_estado = 1 AND h.th_tiph_id = 2
+
+        AND NOT EXISTS (
+            SELECT 1
+            FROM _contratacion.th_cargo_reqi_aptitud ra_cargo
+            WHERE ra_cargo.th_hab_id = h.th_hab_id
+            AND ra_cargo.id_cargo = $id_c
+            AND ra_cargo.th_reqa_estado = 1
+        )
+
+        AND (
+            $id_p = 0
+            OR NOT EXISTS (
+                SELECT 1
+                FROM _contratacion.cn_plaza_reqi_aptitud ra_plaza
+                WHERE ra_plaza.cn_hab_id = h.th_hab_id
                 AND ra_plaza.cn_pla_id = $id_p
                 AND ra_plaza.cn_reqa_estado = 1
-                AND $id_p > 0
-            WHERE h.th_hab_estado = 1 AND h.th_tiph_id = 2
-              AND ra_cargo.th_hab_id IS NULL
-              AND ($id_p = 0 OR ra_plaza.cn_hab_id IS NULL)
-            ORDER BY h.th_hab_nombre;
-            ";
-        } else {
-            $sql = "
-            SELECT 
-                h.th_hab_id,
-                h.th_hab_nombre,
-                h.th_hab_estado,
-                h.th_tiph_id
-            FROM th_cat_habilidades h
-            LEFT JOIN th_cargo_reqi_aptitud ra_cargo
-                ON ra_cargo.th_hab_id = h.th_hab_id
-                AND ra_cargo.id_cargo = $id_c
-                AND ra_cargo.th_reqa_estado = 1
-            WHERE h.th_hab_estado = 1 AND h.th_tiph_id = 2
-              AND ra_cargo.th_hab_id IS NULL
-            ORDER BY h.th_hab_nombre;
-            ";
-        }
+            )
+        )
 
-        return $this->db->datos($sql);
+        ORDER BY h.th_hab_nombre
+    ";
+
+        return $this->db->datos($sql, false, false, true);
     }
 }

@@ -56,44 +56,36 @@ class th_cargo_reqi_idiomasM extends BaseModel
         $id_c = intval($id_cargo);
         $id_p = intval($id_plaza);
 
-        if ($id_p != 0) {
-            $sql = "
-    SELECT 
-        i.id_idiomas,
-        i.descripcion,
-        i.estado
-    FROM th_cat_idiomas i
-    LEFT JOIN th_cargo_reqi_idiomas ri_cargo
-        ON ri_cargo.id_idiomas = i.id_idiomas
-        AND ri_cargo.id_cargo = $id_c
-        AND ri_cargo.th_reqid_estado = 1
-    LEFT JOIN cn_plaza_reqi_idiomas ri_plaza
-        ON ri_plaza.id_idiomas = i.id_idiomas
-        AND ri_plaza.cn_pla_id = $id_p
-        AND ri_plaza.cn_reqid_estado = 1
-        AND $id_p > 0
-    WHERE i.estado = 1
-      AND ri_cargo.id_idiomas IS NULL
-      AND ($id_p = 0 OR ri_plaza.id_idiomas IS NULL)
-    ORDER BY i.id_idiomas;
-    ";
-        } else {
-            $sql = "
+        $sql = "
         SELECT 
             i.id_idiomas,
             i.descripcion,
             i.estado
-        FROM th_cat_idiomas i
-        LEFT JOIN th_cargo_reqi_idiomas ri_cargo
-            ON ri_cargo.id_idiomas = i.id_idiomas
+        FROM _talentoh.th_cat_idiomas i
+        WHERE i.estado = 1
+
+        AND NOT EXISTS (
+            SELECT 1
+            FROM _contratacion.th_cargo_reqi_idiomas ri_cargo
+            WHERE ri_cargo.id_idiomas = i.id_idiomas
             AND ri_cargo.id_cargo = $id_c
             AND ri_cargo.th_reqid_estado = 1
-        WHERE i.estado = 1
-          AND ri_cargo.id_idiomas IS NULL
-        ORDER BY i.descripcion;
-        ";
-        }
+        )
 
-        return $this->db->datos($sql);
+        AND (
+            $id_p = 0
+            OR NOT EXISTS (
+                SELECT 1
+                FROM _contratacion.cn_plaza_reqi_idiomas ri_plaza
+                WHERE ri_plaza.id_idiomas = i.id_idiomas
+                AND ri_plaza.cn_pla_id = $id_p
+                AND ri_plaza.cn_reqid_estado = 1
+            )
+        )
+
+        ORDER BY i.descripcion
+    ";
+
+        return $this->db->datos($sql, false, false, true);
     }
 }
