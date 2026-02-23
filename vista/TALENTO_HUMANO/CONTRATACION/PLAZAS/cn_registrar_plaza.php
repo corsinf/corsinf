@@ -35,6 +35,22 @@ $es_plaza = true;
             cargar_requisitos_cargo(id_cargo);
 
         })
+
+        // setTimeout(function() {
+        //     alert('showStep: ');
+        //     ajustarAlturaContenedor();
+
+        // }, 5000);
+
+    });
+
+    //Para que redimencione el contenedor del smart wizard al cargar los datos de la plaza y los requisitos del cargo
+    $(window).on('load', function() {
+
+        $(document).ajaxStop(function() {
+            ajustarAlturaContenedor();
+        });
+
     });
 
     function cargar_selects2_plaza() {
@@ -61,7 +77,7 @@ $es_plaza = true;
         //Ambiente de Trabajo
         cargar_trabajo(id_cargo, false);
         cargar_riesgos(id_cargo, false);
-        
+
     }
 
     function cargar_propiedades_cargo(id_cargo) {
@@ -125,36 +141,41 @@ $es_plaza = true;
 
                 var wizard = $('#smartwizard_plaza');
                 var pasoActual = wizard.smartWizard("getStepIndex");
-                var form = $('#form_plaza');
 
-                var step = wizard.find('.tab-pane').eq(pasoActual);
-                var inputs = step.find(':input');
-
+                var form = obtener_formulario_paso(pasoActual);
                 var valido = true;
 
-                inputs.each(function() {
-                    if (!form.validate().element(this)) {
-                        valido = false;
-                    }
-                });
+                // Validar solo si el paso tiene formulario
+                if (form !== null) {
 
-                if (!valido) {
-                    //Swal.fire('', 'Complete los campos obligatorios', 'info');
-                    return;
+                    var inputs = form.find(':input');
+
+                    inputs.each(function() {
+                        if (!form.validate().element(this)) {
+                            valido = false;
+                        }
+                    });
+
+                    if (!valido) return;
                 }
 
-                // Insertar en el primer paso
+                // Lógica específica por paso
                 if (pasoActual === 0) {
 
                     if (!validarFechas() || !validarSalarios()) return;
+
                     insertar_plaza();
                     wizard.smartWizard("next");
-
-                    return; // IMPORTANTE para que no siga ejecutando nada más
-                } else {
-                    wizard.smartWizard("next");
+                    return;
                 }
 
+                if (pasoActual === 1) {
+                    // guardar_requisitos();
+                    wizard.smartWizard("next");
+                    return;
+                }
+
+                wizard.smartWizard("next");
             });
 
         var btnAtras = $('<button></button>').text('Atras').addClass('btn btn-info').on('click', function() {
@@ -189,6 +210,25 @@ $es_plaza = true;
                 showPreviousButton: false,
             },
         });
+
+
+    }
+
+    function obtener_formulario_paso(pasoActual) {
+        switch (pasoActual) {
+            case 0:
+                return $('#form_plaza');
+            case 1:
+                return null;
+            case 3:
+                return null;
+            default:
+                return null;
+        }
+    }
+
+    function ajustarAlturaContenedor() {
+        $('#tab_content_smart').css('height', 'auto');
     }
 
     // ─── AJAX ──────────────────────────────────────────────────────────────────
@@ -483,10 +523,10 @@ $es_plaza = true;
                                         <br>This is step description</a>
                                 </li>
                             </ul>
-                            <div class="tab-content">
+                            <div class="tab-content" id="tab_content_smart">
                                 <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1" data-step="0">
 
-
+                                    <button onclick="ajustarAlturaContenedor();">adf</button>
                                     <?php include_once('../vista/TALENTO_HUMANO/CONTRATACION/PLAZAS/WIZART_REGISTRAR_PLAZA/plaza_paso1.php'); ?>
 
                                 </div>
