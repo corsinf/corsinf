@@ -1,7 +1,6 @@
 <?php
 $_id_plaza = isset($_GET['_id_plaza']) ? (int)$_GET['_id_plaza'] : 0;
-
-$color_destino = '#d4edda'; // verde claro para etapas asignadas
+$color_destino = '#d4edda';
 ?>
 
 <style>
@@ -29,13 +28,17 @@ $color_destino = '#d4edda'; // verde claro para etapas asignadas
         font-size: 0.7rem;
         margin-right: 6px;
     }
+
+    #indicador_guardado {
+        font-size: 0.78rem;
+        transition: opacity 0.4s ease;
+    }
 </style>
 
 <script>
     $(document).ready(function() {
         cargarEtapasPlaza('<?= $_id_plaza ?>');
 
-        // Conectar ambas listas para arrastrar entre ellas
         $(".pnl_etapas_sort").sortable({
             connectWith: ".pnl_etapas_sort",
             placeholder: "sortable-placeholder",
@@ -49,19 +52,19 @@ $color_destino = '#d4edda'; // verde claro para etapas asignadas
                     item.css("background-color", "<?= $color_destino ?>");
                 } else {
                     item.css("background-color", "");
-                    // Si vuelve al origen se limpia el id de registro asignado
-                    // (se mantendrá en data-id-plaet para poder eliminarlo al guardar)
                 }
 
-                actualizarNumerosOrden(); // Redibujar los badges de orden
+                actualizarNumerosOrden();
+                guardarEtapasPlaza(); // Auto-guardar al mover
             }
         }).disableSelection();
+
+        // Auto-guardar al cambiar cualquier checkbox (delegado, funciona aunque se genere dinámicamente)
+        $(document).on('change', '#pnl_lista_destino .chk-obligatoria', function() {
+            guardarEtapasPlaza();
+        });
     });
 
-    /**
-     * Carga las etapas del catálogo y las etapas ya asignadas a la plaza.
-     * Llama a ambos endpoints en paralelo y luego separa las listas.
-     */
     function cargarEtapasPlaza(id_plaza) {
         let req_catalogo = $.ajax({
             url: '../controlador/TALENTO_HUMANO/CONTRATACION/cn_cat_plaza_etapasC.php?listar=true',
@@ -79,51 +82,39 @@ $color_destino = '#d4edda'; // verde claro para etapas asignadas
         });
 
         $.when(req_catalogo, req_asignadas).done(function(resCat, resAsig) {
-            let catalogo = resCat[0]; // todas las etapas del catálogo
-            let asignadas = resAsig[0]; // etapas ya asignadas a esta plaza
+            let catalogo = resCat[0];
+            let asignadas = resAsig[0];
 
-            // Ordenar las asignadas por cn_plaet_orden
             asignadas.sort((a, b) => a.cn_plaet_orden - b.cn_plaet_orden);
 
-            // IDs de etapas ya asignadas (para excluirlas del origen)
             let idsAsignados = asignadas.map(e => String(e.id_etapa));
 
-            // ── Lista DESTINO (ya asignadas) ───────────────────────────────
             let itemsDestino = asignadas.map((item, i) =>
                 `<li class="list-group-item d-flex align-items-center gap-2"
-                    data-id-etapa="${item.id_etapa}"
-                    data-id-plaet="${item._id}"
-                    style="background-color: <?= $color_destino ?>;">
-
-                    <!-- Badge de orden -->
+                     data-id-etapa="${item.id_etapa}"
+                     data-id-plaet="${item._id}"
+                     style="background-color: <?= $color_destino ?>;">
                     <span class="badge bg-secondary badge-orden">${i + 1}</span>
-
-                    <!-- Nombre de la etapa -->
                     <span class="flex-grow-1">${item.etapa_nombre || 'Sin nombre'}</span>
-
-                    <!-- Checkbox obligatoria -->
                     <div class="form-check form-check-inline mb-0 ms-auto" style="cursor:default;" onclick="event.stopPropagation()">
                         <input class="form-check-input chk-obligatoria"
-                            type="checkbox"
-                            id="chk_obl_${item._id}"
-                            title="Etapa obligatoria"
-                            ${item.cn_plaet_obligatoria == 1 ? 'checked' : ''}>
-                        <label class="form-check-label small text-muted" for="chk_obl_${item._id}">
-                            Obligatoria
-                        </label>
+                               type="checkbox"
+                               id="chk_obl_${item._id}"
+                               title="Etapa obligatoria"
+                               ${item.cn_plaet_obligatoria == 1 ? 'checked' : ''}>
+                        <label class="form-check-label small text-muted" for="chk_obl_${item._id}">Obligatoria</label>
                     </div>
                 </li>`
             ).join('');
 
-            // ── Lista ORIGEN (no asignadas aún) ───────────────────────────
             let itemsOrigen = catalogo
                 .filter(item => !idsAsignados.includes(String(item._id)))
                 .map(item =>
                     `<li class="list-group-item"
-                     data-id-etapa="${item._id}"
-                     data-id-plaet="">
-                     ${item.nombre || 'Sin nombre'}
-                 </li>`
+                         data-id-etapa="${item._id}"
+                         data-id-plaet="">
+                         ${item.nombre || 'Sin nombre'}
+                     </li>`
                 ).join('');
 
             $("#pnl_lista_destino").html(itemsDestino);
@@ -133,45 +124,34 @@ $color_destino = '#d4edda'; // verde claro para etapas asignadas
         });
     }
 
-    /**
-     * Redibujar los badges de número de orden en la lista destino.
-     */
     function actualizarNumerosOrden() {
         $("#pnl_lista_destino li").each(function(i) {
             let badge = $(this).find('.badge-orden');
             if (badge.length === 0) {
-                // Es un elemento que viene del origen, no tiene checkbox aún → agregarlo
-                $(this).find('span').first().before(`<span class="badge bg-secondary badge-orden">${i + 1}</span>`);
+                $(this).addClass('d-flex align-items-center gap-2');
+                $(this).prepend(`<span class="badge bg-secondary badge-orden">${i + 1}</span>`);
 
-                // Agregar checkbox si no existe
                 if ($(this).find('.chk-obligatoria').length === 0) {
-                    let idPlaet = $(this).data("id-plaet") || 'new_' + i;
-                    $(this).addClass('d-flex align-items-center gap-2');
+                    let uid = $(this).data("id-plaet") || 'new_' + i;
                     $(this).append(`
-                    <div class="form-check form-check-inline mb-0 ms-auto" style="cursor:default;" onclick="event.stopPropagation()">
-                        <input class="form-check-input chk-obligatoria"
-                               type="checkbox"
-                               id="chk_obl_${idPlaet}"
-                               title="Etapa obligatoria">
-                        <label class="form-check-label small text-muted" for="chk_obl_${idPlaet}">
-                            Obligatoria
-                        </label>
-                    </div>
-                `);
+                        <div class="form-check form-check-inline mb-0 ms-auto" style="cursor:default;" onclick="event.stopPropagation()">
+                            <input class="form-check-input chk-obligatoria"
+                                   type="checkbox"
+                                   id="chk_obl_${uid}"
+                                   title="Etapa obligatoria">
+                            <label class="form-check-label small text-muted" for="chk_obl_${uid}">Obligatoria</label>
+                        </div>
+                    `);
                 }
             } else {
                 badge.text(i + 1);
             }
         });
 
-        // Limpiar badges y checkboxes en origen
         $("#pnl_lista_origen .badge-orden").remove();
         $("#pnl_lista_origen .chk-obligatoria").closest('.form-check').remove();
     }
 
-    /**
-     * Construye el array de la lista destino para enviar al servidor.
-     */
     function getListaDestino() {
         let lista = [];
         $("#pnl_lista_destino li").each(function(i) {
@@ -185,10 +165,6 @@ $color_destino = '#d4edda'; // verde claro para etapas asignadas
         return lista;
     }
 
-    /**
-     * Construye el array de la lista origen (solo los que tenían id-plaet,
-     * es decir los que fueron movidos de vuelta al origen).
-     */
     function getListaOrigen() {
         let lista = [];
         $("#pnl_lista_origen li").each(function() {
@@ -203,17 +179,26 @@ $color_destino = '#d4edda'; // verde claro para etapas asignadas
         return lista;
     }
 
-    /**
-     * Guardar las asignaciones.
-     */
+    function mostrarIndicador(estado) {
+        let el = $("#indicador_guardado");
+        let ico = estado === 'guardando' ?
+            `<i class="bx bx-loader-alt bx-spin text-secondary me-1"></i> Guardando...` :
+            `<i class="bx bx-check-circle text-success me-1"></i> Guardado`;
+
+        el.html(ico).css('opacity', 1);
+
+        if (estado === 'ok') {
+            setTimeout(() => el.css('opacity', 0), 2000);
+        }
+    }
+
     function guardarEtapasPlaza() {
         let listaDestino = getListaDestino();
         let listaOrigen = getListaOrigen();
 
-        if (listaDestino.length === 0) {
-            Swal.fire('Aviso', 'Debe asignar al menos una etapa a la plaza.', 'warning');
-            return;
-        }
+        if (listaDestino.length === 0) return;
+
+        mostrarIndicador('guardando');
 
         $.ajax({
             url: '../controlador/TALENTO_HUMANO/CONTRATACION/cn_plaza_etapasC.php?guardar_bulk=true',
@@ -226,8 +211,9 @@ $color_destino = '#d4edda'; // verde claro para etapas asignadas
             },
             success: function(response) {
                 if (response == 1) {
-                    Swal.fire('', 'Etapas guardadas correctamente.', 'success');
-                    cargarEtapasPlaza(<?= $_id_plaza ?>); // Recargar para actualizar data-id-plaet
+                    mostrarIndicador('ok');
+                    // Recargar silenciosamente para actualizar data-id-plaet de los nuevos
+                    cargarEtapasPlaza(<?= $_id_plaza ?>);
                 } else {
                     Swal.fire('', 'Ocurrió un error al guardar.', 'warning');
                 }
@@ -239,19 +225,16 @@ $color_destino = '#d4edda'; // verde claro para etapas asignadas
     }
 </script>
 
-<!-- ═══════════════════════════════════════════════ TEMPLATE ══ -->
+<!-- TEMPLATE -->
 <div class="row pt-3">
 
-    <!-- ORIGEN: etapas disponibles -->
+    <!-- ORIGEN -->
     <div class="col-md-5">
         <h6 class="mb-2 text-secondary fw-bold">
             <i class="bx bx-list-ul me-1"></i> Etapas disponibles
         </h6>
-        <ul id="pnl_lista_origen"
-            class="list-group lista-etapas pnl_etapas_sort">
-            <li class="list-group-item text-muted text-center small fst-italic">
-                Cargando...
-            </li>
+        <ul id="pnl_lista_origen" class="list-group lista-etapas pnl_etapas_sort">
+            <li class="list-group-item text-muted text-center small fst-italic">Cargando...</li>
         </ul>
     </div>
 
@@ -261,17 +244,18 @@ $color_destino = '#d4edda'; // verde claro para etapas asignadas
         <small class="text-muted mt-1">Arrastra</small>
     </div>
 
-    <!-- DESTINO: etapas asignadas a la plaza -->
+    <!-- DESTINO -->
     <div class="col-md-5">
-        <h6 class="mb-2 text-success fw-bold">
-            <i class="bx bx-check-circle me-1"></i> Etapas asignadas
-            <small class="fw-normal text-muted">(el orden define el flujo)</small>
-        </h6>
-        <ul id="pnl_lista_destino"
-            class="list-group lista-etapas pnl_etapas_sort">
-            <li class="list-group-item text-muted text-center small fst-italic">
-                Cargando...
-            </li>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="mb-0 text-success fw-bold">
+                <i class="bx bx-check-circle me-1"></i> Etapas asignadas
+                <small class="fw-normal text-muted">(el orden define el flujo)</small>
+            </h6>
+            <!-- Indicador de guardado automatico -->
+            <span id="indicador_guardado" style="opacity:0;"></span>
+        </div>
+        <ul id="pnl_lista_destino" class="list-group lista-etapas pnl_etapas_sort">
+            <li class="list-group-item text-muted text-center small fst-italic">Cargando...</li>
         </ul>
     </div>
 </div>
