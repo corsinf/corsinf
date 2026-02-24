@@ -82,52 +82,65 @@ class cn_plaza_etapasC
     {
         if ($id_plaza === '') return -1;
 
-        // ── PASO 1: Desactivar etapas devueltas al origen ──────────────────
+        // PASO 1: Desactivar etapas devueltas al origen
         foreach ($lista_origen as $item) {
             if (!empty($item['txt_id_plaet'])) {
                 $this->eliminar($item['txt_id_plaet']);
             }
         }
 
-        // ── PASO 2a: Poner órdenes negativos temporales en los ya existentes
-        //    para evitar colisión con la UNIQUE KEY (cn_pla_id, cn_plaet_orden)
+        // PASO 2a: Poner órdenes negativos temporales para evitar colisión de unique key de orden
         foreach ($lista_destino as $item) {
             $id_plaet = $item['txt_id_plaet'] ?? '';
             $orden    = $item['txt_orden']    ?? 0;
 
             if (!empty($id_plaet)) {
-                $datos = [['campo' => 'cn_plaet_orden', 'dato' => $orden * -1]]; // negativo = temporal
+                $datos = [['campo' => 'cn_plaet_orden', 'dato' => $orden * -1]];
                 $where = [['campo' => 'cn_plaet_id', 'dato' => $id_plaet]];
                 $this->modelo->editar($datos, $where);
             }
         }
 
-        // ── PASO 2b: Insertar nuevos / actualizar con el orden definitivo ──
+        // PASO 2b: Insertar nuevos / actualizar orden definitivo
         foreach ($lista_destino as $item) {
-            $id_plaet      = $item['txt_id_plaet']      ?? '';
-            $id_etapa      = $item['txt_id_etapa']      ?? '';
-            $orden         = $item['txt_orden']          ?? 0;
-            $obligatoria   = !empty($item['txt_obligatoria']) ? 1 : 0;
+            $id_plaet    = $item['txt_id_plaet']   ?? '';
+            $id_etapa    = $item['txt_id_etapa']   ?? '';
+            $orden       = $item['txt_orden']       ?? 0;
+            $obligatoria = !empty($item['txt_obligatoria']) ? 1 : 0;
 
             if ($id_etapa === '') continue;
 
             if (empty($id_plaet)) {
-                // Nueva asignación
-                $datos = [
-                    ['campo' => 'cn_pla_id',           'dato' => $id_plaza],
-                    ['campo' => 'id_etapa',             'dato' => $id_etapa],
-                    ['campo' => 'cn_plaet_orden',       'dato' => $orden],
-                    ['campo' => 'cn_plaet_obligatoria', 'dato' => $obligatoria],
-                    ['campo' => 'estado',               'dato' => 1],
-                    ['campo' => 'fecha_creacion',       'dato' => date('Y-m-d H:i:s')],
-                ];
-                $this->modelo->insertar_id($datos);
+                // Verificar si ya existe el par (cn_pla_id, id_etapa) antes de insertar
+                $existe = $this->modelo->buscar_existente($id_plaza, $id_etapa);
+
+                if ($existe) {
+                    // Ya existe pero sin id_plaet en el frontend → solo actualizar
+                    $datos = [
+                        ['campo' => 'cn_plaet_orden',       'dato' => $orden],
+                        ['campo' => 'cn_plaet_obligatoria', 'dato' => $obligatoria],
+                        ['campo' => 'estado',                'dato' => 1],
+                    ];
+                    $where = [['campo' => 'cn_plaet_id', 'dato' => $existe]];
+                    $this->modelo->editar($datos, $where);
+                } else {
+                    // Realmente es nuevo
+                    $datos = [
+                        ['campo' => 'cn_pla_id',           'dato' => $id_plaza],
+                        ['campo' => 'id_etapa',             'dato' => $id_etapa],
+                        ['campo' => 'cn_plaet_orden',       'dato' => $orden],
+                        ['campo' => 'cn_plaet_obligatoria', 'dato' => $obligatoria],
+                        ['campo' => 'estado',               'dato' => 1],
+                        ['campo' => 'fecha_creacion',       'dato' => date('Y-m-d H:i:s')],
+                    ];
+                    $this->modelo->insertar($datos);
+                }
             } else {
-                // Actualizar orden definitivo + obligatoria
+                // Actualizar orden definitivo
                 $datos = [
                     ['campo' => 'cn_plaet_orden',       'dato' => $orden],
                     ['campo' => 'cn_plaet_obligatoria', 'dato' => $obligatoria],
-                    ['campo' => 'estado',               'dato' => 1],
+                    ['campo' => 'estado',                'dato' => 1],
                 ];
                 $where = [['campo' => 'cn_plaet_id', 'dato' => $id_plaet]];
                 $this->modelo->editar($datos, $where);
