@@ -90,13 +90,29 @@ $color_destino = '#d4edda'; // verde claro para etapas asignadas
 
             // ── Lista DESTINO (ya asignadas) ───────────────────────────────
             let itemsDestino = asignadas.map((item, i) =>
-                `<li class="list-group-item"
-                 data-id-etapa="${item.id_etapa}"
-                 data-id-plaet="${item._id}"
-                 style="background-color: <?= $color_destino ?>;">
-                 <span class="badge bg-secondary badge-orden">${i + 1}</span>
-                 ${item.etapa_nombre || 'Sin nombre'}
-             </li>`
+                `<li class="list-group-item d-flex align-items-center gap-2"
+                    data-id-etapa="${item.id_etapa}"
+                    data-id-plaet="${item._id}"
+                    style="background-color: <?= $color_destino ?>;">
+
+                    <!-- Badge de orden -->
+                    <span class="badge bg-secondary badge-orden">${i + 1}</span>
+
+                    <!-- Nombre de la etapa -->
+                    <span class="flex-grow-1">${item.etapa_nombre || 'Sin nombre'}</span>
+
+                    <!-- Checkbox obligatoria -->
+                    <div class="form-check form-check-inline mb-0 ms-auto" style="cursor:default;" onclick="event.stopPropagation()">
+                        <input class="form-check-input chk-obligatoria"
+                            type="checkbox"
+                            id="chk_obl_${item._id}"
+                            title="Etapa obligatoria"
+                            ${item.cn_plaet_obligatoria == 1 ? 'checked' : ''}>
+                        <label class="form-check-label small text-muted" for="chk_obl_${item._id}">
+                            Obligatoria
+                        </label>
+                    </div>
+                </li>`
             ).join('');
 
             // ── Lista ORIGEN (no asignadas aún) ───────────────────────────
@@ -124,13 +140,33 @@ $color_destino = '#d4edda'; // verde claro para etapas asignadas
         $("#pnl_lista_destino li").each(function(i) {
             let badge = $(this).find('.badge-orden');
             if (badge.length === 0) {
-                $(this).prepend(`<span class="badge bg-secondary badge-orden">${i + 1}</span>`);
+                // Es un elemento que viene del origen, no tiene checkbox aún → agregarlo
+                $(this).find('span').first().before(`<span class="badge bg-secondary badge-orden">${i + 1}</span>`);
+
+                // Agregar checkbox si no existe
+                if ($(this).find('.chk-obligatoria').length === 0) {
+                    let idPlaet = $(this).data("id-plaet") || 'new_' + i;
+                    $(this).addClass('d-flex align-items-center gap-2');
+                    $(this).append(`
+                    <div class="form-check form-check-inline mb-0 ms-auto" style="cursor:default;" onclick="event.stopPropagation()">
+                        <input class="form-check-input chk-obligatoria"
+                               type="checkbox"
+                               id="chk_obl_${idPlaet}"
+                               title="Etapa obligatoria">
+                        <label class="form-check-label small text-muted" for="chk_obl_${idPlaet}">
+                            Obligatoria
+                        </label>
+                    </div>
+                `);
+                }
             } else {
                 badge.text(i + 1);
             }
         });
-        // Limpiar badges en origen
+
+        // Limpiar badges y checkboxes en origen
         $("#pnl_lista_origen .badge-orden").remove();
+        $("#pnl_lista_origen .chk-obligatoria").closest('.form-check').remove();
     }
 
     /**
@@ -142,7 +178,8 @@ $color_destino = '#d4edda'; // verde claro para etapas asignadas
             lista.push({
                 txt_id_etapa: $(this).data("id-etapa"),
                 txt_id_plaet: $(this).data("id-plaet") || '',
-                txt_orden: i + 1
+                txt_orden: i + 1,
+                txt_obligatoria: $(this).find('.chk-obligatoria').is(':checked') ? 1 : 0
             });
         });
         return lista;
@@ -238,4 +275,3 @@ $color_destino = '#d4edda'; // verde claro para etapas asignadas
         </ul>
     </div>
 </div>
-
