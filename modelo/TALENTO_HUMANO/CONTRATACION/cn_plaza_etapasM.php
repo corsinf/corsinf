@@ -43,4 +43,23 @@ class cn_plaza_etapasM extends BaseModel
     ";
         return $this->db->datos($sql);
     }
+
+    
+    public function buscar_existente($id_plaza, $id_etapa)
+    {
+        $id_plaza = intval($id_plaza);
+        $id_etapa = intval($id_etapa);
+
+        $sql = "
+        SELECT cn_plaet_id
+        FROM cn_plaza_etapas
+        WHERE cn_pla_id = $id_plaza
+          AND id_etapa  = $id_etapa
+    ";
+
+        $resultado = $this->db->datos($sql);
+
+        // Retorna el cn_plaet_id si existe, o null si no
+        return !empty($resultado) ? $resultado[0]['cn_plaet_id'] : null;
+    }
 }
