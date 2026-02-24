@@ -1,13 +1,31 @@
 <script>
     $(document).ready(function() {
-        var id_cargo = $('#txt_id_cargo_exp').val();
+        var id_cargo = $('#txt_id_cargo').val();
         cargar_experiencias_necesarias(id_cargo);
         <?php if ($es_plaza) { ?>
             cargar_plaza_experiencias_necesarias('<?= $_id_plaza ?>');
         <?php } ?>
     });
 
+    function cargar_selects_experiencia(car_id, pla_id) {
+        var id_cargo = $('#txt_id_cargo').val();
+        var pla_id = 0;
+        <?php if ($es_plaza) { ?>
+            pla_id = '<?= $_id_plaza ?>';
+        <?php } ?>
+
+        var data_extra = {
+            'car_id': id_cargo,
+            'pla_id': pla_id
+        };
+
+        var url = '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_experienciaC.php?buscar_rango_profesional=true';
+        cargar_select2_url('ddl_rango_profesional', url, '', '#modal_experiencia_necesaria', 0, data_extra);
+    }
+
     function cargar_experiencias_necesarias(id, button = true) {
+        cargar_selects_experiencia(id);
+
         $.ajax({
             url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_experienciaC.php?listar_modal=true',
             type: 'post',
@@ -27,27 +45,31 @@
             url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_experienciaC.php?listar=true',
             type: 'post',
             data: {
-                experiencia_id: id
+                id: id
             },
             dataType: 'json',
             success: function(response) {
                 if (response && response.length > 0) {
                     $('#th_reqi_experiencia_id').val(response[0]._id);
-                    $('#txt_anios_experiencia').val(response[0].th_reqe_anios);
+                    $('#ddl_rango_profesional').append($('<option>', {
+                        value: response[0].id_rango_profesional,
+                        text: response[0].rango_nombre + ' (' + response[0].min_anios_exp + ' - ' + response[0].max_anios_exp + ' años)',
+                        selected: true
+                    })).trigger('change');
                 }
             }
         });
     }
 
     function insertar_editar_experiencia_necesaria() {
-        var anios = $('#txt_anios_experiencia').val();
-        var id_experiencia = $('#th_reqi_experiencia_id').val();
-        var id_cargo = $('#txt_id_cargo_exp').val();
+        var id_rango = $('#ddl_rango_profesional').val();
+        var id_exp = $('#th_reqi_experiencia_id').val();
+        var id_cargo = $('#txt_id_cargo').val();
 
         var parametros = {
-            'th_reqe_anios': anios,
+            'id_rango_profesional': id_rango,
             'id_cargo': id_cargo,
-            '_id': id_experiencia,
+            '_id': id_exp,
         };
 
         if ($("#form_experiencia_necesaria").valid()) {
@@ -56,7 +78,7 @@
     }
 
     function insertar_experiencia_necesaria(parametros) {
-        var id_cargo = $('#txt_id_cargo_exp').val();
+        var id_cargo = $('#txt_id_cargo').val();
 
         $.ajax({
             data: {
@@ -96,7 +118,7 @@
     }
 
     function eliminar_experiencia_necesaria(id) {
-        var id_cargo = $('#txt_id_cargo_exp').val();
+        var id_cargo = $('#txt_id_cargo').val();
 
         $.ajax({
             data: {
@@ -135,14 +157,17 @@
         $('#form_experiencia_necesaria').validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
         $('#th_reqi_experiencia_id').val('');
-        $('#txt_anios_experiencia').val('');
+        $('#ddl_rango_profesional').val(null).trigger('change');
+        $('.select2-selection').removeClass('is-valid is-invalid');
     }
 </script>
 
 <?php if ($es_plaza) { ?>
     <script>
         function cargar_plaza_experiencias_necesarias(id, button = true) {
-            var id_cargo = $('#txt_id_cargo_exp').val();
+            var id_cargo = $('#txt_id_cargo').val();
+            cargar_selects_experiencia(id_cargo, id);
+
             $.ajax({
                 url: '../controlador/TALENTO_HUMANO/PLAZAS/cn_plaza_reqi_experienciaC.php?listar_modal=true',
                 type: 'post',
@@ -158,14 +183,14 @@
         }
 
         function insertar_editar_experiencia_necesaria_plaza() {
-            var anios = $('#txt_anios_experiencia').val();
-            var id_experiencia = $('#th_reqi_experiencia_id').val();
+            var id_rango = $('#ddl_rango_profesional').val();
+            var id_exp = $('#th_reqi_experiencia_id').val();
             var cn_pla_id = '<?= $_id_plaza ?>';
 
             var parametros = {
-                'th_reqe_anios': anios,
+                'id_rango_profesional': id_rango,
                 'cn_pla_id': cn_pla_id,
-                '_id': id_experiencia,
+                '_id': id_exp,
             };
 
             if ($("#form_experiencia_necesaria").valid()) {
@@ -174,7 +199,6 @@
         }
 
         function insertar_experiencia_necesaria_plaza(parametros) {
-
             $.ajax({
                 data: {
                     parametros: parametros
@@ -195,7 +219,6 @@
             });
         }
 
-        /* Override de eliminar para plaza */
         function delete_datos_experiencia_necesaria(id) {
             Swal.fire({
                 title: '¿Eliminar Registro?',
@@ -234,7 +257,7 @@
     </script>
 <?php } ?>
 
-<input type="hidden" name="txt_id_cargo_exp" id="txt_id_cargo_exp" value="<?= $_id ?>">
+<input type="hidden" name="txt_id_cargo" id="txt_id_cargo" value="<?= $_id ?>">
 
 <div class="" id="pnl_experiencia_necesaria"></div>
 
@@ -246,7 +269,6 @@
 <?php } ?>
 
 
-<!-- MODAL -->
 <div class="modal fade" id="modal_experiencia_necesaria" tabindex="-1" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow-lg">
@@ -265,23 +287,13 @@
                 <input type="hidden" name="th_reqi_experiencia_id" id="th_reqi_experiencia_id">
 
                 <div class="modal-body">
-
                     <div class="row g-3 mb-3">
                         <div class="col-md-12">
-                            <label for="txt_anios_experiencia" class="form-label fw-semibold fs-7">
-                                Años de Experiencia
-                            </label>
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-white text-muted">
-                                    <i class='bx bx-time-five'></i>
-                                </span>
-                                <input type="number"
-                                    class="form-control"
-                                    name="txt_anios_experiencia"
-                                    id="txt_anios_experiencia"
-                                    placeholder="Ej: 2">
-                            </div>
-                            <label class="error" style="display:none;" for="txt_anios_experiencia"></label>
+                            <label for="ddl_rango_profesional" class="form-label fw-semibold fs-7">Rango Profesional </label>
+                            <select class="form-select select2-validation" id="ddl_rango_profesional" name="ddl_rango_profesional" required style="width: 100%;">
+                                <option selected value="">-- Seleccione un rango --</option>
+                            </select>
+                            <label class="error" style="display: none;" for="ddl_rango_profesional"></label>
                         </div>
                     </div>
 
@@ -301,7 +313,6 @@
                                 onclick="limpiar_campos_experiencia_necesaria_modal()">
                                 Cancelar
                             </button>
-
                             <?php if ($es_plaza) { ?>
                                 <button type="button" class="btn btn-primary btn-sm px-4"
                                     id="btn_guardar_experiencia_necesaria_plaza"
@@ -317,32 +328,34 @@
                             <?php } ?>
                         </div>
                     </div>
-
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-
 <script>
     $(document).ready(function() {
-        agregar_asterisco_campo_obligatorio('txt_anios_experiencia');
+        agregar_asterisco_campo_obligatorio('ddl_rango_profesional');
 
         $("#form_experiencia_necesaria").validate({
             ignore: [],
             rules: {
-                txt_anios_experiencia: {
+                ddl_rango_profesional: {
                     required: true
                 }
             },
             messages: {
-                txt_anios_experiencia: {
-                    required: "Ingrese los años de experiencia"
+                ddl_rango_profesional: {
+                    required: "Seleccione el rango profesional"
                 }
             },
             errorPlacement: function(error, element) {
-                error.insertAfter(element.closest('.input-group'));
+                if (element.hasClass('select2-validation') || element.hasClass('select2-hidden-accessible')) {
+                    error.insertAfter(element.next('.select2-container'));
+                } else {
+                    error.insertAfter(element);
+                }
             },
             highlight: function(element) {
                 $(element).addClass('is-invalid').removeClass('is-valid');

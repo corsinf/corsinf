@@ -406,12 +406,8 @@
                 <input type="number" min="1" class="form-control form-control-sm"
                     id="txt_cn_pla_num_vacantes" name="txt_cn_pla_num_vacantes" placeholder="Ej: 1" required />
             </div>
-        </div>
-
-        <div id="pnl_prioridad_interna" class="row mb-3" style="display: none;">
-            <div class="col-md-12">
-                <label class="form-label fw-semibold fs-7 mb-2 text-muted text-uppercase ls-1">Requerimientos</label>
-                <div class="d-flex flex-wrap gap-4 p-2 border rounded bg-white">
+            <div id="pnl_prioridad_interna" class="col-md-12" style="display: none;">
+                <div class="d-flex flex-wrap gap-4 p-2 rounded bg-white">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox"
                             id="cbx_cn_pla_prioridad_interna" name="cbx_cn_pla_prioridad_interna" />

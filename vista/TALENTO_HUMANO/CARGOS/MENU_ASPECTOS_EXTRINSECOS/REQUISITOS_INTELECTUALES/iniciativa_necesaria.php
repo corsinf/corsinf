@@ -20,12 +20,13 @@
         cargar_select2_url('ddl_iniciativas', url_iniciativaC, '', '#modal_agregar_iniciativa', 0, data_extra);
     }
 
-    function cargar_iniciativas(id) {
+    function cargar_iniciativas(id, button = true) {
         $.ajax({
             url: '../controlador/TALENTO_HUMANO/CARGOS/th_cargo_reqi_iniciativaC.php?listar_modal=true',
             type: 'post',
             data: {
-                id: id
+                id: id,
+                button_delete: button
             },
             dataType: 'json',
             success: function(response) {

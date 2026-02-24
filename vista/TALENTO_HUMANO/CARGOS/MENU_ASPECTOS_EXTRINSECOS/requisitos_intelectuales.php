@@ -132,13 +132,15 @@
                     Iniciativa Necesaria
                 </h5>
             </div>
-            <div id="pnl_iniciativa_necesaria" class="d-none">
-                <a href="#" class="btn btn-outline-success btn-xs d-flex align-items-center fw-semibold px-3"
-                    data-bs-toggle="modal" data-bs-target="#modal_agregar_iniciativa">
-                    <i class='bx bx-plus-circle me-1'></i>
-                    Agregar
-                </a>
-            </div>
+            <?php if (!$es_plaza) { ?>
+                <div id="pnl_iniciativa_necesaria" class="d-none">
+                    <a href="#" class="btn btn-outline-success btn-xs d-flex align-items-center fw-semibold px-3"
+                        data-bs-toggle="modal" data-bs-target="#modal_agregar_iniciativa">
+                        <i class='bx bx-plus-circle me-1'></i>
+                        Agregar
+                    </a>
+                </div>
+            <?php } ?>
         </div>
 
         <div class="px-1">
