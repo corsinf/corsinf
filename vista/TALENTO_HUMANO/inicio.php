@@ -408,3 +408,14 @@ if ($_GET['acc'] == 'th_proteccion_datos') {
 if ($_GET['acc'] == 'th_ley_violeta') {
 	include('TALENTO_HUMANO/PROTECCION_DATOS/th_ley_violeta.php');
 }
+
+
+/**
+ * 
+ * Vacantes
+ * 
+ */
+
+if ($_GET['acc'] == 'cn_vacantes') {
+	include('TALENTO_HUMANO/CONTRATACION/VACANTES/cn_vacantes.php');
+}

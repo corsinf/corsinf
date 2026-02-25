@@ -8,6 +8,9 @@ $controlador = new cn_plazaC();
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
+if (isset($_GET['listar_resumen'])) {
+    echo json_encode($controlador->listar_resumen($_POST['id'] ?? ''));
+}
 
 if (isset($_GET['listar_plaza'])) {
     echo json_encode($controlador->listar_plaza($_POST['id'] ?? ''));
@@ -47,6 +50,10 @@ class cn_plazaC
     {
         return $this->modelo->where('cn_pla_id', $id)->where('cn_pla_estado', 1)->listar();
     }
+    function listar_resumen($id = '')
+    {
+        return $this->modelo->listar_plaza_resumen($id);
+    }
 
     function insertar_editar($parametros)
     {
@@ -57,10 +64,16 @@ class cn_plazaC
             $ts = strtotime($val);
             return $ts ? date('Y-m-d H:i:s', $ts) : null;
         };
-        
-        $toInt   = function ($v) { return ($v === '' || $v === null) ? null : (int)$v; };
-        $toFloat = function ($v) { return ($v === '' || $v === null) ? null : (float)$v; };
-        $toBool  = function ($v) { return ($v === 1 || $v === '1' || $v === true || $v === 'true') ? 1 : 0; };
+
+        $toInt   = function ($v) {
+            return ($v === '' || $v === null) ? null : (int)$v;
+        };
+        $toFloat = function ($v) {
+            return ($v === '' || $v === null) ? null : (float)$v;
+        };
+        $toBool  = function ($v) {
+            return ($v === 1 || $v === '1' || $v === true || $v === 'true') ? 1 : 0;
+        };
 
         $datos = [
             ['campo' => 'cn_pla_titulo',              'dato' => $parametros['txt_cn_pla_titulo'] ?? ''],
@@ -76,7 +89,7 @@ class cn_plazaC
             ['campo' => 'cn_pla_salario_max',         'dato' => $toFloat($parametros['txt_cn_pla_salario_max'] ?? null)],
             ['campo' => 'th_per_id_responsable',      'dato' => $toInt($parametros['ddl_cn_pla_responsable'] ?? null)],
             ['campo' => 'cn_pla_req_disponibilidad',  'dato' => $toBool($parametros['cbx_cn_pla_req_disponibilidad'] ?? 0)],
-            ['campo' => 'cn_pla_req_prioridad_interna','dato' => $toBool($parametros['cbx_cn_pla_prioridad_interna'] ?? 0)],
+            ['campo' => 'cn_pla_req_prioridad_interna', 'dato' => $toBool($parametros['cbx_cn_pla_prioridad_interna'] ?? 0)],
             ['campo' => 'cn_pla_req_documentos',      'dato' => $toBool($parametros['cbx_cn_pla_req_documentos'] ?? 0)],
             ['campo' => 'cn_pla_observaciones',       'dato' => $parametros['txt_cn_pla_observaciones'] ?? null],
             ['campo' => 'cn_pla_estado',              'dato' => 1],

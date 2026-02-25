@@ -39,6 +39,23 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 {
                     data: 'cn_pla_num_vacantes'
                 },
+                {
+                    data: null,
+                    orderable: false,
+                    className: 'text-center',
+                    render: function(data, type, item) {
+                        // Ruta solicitada
+                        let href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_plaza&_id_plaza=${item._id}`;
+
+                        return `
+            <div class="d-flex justify-content-center gap-1">
+                <a href="${href}" class="btn btn-info btn-xs" title="Ver Plaza">
+                    <i class="bx bx-show fs-7 me-0 fw-bold"></i>
+                </a>
+            </div>
+        `;
+                    }
+                }
             ],
             order: [
                 [1, 'asc']
@@ -82,6 +99,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                         <th>Título</th>
                                         <th>Descripción</th>
                                         <th>N° Vacantes</th>
+                                        <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
