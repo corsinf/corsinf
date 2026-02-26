@@ -25,6 +25,12 @@ if (isset($_GET['guardar_bulk'])) {
     ));
 }
 
+if (isset($_GET['crear_plaza_etapas'])) {
+    echo json_encode($controlador->crear_plaza_etapas(
+        $_POST['cn_pla_id'] ?? 0,
+    ));
+}
+
 
 class cn_plaza_etapasC
 {
@@ -72,6 +78,13 @@ class cn_plaza_etapasC
         return $this->modelo->eliminar($datos);
     }
 
+    function crear_plaza_etapas($cn_pla_id)
+    {
+        if (empty($cn_pla_id)) {
+            return ['error' => 'Parámetros inválidos'];
+        }
+        return $this->modelo->ejecutar_crear_plaza_etapas($cn_pla_id);
+    }
     /**
      * Guarda en bloque las etapas de una plaza desde el drag & drop.
      *

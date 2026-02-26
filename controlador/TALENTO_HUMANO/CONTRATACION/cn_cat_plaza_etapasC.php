@@ -9,6 +9,9 @@ if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
 
+if (isset($_GET['listar_por_defecto'])) {
+    echo json_encode($controlador->listar_por_defecto());
+}
 
 if (isset($_GET['insertar_editar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
@@ -19,12 +22,8 @@ if (isset($_GET['eliminar'])) {
 }
 
 if (isset($_GET['buscar'])) {
-    $parametros = [
-        'query' => $_GET['q'] ?? '',
-    ];
-    echo json_encode($controlador->buscar($parametros));
+    echo json_encode($controlador->buscar(['query' => $_GET['q'] ?? '']));
 }
-
 
 class cn_cat_plaza_etapasC
 {
@@ -43,15 +42,23 @@ class cn_cat_plaza_etapasC
         return $this->modelo->where('id_etapa', $id)->where('estado', 1)->listar();
     }
 
+    function listar_por_defecto()
+    {
+        return $this->modelo->where('obligatoria_default', 1)->where('estado', 1)->listar();
+    }
+
     function insertar_editar($parametros)
     {
         $datos = [
-            ['campo' => 'codigo',           'dato' => $parametros['txt_codigo']         ?? ''],
-            ['campo' => 'nombre',           'dato' => $parametros['txt_nombre']         ?? ''],
-            ['campo' => 'tipo',             'dato' => $parametros['ddl_etapa_tipo']      ?? null],
-            ['campo' => 'requiere_puntaje', 'dato' => isset($parametros['chk_requiere_puntaje']) ? 1 : 0],
-            ['campo' => 'es_final',         'dato' => isset($parametros['chk_es_final']) ? 1 : 0],
-            ['campo' => 'estado',           'dato' => 1],
+            ['campo' => 'codigo',              'dato' => $parametros['txt_codigo']                    ?? ''],
+            ['campo' => 'nombre',              'dato' => $parametros['txt_nombre']                    ?? ''],
+            ['campo' => 'tipo',                'dato' => $parametros['ddl_etapa_tipo']                ?? null],
+            ['campo' => 'requiere_puntaje',    'dato' => isset($parametros['chk_requiere_puntaje'])   ? 1 : 0],
+            ['campo' => 'obligatoria_default', 'dato' => isset($parametros['chk_obligatoria_default']) ? 1 : 0],
+            ['campo' => 'es_inicio_fijo',      'dato' => isset($parametros['chk_es_inicio_fijo'])     ? 1 : 0],
+            ['campo' => 'es_fin_fijo',         'dato' => isset($parametros['chk_es_fin_fijo'])        ? 1 : 0],
+            ['campo' => 'color',               'dato' => $parametros['txt_color']                     ?? null],
+            ['campo' => 'estado',              'dato' => 1],
         ];
 
         if (empty($parametros['_id'])) {
@@ -76,15 +83,9 @@ class cn_cat_plaza_etapasC
     {
         $lista = [];
         $datos = $this->modelo->where('estado', 1)->like('nombre', $parametros['query']);
-
         foreach ($datos as $value) {
-            $lista[] = [
-                'id'   => $value['_id'],
-                'text' => $value['nombre']
-            ];
+            $lista[] = ['id' => $value['_id'], 'text' => $value['nombre']];
         }
-
         return $lista;
     }
-   
 }

@@ -1,13 +1,21 @@
 <?php
 $_id_plaza = isset($_GET['_id_plaza']) ? (int)$_GET['_id_plaza'] : 0;
-$color_destino = '#d4edda';
-$color_final   = '#fff3cd';
-$etapas_por_defecto = [2, 3, 4, 6];
+$color_default = '#d4edda';
 ?>
 
 <style>
     .list-group-item {
         cursor: grab;
+    }
+
+    .list-group-item.fijo-inicio {
+        cursor: not-allowed !important;
+        opacity: .85;
+    }
+
+    .item-bloqueado {
+        cursor: not-allowed !important;
+        opacity: .9;
     }
 
     .sortable-placeholder {
@@ -31,10 +39,8 @@ $etapas_por_defecto = [2, 3, 4, 6];
         margin-right: 6px;
     }
 
-    .badge-final {
+    .badge-tipo {
         font-size: 0.65rem;
-        background-color: #ffc107;
-        color: #000;
         margin-left: 4px;
     }
 
@@ -45,107 +51,111 @@ $etapas_por_defecto = [2, 3, 4, 6];
 </style>
 
 <script>
-    const ETAPAS_POR_DEFECTO = <?= json_encode($etapas_por_defecto) ?>;
-
     $(document).ready(function() {
-        cargarEtapasPlaza('<?= $_id_plaza ?>');
+        verificarEtapasExistentes();
+    });
+
+    function verificarEtapasExistentes() {
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/cn_plaza_etapasC.php?listar=true',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id_plaza: <?= $_id_plaza ?>
+            },
+            success: function(response) {
+                if (response && response.length > 0) {
+                    inicializarEditor();
+                    cargarEtapasPlaza('<?= $_id_plaza ?>');
+                } else {
+                    $('#pnl_inicio').show();
+                    $('#pnl_editor').hide();
+                }
+            }
+        });
+    }
+
+    function inicializarEditor() {
+        $('#pnl_inicio').hide();
+        $('#pnl_editor').show();
+
+        if ($(".pnl_etapas_sort").hasClass("ui-sortable")) return;
 
         $(".pnl_etapas_sort").sortable({
             connectWith: ".pnl_etapas_sort",
             placeholder: "sortable-placeholder",
             cursor: "move",
             revert: 150,
+            cancel: ".item-bloqueado, .fijo-inicio", // ← estos nunca serán arrastrables
 
             change: function(event, ui) {
                 let placeholder = ui.placeholder;
-                let parentId = placeholder.parent().attr("id");
-                if (parentId !== "pnl_lista_destino") return;
+                if (placeholder.parent().attr("id") !== "pnl_lista_destino") return;
 
-                let isDraggingFinal = parseInt(ui.item.data("es-final")) === 1;
-                let draggingId = parseInt(ui.item.data("id-etapa"));
                 let destino = $("#pnl_lista_destino");
+                let itemsReales = destino.find('li:not(.ui-sortable-placeholder):not(.ui-sortable-helper)');
+                let currentIdx = placeholder.index();
+                let esFinFijo = parseInt(ui.item.data("es-fin-fijo")) === 1;
+                let esInicioFijo = parseInt(ui.item.data("es-inicio-fijo")) === 1;
+                let draggingId = parseInt(ui.item.data("id-etapa"));
 
-                // Items reales sin placeholder ni helper
-                let itemsReales = destino.find(
-                    'li:not(.ui-sortable-placeholder):not(.ui-sortable-helper)'
-                );
+                let lastInicio = itemsReales.filter('[data-es-inicio-fijo="1"]').last();
+                if (lastInicio.length > 0 && currentIdx <= lastInicio.index()) {
+                    lastInicio.after(placeholder);
+                    return;
+                }
 
-                if (isDraggingFinal) {
+                let firstFin = itemsReales.filter('[data-es-fin-fijo="1"]').first();
 
-                    // Calcular posición exacta correcta:
-                    // Debe ir DESPUÉS del último no-final Y después de todos los finales con id < draggingId
-                    // Debe ir ANTES del primer final con id > draggingId
+                if (esFinFijo) {
+                    let posDepues = null,
+                        posAntes = null;
+                    let lastNormal = itemsReales.filter('[data-es-fin-fijo="0"][data-es-inicio-fijo="0"]').last();
+                    if (lastNormal.length > 0) posDepues = lastNormal;
 
-                    let posicionDespues = null; // item tras el cual insertar
-                    let posicionAntes = null; // item antes del cual insertar
-
-                    // Paso 1: debe ir después del último no-final
-                    let lastNonFinal = itemsReales.filter('[data-es-final="0"]').last();
-                    if (lastNonFinal.length > 0) {
-                        posicionDespues = lastNonFinal;
-                    }
-
-                    // Paso 2: entre finales, después de todos los que tienen id < draggingId
-                    itemsReales.filter('[data-es-final="1"]').each(function() {
+                    itemsReales.filter('[data-es-fin-fijo="1"]').each(function() {
                         let id = parseInt($(this).data("id-etapa"));
-                        if (id < draggingId) {
-                            posicionDespues = $(this); // el más cercano por debajo
-                        }
+                        if (id < draggingId) posDepues = $(this);
+                    });
+                    itemsReales.filter('[data-es-fin-fijo="1"]').each(function() {
+                        let id = parseInt($(this).data("id-etapa"));
+                        if (id > draggingId && posAntes === null) posAntes = $(this);
                     });
 
-                    // Paso 3: antes del primer final con id > draggingId
-                    itemsReales.filter('[data-es-final="1"]').each(function() {
-                        let id = parseInt($(this).data("id-etapa"));
-                        if (id > draggingId && posicionAntes === null) {
-                            posicionAntes = $(this);
-                        }
-                    });
-
-                    let currentIdx = placeholder.index();
-
-                    // Aplicar restricción de "antes" primero
-                    if (posicionAntes !== null && currentIdx >= posicionAntes.index()) {
-                        posicionAntes.before(placeholder);
+                    if (posAntes !== null && currentIdx >= posAntes.index()) {
+                        posAntes.before(placeholder);
                         return;
                     }
-
-                    // Luego restricción de "después"
-                    if (posicionDespues !== null && currentIdx <= posicionDespues.index()) {
-                        posicionDespues.after(placeholder);
+                    if (posDepues !== null && currentIdx <= posDepues.index()) {
+                        posDepues.after(placeholder);
                         return;
                     }
-
                 } else {
-                    // No-final: no puede cruzar la primera final
-                    let firstFinal = itemsReales.filter('[data-es-final="1"]').first();
-                    if (firstFinal.length > 0 && placeholder.index() >= firstFinal.index()) {
-                        firstFinal.before(placeholder);
-                    }
+                    if (firstFin.length > 0 && currentIdx >= firstFin.index()) firstFin.before(placeholder);
                 }
             },
 
             update: function(event, ui) {
-                let item = ui.item;
-                let parentId = item.parent().attr("id");
-
-                if (parentId === "pnl_lista_destino") {
-                    let esFinalVal = parseInt(item.data("es-final")) === 1;
-                    item.css("background-color", esFinalVal ? "<?= $color_final ?>" : "<?= $color_destino ?>");
-                } else {
-                    item.css("background-color", "");
+                if (ui.item.parent().attr("id") !== "pnl_lista_destino") {
+                    ui.item.css("background-color", "");
                 }
-
                 actualizarNumerosOrden();
                 guardarEtapasPlaza();
             }
+
         }).disableSelection();
 
         $(document).on('change', '#pnl_lista_destino .chk-obligatoria', function() {
             guardarEtapasPlaza();
         });
-    });
+    }
 
-    // ─── Carga de datos ───────────────────────────────────────────────────────
+    function getColor(item) {
+        if (item.etapa_color || item.color) return item.etapa_color || item.color;
+        if (parseInt(item.etapa_es_inicio_fijo || item.es_inicio_fijo) === 1) return '#cfe2ff';
+        if (parseInt(item.etapa_es_fin_fijo || item.es_fin_fijo) === 1) return '#fff3cd';
+        return '<?= $color_default ?>';
+    }
 
     function cargarEtapasPlaza(id_plaza) {
         let req_catalogo = $.ajax({
@@ -153,7 +163,6 @@ $etapas_por_defecto = [2, 3, 4, 6];
             type: 'POST',
             dataType: 'json'
         });
-
         let req_asignadas = $.ajax({
             url: '../controlador/TALENTO_HUMANO/CONTRATACION/cn_plaza_etapasC.php?listar=true',
             type: 'POST',
@@ -166,25 +175,25 @@ $etapas_por_defecto = [2, 3, 4, 6];
         $.when(req_catalogo, req_asignadas).done(function(resCat, resAsig) {
             window._catalogo_etapas = resCat[0];
 
-            let catalogo = resCat[0];
             let asignadas = resAsig[0];
-
             asignadas.sort((a, b) => a.cn_plaet_orden - b.cn_plaet_orden);
-
             let idsAsignados = asignadas.map(e => String(e.id_etapa));
 
             let itemsDestino = asignadas.map((item, i) => buildItemDestino(
                 item.id_etapa,
                 item._id,
                 item.etapa_nombre || 'Sin nombre',
-                item.etapa_es_final || 0,
+                item.etapa_es_fin_fijo || 0,
+                item.etapa_es_inicio_fijo || 0,
                 item.cn_plaet_obligatoria || 0,
-                i
+                getColor(item),
+                i,
+                item.etapa_obligatoria_default || 0
             )).join('');
 
-            let itemsOrigen = catalogo
+            let itemsOrigen = resCat[0]
                 .filter(item => !idsAsignados.includes(String(item._id)))
-                .map(item => buildItemOrigen(item._id, item.nombre, item.es_final))
+                .map(item => buildItemOrigen(item._id, item.nombre, item.es_fin_fijo, item.es_inicio_fijo, getColor(item)))
                 .join('');
 
             $("#pnl_lista_destino").html(itemsDestino);
@@ -194,142 +203,127 @@ $etapas_por_defecto = [2, 3, 4, 6];
         });
     }
 
-    // ─── Builders de <li> ─────────────────────────────────────────────────────
-
-    function buildItemDestino(idEtapa, idPlaet, nombre, esFinalVal, obligatoria, index) {
-        let bg = parseInt(esFinalVal) === 1 ? "<?= $color_final ?>" : "<?= $color_destino ?>";
-        let badgeFinal = parseInt(esFinalVal) === 1 ? `<span class="badge badge-final">Final</span>` : '';
+    function buildItemDestino(idEtapa, idPlaet, nombre, esFinFijo, esInicioFijo, obligatoria, color, index, bloqueada) {
         let uid = idPlaet || 'n' + index;
-        return `<li class="list-group-item d-flex align-items-center gap-2"
-                    data-id-etapa="${idEtapa}"
-                    data-id-plaet="${idPlaet}"
-                    data-es-final="${esFinalVal}"
-                    style="background-color:${bg};">
+        let fijoClass = parseInt(esInicioFijo) === 1 ? 'fijo-inicio' : '';
+        let bloqClass = parseInt(bloqueada) === 1 ? 'item-bloqueado' : '';
+
+        let badgeTipo = parseInt(esInicioFijo) === 1 ?
+            `<span class="badge badge-tipo" style="background:#0d6efd;color:#fff;">Inicio</span>` :
+            (parseInt(esFinFijo) === 1 ? `<span class="badge badge-tipo" style="background:#ffc107;color:#000;">Final</span>` : '');
+
+        let badgeBloq = parseInt(bloqueada) === 1 ?
+            `<span class="badge badge-tipo" style="background:#6c757d;color:#fff;"><i class="bx bx-lock-alt"></i></span>` : '';
+
+        return `<li class="list-group-item d-flex align-items-center gap-2 ${fijoClass} ${bloqClass}"
+                    data-id-etapa="${idEtapa}" data-id-plaet="${idPlaet}"
+                    data-es-fin-fijo="${esFinFijo}" data-es-inicio-fijo="${esInicioFijo}"
+                    data-bloqueada="${bloqueada || 0}"
+                    style="background-color:${color};">
                     <span class="badge bg-secondary badge-orden">${index + 1}</span>
-                    <span class="flex-grow-1">${nombre} ${badgeFinal}</span>
+                    <span class="flex-grow-1">${nombre} ${badgeTipo} ${badgeBloq}</span>
                     <div class="form-check form-check-inline mb-0 ms-auto" style="cursor:default;" onclick="event.stopPropagation()">
-                        <input class="form-check-input chk-obligatoria"
-                               type="checkbox"
-                               id="chk_obl_${uid}"
-                               title="Etapa obligatoria"
-                               ${parseInt(obligatoria) === 1 ? 'checked' : ''}>
+                        <input class="form-check-input chk-obligatoria" type="checkbox"
+                               id="chk_obl_${uid}" title="Etapa obligatoria"
+                               ${parseInt(obligatoria) === 1 ? 'checked' : ''}
+                               ${parseInt(bloqueada)   === 1 ? 'disabled' : ''}>
                         <label class="form-check-label small text-muted" for="chk_obl_${uid}">Obligatoria</label>
                     </div>
                 </li>`;
     }
 
-    function buildItemOrigen(idEtapa, nombre, esFinalVal) {
-        let badgeFinal = parseInt(esFinalVal) === 1 ?
-            `<span class="badge badge-final ms-1">Final</span>` : '';
+    function buildItemOrigen(idEtapa, nombre, esFinFijo, esInicioFijo, color) {
+        let badgeTipo = parseInt(esInicioFijo) === 1 ?
+            `<span class="badge badge-tipo ms-1" style="background:#0d6efd;color:#fff;">Inicio</span>` :
+            (parseInt(esFinFijo) === 1 ? `<span class="badge badge-tipo ms-1" style="background:#ffc107;color:#000;">Final</span>` : '');
         return `<li class="list-group-item"
-                    data-id-etapa="${idEtapa}"
-                    data-id-plaet=""
-                    data-es-final="${esFinalVal || 0}">
-                    ${nombre || 'Sin nombre'} ${badgeFinal}
+                    data-id-etapa="${idEtapa}" data-id-plaet=""
+                    data-es-fin-fijo="${esFinFijo || 0}" data-es-inicio-fijo="${esInicioFijo || 0}"
+                    data-bloqueada="0">
+                    ${nombre || 'Sin nombre'} ${badgeTipo}
                 </li>`;
     }
 
-    // ─── Cargar por defecto ───────────────────────────────────────────────────
-
     function cargarEtapasPorDefecto() {
-        if (!window._catalogo_etapas || window._catalogo_etapas.length === 0) {
-            Swal.fire('Aviso', 'Primero deben cargarse las etapas.', 'warning');
-            return;
-        }
+        let $btn = $('#btn_cargar_defecto');
+        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span> Cargando...');
 
-        let origen = $("#pnl_lista_origen");
-        let destino = $("#pnl_lista_destino");
-
-        ETAPAS_POR_DEFECTO.forEach(function(idEtapa) {
-            let itemOrigen = origen.find(`li[data-id-etapa="${idEtapa}"]`);
-            if (itemOrigen.length === 0) return;
-
-            let info = window._catalogo_etapas.find(e => String(e._id) === String(idEtapa));
-            if (!info) return;
-
-            let esFinalVal = parseInt(info.es_final) || 0;
-
-            if (esFinalVal === 1) {
-                // Insertar entre finales respetando orden por id_etapa
-                let insertado = false;
-                destino.find('li[data-es-final="1"]').each(function() {
-                    if (parseInt($(this).data("id-etapa")) > idEtapa) {
-                        $(this).before(itemOrigen);
-                        insertado = true;
-                        return false;
-                    }
-                });
-                if (!insertado) destino.append(itemOrigen);
-            } else {
-                // No-final: antes de la primera final
-                let primeraFinal = destino.find('li[data-es-final="1"]').first();
-                if (primeraFinal.length > 0) {
-                    primeraFinal.before(itemOrigen);
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/cn_plaza_etapasC.php?crear_plaza_etapas=true',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                cn_pla_id: <?= $_id_plaza ?>
+            },
+            success: function(response) {
+                if (response == 1) {
+                    inicializarEditor();
+                    cargarEtapasPlaza('<?= $_id_plaza ?>');
                 } else {
-                    destino.append(itemOrigen);
+                    $btn.prop('disabled', false).html('<i class="bx bx-download me-1"></i> Cargar etapas por defecto');
+                    Swal.fire('Error', 'No se pudieron generar las etapas.', 'error');
                 }
+            },
+            error: function() {
+                $btn.prop('disabled', false).html('<i class="bx bx-download me-1"></i> Cargar etapas por defecto');
+                Swal.fire('Error', 'No se pudieron cargar las etapas.', 'error');
             }
-
-            itemOrigen.css("background-color", esFinalVal === 1 ? "<?= $color_final ?>" : "<?= $color_destino ?>");
         });
-
-        actualizarNumerosOrden();
-        guardarEtapasPlaza();
     }
-
-    // ─── Borrar todas ─────────────────────────────────────────────────────────
 
     function borrarTodasEtapas() {
         Swal.fire({
             title: '¿Borrar todas las etapas?',
-            text: 'Se eliminarán todas las etapas asignadas a esta plaza.',
+            text: 'Se eliminarán todas las etapas no bloqueadas de esta plaza.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
             cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Sí, borrar todo',
+            confirmButtonText: 'Sí, borrar',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (!result.isConfirmed) return;
-
             $("#pnl_lista_destino li").each(function() {
+                if (parseInt($(this).data("bloqueada")) === 1) return;
                 $(this).css("background-color", "");
                 $(this).find('.badge-orden').remove();
                 $(this).find('.chk-obligatoria').closest('.form-check').remove();
-                $(this).removeClass('d-flex align-items-center gap-2');
+                $(this).removeClass('d-flex align-items-center gap-2 fijo-inicio item-bloqueado');
                 $("#pnl_lista_origen").append($(this));
             });
-
             actualizarNumerosOrden();
             guardarEtapasPlaza();
         });
     }
 
-    // ─── Actualizar badges de orden ───────────────────────────────────────────
-
     function actualizarNumerosOrden() {
         $("#pnl_lista_destino li").each(function(i) {
             let badge = $(this).find('.badge-orden');
-            let esFinalVal = parseInt($(this).data("es-final")) === 1;
-            $(this).css("background-color", esFinalVal ? "<?= $color_final ?>" : "<?= $color_destino ?>");
+            let esInicioFijo = parseInt($(this).data("es-inicio-fijo")) === 1;
+            let esFinFijo = parseInt($(this).data("es-fin-fijo")) === 1;
+            let bloqueada = parseInt($(this).data("bloqueada")) === 1;
 
             if (badge.length === 0) {
                 $(this).addClass('d-flex align-items-center gap-2');
+                if (esInicioFijo) $(this).addClass('fijo-inicio');
+                if (bloqueada) $(this).addClass('item-bloqueado');
                 $(this).prepend(`<span class="badge bg-secondary badge-orden">${i + 1}</span>`);
 
-                if (esFinalVal && $(this).find('.badge-final').length === 0) {
-                    $(this).find('span:not(.badge-orden)').first()
-                        .append(`<span class="badge badge-final ms-1">Final</span>`);
+                let badgeTipo = esInicioFijo ?
+                    `<span class="badge badge-tipo ms-1" style="background:#0d6efd;color:#fff;">Inicio</span>` :
+                    (esFinFijo ? `<span class="badge badge-tipo ms-1" style="background:#ffc107;color:#000;">Final</span>` : '');
+
+                if (badgeTipo && $(this).find('.badge-tipo').length === 0) {
+                    $(this).find('span:not(.badge-orden)').first().append(badgeTipo);
                 }
 
                 if ($(this).find('.chk-obligatoria').length === 0) {
                     let uid = $(this).data("id-plaet") || 'new_' + i;
                     $(this).append(`
                         <div class="form-check form-check-inline mb-0 ms-auto" style="cursor:default;" onclick="event.stopPropagation()">
-                            <input class="form-check-input chk-obligatoria"
-                                   type="checkbox"
-                                   id="chk_obl_${uid}"
-                                   title="Etapa obligatoria">
+                            <input class="form-check-input chk-obligatoria" type="checkbox"
+                                   id="chk_obl_${uid}" title="Etapa obligatoria"
+                                   ${bloqueada ? 'disabled' : ''}>
                             <label class="form-check-label small text-muted" for="chk_obl_${uid}">Obligatoria</label>
                         </div>`);
                 }
@@ -341,8 +335,6 @@ $etapas_por_defecto = [2, 3, 4, 6];
         $("#pnl_lista_origen .badge-orden").remove();
         $("#pnl_lista_origen .chk-obligatoria").closest('.form-check').remove();
     }
-
-    // ─── Getters ──────────────────────────────────────────────────────────────
 
     function getListaDestino() {
         let lista = [];
@@ -361,17 +353,13 @@ $etapas_por_defecto = [2, 3, 4, 6];
         let lista = [];
         $("#pnl_lista_origen li").each(function() {
             let idPlaet = $(this).data("id-plaet");
-            if (idPlaet) {
-                lista.push({
-                    txt_id_etapa: $(this).data("id-etapa"),
-                    txt_id_plaet: idPlaet
-                });
-            }
+            if (idPlaet) lista.push({
+                txt_id_etapa: $(this).data("id-etapa"),
+                txt_id_plaet: idPlaet
+            });
         });
         return lista;
     }
-
-    // ─── Guardado ─────────────────────────────────────────────────────────────
 
     function mostrarIndicador(estado) {
         let el = $("#indicador_guardado");
@@ -385,11 +373,8 @@ $etapas_por_defecto = [2, 3, 4, 6];
     function guardarEtapasPlaza() {
         let listaDestino = getListaDestino();
         let listaOrigen = getListaOrigen();
-
         if (listaDestino.length === 0 && listaOrigen.length === 0) return;
-
         mostrarIndicador('guardando');
-
         $.ajax({
             url: '../controlador/TALENTO_HUMANO/CONTRATACION/cn_plaza_etapasC.php?guardar_bulk=true',
             type: 'POST',
@@ -414,40 +399,36 @@ $etapas_por_defecto = [2, 3, 4, 6];
     }
 </script>
 
-<!-- TEMPLATE -->
-<div class="row pt-3">
+<!-- ESTADO INICIAL -->
+<div id="pnl_inicio" class="text-center py-5" style="display:none;">
+    <i class="bx bx-layer fs-1 text-muted d-block mb-3"></i>
+    <p class="text-muted mb-4">Esta plaza aún no tiene etapas configuradas.</p>
+    <button id="btn_cargar_defecto" class="btn btn-primary px-4" onclick="cargarEtapasPorDefecto()">
+        <i class="bx bx-download me-1"></i> Cargar etapas por defecto
+    </button>
+</div>
 
-    <!-- ORIGEN -->
+<!-- EDITOR -->
+<div id="pnl_editor" class="row pt-3" style="display:none;">
     <div class="col-md-5">
         <div class="d-flex justify-content-between align-items-center mb-2">
             <h6 class="mb-0 text-secondary fw-bold">
                 <i class="bx bx-list-ul me-1"></i> Etapas disponibles
             </h6>
-            <div class="d-flex gap-2">
-                <button class="btn btn-outline-primary btn-sm" type="button"
-                    onclick="cargarEtapasPorDefecto()"
-                    title="Cargar etapas predefinidas">
-                    <i class="bx bx-download me-1"></i> Cargar por defecto
-                </button>
-                <button class="btn btn-outline-danger btn-sm" type="button"
-                    onclick="borrarTodasEtapas()"
-                    title="Quitar todas las etapas asignadas">
-                    <i class="bx bx-trash me-1"></i> Borrar todas
-                </button>
-            </div>
+            <!--
+            <button class="btn btn-outline-danger btn-sm" type="button" onclick="borrarTodasEtapas()">
+                <i class="bx bx-trash me-1"></i> Borrar todas
+            </button>
+-->
         </div>
-        <ul id="pnl_lista_origen" class="list-group lista-etapas pnl_etapas_sort">
-            <li class="list-group-item text-muted text-center small fst-italic">Cargando...</li>
-        </ul>
+        <ul id="pnl_lista_origen" class="list-group lista-etapas pnl_etapas_sort"></ul>
     </div>
 
-    <!-- FLECHA central -->
     <div class="col-md-2 d-flex align-items-center justify-content-center flex-column">
         <i class="bx bx-transfer fs-2 text-muted"></i>
         <small class="text-muted mt-1">Arrastra</small>
     </div>
 
-    <!-- DESTINO -->
     <div class="col-md-5">
         <div class="d-flex justify-content-between align-items-center mb-2">
             <h6 class="mb-0 text-success fw-bold">
@@ -456,8 +437,6 @@ $etapas_por_defecto = [2, 3, 4, 6];
             </h6>
             <span id="indicador_guardado" style="opacity:0;"></span>
         </div>
-        <ul id="pnl_lista_destino" class="list-group lista-etapas pnl_etapas_sort">
-            <li class="list-group-item text-muted text-center small fst-italic">Cargando...</li>
-        </ul>
+        <ul id="pnl_lista_destino" class="list-group lista-etapas pnl_etapas_sort"></ul>
     </div>
 </div>

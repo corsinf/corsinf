@@ -15,4 +15,17 @@ class cn_postulacionM extends BaseModel
         'cn_post_fecha_creacion',
         'cn_post_fecha_modificacion',
     ];
+
+    function ejecutar_crear_postulacion($cn_pla_id, $th_pos_id)
+    {
+        set_time_limit(0);
+
+        $parametros = [
+            intval($cn_pla_id),
+            intval($th_pos_id)
+        ];
+
+        $sql = "EXEC _contratacion.SP_CN_CREAR_POSTULACION @cn_pla_id = ?, @th_pos_id = ?";
+        return $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+    }
 }

@@ -176,7 +176,7 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                 if (response && response.length > 0) {
                     response.forEach(function(item, i) {
                         var esObl = (item.cn_plaet_obligatoria == '1' || item.cn_plaet_obligatoria === true);
-                        var color = item.color || colores[i % colores.length];
+                        var color = item.etapa_color || item.color || colores[i % colores.length];
                         var total = item.total_postulantes || 0;
                         var nombre = item.etapa_nombre;
                         var badgeObl = esObl ? '<span class="etapa-badge-obligatorio">OBLIGATORIO</span>' : '';
@@ -242,7 +242,7 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                 type: 'POST',
                 data: {
                     id: ''
-                }, 
+                },
                 dataSrc: ''
             },
             columns: [{
@@ -257,7 +257,7 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                 {
                     data: null,
                     render: function(d, t, item) {
-                        var n = ((item.th_pos_primer_apellido || '') + ' ' +(item.th_pos_segundo_apellido || '') + ' ' + (item.th_pos_primer_nombre || '') + ' ' + (item.th_pos_segundo_nombre || '')).trim();
+                        var n = ((item.th_pos_primer_apellido || '') + ' ' + (item.th_pos_segundo_apellido || '') + ' ' + (item.th_pos_primer_nombre || '') + ' ' + (item.th_pos_segundo_nombre || '')).trim();
                         return '<strong>' + (n || 'Sin nombre') + '</strong>';
                     }
                 },

@@ -24,23 +24,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             },
             columns: [{
                     data: null,
-                    render: function(data, type, item) {
-                        let href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=cn_registrar_plaza&_id_plaza=${item._id}`;
-                        return `<a href="${href}"><u>${item.cn_pla_titulo}</u></a>`;
-                    }
-                },
-                {
-                    data: 'cn_pla_descripcion',
-                    render: function(data, type, row) {
-                        if (!data) return '';
-                        return data.length > 50 ? data.substring(0, 50) + '...' : data;
-                    }
-                },
-                {
-                    data: 'cn_pla_num_vacantes'
-                },
-                {
-                    data: null,
                     orderable: false,
                     className: 'text-center',
                     render: function(data, type, item) {
@@ -55,6 +38,22 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             </div>
         `;
                     }
+                }, {
+                    data: null,
+                    render: function(data, type, item) {
+                        let href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=cn_registrar_plaza&_id_plaza=${item._id}`;
+                        return `<a href="${href}"><u>${item.cn_pla_titulo}</u></a>`;
+                    }
+                },
+                {
+                    data: 'cn_pla_descripcion',
+                    render: function(data, type, row) {
+                        if (!data) return '';
+                        return data.length > 50 ? data.substring(0, 50) + '...' : data;
+                    }
+                },
+                {
+                    data: 'cn_pla_num_vacantes'
                 }
             ],
             order: [
@@ -96,10 +95,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                             <table class="table table-striped" id="tbl_plazas" style="width:100%">
                                 <thead>
                                     <tr>
+                                        <th>Acciones</th>
                                         <th>Título</th>
                                         <th>Descripción</th>
                                         <th>N° Vacantes</th>
-                                        <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>

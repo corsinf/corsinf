@@ -64,6 +64,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     bloquear_vista();
                     var modal = new bootstrap.Modal(document.getElementById('modalSinPostulante'));
                     modal.show();
+                } else {
+                    $('#txt_pos_id').val(pos_id);
                 }
             },
             error: function() {
@@ -190,7 +192,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                 <a href="${hrefVer}" class="btn btn-info btn-xs" title="Ver plaza">
                                     <i class="bx bx-show fs-7 me-0 fw-bold"></i>
                                 </a>
-                                <a href="${hrefVer}" class="btn btn-success btn-xs" title="Postular">
+                                <a class="btn btn-success btn-xs" title="Postular" onclick="postular('${item._id}')">
                                     <i class="bx bx-send fs-7 me-0 fw-bold"></i>
                                 </a>
                             </div>
@@ -258,6 +260,45 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             scrollTop: $('#pnl_plazas').offset().top - 80
         }, 200);
     }
+
+
+    function postular(cn_pla_id) {
+        let th_pos_id = $('#txt_pos_id').val();
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/cn_postulacionC.php?crear_postulacion=true',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                cn_pla_id: cn_pla_id,
+                th_pos_id: th_pos_id
+            },
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Postulación enviada!',
+                        text: response.mensaje,
+                        confirmButtonColor: '#0d6efd'
+                    });
+                } else if (response == -1) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'No puede registrarse en otra plaza',
+                        text: response.mensaje,
+                        confirmButtonColor: '#fd7e14'
+                    });
+                }
+            },
+            error: function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Ocurrió un error al procesar tu postulación',
+                    confirmButtonColor: '#dc3545'
+                });
+            }
+        });
+    }
 </script>
 
 <div class="page-wrapper">
@@ -292,6 +333,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         </div>
                     </div>
                 </div>
+                <input type="hidden" name="txt_pos_id" id="txt_pos_id" value="">
 
                 <!-- Listado de plazas -->
                 <div id="pnl_plazas">

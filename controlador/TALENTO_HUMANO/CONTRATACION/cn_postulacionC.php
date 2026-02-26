@@ -1,0 +1,88 @@
+<?php
+
+date_default_timezone_set('America/Guayaquil');
+
+require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/CONTRATACION/cn_postulacionM.php');
+
+$controlador = new cn_postulacionC();
+
+if (isset($_GET['listar'])) {
+    echo json_encode($controlador->listar($_POST['id'] ?? ''));
+}
+
+if (isset($_GET['insertar_editar'])) {
+    echo json_encode($controlador->insertar_editar($_POST['parametros']));
+}
+
+if (isset($_GET['eliminar'])) {
+    echo json_encode($controlador->eliminar($_POST['_id']));
+}
+
+if (isset($_GET['crear_postulacion'])) {
+    echo json_encode($controlador->crear_postulacion(
+        $_POST['cn_pla_id'] ?? 0,
+        $_POST['th_pos_id'] ?? 0
+    ));
+}
+
+class cn_postulacionC
+{
+    private $modelo;
+
+    function __construct()
+    {
+        $this->modelo = new cn_postulacionM();
+    }
+
+    function listar($id = '')
+    {
+        if ($id == '') {
+            return $this->modelo->where('cn_post_estado', 1)->listar();
+        }
+        return $this->modelo->where('cn_post_id', intval($id))->listar();
+    }
+
+    function crear_postulacion($cn_pla_id, $th_pos_id)
+    {
+        if (empty($cn_pla_id) || empty($th_pos_id)) {
+            return ['error' => 'Parámetros inválidos'];
+        }
+        return $this->modelo->ejecutar_crear_postulacion($cn_pla_id, $th_pos_id);
+    }
+
+    function insertar_editar($parametros)
+    {
+        $toInt = function ($v) {
+            return ($v === '' || $v === null) ? null : (int)$v;
+        };
+
+        $datos = [
+            ['campo' => 'cn_pla_id',                'dato' => $toInt($parametros['cn_pla_id'] ?? null)],
+            ['campo' => 'th_pos_id',                'dato' => $toInt($parametros['th_pos_id'] ?? null)],
+            ['campo' => 'cn_plaet_id_actual',       'dato' => $toInt($parametros['cn_plaet_id_actual'] ?? null)],
+            ['campo' => 'cn_post_estado_proceso',   'dato' => $toInt($parametros['cn_post_estado_proceso'] ?? null)],
+            ['campo' => 'cn_post_estado',           'dato' => 1],
+            ['campo' => 'cn_post_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')],
+        ];
+
+        if (empty($parametros['_id'])) {
+            $datos[] = ['campo' => 'cn_post_fecha_creacion', 'dato' => date('Y-m-d H:i:s')];
+            $id = $this->modelo->insertar_id($datos);
+            return $id ? $id : 0;
+        } else {
+            $where = [['campo' => 'cn_post_id', 'dato' => intval($parametros['_id'])]];
+            $this->modelo->editar($datos, $where);
+            return $parametros['_id'];
+        }
+    }
+
+    function eliminar($id)
+    {
+        $datos = [
+            ['campo' => 'cn_post_estado',          'dato' => 0],
+            ['campo' => 'cn_post_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')]
+        ];
+        $where = [['campo' => 'cn_post_id', 'dato' => intval($id)]];
+        return $this->modelo->editar($datos, $where);
+    }
+}
