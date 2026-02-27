@@ -31,6 +31,9 @@ if (isset($_GET['crear_plaza_etapas'])) {
     ));
 }
 
+if (isset($_GET['evalular_etapas_completas'])) {
+    echo json_encode($controlador->evaluar_etapas_plaza());
+}
 
 class cn_plaza_etapasC
 {
@@ -161,5 +164,10 @@ class cn_plaza_etapasC
         }
 
         return 1;
+    }
+
+    function evaluar_etapas_plaza()
+    {
+        return $this->modelo->evaluar_etapas_plaza();
     }
 }

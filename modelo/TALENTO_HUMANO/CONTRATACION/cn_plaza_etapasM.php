@@ -69,4 +69,42 @@ class cn_plaza_etapasM extends BaseModel
         $sql = "EXEC _contratacion.SP_CN_GENERAR_ETAPAS_PLAZA @cn_pla_id = ?";
         return $this->db->ejecutar_procesos_almacenados($sql, $parametros);
     }
+
+    public function evaluar_etapas_plaza() //aqui enviar el array
+    {
+        $usuario = $_SESSION['INICIO']['ID_USUARIO'] ?? 0;
+
+        $evaluaciones = [
+            [
+                "cn_post_id" => 14,
+                "resultado" => "APROBADO",
+                "puntaje" => 85.00,
+                "observacion" => "Correcto"
+            ],
+            [
+                "cn_post_id" => 12,
+                "resultado" => "REPROBADO",
+                "puntaje" => 40.00,
+                "observacion" => "No cumple"
+            ],
+        ];
+
+        $json = json_encode($evaluaciones);
+
+        // print_r($json); exit(); die();
+
+        $sql = "EXEC _contratacion.SP_CN_EVALUAR_ETAPA_MASIVO @json = ?, @usuario = ?;";
+
+        $parametros = array(
+            $json,
+            $usuario
+        );
+
+        $resultado = $this->db->ejecutar_procedimiento_con_retorno_1(
+            $sql,
+            $parametros
+        );
+
+        return $resultado;
+    }
 }
