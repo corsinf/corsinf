@@ -219,11 +219,11 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         $('#etapa_nombre_panel').text(nombre);
         $('#pnl_postulantes').addClass('visible');
 
-        cargar_postulantes();
+        cargar_postulantes_etapas();
     }
 
     /* ── Carga la tabla de postulantes (th_pos_estado=1, th_pos_contratado=0) ── */
-    function cargar_postulantes() {
+    function cargar_postulantes_etapas() {
         if (tabla_postulantes && $.fn.DataTable.isDataTable('#tbl_postulantes')) {
             tabla_postulantes.destroy();
             $('#tbl_postulantes tbody').empty();
@@ -234,14 +234,14 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
             dom: 'frtip',
             language: {
                 url: '../assets/plugins/datatable/spanish.json',
-                emptyTable: 'No hay postulantes disponibles.',
+                emptyTable: 'No hay postulantes en esta etapa.',
                 zeroRecords: 'No se encontraron postulantes.'
             },
             ajax: {
-                url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?listar=true',
+                url: '../controlador/TALENTO_HUMANO/CONTRATACION/cn_postulacionC.php?listar_por_etapa=true',
                 type: 'POST',
                 data: {
-                    id: ''
+                    cn_plaet_id: etapa_activa_id
                 },
                 dataSrc: ''
             },
@@ -251,27 +251,31 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                     className: 'text-center',
                     width: '35px',
                     render: function(d, t, item) {
-                        return '<input type="checkbox" class="cbx-postulante form-check-input" value="' + (item.th_pos_id || '') + '" />';
+                        return '<input type="checkbox" class="cbx-postulante form-check-input" value="' + (item._id || '') + '" />';
                     }
                 },
                 {
-                    data: null,
-                    render: function(d, t, item) {
-                        var n = ((item.th_pos_primer_apellido || '') + ' ' + (item.th_pos_segundo_apellido || '') + ' ' + (item.th_pos_primer_nombre || '') + ' ' + (item.th_pos_segundo_nombre || '')).trim();
-                        return '<strong>' + (n || 'Sin nombre') + '</strong>';
+                    data: 'nombre_completo',
+                    render: function(d) {
+                        return '<strong>' + (d || 'Sin nombre') + '</strong>';
                     }
                 },
                 {
                     data: 'th_pos_cedula',
                     defaultContent: '<span class="text-muted">—</span>'
+                }, {
+                    data: 'cn_pose_estado_proceso',
+                    className: 'text-center',
+                    render: function(d) {
+                        return '<span class="badge bg-warning text-dark">Pendiente</span>';
+                    }
                 },
                 {
-                    data: 'th_pos_correo',
-                    defaultContent: '<span class="text-muted">—</span>'
-                },
-                {
-                    data: 'th_pos_telefono_1',
-                    defaultContent: '<span class="text-muted">—</span>'
+                    data: 'cn_pose_puntuacion',
+                    className: 'text-center',
+                    render: function(d) {
+                        return d !== null && d !== '' ? d : '<span class="text-muted">—</span>';
+                    }
                 }
             ],
             order: [
@@ -279,7 +283,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
             ]
         });
     }
-
     /* ── Select-all ── */
     $(document).on('change', '#cbx_select_all_postulantes', function() {
         $('#tbl_postulantes tbody .cbx-postulante').prop('checked', $(this).is(':checked'));
@@ -300,8 +303,25 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
 </script>
 
 <!-- PASOS DEL RECLUTAMIENTO -->
+<div class="alert alert-custom shadow-sm border-0 fade show" role="alert" style="background: #f8f9fa; border-left: 5px solid #0dcaf0 !important;">
+    <div class="d-flex align-items-center">
+        <div class="flex-shrink-0">
+            <i class="bx bx-info-circle fs-3" style="color: #0dcaf0;"></i>
+        </div>
+        <div class="ms-3">
+            <h6 class="alert-heading mb-1 fw-bold" style="color: #333;">Selecciona una etapa</h6>
+            <p class="mb-0 small" style="color: #666; line-height: 1.4;">
+                Haz clic en cualquiera de las <strong>etapas del proceso</strong> para visualizar
+                los postulantes asignados junto con su <strong>estado</strong> y <strong>puntaje</strong>
+                correspondiente a esa etapa.
+            </p>
+        </div>
+        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close" style="font-size: 0.7rem;"></button>
+    </div>
+</div>
 <div class="row">
     <b>Pasos del Reclutamiento</b>
+
     <div class="row mb-col mt-1">
         <div class="col-md-12 col-12">
             <div id="pnl_etapas_tarjetas"></div>
@@ -309,6 +329,9 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
     </div>
 </div>
 
+<button type="button" class="btn btn-outline-success btn-sm" onclick="verificar_pasos()">
+    <i class="bx bx-plus"></i> Verificar Pasos
+</button>
 <!-- PANEL DE POSTULANTES -->
 <div id="pnl_postulantes" class="row mt-3">
     <div class="col-12">
@@ -321,10 +344,8 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                         <h6 class="mb-0 fw-bold text-dark">
                             Postulantes &mdash; <span id="etapa_nombre_panel" class="text-primary"></span>
                         </h6>
+
                     </div>
-                    <button type="button" class="btn btn-outline-success btn-sm" id="btn_nuevo_postulante">
-                        <i class="bx bx-plus"></i> Nuevo Postulante
-                    </button>
                 </div>
 
                 <hr class="mt-0">
@@ -338,8 +359,8 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                                 </th>
                                 <th>Postulante</th>
                                 <th>Cédula</th>
-                                <th>Correo</th>
-                                <th>Teléfono</th>
+                                <th class="text-center">Estado</th>
+                                <th class="text-center">Puntuación</th>
                             </tr>
                         </thead>
                         <tbody></tbody>

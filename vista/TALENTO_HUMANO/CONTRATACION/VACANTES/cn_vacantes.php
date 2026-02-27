@@ -11,9 +11,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 <script type="text/javascript">
     const USER_DATA = {
         tipo: "<?= $_SESSION['INICIO']['TIPO'] ?>",
+        tipo_tabla: "<?= $_SESSION['INICIO']['NO_CONCURENTE_TABLA'] ?>",
         id: "<?= (in_array($_SESSION['INICIO']['TIPO'], ['DBA', 'ADMINISTRADOR'])) ? '' : $_SESSION['INICIO']['NO_CONCURENTE'] ?>"
     };
-    console.log(USER_DATA);
+
+    console.log(<?= json_encode($_SESSION['INICIO']['NO_CONCURENTE_TABLA']) ?>);
 
     var pagina_actual = 1;
     var por_pagina = 10;
@@ -47,6 +49,14 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             var modal = new bootstrap.Modal(document.getElementById('modalSinAcceso'));
             modal.show();
             return; // No hace la petición Ajax
+        }
+        const tablasPermitidas = ['_talentoh.th_personas', '_talentoh.th_postulantes'];
+
+        if (!tablasPermitidas.includes(USER_DATA.tipo_tabla)) {
+            bloquear_vista();
+            var modal = new bootstrap.Modal(document.getElementById('modalSinAcceso'));
+            modal.show();
+            return;
         }
 
         $.ajax({
@@ -283,7 +293,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 } else if (response == -1) {
                     Swal.fire({
                         icon: 'warning',
-                        title: 'No puede registrarse en otra plaza',
+                        title: 'No puede registrarse en esta plaza',
                         text: response.mensaje,
                         confirmButtonColor: '#fd7e14'
                     });

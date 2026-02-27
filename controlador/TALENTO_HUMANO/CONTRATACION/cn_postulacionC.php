@@ -25,6 +25,21 @@ if (isset($_GET['crear_postulacion'])) {
     ));
 }
 
+if (isset($_GET['crear_postulacion_bulk'])) {
+    $ids = $_POST['th_pos_ids'] ?? [];
+    if (is_string($ids)) $ids = json_decode($ids, true);
+    echo json_encode($controlador->crear_postulacion_bulk($_POST['cn_pla_id'] ?? 0, $ids));
+}
+
+if (isset($_GET['listar_por_plaza'])) {
+    echo json_encode($controlador->listar_por_plaza($_POST['cn_pla_id'] ?? 0));
+}
+
+
+if (isset($_GET['listar_por_etapa'])) {
+    echo json_encode($controlador->listar_por_etapa($_POST['cn_plaet_id'] ?? 0));
+}
+
 class cn_postulacionC
 {
     private $modelo;
@@ -41,6 +56,16 @@ class cn_postulacionC
         }
         return $this->modelo->where('cn_post_id', intval($id))->listar();
     }
+    function listar_por_plaza($cn_pla_id)
+    {
+        if (empty($cn_pla_id)) return [];
+        return $this->modelo->listar_postulantes_por_plaza($cn_pla_id);
+    }
+    function listar_por_etapa($cn_plaet_id)
+    {
+        if (empty($cn_plaet_id)) return [];
+        return $this->modelo->listar_postulantes_por_etapa($cn_plaet_id);
+    }
 
     function crear_postulacion($cn_pla_id, $th_pos_id)
     {
@@ -49,6 +74,13 @@ class cn_postulacionC
         }
         return $this->modelo->ejecutar_crear_postulacion($cn_pla_id, $th_pos_id);
     }
+
+    function crear_postulacion_bulk($cn_pla_id, $th_pos_ids)
+    {
+        if (empty($cn_pla_id) || empty($th_pos_ids)) return ['error' => 'Parámetros inválidos'];
+        return $this->modelo->ejecutar_crear_postulacion_bulk($cn_pla_id, $th_pos_ids);
+    }
+
 
     function insertar_editar($parametros)
     {

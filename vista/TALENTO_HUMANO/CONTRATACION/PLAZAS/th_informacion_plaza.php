@@ -9,6 +9,8 @@ if (isset($_GET['_id_plaza'])) {
 }
 
 ?>
+<script src="../lib/jquery_validation/jquery.validate.js"></script>
+<script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <div class="page-wrapper">
     <div class="page-content">
@@ -42,7 +44,7 @@ if (isset($_GET['_id_plaza'])) {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#tab_postulantes">
+                        <a class="nav-link" data-bs-toggle="tab" href="#tab_pla_postulantes">
                             <i class='bx bx-group me-1'></i> Postulantes
                         </a>
                     </li>
@@ -57,15 +59,8 @@ if (isset($_GET['_id_plaza'])) {
                         <?php include_once('../vista/TALENTO_HUMANO/CONTRATACION/PLAZAS/TABS_INFORMACION_PLAZA/tab_etapas_proceso.php'); ?>
                     </div>
 
-                    <div class="tab-pane fade" id="tab_postulantes" role="tabpanel">
-                        <div class="text-center py-5 border rounded bg-light">
-                            <i class="bx bx-group fs-1 text-secondary opacity-50"></i>
-                            <h5 class="mt-3">Gestión de Candidatos</h5>
-                            <p class="text-muted">Acceda al panel de revisión de hojas de vida y estados de postulación.</p>
-                            <a href="#" id="btn_postulaciones" class="btn btn-success px-4">
-                                <i class="bx bx-link-external"></i> Ir a Postulaciones
-                            </a>
-                        </div>
+                    <div class="tab-pane fade" id="tab_pla_postulantes" role="tabpanel">
+                        <?php include_once('../vista/TALENTO_HUMANO/CONTRATACION/PLAZAS/TABS_INFORMACION_PLAZA/tab_postulantes.php'); ?>
                     </div>
                 </div>
             </div>
