@@ -1,4 +1,7 @@
 <script>
+    $(document).ready(function() {
+        alert('compliance');
+    });
     // ============================================
     // FUNCIONES PARA COMPLIANCE
     // ============================================
@@ -19,7 +22,7 @@
         $('#modalComplianceLabel').html('<i class="bx bx-check-shield me-2"></i> Registrar Compliance del Cargo');
 
         // Verificar si ya existe compliance para este cargo
-        verificar_compliance_existente(<?= $_id ?>);
+        verificar_compliance_existente('<?= $_id ?? '' ?>');
 
         modal.show();
     }
@@ -390,7 +393,7 @@
         // Limpiar formulario
         $('#form_funciones_cargo')[0].reset();
         $('#th_carfun_id').val('');
-        $('#th_car_id_funcion').val(<?= $_id ?>);
+        $('#th_car_id_funcion').val(<?= $_id  ?? '' ?>);
         $('#pnl_crear_funcion').show();
         $('#pnl_actualizar_funcion').hide();
         $('#modalFuncionesLabel').html('<i class="bx bx-list-check me-2"></i> Registrar Función del Cargo');
@@ -499,7 +502,7 @@
                             if (modal) modal.hide();
 
                             // Recargar tabla de funciones
-                            listar_funciones_cargo(<?= $_id ?>);
+                            listar_funciones_cargo(<?= $_id  ?? '' ?>);
                         });
                 } else if (response == -2) {
                     Swal.fire('', 'Ya existe una función con ese nombre para este cargo.', 'warning');
@@ -694,7 +697,7 @@
                 if (response == 1 || response === true) {
                     Swal.fire('Eliminado', 'La función ha sido eliminada.', 'success')
                         .then(function() {
-                            listar_funciones_cargo(<?= $_id ?>);
+                            listar_funciones_cargo(<?= $_id  ?? '' ?>);
                         });
                 } else {
                     Swal.fire('', 'Error al eliminar la función.', 'error');

@@ -15,6 +15,9 @@
 
      }
      $(document).ready(function() {
+
+         alert('cargos aspectos intrinsecos');
+
          function obtenerParametrosAspecto() {
              // Helper para obtener valor según checkbox
              const obtenerValor = (checkboxId, ddlId, inputId) => {

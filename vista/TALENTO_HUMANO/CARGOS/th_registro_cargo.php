@@ -179,16 +179,7 @@ $es_plaza = false;
                                         </a>
                                     </li>
                                     <?php if ($_id != '') { ?>
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link" data-bs-toggle="tab" href="#aspectos_intrinsecos" role="tab"
-                                                aria-selected="false">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="tab-icon"><i class='bx bxs-file-blank font-18 me-1'></i>
-                                                    </div>
-                                                    <div class="tab-title">Aspectos Intrínsecos</div>
-                                                </div>
-                                            </a>
-                                        </li>
+
                                         <li class="nav-item" role="presentation">
                                             <a class="nav-link" data-bs-toggle="tab" href="#tab_aspectos_extrinsecos" role="tab"
                                                 aria-selected="false">
@@ -199,16 +190,7 @@ $es_plaza = false;
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link" data-bs-toggle="tab" href="#tab_compliance" role="tab"
-                                                aria-selected="false">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="tab-icon"><i class='bx bxs-file-blank font-18 me-1'></i>
-                                                    </div>
-                                                    <div class="tab-title">Compliance</div>
-                                                </div>
-                                            </a>
-                                        </li>
+
                                     <?php } ?>
                                 </ul>
                             </div>
@@ -260,26 +242,11 @@ $es_plaza = false;
                                     </section>
                                 </div>
 
-                                <!-- SECCION 2: ASPECTOS INTRINSECOS -->
-                                <div class="tab-pane fade" id="aspectos_intrinsecos" role="tabpanel">
-                                    <section class="content pt-0">
-                                        <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_ASPECTOS_INTRINSECOS/aspectos_intrinsecos.php'); ?>
-                                    </section>
-                                </div>
-
                                 <!-- SECCION 3: ASPECTOS EXTRINSECOS -->
                                 <div class="tab-pane fade" id="tab_aspectos_extrinsecos" role="tabpanel">
                                     <?php include_once('../vista/TALENTO_HUMANO/CARGOS/seccion_aspectos_extrinsecos.php'); ?>
                                 </div>
 
-                                <!-- SECCION 4: COMPLIANCE -->
-                                <div class="tab-pane fade" id="tab_compliance" role="tabpanel">
-                                    <section class="content pt-0">
-                                        <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_COMPLIANCE/compliance.php'); ?>
-                                    </section>
-                                </div>
-
-                              
                             </div>
                         </div>
                     </div>
