@@ -209,16 +209,6 @@ $es_plaza = false;
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link" data-bs-toggle="tab" href="#tab_competencias" role="tab"
-                                                aria-selected="false">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="tab-icon"><i class='bx bxs-file-blank font-18 me-1'></i>
-                                                    </div>
-                                                    <div class="tab-title">Competencias</div>
-                                                </div>
-                                            </a>
-                                        </li>
                                     <?php } ?>
                                 </ul>
                             </div>
