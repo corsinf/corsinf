@@ -31,8 +31,9 @@ if (isset($_GET['crear_plaza_etapas'])) {
     ));
 }
 
-if (isset($_GET['evalular_etapas_completas'])) {
-    echo json_encode($controlador->evaluar_etapas_plaza());
+if (isset($_GET['evaluar_etapas_completas'])) {
+    $evaluaciones = isset($_POST['evaluaciones']) ? $_POST['evaluaciones'] : '[]';
+    echo json_encode($controlador->evaluar_etapas_plaza($evaluaciones));
 }
 
 class cn_plaza_etapasC
@@ -51,7 +52,6 @@ class cn_plaza_etapasC
         } else if ($id_plaza != '') {
             return $this->modelo->listar_etapas_por_plaza($id_plaza);
         } else {
-
             return $this->modelo->where('cn_pla_id', $id)->where('estado', 1)->listar();
         }
     }
@@ -88,24 +88,17 @@ class cn_plaza_etapasC
         }
         return $this->modelo->ejecutar_crear_plaza_etapas($cn_pla_id);
     }
-    /**
-     * Guarda en bloque las etapas de una plaza desde el drag & drop.
-     *
-     * - lista_destino: etapas que DEBEN quedar asignadas (con su orden)
-     * - lista_origen:  etapas movidas de vuelta a origen → se eliminan (estado = 0)
-     */
+
     function guardar_bulk($id_plaza, $lista_destino, $lista_origen)
     {
         if ($id_plaza === '') return -1;
 
-        // PASO 1: Desactivar etapas devueltas al origen
         foreach ($lista_origen as $item) {
             if (!empty($item['txt_id_plaet'])) {
                 $this->eliminar($item['txt_id_plaet']);
             }
         }
 
-        // PASO 2a: Poner órdenes negativos temporales para evitar colisión de unique key de orden
         foreach ($lista_destino as $item) {
             $id_plaet = $item['txt_id_plaet'] ?? '';
             $orden    = $item['txt_orden']    ?? 0;
@@ -117,7 +110,6 @@ class cn_plaza_etapasC
             }
         }
 
-        // PASO 2b: Insertar nuevos / actualizar orden definitivo
         foreach ($lista_destino as $item) {
             $id_plaet    = $item['txt_id_plaet']   ?? '';
             $id_etapa    = $item['txt_id_etapa']   ?? '';
@@ -127,20 +119,17 @@ class cn_plaza_etapasC
             if ($id_etapa === '') continue;
 
             if (empty($id_plaet)) {
-                // Verificar si ya existe el par (cn_pla_id, id_etapa) antes de insertar
                 $existe = $this->modelo->buscar_existente($id_plaza, $id_etapa);
 
                 if ($existe) {
-                    // Ya existe pero sin id_plaet en el frontend → solo actualizar
                     $datos = [
                         ['campo' => 'cn_plaet_orden',       'dato' => $orden],
                         ['campo' => 'cn_plaet_obligatoria', 'dato' => $obligatoria],
-                        ['campo' => 'estado',                'dato' => 1],
+                        ['campo' => 'estado',               'dato' => 1],
                     ];
                     $where = [['campo' => 'cn_plaet_id', 'dato' => $existe]];
                     $this->modelo->editar($datos, $where);
                 } else {
-                    // Realmente es nuevo
                     $datos = [
                         ['campo' => 'cn_pla_id',           'dato' => $id_plaza],
                         ['campo' => 'id_etapa',             'dato' => $id_etapa],
@@ -152,11 +141,10 @@ class cn_plaza_etapasC
                     $this->modelo->insertar($datos);
                 }
             } else {
-                // Actualizar orden definitivo
                 $datos = [
                     ['campo' => 'cn_plaet_orden',       'dato' => $orden],
                     ['campo' => 'cn_plaet_obligatoria', 'dato' => $obligatoria],
-                    ['campo' => 'estado',                'dato' => 1],
+                    ['campo' => 'estado',               'dato' => 1],
                 ];
                 $where = [['campo' => 'cn_plaet_id', 'dato' => $id_plaet]];
                 $this->modelo->editar($datos, $where);
@@ -165,9 +153,8 @@ class cn_plaza_etapasC
 
         return 1;
     }
-
-    function evaluar_etapas_plaza()
+    function evaluar_etapas_plaza($evaluaciones_json = '[]')
     {
-        return $this->modelo->evaluar_etapas_plaza();
+        return $this->modelo->evaluar_etapas_plaza($evaluaciones_json);
     }
 }
