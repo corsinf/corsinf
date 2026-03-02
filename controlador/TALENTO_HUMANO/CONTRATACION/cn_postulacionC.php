@@ -9,6 +9,9 @@ $controlador = new cn_postulacionC();
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
+if (isset($_GET['listar_postulante_plaza'])) {
+    echo json_encode($controlador->listar_postulante_plaza($_POST['id'] ?? ''));
+}
 
 if (isset($_GET['insertar_editar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
@@ -54,8 +57,14 @@ class cn_postulacionC
         if ($id == '') {
             return $this->modelo->where('cn_post_estado', 1)->listar();
         }
-        return $this->modelo->where('cn_post_id', intval($id))->listar();
+        return $this->modelo->where('cn_post_id', intval($id))->where('cn_post_estado', 1)->listar();
     }
+
+    function listar_postulante_plaza($id = '')
+    {
+        return $this->modelo->where('th_pos_id', intval($id))->where('cn_post_estado', 1)->listar();
+    }
+
     function listar_por_plaza($cn_pla_id)
     {
         if (empty($cn_pla_id)) return [];

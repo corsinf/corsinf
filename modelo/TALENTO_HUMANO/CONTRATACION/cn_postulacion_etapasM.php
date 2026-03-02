@@ -4,7 +4,7 @@ require_once(dirname(__DIR__, 2) . '/GENERAL/BaseModel.php');
 
 class cn_postulacion_etapasM extends BaseModel
 {
-    protected $tabla = '_contratacion.cn_postulacion_etapas';
+    protected $tabla = 'cn_postulacion_etapas';
     protected $primaryKey = 'cn_pose_id AS _id';
     protected $camposPermitidos = [
         'cn_post_id',

@@ -1,9 +1,6 @@
 <?php
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
-
 ?>
-
-
 
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
@@ -15,19 +12,17 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         id: "<?= (in_array($_SESSION['INICIO']['TIPO'], ['DBA', 'ADMINISTRADOR'])) ? '' : $_SESSION['INICIO']['NO_CONCURENTE'] ?>"
     };
 
-    console.log(<?= json_encode($_SESSION['INICIO']['NO_CONCURENTE_TABLA']) ?>);
-
     var pagina_actual = 1;
     var por_pagina = 10;
     var total_plazas = 0;
     var todas_plazas = [];
     var plazas_filtradas = [];
+    var postulaciones_ids = []; // ← IDs de plazas donde ya está postulado
 
     $(document).ready(function() {
-        cargar_plazas();
+        // ← QUITAR cargar_plazas() de aquí
         datos_postulante(USER_DATA.id);
 
-        // Búsqueda en tiempo real
         $('#txt_buscar_plaza').on('keyup', function() {
             var q = $(this).val().toLowerCase().trim();
             plazas_filtradas = todas_plazas.filter(function(p) {
@@ -40,22 +35,17 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         });
     });
 
-
     function datos_postulante(id) {
-
-        // Si es DBA u ADMINISTRADOR, bloquear de inmediato
         if (USER_DATA.tipo === 'DBA' || USER_DATA.tipo === 'ADMINISTRADOR') {
             bloquear_vista();
-            var modal = new bootstrap.Modal(document.getElementById('modalSinAcceso'));
-            modal.show();
-            return; // No hace la petición Ajax
+            new bootstrap.Modal(document.getElementById('modalSinAcceso')).show();
+            return;
         }
-        const tablasPermitidas = ['_talentoh.th_personas', '_talentoh.th_postulantes'];
 
+        const tablasPermitidas = ['_talentoh.th_personas', '_talentoh.th_postulantes'];
         if (!tablasPermitidas.includes(USER_DATA.tipo_tabla)) {
             bloquear_vista();
-            var modal = new bootstrap.Modal(document.getElementById('modalSinAcceso'));
-            modal.show();
+            new bootstrap.Modal(document.getElementById('modalSinAcceso')).show();
             return;
         }
 
@@ -72,16 +62,15 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
                 if (!datos || isNaN(pos_id) || pos_id <= 0) {
                     bloquear_vista();
-                    var modal = new bootstrap.Modal(document.getElementById('modalSinPostulante'));
-                    modal.show();
+                    new bootstrap.Modal(document.getElementById('modalSinPostulante')).show();
                 } else {
                     $('#txt_pos_id').val(pos_id);
+                    cargar_plazas(); // ← solo aquí, cuando ya tenemos pos_id
                 }
             },
             error: function() {
                 bloquear_vista();
-                var modal = new bootstrap.Modal(document.getElementById('modalSinPostulante'));
-                modal.show();
+                new bootstrap.Modal(document.getElementById('modalSinPostulante')).show();
             }
         });
     }
@@ -96,6 +85,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=index';
     }
 
+    /* ── Carga postulaciones del postulante y luego las plazas ── */
     function cargar_plazas() {
         $('#pnl_plazas').html(
             '<div class="text-center py-5">' +
@@ -103,6 +93,34 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             '<p class="text-muted mt-3">Cargando plazas...</p></div>'
         );
 
+        var th_pos_id = $('#txt_pos_id').val();
+
+        // Primero obtener postulaciones del postulante
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/cn_postulacionC.php?listar_postulante_plaza=true',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: th_pos_id
+            },
+            success: function(postulaciones) {
+                postulaciones_ids = [];
+                if (postulaciones && postulaciones.length > 0) {
+                    postulaciones.forEach(function(p) {
+                        postulaciones_ids.push(String(p.cn_pla_id));
+                    });
+                }
+                _cargar_plazas_ajax();
+            },
+            error: function() {
+                postulaciones_ids = [];
+                _cargar_plazas_ajax();
+            }
+        });
+    }
+
+    /* ── AJAX interno para traer el listado de plazas ── */
+    function _cargar_plazas_ajax() {
         $.ajax({
             url: '../controlador/TALENTO_HUMANO/CONTRATACION/cn_plazaC.php?listar=true',
             type: 'GET',
@@ -116,9 +134,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 renderizar_plazas();
             },
             error: function() {
-                $('#pnl_plazas').html(
-                    '<div class="alert alert-danger">Error al cargar las plazas.</div>'
-                );
+                $('#pnl_plazas').html('<div class="alert alert-danger">Error al cargar las plazas.</div>');
             }
         });
     }
@@ -148,26 +164,36 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             var descCorta = desc.length > 120 ? desc.substring(0, 120) + '...' : desc;
             var fechaPublic = item.cn_pla_fecha || item.created_at || '';
 
-            // Badge tipo
             var colorTipo = tipo.toLowerCase() === 'interna' ? 'primary' :
                 tipo.toLowerCase() === 'mixta' ? 'purple' : 'success';
             var iconTipo = tipo.toLowerCase() === 'interna' ? 'bx-building' :
                 tipo.toLowerCase() === 'mixta' ? 'bx-transfer' : 'bx-globe';
 
-            // Badge vacantes
             var badgeVac = parseInt(vacantes) > 1 ?
                 '<span class="badge bg-warning text-dark ms-1"><i class="bx bx-group me-1"></i>Múltiples vacantes</span>' :
                 '';
 
             var hrefVer = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_plaza&_id_plaza=${item._id}`;
-            var hrefEditar = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=cn_registrar_plaza&_id_plaza=${item._id}`;
+
+            // ── Botón postular según si ya está postulado ──
+            var ya_postulado = postulaciones_ids.includes(String(item._id));
+
+            var btn_postular = ya_postulado ?
+                `<span class="badge bg-success px-2 py-1 d-flex align-items-center gap-1"
+                          title="Ya estás postulado a esta plaza"
+                          style="font-size:11px;line-height:1.6;white-space:nowrap;">
+                       <i class="bx bx-check-circle"></i> Postulado
+                   </span>` :
+                `<a class="btn btn-success btn-xs" title="Postular" onclick="postular('${item._id}')">
+                       <i class="bx bx-send fs-7 me-0 fw-bold"></i>
+                   </a>`;
 
             html += `
-            <div class="card mb-3 border shadow-sm rounded-3 plaza-card" style="border-left: 4px solid #0d6efd !important; transition: box-shadow .2s;">
+            <div class="card mb-3 border shadow-sm rounded-3 plaza-card" style="border-left:4px solid #0d6efd !important;transition:box-shadow .2s;">
                 <div class="card-body py-3 px-4">
                     <div class="row align-items-start g-2">
 
-                        <!-- Ícono / Letra inicial -->
+                        <!-- Ícono inicial -->
                         <div class="col-auto d-none d-md-flex">
                             <div class="rounded-3 d-flex align-items-center justify-content-center fw-bold text-white fs-4"
                                  style="width:52px;height:52px;background:linear-gradient(135deg,#0d6efd,#6610f2);flex-shrink:0;">
@@ -175,15 +201,23 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                             </div>
                         </div>
 
-                        <!-- Contenido principal -->
+                        <!-- Contenido -->
                         <div class="col">
                             <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
-                                <a href="${hrefVer}" class="fw-bold fs-6 text-dark text-decoration-none stretched-link-custom"
+                                <a href="${hrefVer}" class="fw-bold fs-6 text-dark text-decoration-none"
                                    style="line-height:1.3;">${item.cn_pla_titulo}</a>
                                 ${badgeVac}
+                                ${ya_postulado
+                                    ? `<span class="badge bg-success-subtle text-success border border-success-subtle"
+                                              style="font-size:10px;">
+                                           <i class="bx bx-check me-1"></i>Ya postulado
+                                       </span>`
+                                    : ''}
                             </div>
 
-                            <p class="text-muted small mb-2" style="line-height:1.5;">${descCorta || '<em>Sin descripción</em>'}</p>
+                            <p class="text-muted small mb-2" style="line-height:1.5;">
+                                ${descCorta || '<em>Sin descripción</em>'}
+                            </p>
 
                             <div class="d-flex flex-wrap gap-2 align-items-center">
                                 ${ciudad ? `<span class="badge bg-light text-secondary border"><i class="bx bx-map me-1"></i>${ciudad}</span>` : ''}
@@ -197,14 +231,14 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
                         <!-- Acciones -->
                         <div class="col-12 col-md-auto d-flex flex-row flex-md-column align-items-md-end justify-content-between gap-2 mt-2 mt-md-0">
-                            ${fechaPublic ? `<small class="text-muted d-block text-md-end"><i class="bx bx-calendar me-1"></i>${fechaPublic}</small>` : '<span></span>'}
-                            <div class="d-flex gap-1 justify-content-end">
+                            ${fechaPublic
+                                ? `<small class="text-muted d-block text-md-end"><i class="bx bx-calendar me-1"></i>${fechaPublic}</small>`
+                                : '<span></span>'}
+                            <div class="d-flex gap-1 justify-content-end align-items-center">
                                 <a href="${hrefVer}" class="btn btn-info btn-xs" title="Ver plaza">
                                     <i class="bx bx-show fs-7 me-0 fw-bold"></i>
                                 </a>
-                                <a class="btn btn-success btn-xs" title="Postular" onclick="postular('${item._id}')">
-                                    <i class="bx bx-send fs-7 me-0 fw-bold"></i>
-                                </a>
+                                ${btn_postular}
                             </div>
                         </div>
 
@@ -215,7 +249,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
         $('#pnl_plazas').html(html);
 
-        // Hover effect sin CSS extra
         $('.plaza-card').hover(
             function() {
                 $(this).css('box-shadow', '0 4px 20px rgba(13,110,253,.15)');
@@ -271,7 +304,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         }, 200);
     }
 
-
     function postular(cn_pla_id) {
         let th_pos_id = $('#txt_pos_id').val();
         $.ajax({
@@ -287,14 +319,16 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     Swal.fire({
                         icon: 'success',
                         title: '¡Postulación enviada!',
-                        text: response.mensaje,
+                        text: '¡Tu postulación fue registrada exitosamente!',
                         confirmButtonColor: '#0d6efd'
+                    }).then(function() {
+                        cargar_plazas(); // ← recargar para actualizar botones
                     });
                 } else if (response == -1) {
                     Swal.fire({
                         icon: 'warning',
                         title: 'No puede registrarse en esta plaza',
-                        text: response.mensaje,
+                        text: 'Ya estás postulado o no cumples los requisitos.',
                         confirmButtonColor: '#fd7e14'
                     });
                 }
@@ -314,7 +348,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 <div class="page-wrapper">
     <div class="page-content">
 
-        <!-- Breadcrumb -->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
             <div class="breadcrumb-title pe-3">Plazas</div>
             <div class="ps-3">
@@ -330,9 +363,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         <div class="row">
             <div class="col-xl-10 col-lg-11 mx-auto">
 
-                <!-- Header -->
                 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-                    <!-- Buscador -->
                     <div class="mb-4">
                         <div class="input-group input-group-sm" style="max-width:320px;">
                             <span class="input-group-text bg-white border-end-0">
@@ -343,9 +374,9 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         </div>
                     </div>
                 </div>
+
                 <input type="hidden" name="txt_pos_id" id="txt_pos_id" value="">
 
-                <!-- Listado de plazas -->
                 <div id="pnl_plazas">
                     <div class="text-center py-5">
                         <div class="spinner-border text-primary" role="status"></div>
@@ -353,12 +384,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     </div>
                 </div>
 
-                <!-- Paginación -->
                 <div id="pnl_paginacion" class="mt-3"></div>
 
             </div>
         </div>
-
     </div>
 </div>
 
@@ -366,22 +395,15 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 <div class="modal fade" id="modalSinPostulante" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-
-            <!-- Franja superior decorativa -->
             <div style="height:6px;background:linear-gradient(90deg,#0d6efd,#6610f2);"></div>
-
             <div class="modal-body text-center px-5 py-4">
-
-                <!-- Ícono animado -->
                 <div class="mb-3">
                     <div class="rounded-circle d-inline-flex align-items-center justify-content-center"
                         style="width:72px;height:72px;background:linear-gradient(135deg,#e8f0fe,#f3e8ff);">
                         <i class="bx bx-file-blank text-primary" style="font-size:2.2rem;"></i>
                     </div>
                 </div>
-
                 <h5 class="fw-bold text-dark mb-2">¡Un paso antes de continuar!</h5>
-
                 <p class="text-muted mb-1" style="line-height:1.6;">
                     Para postularte a cualquier plaza, primero necesitas
                     <strong class="text-dark">completar tu hoja de vida</strong>.
@@ -390,8 +412,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     Es rápido y solo debes hacerlo una vez. Con tu CV registrado podrás aplicar
                     a todas las oportunidades disponibles. 🚀
                 </p>
-
-                <!-- Pasos visuales -->
                 <div class="d-flex justify-content-center gap-3 mb-4">
                     <div class="text-center">
                         <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-1 fw-bold"
@@ -415,45 +435,36 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         <p class="mb-0 text-muted" style="font-size:.75rem;">¡Postúlate<br>y listo!</p>
                     </div>
                 </div>
-
                 <button onclick="irACompletarCV()" class="btn btn-primary px-4 rounded-pill">
                     <i class="bx bx-edit me-2"></i>Completar mi hoja de vida
                 </button>
-
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal: DBA sin acceso -->
+<!-- Modal: Sin acceso -->
 <div class="modal fade" id="modalSinAcceso" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-
             <div style="height:6px;background:linear-gradient(90deg,#dc3545,#fd7e14);"></div>
-
             <div class="modal-body text-center px-5 py-4">
-
                 <div class="mb-3">
                     <div class="rounded-circle d-inline-flex align-items-center justify-content-center"
                         style="width:72px;height:72px;background:linear-gradient(135deg,#fde8e8,#ffe8d6);">
                         <i class="bx bx-lock-alt text-danger" style="font-size:2.2rem;"></i>
                     </div>
                 </div>
-
                 <h5 class="fw-bold text-dark mb-2">Acceso restringido</h5>
-
                 <p class="text-muted mb-1" style="line-height:1.6;">
                     Este apartado es exclusivo para <strong class="text-dark">postulantes</strong>.
                 </p>
                 <p class="text-muted small mb-4" style="line-height:1.6;">
                     Tu rol actual no tiene permitido visualizar ni interactuar con las plazas de postulación. 🔒
                 </p>
-
                 <button onclick="history.back()" class="btn btn-danger px-4 rounded-pill">
                     <i class="bx bx-arrow-back me-2"></i>Regresar
                 </button>
-
             </div>
         </div>
     </div>
