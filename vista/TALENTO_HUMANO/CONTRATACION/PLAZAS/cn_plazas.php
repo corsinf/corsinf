@@ -31,14 +31,22 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         let href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_plaza&_id_plaza=${item._id}`;
 
                         return `
-            <div class="d-flex justify-content-center gap-1">
-                <a href="${href}" class="btn btn-info btn-xs" title="Ver Plaza">
-                    <i class="bx bx-show fs-7 me-0 fw-bold"></i>
-                </a>
-            </div>
-        `;
+                                <div class="d-flex justify-content-center gap-1">
+                                    <a href="${href}" class="btn btn-primary btn-xs" title="Ver Plaza">
+                                        <i class="bx bx-show fs-7 me-0 fw-bold"></i>
+                                    </a>
+                                </div>
+                            `;
                     }
-                }, {
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        let salida = fecha_formateada(item.cn_pla_fecha_creacion);
+                        return salida;
+                    }
+                },
+                {
                     data: null,
                     render: function(data, type, item) {
                         let href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=cn_registrar_plaza&_id_plaza=${item._id}`;
@@ -57,7 +65,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 }
             ],
             order: [
-                [1, 'asc']
+                [1, 'desc']
             ]
         }));
     });
@@ -71,7 +79,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Todos las plazas</li>
+                        <li class="breadcrumb-item active" aria-current="page">Lista de Plazas</li>
                     </ol>
                 </nav>
             </div>
@@ -96,6 +104,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                 <thead>
                                     <tr>
                                         <th>Acciones</th>
+                                        <th>Fecha Creación</th>
                                         <th>Título</th>
                                         <th>Descripción</th>
                                         <th>N° Vacantes</th>

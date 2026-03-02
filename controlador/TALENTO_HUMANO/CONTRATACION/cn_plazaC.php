@@ -8,8 +8,9 @@ $controlador = new cn_plazaC();
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
-if (isset($_GET['listar_resumen'])) {
-    echo json_encode($controlador->listar_resumen($_POST['id'] ?? ''));
+
+if (isset($_GET['listar_plaza_detalle_completo'])) {
+    ($controlador->listar_plaza_detalle_completo($_POST['id_plaza'] ?? ''));
 }
 
 if (isset($_GET['listar_plaza'])) {
@@ -50,9 +51,16 @@ class cn_plazaC
     {
         return $this->modelo->where('cn_pla_id', $id)->where('cn_pla_estado', 1)->listar();
     }
-    function listar_resumen($id = '')
+
+    public function listar_plaza_detalle_completo($id_plaza)
     {
-        return $this->modelo->listar_plaza_resumen($id);
+        $id_plaza = intval($id_plaza);
+
+        $data = $this->modelo->listar_plaza_cargo_detalle_completo($id_plaza);
+
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        exit;
     }
 
     function insertar_editar($parametros)

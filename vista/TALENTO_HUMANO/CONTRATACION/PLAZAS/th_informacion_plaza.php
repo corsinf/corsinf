@@ -14,19 +14,20 @@ if (isset($_GET['_id_plaza'])) {
 
 <div class="page-wrapper">
     <div class="page-content">
-        <div class="card radius-10 border-top border-4">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <p class="mb-0 text-muted">
-                            <i class="bx bx-buildings me-1"></i><span id="lbl_departamento" class="me-3">---</span>
-                            <i class="bx bx-briefcase me-1"></i><span id="lbl_cargo">---</span>
-                        </p>
-                    </div>
-                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=cn_plazas" class="btn btn-outline-secondary btn-sm shadow-sm">
-                        <i class="bx bx-arrow-back"></i> Regresar
-                    </a>
-                </div>
+
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">Plazas</div>
+            <div class="ps-3 d-flex align-items-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Información General</li>
+                    </ol>
+                </nav>
+
+                <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=cn_plazas" class="btn btn-outline-secondary btn-sm shadow-sm ms-3">
+                    <i class="bx bx-arrow-back"></i> Regresar
+                </a>
             </div>
         </div>
 

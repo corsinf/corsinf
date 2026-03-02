@@ -31,8 +31,8 @@ class cn_plazaM extends BaseModel
     public function listar_plaza_por_id($id)
     {
         $id = intval($id);
-        $sql = "
-            SELECT
+        $sql =
+            "SELECT
                 p.cn_pla_id AS _id,
                 p.cn_pla_titulo,
                 p.id_cargo,
@@ -65,121 +65,118 @@ class cn_plazaM extends BaseModel
             LEFT JOIN cn_cat_tipo_seleccion ts ON p.id_tipo_seleccion = ts.id_tipo_seleccion
             LEFT JOIN th_cat_nomina n ON p.id_nomina = n.id_nomina
             LEFT JOIN th_personas per ON p.th_per_id_responsable = per.th_per_id
-            WHERE p.cn_pla_id = $id
-        ";
+            WHERE p.cn_pla_id = $id;";
+            
         return $this->db->datos($sql);
     }
 
-
-    public function listar_plaza_resumen($id)
+    public function listar_plaza_id_cargo($id_plaza)
     {
-        $id = intval($id);
-        $sql = "
-        SELECT
-            p.cn_pla_id                     AS _id,
-            p.cn_pla_titulo,
-            p.id_cargo,
-            p.cn_pla_descripcion,
-            p.id_tipo_seleccion,
-            p.cn_pla_num_vacantes,
-            p.cn_pla_fecha_publicacion,
-            p.cn_pla_fecha_cierre,
-            p.th_dep_id,
-            p.cn_pla_req_disponibilidad,
-            p.cn_pla_salario_min,
-            p.cn_pla_salario_max,
-            p.id_nomina,
-            p.cn_pla_req_prioridad_interna,
-            p.cn_pla_req_documentos,
-            p.th_per_id_responsable,
-            p.cn_pla_observaciones,
-            p.cn_pla_estado,
-            p.cn_pla_fecha_creacion,
-            p.cn_pla_fecha_modificacion,
-            c.nombre                        AS descripcion_cargo,
-            d.th_dep_nombre                 AS descripcion_departamento,
-            ts.descripcion                  AS descripcion_tipo_seleccion,
-            n.nombre                        AS descripcion_nomina,
-            per.th_per_cedula               AS per_cedula,
-            per.th_per_nombres_completos    AS per_nombre_completo,
+        $id_plaza = intval($id_plaza);
+        $sql = "SELECT
+                p.cn_pla_id AS _id,
+                p.id_cargo
+            FROM cn_plaza p
+            WHERE p.cn_pla_id = $id_plaza;";
 
-            (SELECT STRING_AGG(rrd.descripcion, '||') WITHIN GROUP (ORDER BY rrd.descripcion ASC)
-             FROM cn_plaza_reqr_responsabilidades rr
-             LEFT JOIN th_cat_reqr_responsabilidades_detalle rrd ON rrd.id_req_res_det = rr.id_req_res_det
-             WHERE rr.cn_pla_id = p.cn_pla_id AND rr.cn_reqr_estado = 1)
-                                            AS responsabilidades,
+        $id_cargo = $this->db->datos($sql);
+        if (empty($id_cargo)) {
+            return -1;
+        }
 
-            (SELECT STRING_AGG(na.descripcion, '||') WITHIN GROUP (ORDER BY na.descripcion ASC)
-             FROM cn_plaza_reqi_instruccion ri
-             LEFT JOIN th_cat_pos_nivel_academico na ON na.id_nivel_academico = ri.id_nivel_academico
-             WHERE ri.cn_pla_id = p.cn_pla_id AND ri.cn_reqi_estado = 1)
-                                            AS instruccion,
+        $id_cargo = $id_cargo[0]['id_cargo'];
 
-            (SELECT STRING_AGG(ae_cat.descripcion, '||') WITHIN GROUP (ORDER BY ae_cat.descripcion ASC)
-             FROM cn_plaza_reqi_area_estudio ae
-             LEFT JOIN th_cat_area_estudio ae_cat ON ae_cat.id_area_estudio = ae.id_area_estudio
-             WHERE ae.cn_pla_id = p.cn_pla_id AND ae.cn_reqia_estado = 1)
-                                            AS area_estudio,
+        return $id_cargo;
+    }
 
-            (SELECT STRING_AGG(CONCAT(rp.nombre, '|', ISNULL(CAST(rp.min_anios_exp AS VARCHAR),''), '|', ISNULL(CAST(rp.max_anios_exp AS VARCHAR),'')), '||') WITHIN GROUP (ORDER BY rp.min_anios_exp ASC)
-             FROM cn_plaza_reqi_experiencia re
-             LEFT JOIN th_cat_rango_profesional rp ON rp.id_rango_profesional = re.id_rango_profesional
-             WHERE re.cn_pla_id = p.cn_pla_id AND re.cn_reqe_estado = 1)
-                                            AS experiencia,
 
-            (SELECT STRING_AGG(CONCAT(idi.descripcion, '|', ISNULL(idin.descripcion,'')), '||') WITHIN GROUP (ORDER BY idi.descripcion ASC)
-             FROM cn_plaza_reqi_idiomas ri2
-             LEFT JOIN th_cat_idiomas idi ON idi.id_idiomas = ri2.id_idiomas
-             LEFT JOIN th_cat_idiomas_nivel idin ON idin.id_idiomas_nivel = ri2.id_idiomas_nivel
-             WHERE ri2.cn_pla_id = p.cn_pla_id AND ri2.cn_reqid_estado = 1)
-                                            AS idiomas,
+    public function listar_plaza_detalle_completo(int $plaza_id)
+    {
+        if ($plaza_id <= 0) {
+            return -2;
+        }
 
-            (SELECT STRING_AGG(hh.th_hab_nombre, '||') WITHIN GROUP (ORDER BY hh.th_hab_nombre ASC)
-             FROM cn_plaza_reqi_aptitud ra
-             LEFT JOIN th_cat_habilidades hh ON hh.th_hab_id = ra.cn_hab_id
-             WHERE ra.cn_pla_id = p.cn_pla_id AND ra.cn_reqa_estado = 1 AND hh.th_tiph_id = 1)
-                                            AS habilidades_tecnicas,
+        $sql = "EXEC _contratacion.SP_CN_PLAZA_DETALLE_JSON @cn_pla_id = ?;";
+        $parametros = [$plaza_id];
 
-            (SELECT STRING_AGG(hh.th_hab_nombre, '||') WITHIN GROUP (ORDER BY hh.th_hab_nombre ASC)
-             FROM cn_plaza_reqi_aptitud ra
-             LEFT JOIN th_cat_habilidades hh ON hh.th_hab_id = ra.cn_hab_id
-             WHERE ra.cn_pla_id = p.cn_pla_id AND ra.cn_reqa_estado = 1 AND hh.th_tiph_id = 2)
-                                            AS habilidades_blandas,
+        $resultado = $this->db->ejecutar_procedimiento_con_retorno_1(
+            $sql,
+            $parametros
+        );
 
-            (SELECT STRING_AGG(ci.descripcion, '||') WITHIN GROUP (ORDER BY ci.descripcion ASC)
-             FROM cn_plaza_reqi_iniciativa ini
-             LEFT JOIN th_cat_reqi_iniciativa ci ON ci.id_req_iniciativa = ini.id_req_iniciativa
-             WHERE ini.cn_pla_id = p.cn_pla_id AND ini.cn_reqini_estado = 1)
-                                            AS iniciativas,
+        if (empty($resultado)) {
+            return -1;
+        }
 
-            (SELECT STRING_AGG(td.descripcion, '||') WITHIN GROUP (ORDER BY td.descripcion ASC)
-             FROM cn_plaza_reqct_trabajo pt
-             LEFT JOIN th_cat_reqct_trabajo_detalle td ON td.id_req_trabajo = pt.id_req_trabajo
-             WHERE pt.cn_pla_id = p.cn_pla_id AND pt.cn_reqct_estado = 1)
-                                            AS condiciones_trabajo,
+        // El SP devuelve json_result como string
+        if (isset($resultado[0]['json_result'])) {
 
-            (SELECT STRING_AGG(rrd2.descripcion, '||') WITHIN GROUP (ORDER BY rrd2.descripcion ASC)
-             FROM cn_plaza_reqct_riesgos pr
-             LEFT JOIN th_cat_reqct_riesgos_detalle rrd2 ON rrd2.id_req_riesgo = pr.id_req_riesgo
-             WHERE pr.cn_pla_id = p.cn_pla_id AND pr.cn_reqr_estado = 1)
-                                            AS riesgos,
+            $json = $resultado[0]['json_result'];
 
-            (SELECT STRING_AGG(CONCAT(rfc.descripcion, '|', rfd.descripcion), '||') WITHIN GROUP (ORDER BY rfc.descripcion ASC, rfd.descripcion ASC)
-             FROM cn_plaza_reqf_fisicos rf
-             LEFT JOIN th_cat_reqf_fisicos_detalle rfd ON rfd.id_req_fisico_det = rf.id_req_fisico_det
-             LEFT JOIN th_cat_reqf_fisicos rfc ON rfc.id_req_fisico = rfd.id_req_fisico
-             WHERE rf.cn_pla_id = p.cn_pla_id AND rf.cn_reqf_estado = 1)
-                                            AS requisitos_fisicos
+            $data = json_decode($json, true);
 
-        FROM cn_plaza p
-            LEFT JOIN th_cat_cargo          c   ON p.id_cargo              = c.id_cargo
-            LEFT JOIN th_departamentos      d   ON p.th_dep_id             = d.th_dep_id
-            LEFT JOIN cn_cat_tipo_seleccion ts  ON p.id_tipo_seleccion     = ts.id_tipo_seleccion
-            LEFT JOIN th_cat_nomina         n   ON p.id_nomina             = n.id_nomina
-            LEFT JOIN th_personas           per ON p.th_per_id_responsable = per.th_per_id
-        WHERE p.cn_pla_id = $id
-    ";
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                return -3;
+            }
 
-        return $this->db->datos($sql);
+            return $data;
+        }
+
+        return $resultado;
+    }
+
+    private function listar_cargo_detalle_completo(int $cargo_id)
+    {
+        if ($cargo_id <= 0) {
+            throw new InvalidArgumentException('ID de cargo inválido');
+        }
+
+        $sql = "EXEC _contratacion.SP_CN_CARGO_DETALLE_JSON @id_cargo = ?;";
+        $parametros = [$cargo_id];
+
+        $resultado = $this->db->ejecutar_procedimiento_con_retorno_1(
+            $sql,
+            $parametros
+        );
+
+        if (empty($resultado)) {
+            return -1;
+        }
+
+        // El SP devuelve json_result como string
+        if (isset($resultado[0]['json_result'])) {
+
+            $json = $resultado[0]['json_result'];
+
+            $data = json_decode($json, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new RuntimeException('Error al decodificar JSON: ' . json_last_error_msg());
+            }
+
+            return $data;
+        }
+
+        return $resultado;
+    }
+
+    function listar_plaza_cargo_detalle_completo(int $plaza_id)
+    {
+        // $plaza_id = 1;
+
+
+        $id_cargo = $this->listar_plaza_id_cargo($plaza_id);
+
+        if ($id_cargo <= 0) {
+            return -1;
+        }
+
+        $plaza_json = $this->listar_plaza_detalle_completo($plaza_id);
+        $cargo_json = $this->listar_cargo_detalle_completo($id_cargo);
+
+        return [
+            'plaza' => $plaza_json,
+            'cargo' => $cargo_json
+        ];
     }
 }
