@@ -502,23 +502,31 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
     .sel-resultado.is-invalid {
         border-color: #dc3545 !important;
     }
-</style>
 
-<!-- ALERTA INFORMATIVA -->
-<div class="alert alert-info alert-dismissible fade show shadow-sm border-0 mb-3" role="alert"
-    style="border-left: 5px solid #0dcaf0 !important;">
-    <div class="d-flex align-items-center">
-        <i class="bx bx-info-circle fs-3 me-3" style="color:#0dcaf0;"></i>
-        <div>
-            <h6 class="alert-heading mb-1 fw-bold">Selecciona una etapa</h6>
-            <p class="mb-0 small">
-                Haz clic en cualquiera de las <strong>etapas del proceso</strong> para visualizar
-                los postulantes asignados junto con su <strong>estado</strong> y <strong>puntaje</strong>.
-            </p>
-        </div>
-    </div>
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-</div>
+    /* ── Tabs laterales ── */
+    #pnl_etapas_nav {
+        border-right: 1px solid #dee2e6;
+        height: 400px;
+        /* ← altura fija, no min-height */
+        max-height: 400px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    /* Scrollbar personalizado */
+    #pnl_etapas_nav::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    #pnl_etapas_nav::-webkit-scrollbar-thumb {
+        background: #c0c0c0;
+        border-radius: 4px;
+    }
+
+    #pnl_etapas_nav::-webkit-scrollbar-thumb:hover {
+        background: #888;
+    }
+</style>
 
 <!-- LAYOUT PRINCIPAL: tabs laterales + contenido -->
 <div class="row g-0 shadow-sm border rounded-3 mb-4" style="min-height:400px;">

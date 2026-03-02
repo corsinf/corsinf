@@ -289,12 +289,7 @@ $es_plaza = false;
                                     </section>
                                 </div>
 
-                                <!-- SECCION 5: COMPETENCIAS -->
-                                <div class="tab-pane fade" id="tab_competencias" role="tabpanel">
-                                    <section class="content pt-0">
-                                        <?php include_once('../vista/TALENTO_HUMANO/CARGOS/MENU_COMPENTENCIAS/competencias.php'); ?>
-                                    </section>
-                                </div>
+                              
                             </div>
                         </div>
                     </div>
