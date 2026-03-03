@@ -419,7 +419,6 @@ function cargar_select2_url(ddl, url_controlador, placeholder = '-- Seleccione -
                 };
             },
             processResults: function (data) {
-                // console.log(data.length);
                 // console.log(data);
                 return { results: data };
             },
