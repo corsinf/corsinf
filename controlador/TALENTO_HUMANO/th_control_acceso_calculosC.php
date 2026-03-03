@@ -602,7 +602,8 @@ class th_control_acceso_calculosC
         $resultado = array();
         foreach ($list_dato as $key => $value) {
             $dateTime = new DateTime($value['Fecha']);
-            $dia = (int)$dateTime->format('w');
+            $dia = (int)$dateTime->format('w')+1;
+            if($dia>=7) {$dias =1; }
             // print_r($value);die();
             $horario = $this->control_acceso->lista_detalle_turnos_x_persona($value['card'],$dia);
             // print_r($horario);die();
