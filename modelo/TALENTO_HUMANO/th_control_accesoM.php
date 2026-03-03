@@ -222,6 +222,8 @@ class th_control_accesoM extends BaseModel
 
         // print_r($sql);die();
         $datos = $this->db->datos($sql, false, true,true);
+
+        // print_r($datos);die();
         return $datos;
     }
     

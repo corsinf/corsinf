@@ -117,7 +117,8 @@ class th_control_accesoC
         // $datos = $this->modelo->listar_marcaciones($tabla,$fecha_ini, $fecha_final,$usuario,$departamento,$orden);
         foreach ($list_dato as $key => $value) {
             $dateTime = new DateTime($value['Fecha']);
-            $dia = (int)$dateTime->format('w');
+            $dia = (int)$dateTime->format('w')+1;
+            if($dia>=7) {$dias =1; }
             // print_r($value);die();
             $horario = $this->modelo->lista_detalle_turnos_x_persona($value['card'],$dia);
             // print_r($horario);die();
@@ -134,6 +135,8 @@ class th_control_accesoC
 
     function traer_datos($tabla,$fecha_ini, $fecha_final,$usuario,$departamento,$orden)
     {        
-       return $this->modelo->listar_marcaciones($tabla,$fecha_ini, $fecha_final,$usuario,$departamento,$orden);
+       $data = $this->modelo->listar_marcaciones($tabla,$fecha_ini, $fecha_final,$usuario,$departamento,$orden);
+       // print_r($data);die();
+       return $data;
     }
 }
