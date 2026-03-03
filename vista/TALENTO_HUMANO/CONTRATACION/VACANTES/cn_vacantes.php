@@ -139,127 +139,68 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         });
     }
 
-    function renderizar_plazas() {
-        var inicio = (pagina_actual - 1) * por_pagina;
-        var fin = inicio + por_pagina;
-        var pagina = plazas_filtradas.slice(inicio, fin);
+function renderizar_plazas() {
+    var inicio = (pagina_actual - 1) * por_pagina;
+    var fin = inicio + por_pagina;
+    var pagina = plazas_filtradas.slice(inicio, fin);
 
-        if (plazas_filtradas.length === 0) {
-            $('#pnl_plazas').html(
-                '<div class="text-center py-5 text-muted">' +
-                '<i class="bx bx-search-alt fs-1 d-block mb-2"></i>' +
-                'No se encontraron plazas.</div>'
-            );
-            $('#pnl_paginacion').html('');
-            return;
-        }
-
-        var html = '';
-        pagina.forEach(function(item) {
-            var tipo = item.cn_pla_tipo || 'Externa';
-            var vacantes = item.cn_pla_num_vacantes || 1;
-            var modalidad = item.cn_pla_modalidad || 'Presencial';
-            var ciudad = item.cn_pla_ciudad || '';
-            var desc = item.cn_pla_descripcion || '';
-            var descCorta = desc.length > 120 ? desc.substring(0, 120) + '...' : desc;
-            var fechaPublic = item.cn_pla_fecha || item.created_at || '';
-
-            var colorTipo = tipo.toLowerCase() === 'interna' ? 'primary' :
-                tipo.toLowerCase() === 'mixta' ? 'purple' : 'success';
-            var iconTipo = tipo.toLowerCase() === 'interna' ? 'bx-building' :
-                tipo.toLowerCase() === 'mixta' ? 'bx-transfer' : 'bx-globe';
-
-            var badgeVac = parseInt(vacantes) > 1 ?
-                '<span class="badge bg-warning text-dark ms-1"><i class="bx bx-group me-1"></i>Múltiples vacantes</span>' :
-                '';
-
-            var hrefVer = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_plaza&_id_plaza=${item._id}`;
-
-            // ── Botón postular según si ya está postulado ──
-            var ya_postulado = postulaciones_ids.includes(String(item._id));
-
-            var btn_postular = ya_postulado ?
-                `<span class="badge bg-success px-2 py-1 d-flex align-items-center gap-1"
-                          title="Ya estás postulado a esta plaza"
-                          style="font-size:11px;line-height:1.6;white-space:nowrap;">
-                       <i class="bx bx-check-circle"></i> Postulado
-                   </span>` :
-                `<a class="btn btn-success btn-xs" title="Postular" onclick="postular('${item._id}')">
-                       <i class="bx bx-send fs-7 me-0 fw-bold"></i>
-                   </a>`;
-
-            html += `
-            <div class="card mb-3 border shadow-sm rounded-3 plaza-card" style="border-left:4px solid #0d6efd !important;transition:box-shadow .2s;">
-                <div class="card-body py-3 px-4">
-                    <div class="row align-items-start g-2">
-
-                        <!-- Ícono inicial -->
-                        <div class="col-auto d-none d-md-flex">
-                            <div class="rounded-3 d-flex align-items-center justify-content-center fw-bold text-white fs-4"
-                                 style="width:52px;height:52px;background:linear-gradient(135deg,#0d6efd,#6610f2);flex-shrink:0;">
-                                ${(item.cn_pla_titulo || 'P').charAt(0).toUpperCase()}
-                            </div>
+    var html = '';
+    pagina.forEach(function(item) {
+        var ya_postulado = postulaciones_ids.includes(String(item._id));
+        var hrefVer = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_informacion_plaza&_id_plaza=${item._id}`;
+        
+        html += `
+        <div class="card plaza-card-interactive shadow-sm mb-2 rounded-3" 
+             onclick="window.location.href='${hrefVer}'">
+            <div class="card-body p-3">
+                <div class="row align-items-center">
+                    
+                    <div class="col-md-8">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="badge bg-primary-subtle text-primary border-0 text-xs px-2">
+                                ${item.descripcion_departamento}
+                            </span>
+                            <span class="text-muted text-xs">• ${item.descripcion_tipo_seleccion}</span>
                         </div>
-
-                        <!-- Contenido -->
-                        <div class="col">
-                            <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
-                                <a href="${hrefVer}" class="fw-bold fs-6 text-dark text-decoration-none"
-                                   style="line-height:1.3;">${item.cn_pla_titulo}</a>
-                                ${badgeVac}
-                                ${ya_postulado
-                                    ? `<span class="badge bg-success-subtle text-success border border-success-subtle"
-                                              style="font-size:10px;">
-                                           <i class="bx bx-check me-1"></i>Ya postulado
-                                       </span>`
-                                    : ''}
-                            </div>
-
-                            <p class="text-muted small mb-2" style="line-height:1.5;">
-                                ${descCorta || '<em>Sin descripción</em>'}
-                            </p>
-
-                            <div class="d-flex flex-wrap gap-2 align-items-center">
-                                ${ciudad ? `<span class="badge bg-light text-secondary border"><i class="bx bx-map me-1"></i>${ciudad}</span>` : ''}
-                                <span class="badge bg-light text-secondary border"><i class="bx bx-buildings me-1"></i>${modalidad}</span>
-                                <span class="badge bg-light text-secondary border"><i class="bx bx-user me-1"></i>${vacantes} vacante${vacantes != 1 ? 's' : ''}</span>
-                                <span class="badge bg-light text-${colorTipo} border border-${colorTipo}">
-                                    <i class="bx ${iconTipo} me-1"></i>${tipo}
-                                </span>
-                            </div>
+                        
+                        <h6 class="fw-bold text-dark mb-2">${item.cn_pla_titulo}</h6>
+                        
+                        <div class="d-flex flex-wrap gap-3 text-muted small">
+                            <span class="d-flex align-items-center"><i class="bx bx-wallet me-1"></i>$${item.cn_pla_salario_min} - $${item.cn_pla_salario_max}</span>
+                            <span class="d-flex align-items-center"><i class="bx bx-calendar-event me-1"></i>Cierra: ${item.cn_pla_fecha_cierre}</span>
                         </div>
-
-                        <!-- Acciones -->
-                        <div class="col-12 col-md-auto d-flex flex-row flex-md-column align-items-md-end justify-content-between gap-2 mt-2 mt-md-0">
-                            ${fechaPublic
-                                ? `<small class="text-muted d-block text-md-end"><i class="bx bx-calendar me-1"></i>${fechaPublic}</small>`
-                                : '<span></span>'}
-                            <div class="d-flex gap-1 justify-content-end align-items-center">
-                                <a href="${hrefVer}" class="btn btn-info btn-xs" title="Ver plaza">
-                                    <i class="bx bx-show fs-7 me-0 fw-bold"></i>
-                                </a>
-                                ${btn_postular}
-                            </div>
-                        </div>
-
                     </div>
+
+                    <div class="col-md-4 border-divider-custom ps-md-4 mt-3 mt-md-0">
+                        <div class="d-flex align-items-center justify-content-between justify-content-md-end gap-4">
+                            
+                            <div class="text-center d-none d-sm-block">
+                                <span class="fw-bold d-block h5 mb-0">${item.cn_pla_num_vacantes}</span>
+                                <small class="text-muted text-xs">VACANTES</small>
+                            </div>
+
+                            <div class="stop-prop">
+                                ${ya_postulado ? 
+                                    `<button class="btn btn-success btn-sm rounded-pill px-4 disabled opacity-75 fw-bold">
+                                        <i class="bx bx-check-double me-1"></i> Postulado
+                                     </button>` : 
+                                    `<button onclick="event.stopPropagation(); postular('${item._id}')" 
+                                             class="btn btn-primary btn-sm rounded-pill px-4 fw-bold shadow-sm">
+                                        Postularme
+                                     </button>`
+                                }
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-            </div>`;
-        });
+            </div>
+        </div>`;
+    });
 
-        $('#pnl_plazas').html(html);
-
-        $('.plaza-card').hover(
-            function() {
-                $(this).css('box-shadow', '0 4px 20px rgba(13,110,253,.15)');
-            },
-            function() {
-                $(this).css('box-shadow', '');
-            }
-        );
-
-        renderizar_paginacion();
-    }
+    $('#pnl_plazas').html(html || '<div class="text-center py-5 opacity-50">No hay plazas disponibles.</div>');
+    renderizar_paginacion();
+}
 
     function renderizar_paginacion() {
         var total_paginas = Math.ceil(plazas_filtradas.length / por_pagina);
@@ -345,47 +286,125 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     }
 </script>
 
-<div class="page-wrapper">
-    <div class="page-content">
+<style>
+    /* Efecto hover en el card */
+    .hover-shadow:hover {
+        background-color: #fcfdfe;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08) !important;
+        transform: translateY(-1px);
+    }
 
-        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Plazas</div>
-            <div class="ps-3">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mb-0 p-0">
-                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Todas las plazas</li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
+    /* Divisor vertical para separar acciones de contenido */
+    @media (min-width: 768px) {
+        .border-start-md {
+            border-left: 1px solid #f0f0f0 !important;
+        }
+    }
 
-        <div class="row">
-            <div class="col-xl-10 col-lg-11 mx-auto">
+    .transition-all {
+        transition: all 0.2s ease-in-out;
+    }
 
-                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-                    <div class="mb-4">
-                        <div class="input-group input-group-sm" style="max-width:320px;">
-                            <span class="input-group-text bg-white border-end-0">
-                                <i class="bx bx-search text-muted"></i>
-                            </span>
-                            <input type="text" id="txt_buscar_plaza" class="form-control border-start-0 ps-0"
-                                placeholder="Buscar por título, tipo...">
+    /* Estilo para los badges sutiles (compatibilidad Bootstrap 5) */
+    .bg-primary-subtle {
+        background-color: rgba(13, 110, 253, 0.1) !important;
+    }
+
+    .bg-info-subtle {
+        background-color: rgba(13, 202, 240, 0.1) !important;
+    }
+
+    /* Resaltar título al pasar el mouse */
+    .hover-primary:hover {
+        color: #0d6efd !important;
+    }
+</style>
+
+<style>
+    /* Estilo base de la tarjeta */
+    .plaza-card-interactive {
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        border: 1px solid #e2e8f0 !important;
+        /* Borde gris suave por defecto */
+    }
+
+    /* Cambio de color al hacer Hover */
+    .plaza-card-interactive:hover {
+        border-color: #0d6efd !important;
+        /* El borde se pone azul */
+        background-color: #f8fbff;
+        /* Un fondo azul casi imperceptible */
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.08) !important;
+    }
+
+    /* Para que el botón de postular no dispare el click de la tarjeta */
+    .stop-prop {
+        position: relative;
+        z-index: 10;
+    }
+
+    @media (min-width: 768px) {
+        .border-divider-custom {
+            border-left: 1px solid #edf2f7 !important;
+        }
+    }
+
+    .text-xs {
+        font-size: 0.75rem;
+    }
+
+    .bg-primary-subtle {
+        background-color: rgba(13, 110, 253, 0.1) !important;
+    }
+</style>
+
+<div class="page-wrapper bg-light">
+    <div class="page-content py-4">
+
+        <div class="row g-4">
+            <div class="col-lg-9">
+
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body p-2">
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-0"><i class="bx bx-search text-primary"></i></span>
+                            <input type="text" id="txt_buscar_plaza" class="form-control border-0 shadow-none" placeholder="Buscar cargo o área...">
+                            <button class="btn btn-primary rounded-3 px-4">Buscar</button>
                         </div>
                     </div>
                 </div>
 
-                <input type="hidden" name="txt_pos_id" id="txt_pos_id" value="">
+                <div id="pnl_plazas" class="d-grid gap-2">
+                </div>
 
-                <div id="pnl_plazas">
-                    <div class="text-center py-5">
-                        <div class="spinner-border text-primary" role="status"></div>
-                        <p class="text-muted mt-3">Cargando plazas...</p>
+                <div id="pnl_paginacion" class="mt-4"></div>
+            </div>
+
+            <div class="col-lg-3 d-none d-lg-block">
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-body">
+                        <h6 class="fw-bold mb-3">Resumen</h6>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted small">Total Plazas</span>
+                            <span class="badge bg-primary-subtle text-primary rounded-pill" id="badge_total">0</span>
+                        </div>
+                        <hr class="my-2 opacity-25">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted small">Postulaciones</span>
+                            <span class="badge bg-success-subtle text-success rounded-pill">Activo</span>
+                        </div>
                     </div>
                 </div>
 
-                <div id="pnl_paginacion" class="mt-3"></div>
-
+                <div class="card border-0 bg-primary text-white shadow-sm">
+                    <div class="card-body p-4 text-center">
+                        <i class="bx bx-rocket mb-2 fs-1"></i>
+                        <h6 class="fw-bold">Impulsa tu carrera</h6>
+                        <p class="small opacity-75">Mantén tu perfil al 100% para recibir mejores ofertas.</p>
+                        <button class="btn btn-light btn-sm w-100 rounded-pill fw-bold">Mi Perfil</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

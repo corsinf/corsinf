@@ -26,6 +26,7 @@ class cn_plazaM extends BaseModel
         'cn_pla_estado',
         'cn_pla_fecha_creacion',
         'cn_pla_fecha_modificacion',
+        'id_plaza_estados',
     ];
 
     public function listar_plaza_por_id($id)
@@ -53,6 +54,7 @@ class cn_plazaM extends BaseModel
                 p.cn_pla_estado,
                 p.cn_pla_fecha_creacion,
                 p.cn_pla_fecha_modificacion,
+                p.id_plaza_estados,
                 c.nombre AS descripcion_cargo,
                 d.th_dep_nombre AS descripcion_departamento,
                 ts.descripcion AS descripcion_tipo_seleccion,

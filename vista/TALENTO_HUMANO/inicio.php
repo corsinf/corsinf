@@ -342,3 +342,7 @@ if ($_GET['acc'] == 'th_ley_violeta') {
 if ($_GET['acc'] == 'cn_vacantes') {
 	include('TALENTO_HUMANO/CONTRATACION/VACANTES/cn_vacantes.php');
 }
+
+if ($_GET['acc'] == 'cn_vacante_informacion') {
+	include('TALENTO_HUMANO/CONTRATACION/VACANTES/cn_vacante_informacion.php');
+}
