@@ -49,9 +49,7 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
 
                         // Tab lateral
                         navHtml += `
-                        <button class="nav-link w-100 text-start py-3 px-3 border-bottom etapa-tab-btn ${isFirst ? 'active' : ''}"
-                            data-bs-toggle="pill"
-                            data-bs-target="#etapa_pane_${item._id}"
+                        <button class="nav-link etapa-tab-btn ${isFirst ? 'active' : ''}"
                             data-id="${item._id}"
                             data-nombre="${nombre}"
                             data-color="${color}"
@@ -62,14 +60,13 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                             data-requiere-puntaje="${item.etapa_requiere_puntaje == 1 ? 1 : 0}"
                             type="button" role="tab"
                             onclick="seleccionar_etapa(this)">
-                            <div class="d-flex align-items-center gap-2">
-                                <span style="width:10px;height:10px;border-radius:50%;background:${color};flex-shrink:0;display:inline-block;"></span>
-                                <span class="fw-semibold" style="font-size:13px;line-height:1.3;">
-                                    Etapa ${item.cn_plaet_orden} ${badgeObl}
-                                </span>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span style="width:9px;height:9px;border-radius:50%;background:${color};flex-shrink:0;display:inline-block;"></span>
+                                <span class="fw-semibold" style="font-size:12px;">Etapa ${item.cn_plaet_orden}</span>
+                                ${badgeObl}
                             </div>
-                            <div class="text-muted ms-3 mt-1" style="font-size:11px;">${nombre}</div>
-                            <div class="text-muted ms-3" style="font-size:10px;">${total} postulante${total != 1 ? 's' : ''}</div>
+                            <div style="font-size:11px;color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;">${nombre}</div>
+                            <div style="font-size:10px;color:#999;">${total} postulante${total != 1 ? 's' : ''}</div>
                         </button>`;
 
                         // Pane correspondiente (vacío, se llena al seleccionar)
@@ -414,13 +411,45 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
 </script>
 
 <style>
-    /* ── Tabs laterales ── */
-    #pnl_etapas_nav {
+    .etapas-col-izq {
         border-right: 1px solid #dee2e6;
-        min-height: 400px;
+        padding: 0 !important;
+    }
+
+    .etapas-col-header {
+        background: #f8f9fa;
+        padding: 10px 12px;
+        border-bottom: 1px solid #dee2e6;
+        border-radius: 8px 0 0 0;
+    }
+
+    #pnl_etapas_nav_scroll {
+        height: 270px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    #pnl_etapas_nav_scroll::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    #pnl_etapas_nav_scroll::-webkit-scrollbar-thumb {
+        background: #c0c0c0;
+        border-radius: 4px;
+    }
+
+    #pnl_etapas_nav_scroll::-webkit-scrollbar-thumb:hover {
+        background: #888;
+    }
+
+    #pnl_etapas_nav {
+        display: flex !important;
+        flex-direction: column !important;
     }
 
     .etapa-tab-btn {
+        display: block;
+        width: 100%;
         background: none;
         border: none !important;
         border-bottom: 1px solid #dee2e6 !important;
@@ -428,6 +457,8 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         color: #444;
         transition: background .15s, color .15s;
         text-align: left;
+        padding: 12px 14px;
+        cursor: pointer;
     }
 
     .etapa-tab-btn:hover {
@@ -442,7 +473,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         font-weight: 600;
     }
 
-    /* ── Panel postulantes ── */
     #pnl_postulantes {
         display: none;
     }
@@ -453,15 +483,8 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
     }
 
     @keyframes fadeDown {
-        from {
-            opacity: 0;
-            transform: translateY(-8px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(-8px); }
+        to   { opacity: 1; transform: translateY(0); }
     }
 
     .postulantes-header {
@@ -479,7 +502,7 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         display: inline-block;
         flex-shrink: 0;
         margin-right: 7px;
-        box-shadow: 0 0 0 2px rgba(0, 0, 0, .1);
+        box-shadow: 0 0 0 2px rgba(0,0,0,.1);
     }
 
     .table-postulantes th {
@@ -495,61 +518,34 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         vertical-align: middle;
     }
 
-    .inp-puntaje.is-invalid {
-        border-color: #dc3545 !important;
-    }
-
-    .sel-resultado.is-invalid {
-        border-color: #dc3545 !important;
-    }
-
-    /* ── Tabs laterales ── */
-    #pnl_etapas_nav {
-        border-right: 1px solid #dee2e6;
-        height: 400px;
-        /* ← altura fija, no min-height */
-        max-height: 400px;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-
-    /* Scrollbar personalizado */
-    #pnl_etapas_nav::-webkit-scrollbar {
-        width: 5px;
-    }
-
-    #pnl_etapas_nav::-webkit-scrollbar-thumb {
-        background: #c0c0c0;
-        border-radius: 4px;
-    }
-
-    #pnl_etapas_nav::-webkit-scrollbar-thumb:hover {
-        background: #888;
-    }
+    .inp-puntaje.is-invalid  { border-color: #dc3545 !important; }
+    .sel-resultado.is-invalid { border-color: #dc3545 !important; }
 </style>
+<!-- LAYOUT PRINCIPAL -->
+<div class="row g-0 shadow-sm border rounded-3 mb-4">
 
-<!-- LAYOUT PRINCIPAL: tabs laterales + contenido -->
-<div class="row g-0 shadow-sm border rounded-3 mb-4" style="min-height:400px;">
+    <!-- Columna izquierda: tabs verticales con scroll -->
+    <div class="col-md-3 bg-light rounded-start etapas-col-izq">
 
-    <!-- Columna izquierda: tabs de etapas -->
-    <div class="col-md-3 bg-light rounded-start">
-        <div class="p-2 border-bottom">
+        <div class="etapas-col-header">
             <strong class="text-muted" style="font-size:12px;text-transform:uppercase;letter-spacing:.5px;">
                 <i class="bx bx-list-ol me-1"></i> Etapas del Proceso
             </strong>
         </div>
-        <div class="nav flex-column nav-pills" id="pnl_etapas_nav" role="tablist">
-            <!-- se llena dinámicamente -->
+
+        <div id="pnl_etapas_nav_scroll">
+            <div class="nav flex-column nav-pills" id="pnl_etapas_nav" role="tablist">
+                <!-- se llena dinámicamente -->
+            </div>
         </div>
+
     </div>
 
-    <!-- Columna derecha: tabla de postulantes -->
+    <!-- Columna derecha -->
     <div class="col-md-9 bg-white rounded-end">
-        <div class="tab-content" id="pnl_etapas_content">
-            <!-- panes vacíos, el contenido real está en #pnl_postulantes -->
-        </div>
 
-        <!-- Panel de postulantes (se muestra al seleccionar etapa) -->
+        <div class="tab-content" id="pnl_etapas_content"></div>
+
         <div id="pnl_postulantes">
             <div class="card border-0">
                 <div class="card-body p-4">
@@ -581,7 +577,9 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                                     </th>
                                     <th>Postulante</th>
                                     <th>Cédula</th>
-                                    <th class="text-center" id="col_puntaje_th" id="lbl_col_puntaje" style="display:none;">Puntaje</th>
+                                    <th class="text-center" id="col_puntaje_th" style="display:none;">
+                                        <span id="lbl_col_puntaje">Puntaje</span>
+                                    </th>
                                     <th class="text-center">Resultado</th>
                                 </tr>
                             </thead>
