@@ -419,11 +419,8 @@ function cargar_select2_url(ddl, url_controlador, placeholder = '-- Seleccione -
                 };
             },
             processResults: function (data) {
-<<<<<<< Updated upstream
-=======
-                //console.log(data.length);
-                console.log(data);
->>>>>>> Stashed changes
+                // console.log(data.length);
+                // console.log(data);
                 return { results: data };
             },
             cache: true
@@ -583,8 +580,7 @@ function confirmar_terminos_datos(url) {
     });
 }
 
-function minutosAHora(minutos) 
-{
+function minutosAHora(minutos) {
     const horas = Math.floor(minutos / 60);
     const minutosRestantes = minutos % 60;
     // Formato HH:MM (con 2 dígitos)
