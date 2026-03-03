@@ -2,6 +2,8 @@
 date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/CONTRATACION/cn_plazaM.php');
+require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/CONTRATACION/cn_plaza_historialM.php');
+
 
 $controlador = new cn_plazaC();
 
@@ -21,6 +23,10 @@ if (isset($_GET['insertar_editar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
 
+if (isset($_GET['cambiar_estado_plaza'])) {
+    echo json_encode($controlador->cambiar_estado_plaza($_POST['parametros']));
+}
+
 if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['_id']));
 }
@@ -33,10 +39,12 @@ if (isset($_GET['buscar'])) {
 class cn_plazaC
 {
     private $modelo;
+    private $cn_plaza_historial;
 
     function __construct()
     {
         $this->modelo = new cn_plazaM();
+        $this->cn_plaza_historial = new cn_plaza_historialM();
     }
 
     function listar($id = '')
@@ -65,40 +73,23 @@ class cn_plazaC
 
     function insertar_editar($parametros)
     {
-        $toDateTime = function ($val) {
-            if ($val === null || $val === '') return null;
-            $val = str_replace('T', ' ', $val);
-            if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/', $val)) $val .= ':00';
-            $ts = strtotime($val);
-            return $ts ? date('Y-m-d H:i:s', $ts) : null;
-        };
-
-        $toInt   = function ($v) {
-            return ($v === '' || $v === null) ? null : (int)$v;
-        };
-        $toFloat = function ($v) {
-            return ($v === '' || $v === null) ? null : (float)$v;
-        };
-        $toBool  = function ($v) {
-            return ($v === 1 || $v === '1' || $v === true || $v === 'true') ? 1 : 0;
-        };
 
         $datos = [
             ['campo' => 'cn_pla_titulo',              'dato' => $parametros['txt_cn_pla_titulo'] ?? ''],
             ['campo' => 'cn_pla_descripcion',         'dato' => $parametros['txt_cn_pla_descripcion'] ?? ''],
-            ['campo' => 'id_cargo',                   'dato' => $toInt($parametros['ddl_cargo'] ?? null)],
-            ['campo' => 'th_dep_id',                  'dato' => $toInt($parametros['ddl_th_dep_id'] ?? null)],
-            ['campo' => 'id_tipo_seleccion',          'dato' => $toInt($parametros['ddl_id_tipo_seleccion'] ?? null)],
-            ['campo' => 'cn_pla_num_vacantes',        'dato' => $toInt($parametros['txt_cn_pla_num_vacantes'] ?? null)],
-            ['campo' => 'id_nomina',                  'dato' => $toInt($parametros['ddl_id_nomina'] ?? null)],
-            ['campo' => 'cn_pla_fecha_publicacion',   'dato' => $toDateTime($parametros['txt_cn_pla_fecha_publicacion'] ?? null)],
-            ['campo' => 'cn_pla_fecha_cierre',        'dato' => $toDateTime($parametros['txt_cn_pla_fecha_cierre'] ?? null)],
-            ['campo' => 'cn_pla_salario_min',         'dato' => $toFloat($parametros['txt_cn_pla_salario_min'] ?? null)],
-            ['campo' => 'cn_pla_salario_max',         'dato' => $toFloat($parametros['txt_cn_pla_salario_max'] ?? null)],
-            ['campo' => 'th_per_id_responsable',      'dato' => $toInt($parametros['ddl_cn_pla_responsable'] ?? null)],
-            ['campo' => 'cn_pla_req_disponibilidad',  'dato' => $toBool($parametros['cbx_cn_pla_req_disponibilidad'] ?? 0)],
-            ['campo' => 'cn_pla_req_prioridad_interna', 'dato' => $toBool($parametros['cbx_cn_pla_prioridad_interna'] ?? 0)],
-            ['campo' => 'cn_pla_req_documentos',      'dato' => $toBool($parametros['cbx_cn_pla_req_documentos'] ?? 0)],
+            ['campo' => 'id_cargo',                   'dato' => $parametros['ddl_cargo'] ?? null],
+            ['campo' => 'th_dep_id',                  'dato' => $parametros['ddl_th_dep_id'] ?? null],
+            ['campo' => 'id_tipo_seleccion',          'dato' => $parametros['ddl_id_tipo_seleccion'] ?? null],
+            ['campo' => 'cn_pla_num_vacantes',        'dato' => $parametros['txt_cn_pla_num_vacantes'] ?? null],
+            ['campo' => 'id_nomina',                  'dato' => $parametros['ddl_id_nomina'] ?? null],
+            ['campo' => 'cn_pla_fecha_publicacion',   'dato' => $parametros['txt_cn_pla_fecha_publicacion'] ?? null],
+            ['campo' => 'cn_pla_fecha_cierre',        'dato' => $parametros['txt_cn_pla_fecha_cierre'] ?? null],
+            ['campo' => 'cn_pla_salario_min',         'dato' => $parametros['txt_cn_pla_salario_min'] ?? null],
+            ['campo' => 'cn_pla_salario_max',         'dato' => $parametros['txt_cn_pla_salario_max'] ?? null],
+            ['campo' => 'th_per_id_responsable',      'dato' => $parametros['ddl_cn_pla_responsable'] ?? null],
+            ['campo' => 'cn_pla_req_disponibilidad',  'dato' => $parametros['cbx_cn_pla_req_disponibilidad'] ?? 0],
+            ['campo' => 'cn_pla_req_prioridad_interna', 'dato' => $parametros['cbx_cn_pla_prioridad_interna'] ?? 0],
+            ['campo' => 'cn_pla_req_documentos',      'dato' => $parametros['cbx_cn_pla_req_documentos'] ?? 0],
             ['campo' => 'cn_pla_observaciones',       'dato' => $parametros['txt_cn_pla_observaciones'] ?? null],
             ['campo' => 'cn_pla_estado',              'dato' => 1],
             ['campo' => 'cn_pla_fecha_modificacion',  'dato' => date('Y-m-d H:i:s')],
@@ -120,6 +111,27 @@ class cn_plazaC
         $where = [['campo' => 'cn_pla_id',     'dato' => $id]];
         return $this->modelo->editar($datos, $where);
     }
+
+
+    function cambiar_estado_plaza($parametros)
+    {
+
+        $datos_plaza_his = [
+            ['campo' => 'cn_pla_id',        'dato' => $parametros['_id']],
+            ['campo' => 'id_plaza_estados', 'dato' =>  $parametros['id_plaza_estados']],
+            ['campo' => 'id_usuario',       'dato' => $_SESSION['INICIO']['ID_USUARIO']],
+            ['campo' => 'accion',           'dato' => $parametros['accion']],
+        ];
+
+        $datos = [['campo' => 'id_plaza_estados', 'dato' => $parametros['id_plaza_estados']]];
+        $where = [['campo' => 'cn_pla_id',     'dato' => $parametros['_id']]];
+
+        $this->cn_plaza_historial->insertar_id($datos_plaza_his);
+
+        return $this->modelo->editar($datos, $where);
+    }
+
+
 
     function buscar($parametros)
     {
