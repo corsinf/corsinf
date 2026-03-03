@@ -467,6 +467,7 @@ namespace CorsinfSDKHik.ConfigDB
 
         public List<JustificacionModel> Justificacion(SqlConnection conn, String FechaMarcacion,string IdPpersona="", string IdDepartamento = "",string CardNo = "", int recalcular = 0)
         {
+            configConsulta();
             List<JustificacionModel> RegistroEntrada = new List<JustificacionModel>();
             string tabla = "th_justificaciones";
             if (recalcular == 1)
@@ -479,7 +480,7 @@ namespace CorsinfSDKHik.ConfigDB
                 "th_jus_fecha_creacion,th_jus_fecha_modificacion,th_jus_estado,id_usuario,th_jus_es_rango,th_jus_minutos_justificados," +
                 "th_jus_tipo" +
                 " FROM " + esquema + "." + tabla + " " +
-                "WHERE CONVERT(DATE, th_jus_fecha_inicio) = @Fecha ";
+                " WHERE CONVERT(DATE, th_jus_fecha_inicio) = @Fecha ";
 
             if (!string.IsNullOrEmpty(CardNo))
             {

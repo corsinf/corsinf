@@ -570,7 +570,7 @@ namespace CorsinfSDKHik.ConfigDB
                             Acceso.th_acc_hor_extraordinarias_min = FinExtraordinarias - iniExtraordinarias;
                         }
 
-                        if (!_SelectData.ExisteHorasExtra(conn, Acceso.th_per_id.ToString(), FechaMarcacion, Acceso.th_acc_hor_suplementarias_min,"suplementarias", 1) && Acceso.th_acc_hor_suplementarias_min!=0)
+                        if (!_SelectData.ExisteHorasExtra(conn, Acceso.th_per_id.ToString(), FechaMarcacion, Acceso.th_acc_hor_suplementarias_min,"suplementarias") && Acceso.th_acc_hor_suplementarias_min!=0)
                         {
                            
                                 HorasExtra.asis_extraordinarias_detalle = "suplementarias";
@@ -578,7 +578,7 @@ namespace CorsinfSDKHik.ConfigDB
                                 _InsertData.InsertarExtraordinarias(conn, HorasExtra,FechaMarcacion);
                         }
 
-                        if (!_SelectData.ExisteHorasExtra(conn, Acceso.th_per_id.ToString(), FechaMarcacion, Acceso.th_acc_hor_suplementarias_min, "extraordinarias",1) && Acceso.th_acc_hor_extraordinarias_min != 0)
+                        if (!_SelectData.ExisteHorasExtra(conn, Acceso.th_per_id.ToString(), FechaMarcacion, Acceso.th_acc_hor_suplementarias_min, "extraordinarias") && Acceso.th_acc_hor_extraordinarias_min != 0)
                         {                            
                             HorasExtraSup.asis_extraordinarias_detalle = "extraordinarias";
                             HorasExtraSup.asis_extraordinarias_total_min = Acceso.th_acc_hor_extraordinarias_min;

@@ -376,9 +376,9 @@ namespace CorsinfSDKHik.ConfigDB
             string tabla = "th_log_dispositivos";
             if (!string.IsNullOrEmpty(fechaProceso) && fecha != fechaProceso)
             {
-                tabla = "th_control_acceso_" + fecha;
+                tabla = "th_log_dispositivos_" + fecha;
             }
-            if (!string.IsNullOrEmpty(fecha)) { tabla = "th_log_dispositivos_"+ fechaProceso; } 
+            //if (!string.IsNullOrEmpty(fecha)) { tabla = "th_log_dispositivos_"+ fechaProceso; } 
             try
             {
                 String SqlText = "INSERT INTO " + esquema + "."+tabla+" (LOG_DEVICE) VALUES ('" + data + "');";
