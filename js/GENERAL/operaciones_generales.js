@@ -419,11 +419,8 @@ function cargar_select2_url(ddl, url_controlador, placeholder = '-- Seleccione -
                 };
             },
             processResults: function (data) {
-<<<<<<< Updated upstream
-=======
                 //console.log(data.length);
                 console.log(data);
->>>>>>> Stashed changes
                 return { results: data };
             },
             cache: true
