@@ -873,7 +873,8 @@ class loginC
 				$_SESSION["INICIO"]['EMAIL'] = $datos[0]['email'];
 				$_SESSION["INICIO"]['TIPO'] = $datos[0]['tipo'];
 				$_SESSION["INICIO"]['PERFIL'] = $parametros['tipo'];				
-				$_SESSION["INICIO"]['FOTO'] = $datos[0]['foto'];
+				$_SESSION["INICIO"]['FOTO'] = $datos[0]['foto'];			
+				$_SESSION["INICIO"]['SERIE'] = $datos[0]['serie'];
 				$_SESSION["INICIO"]['NO_CONCURENTE'] = '';
 				$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] ='';
 				$_SESSION["INICIO"]['NO_CONCURENTE_POLITICAS'] ='';
@@ -1032,6 +1033,8 @@ class loginC
 	if(count($empresa)>0)
 		{
 				$_SESSION["INICIO"]['ID_EMPRESA'] = $empresa[0]['Id_empresa'];
+				$_SESSION["INICIO"]['RUC_EMPRESA'] = $empresa[0]['Ruc'];
+				$_SESSION["INICIO"]['IVA'] = $empresa[0]['Valor_iva'];
 				$_SESSION["INICIO"]['ASIGNAR_SEGUROS'] = $empresa[0]['Tabla_seguros'];
 				$_SESSION["INICIO"]['RAZON_SOCIAL'] = $empresa[0]['Razon_Social'];
 				$_SESSION["INICIO"]['IP_HOST'] = $empresa[0]['Ip_host'];

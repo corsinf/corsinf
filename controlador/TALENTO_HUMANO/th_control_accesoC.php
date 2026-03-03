@@ -51,11 +51,19 @@ class th_control_accesoC
         $fecha_obj = new DateTime($fecha_final);
         $mesHasta =  $fecha_obj->format('Y').''. $fecha_obj->format('m');
 
+        $hoy = date('Ym');
+
         // print_r($mesdesde.'-'.$mesHasta);die();
         $array_table = array();
         if($mesdesde==$mesHasta)
         {
-            $array_table[] =  array('tbl'=>'th_control_acceso','inicio'=>$fecha_ini,'fin'=>$fecha_final);
+            if($mesdesde==$hoy && $mesHasta==$hoy)
+            {
+                $array_table[] =  array('tbl'=>'th_control_acceso','inicio'=>$fecha_ini,'fin'=>$fecha_final);
+            }else
+            {
+                $array_table[] =  array('tbl'=>'th_control_acceso_'.$mesdesde,'inicio'=>$fecha_ini,'fin'=>$fecha_final);
+            }
         }else
         {
             $inicio = new DateTime($fecha_ini);
@@ -105,7 +113,7 @@ class th_control_accesoC
               
         // print_r($list_dato);die();
 
-        // $resultado = array();   
+        $resultado = array();   
         // $datos = $this->modelo->listar_marcaciones($tabla,$fecha_ini, $fecha_final,$usuario,$departamento,$orden);
         foreach ($list_dato as $key => $value) {
             $dateTime = new DateTime($value['Fecha']);

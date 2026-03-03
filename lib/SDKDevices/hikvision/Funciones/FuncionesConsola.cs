@@ -32,6 +32,7 @@ namespace CorsinfSDKHik.Funciones
         static String dbName;
         static String userHost;
         static String passHost;
+        static SqlConnection _conn;
 
         String userName;
         String patch;
@@ -44,6 +45,7 @@ namespace CorsinfSDKHik.Funciones
             if (args.Length > 0)
             {
                 loginSDK login = new loginSDK();
+
                 EmpresaController empresa = new EmpresaController();
                 if (CHCNetSDK.NET_DVR_Init() == false)
                 {
@@ -175,7 +177,7 @@ namespace CorsinfSDKHik.Funciones
                         if (m_UserId >= 0)
                         {
                             //SqlConnection conn_ = db.conexion(ipHost, portHost, dbName, userHost, passHost);
-                            SqlConnection _conn = empresa.ConexionEmpresa(IdEmpresa);
+                            _conn = empresa.ConexionEmpresa(IdEmpresa);
                             if (_conn != null)
                             {
                                 FingerManagerSDK FingerMan = new FingerManagerSDK();
@@ -269,14 +271,19 @@ namespace CorsinfSDKHik.Funciones
                         user = args[2];
                         port = args[3];
                         pass = args[4];
-                        String fechaIni = args.Length > 5 ? args[5] : fechaHoy.ToString("yyyy-MM-dd");
-                        String fechaFin = args.Length > 6 ? args[6] : fechaHoy.ToString("yyyy-MM-dd");
+                        IdEmpresa = args[5];
+                        String fechaIni = args.Length > 6 ? args[6] : fechaHoy.ToString("yyyy-MM-dd");
+                        String fechaFin = args.Length > 7 ? args[7] : fechaHoy.ToString("yyyy-MM-dd");
+                        String Card = args.Length >8 ? args[8] : "";
+                        int procesar = args.Length > 9 ? Convert.ToInt32(args[9]) : 0;
+
+                        _conn = empresa.ConexionEmpresa(IdEmpresa);
                         r = login.loginSDKDevice(ip, port, user, pass);
                         m_UserId = login.m_UserID;
                         if (m_UserId >= 0)
                         {
                             hikvisionSDKLog logs = new hikvisionSDKLog();
-                            r = logs.buscarLogs(m_UserId, fechaIni, fechaFin, ip, port).ToString();
+                            r = logs.buscarLogs(_conn,m_UserId, fechaIni, fechaFin, ip, port,Card,procesar).ToString();
                         }
 
                         json = JsonSerializer.Serialize(new { msj = r });

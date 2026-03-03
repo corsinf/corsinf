@@ -422,6 +422,7 @@ namespace CorsinfSDKHik.ConfigDB
                                 Atrasos.asi_atrasos_fecha_marcacion = FechaMarcacionHora;
                                 Atrasos.asi_atrasos_hora_marcacion = ts.ToString();
                                 Atrasos.asi_atrasos_total_min = RetrazadoX;
+                                Atrasos.asi_atrasos_justi = 0;
                                 _InsertData.InsertarAtrasos(conn, Atrasos);
                             }
 
@@ -477,6 +478,7 @@ namespace CorsinfSDKHik.ConfigDB
                                     Atrasos.asi_atrasos_fecha_marcacion = FechaMarcacionHora;
                                     Atrasos.asi_atrasos_hora_marcacion = ts.ToString();
                                     Atrasos.asi_atrasos_total_min = RetrazadoX;
+                                    Atrasos.asi_atrasos_justi = 0;
                                     _InsertData.InsertarAtrasos(conn, Atrasos);
                                 }
                                 List<ControlAccesosModelo> horariosAcceso = _SelectData.RegistroEntradaCC(conn, FechaMarcacion, cardNumber);
@@ -538,6 +540,19 @@ namespace CorsinfSDKHik.ConfigDB
                         int iniExtraordinarias = horariosEncontradas.inicio_extraordinarias;
                         int FinExtraordinarias = horariosEncontradas.fin_extraordinarias;
 
+                       ExtraordinariasModelo HorasExtra = new ExtraordinariasModelo();
+                        ExtraordinariasModelo HorasExtraSup = new ExtraordinariasModelo();
+                        HorasExtra.th_per_id = Acceso.th_per_id.ToString();
+                        HorasExtra.asis_extraordinarias_hora = ts.ToString();
+                        HorasExtra.asi_fecha_parametrizada = FechaMarcacion;
+                        HorasExtra.asi_hora_parametrizada = ConvertirConTimeSpan(iniSuplementarias);
+                        HorasExtra.asis_extraordinarias_detalle = "suplementarias";
+
+                        HorasExtraSup.th_per_id = Acceso.th_per_id.ToString();
+                        HorasExtraSup.asis_extraordinarias_hora = ts.ToString();
+                        HorasExtraSup.asi_fecha_parametrizada = FechaMarcacion;
+
+
                         if (MinutosMarcacion > iniSuplementarias && MinutosMarcacion <= finiSuplementarias)
                         {
                             Acceso.th_acc_hor_suplementarias_min = MinutosMarcacion - iniSuplementarias;
@@ -547,11 +562,28 @@ namespace CorsinfSDKHik.ConfigDB
                         {
                             Acceso.th_acc_hor_suplementarias_min = finiSuplementarias - iniSuplementarias;
                             Acceso.th_acc_hor_extraordinarias_min = MinutosMarcacion - iniExtraordinarias;
+
                         }
                         else if (MinutosMarcacion > FinExtraordinarias)
                         {
                             Acceso.th_acc_hor_suplementarias_min = finiSuplementarias - iniSuplementarias;
                             Acceso.th_acc_hor_extraordinarias_min = FinExtraordinarias - iniExtraordinarias;
+                        }
+
+                        if (!_SelectData.ExisteHorasExtra(conn, Acceso.th_per_id.ToString(), FechaMarcacion, Acceso.th_acc_hor_suplementarias_min,"suplementarias", 1) && Acceso.th_acc_hor_suplementarias_min!=0)
+                        {
+                           
+                                HorasExtra.asis_extraordinarias_detalle = "suplementarias";
+                                HorasExtra.asis_extraordinarias_total_min = Acceso.th_acc_hor_suplementarias_min;
+                                _InsertData.InsertarExtraordinarias(conn, HorasExtra,FechaMarcacion);
+                        }
+
+                        if (!_SelectData.ExisteHorasExtra(conn, Acceso.th_per_id.ToString(), FechaMarcacion, Acceso.th_acc_hor_suplementarias_min, "extraordinarias",1) && Acceso.th_acc_hor_extraordinarias_min != 0)
+                        {                            
+                            HorasExtraSup.asis_extraordinarias_detalle = "extraordinarias";
+                            HorasExtraSup.asis_extraordinarias_total_min = Acceso.th_acc_hor_extraordinarias_min;
+                            HorasExtraSup.asi_hora_parametrizada = ConvertirConTimeSpan(iniExtraordinarias);
+                            _InsertData.InsertarExtraordinarias(conn, HorasExtraSup, FechaMarcacion);
                         }
 
                             //ingresa en accesos
@@ -655,6 +687,7 @@ namespace CorsinfSDKHik.ConfigDB
                                 Atrasos.asi_atrasos_fecha_marcacion = FechaMarcacionHora;
                                 Atrasos.asi_atrasos_hora_marcacion = ts.ToString();
                                 Atrasos.asi_atrasos_total_min = RetrazadoX;
+                                Atrasos.asi_atrasos_justi = 0;
                                 _InsertData.InsertarAtrasos(conn, Atrasos);
 
                                 int totalAtrazo = _SelectData.TotalAtrazos(conn, idPersona, FechaMarcacion);
@@ -679,42 +712,75 @@ namespace CorsinfSDKHik.ConfigDB
         }
 
 
-        public void ValidaFaltas(SqlConnection conn)
+        public void ValidaFaltas(SqlConnection conn, String fecha = "", int recalcular = 0,string Card="")
         {
             DateTime hoy = DateTime.Now;
-            int dia = (int)hoy.DayOfWeek;
-            String diaVar = dia.ToString();
-
             DateTime ayer = DateTime.Now.AddDays(-1);
             string fechaAyer = ayer.ToString("yyyy-MM-dd");
+            if (!string.IsNullOrEmpty(fecha))
+            {
+                hoy = DateTime.Parse(fecha);
+                ayer = hoy.AddDays(-1);
+                fechaAyer = ayer.ToString("yyyy-MM-dd");
+
+            }
+
+            int dia = (int)hoy.DayOfWeek;
+            String diaVar = dia.ToString();
+            int persona = 1;
+            List<JustificacionModel> _Justificacion;
             //validar si existen datos del dia anterior
-            if(!_SelectData.ExisteMarcacioFaltas( conn, fechaAyer)) { 
+            if (!_SelectData.ExisteMarcacioFaltas( conn, fechaAyer,recalcular)) { 
             List<HorarioPersonasxDiaModelo> horarios = ObtenerHorariosXpersona(conn, diaVar, "");
-                if (horarios.Count() == 0) { horarios = ObtenerHorariosXDepartamento(conn, diaVar, ""); }
+                if (horarios.Count() == 0) { horarios = ObtenerHorariosXDepartamento(conn, diaVar, ""); persona = 0; }
                 foreach (var horario in horarios)
                 {
-                    if (!_SelectData.ExisteMarcacion(conn, horario.th_cardNo, fechaAyer))
+                    if (!_SelectData.ExisteMarcacion(conn, horario.th_cardNo, fechaAyer,recalcular))
                     {
                         //descontartiempo
-                        DescuentosTiempoModelo DescuentoTime = new DescuentosTiempoModelo();
-                        DescuentoTime.asi_desc_motivo = "Falta";
-                        DescuentoTime.th_per_id = horario.th_per_id.ToString();
-                        DescuentoTime.asi_fecha_parametrizada = fechaAyer;
-                        DescuentoTime.asi_hora_parametrizada = ConvertirConTimeSpan(horario.entrada_min);
-                        DescuentoTime.asi_desc_total_min = horario.salida_min - horario.entrada_min;
-                        _InsertData.InsertarDescuentos(conn, DescuentoTime);
+                        //DescuentosTiempoModelo DescuentoTime = new DescuentosTiempoModelo();
+                        //DescuentoTime.asi_desc_motivo = "Falta";
+                        //DescuentoTime.th_per_id = horario.th_per_id.ToString();
+                        //DescuentoTime.asi_fecha_parametrizada = fechaAyer;
+                        //DescuentoTime.asi_hora_parametrizada = ConvertirConTimeSpan(horario.entrada_min);
+                        //DescuentoTime.asi_desc_total_min = horario.salida_min - horario.entrada_min;
+                        //_InsertData.InsertarDescuentos(conn, DescuentoTime);
+
+                        if (persona == 1)
+                        {
+                            _Justificacion = _SelectData.Justificacion(conn,fechaAyer,horario.th_per_id.ToString(),"","",recalcular);
+                        }
+                        else
+                        {
+                            _Justificacion = _SelectData.Justificacion(conn, fechaAyer,"", horario.th_per_id.ToString(), "", recalcular);
+                        }
+
+
 
                         FaltasModelo Faltas = new FaltasModelo();
+                        Faltas.asi_faltas_justi = 0;
+                        if (_Justificacion.Count()>0 )
+                        {
+                            Faltas.asi_faltas_justi = 1;
+                        }
                         Faltas.th_per_id = horario.th_per_id.ToString();
                         Faltas.asi_faltas_fecha_inicio = Convert.ToDateTime(fechaAyer + " 00:00:00");
                         Faltas.asi_faltas_fecha_fin = Convert.ToDateTime(fechaAyer + " 00:00:00");
                         Faltas.asi_faltas_total_min = horario.salida_min - horario.entrada_min;
-                        _InsertData.InsertarFaltas(conn, Faltas);
+                        if (Card == "")
+                        {
+                            _InsertData.InsertarFaltas(conn, Faltas, fechaAyer, recalcular);
+                        }
+                        if (Card == horario.th_cardNo)
+                        {
+                            _InsertData.InsertarFaltas(conn, Faltas, fechaAyer, recalcular);
+                        }
 
                     }
                 }
             }
         }
+
 
         public void validarMes(SqlConnection conn)
         {
@@ -753,6 +819,442 @@ namespace CorsinfSDKHik.ConfigDB
             int minutos = Convert.ToInt32(tiempo.TotalMinutes);
             return minutos;
         }
+
+
+        public void InsertDataRecalculado(SqlConnection conn, String data,String CardSearch = "")
+        {
+            configConsulta();
+            ControlAccesosModelo Acceso = new ControlAccesosModelo();
+            DescuentosTiempoModelo DescuentoTime = new DescuentosTiempoModelo();
+            String dato = data;
+            JArray array = JArray.Parse(dato);
+
+            //control de  accesos
+            string cardNumber = array[0]?["Card_Number"]?.ToString() ?? string.Empty;
+            string FechaMarcacionHora = array[0]["fecha"]?.ToString() ?? DateTime.Now.ToString("yyyy-MM-dd");
+            string FechaMarcacion = DateTime.Parse(FechaMarcacionHora).ToString("yyyy-MM-dd");
+            fecha = DateTime.Parse(FechaMarcacionHora).ToString("yyyyMM");
+
+            DateTime _fechaDia = DateTime.Parse(FechaMarcacion);
+            int dia = (int)_fechaDia.DayOfWeek;
+            String nombreDia = diasEspanol[dia];
+
+
+            if (!string.IsNullOrEmpty(cardNumber))
+            {
+                _InsertData.InsertTabla(conn, data, fecha);
+                //revisa las faltas del dia de ayer
+                ValidaFaltas(conn, FechaMarcacion,1,CardSearch);
+                validarMes(conn);
+
+                TimeSpan ts = TimeSpan.Parse(array?[0]?["hora"]?.ToString() ?? "");
+                int MinutosMarcacion = Convert.ToInt32(ts.TotalMinutes);
+
+                //HorarioPersonasxDiaModelo horariosEncontradas = ConsultarHorariosxDia(conn,"",cardNumber);
+             
+                List<HorarioPersonasxDiaModelo> horarios = ObtenerHorariosXpersona(conn, "", cardNumber);
+                HorarioPersonasxDiaModelo horariosEncontradas = horarios.FirstOrDefault();
+                if (horarios.Count() == 0)
+                {
+                    horarios = ObtenerHorariosXDepartamento(conn, "", cardNumber);
+                    horariosEncontradas = horarios.FirstOrDefault();
+                }
+                if (horarios.Count() > 0)
+                {
+                    
+
+                    string idPersona = horariosEncontradas.th_per_id.ToString() ?? "";
+                    Acceso.th_dis_id = array[0]["ip"].ToString();
+                    Acceso.th_acc_hora = array[0]["hora"].ToString();
+                    Acceso.th_acc_fecha_hora = array[0]["fecha"].ToString();
+                    Acceso.th_acc_puerto = array[0]["Puerto"].ToString();
+                    Acceso.th_cardNo = cardNumber;
+                    Acceso.th_acc_tipo_origen = "BIO";
+                    Acceso.th_per_id = Convert.ToInt32(idPersona);
+                    Acceso.th_acc_fecha = FechaMarcacion;
+                    Acceso.th_acc_dia = nombreDia;
+                    Acceso.th_acc_hora_ingreso = ts.ToString();
+
+                    List<JustificacionModel> _justificacion = _SelectData.Justificacion(conn, FechaMarcacion, idPersona, "", "", 1);
+                    int hjustificaciones = 0;
+                    foreach (var item in _justificacion)
+                    {
+                        hjustificaciones = hjustificaciones+item.th_jus_minutos_justificados;                        
+                    }
+
+                    Acceso.th_acc_justificacion_min = hjustificaciones;
+
+
+
+
+                    int rangoValidoIngreso = horariosEncontradas.entrada_min + horariosEncontradas.tolerancia_ini;
+                    int rangoValidoSalida = horariosEncontradas.salida_min - horariosEncontradas.tolerancia_fin;
+
+                    int descasoHabilitado = horariosEncontradas.aplica_descanso;
+                    int descasoXIntervalosHabilitado = horariosEncontradas.aplica_horario_descanso_intervalo;
+
+                    int rangoMarcacionSalidaFin = horariosEncontradas.salida_tiempo_marcacion_valida_fin;
+
+                    //desde que hora a que hora se puede hacer la marcacion
+                    int rangoMarcacionEntradaIni = horariosEncontradas.entrada_tiempo_marcacion_valida_inicio;
+                    int rangoMarcacionEntradaFin = horariosEncontradas.entrada_tiempo_marcacion_valida_fin;
+
+                    if (!_SelectData.ExisteMarcacion(conn, cardNumber, FechaMarcacion,1))
+                    {
+                        //si no existe marcacion alguna ingresa primera intrada 
+                        if (MinutosMarcacion >= rangoMarcacionEntradaIni && MinutosMarcacion <= rangoMarcacionEntradaFin)
+                        {
+                            //validamos que no este conretrasos en la marcacion
+                            if (MinutosMarcacion > rangoValidoIngreso)
+                            {
+                                AtrasosModelo Atrasos = new AtrasosModelo();
+                                int RetrazadoX = MinutosMarcacion - rangoValidoIngreso;
+                                Atrasos.th_per_id = idPersona;
+                                Atrasos.asi_fecha_parametrizada = FechaMarcacion;
+                                Atrasos.asi_hora_parametrizada = ConvertirConTimeSpan(rangoValidoIngreso);
+                                Atrasos.asi_atrasos_fecha_marcacion = FechaMarcacionHora;
+                                Atrasos.asi_atrasos_hora_marcacion = ts.ToString();
+                                Atrasos.asi_atrasos_total_min = RetrazadoX;
+                                Atrasos.asi_atrasos_justi = 0;
+                                _InsertData.InsertarAtrasos(conn, Atrasos,FechaMarcacion,1);
+                            }
+
+                            //validamos que el descanso sea fijo
+                            if (descasoHabilitado == 1 && descasoXIntervalosHabilitado == 0)
+                            {
+                                //descanzo con intervalos
+                                int inicioDescanso = horariosEncontradas.descanso_inicio - horariosEncontradas.adelanto_descanso;
+                                int finDescanso = horariosEncontradas.descanso_fin + horariosEncontradas.tolerancia_descanso;
+                                if (!_SelectData.ExisteDescanso(conn, idPersona, FechaMarcacion, "Inicio descanso",1))
+                                {
+                                    DescansoModelo _descansoModelo = new DescansoModelo();
+                                    _descansoModelo.th_per_id = idPersona;
+                                    _descansoModelo.asi_fecha_parametrizada = FechaMarcacion;
+                                    _descansoModelo.asi_hora_parametrizada = ConvertirConTimeSpan(inicioDescanso);
+                                    _descansoModelo.asi_descanso_detalle = "Inicio descanso";
+                                    _descansoModelo.asi_descanso_fecha_marcacion = FechaMarcacionHora;
+                                    _descansoModelo.asi_descanso_hora_marcacion = ts.ToString();
+                                    _descansoModelo.asi_descanso_total_min = MinutosMarcacion - horariosEncontradas.descanso_inicio;
+                                    _InsertData.InsertarDescanso(conn, _descansoModelo, FechaMarcacion, 1);
+                                }
+                            }
+
+                            List<ControlAccesosModelo> horariosAcceso = _SelectData.RegistroEntradaCC(conn, FechaMarcacion, cardNumber,1);
+                            ControlAccesosModelo horariosAccesoXPersona = horariosAcceso.FirstOrDefault();
+                            int totalAtrazo = _SelectData.TotalAtrazos(conn, idPersona, FechaMarcacion,1);
+
+                            Acceso.th_acc_tipo_registro = "Entrada";
+                            Acceso.th_acc_detalle_registro = "Marcacion inicial";
+                            Acceso.th_acc_atraso_min = totalAtrazo;
+                            Acceso.th_acc_almuerzo_min = horariosEncontradas.tiempo_descanso;
+                            Acceso.th_acc_horas_trabajadasJornada_min = 0;
+                            //Acceso.th_acc_justificacion_min = 0;
+                            Acceso.th_acc_hor_faltantesJornada_min = horariosEncontradas.salida_min - horariosEncontradas.entrada_min - horariosEncontradas.tiempo_descanso;
+                            Acceso.th_acc_horario_jornada = ConvertirConTimeSpan(horariosEncontradas.entrada_min) + " - " + ConvertirConTimeSpan(horariosEncontradas.salida_min);
+                            Acceso.th_acc_hora_ingreso = ts.ToString();
+                            _InsertData.InsertarAccesos(conn, Acceso,FechaMarcacion,1);
+
+                        }
+                        else
+                        {
+                            //en este caso la marcacion esta fuera del rango de inicio y ya esta retrasado
+
+                            if (MinutosMarcacion > rangoMarcacionEntradaFin)
+                            {
+                                if (!_SelectData.ExisteAtraso(conn, idPersona, FechaMarcacion,1))
+                                {
+                                    AtrasosModelo Atrasos = new AtrasosModelo();
+                                    int RetrazadoX = MinutosMarcacion - horariosEncontradas.entrada_min;
+                                    Atrasos.th_per_id = idPersona;
+                                    Atrasos.asi_fecha_parametrizada = FechaMarcacion;
+                                    Atrasos.asi_hora_parametrizada = ConvertirConTimeSpan(horariosEncontradas.entrada_min);
+                                    Atrasos.asi_atrasos_fecha_marcacion = FechaMarcacionHora;
+                                    Atrasos.asi_atrasos_hora_marcacion = ts.ToString();
+                                    Atrasos.asi_atrasos_total_min = RetrazadoX;
+                                    Atrasos.asi_atrasos_justi = 0;
+                                    _InsertData.InsertarAtrasos(conn, Atrasos,FechaMarcacion,1);
+                                }
+                                List<ControlAccesosModelo> horariosAcceso = _SelectData.RegistroEntradaCC(conn, FechaMarcacion, cardNumber,1);
+                                ControlAccesosModelo horariosAccesoXPersona = horariosAcceso.FirstOrDefault();
+                                int totalAtrazo = _SelectData.TotalAtrazos(conn, idPersona, FechaMarcacion,1);
+
+
+                                if (horariosAcceso.Count() == 0)
+                                {
+                                    Acceso.th_acc_detalle_registro = "Marcacion inicial fuera de rango";
+                                    Acceso.th_acc_horas_trabajadasJornada_min = 0;
+                                    Acceso.th_acc_hora_ingreso = ts.ToString();
+                                    Acceso.th_acc_hor_faltantesJornada_min = (horariosEncontradas.salida_min - horariosEncontradas.tiempo_descanso) - (MinutosMarcacion - totalAtrazo);
+                                }
+                                else
+                                {
+                                    Acceso.th_acc_detalle_registro = "Registro normal";
+
+                                    int nuevo_intervalo = horariosEncontradas.salida_min - horariosEncontradas.entrada_min - horariosEncontradas.tiempo_descanso - totalAtrazo;
+                                    Acceso.th_acc_hor_faltantesJornada_min = (horariosEncontradas.salida_min - horariosEncontradas.tiempo_descanso) - MinutosMarcacion;
+
+                                    Acceso.th_acc_horas_trabajadasJornada_min = MinutosMarcacion - (horariosEncontradas.entrada_min + totalAtrazo);
+
+
+                                    //Acceso.th_acc_horas_trabajadasJornada_min = nuevo_intervalo - MinutosMarcacion - ConvertirHoratomin(horariosAccesoXPersona.th_acc_hora);
+                                    //Acceso.th_acc_hor_faltantesJornada_min = (horariosEncontradas.salida_min - horariosEncontradas.tiempo_descanso) - (MinutosMarcacion - totalAtrazo);
+
+
+                                }
+
+                                List<ControlAccesosModelo> Lista = _SelectData.RegistroEntradaCC(conn, FechaMarcacion, cardNumber,1);
+                                int RegNum = Lista.Count();
+                                if (RegNum % 2 == 0)
+                                {
+                                    Acceso.th_acc_tipo_registro = "Entrada";
+                                }
+                                else
+                                {
+                                    Acceso.th_acc_tipo_registro = "Salida";
+                                }
+
+                                Acceso.th_acc_atraso_min = totalAtrazo;
+                                Acceso.th_acc_almuerzo_min = horariosEncontradas.tiempo_descanso;
+                                //Acceso.th_acc_justificacion_min = 0;
+                                Acceso.th_acc_horario_jornada = ConvertirConTimeSpan(horariosEncontradas.entrada_min) + " - " + ConvertirConTimeSpan(horariosEncontradas.salida_min);
+
+                                _InsertData.InsertarAccesos(conn, Acceso,FechaMarcacion,1);
+
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        int iniSuplementarias = horariosEncontradas.inico_suplementario;
+                        int finiSuplementarias = horariosEncontradas.fin_suplementarias;
+
+
+                        int iniExtraordinarias = horariosEncontradas.inicio_extraordinarias;
+                        int FinExtraordinarias = horariosEncontradas.fin_extraordinarias;
+
+                      
+                        ExtraordinariasModelo HorasExtra = new ExtraordinariasModelo();
+                        ExtraordinariasModelo HorasExtraSup = new ExtraordinariasModelo();
+                        HorasExtra.th_per_id = Acceso.th_per_id.ToString();
+                        HorasExtra.asis_extraordinarias_hora = ts.ToString();
+                        HorasExtra.asi_fecha_parametrizada = FechaMarcacion;
+                        HorasExtra.asi_hora_parametrizada = ConvertirConTimeSpan(iniSuplementarias);
+                        HorasExtra.asis_extraordinarias_detalle = "suplementarias";
+
+                        HorasExtraSup.th_per_id = Acceso.th_per_id.ToString();
+                        HorasExtraSup.asis_extraordinarias_hora = ts.ToString();
+                        HorasExtraSup.asi_fecha_parametrizada = FechaMarcacion;
+
+
+                        if (MinutosMarcacion > iniSuplementarias && MinutosMarcacion <= finiSuplementarias)
+                        {
+                            Acceso.th_acc_hor_suplementarias_min = MinutosMarcacion - iniSuplementarias;
+                            Acceso.th_acc_hor_extraordinarias_min = 0;
+                        }
+                        else if (MinutosMarcacion > iniExtraordinarias && MinutosMarcacion <= FinExtraordinarias)
+                        {
+                            Acceso.th_acc_hor_suplementarias_min = finiSuplementarias - iniSuplementarias;
+                            Acceso.th_acc_hor_extraordinarias_min = MinutosMarcacion - iniExtraordinarias;
+
+                        }
+                        else if (MinutosMarcacion > FinExtraordinarias)
+                        {
+                            Acceso.th_acc_hor_suplementarias_min = finiSuplementarias - iniSuplementarias;
+                            Acceso.th_acc_hor_extraordinarias_min = FinExtraordinarias - iniExtraordinarias;
+                        }
+
+                        if (!_SelectData.ExisteHorasExtra(conn, Acceso.th_per_id.ToString(), FechaMarcacion, Acceso.th_acc_hor_suplementarias_min,"suplementarias", 1) && Acceso.th_acc_hor_suplementarias_min!=0)
+                        {
+                           
+                                HorasExtra.asis_extraordinarias_detalle = "suplementarias";
+                                HorasExtra.asis_extraordinarias_total_min = Acceso.th_acc_hor_suplementarias_min;
+                                _InsertData.InsertarExtraordinarias(conn, HorasExtra,FechaMarcacion,1);
+                        }
+
+                        if (!_SelectData.ExisteHorasExtra(conn, Acceso.th_per_id.ToString(), FechaMarcacion, Acceso.th_acc_hor_suplementarias_min, "extraordinarias",1) && Acceso.th_acc_hor_extraordinarias_min != 0)
+                        {                            
+                            HorasExtraSup.asis_extraordinarias_detalle = "extraordinarias";
+                            HorasExtraSup.asis_extraordinarias_total_min = Acceso.th_acc_hor_extraordinarias_min;
+                            HorasExtraSup.asi_hora_parametrizada = ConvertirConTimeSpan(iniExtraordinarias);
+                            _InsertData.InsertarExtraordinarias(conn, HorasExtraSup, FechaMarcacion, 1);
+                        }
+
+
+                        //ingresa en accesos
+                        List<ControlAccesosModelo> horariosAcceso = _SelectData.RegistroEntradaCC(conn, FechaMarcacion, cardNumber,1);
+                        ControlAccesosModelo horariosAccesoXPersona = horariosAcceso.FirstOrDefault();
+                        int totalAtrazo = _SelectData.TotalAtrazos(conn, idPersona, FechaMarcacion, 1);
+
+                        List<ControlAccesosModelo> Lista = _SelectData.RegistroEntradaCC(conn, FechaMarcacion, cardNumber,1);
+                        int RegNum = Lista.Count();
+                        if (RegNum % 2 == 0)
+                        {
+                            Acceso.th_acc_tipo_registro = "Entrada";
+                        }
+                        else
+                        {
+                            Acceso.th_acc_tipo_registro = "Salida";
+                        }
+
+                        Acceso.th_acc_detalle_registro = "Registro normal";
+                        Acceso.th_acc_atraso_min = totalAtrazo;
+                        Acceso.th_acc_almuerzo_min = horariosEncontradas.tiempo_descanso;
+                        //Acceso.th_acc_justificacion_min = 0;
+                        Acceso.th_acc_hora_ingreso = ts.ToString();
+                        if (Lista != null && !string.IsNullOrEmpty(Lista[0].th_acc_hora_ingreso))
+                        {
+                            Acceso.th_acc_hora_ingreso = Lista[0].th_acc_hora_ingreso;
+                        }
+
+                        Acceso.th_acc_hor_faltantesJornada_min = (horariosEncontradas.salida_min - horariosEncontradas.tiempo_descanso) - MinutosMarcacion;
+
+                        Acceso.th_acc_horas_trabajadasJornada_min = MinutosMarcacion - (horariosEncontradas.entrada_min + totalAtrazo);
+
+                        Acceso.th_acc_horario_jornada = ConvertirConTimeSpan(horariosEncontradas.entrada_min) + " - " + ConvertirConTimeSpan(horariosEncontradas.salida_min);
+                        if (MinutosMarcacion > horariosEncontradas.salida_min)
+                        {
+                            Acceso.th_acc_hor_faltantesJornada_min = 0;
+                            Acceso.th_acc_horas_trabajadasJornada_min = (horariosEncontradas.salida_min - horariosEncontradas.tiempo_descanso) - (horariosEncontradas.entrada_min + totalAtrazo);
+                        }
+
+                        _InsertData.InsertarAccesos(conn, Acceso,FechaMarcacion,1);
+                    }
+
+                    //aplicamos los descansos
+                    if (descasoHabilitado == 1 && descasoXIntervalosHabilitado == 0)
+                    {
+                        //descanzo con intervalos
+                        int inicioDescanso = horariosEncontradas.descanso_inicio - horariosEncontradas.adelanto_descanso;
+                        int finDescanso = horariosEncontradas.descanso_fin + horariosEncontradas.tolerancia_descanso;
+                        if (!_SelectData.ExisteDescanso(conn, idPersona, FechaMarcacion, "Descanso sin intervalos",1))
+                        {
+                            DescansoModelo _descansoModelo = new DescansoModelo();
+                            _descansoModelo.th_per_id = idPersona;
+                            _descansoModelo.asi_fecha_parametrizada = FechaMarcacion;
+                            _descansoModelo.asi_hora_parametrizada = "00:00:00";
+                            _descansoModelo.asi_descanso_detalle = "Descanso sin intervalos";
+                            _descansoModelo.asi_descanso_fecha_marcacion = FechaMarcacionHora;
+                            _descansoModelo.asi_descanso_hora_marcacion = ts.ToString();
+                            _descansoModelo.asi_descanso_total_min = horariosEncontradas.tiempo_descanso;
+                            _InsertData.InsertarDescanso(conn, _descansoModelo,FechaMarcacion,1);
+                        }
+                    }
+                    else if (descasoHabilitado == 0 && descasoXIntervalosHabilitado == 1)
+                    {
+                        //descanzo con intervalos
+                        int inicioDescanso = horariosEncontradas.descanso_inicio - horariosEncontradas.adelanto_descanso;
+                        int finDescanso = horariosEncontradas.descanso_fin + horariosEncontradas.tolerancia_descanso;
+
+                        if (MinutosMarcacion >= inicioDescanso && MinutosMarcacion <= finDescanso)
+                        {
+
+                            DescansoModelo _descansoModelo = new DescansoModelo();
+                            List<DescansoModelo> DescansoModelo = _SelectData.DescansoRegistros(conn, idPersona, FechaMarcacion, "");
+                            int RegNumDes = DescansoModelo.Count();
+                            if (RegNumDes % 2 == 0)
+                            {
+                                _descansoModelo.asi_descanso_detalle = "Inicio Descanzo";
+                            }
+                            else
+                            {
+                                _descansoModelo.asi_descanso_detalle = "Fin Descanzo";
+                            }
+
+                            _descansoModelo.th_per_id = idPersona;
+                            _descansoModelo.asi_fecha_parametrizada = FechaMarcacion;
+                            _descansoModelo.asi_hora_parametrizada = ConvertirConTimeSpan(inicioDescanso);
+                            _descansoModelo.asi_descanso_fecha_marcacion = FechaMarcacionHora;
+                            _descansoModelo.asi_descanso_hora_marcacion = ts.ToString();
+                            _descansoModelo.asi_descanso_total_min = MinutosMarcacion - horariosEncontradas.descanso_inicio;
+                            _InsertData.InsertarDescanso(conn, _descansoModelo,FechaMarcacion,1);
+                        }
+                        else if (MinutosMarcacion > finDescanso)
+                        {
+                            if (!_SelectData.ExisteDescanso(conn, idPersona, FechaMarcacion, "Fin Descanzo",1))
+                            {
+                                //BuscarEmpresa registro de descuento si ya existe
+                                AtrasosModelo Atrasos = new AtrasosModelo();
+                                int RetrazadoX = MinutosMarcacion - finDescanso;
+                                Atrasos.th_per_id = idPersona;
+                                Atrasos.asi_fecha_parametrizada = FechaMarcacion;
+                                Atrasos.asi_hora_parametrizada = ConvertirConTimeSpan(finDescanso);
+                                Atrasos.asi_atrasos_fecha_marcacion = FechaMarcacionHora;
+                                Atrasos.asi_atrasos_hora_marcacion = ts.ToString();
+                                Atrasos.asi_atrasos_total_min = RetrazadoX;
+                                Atrasos.asi_atrasos_justi = 0;
+                                _InsertData.InsertarAtrasos(conn, Atrasos,FechaMarcacion,1);
+
+                                int totalAtrazo = _SelectData.TotalAtrazos(conn, idPersona, FechaMarcacion);
+                                Acceso.th_acc_atraso_min = totalAtrazo;
+                                _InsertData.InsertarAccesos(conn, Acceso, FechaMarcacion, 1);
+
+                                DescansoModelo _descansoModelo = new DescansoModelo();
+                                _descansoModelo.asi_descanso_detalle = "Fin Descanzo";
+                                _descansoModelo.th_per_id = idPersona;
+                                _descansoModelo.asi_fecha_parametrizada = FechaMarcacion;
+                                _descansoModelo.asi_hora_parametrizada = ConvertirConTimeSpan(inicioDescanso);
+                                _descansoModelo.asi_descanso_fecha_marcacion = FechaMarcacionHora;
+                                _descansoModelo.asi_descanso_hora_marcacion = ts.ToString();
+                                _descansoModelo.asi_descanso_total_min = MinutosMarcacion - horariosEncontradas.descanso_inicio;
+                                _InsertData.InsertarDescanso(conn, _descansoModelo,FechaMarcacion,1);
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+
+
+        public Boolean eliminarRegistros(SqlConnection conn, String CardSearch,String FechaInicioSearch,String FechaFinSearch,int recalcular = 0)
+        {
+            configConsulta();
+            string tabla = "th_control_acceso";
+            if (recalcular == 1)
+            {
+                DateTime _fechaMarcacion = DateTime.Parse(FechaInicioSearch);
+                string yearMonth = _fechaMarcacion.ToString("yyyyMM");
+                if (yearMonth != fecha)
+                {
+                    tabla = "th_control_acceso_" + yearMonth;
+                }
+            }
+            String SqlText = "DELETE FROM "+esquema+"."+tabla+" WHERE 1=1";
+            if (!string.IsNullOrEmpty(CardSearch))
+            {
+                SqlText += " AND th_cardNo = @CardNo";
+            }
+            if (!string.IsNullOrEmpty(FechaInicioSearch) && !string.IsNullOrEmpty(FechaFinSearch))
+            {
+                SqlText += " AND th_acc_fecha BETWEEN @FechaInicioSearch AND @FechaFinSearch";
+            }
+
+            try
+            {
+                var cmd = new SqlCommand(SqlText, conn);
+
+                if (!string.IsNullOrEmpty(CardSearch))
+                {
+                    cmd.Parameters.AddWithValue("@CardNo", CardSearch);
+                }
+                if (!string.IsNullOrEmpty(FechaInicioSearch) && !string.IsNullOrEmpty(FechaFinSearch))
+                {
+                    cmd.Parameters.AddWithValue("@FechaInicioSearch", FechaInicioSearch);
+                    cmd.Parameters.AddWithValue("@FechaFinSearch", FechaFinSearch);
+                }
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return false;
+            }
+        }
+
+
+
     }
 
 }

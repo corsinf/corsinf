@@ -56,15 +56,15 @@ namespace CorsinfSDKHik.ConfigDB
             }
         }
 
-        public void validarTablas(SqlConnection conn, String esquema, String fecha)
+        public void validarTablas(SqlConnection conn, String esquema, String fecha,int recalculado = 0)
         {
-            CreateTblControlAcceso(esquema,fecha,conn);
-            CreateTblAtrasos(esquema, fecha, conn);
-            CreateTblFaltas(esquema, fecha, conn);
-            CreateTblExtraordinarias(esquema, fecha, conn);
+            CreateTblControlAcceso(esquema,fecha,conn,recalculado);
+            CreateTblAtrasos(esquema, fecha, conn, recalculado);
+            CreateTblFaltas(esquema, fecha, conn, recalculado);
+            CreateTblExtraordinarias(esquema, fecha, conn, recalculado);
             //CreateTblDescuentosTime(esquema, fecha, conn);
-            CreateTblLogDispositivos(esquema, conn);
-            CreateTblDescanso(esquema, fecha, conn);
+            CreateTblLogDispositivos(esquema,fecha, conn, recalculado);
+            CreateTblDescanso(esquema, fecha, conn, recalculado);
         }
 
 
@@ -91,9 +91,14 @@ namespace CorsinfSDKHik.ConfigDB
 
         }
 
-        public Boolean CreateTblControlAcceso(String esquema,String fecha,SqlConnection conn)
+        public Boolean CreateTblControlAcceso(String esquema,String fecha,SqlConnection conn,int recalculado = 0)
         {
+            string hoy = DateTime.Now.ToString("yyyyMM");
             String tabla = "th_control_acceso";
+            if (recalculado == 1 && hoy != fecha)
+            {
+                tabla = "th_control_acceso_"+fecha;
+            }
             if (ExisteTabla(conn, esquema, tabla) == 0)
             {
                 try
@@ -137,9 +142,14 @@ namespace CorsinfSDKHik.ConfigDB
             else { return true; }
         }
 
-        public Boolean CreateTblAtrasos(String esquema, String fecha, SqlConnection conn)
+        public Boolean CreateTblAtrasos(String esquema, String fecha, SqlConnection conn,int recalculado = 0)
         {
             String tabla = "asis_atrasos";
+            string hoy = DateTime.Now.ToString("yyyyMM");
+            if (recalculado == 1 && hoy != fecha)
+            {
+                tabla = "asis_atrasos_" + fecha;
+            }
 
             if (ExisteTabla(conn, esquema, tabla) == 0)
             {
@@ -152,7 +162,8 @@ namespace CorsinfSDKHik.ConfigDB
                         "asi_hora_parametrizada NVARCHAR(MAX)," +
                         "asi_atrasos_fecha_marcacion datetime," +
                         "asi_atrasos_hora_marcacion time," +
-                        "asi_atrasos_total_min INT" +
+                        "asi_atrasos_total_min INT," +
+                        "asi_atrasos_justi INT," +
                         ");";
                     SqlCommand sql = new SqlCommand(SqlText, conn);
                     sql.ExecuteNonQuery();
@@ -167,9 +178,14 @@ namespace CorsinfSDKHik.ConfigDB
             else { return true; }
         }
 
-        public Boolean CreateTblDescanso(String esquema, String fecha, SqlConnection conn)
+        public Boolean CreateTblDescanso(String esquema, String fecha, SqlConnection conn, int recalculado = 0)
         {
             String tabla = "asis_descansos";
+            string hoy = DateTime.Now.ToString("yyyyMM");
+            if (recalculado == 1 && hoy != fecha)
+            {
+                tabla = "asis_descansos_" + fecha;
+            }
 
             if (ExisteTabla(conn, esquema, tabla) == 0)
             {
@@ -198,9 +214,14 @@ namespace CorsinfSDKHik.ConfigDB
             else { return true; }
         }
 
-        public Boolean CreateTblLogDispositivos(String esquema, SqlConnection conn)
+        public Boolean CreateTblLogDispositivos(String esquema, string fecha,SqlConnection conn, int recalculado = 0)
         {
             String tabla = "th_log_dispositivos";
+            string hoy = DateTime.Now.ToString("yyyyMM");
+            if (recalculado == 1 && hoy != fecha)
+            {
+                tabla = "th_log_dispositivos_" + fecha;
+            }
 
             if (ExisteTabla(conn, esquema, tabla) == 0)
             {
@@ -224,9 +245,14 @@ namespace CorsinfSDKHik.ConfigDB
             else { return true; }
         }
 
-        public Boolean CreateTblFaltas(String esquema, String fecha, SqlConnection conn)
+        public Boolean CreateTblFaltas(String esquema, String fecha, SqlConnection conn, int recalculado = 0)
         {
             String tabla = "asis_faltas" ;
+            string hoy = DateTime.Now.ToString("yyyyMM");
+            if (recalculado == 1 && hoy != fecha)
+            {
+                tabla = "asis_faltas_" + fecha;
+            }
 
             if (ExisteTabla(conn, esquema, tabla) == 0)
             {
@@ -238,7 +264,8 @@ namespace CorsinfSDKHik.ConfigDB
                         "th_dep_id NVARCHAR(MAX)," +
                         "asi_faltas_fecha_inicio datetime," +
                         "asi_faltas_fecha_fin datetime," +
-                        "asi_faltas_total_min INT" +
+                        "asi_faltas_total_min INT," +
+                        "asi_faltas_justi INT" +
                         ");";
                     SqlCommand sql = new SqlCommand(SqlText, conn);
                     sql.ExecuteNonQuery();
@@ -254,9 +281,14 @@ namespace CorsinfSDKHik.ConfigDB
         }
 
 
-        public Boolean CreateTblExtraordinarias(String esquema, String fecha, SqlConnection conn)
+        public Boolean CreateTblExtraordinarias(String esquema, String fecha, SqlConnection conn, int recalculado = 0)
         {
             String tabla = "asis_extraordinarias";
+            string hoy = DateTime.Now.ToString("yyyyMM");
+            if (recalculado == 1 && hoy != fecha)
+            {
+                tabla = "asis_extraordinarias_" + fecha;
+            }
 
             if (ExisteTabla(conn, esquema, tabla) == 0)
             {

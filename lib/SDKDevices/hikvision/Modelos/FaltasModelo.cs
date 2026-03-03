@@ -14,5 +14,6 @@ namespace CorsinfSDKHik.Modelos
         public DateTime asi_faltas_fecha_inicio { get; set; }
         public DateTime asi_faltas_fecha_fin { get; set; }
         public int asi_faltas_total_min { get; set; }
+        public int asi_faltas_justi { get; set; }
     }
 }

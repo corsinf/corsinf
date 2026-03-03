@@ -77,6 +77,46 @@ class th_control_accesoM extends BaseModel
         return $datos;
     }
 
+    function actualizar_min_justificacion($min,$id,$fecha,$periodo="")
+    {
+
+        $table = "th_control_acceso";
+        if($periodo!=''){ $table = "th_control_acceso_".$periodo; }
+
+        $sql =
+            "UPDATE _asistencias.".$table."
+            SET th_acc_justificacion_min = ".$min."
+            WHERE th_acc_fecha = '".$fecha."'
+            AND th_per_id = '".$id."'";
+
+        // print_r($sql); exit(); die();
+
+        // $datos = $this->db->datos($sql, false, true, true);
+        $datos = $this->db->sql_string($sql, false, true);
+
+        return $datos;
+    }
+
+    function delete_registros($id=false,$periodo="")
+    {
+
+        $table = "th_control_acceso";
+        if($periodo!=''){ $table = "th_control_acceso_".$periodo; }
+
+        $sql =
+            "DELETE FROM _asistencias.".$table."
+            WHERE 1=1 ";
+            if($id){$sql.=" AND th_per_id = '".$id."'";}
+
+        // print_r($sql); exit(); die();
+
+        // $datos = $this->db->datos($sql, false, true, true);
+        $datos = $this->db->sql_string($sql, false, true);
+
+        return $datos;
+    }
+
+
     function listar_personalizado($fecha_ini = '', $fecha_final = '')
     {
 
@@ -149,9 +189,9 @@ class th_control_accesoM extends BaseModel
                         d.th_dis_nombre AS dispositivo_nombre,
                         ca.th_acc_fecha_hora,
                         ca.th_acc_hora_ingreso as RegistroIng,
-                        COUNT(*) OVER (PARTITION BY ca.th_per_id) AS TotalMarcaciones,
+                        COUNT(*) OVER (PARTITION BY ca.th_per_id,ca.th_acc_fecha) AS TotalMarcaciones,
                         ROW_NUMBER() OVER (
-                            PARTITION BY ca.th_per_id
+                            PARTITION BY ca.th_per_id,ca.th_acc_fecha
                             ORDER BY ca.th_acc_id DESC
                         ) AS rn
                     FROM _asistencias.".$tabla." AS ca
@@ -256,6 +296,8 @@ class th_control_accesoM extends BaseModel
                     $sql.=" AND TH.th_tuh_dia = '".$dia."' ";
                 }
 
+                // print_r($sql);die();
+
 
         $datos = $this->db->datos($sql, false, true,false);
         return $datos;
@@ -302,4 +344,5 @@ class th_control_accesoM extends BaseModel
         return $datos;
 
     }
+
 }

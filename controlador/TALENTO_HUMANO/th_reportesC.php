@@ -2,6 +2,19 @@
 date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_reportesM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_cardM.php');
+
+
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_accesoM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_faltasM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_atrasosM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_extraordinariasM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_descansosM.php');
+
+
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_personas_departamentosM.php');
+
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_dispositivosM.php');
 
 require_once(dirname(__DIR__, 2) . '/lib/spout_excel/vendor/box/spout/src/Spout/Autoloader/autoload.php');
 
@@ -45,7 +58,7 @@ if (isset($_GET['sincronizar_calculo_asistencia'])) {
 
 //Por codigo
 if (isset($_GET['sincronizar_calculo_asistencia_fecha'])) {
-    echo json_encode($controlador->sincronizar_calculo_asistencia_fecha($_POST['fecha_inicio'] ?? '', $_POST['fecha_fin'] ?? ''));
+    echo json_encode($controlador->sincronizar_calculo_asistencia_fecha($_POST['parametros'] ?? ''));
 }
 
 if (isset($_GET['sincronizar_marcaciones'])) {
@@ -55,10 +68,36 @@ if (isset($_GET['sincronizar_marcaciones'])) {
 class th_reportesC
 {
     private $modelo;
+    private $card;
+
+    private $accesos;
+    private $faltas;
+    private $atrasos;
+    private $extraordinarias;
+    private $descansos;
+
+    private $personaDepartamento;
+
+    private $dispositivos;
 
     function __construct()
     {
         $this->modelo = new th_reportesM();
+        $this->card = new th_cardM();
+
+        $this->accesos = new th_control_accesoM();
+        $this->faltas = new th_faltasM();
+        $this->atrasos = new th_atrasosM();
+        $this->extraordinarias = new th_extraordinariasM();
+        $this->descansos = new th_descansosM();
+
+        $this->dispositivos = new th_dispositivosM();
+        $this->sdk_patch = dirname(__DIR__,2).'\\lib\\SDKDevices\\hikvision\\bin\\Debug\\net8.0\\CorsinfSDKHik.dll ';
+
+        $this->personaDepartamento = new th_personas_departamentosM();
+
+
+
     }
 
     function listar($id)
@@ -327,68 +366,124 @@ class th_reportesC
         return ['msj' => implode("\n", $msg)];
     }
 
-    function sincronizar_calculo_asistencia_fecha($fecha_inicio = '', $fecha_fin = '')
+    function sincronizar_calculo_asistencia_fecha($parametros)
     {
-        ini_set('max_execution_time', 100000); // 300 segundos = 5 minutos
-
-        date_default_timezone_set('America/Guayaquil');
-
-        require_once(dirname(__DIR__, 2) . '/Cron/TALENTO_HUMANO/calculo_control_acceso.php');
-
-        $USUARIO_DB = $_SESSION['INICIO']['USUARIO_DB'];
-        $PASSWORD_DB = $_SESSION['INICIO']['PASSWORD_DB'];
-        $BASEDATO = $_SESSION['INICIO']['BASEDATO'];
-        $PUERTO_DB = $_SESSION['INICIO']['PUERTO_DB'];
-        $IP_HOST = $_SESSION['INICIO']['IP_HOST'];
-
-        // Crear una instancia de la clase y llamar al método
-        $proceso = new calculo_persona($USUARIO_DB, $PASSWORD_DB, $IP_HOST, $BASEDATO, $PUERTO_DB);
-
-        // $fecha_actual = '2025-08-07';
-
-        // print_r($fecha_calcular); exit(); die();
-
-        // $parametros = $proceso->calculo_persona_control_acceso(2000, '2025-06-27');
-
-
-        //Funcion para guardar de fora masiva
-        // guardar_log('[INF] Inicio Inserción Masiva WEB', $BASEDATO);
-        // $parametros = $proceso->carga_masiva($fecha_in);
-        // guardar_log($parametros, $BASEDATO);
-
-        //Para realizar pruebas individuales
-        // $parametros = $proceso->calculo_persona_control_acceso(60, $fecha_actual, true);
-
-        if ($fecha_inicio == '') {
-            $fecha_inicio = date("Y-m-d");
-            $fecha_fin = date("Y-m-d");
+        switch ($parametros['tipo_busqueda']) {
+            case 'persona':
+                return $this->sincronizar_datos_persona($parametros);
+                break;
+            case 'departamento':
+                return $this->sincronizar_datos_departamentos($parametros);
+                break;            
+            default:
+                break;
         }
 
-        // $parametros = $proceso->calculo_persona_control_acceso(1, $fecha_inicio);
+    }
 
-
-        // print_r($parametros); exit(); die();
-
-
-        $fecha_actual = new DateTime($fecha_inicio);
-        $fecha_limite = new DateTime($fecha_fin);
-
-        // Usamos ->format('Y-m-d H:i:s') para convertir el objeto a texto
-        $mensaje = "[INF] Inicio Inserción Masiva de las fechas -> " . $fecha_actual->format('Y-m-d') . " - " . $fecha_limite->format('Y-m-d');
-
-        $this->guardar_log($mensaje, $BASEDATO);
-
-        while ($fecha_actual <= $fecha_limite) {
-            $fecha_str = $fecha_actual->format('Y-m-d');
-
-            $parametros = $proceso->carga_masiva($fecha_str);
-
-            // echo "Procesado: $fecha_str\n";
-            $fecha_actual->modify('+1 day');
+    function sincronizar_datos_persona($parametros)
+    {        
+        // print_r($parametros);die();
+        $card = array();
+        // primero buscamos la card de la persona
+        if($parametros['all']==0)
+        {
+            if($parametros['persona']!='')
+            {
+                $persona = $this->card->where('th_card_id',$parametros['persona'])->listar();
+                $card[] = array('ID'=>$persona[0]['_id'],'card'=> $persona[0]['th_cardNo']);
+            }
+        }else
+        {
+            // $persona = $this->card->listar();
+            // foreach ($persona as $key => $value) {
+                $card[] = array('ID'=>"all",'card'=> "");
+            // }
         }
-        $this->guardar_log($parametros, $BASEDATO);
+        return $this->sincronizar_asistencia_fecha($card,$parametros['inicio'],$parametros['fin']);
+    }
 
-        return ($parametros);
+
+    function sincronizar_datos_departamentos($parametros)
+    {
+        
+        $lista_personas_departamento = array();
+        
+        if($parametros['all']==0)
+        {
+            $personas = $this->personaDepartamento->where("th_dep_id",$parametros['departamento'])->listar();
+        }else
+        {
+            $personas = $this->personaDepartamento->listar();
+        }
+
+        // print_r($parametros);
+        // print_r($personas);die(); 
+
+        foreach ($personas as $key => $value) {
+            // print_r($value);die();
+            $card = $this->card->where("th_per_id",$value['id_persona'])->listar();
+            $lista_personas_departamento[] = array('ID'=>$value['id_persona'],'card'=> $card[0]['th_cardNo']);
+        }
+
+        return $this->sincronizar_asistencia_fecha($lista_personas_departamento,$parametros['inicio'],$parametros['fin']);
+
+    }
+
+
+    function sincronizar_asistencia_fecha($cards,$fechaIni,$fechaFin)
+    {
+
+        // eliminamos los registros que esta persona tiene en 
+        // accesos,atrasos,faltas,descansos,extraordinarias
+
+            $fecha_obj = new DateTime($fechaIni);
+            $mesdesde =  $fecha_obj->format('Y').''. $fecha_obj->format('m');
+            $fecha = $mesdesde;        
+            $hoy = date('Ym');
+
+            if($mesdesde==$hoy)
+            {
+                $fecha = "";
+            }
+
+            foreach ($cards as $key => $value) 
+            {
+                if($value['ID']=='all'){ $value['ID'] = false; }
+
+                // print_r($value['ID']);die();
+                
+                    $this->accesos->delete_registros($value['ID'],$fecha);
+                    $this->faltas->deleteFaltas($value['ID'],$fecha);
+                    $this->atrasos->deleteAtraso($value['ID'],$fecha);
+                    $this->descansos->delete_descansos($value['ID'],$fecha);
+                    $this->extraordinarias->delete_extraordinarias($value['ID'],$fecha);
+                
+
+                // traemos las marcaciones respectivas de esa persona
+                    // listamos los biometricos
+
+                $dispositivo = $this->dispositivos->where('th_dis_estado_dis',1)->listar();
+
+                foreach ($dispositivo as $key1 => $value1) {
+
+                    set_time_limit(0); 
+                    $dllPath = $this->sdk_patch.'10 '.$value1['host'].' '.$value1['usuario'].' '.$value1['port'].' '.$value1['pass'].' '.$_SESSION['INICIO']['ID_EMPRESA'].' '.$fechaIni.' '.$fechaFin.' '.$value['card'];
+                    // Comando para ejecutar la DLL
+                    $command = "dotnet $dllPath";
+
+                    // print_r($command.'-');die();
+                    $output = shell_exec($command);
+                    // print_r($output);die();
+                    if($output!='')
+                    {
+                        $resp = json_decode($output,true);
+                        $cadena = $resp['msj'];
+                    }
+                }
+            }
+
+            return 1;
     }
 
     function sincronizar_marcaciones()
