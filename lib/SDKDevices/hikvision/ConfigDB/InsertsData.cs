@@ -26,10 +26,20 @@ namespace CorsinfSDKHik.ConfigDB
             fecha = DateTime.Now.ToString("yyyyMM");
 
         }
-        public Boolean InsertarAccesos(SqlConnection conn, object modelo)
+        public Boolean InsertarAccesos(SqlConnection conn, object modelo,string FechaMarcacion="", int recalcular = 0)
         {
             configConsulta();
-            string querySQL = "INSERT INTO  " + esquema + ".th_control_acceso (" +
+            string tabla = "th_control_acceso";
+            if (recalcular == 1 && !string.IsNullOrEmpty(FechaMarcacion))
+            {
+                DateTime _fechaMarcacion = DateTime.Parse(FechaMarcacion);
+                string yearMonth = _fechaMarcacion.ToString("yyyyMM");
+                if (yearMonth != fecha)
+                {
+                    tabla = "th_control_acceso_" + yearMonth;
+                }
+            }
+            string querySQL = "INSERT INTO  " + esquema + "."+tabla+" (" +
                 "th_cardNo," +
                 "th_dis_id," +
                 "th_acc_tipo_registro," +
@@ -117,22 +127,31 @@ namespace CorsinfSDKHik.ConfigDB
             }
         }
 
-        public Boolean InsertarAtrasos(SqlConnection conn, object modelo)
+        public Boolean InsertarAtrasos(SqlConnection conn, object modelo,string FechaMarcacion="",int recalcular = 0)
         {
             configConsulta();
-            string querySQL = "INSERT INTO  " + esquema + ".asis_atrasos (" +
+            string tabla = "asis_atrasos";
+            if (recalcular == 1 && !string.IsNullOrEmpty(FechaMarcacion))
+            {
+                DateTime _fechaMarcacion = DateTime.Parse(FechaMarcacion);
+                string yearMonth = _fechaMarcacion.ToString("yyyyMM");
+                tabla = "asis_atrasos_" + yearMonth;
+            }
+            string querySQL = "INSERT INTO  " + esquema + "."+tabla+" (" +
                 "th_per_id," +
                 "asi_fecha_parametrizada," +
                 "asi_hora_parametrizada," +
                 "asi_atrasos_fecha_marcacion," +
                 "asi_atrasos_hora_marcacion," +
-                "asi_atrasos_total_min) VALUES (" +
+                "asi_atrasos_total_min," +
+                "asi_atrasos_justi) VALUES (" +
                 "@th_per_id," +
                 "@asi_fecha_parametrizada," +
                 "@asi_hora_parametrizada," +
                 "@asi_atrasos_fecha_marcacion," +
                 "@asi_atrasos_hora_marcacion," +
-                "@asi_atrasos_total_min) ";
+                "@asi_atrasos_total_min," +
+                "@asi_atrasos_justi) ";
             try
             {
                 var cmd = new SqlCommand(querySQL, conn);
@@ -145,6 +164,7 @@ namespace CorsinfSDKHik.ConfigDB
                     cmd.Parameters.AddWithValue("@asi_atrasos_fecha_marcacion", registro.asi_atrasos_fecha_marcacion ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@asi_atrasos_hora_marcacion", registro.asi_atrasos_hora_marcacion ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@asi_atrasos_total_min", registro.asi_atrasos_total_min);
+                    cmd.Parameters.AddWithValue("@asi_atrasos_justi", registro.asi_atrasos_justi);
                 }
 
                 cmd.ExecuteNonQuery();
@@ -157,10 +177,20 @@ namespace CorsinfSDKHik.ConfigDB
             }
         }
 
-        public Boolean InsertarDescanso(SqlConnection conn, object modelo)
+        public Boolean InsertarDescanso(SqlConnection conn, object modelo,string FechaMarcacion="",int recalcular=0)
         {
             configConsulta();
-            string querySQL = "INSERT INTO  " + esquema + ".asis_descansos (" +
+            string tabla = "asis_descansos";
+            if (recalcular == 1 && !string.IsNullOrEmpty(FechaMarcacion))
+            {
+                DateTime _fechaMarcacion = DateTime.Parse(FechaMarcacion);
+                string yearMonth = _fechaMarcacion.ToString("yyyyMM");
+                if(yearMonth!= fecha)
+                { 
+                    tabla = "asis_descansos_" + yearMonth;
+                }
+            }
+            string querySQL = "INSERT INTO  " + esquema + "."+tabla+" (" +
                 "th_per_id," +
                 "asi_fecha_parametrizada," +
                 "asi_hora_parametrizada," + 
@@ -243,10 +273,18 @@ namespace CorsinfSDKHik.ConfigDB
             }
         }
 
-        public Boolean InsertarExtraordinarias(SqlConnection conn, object modelo)
+        public Boolean InsertarExtraordinarias(SqlConnection conn, object modelo, string FechaMarcacion = "", int recalcular = 0)
         {
             configConsulta();
-            string querySQL = "INSERT INTO  " + esquema + ".asis_extraordinarias (" +
+
+            string tabla = "asis_extraordinarias";
+            if (recalcular == 1 && !string.IsNullOrEmpty(FechaMarcacion))
+            {
+                DateTime _fechaMarcacion = DateTime.Parse(FechaMarcacion);
+                string yearMonth = _fechaMarcacion.ToString("yyyyMM");
+                tabla = "asis_extraordinarias_" + yearMonth;
+            }
+            string querySQL = "INSERT INTO  " + esquema + "." + tabla + " ("+
                 "th_per_id," +
                 "asis_extraordinarias_detalle, " +
                 "asi_fecha_parametrizada," +
@@ -286,18 +324,27 @@ namespace CorsinfSDKHik.ConfigDB
             }
         }
 
-        public Boolean InsertarFaltas(SqlConnection conn, object modelo)
+        public Boolean InsertarFaltas(SqlConnection conn, object modelo,string FechaMarcacion ="",int recalcular=0)
         {
             configConsulta();
-            string querySQL = "INSERT INTO  " + esquema + ".asis_faltas (" +
+            string tabla = "asis_faltas";
+            if (recalcular == 1 && !string.IsNullOrEmpty(FechaMarcacion))
+            {
+                DateTime _fechaMarcacion = DateTime.Parse(FechaMarcacion);
+                string yearMonth = _fechaMarcacion.ToString("yyyyMM");
+                tabla = "asis_faltas_" + yearMonth;
+            }
+            string querySQL = "INSERT INTO  " + esquema + "."+tabla+" (" +
                 "th_per_id," +
                 "asi_faltas_fecha_inicio," +
                 "asi_faltas_fecha_fin," +
-                "asi_faltas_total_min) VALUES (" +
+                "asi_faltas_total_min," +
+                "asi_faltas_justi) VALUES (" +
                 "@th_per_id," +
                 "@asi_faltas_fecha_inicio," +
                 "@asi_faltas_fecha_fin," +
-                "@asi_faltas_total_min) ";
+                "@asi_faltas_total_min," +
+                "@asi_faltas_justi) ";
             try
             {
                 var cmd = new SqlCommand(querySQL, conn);
@@ -308,7 +355,8 @@ namespace CorsinfSDKHik.ConfigDB
                     cmd.Parameters.AddWithValue("@asi_faltas_fecha_inicio", registro.asi_faltas_fecha_inicio);
                     cmd.Parameters.AddWithValue("@asi_faltas_fecha_fin", registro.asi_faltas_fecha_fin);
                     cmd.Parameters.AddWithValue("@asi_faltas_total_min", registro.asi_faltas_total_min);
-                    }
+                    cmd.Parameters.AddWithValue("@asi_faltas_justi", registro.asi_faltas_justi);
+                }
 
                 cmd.ExecuteNonQuery();
                 return true;
@@ -320,13 +368,20 @@ namespace CorsinfSDKHik.ConfigDB
             }
         }
 
-        public Boolean InsertTabla(SqlConnection conn, String data)
+        public Boolean InsertTabla(SqlConnection conn, String data, string fechaProceso = "")
         {
 
             configConsulta();
+
+            string tabla = "th_log_dispositivos";
+            if (!string.IsNullOrEmpty(fechaProceso) && fecha != fechaProceso)
+            {
+                tabla = "th_control_acceso_" + fecha;
+            }
+            if (!string.IsNullOrEmpty(fecha)) { tabla = "th_log_dispositivos_"+ fechaProceso; } 
             try
             {
-                String SqlText = "INSERT INTO " + esquema + ".th_log_dispositivos (LOG_DEVICE) VALUES ('" + data + "');";
+                String SqlText = "INSERT INTO " + esquema + "."+tabla+" (LOG_DEVICE) VALUES ('" + data + "');";
                 SqlCommand sql = new SqlCommand(SqlText, conn);
                 sql.ExecuteNonQuery();
                 return true;

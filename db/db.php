@@ -188,6 +188,7 @@ class db
 		}
 
 		try {
+			// print_r($sql);die();
 			$stmt = $conn->prepare($sql);
     		$stmt->execute();
     		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -198,6 +199,8 @@ class db
 			
 		} catch (Exception $e) {
 			if($error){
+
+				// print_r($sql);
 				die("Error: " . $e->getMessage());
 			}else{
 				print_r($sql);
@@ -206,12 +209,12 @@ class db
 		}
 		
 	}
-	function inserts($tabla, $datos, $master = false)
+	function inserts($tabla, $datos, $master = false,$sin_esquema=false)
 	{
 		// print_r($datos);die();		
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
-		if(!$master){ $tabla = $this->esquema_modulo($tabla,1);	}
+		if(!$master && !$sin_esquema){ $tabla = $this->esquema_modulo($tabla,1);	}
 
 		$valores = '';
 		$campos = '';

@@ -15,5 +15,6 @@ namespace CorsinfSDKHik.Modelos
         public string asi_atrasos_fecha_marcacion { get; set; }
         public string asi_atrasos_hora_marcacion { get; set; }
         public int asi_atrasos_total_min { get; set; }
+        public int asi_atrasos_justi { get; set; }
     }
 }

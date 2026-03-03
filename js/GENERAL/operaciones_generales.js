@@ -406,6 +406,7 @@ function cargar_select2_url(ddl, url_controlador, placeholder = '-- Seleccione -
         },
         minimumInputLength: minimumInputLength,
         placeholder: placeholder,
+        allowClear: true,
         width: '100%',
         ajax: {
             url: url_controlador,
@@ -418,6 +419,11 @@ function cargar_select2_url(ddl, url_controlador, placeholder = '-- Seleccione -
                 };
             },
             processResults: function (data) {
+<<<<<<< Updated upstream
+=======
+                //console.log(data.length);
+                console.log(data);
+>>>>>>> Stashed changes
                 return { results: data };
             },
             cache: true
@@ -575,4 +581,12 @@ function confirmar_terminos_datos(url) {
             window.location.href = url;
         }
     });
+}
+
+function minutosAHora(minutos) 
+{
+    const horas = Math.floor(minutos / 60);
+    const minutosRestantes = minutos % 60;
+    // Formato HH:MM (con 2 dígitos)
+    return `${horas.toString().padStart(2, '0')}:${minutosRestantes.toString().padStart(2, '0')}`;
 }

@@ -1,6 +1,9 @@
-﻿using CorsinfSDKHik.NetSDK;
+﻿using CorsinfSDKHik.ConfigDB;
+using CorsinfSDKHik.NetSDK;
 using Lextm.SharpSnmpLib;
 using Lextm.SharpSnmpLib.Security;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,16 +28,47 @@ namespace CorsinfSDKHik.Funciones
 
         private string ipDevice = "";
         private string portDevice = "";
+        private string CardSearch = "";
+        private string FechaInicioSearch = "";
+        private string FechaFinSearch = "";
+
+
+        private int _procesar=0;
+        private SqlConnection _conn;
+        Modelo _modelo = new Modelo();
+        private string[] diasEspanol = { "Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado" };
+        private EmpresaDAL _empresaDal = new EmpresaDAL();
+        private SelectData _selectData = new SelectData();
+        private int ProcesoRecalculado = 0;
+
+        private string esquema;
+        private string fecha;
+        public void configConsulta()
+        {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile(Path.Combine("ConfigDB", "appsettings.json"), optional: false, reloadOnChange: true)
+                .Build();
+            esquema = config["Esquema"];
+            fecha = DateTime.Now.ToString("yyyyMM");
+
+        }
 
         //private string listaResp = "";
-        public String buscarLogs(int m_UserID, String fechaInit,String fechaFin,String ip,string port)
+        public String buscarLogs(SqlConnection conn, int m_UserID, String fechaInit,String fechaFin,String ip,string port,String Card = null,int procesar = 0)
         {
+            CardSearch = Card;
+            _procesar = procesar;
+            _conn = conn;
             m_lLogNum = 0;
             String msj = "";
             ipDevice = ip;
             portDevice = port;
             DateTime dateTimeStart = DateTime.Parse(fechaInit);
             DateTime dateTimeEnd = DateTime.Parse(fechaFin);
+
+            FechaInicioSearch = dateTimeStart.ToString("yyyy-MM-dd");
+            FechaFinSearch = dateTimeEnd.ToString("yyyy-MM-dd");
 
             CHCNetSDK.NET_DVR_ACS_EVENT_COND struCond = new CHCNetSDK.NET_DVR_ACS_EVENT_COND();
             struCond.Init();
@@ -90,6 +124,7 @@ namespace CorsinfSDKHik.Funciones
 
             //m_pDisplayListThread = new Thread(ProcessEvent);
             //m_pDisplayListThread.Start();
+
             _resultado.Substring(0, _resultado.Length - 1);
             return _resultado;
         }
@@ -110,7 +145,9 @@ namespace CorsinfSDKHik.Funciones
                 {
                     case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_SUCCESS://成功读取到数据，处理完本次数据后需调用next
                         String listaResp = ProcessAcsEvent(ref struCFG, ref Flag);
-                        msj+=listaResp+";";
+
+                        if (!string.IsNullOrEmpty(listaResp))
+                        { msj += listaResp + ";"; }
                         break;
                     case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_NEED_WAIT:
                         Thread.Sleep(200);
@@ -142,6 +179,7 @@ namespace CorsinfSDKHik.Funciones
             }
             catch
             {
+                return null;
                 return "AddAcsEventToList Failed";
                 flag = false;
             }
@@ -158,123 +196,65 @@ namespace CorsinfSDKHik.Funciones
             string byType = struEventCfg.struAcsEventInfo.byType.ToString();
             string byCardType = struEventCfg.struAcsEventInfo.byCardType.ToString();
             string LogTime = GetStrLogTime(ref struEventCfg.struTime);
+            string[] Datetime = LogTime.Split(" ");
+            String Time = Datetime[1];
+            String listaRes = "";
+            if (ProcesoRecalculado == 0)
+            {
+                //valida tblas existentes
+                configConsulta();
+                DateTime _fechaDia = DateTime.Parse(LogTime);
+                int dia = (int)_fechaDia.DayOfWeek;
+                String nombreDia = diasEspanol[dia];
+                _empresaDal.validarTablas(_conn, esquema, _fechaDia.ToString("yyyyMM"), 1);
+                //eliminar registros
+                //_modelo.eliminarRegistros(_conn,CardSearch,FechaInicioSearch,FechaFinSearch,1);
 
+            }
 
-            String listaRes = "[{\"ip\":\"" + ipDevice + "\"," +
-                           "\"Puerto\":\"" + portDevice + "\"," +
-                           "\"Card Number\":\"" + byCardNo + "\"," +
-                           "\"cardType\":\"" + byCardType + "\"," +
-                           "\"cardReaderNumber\":\"" + dwCardReaderNo + "\"," +
-                           "\"doorNumber\":\"" + dwDoorNo + "\"," +
-                           "\"accessChannel\":\"" + wAccessChannel + "\"," +
-                           "\"localControllerID\":\"" + wLocalControllerID + "\"," +
-                           "\"byInternetAccess\":\"" + byInternetAccess + "\"," +
-                           "\"byType\":\"" + byType + "\"," +
-                           "\"fecha\":\"" + LogTime + "\"," +
-                           "\"No:\":\"" + (++m_lLogNum).ToString() + "\"}]";
+            if (byCardNo != "")
+            {
+                if (CardSearch == byCardNo && !string.IsNullOrEmpty(CardSearch))
+                {
+                    listaRes = "[{\"ip\":\"" + ipDevice + "\"," +
+                                   "\"Puerto\":\"" + portDevice + "\"," +
+                                   "\"Card_Number\":\"" + byCardNo + "\"," +
+                                   "\"cardType\":\"" + byCardType + "\"," +
+                                   "\"cardReaderNumber\":\"" + dwCardReaderNo + "\"," +
+                                   "\"doorNumber\":\"" + dwDoorNo + "\"," +
+                                   "\"accessChannel\":\"" + wAccessChannel + "\"," +
+                                   "\"localControllerID\":\"" + wLocalControllerID + "\"," +
+                                   "\"byInternetAccess\":\"" + byInternetAccess + "\"," +
+                                   "\"byType\":\"" + byType + "\"," +
+                                   "\"hora\":\"" + Time + "\"," +
+                                   "\"fecha\":\"" + LogTime + "\"," +
+                                   "\"No:\":\"" + (++m_lLogNum).ToString() + "\"}]";
+                }
+                if(CardSearch=="" )
+                {
+                    listaRes = "[{\"ip\":\"" + ipDevice + "\"," +
+                                      "\"Puerto\":\"" + portDevice + "\"," +
+                                      "\"Card_Number\":\"" + byCardNo + "\"," +
+                                      "\"cardType\":\"" + byCardType + "\"," +
+                                      "\"cardReaderNumber\":\"" + dwCardReaderNo + "\"," +
+                                      "\"doorNumber\":\"" + dwDoorNo + "\"," +
+                                      "\"accessChannel\":\"" + wAccessChannel + "\"," +
+                                      "\"localControllerID\":\"" + wLocalControllerID + "\"," +
+                                      "\"byInternetAccess\":\"" + byInternetAccess + "\"," +
+                                      "\"byType\":\"" + byType + "\"," +
+                                      "\"hora\":\"" + Time + "\"," +
+                                      "\"fecha\":\"" + LogTime + "\"," +
+                                      "\"No:\":\"" + (++m_lLogNum).ToString() + "\"}]";
+
+                }
+                if (_selectData.ExisteCard(_conn, byCardNo))
+                {
+                    _modelo.InsertDataRecalculado(_conn, listaRes, CardSearch);
+                }
+            }
+            ProcesoRecalculado = 1;
 
             return listaRes;
-            //[{\"ip\":\"" + pAlarmer.sDeviceIP + "\",
-
-            /*
-            Item.Text = (++m_lLogNum).ToString();
-
-            string LogTime = GetStrLogTime(ref struEventCfg.struTime);
-            Item.SubItems.Add(LogTime);
-
-            string Major = ProcessMajorType(ref struEventCfg.dwMajor);
-            Item.SubItems.Add(Major);
-
-            ProcessMinorType(ref struEventCfg);
-            Item.SubItems.Add(CsTemp);
-
-            CsTemp = System.Text.Encoding.UTF8.GetString(struEventCfg.struAcsEventInfo.byCardNo);
-            Item.SubItems.Add(CsTemp);
-
-            CardTypeMap(ref struEventCfg);
-            Item.SubItems.Add(CsTemp);
-
-            Item.SubItems.Add(struEventCfg.struAcsEventInfo.byWhiteListNo.ToString());//WhiteList
-
-            ProcessReportChannel(ref struEventCfg);
-            Item.SubItems.Add(CsTemp);
-
-            ProcessCardReader(ref struEventCfg);
-            Item.SubItems.Add(CsTemp);
-
-            CsTemp = struEventCfg.struAcsEventInfo.dwCardReaderNo.ToString();
-            Item.SubItems.Add(CsTemp);
-
-            Item.SubItems.Add(struEventCfg.struAcsEventInfo.dwDoorNo.ToString());
-
-            Item.SubItems.Add(struEventCfg.struAcsEventInfo.dwVerifyNo.ToString());
-
-            Item.SubItems.Add(struEventCfg.struAcsEventInfo.dwAlarmInNo.ToString());
-
-            Item.SubItems.Add(struEventCfg.struAcsEventInfo.dwAlarmOutNo.ToString());
-
-            Item.SubItems.Add(struEventCfg.struAcsEventInfo.dwCaseSensorNo.ToString());
-
-            Item.SubItems.Add(struEventCfg.struAcsEventInfo.dwRs485No.ToString());
-
-            Item.SubItems.Add(struEventCfg.struAcsEventInfo.dwMultiCardGroupNo.ToString());
-
-            Item.SubItems.Add(struEventCfg.struAcsEventInfo.wAccessChannel.ToString());
-
-            Item.SubItems.Add(struEventCfg.struAcsEventInfo.byDeviceNo.ToString());
-
-            Item.SubItems.Add(struEventCfg.struAcsEventInfo.dwEmployeeNo.ToString());
-
-            Item.SubItems.Add(struEventCfg.struAcsEventInfo.byDistractControlNo.ToString());
-
-            Item.SubItems.Add(struEventCfg.struAcsEventInfo.wLocalControllerID.ToString());
-
-            ProcessInternatAccess(ref struEventCfg);
-            Item.SubItems.Add(CsTemp);
-
-            ProcessByType(ref struEventCfg);
-            Item.SubItems.Add(CsTemp);
-
-            ProcessMacAdd(ref struEventCfg);
-            Item.SubItems.Add(CsTemp);
-
-            ProcessSwipeCard(ref struEventCfg);
-            Item.SubItems.Add(CsTemp);
-
-            Item.SubItems.Add(struEventCfg.struAcsEventInfo.dwSerialNo.ToString());
-            */
-                // Item.SubItems.Add("0"/*struEventCfg.struAcsEventInfo.byChannelControllerID.ToString()*/);
-
-                //Item.SubItems.Add("0"/*struEventCfg.struAcsEventInfo.byChannelControllerLampID.ToString()*/);
-
-                //Item.SubItems.Add("0"/*struEventCfg.struAcsEventInfo.byChannelControllerIRAdaptorID.ToString()*/);
-
-                //Item.SubItems.Add("0"/*struEventCfg.struAcsEventInfo.byChannelControllerIREmitterID.ToString()*/);
-
-                //if (struEventCfg.wInductiveEventType < (ushort)GetAcsEventType.NumOfInductiveEvent())
-                //{
-                //Item.SubItems.Add("0"/*GetAcsEventType.FindKeyOfInductive(struEventCfg.wInductiveEventType)*/);
-                //}
-                //else
-                //{
-                //    Item.SubItems.Add("Invalid");
-                //}
-                /*
-                Item.SubItems.Add("0");//RecordChannelNum
-
-                //ProcessbyUserType(ref struEventCfg);
-                Item.SubItems.Add("0");
-
-                //ProcessVerifyMode(ref struEventCfg);
-                Item.SubItems.Add("0");
-
-                //CsTemp = System.Text.Encoding.UTF8.GetString(struEventCfg.struAcsEventInfo.byEmployeeNo);
-                Item.SubItems.Add("0");
-
-                CsTemp = null;
-                this.listViewEvent.Items.Add(Item);
-                */
-                //this.listViewEvent.EndUpdate();
         }
 
         private void ProcessByType(ref CHCNetSDK.NET_DVR_ACS_EVENT_CFG struEventCfg)

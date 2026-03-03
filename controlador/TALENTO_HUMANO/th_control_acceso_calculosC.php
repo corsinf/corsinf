@@ -50,6 +50,7 @@ if (isset($_GET['descargar_excel_general_'])) {
     $parametros = [
         'txt_fecha_inicio' => $_GET['txt_fecha_inicio'] ?? '',
         'txt_fecha_fin' => $_GET['txt_fecha_fin'] ?? '',
+        'ddl_personas' => $_GET['ddl_personas'] ?? '',
         'ddl_departamentos' => $_GET['ddl_departamentos'] ?? '',
         '_id' => $_GET['_id'] ?? '',
 
@@ -483,6 +484,8 @@ class th_control_acceso_calculosC
     function descargar_excel_general_($nombreArchivo = 'Reporte.xlsx', $parametros = [])
     {
 
+        // print_r($parametros);die();
+
         $txt_fecha_inicio   = $parametros['txt_fecha_inicio'] ?? '';
         $txt_fecha_fin      = $parametros['txt_fecha_fin'] ?? '';
         $ddl_departamentos  = $parametros['ddl_departamentos'] ?? '';
@@ -535,15 +538,25 @@ class th_control_acceso_calculosC
         $fecha_obj = new DateTime($txt_fecha_fin);
         $mesHasta =  $fecha_obj->format('Y').''. $fecha_obj->format('m');
 
+
+
+        $hoy = date('Ym');
+
         // print_r($mesdesde.'-'.$mesHasta);die();
         $array_table = array();
         if($mesdesde==$mesHasta)
         {
-            $array_table[] =  array('tbl'=>'th_control_acceso','inicio'=>$txt_fecha_inicio,'fin'=>$txt_fecha_fin);
+            if($mesdesde==$hoy && $mesHasta==$hoy)
+            {
+                $array_table[] =  array('tbl'=>'th_control_acceso','inicio'=>$txt_fecha_inicio,'fin'=>$txt_fecha_fin);
+            }else
+            {
+                $array_table[] =  array('tbl'=>'th_control_acceso_'.$mesdesde,'inicio'=>$txt_fecha_inicio,'fin'=>$txt_fecha_fin);
+            }
         }else
         {
-            $inicio = new DateTime($txt_fecha_inicio);
-            $fin = new DateTime($txt_fecha_fin);
+            $inicio = new DateTime($fecha_ini);
+            $fin = new DateTime($fecha_final);
 
             $inicio->modify('first day of this month');
             $fin->modify('first day of next month');
@@ -565,15 +578,17 @@ class th_control_acceso_calculosC
                     $fecha_primero =  $dt->format('Y-m-d');
                     if($num_meses>1) {$fecha_ini = $fecha_primero; }
 
-                    array_push($array_table, array('tbl'=>'th_control_acceso_'.$periodo,'inicio'=>$fecha_inicio,'fin'=>$fecha_ultima));
+                    array_push($array_table, array('tbl'=>'th_control_acceso_'.$periodo,'inicio'=>$fecha_ini,'fin'=>$fecha_ultima));
                     $num_meses++;
                 }else
                 {
                     $hoy = date('Y-m');
-                    array_push($array_table, array('tbl'=>'th_control_acceso','inicio'=>$hoy.'-01','fin'=>$txt_fecha_fin));
+                    array_push($array_table, array('tbl'=>'th_control_acceso','inicio'=>$hoy.'-01','fin'=>$fecha_final));
                 }
             }
         }
+
+
 
         // print_r($array_table);die();
         $list_dato = array();
@@ -599,8 +614,8 @@ class th_control_acceso_calculosC
         }
        
 
-
-              
+        // print_r($parametros);
+        // print_r($resultado); 
         // print_r($list_dato);die();
 
 
@@ -687,14 +702,14 @@ class th_control_acceso_calculosC
                 ($dato['TotalMarcaciones'] % 2 === 0 ) ? "NO" : "SI",
                 1,
                 ($dato['Horas_trabajadas']==0) ? 'SI':'NO',
-                $this->minutos_a_horas_mm($dato['Horas_faltantes']),
+                ($dato["Horas_faltantes"]>0) ? $this->minutos_a_horas_mm($dato['Horas_faltantes']): (string)$dato['Horas_faltantes'],
                 ($res>0) ? $this->minutos_a_horas_mm($res) : '00:00',
                 ($dato['RegistroSalida'] < $dato['salida_tiempo_marcacion_valida_inicio'] && $dato['TotalMarcaciones'] % 2 === 0 ) ? 'SI': "NO",
                 $this->minutos_a_horas_mm($dato['Suplem']),
                 $this->minutos_a_horas_mm($dato['Extra']),
                 $this->minutos_a_horas_mm($dato['tiempo_descanso']),
                 ($this->minutos_a_horas_mm($dato['descanso_inicio']).'-'.$this->minutos_a_horas_mm($dato['descanso_fin'])),
-                $dato['Horas_trabajadas'],
+                $this->minutos_a_horas_mm($dato['Horas_trabajadas']),
             ];
 
             $writer->addRow(WriterEntityFactory::createRowFromArray($filas_datos));
@@ -706,6 +721,13 @@ class th_control_acceso_calculosC
 
     function traer_datos($tabla,$fecha_ini, $fecha_final,$usuario,$departamento,$orden)
     {        
+        // print_r($tabla.'-');
+        // print_r($fecha_ini.'-');
+        // print_r($fecha_final.'-');
+        // print_r($usuario.'-');
+        // print_r($departamento.'-');
+        // print_r($orden.'-');
+        // die();
        return $this->control_acceso->listar_marcaciones($tabla,$fecha_ini, $fecha_final,$usuario,$departamento,$orden);
     }
 
@@ -717,9 +739,15 @@ class th_control_acceso_calculosC
 
     function minutos_a_horas_mm($min)
     {
-        $dt = new DateTime('00:00');
-        $dt->add(new DateInterval("PT{$min}M"));
-        return $dt->format('H:i');
+        if($min!=0 && $min>0)
+        {
+            $dt = new DateTime('00:00');
+            $dt->add(new DateInterval("PT{$min}M"));
+            return $dt->format('H:i');
+        }else
+        {
+            return "00:00";
+        }
     }
 
 
