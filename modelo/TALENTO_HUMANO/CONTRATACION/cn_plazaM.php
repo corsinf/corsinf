@@ -29,7 +29,7 @@ class cn_plazaM extends BaseModel
         'id_plaza_estados',
     ];
 
-    public function listar_plaza_por_id($id)
+    public function listar_plaza_por_id($id = '', $estado = 1, $estados_plaza = '')
     {
         $id = intval($id);
         $sql =
@@ -67,8 +67,18 @@ class cn_plazaM extends BaseModel
             LEFT JOIN cn_cat_tipo_seleccion ts ON p.id_tipo_seleccion = ts.id_tipo_seleccion
             LEFT JOIN th_cat_nomina n ON p.id_nomina = n.id_nomina
             LEFT JOIN th_personas per ON p.th_per_id_responsable = per.th_per_id
-            WHERE p.cn_pla_id = $id;";
-            
+            WHERE p.cn_pla_estado = $estado";
+
+        if ($id !== 0) {
+            $sql .= " AND p.cn_pla_id = $id ";
+        }
+
+        if ($estados_plaza !== '') {
+            $sql .= " AND p.id_plaza_estados = $estados_plaza";
+        }
+
+        $sql .= " ORDER BY p.cn_pla_fecha_creacion DESC;";
+
         return $this->db->datos($sql);
     }
 

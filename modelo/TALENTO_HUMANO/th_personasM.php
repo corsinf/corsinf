@@ -41,7 +41,7 @@ class th_personasM extends BaseModel
         //'th_per_fecha_modificacion AS fecha_modificacion',
         'PERFIL',
         'PASS',
-        'th_pos_id',
+        'th_pos_id AS id_postulante',
 
         // Campos adicionales que pueden ser necesarios en el futuro
         // 'th_per_es_admin',
@@ -324,5 +324,11 @@ class th_personasM extends BaseModel
     ";
 
         return $this->db->datos($sql);
+    }
+
+    function obtener_id($id){
+        $sql = "SELECT th_pos_id AS id_postulante FROM $this->tabla WHERE th_pos_id = $id";
+        $resultado = $this->db->datos($sql);
+        return $resultado;
     }
 }

@@ -8,7 +8,7 @@ require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/CONTRATACION/cn_plaza
 $controlador = new cn_plazaC();
 
 if (isset($_GET['listar'])) {
-    echo json_encode($controlador->listar($_POST['id'] ?? ''));
+    echo json_encode($controlador->listar($_POST['id'] ?? '', $_POST['estado'] ?? 1, $_POST['estados_plaza'] ?? ''));
 }
 
 if (isset($_GET['listar_plaza_detalle_completo'])) {
@@ -47,10 +47,10 @@ class cn_plazaC
         $this->cn_plaza_historial = new cn_plaza_historialM();
     }
 
-    function listar($id = '')
+    function listar($id = '', $estado = 1, $estados_plaza = '')
     {
         if ($id == '') {
-            return $this->modelo->where('cn_pla_estado', 1)->listar();
+            return $this->modelo->listar_plaza_por_id('', $estado, $estados_plaza);
         }
         return $this->modelo->listar_plaza_por_id($id);
     }

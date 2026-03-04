@@ -420,6 +420,7 @@
                     <div class="col-md-6">
                         <label for="txt_correo" class="form-label form-label-sm">Correo Institucional </label>
                         <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" maxlength="100" oninput="texto_minusculas(this);">
+                        <span id="error_txt_correo" class="text-danger small"></span>
                     </div>
                 </div>
 

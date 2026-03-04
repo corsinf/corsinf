@@ -13,6 +13,10 @@ if (isset($_GET['listar_todo'])) {
     echo json_encode($controlador->listar_todo());
 }
 
+if (isset($_GET['listar_personas_rol'])) {
+    echo json_encode($controlador->listar_postulantes_personas_postulacion());
+}
+
 if (isset($_GET['listar_todos_postulantes'])) {
     echo json_encode($controlador->listar_todos_postulantes($_POST['id'] ?? ''));
 }
@@ -78,6 +82,29 @@ class th_postulantesC
         $lista = $this->modelo->where('th_pos_estado', 1)->where('th_pos_contratado', 0)->listar();
         return $lista;
     }
+
+    function listar_postulantes_personas_postulacion()
+    {
+        $id = $_SESSION['INICIO']['NO_CONCURENTE'] ?? '';
+        $tabla = $_SESSION['INICIO']['NO_CONCURENTE_TABLA'] ?? '';
+
+        if ($id != null || $id != '' || $id != 0) {
+            
+            if ($tabla == '_talentoh.th_personas') {
+                $datos = $this->personas->obtener_id($id);
+            } else if ($tabla == '_talentoh.th_postulantes') {
+                $datos = $this->modelo->obtener_id($id);
+            } else {
+                return -2; //Usuario no vinculado a ninguna tabla para realizar la postulacion
+            }
+
+        } else {
+            return -1;
+        }
+
+        return $datos;
+    }
+
     function listar_todos_postulantes($id)
     {
         if ($id == 1) {

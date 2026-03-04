@@ -219,4 +219,10 @@ class th_postulantesM extends BaseModel
 
         return $this->db->datos($sql);
     }
+
+    function obtener_id($id){
+        $sql = "SELECT th_pos_id AS id_postulante FROM $this->tabla WHERE th_pos_id = $id";
+        $resultado = $this->db->datos($sql);
+        return $resultado;
+    }
 }

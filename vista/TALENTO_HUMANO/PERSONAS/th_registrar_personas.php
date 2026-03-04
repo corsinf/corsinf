@@ -184,6 +184,9 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
                     //Swal.fire('', 'Operación fallida', 'warning');
                     $(txt_cedula).addClass('is-invalid');
                     $('#error_txt_cedula').text('La cédula ya está en uso.');
+                } else if (response == -3) {
+                    $(txt_correo).addClass('is-invalid');
+                    $('#error_txt_correo').text('El correo electrónico ya está en uso.');
                 }
             },
 

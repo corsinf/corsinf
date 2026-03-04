@@ -124,7 +124,7 @@ class no_concurenteM
 		return $this->db->esquema_modulo($tabla, $solotabla);
 	}
 
-	function actualizar_claves_merge_sin_tmp(array $claves)
+	function actualizar_claves_merge_sin_tmp(array $claves, $tabla, $primary_key)
 	{
 		if (empty($claves)) return false;
 
@@ -137,15 +137,15 @@ class no_concurenteM
 		}
 
 		$sql =
-			"MERGE _talentoh.th_personas AS T
+			"MERGE " . $this->db->esquema_modulo($tabla, true) . " AS T
 				USING (
 					VALUES " . implode(',', $values) . "
-				) AS S (th_per_id, PASS)
-				ON T.th_per_id = S.th_per_id
+				) AS S ($primary_key, PASS)
+				ON T.$primary_key = S.$primary_key
 				WHEN MATCHED THEN
 					UPDATE SET T.PASS = S.PASS;";
 
-		// print_r($sql);
+		// print_r($sql); exit(); die();
 		return $this->db->sql_string($sql, false, true);
 	}
 }

@@ -68,6 +68,7 @@ class th_personasC
 
             // Obtener cédula (puede venir de txt_cedula o txt_numero_cedula)
             $cedula = $parametros['txt_cedula_persona'] ?? $parametros['txt_numero_cedula'] ?? '';
+            $correo = $parametros['txt_correo'] ?? '';
 
             // Array de datos - SOLO CAMPOS QUE EXISTEN EN LA BD
             $datos = array(
@@ -86,7 +87,7 @@ class th_personasC
                 // Datos de contacto
                 array('campo' => 'th_per_telefono_1', 'dato' => trim($parametros['txt_telefono_1'] ?? '')),
                 array('campo' => 'th_per_telefono_2', 'dato' => trim($parametros['txt_telefono_2'] ?? '')),
-                array('campo' => 'th_per_correo', 'dato' => trim($parametros['txt_correo'] ?? '')),
+                array('campo' => 'th_per_correo', 'dato' => trim($correo)),
 
                 // Ubicación
                 array('campo' => 'th_per_direccion', 'dato' => trim($parametros['txt_direccion'] ?? '')),
@@ -117,33 +118,66 @@ class th_personasC
 
             // Verificar si es inserción o edición
             if (empty($parametros['_id'])) {
+
                 // === INSERCIÓN ===
-                // Verificar que no exista la cédula
-                $existe = $this->modelo
+                $existe_cedula = $this->modelo
                     ->where('th_per_cedula', trim($cedula))
                     ->where('th_per_estado', '1')
                     ->listar();
 
-                if (count($existe) == 0) {
-                    // Agregar campos solo para inserción
-                    $datos[] = array('campo' => 'th_per_fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
-
-                    // Opcional: Encriptar contraseña por defecto
-                    // $datos[] = array('campo' => 'PASS', 'dato' => $this->cod_global->enciptar_clave($cedula));
-
-                    $resultado = $this->modelo->insertar($datos);
-                    return $resultado;
-                } else {
+                if (count($existe_cedula) > 0) {
                     return -2; // Cédula duplicada
                 }
+
+                $existe_correo = $this->modelo
+                    ->where('th_per_correo', trim($correo))
+                    ->where('th_per_estado', '1')
+                    ->listar();
+
+                if (count($existe_correo) > 0) {
+                    return -3; // Correo duplicado
+                }
+
+                $datos[] = array(
+                    'campo' => 'th_per_fecha_creacion',
+                    'dato' => date('Y-m-d H:i:s')
+                );
+
+                $resultado = $this->modelo->insertar($datos);
+                return $resultado;
             } else {
+
+                // === EDICIÓN ===
+
+                // Validar cédula (excluyendo el registro actual)
+                $existe_cedula = $this->modelo
+                    ->where('th_per_cedula', trim($cedula))
+                    ->where('th_per_estado', '1')
+                    ->where('th_per_id !', $parametros['_id'])
+                    ->listar();
+
+                if (count($existe_cedula) > 0) {
+                    return -2; // Cédula ya pertenece a otro usuario
+                }
+
+                // Validar correo (excluyendo el registro actual)
+                $existe_correo = $this->modelo
+                    ->where('th_per_correo', trim($correo))
+                    ->where('th_per_estado', '1')
+                    ->where('th_per_id !', $parametros['_id'])
+                    ->listar();
+
+                if (count($existe_correo) > 0) {
+                    return -3; // Correo ya pertenece a otro usuario
+                }
 
                 $where = array(
                     array('campo' => 'th_per_id', 'dato' => $parametros['_id'])
                 );
 
                 $resultado = $this->modelo->editar($datos, $where);
-                return $resultado ? 1 : -2;
+
+                return $resultado ? 1 : 0;
             }
         } catch (Exception $e) {
             error_log("Error en insertar_editar: " . $e->getMessage());

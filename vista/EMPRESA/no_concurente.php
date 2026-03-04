@@ -220,7 +220,7 @@
 
               <div class="col-sm-3">
                 <label class="fw-bold mb-1">Perfil Asignado</label>
-                <select class="form-select form-select-sm" id="ddl_perfil" name="ddl_perfil" onchange="buscar_usuario_perfil();">
+                <select class="form-select form-select-sm" id="ddl_perfil" name="ddl_perfil">
                   <option value="">Seleccione perfil de usuario</option>
                 </select>
               </div>

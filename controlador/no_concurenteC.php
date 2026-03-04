@@ -49,6 +49,7 @@ class no_concurenteC
 		$datos = $this->modelo->tabla_no_concurente();
 		return $datos;
 	}
+
 	function add_no_concurente($parametros)
 	{
 		$existe = $this->modelo->existe_no_concurente($parametros['tabla']);
@@ -84,7 +85,7 @@ class no_concurenteC
 			}
 
 			$datosUPD = array(
-				array('campo' => 'PERFIL', 'dato' => 2)
+				array('campo' => 'PERFIL', 'dato' => 2),
 			);
 			$where = array(
 				array('campo' => '1', 'dato' => 1)
@@ -98,7 +99,6 @@ class no_concurenteC
 
 			$datos = $this->modelo->datos_no_concurentes($parametros['tabla'], false, $id_tabla_noc);
 
-
 			$resultado = 1;
 			if ($parametros['chk_pass'] == 1) {
 				$personas = $datos;
@@ -106,7 +106,7 @@ class no_concurenteC
 				$claves = [];
 
 				foreach ($personas as $p) {
-					$id = (int)$p['th_per_id'];
+					$id = (int)$p[$id_tabla_noc];
 
 					$clave = $this->cod_global->generar_clave_digitos();
 					$clave_enc = $this->cod_global->enciptar_clave($clave);
@@ -115,7 +115,7 @@ class no_concurenteC
 					$claves[$id] = $clave_enc;
 				}
 
-				$resultado = $this->modelo->actualizar_claves_merge_sin_tmp($claves);
+				$resultado = $this->modelo->actualizar_claves_merge_sin_tmp($claves, $parametros['tabla'], $id_tabla_noc);
 			}
 
 			return $resultado;
@@ -129,7 +129,8 @@ class no_concurenteC
 		$this->modelo->eliminar_no_concurente($parametros['tabla']);
 
 		$datosUPD = array(
-			array('campo' => 'PERFIL', 'dato' => '.')
+			array('campo' => 'PERFIL', 'dato' => '.'),
+			array('campo' => 'PASS', 'dato' => '.')
 		);
 		$where = array(
 			// array('campo' => '1', 'dato' => 1)

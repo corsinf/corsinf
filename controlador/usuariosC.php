@@ -604,8 +604,8 @@ class usuariosC
 				}
 			}
 
-			if (!file_exists($datos[0]['foto'])) {
-				$datos[0]['foto'] = '';
+			if (!file_exists($datosNOCon[0]['foto'])) {
+				$datosNOCon[0]['foto'] = '';
 			}
 		}
 

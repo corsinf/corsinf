@@ -24,10 +24,6 @@ if (isset($_GET['listar_persona_departamento_cargo'])) {
     echo json_encode($controlador->listar_persona_departamento_cargo($_POST['id'] ?? ''));
 }
 
-if (isset($_GET['listar_personas_rol'])) {
-    echo json_encode($controlador->listar_personas_rol());
-}
-
 if (isset($_GET['listar_postulantes'])) {
     $coincidencias = isset($_POST['coincidencias']) ? $_POST['coincidencias'] : false;
     echo json_encode($controlador->listar_postulantes($_POST['id'], $coincidencias));
@@ -54,6 +50,7 @@ if (isset($_GET['buscar'])) {
 
     echo json_encode($controlador->buscar($parametros));
 }
+
 if (isset($_GET['busca_persona_nomina'])) {
     $query = '';
 
@@ -67,7 +64,6 @@ if (isset($_GET['busca_persona_nomina'])) {
 
     echo json_encode($controlador->buscar_personas_por_departamento($parametros));
 }
-
 
 if (isset($_GET['buscar_departamento'])) {
     $query = isset($_GET['q']) ? $_GET['q'] : '';
@@ -85,6 +81,7 @@ if (isset($_GET['buscar_departamento'])) {
 if (isset($_GET['conectar_buscar'])) {
     echo json_encode($controlador->conectar_buscar($_POST['parametros']));
 }
+
 if (isset($_GET['conectar_buscar_'])) {
     echo json_encode($controlador->conectar_buscar_($_POST['parametros']));
 }
@@ -92,12 +89,15 @@ if (isset($_GET['conectar_buscar_'])) {
 if (isset($_GET['guardarImport'])) {
     echo json_encode($controlador->guardarImport($_POST['parametros']));
 }
+
 // if (isset($_GET['registros_biometria'])) {
 //     echo json_encode($controlador->registros_biometria($_POST['parametros']));
 // }
+
 if (isset($_GET['eliminarFing'])) {
     echo json_encode($controlador->eliminarFing($_POST['id']));
 }
+
 if (isset($_GET['syncronizarPersona'])) {
     echo json_encode($controlador->syncronizarPersona($_POST['parametros']));
 }
@@ -266,18 +266,6 @@ class th_personasC
         return $datos;
     }
 
-    function listar_personas_rol()
-    {
-        $id = $_SESSION['INICIO']['NO_CONCURENTE'];
-        if ($id != null) {
-            $datos = $this->modelo->where('th_per_id', $id)->listar();
-        } else {
-            return null;
-        }
-
-        return $datos;
-    }
-
     //Para usar en select2
     function buscar($parametros)
     {
@@ -294,6 +282,7 @@ class th_personasC
 
         return $lista;
     }
+
     public function buscar_personas_por_departamento($parametros)
     {
         $lista = array();
@@ -310,7 +299,7 @@ class th_personasC
 
             $dep = ($value['th_dep_nombre']) ? ' [' . $value['th_dep_nombre'] . ']' : ' [Sin Depto]';
 
-            $text = $value['th_per_cedula'] . ' - ' . $nombre_completo ;
+            $text = $value['th_per_cedula'] . ' - ' . $nombre_completo;
 
             $lista[] = array(
                 'id'   => $value['id'],
@@ -637,7 +626,6 @@ class th_personasC
         return $resp;
     }
 
-
     function generar_CardNo()
     {
         $data = $this->cod_globales->secuenciale_globales("CardNo", $_SESSION['INICIO']['ID_EMPRESA'], true);
@@ -650,7 +638,6 @@ class th_personasC
         $tarjetas = $this->card->where('th_per_id', $parametros['id'])->listar();
         return $tarjetas;
     }
-
 
     function addTarjetaBioAll($parametros)
     {
