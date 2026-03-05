@@ -1,6 +1,50 @@
-<button type="button" class="btn btn-outline-success btn-sm" onclick="nuevo_postulante()">
-    <i class="bx bx-plus"></i> Nuevo Postulante
-</button>
+<script>
+    function verificar_acciones_postulantes(plaza_estado, tipo_seleccion) {
+        // Mostrar/ocultar botón según si permite postulación
+        if (plaza_estado && plaza_estado.permite_postulacion == true) {
+            $('#btn_postulante').show();
+        } else {
+            $('#btn_postulante').hide();
+        }
+
+        // Guardar tipo de selección globalmente
+        if (tipo_seleccion) {
+            window._tipo_seleccion_descripcion = (tipo_seleccion.descripcion || '').trim().toUpperCase();
+            window._tipo_seleccion_id = tipo_seleccion.id_tipo_seleccion || 0;
+        }
+
+        var desc = window._tipo_seleccion_descripcion || '';
+
+        if (desc === 'INTERNA' || desc === 'EXTERNA') {
+            // Filtro fijo: ocultar DDL y cargar directo
+            $('#bloque_ddl_tipo_seleccion').hide();
+            id_seleccion = window._tipo_seleccion_id;
+            cargar_postulantes_modal(id_seleccion);
+        } else if (desc === 'MIXTA') {
+            // Mostrar DDL sin opción MIXTA
+            $('#bloque_ddl_tipo_seleccion').show();
+            id_seleccion = 0;
+        }
+    }
+
+    // Llamar desde otras páginas para refrescar botón
+    function actualizar_boton_postulante(permite) {
+        if (permite) {
+            $('#btn_postulante').show();
+        } else {
+            $('#btn_postulante').hide();
+        }
+    }
+</script>
+
+<div class="d-flex align-items-center justify-content-between mb-2">
+    <div></div>
+    <button id="btn_postulante" style="display: none;" type="button"
+        class="btn btn-success btn-sm" onclick="nuevo_postulante()">
+        <i class="bx bx-plus"></i> Nuevo Postulante
+    </button>
+</div>
+<input type="hidden" id="txt_tipo_seleccion_id" value="">
 
 <table class="table table-striped table-postulantes" id="tabla_plaza_postulantes" style="width:100%">
     <thead>
@@ -24,14 +68,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <div class="row mb-2">
+
+                <!-- DDL solo visible para MIXTA -->
+                <div class="row mb-3" id="bloque_ddl_tipo_seleccion" style="display:none;">
                     <div class="col-md-4">
-                        <label for="ddl_id_tipo_seleccion" class="form-label">Tipo de Selección </label>
-                        <select class="form-select form-select-sm select2-validation" id="ddl_id_tipo_seleccion" name="ddl_id_tipo_seleccion">
+                        <label for="ddl_id_tipo_seleccion" class="form-label fw-semibold small">
+                            Tipo de Selección
+                        </label>
+                        <select class="form-select form-select-sm select2-validation"
+                            id="ddl_id_tipo_seleccion" name="ddl_id_tipo_seleccion">
                             <option value="" selected hidden>-- Seleccione --</option>
                         </select>
                     </div>
                 </div>
+
                 <table class="table table-striped" id="tbl_postulantes_modal" style="width:100%">
                     <thead>
                         <tr>
@@ -68,22 +118,49 @@
 
         $('#ddl_id_tipo_seleccion').on('change', function() {
             id_seleccion = $(this).val();
-            if ($.fn.DataTable.isDataTable('#tbl_postulantes_modal')) {
-                cargar_postulantes_modal(id_seleccion);
-            }
+            cargar_postulantes_modal(id_seleccion);
         });
     });
 
+    // Carga el select2 excluyendo MIXTA
     function cargar_seleted_postulante() {
-        cargar_select2_url('ddl_id_tipo_seleccion', '../controlador/TALENTO_HUMANO/CATALOGOS/cn_cat_tipo_seleccionC.php?buscar=true', '', '#modal_agregar_postulante');
+        cargar_select2_url(
+            'ddl_id_tipo_seleccion',
+            '../controlador/TALENTO_HUMANO/CATALOGOS/cn_cat_tipo_seleccionC.php?buscar=true',
+            '', '#modal_agregar_postulante', 0, {},
+            // Filtro post-carga: eliminar opción MIXTA
+            function() {
+                $('#ddl_id_tipo_seleccion option').filter(function() {
+                    return $(this).text().trim().toUpperCase() === 'MIXTA';
+                }).remove();
+            }
+        );
     }
 
     function nuevo_postulante() {
         var modalEl = document.getElementById('modal_agregar_postulante');
         var modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        var desc = (window._tipo_seleccion_descripcion || '').trim().toUpperCase();
 
         $(modalEl).off('shown.bs.modal').on('shown.bs.modal', function() {
-            cargar_postulantes_modal(id_seleccion);
+            if (desc === 'INTERNA' || desc === 'EXTERNA') {
+                // Directo, sin DDL
+                $('#bloque_ddl_tipo_seleccion').hide();
+                cargar_postulantes_modal(window._tipo_seleccion_id || 0);
+            } else {
+                // MIXTA: mostrar DDL, esperar selección
+                $('#bloque_ddl_tipo_seleccion').show();
+                var val = $('#ddl_id_tipo_seleccion').val();
+                if (val) {
+                    cargar_postulantes_modal(val);
+                } else {
+                    // Limpiar tabla hasta que seleccione
+                    if (tabla_modal_postulantes && $.fn.DataTable.isDataTable('#tbl_postulantes_modal')) {
+                        tabla_modal_postulantes.destroy();
+                        $('#tbl_postulantes_modal tbody').empty();
+                    }
+                }
+            }
         });
 
         modal.show();
@@ -100,7 +177,7 @@
             dom: 'frtip',
             language: {
                 url: '../assets/plugins/datatable/spanish.json',
-                emptyTable: 'No hay postulantes en esta etapa.',
+                emptyTable: 'No hay postulantes en esta plaza.',
                 zeroRecords: 'No se encontraron postulantes.'
             },
             ajax: {
@@ -171,10 +248,7 @@
         });
     }
 
-    function cargar_postulantes_modal(id_seleccion) {
-
-        id_seleccion = id_seleccion;
-
+    function cargar_postulantes_modal(id_sel) {
         if (tabla_modal_postulantes && $.fn.DataTable.isDataTable('#tbl_postulantes_modal')) {
             tabla_modal_postulantes.destroy();
             $('#tbl_postulantes_modal tbody').empty();
@@ -192,7 +266,7 @@
                 url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?listar_todos_postulantes=true',
                 type: 'POST',
                 data: {
-                    id: id_seleccion
+                    id: id_sel
                 },
                 dataSrc: ''
             },
@@ -208,7 +282,12 @@
                 {
                     data: null,
                     render: function(d, t, item) {
-                        var n = ((item.th_pos_primer_apellido || '') + ' ' + (item.th_pos_segundo_apellido || '') + ' ' + (item.th_pos_primer_nombre || '') + ' ' + (item.th_pos_segundo_nombre || '')).trim();
+                        var n = [
+                            item.th_pos_primer_apellido || '',
+                            item.th_pos_segundo_apellido || '',
+                            item.th_pos_primer_nombre || '',
+                            item.th_pos_segundo_nombre || ''
+                        ].join(' ').replace(/\s+/g, ' ').trim();
                         return '<strong>' + (n || 'Sin nombre') + '</strong>';
                     }
                 },
@@ -262,11 +341,9 @@
                 Swal.fire({
                     icon: response.fallidos > 0 ? 'warning' : 'success',
                     title: 'Operación completada',
-                    html: `Agregados: <b>${response.exitosos}</b> &nbsp; Fallidos: <b>${response.fallidos}</b>`
+                    html: 'Agregados: <b>' + response.exitosos + '</b> &nbsp; Fallidos: <b>' + response.fallidos + '</b>'
                 });
                 cargar_postulantes();
-                console.log(ids);
-
             },
             error: function() {
                 Swal.fire('Error', 'Ocurrió un error al agregar los postulantes.', 'error');
@@ -274,6 +351,7 @@
         });
     }
 
+    // Select-all modal
     $(document).on('change', '#cbx_all_modal', function() {
         $('#tbl_postulantes_modal tbody .cbx-postulante-modal').prop('checked', $(this).is(':checked'));
     });

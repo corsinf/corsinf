@@ -10,6 +10,20 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
     var tabla_postulantes = null;
     var etapas_data = [];
     var etapas_completas = {};
+    var _permite_evaluacion = false;
+
+    /* ── Llamar desde la página principal al cargar datos de la plaza ── */
+    function verificar_acciones_etapas(plaza_estado) {
+        if (plaza_estado) {
+            var id_estado = parseInt(plaza_estado.id_plaza_estados) || 0;
+            _permite_evaluacion = (id_estado === 5 || id_estado === 6);
+        } else {
+            _permite_evaluacion = false;
+        }
+        if (etapa_activa_id) {
+            actualizar_visibilidad_boton_verificar();
+        }
+    }
 
     /* ── Carga tabs de etapas ── */
     function cargar_etapas_tarjetas(id_plaza) {
@@ -47,7 +61,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                             '<span class="badge ms-1" style="font-size:9px;background:#dc3545;">OBLIGATORIA</span>' :
                             '';
 
-                        // Tab lateral
                         navHtml += `
                         <button class="nav-link etapa-tab-btn ${isFirst ? 'active' : ''}"
                             data-id="${item._id}"
@@ -69,7 +82,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                             <div style="font-size:10px;color:#999;">${total} postulante${total != 1 ? 's' : ''}</div>
                         </button>`;
 
-                        // Pane correspondiente (vacío, se llena al seleccionar)
                         contentHtml += `
                         <div class="tab-pane fade ${isFirst ? 'show active' : ''}" id="etapa_pane_${item._id}" role="tabpanel">
                         </div>`;
@@ -82,16 +94,15 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                 $nav.html(navHtml);
                 $content.html(contentHtml);
 
-                // Seleccionar la primera etapa automáticamente
                 if (response && response.length > 0) {
                     var $primer = $nav.find('.etapa-tab-btn').first();
                     seleccionar_etapa($primer[0]);
                 }
 
-                // Re-seleccionar etapa activa si ya había una
                 if (etapa_activa_id) {
                     var $btn = $nav.find('.etapa-tab-btn[data-id="' + etapa_activa_id + '"]');
                     if ($btn.length) {
+                        $('#pnl_etapas_nav .etapa-tab-btn').removeClass('active');
                         $btn.addClass('active');
                     }
                 }
@@ -105,6 +116,10 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
     /* ── Al hacer clic en una etapa ── */
     function seleccionar_etapa(el) {
         var $el = $(el);
+
+        $('#pnl_etapas_nav .etapa-tab-btn').removeClass('active');
+        $el.addClass('active');
+
         var id = $el.data('id');
         var nombre = $el.data('nombre');
         var color = $el.data('color');
@@ -118,7 +133,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         $('#etapa_dot_panel').css('background-color', color);
         $('#etapa_nombre_panel').text(nombre);
 
-        // ── Mostrar/ocultar columna puntaje ──
         if (etapa_requiere_puntaje) {
             $('#col_puntaje_th').show();
             $('#lbl_col_puntaje').html('Puntaje <span class="badge bg-danger ms-1" style="font-size:9px;">REQUERIDO</span>');
@@ -141,6 +155,9 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
             tabla_postulantes.destroy();
             $('#tbl_postulantes tbody').empty();
         }
+
+        // ← Limpiar thead para evitar columnas duplicadas
+        $('#tbl_postulantes thead tr th#col_puntaje_th').hide();
 
         tabla_postulantes = $('#tbl_postulantes').DataTable({
             responsive: true,
@@ -179,8 +196,8 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                 },
                 {
                     data: 'cn_pose_puntuacion',
-                    className: 'text-center col-puntaje-td', // ← agregar clase
-                    visible: false, // ← empezar oculta, se muestra solo si requiere
+                    className: 'text-center col-puntaje-td',
+                    // ← NO usar visible:false aquí, controlamos con column().visible() después
                     render: function(d, t, item) {
                         var valor = (d !== null && d !== undefined && d !== '') ? parseFloat(d).toFixed(2) : '';
                         var bloqueado = (item.cn_pose_estado_proceso === 'APROBADO' || item.cn_pose_estado_proceso === 'REPROBADO') ? 'disabled' : '';
@@ -215,21 +232,32 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                 [1, 'asc']
             ],
             drawCallback: function() {
-                toggle_columna_puntaje();
-                actualizar_visibilidad_boton_verificar();
+                // ← Usar setTimeout para esperar que el DOM de DataTables esté listo
+                setTimeout(function() {
+                    toggle_columna_puntaje();
+                    actualizar_visibilidad_boton_verificar();
+                }, 0);
             }
         });
     }
 
     function toggle_columna_puntaje() {
-        if (tabla_postulantes && $.fn.DataTable.isDataTable('#tbl_postulantes')) {
-            // columna índice 3 = puntaje
-            tabla_postulantes.column(3).visible(etapa_requiere_puntaje ? true : false);
+        try {
+            if (tabla_postulantes && $.fn.DataTable.isDataTable('#tbl_postulantes')) {
+                var col = tabla_postulantes.column(3);
+                if (col) {
+                    col.visible(etapa_requiere_puntaje ? true : false);
+                }
+            }
+        } catch (e) {
+            // Silenciar error si la columna aún no está lista
         }
 
         if (etapa_requiere_puntaje) {
+            $('#col_puntaje_th').show();
             $('#lbl_col_puntaje').html('Puntaje <span class="badge bg-danger ms-1" style="font-size:9px;">REQUERIDO</span>');
         } else {
+            $('#col_puntaje_th').hide();
             $('#lbl_col_puntaje').text('Puntaje');
         }
     }
@@ -249,9 +277,15 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         actualizar_visibilidad_boton_verificar();
     });
 
-    /* ── Controla visibilidad del botón ── */
+    /* ── Controla visibilidad del botón verificar ── */
     function actualizar_visibilidad_boton_verificar() {
         $('#warn_etapa_anterior').remove();
+
+        // Bloqueo principal: solo estados 5 (PUBLICADA) y 6 (EN_EVALUACION)
+        if (!_permite_evaluacion) {
+            $('#btn_verificar_etapa').addClass('d-none');
+            return;
+        }
 
         var $selects = $('#tbl_postulantes tbody .sel-resultado');
         var total = $selects.length;
@@ -295,7 +329,12 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
     /* ── Verificar / Guardar evaluación ── */
     function verificar_pasos() {
         if (!etapa_activa_id) {
-            alert('Selecciona una etapa primero.');
+            Swal.fire('Atención', 'Selecciona una etapa primero.', 'warning');
+            return;
+        }
+
+        if (!_permite_evaluacion) {
+            Swal.fire('Sin permiso', 'La plaza no está habilitada para evaluación.', 'warning');
             return;
         }
 
@@ -303,8 +342,7 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         var hay_error = false;
 
         $('#tbl_postulantes tbody tr').removeClass('table-danger');
-        $('#tbl_postulantes tbody .sel-resultado').removeClass('is-invalid');
-        $('#tbl_postulantes tbody .inp-puntaje').removeClass('is-invalid');
+        $('#tbl_postulantes tbody .sel-resultado, #tbl_postulantes tbody .inp-puntaje').removeClass('is-invalid');
 
         $('#tbl_postulantes tbody tr').each(function() {
             var $fila = $(this);
@@ -312,8 +350,7 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
             var $puntaje = $fila.find('.inp-puntaje');
 
             var cn_post_id = $select.data('id');
-            if (!cn_post_id) return;
-            if ($select.prop('disabled')) return;
+            if (!cn_post_id || $select.prop('disabled')) return;
 
             var resultado = $select.val();
             var puntaje = parseFloat($puntaje.val());
@@ -324,49 +361,55 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                 fila_error = true;
             }
 
-            if (etapa_requiere_puntaje) {
-                if ($puntaje.val() === '' || isNaN(puntaje)) {
-                    $puntaje.addClass('is-invalid');
-                    fila_error = true;
-                }
+            if (etapa_requiere_puntaje && ($puntaje.val() === '' || isNaN(puntaje))) {
+                $puntaje.addClass('is-invalid');
+                fila_error = true;
             }
 
             if (fila_error) {
                 $fila.addClass('table-danger');
                 hay_error = true;
-                return;
+            } else {
+                evaluaciones.push({
+                    cn_post_id: parseInt(cn_post_id),
+                    resultado: resultado,
+                    puntaje: etapa_requiere_puntaje ? puntaje : ($puntaje.val() !== '' && !isNaN(puntaje) ? puntaje : 0),
+                    observacion: resultado === 'APROBADO' ?
+                        'Cumple con los criterios de evaluación.' : 'No alcanza el puntaje mínimo requerido.'
+                });
             }
-
-            var observacion = resultado === 'APROBADO' ?
-                'Cumple con los criterios de evaluación.' :
-                'No alcanza el puntaje mínimo requerido.';
-
-            evaluaciones.push({
-                cn_post_id: parseInt(cn_post_id),
-                resultado: resultado,
-                puntaje: etapa_requiere_puntaje ? puntaje : ($puntaje.val() !== '' && !isNaN(puntaje) ? puntaje : 0),
-                observacion: observacion
-            });
         });
 
         if (hay_error) {
-            var $alerta = $('<div class="alert alert-danger alert-dismissible fade show mt-2 py-2" role="alert">' +
-                '<i class="bx bx-error-circle me-1"></i> Completa los campos marcados en rojo antes de guardar.' +
-                '<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
-            $('#pnl_postulantes .card-body').prepend($alerta);
-            setTimeout(function() {
-                $alerta.alert('close');
-            }, 4000);
+            Swal.fire({
+                title: 'Campos incompletos',
+                text: 'Completa los campos marcados en rojo antes de continuar.',
+                icon: 'error',
+                confirmButtonColor: '#dc3545'
+            });
             return;
         }
 
         if (evaluaciones.length === 0) {
-            alert('No hay postulantes para evaluar en esta etapa.');
+            Swal.fire('Sin datos', 'No hay postulantes pendientes de evaluación en esta etapa.', 'info');
             return;
         }
 
-        if (!confirm('¿Guardar evaluaciones de la Etapa ' + etapa_activa_orden + '? (' + evaluaciones.length + ' postulante(s))')) return;
+        Swal.fire({
+            title: '¿Guardar evaluaciones?',
+            text: 'Vas a registrar la Etapa ' + etapa_activa_orden + ' para ' + evaluaciones.length + ' postulante(s).',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#198754',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, guardar',
+            cancelButtonText: 'Cancelar'
+        }).then(function(result) {
+            if (result.isConfirmed) ejecutar_guardado_etapa(evaluaciones);
+        });
+    }
 
+    function ejecutar_guardado_etapa(evaluaciones) {
         var $btn = $('#btn_verificar_etapa');
         $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span> Guardando...');
 
@@ -379,25 +422,53 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
             },
             success: function(response) {
                 $btn.prop('disabled', false).text('Verificar Etapa ' + etapa_activa_orden);
+
                 if (response && !response.error) {
-                    var $ok = $('<div class="alert alert-success alert-dismissible fade show mt-2 py-2" role="alert">' +
-                        '<i class="bx bx-check-circle me-1"></i> Evaluaciones guardadas correctamente.' +
-                        '<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
-                    $('#pnl_postulantes .card-body').prepend($ok);
-                    setTimeout(function() {
-                        $ok.alert('close');
-                    }, 3500);
+                    Swal.fire({
+                        title: '¡Logrado!',
+                        text: 'Las evaluaciones se han guardado correctamente.',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+
                     <?php if (!empty($_id_plaza)) { ?>
                         cargar_etapas_tarjetas(<?= (int)$_id_plaza ?>);
                     <?php } ?>
+
+                    var id_plaza_estado = parseInt($('#txt_id_plaza_estados').val()) || 0;
+                    if (id_plaza_estado == 5) Evaluar_plaza();
+
                     cargar_postulantes_etapas();
                 } else {
-                    alert('Error al guardar: ' + (response.error || 'Intenta nuevamente.'));
+                    Swal.fire('Error', response.error || 'No se pudieron guardar los cambios.', 'error');
                 }
             },
             error: function() {
                 $btn.prop('disabled', false).text('Verificar Etapa ' + etapa_activa_orden);
-                alert('Error de conexión al guardar las evaluaciones.');
+                Swal.fire('Error de red', 'No se pudo conectar con el servidor.', 'error');
+            }
+        });
+    }
+
+    function Evaluar_plaza() {
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/cn_plazaC.php?cambiar_estado_plaza=true',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                parametros: {
+                    '_id': '<?= $_id_plaza ?>',
+                    'id_plaza_estados': 6,
+                    'accion': 'Evaluación de la plaza'
+                }
+            },
+            success: function() {
+                cargar_plaza_historial('<?= $_id_plaza ?>');
+                actualizar_boton_postulante(false);
+            },
+            error: function(xhr) {
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
         });
     }
@@ -483,8 +554,15 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
     }
 
     @keyframes fadeDown {
-        from { opacity: 0; transform: translateY(-8px); }
-        to   { opacity: 1; transform: translateY(0); }
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .postulantes-header {
@@ -502,7 +580,7 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         display: inline-block;
         flex-shrink: 0;
         margin-right: 7px;
-        box-shadow: 0 0 0 2px rgba(0,0,0,.1);
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, .1);
     }
 
     .table-postulantes th {
@@ -518,32 +596,32 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         vertical-align: middle;
     }
 
-    .inp-puntaje.is-invalid  { border-color: #dc3545 !important; }
-    .sel-resultado.is-invalid { border-color: #dc3545 !important; }
+    .inp-puntaje.is-invalid {
+        border-color: #dc3545 !important;
+    }
+
+    .sel-resultado.is-invalid {
+        border-color: #dc3545 !important;
+    }
 </style>
+
 <!-- LAYOUT PRINCIPAL -->
 <div class="row g-0 shadow-sm border rounded-3 mb-4">
 
-    <!-- Columna izquierda: tabs verticales con scroll -->
     <div class="col-md-3 bg-light rounded-start etapas-col-izq">
-
         <div class="etapas-col-header">
             <strong class="text-muted" style="font-size:12px;text-transform:uppercase;letter-spacing:.5px;">
                 <i class="bx bx-list-ol me-1"></i> Etapas del Proceso
             </strong>
         </div>
-
         <div id="pnl_etapas_nav_scroll">
             <div class="nav flex-column nav-pills" id="pnl_etapas_nav" role="tablist">
                 <!-- se llena dinámicamente -->
             </div>
         </div>
-
     </div>
 
-    <!-- Columna derecha -->
     <div class="col-md-9 bg-white rounded-end">
-
         <div class="tab-content" id="pnl_etapas_content"></div>
 
         <div id="pnl_postulantes">
@@ -590,6 +668,5 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                 </div>
             </div>
         </div>
-
     </div>
 </div>

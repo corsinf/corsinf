@@ -55,6 +55,13 @@ $color_default = '#d4edda';
         verificarEtapasExistentes();
     });
 
+    /* ── Notifica al wizard (plaza_wizard.php) si hay o no etapas ── */
+    function notificar_estado_etapas(hay_etapas) {
+        if (typeof validar_etapas_para_guardar === 'function') {
+            validar_etapas_para_guardar(hay_etapas);
+        }
+    }
+
     function verificarEtapasExistentes() {
         $.ajax({
             url: '../controlador/TALENTO_HUMANO/CONTRATACION/cn_plaza_etapasC.php?listar=true',
@@ -64,7 +71,9 @@ $color_default = '#d4edda';
                 id_plaza: <?= $_id_plaza ?>
             },
             success: function(response) {
-                if (response && response.length > 0) {
+                var hay_etapas = response && response.length > 0;
+                notificar_estado_etapas(hay_etapas); // ← PUNTO 1: al cargar
+                if (hay_etapas) {
                     inicializarEditor();
                     cargarEtapasPlaza('<?= $_id_plaza ?>');
                 } else {
@@ -86,7 +95,7 @@ $color_default = '#d4edda';
             placeholder: "sortable-placeholder",
             cursor: "move",
             revert: 150,
-            cancel: ".item-bloqueado, .fijo-inicio", // ← estos nunca serán arrastrables
+            cancel: ".item-bloqueado, .fijo-inicio",
 
             change: function(event, ui) {
                 let placeholder = ui.placeholder;
@@ -142,7 +151,6 @@ $color_default = '#d4edda';
                 actualizarNumerosOrden();
                 guardarEtapasPlaza();
             }
-
         }).disableSelection();
 
         $(document).on('change', '#pnl_lista_destino .chk-obligatoria', function() {
@@ -180,14 +188,9 @@ $color_default = '#d4edda';
             let idsAsignados = asignadas.map(e => String(e.id_etapa));
 
             let itemsDestino = asignadas.map((item, i) => buildItemDestino(
-                item.id_etapa,
-                item._id,
-                item.etapa_nombre || 'Sin nombre',
-                item.etapa_es_fin_fijo || 0,
-                item.etapa_es_inicio_fijo || 0,
-                item.cn_plaet_obligatoria || 0,
-                getColor(item),
-                i,
+                item.id_etapa, item._id, item.etapa_nombre || 'Sin nombre',
+                item.etapa_es_fin_fijo || 0, item.etapa_es_inicio_fijo || 0,
+                item.cn_plaet_obligatoria || 0, getColor(item), i,
                 item.etapa_obligatoria_default || 0
             )).join('');
 
@@ -259,6 +262,7 @@ $color_default = '#d4edda';
                 if (response == 1) {
                     inicializarEditor();
                     cargarEtapasPlaza('<?= $_id_plaza ?>');
+                    notificar_estado_etapas(true); // ← PUNTO 2: al cargar por defecto
                 } else {
                     $btn.prop('disabled', false).html('<i class="bx bx-download me-1"></i> Cargar etapas por defecto');
                     Swal.fire('Error', 'No se pudieron generar las etapas.', 'error');
@@ -375,6 +379,7 @@ $color_default = '#d4edda';
         let listaOrigen = getListaOrigen();
         if (listaDestino.length === 0 && listaOrigen.length === 0) return;
         mostrarIndicador('guardando');
+
         $.ajax({
             url: '../controlador/TALENTO_HUMANO/CONTRATACION/cn_plaza_etapasC.php?guardar_bulk=true',
             type: 'POST',
@@ -388,6 +393,7 @@ $color_default = '#d4edda';
                 if (response == 1) {
                     mostrarIndicador('ok');
                     cargarEtapasPlaza(<?= $_id_plaza ?>);
+                    notificar_estado_etapas(listaDestino.length > 0); // ← PUNTO 3: al guardar
                 } else {
                     Swal.fire('', 'Ocurrió un error al guardar.', 'warning');
                 }
@@ -415,11 +421,6 @@ $color_default = '#d4edda';
             <h6 class="mb-0 text-secondary fw-bold">
                 <i class="bx bx-list-ul me-1"></i> Etapas disponibles
             </h6>
-            <!--
-            <button class="btn btn-outline-danger btn-sm" type="button" onclick="borrarTodasEtapas()">
-                <i class="bx bx-trash me-1"></i> Borrar todas
-            </button>
--->
         </div>
         <ul id="pnl_lista_origen" class="list-group lista-etapas pnl_etapas_sort"></ul>
     </div>

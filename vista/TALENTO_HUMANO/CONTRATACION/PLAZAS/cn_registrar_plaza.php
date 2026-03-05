@@ -1,17 +1,13 @@
 <?php
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
-//No eliminar
-$_id = ''; // Este es el id que se usa para cargo 
-
+$_id = '';
 $_id_plaza = '';
 if (isset($_GET['_id_plaza'])) {
     $_id_plaza = $_GET['_id_plaza'];
 }
 
-
 $es_plaza = true;
-
 ?>
 
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
@@ -19,110 +15,145 @@ $es_plaza = true;
 
 <script>
     $(document).ready(function() {
-
         smartwizard_cargar_plaza();
-
     });
 
-    //Para que redimencione el contenedor del smart wizard al cargar los datos de la plaza y los requisitos del cargo
     $(window).on('load', function() {
-
         $(document).ajaxStop(function() {
             ajustarAlturaContenedor();
         });
-
     });
 
-    // ─── Wizard: navegación entre pasos ────────────────────────────────────────
+    // ─── Wizard ────────────────────────────────────────────────────────────────
     function smartwizard_cargar_plaza() {
 
         var btnSiguiente = $('<button></button>')
             .text('Siguiente')
             .addClass('btn btn-info')
+            .attr('id', 'btn_siguiente_plaza')
             .on('click', function() {
-
                 var wizard = $('#smartwizard_plaza');
                 var pasoActual = wizard.smartWizard("getStepIndex");
-
                 var form = obtener_formulario_paso(pasoActual);
                 var valido = true;
 
-                // Validar solo si el paso tiene formulario
                 if (form !== null) {
-
-                    var inputs = form.find(':input');
-
-                    inputs.each(function() {
-                        if (!form.validate().element(this)) {
-                            valido = false;
-                        }
+                    form.find(':input').each(function() {
+                        if (!form.validate().element(this)) valido = false;
                     });
-
                     if (!valido) return;
                 }
 
-                // Lógica específica por paso
                 if (pasoActual === 0) {
-
                     if (!validarFechas() || !validarSalarios()) return;
-
                     insertar_plaza();
                     wizard.smartWizard("next");
                     return;
                 }
 
-                if (pasoActual === 1) {
-                    // guardar_requisitos();
-                    wizard.smartWizard("next");
-                    return;
-                }
-               
-
                 wizard.smartWizard("next");
             });
 
-        var btnAtras = $('<button></button>').text('Atras').addClass('btn btn-info').on('click', function() {
-            $('#smartwizard_plaza').smartWizard("prev");
-            return true;
-        });
+        var btnAtras = $('<button></button>')
+            .text('Atrás')
+            .addClass('btn btn-info')
+            .attr('id', 'btn_atras_plaza')
+            .on('click', function() {
+                $('#smartwizard_plaza').smartWizard("prev");
+            });
 
+        var btnGuardar = $('<button></button>')
+            .text('Guardar')
+            .addClass('btn btn-secondary d-none') // ← inicia deshabilitado visualmente
+            .attr('id', 'btn_guardar_plaza')
+            .prop('disabled', true) // ← inicia deshabilitado
+            .on('click', function() {
+                guardar_paso3();
+            });
+
+        // ── Mostrar/ocultar botones según el paso ──
         $("#smartwizard_plaza").on("showStep", function(e, anchorObject, stepNumber, stepDirection, stepPosition) {
+
             $("#prev-btn").removeClass('disabled');
             $("#next-btn").removeClass('disabled');
+
             if (stepPosition === 'first') {
                 $("#prev-btn").addClass('disabled');
-            } else if (stepPosition === 'last') {
+            }
+
+            if (stepPosition === 'last') {
+                $('#btn_siguiente_plaza').addClass('d-none');
+                $('#btn_guardar_plaza').removeClass('d-none');
                 $("#next-btn").addClass('disabled');
+
+                // ← Verificar etapas cada vez que llega al paso 3
+                verificar_etapas_al_llegar();
             } else {
-                $("#prev-btn").removeClass('disabled');
-                $("#next-btn").removeClass('disabled');
+                $('#btn_siguiente_plaza').removeClass('d-none');
+                $('#btn_guardar_plaza').addClass('d-none');
             }
         });
 
-        // Smart Wizard
         $('#smartwizard_plaza').smartWizard({
             selected: 0,
             theme: 'arrows',
             transition: {
-                animation: 'slide-horizontal', // Effect on navigation, none/fade/slide-horizontal/slide-vertical/slide-swing
+                animation: 'slide-horizontal',
             },
             toolbarSettings: {
                 toolbarPosition: '',
-                toolbarExtraButtons: [btnAtras, btnSiguiente],
-                showNextButton: false, // Oculta el botón predeterminado "Next"
+                toolbarExtraButtons: [btnAtras, btnSiguiente, btnGuardar],
+                showNextButton: false,
                 showPreviousButton: false,
             },
         });
     }
 
+    // ─── Verifica etapas al llegar al paso 3 ───────────────────────────────────
+    function verificar_etapas_al_llegar() {
+        var _id_plaza = '<?= $_id_plaza ?>';
+        if (!_id_plaza) {
+            validar_etapas_para_guardar(false);
+            return;
+        }
+
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/CONTRATACION/cn_plaza_etapasC.php?listar=true',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id_plaza: _id_plaza
+            },
+            success: function(response) {
+                validar_etapas_para_guardar(response && response.length > 0);
+            },
+            error: function() {
+                validar_etapas_para_guardar(false);
+            }
+        });
+    }
+
+    // ─── Habilitar / deshabilitar botón Guardar ────────────────────────────────
+    // Esta función también es llamada desde plaza_paso3.php (notificar_estado_etapas)
+    function validar_etapas_para_guardar(hay_etapas) {
+        if (hay_etapas) {
+            $('#btn_guardar_plaza')
+                .prop('disabled', false)
+                .removeClass('btn-secondary')
+                .addClass('btn-success');
+        } else {
+            $('#btn_guardar_plaza')
+                .prop('disabled', true)
+                .removeClass('btn-success')
+                .addClass('btn-secondary');
+        }
+    }
+
+    // ─── Helpers ───────────────────────────────────────────────────────────────
     function obtener_formulario_paso(pasoActual) {
         switch (pasoActual) {
             case 0:
                 return $('#form_plaza');
-            case 1:
-                return null;
-            case 3:
-                return null;
             default:
                 return null;
         }
@@ -131,8 +162,66 @@ $es_plaza = true;
     function ajustarAlturaContenedor() {
         $('#tab_content_smart').css('height', 'auto');
     }
-</script>
 
+    // ─── Guardar paso 3 ────────────────────────────────────────────────────────
+    function guardar_paso3() {
+        var _id_plaza = '<?= $_id_plaza ?>';
+
+        if (!_id_plaza) {
+            Swal.fire('', 'Primero debes completar el Paso 1 para registrar la plaza.', 'warning');
+            return;
+        }
+
+        Swal.fire({
+            title: '¿Guardar plaza?',
+            text: '¿Deseas finalizar y guardar el proceso de la plaza?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#198754',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, guardar',
+            cancelButtonText: 'Cancelar'
+        }).then(function(result) {
+            if (!result.isConfirmed) return;
+
+            $.ajax({
+                url: '../controlador/TALENTO_HUMANO/CONTRATACION/cn_plazaC.php?cambiar_estado_plaza=true',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    parametros: {
+                        '_id': _id_plaza,
+                        'id_plaza_estados': 1,
+                        'accion': 'Insertar Borrador',
+                    }
+                },
+                success: function(response) {
+                    Swal.fire({
+                        title: 'Plaza Guardada',
+                        html: `
+                            <div class="text-start small">
+                                <p>La plaza se ha guardado correctamente, pero <b>todavía se encuentra en estado de Borrador</b>.</p>
+                                <p>Para que la plaza sea publicada, debe pasar a la siguiente etapa de revisión donde será:</p>
+                                <ul>
+                                    <li><span class="badge bg-success">Aprobada</span></li>
+                                    <li><span class="badge bg-danger">Rechazada</span></li>
+                                    <li><span class="badge bg-warning text-dark">Pendiente</span></li>
+                                </ul>
+                            </div>
+                        `,
+                        icon: 'info',
+                        confirmButtonText: 'Entendido'
+                    }).then(function() {
+                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=cn_plazas';
+                    });
+                },
+                error: function(xhr) {
+                    Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+                }
+            });
+        });
+    }
+</script>
 
 <div class="page-wrapper">
     <div class="page-content">
@@ -155,22 +244,16 @@ $es_plaza = true;
                     <div class="card-body p-5">
 
                         <div class="card-title d-flex align-items-center">
-
-                            <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
-                            </div>
+                            <div><i class="bx bxs-user me-1 font-22 text-primary"></i></div>
                             <h5 class="mb-0 text-primary">
-                                <?php
-                                if ($_id_plaza == '') {
-                                    echo 'Registrar Plaza';
-                                } else {
-                                    echo 'Modificar Plaza';
-                                }
-                                ?>
+                                <?php echo $_id_plaza == '' ? 'Registrar Plaza' : 'Modificar Plaza'; ?>
                             </h5>
-
                             <div class="row m-2">
                                 <div class="col-sm-12">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=cn_plazas" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=cn_plazas"
+                                        class="btn btn-outline-dark btn-sm">
+                                        <i class="bx bx-arrow-back"></i> Regresar
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -180,36 +263,32 @@ $es_plaza = true;
                         <div id="smartwizard_plaza">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#step-1"> <strong>Paso 1</strong>
-                                        <br>Plaza</a>
+                                    <a class="nav-link" href="#step-1">
+                                        <strong>Paso 1</strong><br>Plaza
+                                    </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#step-2"> <strong>Paso 2</strong>
-                                        <br>Requisitos</a>
+                                    <a class="nav-link" href="#step-2">
+                                        <strong>Paso 2</strong><br>Requisitos
+                                    </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#step-3"> <strong>Paso 3</strong>
-                                        <br>Etapas del Proceso</a>
+                                    <a class="nav-link" href="#step-3">
+                                        <strong>Paso 3</strong><br>Etapas del Proceso
+                                    </a>
                                 </li>
-                              
                             </ul>
+
                             <div class="tab-content" id="tab_content_smart">
                                 <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1" data-step="0">
-
                                     <?php include_once('../vista/TALENTO_HUMANO/CONTRATACION/PLAZAS/WIZART_REGISTRAR_PLAZA/plaza_paso1.php'); ?>
-
                                 </div>
                                 <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2" data-step="2">
-
                                     <?php include_once('../vista/TALENTO_HUMANO/CARGOS/seccion_aspectos_extrinsecos.php'); ?>
-
                                 </div>
                                 <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3" data-step="3">
-
                                     <?php include_once('../vista/TALENTO_HUMANO/CONTRATACION/PLAZAS/WIZART_REGISTRAR_PLAZA/plaza_paso3.php'); ?>
-
                                 </div>
-                               
                             </div>
                         </div>
 
@@ -221,16 +300,13 @@ $es_plaza = true;
     </div>
 </div>
 
-<!-- Para los navs del menu -->
 <link rel="stylesheet" href="../assets/css/css-navs-menus.css">
 
 <style>
-    /* Hace que la fila brille un poco al pasar el mouse */
     .table-hover tbody tr:hover {
         background-color: #fbfbfb !important;
     }
 
-    /* Quita el borde superior de la primera fila para que encaje en el rounded */
     .table tbody tr:first-child td {
         border-top: 0;
     }

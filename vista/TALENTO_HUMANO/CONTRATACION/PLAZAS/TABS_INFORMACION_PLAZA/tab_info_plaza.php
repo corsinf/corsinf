@@ -28,6 +28,12 @@
                 $('#txt_vacantes').text(p.cn_pla_num_vacantes);
                 $('#txt_nomina').text(p.descripcion_nomina);
                 $('#txt_tipo_seleccion').text(p.tipo_seleccion.descripcion);
+                $('#txt_tipo_seleccion_id').val(p.tipo_seleccion.id_tipo_seleccion);
+                $('#txt_id_plaza_estados').val(p.id_plaza_estados);
+
+                verificar_borrador_plaza();
+                verificar_acciones_etapas(p.plaza_estado);
+                verificar_acciones_postulantes(p.plaza_estado, p.tipo_seleccion);
 
                 $('#txt_fecha_inicio').text(new Date(p.cn_pla_fecha_publicacion).toLocaleDateString());
                 $('#txt_fecha_cierre').text(new Date(p.cn_pla_fecha_cierre).toLocaleDateString());
@@ -208,6 +214,7 @@
 <div id="contenedor_detalle_completo" class="job-detail-container">
     <header class="glass-card header-main mb-4">
         <div class="row align-items-center g-4">
+            <input type="hidden" id="txt_id_plaza_estados" value="" />
             <div class="col-lg-7">
                 <div class="d-flex align-items-center gap-2 mb-3">
                     <span class="badge-custom badge-purple" id="txt_tipo_seleccion"></span>

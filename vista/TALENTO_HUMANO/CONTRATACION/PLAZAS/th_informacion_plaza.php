@@ -49,6 +49,11 @@ if (isset($_GET['_id_plaza'])) {
                             <i class='bx bx-group me-1'></i> Postulantes
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#tab_estado_plaza">
+                            <i class='bx bx-group me-1'></i> Estado de la plaza
+                        </a>
+                    </li>
                 </ul>
 
                 <div class="tab-content py-3">
@@ -62,6 +67,10 @@ if (isset($_GET['_id_plaza'])) {
 
                     <div class="tab-pane fade" id="tab_pla_postulantes" role="tabpanel">
                         <?php include_once('../vista/TALENTO_HUMANO/CONTRATACION/PLAZAS/TABS_INFORMACION_PLAZA/tab_postulantes.php'); ?>
+                    </div>
+
+                    <div class="tab-pane fade" id="tab_estado_plaza" role="tabpanel">
+                        <?php include_once('../vista/TALENTO_HUMANO/CONTRATACION/PLAZAS/TABS_INFORMACION_PLAZA/tab_estado_proceso.php'); ?>
                     </div>
                 </div>
             </div>

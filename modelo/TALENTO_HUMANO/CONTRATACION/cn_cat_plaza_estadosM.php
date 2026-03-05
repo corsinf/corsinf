@@ -15,6 +15,7 @@ class cn_cat_plaza_estadosM extends BaseModel
         'permite_evaluacion',
         'visible_postulantes',
         'estado',
-        'fecha_creacion',
+        'is_delete',
+        'modificado_usuario',
     ];
 }

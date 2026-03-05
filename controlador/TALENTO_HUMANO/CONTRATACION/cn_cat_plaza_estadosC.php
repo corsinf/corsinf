@@ -15,6 +15,19 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['_id']));
 }
 
+
+if (isset($_GET['buscar_plaza_estados'])) {
+
+    $parametros = array(
+        'query'    => isset($_GET['q']) ? $_GET['q'] : '',
+        'orden'   => isset($_GET['orden']) ? $_GET['orden'] : 0
+    );
+
+    $datos = $controlador->buscar_plaza_estados($parametros);
+    echo json_encode($datos);
+    exit;
+}
+
 class cn_cat_plaza_estadosC
 {
     private $modelo;
@@ -53,8 +66,31 @@ class cn_cat_plaza_estadosC
 
     function eliminar($id)
     {
-        $datos = [['campo' => 'estado', 'dato' => 0]];
-        $where = [['campo' => 'id_plaza_estados', 'dato' => $id]];
+
+        $datos = [
+            ['campo' => 'is_delete', 'dato' => 1],
+            ['campo' => 'modificado_usuario', 'dato' => $_SESSION['INICIO']['ID_USUARIO']],
+        ];
+        $where = [['campo' => 'id_plaza_estados',     'dato' => $id]];
         return $this->modelo->editar($datos, $where);
+    }
+
+
+    public function buscar_plaza_estados($parametros)
+    {
+        $lista = [];
+
+        $concat = "codigo, descripcion";
+
+        $orden = isset($parametros['orden']) ? (int)$parametros['orden'] : 0;
+
+        $datos = $this->modelo->where('estado', 1)->where('orden', $orden)->like($concat, $parametros['query']);
+
+        foreach ($datos as $key => $value) {
+            $text = $value['descripcion'];
+            $lista[] = array('id' => ($value['id_plaza_estados']), 'text' => ($text), /* 'data' => $value */);
+        }
+
+        return $lista;
     }
 }

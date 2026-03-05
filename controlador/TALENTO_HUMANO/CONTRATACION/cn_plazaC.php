@@ -116,17 +116,30 @@ class cn_plazaC
     function cambiar_estado_plaza($parametros)
     {
 
+
+        $datos = [
+            ['campo' => 'id_plaza_estados', 'dato' => $parametros['id_plaza_estados']]
+        ];
+
+        $where = [
+            ['campo' => 'cn_pla_id', 'dato' => $parametros['_id']]
+        ];
         $datos_plaza_his = [
             ['campo' => 'cn_pla_id',        'dato' => $parametros['_id']],
-            ['campo' => 'id_plaza_estados', 'dato' =>  $parametros['id_plaza_estados']],
+            ['campo' => 'id_plaza_estados', 'dato' => $parametros['id_plaza_estados']],
             ['campo' => 'id_usuario',       'dato' => $_SESSION['INICIO']['ID_USUARIO']],
             ['campo' => 'accion',           'dato' => $parametros['accion']],
         ];
 
-        $datos = [['campo' => 'id_plaza_estados', 'dato' => $parametros['id_plaza_estados']]];
-        $where = [['campo' => 'cn_pla_id',     'dato' => $parametros['_id']]];
+        if ($parametros['id_plaza_estados'] == 5) {
+
+            $datos[] = ['campo' => 'cn_pla_fecha_publicacion', 'dato' => $parametros['fecha_publicacion'] ?? null];
+            $datos[] = ['campo' => 'cn_pla_fecha_cierre',      'dato' => $parametros['fecha_cierre']      ?? null];
+        }
 
         $this->cn_plaza_historial->insertar_id($datos_plaza_his);
+
+
 
         return $this->modelo->editar($datos, $where);
     }
