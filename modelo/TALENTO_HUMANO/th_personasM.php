@@ -327,7 +327,7 @@ class th_personasM extends BaseModel
     }
 
     function obtener_id($id){
-        $sql = "SELECT th_pos_id AS id_postulante FROM $this->tabla WHERE th_pos_id = $id";
+        $sql = "SELECT th_pos_id AS id_postulante FROM $this->tabla WHERE th_per_id = $id";
         $resultado = $this->db->datos($sql);
         return $resultado;
     }
