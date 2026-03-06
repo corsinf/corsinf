@@ -197,20 +197,34 @@ $es_plaza = true;
                 },
                 success: function(response) {
                     Swal.fire({
-                        title: 'Plaza Guardada',
+                        title: '<span class="text-dark fw-bold">¡Proceso Finalizado!</span>',
                         html: `
-                            <div class="text-start small">
-                                <p>La plaza se ha guardado correctamente, pero <b>todavía se encuentra en estado de Borrador</b>.</p>
-                                <p>Para que la plaza sea publicada, debe pasar a la siguiente etapa de revisión donde será:</p>
-                                <ul>
-                                    <li><span class="badge bg-success">Aprobada</span></li>
-                                    <li><span class="badge bg-danger">Rechazada</span></li>
-                                    <li><span class="badge bg-warning text-dark">Pendiente</span></li>
-                                </ul>
-                            </div>
-                        `,
-                        icon: 'info',
-                        confirmButtonText: 'Entendido'
+        <div class="mt-3">
+            <p class="mb-4 text-muted" style="font-size: 1.05rem;">
+                La plaza se guardó con éxito y ahora se encuentra en <b>Borrador</b>.
+            </p>
+            
+            <div class="p-3 rounded-3 mb-2" style="background-color: #f8f9fa; border: 1px solid #e9ecef;">
+                <p class="small fw-bold text-uppercase text-secondary mb-2" style="letter-spacing: 0.5px;">Siguiente Paso:</p>
+                <div class="d-flex justify-content-center gap-2">
+                    <span class="badge rounded-pill bg-success px-3 py-2">Aprobación</span>
+                    <span class="badge rounded-pill bg-danger px-3 py-2">Rechazo</span>
+                    <span class="badge rounded-pill bg-warning text-dark px-3 py-2">Pendiente</span>
+                </div>
+            </div>
+            
+            <p class="small text-muted mt-3">
+                <i class="bx bx-info-circle me-1"></i> 
+                Debe ser revisada antes de su publicación definitiva.
+            </p>
+        </div>
+    `,
+                        icon: 'success', // Cambiado a success porque la acción fue exitosa
+                        confirmButtonText: 'Entendido, ir a mis plazas',
+                        confirmButtonColor: '#198754',
+                        showClass: {
+                            popup: 'animate__animated animate__fadeInUp'
+                        }
                     }).then(function() {
                         location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=cn_plazas';
                     });

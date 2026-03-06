@@ -9,12 +9,11 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
     var etapa_requiere_puntaje = 0;
     var tabla_postulantes = null;
     var etapas_data = [];
-    var etapas_completas = {}; // ← se rellena desde el servidor al cargar
+    var etapas_completas = {};
     var _permite_evaluacion = false;
     var _plaza_evaluada = false;
-    var etapa_siguiente_id = null; // ← id de la siguiente etapa tras guardar
+    var etapa_siguiente_id = null;
 
-    /* ── Estado plaza ── */
     function verificar_acciones_etapas(plaza_estado) {
         if (plaza_estado) {
             var id_estado = parseInt(plaza_estado.id_plaza_estados) || 0;
@@ -25,7 +24,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         if (etapa_activa_id) actualizar_visibilidad_boton_verificar();
     }
 
-    /* ── Pública: mostrar/ocultar botón verificar desde otras hojas ── */
     function mostrar_boton_verificar(permite) {
         if (!permite) {
             $('#btn_verificar_etapa').addClass('d-none');
@@ -34,13 +32,11 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         actualizar_visibilidad_boton_verificar();
     }
 
-    /* ── Carga tabs de etapas ── */
     function cargar_etapas_tarjetas(id_plaza) {
         var $nav = $('#pnl_etapas_nav');
         var $content = $('#pnl_etapas_content');
 
-        $nav.html('<span class="text-muted fst-italic p-3" style="font-size:13px;">' +
-            '<span class="spinner-border spinner-border-sm me-1"></span> Cargando...</span>');
+        $nav.html('<span class="text-muted fst-italic p-3" style="font-size:13px;"><span class="spinner-border spinner-border-sm me-1"></span> Cargando...</span>');
         $content.html('');
 
         $.ajax({
@@ -55,7 +51,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                 var navHtml = '';
                 var contentHtml = '';
 
-                // ← Reconstruir etapas_completas desde datos del servidor
                 etapas_completas = {};
                 if (response && response.length > 0) {
                     response.forEach(function(item) {
@@ -107,21 +102,18 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                             <div style="font-size:10px;color:#999;">${total} postulante${total != 1 ? 's' : ''}</div>
                         </button>`;
 
-                        contentHtml += `
-                        <div class="tab-pane fade ${isFirst ? 'show active' : ''}" id="etapa_pane_${item._id}" role="tabpanel"></div>`;
+                        contentHtml += `<div class="tab-pane fade ${isFirst ? 'show active' : ''}" id="etapa_pane_${item._id}" role="tabpanel"></div>`;
                     });
                 } else {
-                    navHtml = '<span class="text-muted fst-italic p-3" style="font-size:13px;">' +
-                        '<i class="bx bx-info-circle me-1"></i>No hay etapas configuradas.</span>';
+                    navHtml = '<span class="text-muted fst-italic p-3" style="font-size:13px;"><i class="bx bx-info-circle me-1"></i>No hay etapas configuradas.</span>';
                 }
 
                 $nav.html(navHtml);
                 $content.html(contentHtml);
 
                 if (response && response.length > 0) {
-                    // ← Si hay siguiente etapa pendiente tras guardar, ir a ella; si no, mantener activa o ir a primera
                     var idDestino = etapa_siguiente_id || etapa_activa_id;
-                    etapa_siguiente_id = null; // limpiar después de usar
+                    etapa_siguiente_id = null;
 
                     var $destino = idDestino ?
                         $nav.find('.etapa-tab-btn[data-id="' + idDestino + '"]') :
@@ -140,7 +132,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         });
     }
 
-    /* ── Al hacer clic en una etapa ── */
     function seleccionar_etapa(el) {
         var $el = $(el);
 
@@ -174,7 +165,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         $('#pnl_postulantes').addClass('visible');
         cargar_postulantes_etapas();
 
-        // ← Restaurar verde a todas las etapas EVALUADO después de reasignar active
         $('#pnl_etapas_nav .etapa-tab-btn').each(function() {
             var ev = ($(this).data('evaluada') || '').toString().trim().toUpperCase();
             if (ev === 'EVALUADO') {
@@ -188,7 +178,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         });
     }
 
-    /* ── Carga la tabla de postulantes ── */
     function cargar_postulantes_etapas() {
         if (tabla_postulantes && $.fn.DataTable.isDataTable('#tbl_postulantes')) {
             tabla_postulantes.destroy();
@@ -213,20 +202,16 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                 },
                 dataSrc: ''
             },
-            columns: [
-                // col 0 — Postulante
-                {
+            columns: [{
                     data: 'nombre_completo',
                     render: function(d) {
                         return '<strong>' + (d || 'Sin nombre') + '</strong>';
                     }
                 },
-                // col 1 — Cédula
                 {
                     data: 'th_pos_cedula',
                     defaultContent: '<span class="text-muted">—</span>'
                 },
-                // col 2 — Puntaje (oculta si no se requiere)
                 {
                     data: 'cn_pose_puntuacion',
                     className: 'text-center col-puntaje-td',
@@ -234,17 +219,9 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                         var valor = (d !== null && d !== undefined && d !== '') ? parseFloat(d).toFixed(2) : '';
                         var bloqueado = (item.cn_pose_estado_proceso === 'APROBADO' || item.cn_pose_estado_proceso === 'REPROBADO') ? 'disabled' : '';
                         var borderStyle = (!bloqueado && etapa_requiere_puntaje) ? 'border-color:#dc3545;border-width:1.5px;' : '';
-                        return '<input type="number" ' +
-                            'class="form-control form-control-sm inp-puntaje text-center" ' +
-                            'data-id="' + item.cn_post_id + '" ' +
-                            'min="0" max="100" step="0.01" ' +
-                            'value="' + valor + '" ' +
-                            'placeholder="0.00" ' +
-                            'style="min-width:80px;' + borderStyle + '" ' +
-                            bloqueado + ' />';
+                        return '<input type="number" class="form-control form-control-sm inp-puntaje text-center" data-id="' + item.cn_post_id + '" min="0" max="100" step="0.01" value="' + valor + '" placeholder="0.00" style="min-width:80px;' + borderStyle + '" ' + bloqueado + ' />';
                     }
                 },
-                // col 3 — Resultado
                 {
                     data: 'cn_pose_estado_proceso',
                     className: 'text-center',
@@ -260,7 +237,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                             '</select>';
                     }
                 },
-                // col 4 — Observación
                 {
                     data: null,
                     className: 'text-center',
@@ -271,21 +247,12 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                         var titulo = obs ? 'Editar observación' : 'Agregar observación';
 
                         if (bloqueado) {
-                            // Solo ver si tiene observación
                             return obs ?
-                                '<button type="button" class="btn btn-outline-secondary btn-xs btn-obs" ' +
-                                'data-id="' + item.cn_post_id + '" data-obs="' + obs.replace(/"/g, '&quot;') + '" ' +
-                                'title="Ver observación" onclick="ver_observacion(this)">' +
-                                '<i class="bx bx-message-square-detail" style="font-size:14px;"></i></button>' :
+                                '<button type="button" class="btn btn-outline-secondary btn-xs btn-obs" data-id="' + item.cn_post_id + '" data-obs="' + obs.replace(/"/g, '&quot;') + '" title="Ver observación" onclick="ver_observacion(this)"><i class="bx bx-message-square-detail" style="font-size:14px;"></i></button>' :
                                 '<span class="text-muted" style="font-size:11px;">—</span>';
                         }
 
-                        return '<button type="button" class="btn btn-xs btn-obs" ' +
-                            'style="border:1px dashed ' + iconColor + ';color:' + iconColor + ';background:transparent;border-radius:5px;padding:3px 8px;" ' +
-                            'data-id="' + item.cn_post_id + '" data-obs="' + obs.replace(/"/g, '&quot;') + '" ' +
-                            'title="' + titulo + '" onclick="abrir_modal_observacion(this)">' +
-                            '<i class="bx ' + (obs ? 'bx-edit' : 'bx-message-square-add') + '" style="font-size:14px;"></i>' +
-                            '</button>';
+                        return '<button type="button" class="btn btn-xs btn-obs" style="border:1px dashed ' + iconColor + ';color:' + iconColor + ';background:transparent;border-radius:5px;padding:3px 8px;" data-id="' + item.cn_post_id + '" data-obs="' + obs.replace(/"/g, '&quot;') + '" title="' + titulo + '" onclick="abrir_modal_observacion(this)"><i class="bx ' + (obs ? 'bx-edit' : 'bx-message-square-add') + '" style="font-size:14px;"></i></button>';
                     }
                 }
             ],
@@ -301,7 +268,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         });
     }
 
-    /* ── Toggle columna puntaje — índice 2 (sin checkbox) ── */
     function toggle_columna_puntaje() {
         try {
             if (tabla_postulantes && $.fn.DataTable.isDataTable('#tbl_postulantes')) {
@@ -318,24 +284,19 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         }
     }
 
-    /* ── Evento cambio resultado ── */
     $(document).on('change', '#tbl_postulantes tbody .sel-resultado', function() {
         actualizar_visibilidad_boton_verificar();
     });
 
-    /* ── Modal observación ── */
     function abrir_modal_observacion(el) {
         var $btn = $(el);
-        var cn_post_id = $btn.data('id');
         var obsActual = $btn.data('obs') || '';
 
         Swal.fire({
             title: '<i class="bx bx-message-square-edit me-2" style="color:#0d6efd;"></i>Observación',
             html: '<div class="text-start">' +
                 '<label class="form-label text-muted mb-1" style="font-size:12px;">Escribe la observación para este postulante:</label>' +
-                '<textarea id="swal_obs_input" class="form-control" rows="4" maxlength="500" ' +
-                'placeholder="Ej: Cumple con los requisitos técnicos pero requiere experiencia adicional..."' +
-                'style="font-size:13px;resize:vertical;">' + obsActual + '</textarea>' +
+                '<textarea id="swal_obs_input" class="form-control" rows="4" maxlength="500" placeholder="Ej: Cumple con los requisitos técnicos pero requiere experiencia adicional..." style="font-size:13px;resize:vertical;">' + obsActual + '</textarea>' +
                 '<div class="d-flex justify-content-end mt-1"><small class="text-muted" id="swal_obs_count">' + obsActual.length + '/500</small></div>' +
                 '</div>',
             showCancelButton: true,
@@ -357,7 +318,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         }).then(function(result) {
             if (result.isConfirmed) {
                 var nuevaObs = result.value;
-                // ← Actualizar data-obs en el botón y cambiar ícono
                 $btn.data('obs', nuevaObs);
                 $btn.attr('data-obs', nuevaObs);
                 if (nuevaObs) {
@@ -389,7 +349,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         });
     }
 
-    /* ── Visibilidad botón verificar ── */
     function actualizar_visibilidad_boton_verificar() {
         $('#warn_etapa_anterior').remove();
 
@@ -417,9 +376,7 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
             $btnNav.addClass('etapa-evaluada');
             $btnNav.attr('data-evaluada', 'EVALUADO');
             if (!$btnNav.find('.etapa-check-icon').length) {
-                $btnNav.find('.d-flex').append(
-                    '<i class="bx bx-check-circle ms-auto etapa-check-icon" style="color:#198754;font-size:16px;flex-shrink:0;"></i>'
-                );
+                $btnNav.find('.d-flex').append('<i class="bx bx-check-circle ms-auto etapa-check-icon" style="color:#198754;font-size:16px;flex-shrink:0;"></i>');
             }
             $('#btn_verificar_etapa').addClass('d-none');
             return;
@@ -431,8 +388,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         }
 
         var orden_anterior = etapa_activa_orden - 1;
-
-        // ← Verificar también en el nav si la etapa anterior tiene clase etapa-evaluada (por datos del servidor)
         var $btnAnterior = $('#pnl_etapas_nav .etapa-tab-btn').filter(function() {
             return parseInt($(this).data('orden')) === orden_anterior;
         });
@@ -451,7 +406,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         }
     }
 
-    /* ── Verificar / Guardar evaluación ── */
     function verificar_pasos() {
         if (!etapa_activa_id) {
             Swal.fire('Atención', 'Selecciona una etapa primero.', 'warning');
@@ -494,12 +448,8 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                 $fila.addClass('table-danger');
                 hay_error = true;
             } else {
-                // ← Tomar observación del botón; si está vacía usar default según resultado
                 var obsIngresada = ($btnObs.length ? ($btnObs.data('obs') || '').toString().trim() : '');
-                var obsDefault = resultado === 'APROBADO' ?
-                    'Cumple con los criterios de evaluación.' :
-                    'No alcanza el puntaje mínimo requerido.';
-
+                var obsDefault = resultado === 'APROBADO' ? 'Cumple con los criterios de evaluación.' : 'No alcanza el puntaje mínimo requerido.';
                 evaluaciones.push({
                     cn_post_id: parseInt(cn_post_id),
                     resultado: resultado,
@@ -560,7 +510,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                         showConfirmButton: false
                     });
 
-                    // ← Buscar la siguiente etapa para ir a ella tras recargar
                     var $btnSiguiente = $('#pnl_etapas_nav .etapa-tab-btn').filter(function() {
                         return parseInt($(this).data('orden')) === etapa_activa_orden + 1;
                     });
@@ -568,10 +517,19 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
 
                     <?php if (!empty($_id_plaza)) { ?>
                         cargar_etapas_tarjetas(<?= (int)$_id_plaza ?>);
+                        cargar_plaza_historial('<?= $_id_plaza ?>');
                     <?php } ?>
 
+                    // ← Verificar DESPUÉS de recargar etapas si todas están completas
                     var id_plaza_estado = parseInt($('#txt_id_plaza_estados').val()) || 0;
-                    if (id_plaza_estado == 5) Evaluar_plaza();
+                    if (id_plaza_estado == 5) {
+                        setTimeout(function() {
+                            var pendientes = $('#pnl_etapas_nav .etapa-tab-btn').filter(function() {
+                                return ($(this).data('evaluada') || '').toString().trim().toUpperCase() !== 'EVALUADO';
+                            }).length;
+                            if (pendientes === 0) Evaluar_plaza();
+                        }, 800);
+                    }
                 } else {
                     Swal.fire('Error', response.error || 'No se pudieron guardar los cambios.', 'error');
                 }
@@ -583,7 +541,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         });
     }
 
-    /* ── Cambiar estado plaza — solo una vez ── */
     function Evaluar_plaza() {
         if (_plaza_evaluada) return;
         _plaza_evaluada = true;
@@ -600,6 +557,9 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                 }
             },
             success: function() {
+                // ← Actualizar hidden para que cierre y estado reflejen EN_EVALUACION
+                $('#txt_id_plaza_estados').val(6);
+                _permite_evaluacion = true; // id 6 también permite evaluación
                 cargar_plaza_historial('<?= $_id_plaza ?>');
                 actualizar_boton_postulante(false);
             },
@@ -610,7 +570,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         });
     }
 
-    /* ── Init ── */
     $(document).ready(function() {
         <?php if (!empty($_id_plaza)) { ?>
             cargar_etapas_tarjetas(<?= (int)$_id_plaza ?>);
@@ -643,7 +602,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         flex-shrink: 0;
     }
 
-    /* ← Máximo ~6 etapas visibles, luego scroll */
     #pnl_etapas_nav_scroll {
         max-height: 420px;
         overflow-y: auto;
@@ -802,11 +760,9 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
     }
 </style>
 
-<!-- LAYOUT PRINCIPAL -->
 <div class="row g-0 shadow-sm border rounded-3 mb-4">
     <div class="col-12">
         <div class="etapas-wrapper">
-
             <div class="etapas-col-izq">
                 <div class="etapas-col-header">
                     <strong class="text-muted" style="font-size:12px;text-transform:uppercase;letter-spacing:.5px;">
@@ -814,44 +770,31 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                     </strong>
                 </div>
                 <div id="pnl_etapas_nav_scroll">
-                    <div class="nav flex-column nav-pills" id="pnl_etapas_nav" role="tablist">
-                        <!-- se llena dinámicamente -->
-                    </div>
+                    <div class="nav flex-column nav-pills" id="pnl_etapas_nav" role="tablist"></div>
                 </div>
             </div>
-
             <div class="etapas-col-der">
                 <div class="tab-content" id="pnl_etapas_content"></div>
-
                 <div id="pnl_postulantes">
                     <div class="card border-0">
                         <div class="card-body p-4">
-
                             <div class="postulantes-header mb-3">
                                 <div class="d-flex align-items-center">
                                     <span class="etapa-dot" id="etapa_dot_panel"></span>
-                                    <h6 class="mb-0 fw-bold text-dark">
-                                        Postulantes &mdash; <span id="etapa_nombre_panel" class="text-primary"></span>
-                                    </h6>
+                                    <h6 class="mb-0 fw-bold text-dark">Postulantes &mdash; <span id="etapa_nombre_panel" class="text-primary"></span></h6>
                                 </div>
-                                <button type="button" id="btn_verificar_etapa"
-                                    class="btn btn-success btn-sm d-none"
-                                    onclick="verificar_pasos()">
+                                <button type="button" id="btn_verificar_etapa" class="btn btn-success btn-sm d-none" onclick="verificar_pasos()">
                                     <i class="bx bx-check-shield me-1"></i> Verificar Etapa
                                 </button>
                             </div>
-
                             <hr class="mt-0 mb-3">
-
                             <div class="table-responsive">
                                 <table class="table table-striped table-postulantes" id="tbl_postulantes" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>Postulante</th>
                                             <th>Cédula</th>
-                                            <th class="text-center" id="col_puntaje_th" style="display:none;">
-                                                <span id="lbl_col_puntaje">Puntaje</span>
-                                            </th>
+                                            <th class="text-center" id="col_puntaje_th" style="display:none;"><span id="lbl_col_puntaje">Puntaje</span></th>
                                             <th class="text-center">Resultado</th>
                                             <th class="text-center">Observación</th>
                                         </tr>
@@ -859,12 +802,10 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                                     <tbody></tbody>
                                 </table>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

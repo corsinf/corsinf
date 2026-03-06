@@ -1,13 +1,16 @@
+<?php
+$modulo_sistema = isset($_SESSION['INICIO']['MODULO_SISTEMA']) ? $_SESSION['INICIO']['MODULO_SISTEMA'] : '';
+$_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
+?>
+
 <script>
     function verificar_acciones_postulantes(plaza_estado, tipo_seleccion) {
-        // Mostrar/ocultar botón según si permite postulación
         if (plaza_estado && plaza_estado.permite_postulacion == true) {
             $('#btn_postulante').show();
         } else {
             $('#btn_postulante').hide();
         }
 
-        // Guardar tipo de selección globalmente
         if (tipo_seleccion) {
             window._tipo_seleccion_descripcion = (tipo_seleccion.descripcion || '').trim().toUpperCase();
             window._tipo_seleccion_id = tipo_seleccion.id_tipo_seleccion || 0;
@@ -16,18 +19,15 @@
         var desc = window._tipo_seleccion_descripcion || '';
 
         if (desc === 'INTERNA' || desc === 'EXTERNA') {
-            // Filtro fijo: ocultar DDL y cargar directo
             $('#bloque_ddl_tipo_seleccion').hide();
             id_seleccion = window._tipo_seleccion_id;
             cargar_postulantes_modal(id_seleccion);
         } else if (desc === 'MIXTA') {
-            // Mostrar DDL sin opción MIXTA
             $('#bloque_ddl_tipo_seleccion').show();
             id_seleccion = 0;
         }
     }
 
-    // Llamar desde otras páginas para refrescar botón
     function actualizar_boton_postulante(permite) {
         if (permite) {
             $('#btn_postulante').show();
@@ -35,6 +35,17 @@
             $('#btn_postulante').hide();
         }
     }
+
+    var _etapas_pendiente_recarga = false;
+
+    $(document).on('shown.bs.tab', 'a[href="#tab_etapas_proceso"]', function() {
+        if (_etapas_pendiente_recarga) {
+            _etapas_pendiente_recarga = false;
+            <?php if (!empty($_id_plaza)) { ?>
+                cargar_etapas_tarjetas(<?= (int)$_id_plaza ?>);
+            <?php } ?>
+        }
+    });
 </script>
 
 <div class="d-flex align-items-center justify-content-between mb-2">
@@ -68,26 +79,19 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-
-                <!-- DDL solo visible para MIXTA -->
                 <div class="row mb-3" id="bloque_ddl_tipo_seleccion" style="display:none;">
                     <div class="col-md-4">
-                        <label for="ddl_id_tipo_seleccion" class="form-label fw-semibold small">
-                            Tipo de Selección
-                        </label>
+                        <label for="ddl_id_tipo_seleccion" class="form-label fw-semibold small">Tipo de Selección</label>
                         <select class="form-select form-select-sm select2-validation"
                             id="ddl_id_tipo_seleccion" name="ddl_id_tipo_seleccion">
                             <option value="" selected hidden>-- Seleccione --</option>
                         </select>
                     </div>
                 </div>
-
                 <table class="table table-striped" id="tbl_postulantes_modal" style="width:100%">
                     <thead>
                         <tr>
-                            <th style="width:35px">
-                                <input type="checkbox" id="cbx_all_modal" class="form-check-input">
-                            </th>
+                            <th style="width:35px"><input type="checkbox" id="cbx_all_modal" class="form-check-input"></th>
                             <th>Postulante</th>
                             <th>Cédula</th>
                             <th>Correo</th>
@@ -122,13 +126,11 @@
         });
     });
 
-    // Carga el select2 excluyendo MIXTA
     function cargar_seleted_postulante() {
         cargar_select2_url(
             'ddl_id_tipo_seleccion',
             '../controlador/TALENTO_HUMANO/CATALOGOS/cn_cat_tipo_seleccionC.php?buscar=true',
             '', '#modal_agregar_postulante', 0, {},
-            // Filtro post-carga: eliminar opción MIXTA
             function() {
                 $('#ddl_id_tipo_seleccion option').filter(function() {
                     return $(this).text().trim().toUpperCase() === 'MIXTA';
@@ -144,17 +146,14 @@
 
         $(modalEl).off('shown.bs.modal').on('shown.bs.modal', function() {
             if (desc === 'INTERNA' || desc === 'EXTERNA') {
-                // Directo, sin DDL
                 $('#bloque_ddl_tipo_seleccion').hide();
                 cargar_postulantes_modal(window._tipo_seleccion_id || 0);
             } else {
-                // MIXTA: mostrar DDL, esperar selección
                 $('#bloque_ddl_tipo_seleccion').show();
                 var val = $('#ddl_id_tipo_seleccion').val();
                 if (val) {
                     cargar_postulantes_modal(val);
                 } else {
-                    // Limpiar tabla hasta que seleccione
                     if (tabla_modal_postulantes && $.fn.DataTable.isDataTable('#tbl_postulantes_modal')) {
                         tabla_modal_postulantes.destroy();
                         $('#tbl_postulantes_modal tbody').empty();
@@ -345,6 +344,14 @@
                 });
                 mostrar_boton_verificar(true);
                 cargar_postulantes();
+
+                if ($('#tab_etapas_proceso').hasClass('active')) {
+                    <?php if (!empty($_id_plaza)) { ?>
+                        cargar_etapas_tarjetas(<?= (int)$_id_plaza ?>);
+                    <?php } ?>
+                } else {
+                    _etapas_pendiente_recarga = true;
+                }
             },
             error: function() {
                 Swal.fire('Error', 'Ocurrió un error al agregar los postulantes.', 'error');

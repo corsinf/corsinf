@@ -49,7 +49,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 {
                     data: null,
                     render: function(data, type, item) {
-                        if (parseInt(item.editable_plaza) === 1) {
+                        if (parseInt(item.editable_plaza) === 1 || parseInt(item.id_plaza_estados) === 0) {
                             let href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=cn_registrar_plaza&_id_plaza=${item._id}`;
                             return `<a href="${href}"><u>${item.cn_pla_titulo}</u></a>`;
                         } else {
