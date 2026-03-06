@@ -520,16 +520,11 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                         cargar_plaza_historial('<?= $_id_plaza ?>');
                     <?php } ?>
 
-                    // ← Verificar DESPUÉS de recargar etapas si todas están completas
                     var id_plaza_estado = parseInt($('#txt_id_plaza_estados').val()) || 0;
                     if (id_plaza_estado == 5) {
-                        setTimeout(function() {
-                            var pendientes = $('#pnl_etapas_nav .etapa-tab-btn').filter(function() {
-                                return ($(this).data('evaluada') || '').toString().trim().toUpperCase() !== 'EVALUADO';
-                            }).length;
-                            if (pendientes === 0) Evaluar_plaza();
-                        }, 800);
+                        Evaluar_plaza();
                     }
+                    
                 } else {
                     Swal.fire('Error', response.error || 'No se pudieron guardar los cambios.', 'error');
                 }
@@ -542,6 +537,8 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
     }
 
     function Evaluar_plaza() {
+        console.log("desde evaluar plaza");
+        
         if (_plaza_evaluada) return;
         _plaza_evaluada = true;
 

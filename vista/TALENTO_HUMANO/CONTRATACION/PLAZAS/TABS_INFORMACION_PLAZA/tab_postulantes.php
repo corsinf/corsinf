@@ -336,22 +336,30 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                     Swal.fire('Error', response.error, 'error');
                     return;
                 }
+
                 bootstrap.Modal.getInstance(document.getElementById('modal_agregar_postulante')).hide();
+
                 Swal.fire({
                     icon: response.fallidos > 0 ? 'warning' : 'success',
                     title: 'Operación completada',
-                    html: 'Agregados: <b>' + response.exitosos + '</b> &nbsp; Fallidos: <b>' + response.fallidos + '</b>'
-                });
-                mostrar_boton_verificar(true);
-                cargar_postulantes();
+                    html: response.fallidos > 0 ?
+                        'Agregados: <b>' + response.exitosos + '</b> &nbsp; Fallidos: <b>' + response.fallidos + '</b>' :
+                        '<b>' + response.exitosos + '</b> postulante(s) agregado(s) correctamente.',
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(function() {
+                    // ← Todo se ejecuta DESPUÉS de que cierra el Swal
+                    mostrar_boton_verificar(true);
+                    cargar_postulantes();
 
-                if ($('#tab_etapas_proceso').hasClass('active')) {
-                    <?php if (!empty($_id_plaza)) { ?>
-                        cargar_etapas_tarjetas(<?= (int)$_id_plaza ?>);
-                    <?php } ?>
-                } else {
-                    _etapas_pendiente_recarga = true;
-                }
+                    if ($('#tab_etapas_proceso').hasClass('active')) {
+                        <?php if (!empty($_id_plaza)) { ?>
+                            cargar_etapas_tarjetas(<?= (int)$_id_plaza ?>);
+                        <?php } ?>
+                    } else {
+                        _etapas_pendiente_recarga = true;
+                    }
+                });
             },
             error: function() {
                 Swal.fire('Error', 'Ocurrió un error al agregar los postulantes.', 'error');
