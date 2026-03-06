@@ -343,19 +343,21 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                     icon: response.fallidos > 0 ? 'warning' : 'success',
                     title: 'Operación completada',
                     html: response.fallidos > 0 ?
-                        'Agregados: <b>' + response.exitosos + '</b> &nbsp; Fallidos: <b>' + response.fallidos + '</b>' :
-                        '<b>' + response.exitosos + '</b> postulante(s) agregado(s) correctamente.',
+                        'Agregados: <b>' + response.exitosos + '</b> &nbsp; Fallidos: <b>' + response.fallidos + '</b>' : '<b>' + response.exitosos + '</b> postulante(s) agregado(s) correctamente.',
                     timer: 2000,
                     showConfirmButton: false
                 }).then(function() {
-                    // ← Todo se ejecuta DESPUÉS de que cierra el Swal
-                    mostrar_boton_verificar(true);
                     cargar_postulantes();
 
-                    if ($('#tab_etapas_proceso').hasClass('active')) {
-                        <?php if (!empty($_id_plaza)) { ?>
-                            cargar_etapas_tarjetas(<?= (int)$_id_plaza ?>);
-                        <?php } ?>
+                    var $tabEtapas = $('a[href="#tab_etapas_proceso"]');
+                    if ($tabEtapas.length) {
+                        $tabEtapas[0].click(); // ← activa el tab
+                        // ← Esperar que el tab esté visible antes de recargar
+                        setTimeout(function() {
+                            <?php if (!empty($_id_plaza)) { ?>
+                                cargar_etapas_tarjetas(<?= (int)$_id_plaza ?>);
+                            <?php } ?>
+                        }, 150);
                     } else {
                         _etapas_pendiente_recarga = true;
                     }

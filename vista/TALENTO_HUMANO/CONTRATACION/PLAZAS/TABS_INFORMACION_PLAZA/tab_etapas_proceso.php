@@ -25,11 +25,10 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
     }
 
     function mostrar_boton_verificar(permite) {
-        if (!permite) {
-            $('#btn_verificar_etapa').addClass('d-none');
-            return;
+        _permite_evaluacion = permite;
+        if (etapa_activa_id) {
+            actualizar_visibilidad_boton_verificar();
         }
-        actualizar_visibilidad_boton_verificar();
     }
 
     function cargar_etapas_tarjetas(id_plaza) {
@@ -74,11 +73,9 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
 
                         var claseEvaluada = esEvaluada ? 'etapa-evaluada' : '';
                         var badgeObl = esObl ?
-                            '<span class="badge ms-1" style="font-size:9px;background:#dc3545;">OBLIGATORIA</span>' :
-                            '';
+                            '<span class="badge ms-1" style="font-size:9px;background:#dc3545;">OBLIGATORIA</span>' : '';
                         var iconoEvaluada = esEvaluada ?
-                            '<i class="bx bx-check-circle ms-auto etapa-check-icon" style="color:#198754;font-size:16px;flex-shrink:0;"></i>' :
-                            '';
+                            '<i class="bx bx-check-circle ms-auto etapa-check-icon" style="color:#198754;font-size:16px;flex-shrink:0;"></i>' : '';
 
                         navHtml += `
                         <button class="nav-link etapa-tab-btn ${isFirst ? 'active' : ''} ${claseEvaluada}"
@@ -116,8 +113,7 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                     etapa_siguiente_id = null;
 
                     var $destino = idDestino ?
-                        $nav.find('.etapa-tab-btn[data-id="' + idDestino + '"]') :
-                        null;
+                        $nav.find('.etapa-tab-btn[data-id="' + idDestino + '"]') : null;
 
                     if ($destino && $destino.length) {
                         seleccionar_etapa($destino[0]);
@@ -159,11 +155,13 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
             $('#lbl_col_puntaje').text('Puntaje');
         }
 
-        $('#btn_verificar_etapa').text('Verificar Etapa ' + orden);
+        // ← Sólo actualiza el texto y deshabilita mientras carga el DataTable
+        //   NO se agrega d-none, el botón siempre es visible
+        $('#btn_verificar_etapa').prop('disabled', true).html('<i class="bx bx-check-shield me-1"></i> Verificar Etapa ' + orden);
         $('#warn_etapa_anterior').remove();
-        $('#btn_verificar_etapa').addClass('d-none');
         $('#pnl_postulantes').addClass('visible');
-        cargar_postulantes_etapas();
+
+        cargar_postulantes_etapas(); // drawCallback habilitará el botón si corresponde
 
         $('#pnl_etapas_nav .etapa-tab-btn').each(function() {
             var ev = ($(this).data('evaluada') || '').toString().trim().toUpperCase();
@@ -197,8 +195,10 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/CONTRATACION/cn_postulacionC.php?listar_por_etapa=true',
                 type: 'POST',
-                data: {
-                    cn_plaet_id: etapa_activa_id
+                data: function() {
+                    return {
+                        cn_plaet_id: etapa_activa_id
+                    };
                 },
                 dataSrc: ''
             },
@@ -259,6 +259,12 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
             order: [
                 [0, 'asc']
             ],
+            initComplete: function() {
+                toggle_columna_puntaje();
+                setTimeout(function() {
+                    actualizar_visibilidad_boton_verificar();
+                }, 100);
+            },
             drawCallback: function() {
                 setTimeout(function() {
                     toggle_columna_puntaje();
@@ -353,15 +359,16 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         $('#warn_etapa_anterior').remove();
 
         if (!_permite_evaluacion) {
-            $('#btn_verificar_etapa').addClass('d-none');
+            $('#btn_verificar_etapa').prop('disabled', true).attr('title', 'La plaza no está habilitada para evaluación.');
             return;
         }
 
         var $selects = $('#tbl_postulantes tbody .sel-resultado');
         var total = $selects.length;
 
+        // DataTable aún cargando o sin postulantes → deshabilitar
         if (total === 0) {
-            $('#btn_verificar_etapa').addClass('d-none');
+            $('#btn_verificar_etapa').prop('disabled', true).attr('title', 'No hay postulantes en esta etapa.');
             return;
         }
 
@@ -372,18 +379,22 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         etapas_completas[etapa_activa_orden] = (pendientes_actuales === 0);
 
         if (pendientes_actuales === 0) {
+            // Todos evaluados → marcar etapa como completada en el nav
             var $btnNav = $('#pnl_etapas_nav .etapa-tab-btn[data-id="' + etapa_activa_id + '"]');
             $btnNav.addClass('etapa-evaluada');
             $btnNav.attr('data-evaluada', 'EVALUADO');
             if (!$btnNav.find('.etapa-check-icon').length) {
-                $btnNav.find('.d-flex').append('<i class="bx bx-check-circle ms-auto etapa-check-icon" style="color:#198754;font-size:16px;flex-shrink:0;"></i>');
+                $btnNav.find('.d-flex').append(
+                    '<i class="bx bx-check-circle ms-auto etapa-check-icon" style="color:#198754;font-size:16px;flex-shrink:0;"></i>'
+                );
             }
-            $('#btn_verificar_etapa').addClass('d-none');
+            $('#btn_verificar_etapa').prop('disabled', true).attr('title', 'Todos los postulantes ya fueron evaluados en esta etapa.');
             return;
         }
 
+        // Hay postulantes pendientes → verificar si la etapa anterior está completa
         if (etapa_activa_orden <= 1) {
-            $('#btn_verificar_etapa').removeClass('d-none');
+            $('#btn_verificar_etapa').prop('disabled', false).attr('title', '');
             return;
         }
 
@@ -395,9 +406,9 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         var anterior_completa = etapas_completas[orden_anterior] === true || anterior_nav;
 
         if (anterior_completa) {
-            $('#btn_verificar_etapa').removeClass('d-none');
+            $('#btn_verificar_etapa').prop('disabled', false).attr('title', '');
         } else {
-            $('#btn_verificar_etapa').addClass('d-none');
+            $('#btn_verificar_etapa').prop('disabled', true).attr('title', 'Completa la Etapa ' + orden_anterior + ' primero.');
             var $warn = $('<div id="warn_etapa_anterior" class="alert alert-warning d-flex align-items-center gap-2 mb-3 mt-0" role="alert" style="font-size:13px;">' +
                 '<i class="bx bx-error fs-5 flex-shrink-0"></i>' +
                 '<span>Debes completar la evaluación de la <strong>Etapa ' + orden_anterior + '</strong> antes de poder verificar esta etapa.</span>' +
@@ -499,7 +510,7 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                 evaluaciones: JSON.stringify(evaluaciones)
             },
             success: function(response) {
-                $btn.prop('disabled', false).text('Verificar Etapa ' + etapa_activa_orden);
+                $btn.prop('disabled', false).html('<i class="bx bx-check-shield me-1"></i> Verificar Etapa ' + etapa_activa_orden);
 
                 if (response && !response.error) {
                     Swal.fire({
@@ -524,21 +535,19 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                     if (id_plaza_estado == 5) {
                         Evaluar_plaza();
                     }
-                    
+
                 } else {
                     Swal.fire('Error', response.error || 'No se pudieron guardar los cambios.', 'error');
                 }
             },
             error: function() {
-                $btn.prop('disabled', false).text('Verificar Etapa ' + etapa_activa_orden);
+                $btn.prop('disabled', false).html('<i class="bx bx-check-shield me-1"></i> Verificar Etapa ' + etapa_activa_orden);
                 Swal.fire('Error de red', 'No se pudo conectar con el servidor.', 'error');
             }
         });
     }
 
     function Evaluar_plaza() {
-        console.log("desde evaluar plaza");
-        
         if (_plaza_evaluada) return;
         _plaza_evaluada = true;
 
@@ -554,9 +563,8 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                 }
             },
             success: function() {
-                // ← Actualizar hidden para que cierre y estado reflejen EN_EVALUACION
                 $('#txt_id_plaza_estados').val(6);
-                _permite_evaluacion = true; // id 6 también permite evaluación
+                _permite_evaluacion = true;
                 cargar_plaza_historial('<?= $_id_plaza ?>');
                 actualizar_boton_postulante(false);
             },
@@ -751,6 +759,12 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         border-color: #dc3545 !important;
     }
 
+    /* Botón deshabilitado con apariencia clara */
+    #btn_verificar_etapa:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+    }
+
     .btn-xs {
         font-size: 12px;
         padding: 3px 7px;
@@ -780,7 +794,11 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                                     <span class="etapa-dot" id="etapa_dot_panel"></span>
                                     <h6 class="mb-0 fw-bold text-dark">Postulantes &mdash; <span id="etapa_nombre_panel" class="text-primary"></span></h6>
                                 </div>
-                                <button type="button" id="btn_verificar_etapa" class="btn btn-success btn-sm d-none" onclick="verificar_pasos()">
+                                <!-- El botón siempre visible, solo cambia disabled -->
+                                <button type="button" id="btn_verificar_etapa"
+                                    class="btn btn-success btn-sm"
+                                    disabled
+                                    onclick="verificar_pasos()">
                                     <i class="bx bx-check-shield me-1"></i> Verificar Etapa
                                 </button>
                             </div>
