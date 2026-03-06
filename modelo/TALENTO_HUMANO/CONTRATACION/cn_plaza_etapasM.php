@@ -12,6 +12,7 @@ class cn_plaza_etapasM extends BaseModel
         'cn_plaet_obligatoria',
         'estado',
         'fecha_creacion',
+        'estado_proceso',
     ];
 
     public function listar_etapas_por_plaza($plaza_id)
@@ -24,6 +25,7 @@ class cn_plaza_etapasM extends BaseModel
             pe.id_etapa,
             pe.cn_plaet_orden,
             pe.cn_plaet_obligatoria,
+            pe.estado_proceso,        
             pe.estado,
             pe.fecha_creacion,
             ce.codigo                   AS etapa_codigo,

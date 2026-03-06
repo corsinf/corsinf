@@ -343,6 +343,7 @@
                     title: 'Operación completada',
                     html: 'Agregados: <b>' + response.exitosos + '</b> &nbsp; Fallidos: <b>' + response.fallidos + '</b>'
                 });
+                mostrar_boton_verificar(true);
                 cargar_postulantes();
             },
             error: function() {

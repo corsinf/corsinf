@@ -120,7 +120,7 @@ class cn_plazaC
         $datos = [
             ['campo' => 'id_plaza_estados', 'dato' => $parametros['id_plaza_estados']]
         ];
-
+ 
         $where = [
             ['campo' => 'cn_pla_id', 'dato' => $parametros['_id']]
         ];

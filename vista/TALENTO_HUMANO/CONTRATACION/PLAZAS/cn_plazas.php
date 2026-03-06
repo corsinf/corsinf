@@ -49,8 +49,12 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 {
                     data: null,
                     render: function(data, type, item) {
-                        let href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=cn_registrar_plaza&_id_plaza=${item._id}`;
-                        return `<a href="${href}"><u>${item.cn_pla_titulo}</u></a>`;
+                        if (parseInt(item.editable_plaza) === 1) {
+                            let href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=cn_registrar_plaza&_id_plaza=${item._id}`;
+                            return `<a href="${href}"><u>${item.cn_pla_titulo}</u></a>`;
+                        } else {
+                            return `<span>${item.cn_pla_titulo}</span>`;
+                        }
                     }
                 },
                 {
@@ -62,6 +66,39 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 },
                 {
                     data: 'cn_pla_num_vacantes'
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        const orden = parseInt(item.orden_plaza_estado);
+
+                        const colores = {
+                            1: {
+                                bg: 'secondary'
+                            },
+                            2: {
+                                bg: 'warning'
+                            },
+                            3: {
+                                bg: 'primary'
+                            },
+                            4: {
+                                bg: 'success'
+                            },
+                            5: {
+                                bg: 'danger'
+                            },
+                        };
+
+                        if (!item.descripcion_plaza_estado) {
+                            return `<span class="badge bg-dark">Sin Estado</span>`;
+                        }
+
+                        const color = colores[orden] || {
+                            bg: 'dark'
+                        };
+                        return `<span class="badge bg-${color.bg}">${item.descripcion_plaza_estado}</span>`;
+                    }
                 }
             ],
             order: [
@@ -108,6 +145,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                         <th>Título</th>
                                         <th>Descripción</th>
                                         <th>N° Vacantes</th>
+                                        <th>Estado</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>

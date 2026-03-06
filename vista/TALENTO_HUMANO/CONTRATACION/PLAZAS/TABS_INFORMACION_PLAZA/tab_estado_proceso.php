@@ -373,6 +373,7 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                         Swal.fire('', 'Aprobación y publicación eliminadas correctamente.', 'success').then(function() {
                             cargar_plaza_historial('<?= $_id_plaza ?>');
                             actualizar_boton_postulante(false);
+                            mostrar_boton_verificar(false);
                         });
                     });
                 });
@@ -381,6 +382,7 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                     Swal.fire('', 'Registro eliminado correctamente.', 'success').then(function() {
                         cargar_plaza_historial('<?= $_id_plaza ?>');
                         actualizar_boton_postulante(false);
+                        mostrar_boton_verificar(false);
                     });
                 });
             }
@@ -565,6 +567,7 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                     Swal.fire('', 'Plaza publicada correctamente.', 'success').then(function() {
                         cargar_plaza_historial('<?= $_id_plaza ?>');
                         actualizar_boton_postulante(true);
+                         mostrar_boton_verificar(true);
                     });
                 },
                 error: function(xhr) {
