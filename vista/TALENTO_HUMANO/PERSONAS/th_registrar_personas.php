@@ -188,6 +188,7 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
                     $(txt_correo).addClass('is-invalid');
                     $('#error_txt_correo').text('El correo electrónico ya está en uso.');
                 } else if (response == -4) {
+                    $(txt_cedula).addClass('is-invalid');
                     $(txt_correo).addClass('is-invalid');
                     $('#error_txt_cedula').text('La cédula ya está en uso.');
                     $('#error_txt_correo').text('El correo electrónico está en uso.');

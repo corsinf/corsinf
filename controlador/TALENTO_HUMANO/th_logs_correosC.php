@@ -2,6 +2,7 @@
 date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_personasM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/POSTULANTES/th_postulantesM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_logs_correosM.php');
 include_once(dirname(__DIR__, 2) . '/lib/phpmailer/enviar_emails.php');
 require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
@@ -24,6 +25,10 @@ if (isset($_GET['enviar_correo'])) {
     echo json_encode($controlador->enviar_correo($_POST['parametros']));
 }
 
+if (isset($_GET['enviar_correo_postulante'])) {
+    echo json_encode($controlador->enviar_correo_postulante($_POST['parametros']));
+}
+
 if (isset($_GET['buscar'])) {
     $query = '';
     if (isset($_GET['q'])) {
@@ -38,6 +43,7 @@ class th_logs_correosC
     private $modelo;
     private $email;
     private $personas;
+    private $postulantes;
     private $codigo_globales;
 
     function __construct()
@@ -45,6 +51,7 @@ class th_logs_correosC
         $this->modelo = new th_logs_correosM();
         $this->email = new enviar_emails();
         $this->personas = new th_personasM();
+        $this->postulantes = new th_postulantesM();
         $this->codigo_globales = new codigos_globales();
     }
 
@@ -301,6 +308,140 @@ class th_logs_correosC
 
             $res = $this->modelo->editar($datos, $where);
             return $res;
+        }
+    }
+
+    function enviar_correo_postulante($parametros)
+    {
+        if (empty($parametros['pos_id']) || !isset($parametros['enviar_credenciales'])) {
+            return ['error' => 'Parámetros faltantes'];
+        }
+
+        $pos_id              = intval($parametros['pos_id']);
+        $enviar_credenciales = intval($parametros['enviar_credenciales']);
+        $empresa             = $_SESSION['INICIO']['RAZON_SOCIAL'] ?? 'Sistema';
+        $support_por_defecto = 'soporte@corsinf.com';
+        $id_remitente        = $_SESSION['INICIO']['ID_USUARIO'] ?? null;
+        $baseUrl             = 'https://corsinf.com:447/corsinf/';
+        $loginUrl            = $baseUrl . 'login.php';
+        $logoPath            = $_SESSION['INICIO']['LOGO'] ?? '';
+        $logoUrl             = $logoPath !== ''
+            ? $baseUrl . ltrim($logoPath, './')
+            : $baseUrl . 'img/empresa/apudata.png';
+
+        // ── Obtener postulante ─────────────────────────────────────────
+        $postulante = $this->postulantes->where('th_pos_id', $pos_id)->listar();
+
+        if (empty($postulante)) {
+            return ['error' => 'Postulante no encontrado'];
+        }
+
+        $postulante = $postulante[0];
+
+        $correo = trim($postulante['th_pos_correo'] ?? '');
+
+        // ── Validar correo ─────────────────────────────────────────────
+        if (empty($correo) || !filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+            return ['error' => 'El postulante no tiene un correo válido registrado'];
+        }
+
+        // ── Validar PASS si se van a enviar credenciales ───────────────
+        if ($enviar_credenciales && empty(trim($postulante['PASS'] ?? ''))) {
+            // Se genera nueva clave, no bloqueamos — se avisa desde el front
+        }
+
+        $nombre_completo = trim(
+            ($postulante['th_pos_primer_nombre']    ?? '') . ' ' .
+                ($postulante['th_pos_segundo_nombre']   ?? '') . ' ' .
+                ($postulante['th_pos_primer_apellido']  ?? '') . ' ' .
+                ($postulante['th_pos_segundo_apellido'] ?? '')
+        );
+
+        try {
+            // ── Modo credenciales ──────────────────────────────────────
+            if ($enviar_credenciales) {
+
+                // Generar nueva clave
+                $clave     = $this->codigo_globales->generar_clave_digitos();
+                $clave_enc = $this->codigo_globales->enciptar_clave($clave);
+
+                // Actualizar PASS y resetear políticas en th_postulantes
+                $this->postulantes->editar(
+                    [
+                        ['campo' => 'PASS',                 'dato' => $clave_enc],
+                        ['campo' => 'POLITICAS_ACEPTACION', 'dato' => '0'],
+                    ],
+                    [['campo' => 'th_pos_id', 'dato' => $pos_id]]
+                );
+
+                $titulo_correo = "Bienvenido/a a $empresa";
+                $htmlBody = $this->crearPlantillaCredencialesHTML(
+                    $empresa,
+                    $correo,         // usuario = correo del postulante
+                    $clave,          // contraseña en texto plano para el correo
+                    $nombre_completo,
+                    $loginUrl,
+                    $logoUrl,
+                    $support_por_defecto
+                );
+
+                // ── Modo mensaje libre ─────────────────────────────────────
+            } else {
+                $asunto      = trim($parametros['asunto']      ?? '');
+                $descripcion = trim($parametros['descripcion'] ?? '');
+
+                if (empty($asunto)) {
+                    return ['error' => 'El asunto es requerido'];
+                }
+
+                $titulo_correo = $asunto;
+                $htmlBody = $this->crearPlantillaMensajeHTML(
+                    $empresa,
+                    $asunto,
+                    $descripcion,
+                    $nombre_completo,
+                    $logoUrl,
+                    $support_por_defecto
+                );
+            }
+
+            // ── Enviar correo ──────────────────────────────────────────
+            $envio         = $this->email->enviar_email_errores($correo, $htmlBody, $titulo_correo, '', false, $empresa, true);
+            $envio_exitoso = is_array($envio) ? $envio['status'] : $envio;
+            $error_mensaje = is_array($envio) && isset($envio['error']) ? $envio['error'] : '';
+
+            if ($envio_exitoso) {
+                $estado_envio = 1;
+                $detalle_log  = 'Correo enviado correctamente';
+            } else {
+                $estado_envio = 0;
+                $detalle_log  = !empty($error_mensaje) ? substr($error_mensaje, 0, 500) : 'Error desconocido al enviar';
+            }
+
+            // ── Registrar log ──────────────────────────────────────────
+            $this->insertar_editar([
+                'correo_destino'     => $correo,
+                'asunto'             => $titulo_correo,
+                'detalle'            => $detalle_log,
+                'id_remitente'       => $id_remitente,
+                'tabla_remitente'    => 'USUARIOS',
+                'id_destinatario'    => $pos_id,
+                'tabla_destinatario' => 'th_postulantes',
+                'enviado'            => $estado_envio,
+                'estado'             => 1
+            ]);
+
+            if ($envio_exitoso) {
+                return [
+                    'enviado' => true,
+                    'correo'  => $correo,
+                    'mensaje' => $detalle_log
+                ];
+            } else {
+                return ['error' => $detalle_log];
+            }
+        } catch (Exception $e) {
+            return ['error' => 'Error crítico: ' . $e->getMessage()];
         }
     }
 

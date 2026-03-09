@@ -60,6 +60,14 @@ if (isset($_GET['id_persona'])) {
                                     <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_postulantes" class="btn btn-outline-dark btn-sm d-flex align-items-center"><i class="bx bx-arrow-back"></i> Regresar</a>
                                 </div>
                             </div>
+                            <?php
+                            if ($id_postulante !== '') { ?>
+                                <button class="btn btn-success btn-sm" type="button"
+                                    onclick="abrir_modal_correo_postulante('<?= $id_postulante ?>')">
+                                    <i class="bx bx-envelope me-1"></i> Enviar Correo
+                                </button>
+                            <?php }
+                            ?>
                         </div>
                         <hr>
                         <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_formulario_registro.php'); ?>
@@ -79,6 +87,141 @@ if (isset($_GET['id_persona'])) {
         </div>
     </div>
 </div>
+<div class="modal fade" id="modal_correo_postulante" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bx bx-envelope me-2"></i> Enviar Mensaje</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" value="1" id="cbx_cred_postulante" checked>
+                    <label class="form-check-label" for="cbx_cred_postulante">Enviar credenciales de acceso</label>
+                </div>
+
+                <div id="cont_inputs_postulante" style="display:none;">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Asunto <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" id="txt_asunto_postulante" placeholder="Asunto del mensaje">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Descripción <span class="text-danger">*</span></label>
+                        <textarea class="form-control form-control-sm" id="txt_descripcion_postulante" rows="5" placeholder="Escribe aquí el mensaje..."></textarea>
+                    </div>
+                </div>
+
+                <div id="info_cred_postulante" class="small text-muted">
+                    <i class="bx bx-info-circle me-1"></i>
+                    Se generará una nueva contraseña y se enviará al correo del postulante.
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" id="btn_enviar_correo_postulante" class="btn btn-primary btn-sm" onclick="enviar_correo_postulante()">
+                    <i class="bx bx-send me-1"></i> Enviar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var _pos_id_correo = null;
+
+    // ── Abrir modal ────────────────────────────────────────────────
+    function abrir_modal_correo_postulante(pos_id) {
+        _pos_id_correo = pos_id;
+
+        // Resetear formulario
+        $('#cbx_cred_postulante').prop('checked', true);
+        $('#txt_asunto_postulante').val('').removeClass('is-invalid');
+        $('#txt_descripcion_postulante').val('').removeClass('is-invalid');
+        actualizar_vista_modal_postulante();
+
+        $('#modal_correo_postulante').modal('show');
+    }
+    // ── Toggle credenciales / mensaje libre ────────────────────────
+    function actualizar_vista_modal_postulante() {
+        var cred = $('#cbx_cred_postulante').is(':checked');
+        $('#cont_inputs_postulante').toggle(!cred);
+        $('#info_cred_postulante').toggle(cred);
+    }
+
+    $(document).on('change', '#cbx_cred_postulante', function() {
+        actualizar_vista_modal_postulante();
+    });
+
+    // ── Enviar ─────────────────────────────────────────────────────
+    function enviar_correo_postulante() {
+        if (!_pos_id_correo) return;
+
+        var enviar_cred = $('#cbx_cred_postulante').is(':checked');
+        var asunto = $.trim($('#txt_asunto_postulante').val());
+        var descripcion = $.trim($('#txt_descripcion_postulante').val());
+
+        // Validar si es mensaje libre
+        if (!enviar_cred) {
+            $('#txt_asunto_postulante').toggleClass('is-invalid', !asunto);
+            $('#txt_descripcion_postulante').toggleClass('is-invalid', !descripcion);
+            if (!asunto || !descripcion) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campos requeridos',
+                    text: 'Completa el asunto y la descripción.',
+                    confirmButtonColor: '#3085d6'
+                });
+                return;
+            }
+        }
+
+        $('#modal_correo_postulante').modal('hide');
+
+        Swal.fire({
+            title: 'Enviando...',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            didOpen: function() {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_logs_correosC.php?enviar_correo_postulante=true',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                parametros: {
+                    pos_id: _pos_id_correo,
+                    enviar_credenciales: enviar_cred ? 1 : 0,
+                    asunto: asunto,
+                    descripcion: descripcion
+                }
+            },
+            success: function(response) {
+                if (response.error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.error,
+                        confirmButtonColor: '#d33'
+                    });
+                    return;
+                }
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Correo enviado',
+                    text: 'Se envió correctamente a ' + response.correo,
+                    confirmButtonColor: '#198754'
+                });
+            },
+            error: function(xhr, status, error) {
+                Swal.fire('Error', 'Error en la conexión: ' + error, 'error');
+            }
+        });
+    }
+</script>
 
 <script>
     $(document).ready(function() {

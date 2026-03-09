@@ -264,6 +264,14 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
                 } else if (response == -2) {
                     $(txt_cedula).addClass('is-invalid');
                     $('#error_txt_cedula').text('La cédula ya está en uso.');
+                } else if (response == -3) {
+                    $(txt_correo).addClass('is-invalid');
+                    $('#error_txt_correo').text('El correo electrónico ya está en uso.');
+                } else if (response == -4) {
+                    $(txt_correo).addClass('is-invalid');
+                    $(txt_cedula).addClass('is-invalid');
+                    $('#error_txt_cedula').text('La cédula ya está en uso.');
+                    $('#error_txt_correo').text('El correo electrónico está en uso.');
                 }
             },
 
@@ -380,6 +388,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
         <div class="col-md-4">
             <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico </label>
             <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" maxlength="100">
+            <span id="error_txt_correo" class="text-danger small"></span>
         </div>
     </div>
 

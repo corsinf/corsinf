@@ -89,7 +89,7 @@ class th_postulantesC
         $tabla = $_SESSION['INICIO']['NO_CONCURENTE_TABLA'] ?? '';
 
         if ($id != null || $id != '' || $id != 0) {
-            
+
             if ($tabla == '_talentoh.th_personas') {
                 $datos = $this->personas->obtener_id($id);
             } else if ($tabla == '_talentoh.th_postulantes') {
@@ -97,7 +97,6 @@ class th_postulantesC
             } else {
                 return -2; //Usuario no vinculado a ninguna tabla para realizar la postulacion
             }
-
         } else {
             return -1;
         }
@@ -125,7 +124,63 @@ class th_postulantesC
 
     function insertar_editar($parametros)
     {
-        //print_r($parametros); exit(); die();
+        $cedula    = trim($parametros['txt_cedula']  ?? '');
+        $correo    = trim($parametros['txt_correo']  ?? '');
+        $id_postulante = !empty($parametros['_id']) ? intval($parametros['_id']) : null;
+
+        $th_per_id_vinculado = null;
+        if ($id_postulante) {
+            $post_actual = $this->modelo->where('th_pos_id', $id_postulante)->listar();
+            if (!empty($post_actual)) {
+                // th_personas tiene th_pos_id como FK hacia postulantes
+                $persona_vinculada = $this->personas->where('th_pos_id', $id_postulante)->listar();
+                if (!empty($persona_vinculada)) {
+                    $th_per_id_vinculado = $persona_vinculada[0]['th_per_id'] ?? null;
+                }
+            }
+        }
+
+        $cedula_duplicada = false;
+        $correo_duplicado = false;
+       
+        if (!empty($cedula)) {
+
+            $this->modelo->where('th_pos_cedula', $cedula);
+            if ($id_postulante) $this->modelo->where('th_pos_id !', $id_postulante);
+            if (!empty($this->modelo->listar())) {
+                $cedula_duplicada = true;
+            }
+
+            if (!$cedula_duplicada) {
+                $this->personas->where('th_per_cedula', $cedula);
+                if ($th_per_id_vinculado) $this->personas->where('th_per_id !', $th_per_id_vinculado);
+                if (!empty($this->personas->listar())) {
+                    $cedula_duplicada = true;
+                }
+            }
+        }
+
+       
+        if (!empty($correo)) {
+
+            $this->modelo->where('th_pos_correo', $correo);
+            if ($id_postulante) $this->modelo->where('th_pos_id !', $id_postulante);
+            if (!empty($this->modelo->listar())) {
+                $correo_duplicado = true;
+            }
+
+            if (!$correo_duplicado) {
+                $this->personas->where('th_per_correo', $correo);
+                if ($th_per_id_vinculado) $this->personas->where('th_per_id !', $th_per_id_vinculado);
+                if (!empty($this->personas->listar())) {
+                    $correo_duplicado = true;
+                }
+            }
+        }
+       
+        if ($cedula_duplicada && $correo_duplicado) return -4;
+        if ($cedula_duplicada)                      return -2;
+        if ($correo_duplicado)                      return -3;
         $datos = array(
             array('campo' => 'th_pos_primer_nombre', 'dato' => $parametros['txt_primer_nombre']),
             array('campo' => 'th_pos_segundo_nombre', 'dato' => $parametros['txt_segundo_nombre']),
