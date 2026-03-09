@@ -24,6 +24,7 @@
                 $('#txt_header_titulo').text(p.cn_pla_titulo);
                 $('#txt_cargo_nombre_oficial').text(cargo.nombre);
                 $('#txt_header_departamento').text(p.departamento.th_dep_nombre);
+                $('#txt_header_seccion').text(p.seccion.descripcion);
                 $('#txt_responsable').text(p.per_nombre_completo);
                 $('#txt_vacantes').text(p.cn_pla_num_vacantes);
                 $('#txt_nomina').text(p.descripcion_nomina);
@@ -229,6 +230,7 @@
                     <div class="info-pill"><i class="fas fa-layer-group"></i> <span id="txt_header_departamento"></span></div>
                     <div class="info-pill"><i class="fas fa-users"></i> Vacantes: <b id="txt_vacantes"></b></div>
                     <div class="info-pill"><i class="fas fa-user-tie"></i> <span id="txt_responsable"></span></div>
+                    <div class="info-pill"><i class="fas fa-user-tie"></i> <span id="txt_header_seccion"></span></div>
                 </div>
             </div>
             <div class="col-lg-5">

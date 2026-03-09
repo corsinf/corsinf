@@ -41,6 +41,7 @@
         cargar_select2_url('ddl_cargo', '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_cargoC.php?buscar=true');
         cargar_select2_url('ddl_th_dep_id', '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true');
         cargar_select2_url('ddl_id_nomina', '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_nominaC.php?buscar=true');
+        cargar_select2_url('ddl_id_seccion', '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_seccionC.php?buscar=true');
         cargar_select2_url('ddl_cn_pla_responsable', '../controlador/TALENTO_HUMANO/th_personasC.php?busca_persona_nomina=true');
     }
 
@@ -102,6 +103,7 @@
             'ddl_id_tipo_seleccion': $('#ddl_id_tipo_seleccion').val(),
             'txt_cn_pla_num_vacantes': $('#txt_cn_pla_num_vacantes').val(),
             'ddl_id_nomina': $('#ddl_id_nomina').val(),
+            'ddl_id_seccion': $('#ddl_id_seccion').val(),
             'txt_cn_pla_fecha_publicacion': $('#txt_cn_pla_fecha_publicacion').val(),
             'txt_cn_pla_fecha_cierre': $('#txt_cn_pla_fecha_cierre').val(),
             'txt_cn_pla_salario_min': $('#txt_cn_pla_salario_min').val(),
@@ -205,6 +207,11 @@
                 $('#ddl_id_nomina').append($('<option>', {
                     value: r.id_nomina,
                     text: r.descripcion_nomina,
+                    selected: true
+                }));
+                $('#ddl_id_seccion').append($('<option>', {
+                    value: r.id_seccion,
+                    text: r.descripcion_seccion,
                     selected: true
                 }));
 
@@ -389,22 +396,28 @@
         </div>
 
         <div class="row mb-2">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label for="ddl_id_tipo_seleccion" class="form-label">Tipo de Selección </label>
                 <select class="form-select form-select-sm select2-validation" id="ddl_id_tipo_seleccion" name="ddl_id_tipo_seleccion">
                     <option value="" selected hidden>-- Seleccione --</option>
                 </select>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label for="ddl_id_nomina" class="form-label">Figura Legal </label>
                 <select class="form-select form-select-sm select2-validation" id="ddl_id_nomina" name="ddl_id_nomina">
                     <option value="" selected hidden>-- Seleccione --</option>
                 </select>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label for="txt_cn_pla_num_vacantes" class="form-label">Número de Vacantes </label>
                 <input type="number" min="1" class="form-control form-control-sm"
                     id="txt_cn_pla_num_vacantes" name="txt_cn_pla_num_vacantes" placeholder="Ej: 1" required />
+            </div>
+            <div class="col-md-3">
+                <label for="ddl_id_seccion" class="form-label">Sessión </label>
+                <select class="form-select form-select-sm select2-validation" id="ddl_id_seccion" name="ddl_id_seccion">
+                    <option value="" selected hidden>-- Seleccione --</option>
+                </select>
             </div>
             <div id="pnl_prioridad_interna" class="col-md-12" style="display: none;">
                 <div class="d-flex flex-wrap gap-4 p-2 rounded bg-white">
@@ -415,6 +428,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
         <div class="p-3 bg-light rounded-3 border border-dashed mb-3">
@@ -514,7 +528,7 @@
 
         // Asteriscos campos obligatorios
         ['txt_cn_pla_titulo', 'txt_cn_pla_descripcion', 'ddl_cargo', 'ddl_th_dep_id',
-            'ddl_id_tipo_seleccion', 'txt_cn_pla_num_vacantes', 'ddl_id_nomina',
+            'ddl_id_tipo_seleccion', 'txt_cn_pla_num_vacantes', 'ddl_id_nomina','ddl_id_seccion',
             'txt_cn_pla_fecha_publicacion', 'txt_cn_pla_fecha_cierre',
             'txt_cn_pla_salario_min', 'txt_cn_pla_salario_max', 'ddl_cn_pla_responsable'
         ].forEach(function(id) {
@@ -547,6 +561,9 @@
                     digits: true
                 },
                 ddl_id_nomina: {
+                    required: true
+                },
+                ddl_id_seccion: {
                     required: true
                 },
                 txt_cn_pla_fecha_publicacion: {
@@ -593,6 +610,9 @@
                 },
                 ddl_id_nomina: {
                     required: 'Seleccione la figura legal / nómina'
+                },
+                ddl_id_seccion: {
+                    required: 'Seleccione la sección'
                 },
                 txt_cn_pla_fecha_publicacion: {
                     required: 'Seleccione la fecha de publicación'

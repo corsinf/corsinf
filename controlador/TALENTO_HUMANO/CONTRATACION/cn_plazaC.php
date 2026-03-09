@@ -82,6 +82,7 @@ class cn_plazaC
             ['campo' => 'id_tipo_seleccion',          'dato' => $parametros['ddl_id_tipo_seleccion'] ?? null],
             ['campo' => 'cn_pla_num_vacantes',        'dato' => $parametros['txt_cn_pla_num_vacantes'] ?? null],
             ['campo' => 'id_nomina',                  'dato' => $parametros['ddl_id_nomina'] ?? null],
+            ['campo' => 'id_seccion',                  'dato' => $parametros['ddl_id_seccion'] ?? null],
             ['campo' => 'cn_pla_fecha_publicacion',   'dato' => $parametros['txt_cn_pla_fecha_publicacion'] ?? null],
             ['campo' => 'cn_pla_fecha_cierre',        'dato' => $parametros['txt_cn_pla_fecha_cierre'] ?? null],
             ['campo' => 'cn_pla_salario_min',         'dato' => $parametros['txt_cn_pla_salario_min'] ?? null],

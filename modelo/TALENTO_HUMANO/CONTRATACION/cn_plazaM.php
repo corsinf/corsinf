@@ -27,6 +27,7 @@ class cn_plazaM extends BaseModel
         'cn_pla_fecha_creacion',
         'cn_pla_fecha_modificacion',
         'id_plaza_estados',
+        'id_seccion',
     ];
 
     public function listar_plaza_por_id($id = '', $estado = 1, $estados_plaza = '')
@@ -55,6 +56,7 @@ class cn_plazaM extends BaseModel
                 p.cn_pla_fecha_creacion,
                 p.cn_pla_fecha_modificacion,
                 p.id_plaza_estados,
+                p.id_seccion,
                 pla_est.codigo AS codigo_plaza_estado,
                 pla_est.descripcion AS descripcion_plaza_estado,
                 pla_est.orden AS orden_plaza_estado,
@@ -62,6 +64,7 @@ class cn_plazaM extends BaseModel
                 c.nombre AS descripcion_cargo,
                 d.th_dep_nombre AS descripcion_departamento,
                 ts.descripcion AS descripcion_tipo_seleccion,
+                s.descripcion AS descripcion_seccion,
                 n.nombre AS descripcion_nomina,
                 per.th_per_cedula AS per_cedula,
                 per.th_per_nombres_completos AS per_nombre_completo
@@ -70,6 +73,7 @@ class cn_plazaM extends BaseModel
             LEFT JOIN th_departamentos d ON p.th_dep_id = d.th_dep_id
             LEFT JOIN cn_cat_tipo_seleccion ts ON p.id_tipo_seleccion = ts.id_tipo_seleccion
             LEFT JOIN th_cat_nomina n ON p.id_nomina = n.id_nomina
+            LEFT JOIN th_cat_seccion s ON p.id_seccion = s.id_seccion
             LEFT JOIN th_personas per ON p.th_per_id_responsable = per.th_per_id
             LEFT JOIN cn_cat_plaza_estados pla_est ON p.id_plaza_estados = pla_est.id_plaza_estados
             WHERE p.cn_pla_estado = $estado";
