@@ -2,6 +2,8 @@
 date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 2) . '/modelo/GENERAL/th_personasM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/POSTULANTES/th_postulantesM.php');
+
 
 $controlador = new th_personasC();
 
@@ -34,10 +36,12 @@ if (isset($_GET['insertar_imagen'])) {
 class th_personasC
 {
     private $modelo;
+    private $th_postulantes;
 
     function __construct()
     {
         $this->modelo = new th_personasM();
+        $this->th_postulantes = new th_postulantesM();
     }
 
     function listar($id = '')
@@ -67,8 +71,71 @@ class th_personasC
             );
 
             // Obtener cédula (puede venir de txt_cedula o txt_numero_cedula)
-            $cedula = $parametros['txt_cedula_persona'] ?? $parametros['txt_numero_cedula'] ?? '';
-            $correo = $parametros['txt_correo'] ?? '';
+            $cedula     = $parametros['txt_cedula_persona'] ?? $parametros['txt_numero_cedula'] ?? '';
+            $correo     = $parametros['txt_correo'] ?? '';
+            $id_persona = !empty($parametros['_id']) ? intval($parametros['_id']) : null;
+
+            // Si es edición, obtener el th_pos_id vinculado a esta persona
+            $th_pos_id_vinculado = null;
+            if ($id_persona) {
+                $persona_actual = $this->modelo->where('th_per_id', $id_persona)->listar();
+                if (!empty($persona_actual)) {
+                    $th_pos_id_vinculado = $persona_actual[0]['th_pos_id'] ?? null;
+                }
+            }
+
+            $cedula_duplicada = false;
+            $correo_duplicado = false;
+
+            // ══════════════════════════════════════════════
+            // VALIDAR CÉDULA
+            // ══════════════════════════════════════════════
+            if (!empty($cedula)) {
+
+                $this->modelo->where('th_per_cedula', $cedula);
+                if ($id_persona) $this->modelo->where('th_per_id !', $id_persona);
+                if (!empty($this->modelo->listar())) {
+                    $cedula_duplicada = true;
+                }
+
+                if (!$cedula_duplicada) {
+                    $this->th_postulantes->where('th_pos_cedula', $cedula);
+                    if ($th_pos_id_vinculado) $this->th_postulantes->where('th_pos_id !', $th_pos_id_vinculado);
+                    if (!empty($this->th_postulantes->listar())) {
+                        $cedula_duplicada = true;
+                    }
+                }
+            }
+
+            // ══════════════════════════════════════════════
+            // VALIDAR CORREO
+            // ══════════════════════════════════════════════
+            if (!empty($correo)) {
+
+                $this->modelo->where('th_per_correo', $correo);
+                if ($id_persona) $this->modelo->where('th_per_id !', $id_persona);
+                if (!empty($this->modelo->listar())) {
+                    $correo_duplicado = true;
+                }
+
+                if (!$correo_duplicado) {
+                    $this->th_postulantes->where('th_pos_correo', $correo);
+                    if ($th_pos_id_vinculado) $this->th_postulantes->where('th_pos_id !', $th_pos_id_vinculado);
+                    if (!empty($this->th_postulantes->listar())) {
+                        $correo_duplicado = true;
+                    }
+                }
+            }
+
+            // ══════════════════════════════════════════════
+            // RETORNAR MENSAJE UNIFICADO
+            // ══════════════════════════════════════════════
+            if ($cedula_duplicada && $correo_duplicado) return -4;
+            if ($cedula_duplicada)                      return -2;
+            if ($correo_duplicado)                      return -3;
+
+
+
 
             // Array de datos - SOLO CAMPOS QUE EXISTEN EN LA BD
             $datos = array(

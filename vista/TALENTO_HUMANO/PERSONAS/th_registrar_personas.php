@@ -187,6 +187,10 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
                 } else if (response == -3) {
                     $(txt_correo).addClass('is-invalid');
                     $('#error_txt_correo').text('El correo electrónico ya está en uso.');
+                } else if (response == -4) {
+                    $(txt_correo).addClass('is-invalid');
+                    $('#error_txt_cedula').text('La cédula ya está en uso.');
+                    $('#error_txt_correo').text('El correo electrónico está en uso.');
                 }
             },
 
@@ -272,6 +276,42 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
 
 
         function enviar_Mail_Persona(parametrosLogCorreos) {
+
+            var correo = $('#txt_correo').val();
+            console.log(correo);
+
+            var cedula = $('#txt_cedula').val();
+
+            if (correo === '') {
+                $modal.modal('hide');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Atención',
+                    text: 'Por favor, actualice los datos.',
+                    confirmButtonColor: '#3085d6',
+                }).then(() => {
+                    $('#txt_correo').focus();
+                    $('#txt_correo').addClass('is-invalid').removeClass('is-valid');
+                    $('#error_txt_correo').text('El correo electrónico está en uso.');
+
+                });
+                return;
+
+            }
+            if (cedula === '') {
+                $modal.modal('hide');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Atención',
+                    text: 'Por favor, actualice los datos.',
+                    confirmButtonColor: '#3085d6',
+                }).then(() => {
+                    $('#txt_cedula').focus();
+                    $('#txt_cedula').addClass('is-invalid').removeClass('is-valid');
+                    $('#error_txt_cedula').text('La cédula ya está en uso.');
+                });
+                return;
+            }
 
             $.ajax({
                 data: {

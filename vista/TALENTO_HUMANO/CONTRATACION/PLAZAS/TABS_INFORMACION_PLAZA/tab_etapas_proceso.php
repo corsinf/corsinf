@@ -529,6 +529,7 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                     <?php if (!empty($_id_plaza)) { ?>
                         cargar_etapas_tarjetas(<?= (int)$_id_plaza ?>);
                         cargar_plaza_historial('<?= $_id_plaza ?>');
+                        actualizar_boton_postulante(false);
                     <?php } ?>
 
                     var id_plaza_estado = parseInt($('#txt_id_plaza_estados').val()) || 0;
