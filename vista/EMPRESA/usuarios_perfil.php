@@ -191,7 +191,7 @@
      Swal.fire({
       title: 'Quiere eliminar este registro?',
       text: "Esta seguro de eliminar este registro!",
-      type: 'warning',
+      icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
@@ -476,6 +476,69 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal fade" id="add_subModulo" tabindex="-1" role="dialog" aria-bs-labelledby="exampleModalCenterTitle" aria-hidden="true" data-bs-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="title_usuarios_sub_perfil">Sub Perfil</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <b>Nombre</b>
+            <input type="" name="txt_sub_perfil" id="txt_sub_perfil" class="form-control form-control-sm" placeholder="Sub perfil"> 
+            <input type="hidden" name="txt_perfil" id="txt_perfil" class="form-control form-control-sm" placeholder="Sub perfil">              
+          </div>        
+        </div>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="add_sub_perfil();" id="btn_opcion">Guardar</button>
+          <button type="button" class="btn btn-default" data-bs-dismiss="modal" aria-label="Close">Cerrar</button>
+        </div>
+    </div>
+  </div>
+</div>
+<script>
+  
+  function add_subModulo(id)
+  {
+    var tipo = $('#txt_tipo_usuario_'+id).val();
+    $('#txt_perfil').val(id);
+    $('#title_usuarios_sub_perfil').text("Sub perfil de "+tipo);
+    $('#add_subModulo').modal('show');
+  }
+
+  function add_sub_perfil()
+  {
+    var subperfil = $('#txt_sub_perfil').val();
+    if(subperfil==""){ Swal.fire("Llene todo los campos","","error");}
+    var parametros = 
+    {
+      'perfil':$('#txt_perfil').val(),
+      'subperfil':subperfil
+    }
+      $.ajax({
+         data:  {parametros:parametros},
+         url:   '../controlador/tipo_usuarioC.php?add_sub_perfil=true',
+         type:  'post',
+         dataType: 'json',
+         success:  function (response) {  
+            if(response)
+            {
+              Swal.fire("Sub perfil guardado","","success").then(function(){
+                $('#txt_perfil').val("");
+                $('#txt_sub_perfil').val("");
+                $('#add_subModulo').modal('hide');
+                lista_tipo_usuario();
+              });
+            }
+          } 
+          
+       });
+    }
+</script>
 
 
 

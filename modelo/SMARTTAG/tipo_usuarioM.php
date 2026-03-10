@@ -58,7 +58,7 @@ class tipo_usuarioM
 
 	function lista_tipo_usuario($query=false)
 	{
-		$sql = "SELECT id_tipo_usuario as 'id', detalle_tipo_usuario as 'nombre' FROM tipo_usuario WHERE 1=1 ";
+		$sql = "SELECT id_tipo_usuario as 'id', detalle_tipo_usuario as 'nombre' FROM tipo_usuario WHERE ESTADO='A' AND PADRE = 0 ";
 		if($query)
 		{
 			$sql.=" detalle_tipo_usuario LIKE '%".$query."%'";

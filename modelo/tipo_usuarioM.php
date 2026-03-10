@@ -74,7 +74,9 @@ class tipo_usuarioM
 
 	function lista_tipo_usuario($query=false)
 	{
-		$sql = "SELECT ID_TIPO as 'id', DESCRIPCION as 'nombre' FROM TIPO_USUARIO WHERE 1=1 ";
+		$sql = "SELECT ID_TIPO as 'id', DESCRIPCION as 'nombre' FROM TIPO_USUARIO 
+		WHERE ESTADO='A'
+		AND PADRE = 0 ";
 		if($query)
 		{
 			$sql.=" AND DESCRIPCION LIKE '%".$query."%'";
@@ -84,7 +86,23 @@ class tipo_usuarioM
 		return $datos;
 	}
 
-	function lista_tipo_usuario_all($query=false,$exacto=false)
+	function lista_tipo_usuario_hijo($query=false,$padre=false)
+	{
+		$sql = "SELECT ID_TIPO as 'id', DESCRIPCION as 'nombre' FROM TIPO_USUARIO WHERE ESTADO='A' ";
+		if($query)
+		{
+			$sql.=" AND DESCRIPCION LIKE '%".$query."%'";
+		}
+		if($padre)
+		{
+			$sql.=" AND PADRE = '".$padre."'";
+		}
+		// print_r($sql);die();
+		$datos = $this->db->datos($sql,1);
+		return $datos;
+	}
+
+	function lista_tipo_usuario_all($query=false,$exacto=false,$padre=false)
 	{
 		$sql = "SELECT ID_TIPO as 'id', DESCRIPCION as 'nombre' FROM TIPO_USUARIO WHERE 1=1 ";
 		if($query)
@@ -96,6 +114,10 @@ class tipo_usuarioM
 			}else{
 				$sql.=" AND DESCRIPCION LIKE '%".$query."%'";
 			}
+		}
+		if($padre)
+		{
+			$sql.=" AND PADRE = '".$padre."'";
 		}
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql,1);

@@ -101,7 +101,8 @@
       'usuario': $('#ddl_usuario').val(),
       'pass_usu': $('#ddl_pass_usu').val() ?? '',
       'chk_pass': $('#chk_claves_aleatorias').is(':checked') ? 1 : 0,
-      'perfil_usu': $("#ddl_perfil").val(),
+      'perfil_usu': $("#ddl_perfil").val(),      
+      'subperfil_usu': $("#ddl_Sub_perfil").val(),
       'foto': $('#ddl_campo_img').val(),
     }
     $.ajax({
@@ -186,6 +187,41 @@
 
     });
   }
+
+  function cargar_sub_perfil()
+  {
+    perfil = $('#ddl_perfil').val();
+    var parametros = 
+    {
+      'perfil':perfil,
+    }
+      $.ajax({
+        data:  {parametros:parametros},
+        url: '../controlador/no_concurenteC.php?lista_sub_perfil=true',
+        type: 'post',
+        dataType: 'json',
+        /*beforeSend: function () {   
+             var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           $('#tabla_').html(spiner);
+        },*/
+        success: function(response) {
+          console.log(response);
+          var op = '<option value="">Seleccione Sub perfil</option>';
+          
+          if(response.length>0)
+          {
+            $('#pnl_sub_perfil').removeClass('d-none');
+            response.forEach(function(item, i) {
+              op += '<option value="'+item.id+'">'+item.nombre+'</option>';
+            })
+          }else
+          {            
+            $('#pnl_sub_perfil').addClass('d-none');
+          }
+          $('#ddl_Sub_perfil').html(op);
+        }
+      });
+  }
 </script>
 
 <div class="page-wrapper">
@@ -220,8 +256,15 @@
 
               <div class="col-sm-3">
                 <label class="fw-bold mb-1">Perfil Asignado</label>
-                <select class="form-select form-select-sm" id="ddl_perfil" name="ddl_perfil">
+                <select class="form-select form-select-sm" id="ddl_perfil" name="ddl_perfil" onchange="cargar_sub_perfil()">
                   <option value="">Seleccione perfil de usuario</option>
+                </select>
+              </div>
+
+              <div class="col-sm-3 d-none" id="pnl_sub_perfil">
+                <label class="fw-bold mb-1">Sub perfil</label>
+                <select class="form-select form-select-sm" id="ddl_Sub_perfil" name="ddl_Sub_perfil">
+                  <option value="">Seleccione sub perfil de usuario</option>
                 </select>
               </div>
 

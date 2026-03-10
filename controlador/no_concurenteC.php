@@ -26,6 +26,9 @@ if (isset($_GET['delete_no_concurente'])) {
 	echo json_encode($controlador->eliminar($_POST['parametros']));
 }
 
+if (isset($_GET['lista_sub_perfil'])) {
+	echo json_encode($controlador->lista_sub_perfil($_POST['parametros']));
+}
 
 
 class no_concurenteC
@@ -52,6 +55,10 @@ class no_concurenteC
 
 	function add_no_concurente($parametros)
 	{
+		if($parametros['subperfil_usu'])
+		{
+			$parametros['perfil_usu'] = $parametros['subperfil_usu'];
+		}
 		$existe = $this->modelo->existe_no_concurente($parametros['tabla']);
 
 		if (count($existe) == 0) {
@@ -151,4 +158,13 @@ class no_concurenteC
 		}
 		return $lista;
 	}
+
+	function lista_sub_perfil($parametros)
+	{
+
+		return $this->modelo->lista_sub_perfil($parametros['perfil']);
+		// print_r($parametros);die();
+	}
+
+
 }

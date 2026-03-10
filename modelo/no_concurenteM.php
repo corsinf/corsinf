@@ -148,4 +148,18 @@ class no_concurenteM
 		// print_r($sql); exit(); die();
 		return $this->db->sql_string($sql, false, true);
 	}
+
+	function lista_sub_perfil($perfil)
+	{
+		$sql = "SELECT ID_TIPO as id,DESCRIPCION as nombre
+				FROM TIPO_USUARIO 
+				WHERE ESTADO = 'A'";
+				if($perfil)
+				{
+					$sql.=" AND PADRE = '".$perfil."'";
+				}
+		$datos = $this->db->datos($sql, 1);
+		return $datos;
+	
+	}
 }

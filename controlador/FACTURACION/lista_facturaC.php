@@ -2,7 +2,10 @@
 require_once(dirname(__DIR__,2).'/modelo/FACTURACION/lista_facturaM.php');
 require_once(dirname(__DIR__,2).'/modelo/FACTURACION/secuencialesM.php');
 require_once(dirname(__DIR__,2).'/modelo/FACTURACION/categoriasM.php');
+require_once(dirname(__DIR__,2).'/modelo/FACTURACION/lineas_facturasM.php');
 require_once(dirname(__DIR__,2).'/modelo/FACTURACION/tabla_referenciales_sriM.php');
+require_once(dirname(__DIR__,2).'/lib/PDFelectronicos.php');
+require_once(dirname(__DIR__,2).'/comprobantes/SRI/autorizar_sri.php');
 // require_once('../modelo/loginM.php');
 /**
  * 
@@ -142,6 +145,13 @@ if(isset($_GET['pagada']))
   $parametros = $_POST['parametros'];
    echo  json_encode($controlador->pagada($parametros));
 }
+
+// if(isset($_GET['reporte_factura']))
+// {   
+//   $parametros = $_GET;
+//   echo json_encode($controlador->reporte_factura($parametros));
+// }
+
 class lista_facturaC
 {
 	private $modelo;
@@ -149,6 +159,7 @@ class lista_facturaC
   private $secuencial;
   private $tabla_referenciales_sri;
   private $categorias;
+  private $lineas;
 
 	function __construct()
 	{
@@ -156,8 +167,10 @@ class lista_facturaC
     $this->secuencial = new secuencialesM();
     $this->categorias = new categoriasM();
     $this->tabla_referenciales_sri = new tabla_referenciales_sriM();
+    $this->lineas = new lineas_facturasM();
 	    // $this->mail = new enviar_emails();
-	    // $this->pdf = new Reporte_pdf(); 
+	  $this->pdf = new PDFelectronicos(); 
+    $this->sri = new autorizacion_sri(); 
 	}
 	
 
@@ -184,30 +197,32 @@ function DCTipoPago()
     $tr ='';
     foreach($result as $key => $value)
     {
+      $value['estado'] = trim($value['estado']);
       if(is_object($value['fecha']))
       {
         $value['fecha'] = $value['fecha']->format('Y-m-d');
       }
       $tr.='<tr>
               <td>
-                <a class="btn-sm btn btn-primary" href="../controlador/facturar.php?reporte_factura=true&empresa='.$_SESSION['INICIO']['ID_EMPRESA'].'&fac='.$value['id'].'&usu='.$_SESSION['INICIO']['ID_USUARIO'].'" target="_blank"><i class="fa fa-eye" title="Ver factura"></i></a>
+                <a class="btn-sm btn btn-primary p-1" href="../controlador/FACTURACION/lista_facturaC.php?reporte_factura=true&empresa='.$_SESSION['INICIO']['ID_EMPRESA'].'&fac='.$value['id'].'&usu='.$_SESSION['INICIO']['ID_USUARIO'].'" target="_blank"><i class="bx bx-show me-0" title="Ver factura"></i></a>
                 ';
                 if($value['estado']=='P' || $value['estado']=='')
                 {
-                  $tr.='<button class="btn-sm btn btn-danger" onclick="eliminar_factura('.$value['id'].')"><i class="fa fa-trash" title="Eliminar"></i></button><button class="btn-sm btn btn-info" onclick="autorizar('.$value['id'].')"><i class="fa fa-paper-plane" title="Autorizar"></i></button>';
+                  $tr.='<button class="btn-sm btn btn-danger p-1" onclick="eliminar_factura('.$value['id'].')"><i class="bx bx-trash me-0" title="Eliminar"></i></button>
+                    <button class="btn-sm btn btn-info p-1" onclick="autorizar('.$value['id'].')"><i class="bx bx-paper-plane me-0" title="Autorizar"></i></button>';
                 }
                 if($value['estado']=='R')
                 {
-                  $tr.='<button class="btn-sm btn btn-warning" onclick="modal_error_seri(\''.$value['Autorizacion'].'\',\'FACTURAS\')"><i class="fa fa-exclamation-triangle" title="Descargar xml"></i></button>';
+                  $tr.='<button class="btn btn-sm btn btn-warning p-1" onclick="modal_error_seri(\''.$value['Autorizacion'].'\',\'FACTURAS\')"><i class="bx bx-error me-0" title="Descargar xml"></i></button>';
                 }
                 
                 if($value['estado']=='A')
                 {
-                  $tr.='<button class="btn-sm btn btn-secondary" onclick="anular_factura(\''.$value['id'].'\',\'FACTURAS\')"><i class="fa fa-times-circle" title="Anular"></i></button>';
+                  $tr.='<button class="btn-sm btn btn-secondary p-1" onclick="anular_factura(\''.$value['id'].'\',\'FACTURAS\')"><i class="bx bx-x me-0" title="Anular"></i></button>';
                 }
                 if($value['pago']=='0')
                 {
-                  $tr.='<button class="btn-sm btn btn-secondary" onclick="pagada(\''.$value['id'].'\',\'FACTURAS\')"><i class="fa fa-money-bill" title="Marcar como pagada"></i></button>';
+                  $tr.='<button class="btn-sm btn btn-secondary p-1" onclick="pagada(\''.$value['id'].'\',\'FACTURAS\')"><i class="bx bx-money me-0" title="Marcar como pagada"></i></button>';
                 }
               $tr.='</td>
               <td><a href="#" onclick="cargar_detalle(\''.$value['id'].'\',\''.$value['estado'].'\')">'.$value['nombre'].'</a></td>
@@ -249,7 +264,11 @@ function DCTipoPago()
   {
     $query =$fac;
     $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
-    $result = $this->modelo->linea_facturas($query,$id_empresa);
+    // $result = $this->lineas->where('id_factura',$fac)->where('productos.id_empresa',$_SESSION['INICIO']['ID_EMPRESA'])->join('productos','lineas_factura.referencia = productos.referencia','INNER')->Listar();
+    $result = $this->lineas->linea_facturas($fac);
+
+    // print_r($result);die();
+    // $result = $this->modelo->linea_facturas($query,$id_empresa);
     $estado_fac = $this->modelo->cliente_factura($query,$id_empresa);
 
     $tr ='';
@@ -273,7 +292,7 @@ function DCTipoPago()
        if($estado_fac[0]['estado_factura']!='A' && $estado_fac[0]['estado_factura']!='AN')
         {
           $lineas.= '   <td>
-                         <button class="btn p-2 btn-danger" onclick="Eliminar(\''.$value['id_lineas'].'\')" ><i class="fa fa-trash"></i></button>
+                         <button class="btn btn-danger btn-sm" onclick="Eliminar(\''.$value['id_lineas'].'\')" ><i class="bx bx-trash me-0"></i></button>
                         <!--- <button class="btn-sm btn-primary" onclick="Editar(\''.$value['id_lineas'].'\')" ><i class="fa fa-save"></i></button> --!>
                       </td>';
         }else{ $lineas.= '<td></td>';}
@@ -331,7 +350,7 @@ function DCTipoPago()
 
     // print_r($datos);die();
 
-    $this->modelo->update('facturas',$datos,$where,$id_empresa);
+    $this->modelo->editar($datos,$where);
     $dat = array('tr'=>$lineas,'total'=>$tota,'sub'=>$sub,'iva'=>$iva,'des'=>$des,'factura'=>$estado_fac[0]);
     return $dat;
   }
@@ -391,7 +410,7 @@ function DCTipoPago()
     $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
     // print_r($datos);die();
 
-    $this->modelo->update('facturas',$datos,$where,$id_empresa);
+    $this->modelo->editar($datos,$where);
 
     // print_r($parametros);die();
     $datosA = $this->modelo->articulos_id($parametros['id'],$_SESSION['INICIO']['ID_EMPRESA']);
@@ -429,7 +448,7 @@ function DCTipoPago()
       $datos[12]['dato'] = 0;
     }
 
-   return  $this->modelo->add('lineas_factura',$datos,$_SESSION['INICIO']['ID_EMPRESA']);
+   return  $this->lineas->insertar($datos);
 
   }
 
@@ -473,12 +492,17 @@ function DCTipoPago()
     // print_r($parametros);die();
     $datos[0]['campo']='id_lineas';
     $datos[0]['dato']=$parametros['id'];
-    return $this->modelo->delete('lineas_factura',$datos,$_SESSION['INICIO']['ID_EMPRESA']);
+    return $this->lineas->eliminar($datos);
   }
   function facturar($parametros)
   {
-    // print_r('ssss');die();
-    return  $this->sri->Autorizar($parametros);
+    // print_r($parametros);die();
+    $data = array(array('campo'=>'fecha','dato'=>$parametros['fecha']),
+                  array('campo'=>'Tipo_pago','dato'=>$parametros['tipopago']));
+    $where = array(array('campo'=>'id_factura','dato'=>$parametros['fac']));
+
+    $this->modelo->Editar($data,$where);
+    return  $this->sri->Autorizar_factura_o_liquidacion($parametros);
   }
   function cliente_factura($parametros)
   {
@@ -576,20 +600,64 @@ function DCTipoPago()
 
   function reporte_factura($parametros)
   {
+    // $empresa = $this->modelo->datos_empresa_sucursal_usuario($parametros['usu'],$parametros['empresa']);
+    // $cliente_factura = $this->modelo->cliente_factura($parametros['fac'],$parametros['empresa']);
+    // $lineas = $this->modelo->linea_facturas_all($parametros['fac'],$parametros['empresa']);
+    // $doc =  $this->pdf->factura_pdf($cliente_factura,$lineas,$empresa,false,true);
+    // // print_r($doc);die();
+
     $empresa = $this->modelo->datos_empresa_sucursal_usuario($parametros['usu'],$parametros['empresa']);
     $cliente_factura = $this->modelo->cliente_factura($parametros['fac'],$parametros['empresa']);
     $lineas = $this->modelo->linea_facturas_all($parametros['fac'],$parametros['empresa']);
-    $doc =  $this->pdf->factura_pdf($cliente_factura,$lineas,$empresa,false,true);
-    // print_r($doc);die();
+    $rimpe = $this->sri->tipo_contribuyente($empresa[0]['Ruc']);
+    if($cliente_factura[0]['Tipo_pago']=='.' || $cliente_factura[0]['Tipo_pago']=='')
+    {
+      $cliente_factura[0]['Tipo_pago'] = $parametros['pago'];
+    }
+    $tipo_pago = $this->modelo->DCTipoPago($id=false,$cliente_factura[0]['Tipo_pago'],$descripcion=false);
+    $guia = 0;
+    // $guia_remision = $this->modelo->guia_remision_x_factura($parametros['fac']);
+    // if(count($guia_remision)>0)
+    // {
+    //   $guia = 1;
+    // }
+
+    // print_r($tipo_pago);die();
+
+    $cliente_factura[0]['tipo_pago_des'] = $tipo_pago[0]['CTipoPago'];
+    $cliente_factura[0]['Guia_Remision'] = $guia;
+    $cliente_factura[0]['TC'] = 'FA';
+    // print_r($rimpe);die();
+
+    if(is_object($cliente_factura[0]['fecha']))
+    {
+      $cliente_factura[0]['fecha'] = $cliente_factura[0]['fecha']->format('Y-m-d');
+    }
+    $logo = $empresa[0]['Logo'];
+    $rin = '';
+
+    if(count($rimpe)>0)
+    {
+      if($rimpe['microempresa']!='.' && $rimpe['microempresa']!='' )
+      {
+        $rin =utf8_decode($rimpe['microempresa']);
+      }     
+    }
+
+    $empresa[0]['rimpe'] = $rin;
+    $doc = $this->pdf->FacturaElectronica($empresa,$cliente_factura,$lineas);
+
+
     return $doc;
-  }
+}
+
 
 function error_sri($parametros)
 {
   // print_r($parametros);die();
   $clave = $parametros['clave'].'.xml';
   $entidad = $_SESSION['INICIO']['ID_EMPRESA'];
-  $carpeta_entidad = dirname(__DIR__,1)."/comprobantes/entidades/entidad_".$entidad;
+  $carpeta_entidad = dirname(__DIR__,2)."/comprobantes/entidades/entidad_".$entidad;
   $carpeta_comprobantes = $carpeta_entidad.'/CE'.$entidad.'/'.$parametros['carpeta'];
   $carpeta_no_autori = $carpeta_comprobantes."/No_autorizados";
   $carpeta_rechazados = $carpeta_comprobantes."/Rechazados";
@@ -603,7 +671,7 @@ function error_sri($parametros)
   if(file_exists($ruta1))
   {
 
-    // print_r('ruta1');die();
+    print_r('ruta1');die();
     $xml = simplexml_load_file($ruta1);
     $codigo = $xml->mensajes->mensaje->mensaje->identificador;
     $mensaje = $xml->mensajes->mensaje->mensaje->mensaje;
@@ -639,9 +707,10 @@ function error_sri($parametros)
 function eliminarFac($parametros)
   {
     $empresa = $_SESSION['INICIO']['ID_EMPRESA'];
-     $this->modelo->delete_lineas_factura($empresa,$id=false,$parametros['id']);
-     return $this->modelo->delete_factura($empresa,$parametros['id']);
-    // print_r($parametros);die();
+    $where = array(array('campo'=>'id_factura','dato'=>$parametros['id']));
+    $this->lineas->eliminar($where);
+    $where = array(array('campo'=>'id_factura','dato'=>$parametros['id']));
+    return $this->modelo->eliminar($where);
   }
   function anular_factura($parametros)
   {
@@ -655,7 +724,7 @@ function eliminarFac($parametros)
 
     // print_r($datos);print_r($where);die();
 
-    return $this->modelo->update('facturas',$datos,$where, $empresa);
+    return $this->modelo->Editar($datos,$where);
     // print_r($parametros);die();
   }
 
@@ -703,6 +772,44 @@ function eliminarFac($parametros)
 
     // print_r($parametros);die();
   }
+
+  function generar_ceros($num,$long)
+  {
+    $num_l = strlen($num);
+    $num_C = $long-$num_l;
+    $ceros = str_repeat('0', $num_C);
+    return $ceros.$num;
+
+  }
+
+  // function reporte_factura($parametros)
+  // {
+  //   $empresa = $this->modelo->datos_empresa_sucursal_usuario($parametros['usu'],$parametros['empresa']);
+  //   $cliente_factura = $this->modelo->cliente_factura($parametros['fac'],$parametros['empresa']);
+  //   $lineas = $this->modelo->linea_facturas_all($parametros['fac'],$parametros['empresa']);
+  //   $rimpe = $this->sri->tipo_contribuyente($empresa[0]['RUC']);
+  //   if($cliente_factura[0]['Tipo_pago']=='.' || $cliente_factura[0]['Tipo_pago']=='')
+  //   {
+  //     $cliente_factura[0]['Tipo_pago'] = $parametros['pago'];
+  //   }
+  //   $tipo_pago = $this->modelo->DCTipoPago($id=false,$cliente_factura[0]['Tipo_pago'],$descripcion=false);
+  //   $guia = 0;
+  //   $guia_remision = $this->modelo->guia_remision_x_factura($parametros['fac']);
+  //   if(count($guia_remision)>0)
+  //   {
+  //     $guia = 1;
+  //   }
+
+  //   // print_r($tipo_pago);die();
+  //   $cliente_factura[0]['tipo_pago_des'] = $tipo_pago[0]['CTipoPago'];
+  //   $cliente_factura[0]['Guia_Remision'] = $guia;
+  //   $cliente_factura[0]['TC'] = 'FA';
+  //   // print_r($rimpe);die();
+  //   $doc =  $this->pdf->factura_pdf($cliente_factura,$lineas,$empresa,$rimpe,true,false);
+  //   // print_r($doc);die();
+  //   return $doc;
+  // }
+
 
 
 }
