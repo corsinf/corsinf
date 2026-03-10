@@ -46,31 +46,31 @@ class lista_facturaM  extends BaseModel
 		return $this->db->delete($tabla,$datos,$id_empresa);
 	}
 
-	function delete_lineas_factura($empresa,$id,$factura)
-	{
-		$sql = "DELETE FROM lineas_factura WHERE 1=1";
-		if($id)
-		{
-			$sql.=" AND id_lineas = '".$id."'";
-		}
-		if($factura)
-		{
-			$sql.=" AND id_factura= '".$factura."'";
-		}
-		return $this->db->sql_string($sql,$empresa);
-	}
+	// function delete_lineas_factura($empresa,$id,$factura)
+	// {
+	// 	$sql = "DELETE FROM lineas_factura WHERE 1=1";
+	// 	if($id)
+	// 	{
+	// 		$sql.=" AND id_lineas = '".$id."'";
+	// 	}
+	// 	if($factura)
+	// 	{
+	// 		$sql.=" AND id_factura= '".$factura."'";
+	// 	}
+	// 	return $this->db->sql_string($sql,1);
+	// }
 
-	function delete_factura($empresa,$id)
-	{
-		$sql = "DELETE FROM facturas WHERE id_empresa = '".$empresa."' ";
-		if($id)
-		{
-			$sql.=" AND id_factura = '".$id."'";
-		}
+	// function delete_factura($empresa,$id)
+	// {
+	// 	$sql = "DELETE FROM facturas WHERE id_empresa = '".$empresa."' ";
+	// 	if($id)
+	// 	{
+	// 		$sql.=" AND id_factura = '".$id."'";
+	// 	}
 
-		return $this->db->sql_string($sql,$empresa);
+	// 	return $this->db->sql_string($sql);
 
-	}
+	// }
 
 	
 	
@@ -112,24 +112,11 @@ class lista_facturaM  extends BaseModel
 		$result = $this->db->datos($sql);
 	    return $result;
 	}
-
-	function linea_facturas($id,$id_empresa)
-	{
-		$sql= "SELECT id_lineas,producto,cantidad,LF.precio_uni,LF.iva,foto,total,subtotal,descuento,observacion FROM lineas_factura LF 
-		INNER JOIN productos P ON LF.referencia = P.referencia
-		WHERE id_factura = '".$id."'
-		AND LF.Serie_No = '".$_SESSION['INICIO']['SERIE']."' 
-		AND P.id_empresa ='".$id_empresa."'
-		ORDER BY id_lineas DESC";
-		// print_r($sql);die();
-		$result = $this->db->datos($sql,$id_empresa);
-	    return $result;
-	}
 	function linea_facturas_all($id,$id_empresa)
 	{
 		$sql= "SELECT * FROM lineas_factura LF 
 		WHERE id_factura = '".$id."' ORDER BY id_lineas DESC";
-		$result = $this->db->datos($sql,$id_empresa);
+		$result = $this->db->datos($sql);
 	    return $result;
 	}
 
@@ -143,23 +130,26 @@ class lista_facturaM  extends BaseModel
 
 	function articulos_id($query,$empresa,$category=false)
 	{
-		$sql= "SELECT id_productos as 'id',nombre,precio_uni,foto,iva,referencia FROM productos WHERE id_empresa = '".$empresa."' and id_productos = '".$query."' ";
+		$sql= "SELECT id_productos as 'id',nombre,precio_uni,foto,iva,referencia 
+		FROM productos 
+		WHERE id_productos = '".$query."' ";
 		if($category){
 			$sql.=" AND categoria = '".$category."'";
 		}
-		$sql.= ' ORDER BY id_productos LIMIT 10;';
+		$sql.= ' ORDER BY id_productos';
 		// print_r($sql);die();
-		$result = $this->db->datos($sql,$empresa);
+		$result = $this->db->datos($sql);
 	    return $result;
 	}
 
 	function cliente_factura($id,$id_empresa)
 	{
-		$sql="SELECT C.id_cliente,nombre,mail,C.telefono,C.direccion,ci_ruc,num_factura,serie,valor_iva,Autorizacion,fecha,estado_factura,Tipo_pago,datos_adicionales,estado_pago FROM facturas 
-		INNER JOIN cliente C ON facturas.id_cliente = C.id_cliente
-		INNER JOIN empresa ON facturas.id_empresa = empresa.id_empresa
-		WHERE facturas.id_factura = '".$id."'";
-		$result = $this->db->datos($sql,$id_empresa);
+		$sql="SELECT C.id_cliente,nombre,mail,C.telefono,C.direccion,ci_ruc,num_factura,serie,valor_iva,Autorizacion,fecha,estado_factura,Tipo_pago,datos_adicionales,estado_pago 
+		FROM facturas F
+		INNER JOIN cliente C ON F.id_cliente = C.id_cliente
+		INNER JOIN EMPRESAS E ON F.id_empresa = E.id_empresa
+		WHERE F.id_factura = '".$id."'";
+		$result = $this->db->datos($sql);
 	    return $result;
 				
 	}
@@ -215,12 +205,14 @@ class lista_facturaM  extends BaseModel
 
 	function datos_empresa_sucursal_usuario($idUsuario,$id_empresa)
 	{
-		$sql = "SELECT * FROM usuario U
-		INNER JOIN empresa E ON U.id_empresa = E.id_empresa
-		LEFT JOIN sucursales S ON U.sucursal = S.id_sucursal 
-		WHERE id_usuario = '".$idUsuario."'";
+		$sql = "SELECT * 
+		FROM USUARIOS U 
+		LEFT JOIN sucursales S ON U.serie = S.serie_s 
+		INNER JOIN EMPRESAS E ON S.empresa = E.id_empresa 
+		WHERE id_usuarios = '".$idUsuario."'
+		AND S.empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."'";
 		// print_r($sql);die();
-		$result = $this->db->datos($sql,$id_empresa);
+		$result = $this->db->datos($sql);
 	    return $result;
 
 	}
@@ -347,6 +339,27 @@ class lista_facturaM  extends BaseModel
 		// print_r($sql);die();
 		$result = $this->db->datos($sql);
 	    return $result;
+	}
+
+	function DCTipoPago($id=false,$codigo=false,$descripcion=false)
+	{
+   	  $sql = "SELECT Codigo,CONCAT(Codigo,' ',Descripcion) As CTipoPago
+         FROM tabla_referenciales_sri
+         WHERE Tipo_Referencia = 'FORMA DE PAGO'";
+         if($codigo)
+         {
+         	$sql.=" AND Codigo = '".$codigo."'";
+         }
+         $sql.=" ORDER BY Codigo ";
+
+	      $result = $this->db->datos($sql);
+	         // print_r($result);die();
+	        $datos =  array();
+	        foreach ($result as $key => $value) {	        		
+			$datos[] =array('Codigo'=>$value['Codigo'],'CTipoPago'=>$value['CTipoPago']);	
+			 // $datos[] = $row;
+		   }
+	      return $datos;
 	}
 
 	

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jnlp href="launch.jnlp" spec="1.0+">
+    <information>
+        <title>JavClientSri</title>
+        <vendor>lenovo</vendor>
+        <homepage href=""/>
+        <description>JavClientSri</description>
+        <description kind="short">JavClientSri</description>
+    </information>
+    <update check="always"/>
+    <resources>
+        <j2se version="1.8+"/>
+        <jar href="JavClientSri.jar" main="true"/>
+        <jar href="lib/cliente-ws-offline.jar"/>
+        <jar href="lib/commons-io.jar"/>
+        <jar href="lib/serializer.jar"/>
+        <jar href="lib/xalan.jar"/>
+        <jar href="lib/gson-2.8.2.jar"/>
+    </resources>
+    <application-desc main-class="javclientsri.JavClientSri">
+        <argument>1</argument>
+        <argument>2012202406070216417900110010020000001611234567818</argument>
+        <argument>C:\xampp\htdocs\facturacion\php1\comprobantes\entidades\entidad_7\CE7\FACTURAS\Firmados</argument>
+        <argument>C:\xampp\htdocs\facturacion\php1\comprobantes\entidades\entidad_7\CE7\FACTURAS\Enviados</argument>
+        <argument>C:\xampp\htdocs\facturacion\php1\comprobantes\entidades\entidad_7\CE7\FACTURAS\Rechazados</argument>
+        <argument>https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl</argument>
+    </application-desc>
+</jnlp>

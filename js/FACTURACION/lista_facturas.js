@@ -89,7 +89,7 @@ function series()
 }
 function cargar_detalle(id,estado)
 {
-    location.href="inicio.php?acc=detalle_factura&id="+id+"&estado="+estado;
+    location.href="inicio.php?mod="+modulo+"&acc=detalle_factura&id="+id+"&estado="+estado;
 }
 
 //----------------------------detalle factura------------------------
@@ -119,7 +119,7 @@ function detalle_factura(id)
                 $('#DCTipoPago').val(response.factura.Tipo_pago);
             }
             $('#txt_datos_adicionales').val(response.factura.datos_adicionales);
-            if(response.factura.estado_factura=='A')
+            if(response.factura.estado_factura.trim()=='A')
             {
                  $('#txt_estado').text('Factura Autorizada');
                  $('#txt_estado').css('background','greenyellow');
@@ -127,14 +127,14 @@ function detalle_factura(id)
                   $('#btn_anular').css('display','initial');
                  $('#btn_eliminar').css('display','none');   
                 $('#txt_estado').css('color','black');
-            }else if(response.factura.estado_factura=='R')
+            }else if(response.factura.estado_factura.trim()=='R')
             {
                  $('#txt_estado').text('Factura rechazada');
                   $('#txt_estado').css('background','coral');
                   $('#txt_estado').css('color','white');
                   $('#btn_sri_error').css('display','initial');
                   $('#btn_eliminar').css('display','none');
-            }else if(response.factura.estado_factura=='AN'){
+            }else if(response.factura.estado_factura.trim()=='AN'){
 
                  $('#btn_autorizar').css('display','none');
                  $('#form_add_producto').css('display','none');
@@ -162,7 +162,7 @@ function detalle_factura(id)
                 $('#btn_autorizar').css('display','none');
                 $('#opciones').css('display','none');
             }
-            detalle_guia(response.factura.serie,response.factura.num_factura);  
+            // detalle_guia(response.factura.serie,response.factura.num_factura);  
             lista_series('FA','txt_serie');      
         }
       });
@@ -415,7 +415,7 @@ function autorizar(fac=false)
     }
     $.ajax({
         data:  {parametros:parametros},
-        url:   '../controlador/facturar.php?facturar=true',      
+        url:   '../controlador/FACTURACION/lista_facturaC.php?facturar=true',      
         type:  'post',
         dataType: 'json',
         success:  function (response) { 
@@ -520,7 +520,7 @@ function pdf_factura()
         'usu':usu,
         'pago':pago,
     }
-     var url1= '../controlador/facturar.php?reporte_factura=true&empresa='+empresa+'&fac='+id+'&usu='+usu+'&pago='+pago;
+     var url1= '../controlador/FACTURACION/lista_facturaC.php?reporte_factura=true&empresa='+empresa+'&fac='+id+'&usu='+usu+'&pago='+pago;
      window.open(url1,'_blank');
    
   }
@@ -619,7 +619,7 @@ function pdf_factura()
     }
     $.ajax({
         data: {parametros,parametros},
-        url:   '../controlador/facturar.php?detalle_guia=true',
+        url:   '../controlador/FACTURACION/facturar.php?detalle_guia=true',
         dataType:'json',      
         type:  'post',
         // dataType: 'json',
@@ -879,7 +879,7 @@ function eliminar(id)
             console.log(response); 
             if(response==1)
             {
-                location.href ='lista_facturas.php';
+                location.href ='../vista/inicio.php?mod='+modulo+'&acc=lista_facturas';
             }
         }
       });
@@ -911,8 +911,8 @@ function anular(id)
         dataType: 'json',
         success:  function (response) { 
             if(response==1)
-            {               
-                location.href ='lista_facturas.php';
+            {                              
+                location.href ='../vista/inicio.php?mod='+modulo+'&acc=lista_facturas';
             }
         }
       });
@@ -979,3 +979,35 @@ function pagada(id)
       });
 
 }
+
+function lista_series(tipo,campo)
+{
+    actual = $('#'+campo).text();
+    console.log(actual);
+    var parametros = 
+    {
+        'tipo':tipo,
+    }
+    $.ajax({
+        data:  {parametros:parametros},
+        url:    '../controlador/FACTURACION/lista_facturaC.php?lista_series=true',           
+        type:  'post',
+        dataType: 'json',
+        success:  function (response) { 
+            console.log(response)
+            var option = '';
+            response.forEach(function(item,i){
+                if(item.Serie!=actual)
+                {
+                    option+='<button type="button" class="dropdown-item" onclick="cambio_serie(\''+tipo+'\',\''+item.Serie+'\',)">'+item.Serie+'</button>';
+                }
+            
+            })
+            // console.log(option)
+            $('#opciones').html(option);
+            console.log(response);           
+        }
+      });
+
+}
+

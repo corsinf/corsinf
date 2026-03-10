@@ -4,7 +4,7 @@
     var empresa = '<?php echo $_SESSION['INICIO']['ID_EMPRESA']; ?>' ;
     var estadofac = '<?php echo $_GET['estado']; ?>' 
 </script>
-<script src="../js/lista_facturas.js"></script> 
+<script src="../js/FACTURACION/lista_facturas.js"></script> 
 <script type="text/javascript">
     $(document).ready(function () {
         var id = '<?php if(isset($_GET['id'])){$id = $_GET['id']; echo $_GET['id']; };?>';
@@ -24,100 +24,110 @@
         }
      });
 </script>
-<!-- Begin Page Content -->
-<main class="content">
-    <div class="container-fluid p-0">
-        <h1 class="h3 mb-3"><strong>Factura </strong><strong id="lbl_anulado" style="display:none;"><u>ANULADO</u></strong></h1>
-    <div class="row">
-    	<div class="col-sm-10">    		
-    		<a class="btn btn-default btn-sm" style="border: 1px solid;" href="lista_facturas.php"><i class="fa fa-arrow-left"></i> Regresar</a>
-            <button class="btn btn-default btn-sm" style="border: 1px solid;" onclick="pdf_factura()"><i class="fa fa-print"></i> Imprimir</button>
-            <button class="btn btn-warning btn-sm" style="border: 1px solid;" id="btn_autorizar" onclick="autorizar()"><i class="fa fa-paper-plane"></i> Autorizar</button>
-            <button class="btn btn-warning btn-sm" style="border: 1px solid; display: none;" id="btn_modal_guia" onclick="modal_guia()"><i class="fa fa-paper-plane"></i> Generar guia de remision</button>
-            <button class="btn btn-info btn-sm" style="border: 1px solid;" onclick="modal_email()"><i class="fa fa-envelope"></i> Enviar</button>
-            <button class="btn btn-primary btn-sm" id="btn_marcar_pagado" style="border: 1px solid;" onclick="pagada(<?php echo $id; ?>)"><i class="fa fa-money-bill"></i> Marcar como cobrada</button>
-            <button class="btn btn-danger btn-sm" style="border: 1px solid;display: none;" id="btn_sri_error" onclick="modal_error_seri($('#txt_autorizacion').text(),'FACTURAS')"><i class="fa fa-eye"></i> Ver error en xml</button>      
-    	</div>
-        <div class="col-sm-2 text-end">
-        <button class="btn btn-sm btn-danger" style="display:none;" id="btn_eliminar" onclick="eliminar_factura(<?php echo $id; ?>)"><i class="fa fa-trash"></i> Eliminar</button>    
-        <button class="btn btn-sm btn-danger" style="display:none;" id="btn_anular" onclick="anular_factura(<?php echo $id; ?>)"><i class="fa fa-times-circle"></i> Anular</button>          
-        </div>                   	
-    </div>
-    <hr>
-    <div class="row">
-        <div class="col-sm-4">
-           <b> Cliente:</b>
-             <h1 class="h3 mb-1 text-gray-800" id="txt_nombre">Home</h1> 
-            <div class="row">
-                <div class="col-sm-6">
-                   <b>C.I. / R.U.C</b><br>
-                   <label  id="txt_ci_ruc"></label>
-                </div>
-                <div class="col-sm-6">
-                    <b>Fecha Emision:</b>
-                    <input type="date" name="txt_fecha" id="txt_fecha" class="form-control form-control-sm">              
-                </div>
-            </div>            
-         </div>
-         <div class="col-sm-6">
-            <b>Autorizacion:</b><br>
-            <label id="txt_autorizacion"></label><br>
-            <div class="row">
-                <div class="col-sm-4">
-                     <b>Estado</b><br>
-                     <label id="txt_estado"></label>
-                     <label id="txt_estadoP" style="background:coral; color: white;" >Factura no cobrada</label>
-                </div>                 
-                <div class="col-sm-3">
-                    <b>Telefono</b>
-                    <input type="text" name="txt_telefono" id="txt_telefono" class="form-control form-control-sm">
-                </div> 
-                <div class="col-sm-5">
-                    <b>Email:</b>
-                    <input type="text" name="txt_email_p" id="txt_email_p" class="form-control form-control-sm">              
-                </div>                               
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+       <!--  <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">Documentos</div>
+            <?php
+            // print_r($_SESSION['INICIO']);die();
+
+            ?>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Lista de facturas
+                        </li>
+                    </ol>
+                </nav>
             </div>
-           
-            <!-- <input type="date" name="" id="" class="form-control form-control-sm"> -->
-        </div>       
-        <div class="col-sm-2 text-center">
-            <b>No. Factura:</b><br>
-            <div class="btn-group btn-group-sm">
-                <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <label id="txt_serie"></label>
-                </button>
-                <button class="btn btn-sm btn-outline-primary" style="display:none;" id="btn_guardar_serie" title="Guardar Serie" onclick="guardar_serie()"><i class="fa fa-save"></i></button>
-                <button class="btn btn-sm btn-outline-info" style="display:none;" id="btn_recargar" onclick="location.reload()"><i class="fa fa-close"></i></button>
-                <div class="dropdown-menu" id="opciones">
-                </div>
-            </div>
-             <h1 class="h3 mb-4 text-gray-800" id="txt_NoFac">0</h1>             
-        </div>
-        <div class="col-sm-2">
-            <b>Forma de pago</b>
-        </div>
-        <div class="col-sm-6">
-            <select class="" style="width: 100%;" id="DCTipoPago">
-                <option value="">Seleccione tipo de pago</option>
-            </select>
-        </div>
-    </div>    
-    <div class="row">        
-          
-        
-      <!--   <div class="col-sm-2">
-            <input type="date" name="" id="" class="form-control form-control-sm">
         </div> -->
-        
-    </div> 
-    <hr>
-    <div class="row">
-         <div class="col-lg-12">
-            <!-- Basic Card Example -->
-            <div class="card shadow mb-8">
-                <!-- <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Basic Card Example</h6>
-                </div> -->
+        <div class="row mb-1">
+            <h1 class="h3 mb-3"><strong>Factura </strong><strong id="lbl_anulado" style="display:none;"><u>ANULADO</u></strong></h1>
+            <div class="row">
+                <div class="col-sm-10">         
+                    <a class="btn btn-default btn-sm btn-outline-secondary" href="../vista/inicio.php?mod=<?php echo$_GET['mod'];?>&acc=lista_facturas"><i class="bx bx-left-arrow-alt"></i> Regresar</a>
+                    <button class="btn btn-default btn-sm btn-outline-secondary" onclick="pdf_factura()"><i class="bx bx-printer"></i> Imprimir</button>
+                    <button class="btn btn-warning btn-sm" id="btn_autorizar" onclick="autorizar()"><i class="bx bx-paper-plane"></i> Autorizar</button>
+                    <button class="btn btn-warning btn-sm" style="solid; display: none;" id="btn_modal_guia" onclick="modal_guia()"><i class="bx bx-paper-plane"></i> Generar guia de remision</button>
+                    <button class="btn btn-info btn-sm" onclick="modal_email()"><i class="bx bx-envelope"></i> Enviar</button>
+                    <button class="btn btn-primary btn-sm" id="btn_marcar_pagado" onclick="pagada(<?php echo $id; ?>)"><i class="bx bx-money"></i> Marcar como cobrada</button>
+                    <button class="btn btn-danger btn-sm" style="solid;display: none;" id="btn_sri_error" onclick="modal_error_seri($('#txt_autorizacion').text(),'FACTURAS')"><i class="bx bx-show-alt"></i> Ver error en xml</button>      
+                </div>
+                <div class="col-sm-2 text-end">
+                <button class="btn btn-sm btn-danger" style="display:none;" id="btn_eliminar" onclick="eliminar_factura(<?php echo $id; ?>)"><i class="bx bx-trash"></i> Eliminar</button>    
+                <button class="btn btn-sm btn-danger" style="display:none;" id="btn_anular" onclick="anular_factura(<?php echo $id; ?>)"><i class="bx bx-times"></i> Anular</button>          
+                </div>                      
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="card mb-1">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                           <b> Cliente:</b>
+                             <h1 class="h3 mb-1 text-gray-800" id="txt_nombre">Home</h1> 
+                            <div class="row">
+                                <div class="col-sm-6">
+                                   <b>C.I. / R.U.C</b><br>
+                                   <label  id="txt_ci_ruc"></label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <b>Fecha Emision:</b>
+                                    <input type="date" name="txt_fecha" id="txt_fecha" class="form-control form-control-sm">              
+                                </div>
+                            </div>            
+                         </div>
+                         <div class="col-sm-6">
+                            <b>Autorizacion:</b><br>
+                            <label id="txt_autorizacion"></label><br>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                     <b>Estado</b><br>
+                                     <label id="txt_estado"></label>
+                                     <label id="txt_estadoP" style="background:coral; color: white;" >Factura no cobrada</label>
+                                </div>                 
+                                <div class="col-sm-3">
+                                    <b>Telefono</b>
+                                    <input type="text" name="txt_telefono" id="txt_telefono" class="form-control form-control-sm">
+                                </div> 
+                                <div class="col-sm-5">
+                                    <b>Email:</b>
+                                    <input type="text" name="txt_email_p" id="txt_email_p" class="form-control form-control-sm">              
+                                </div>                               
+                            </div>
+                        </div>       
+                        <div class="col-sm-2 text-center">
+                            <b>No. Factura:</b><br>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <label id="txt_serie"></label>
+                                </button>
+                                <button class="btn btn-sm btn-outline-primary" style="display:none;" id="btn_guardar_serie" title="Guardar Serie" onclick="guardar_serie()"><i class="fa fa-save"></i></button>
+                                <button class="btn btn-sm btn-outline-info" style="display:none;" id="btn_recargar" onclick="location.reload()"><i class="fa fa-close"></i></button>
+                                <div class="dropdown-menu" id="opciones">
+                                </div>
+                            </div>
+                             <h1 class="h3 mb-4 text-gray-800" id="txt_NoFac">0</h1>             
+                        </div>
+                        <div class="col-sm-2">
+                            <b>Forma de pago</b>
+                        </div>
+                        <div class="col-sm-6">
+                            <select class="" style="width: 100%;" id="DCTipoPago">
+                                <option value="">Seleccione tipo de pago</option>
+                            </select>
+                        </div>
+                    </div>  
+                </div>               
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="card">
                 <div class="card-body">
                     <div class="row" id="form_add_producto">
                         <input type="hidden" name="txt_fac" id="txt_fac">
@@ -164,9 +174,12 @@
                         </div> 
                         <div class="col-sm-2 text-end">
                             <br>
-                            <button class="btn btn-primary btn-sm" onclick="agregar_factura()"><i class="fa fa-arrow-down"></i> Agregar</button>
+                            <button class="btn btn-primary btn-sm" onclick="agregar_factura()"><i class="bx bx-down-arrow-alt"></i> Agregar</button>
                         </div>                       
                     </div>
+                    <hr>
+
+
                     <div class="row">
                         <div class="col-12 col-lg-12">
                             <div class="tab tab-secondary">
@@ -320,12 +333,13 @@
                             </div>
                         </div>
                     </div>
-            </div>
-        </div>                        
+
+                </div>                
+            </div>            
+        </div>
     </div>
 </div>
-</main>
-<!-- Button to Open the Modal -->
+
 
 <!-- The Modal -->
 <div class="modal" id="myModal_productos" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">

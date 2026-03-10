@@ -116,6 +116,11 @@ if(isset($_GET['lista_usuarios_perfil_accesos']))
 	$tipo = $_POST['tipo'];
 	echo json_encode($controlador->usuarios_en_tipo_accesos($tipo));
 }
+if(isset($_GET['add_sub_perfil']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->add_sub_perfil($parametros));
+}
 
 
 class tipo_usuarioC
@@ -146,25 +151,51 @@ class tipo_usuarioC
 		// print_r($datos);die();
 		$html='';
 		foreach ($datos as $key => $value) {
+
+
+			$tbl_hijos = '';
+			$hijos = $this->modelo->lista_tipo_usuario_hijo($query=false,$value['id']);
+			if(count($hijos)>0)
+			{
+				$tbl_hijos.='<table class="table">';
+				foreach ($hijos as $key1 => $value1) {
+						$tbl_hijos.='<tr>
+								<td><input type="text" class="form-control form-control-sm" id="txt_tipo_usuario_'.$value1['id'].'" name="txt_tipo_usuario_'.$value1['id'].'"  value="'.$value1['nombre'].'" />
+								</td>
+								<td>
+									<button class="btn btn-sm btn-primary" onclick="add_tipo('.$value1['id'].')"><i class="bx bx-save font-18 me-0"></i></button>
+									<button class="btn btn-sm btn-danger" onclick="eliminar_tipo('.$value1['id'].')"><i class="bx bx-trash font-18 me-0"></i></button>
+								</td>
+						</tr>';
+				}
+				$tbl_hijos.='</table>';
+			}
+
 			if($value['nombre']=='DBA' )
 			{
 				if($_SESSION['INICIO']['TIPO']=='DBA')
 				{
 					$html.='<tr>
-					<td><input type="text" class="form-control form-control-sm" id="txt_tipo_usuario_'.$value['id'].'" name="txt_tipo_usuario_'.$value['id'].'"  value="'.$value['nombre'].'" /></td>
+					<td><input type="text" class="form-control form-control-sm" id="txt_tipo_usuario_'.$value['id'].'" name="txt_tipo_usuario_'.$value['id'].'"  value="'.$value['nombre'].'" />
+					'.$tbl_hijos.'
+					</td>
 					<td>
-					<button class="btn btn-sm btn-primary" onclick="add_tipo('.$value['id'].')"><i class="bx bx-save font-18 me-1"></i></button>
-					<button class="btn btn-sm btn-danger" onclick="eliminar_tipo('.$value['id'].')"><i class="bx bx-trash font-18 me-1"></i></button>
+					<button class="btn btn-sm btn-primary" onclick="add_tipo('.$value['id'].')"><i class="bx bx-save font-18 me-0"></i></button>
+					<button class="btn btn-sm btn-danger" onclick="eliminar_tipo('.$value['id'].')"><i class="bx bx-trash font-18 me-0"></i></button>
+
 					</td>
 					</tr>';
 				}
 			}else
 			{
 				$html.='<tr>
-				<td><input type="text" class="form-control form-control-sm" id="txt_tipo_usuario_'.$value['id'].'" name="txt_tipo_usuario_'.$value['id'].'"  value="'.$value['nombre'].'" /></td>
+				<td><input type="text" class="form-control form-control-sm" id="txt_tipo_usuario_'.$value['id'].'" name="txt_tipo_usuario_'.$value['id'].'"  value="'.$value['nombre'].'" />
+				'.$tbl_hijos.'
+				</td>
 				<td>
-				<button class="btn btn-sm btn-primary" onclick="add_tipo('.$value['id'].')"><i class="bx bx-save font-18 me-1"></i></button>
-				<button class="btn btn-sm btn-danger" onclick="eliminar_tipo('.$value['id'].')"><i class="bx bx-trash font-18 me-1"></i></button>
+				<button class="btn btn-sm btn-primary" onclick="add_tipo('.$value['id'].')"><i class="bx bx-save font-18 me-0"></i></button>
+				<button class="btn btn-sm btn-danger" onclick="eliminar_tipo('.$value['id'].')"><i class="bx bx-trash font-18 me-0"></i></button>
+				<button class="btn btn-sm btn-success" title="Agregar Sub perfil" onclick="add_subModulo('.$value['id'].')"><i class="bx bx-plus font-18 me-0"></i></button>
 				</td>
 				</tr>';
 			}
@@ -680,6 +711,31 @@ class tipo_usuarioC
 		$resp = $this->modelo->eliminar_usuario_tipo($id);
 		return $resp;
 
+	}
+
+	function add_sub_perfil($parametros)
+	{
+
+		$tabla = 'TIPO_USUARIO';
+		$datos = array(
+										array('campo'=>'DESCRIPCION','dato'=>$parametros['subperfil']),
+										array('campo'=>'PADRE','dato'=>$parametros['perfil']),
+										array('campo'=>'ESTADO','dato'=>'A'),
+		);
+
+		$ingresado = $this->modelo->lista_tipo_usuario_all($parametros['subperfil'],1,$parametros['perfil']);
+		if(count($ingresado)==0)
+		{
+				$this->modelo->guardar($datos,$tabla);
+				$ingresado = $this->modelo->lista_tipo_usuario_all($parametros['subperfil'],1,$parametros['perfil']);
+		}
+
+		$datosIm = array(
+										array('campo'=>'id_empresa','dato'=>$_SESSION['INICIO']['ID_EMPRESA']),
+										array('campo'=>'id_tipo_usuario','dato'=>$ingresado[0]['id'])
+		);
+
+		return $this->modelo->guardar($datosIm,'TIPO_USUARIO_EMPRESA');
 	}
 	
 }
