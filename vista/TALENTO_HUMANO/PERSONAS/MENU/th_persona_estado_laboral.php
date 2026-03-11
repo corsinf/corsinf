@@ -425,11 +425,11 @@
 
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label for="txt_fecha_contratacion_estado" class="form-label fs-7 mb-1">Fecha de Contratación</label>
+                                <label for="txt_fecha_contratacion_estado" class="form-label fs-7 mb-1">Fecha de Contratación </label>
                                 <input type="date" class="form-control form-control-sm" name="txt_fecha_contratacion_estado" id="txt_fecha_contratacion_estado" onchange="validar_fechas_est_lab();">
                             </div>
                             <div class="col-md-6">
-                                <label for="txt_fecha_salida_estado" class="form-label fs-7 mb-1">Fecha de Salida</label>
+                                <label for="txt_fecha_salida_estado" class="form-label fs-7 mb-1">Fecha de Salida </label>
                                 <input type="date" class="form-control form-control-sm" name="txt_fecha_salida_estado" id="txt_fecha_salida_estado" onchange="validar_fechas_est_lab();">
                                 <label class="error" style="display: none;" for="txt_fecha_salida_estado"></label>
                             </div>

@@ -134,8 +134,8 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
     $(document).ready(function() {
         <?php if (isset($_GET['id_persona'])) { ?>
             cargar_datos_persona('<?= $id_persona ?>');
-            cargar_selects2();
         <?php } ?>
+        cargar_selects2();
     });
 
     function cargar_selects2() {
