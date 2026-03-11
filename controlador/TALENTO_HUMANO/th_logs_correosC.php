@@ -111,7 +111,25 @@ class th_logs_correosC
 
                 $personas_correos =  $this->personas->listar_personas_departamentos($id_dep, $per_id);
             } else {
-                $personas_correos = [];
+
+                $personas_correos =  $this->personas->where('th_per_id', $per_id)->listar();
+
+                $clave = $this->codigo_globales->generar_clave_digitos();
+                $clave_enc = $this->codigo_globales->enciptar_clave($clave);
+
+                $datos = array(
+                    array('campo' => 'POLITICAS_ACEPTACION', 'dato' => '0'),
+                    array('campo' => 'PASS', 'dato' => $clave_enc),
+                );
+
+                $where = array(
+                    array('campo' => 'th_per_id', 'dato' => $per_id)
+                );
+
+                $this->personas->editar($datos, $where);
+
+                $personas_correos =  $this->personas->where('th_per_id', $per_id)->listar();
+
             }
 
             if (empty($personas_correos)) {
@@ -126,7 +144,8 @@ class th_logs_correosC
 
             foreach ($personas_correos as $value) {
 
-                $correo = trim($value['th_per_correo'] ?? '');
+                $correo = $value['th_per_correo'] ?? $value['correo'] ?? '';
+                $correo = trim($correo);
                 $usuario = trim($value['nombre_completo'] ?? '');
                 $password = $this->codigo_globales->desenciptar_clave(trim($value['PASS'] ?? ''));
 

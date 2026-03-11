@@ -269,7 +269,7 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
                 asunto: asunto,
                 descripcion: descripcion,
                 per_id: '<?= $id_persona ? $id_persona : '' ?>',
-                personas: 'nomina'
+                personas: 'personas'
             };
             enviar_Mail_Persona(parametrosLogCorreos);
             $modal.modal('hide');
