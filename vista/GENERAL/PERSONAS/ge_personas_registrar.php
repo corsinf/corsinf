@@ -2,27 +2,27 @@
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 $redireccionar_vista = 'ge_personas';
 
-$_id = '';
+$id_persona = '';
 
-if (isset($_GET['_id'])) {
-    $_id = $_GET['_id'];
+if (isset($_GET['id_persona'])) {
+    $id_persona = $_GET['id_persona'];
 }
 
 ?>
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
-
 <script type="text/javascript">
     $(document).ready(function() {
-        <?php if (isset($_GET['_id'])) { ?>
-            cargar_datos_persona(<?= $_id ?>);
+        <?php if (isset($_GET['id_persona'])) { ?>
+            cargar_datos_persona('<?= $id_persona ?>');
         <?php } ?>
-    })
+        cargar_select2_persona();
+    });
 
     function insertar_editar_persona() {
         let parametros = {
-            '_id': '<?= $_id ?>',
+            '_id': '<?= $id_persona ?>',
         };
 
         let parametros_vista_persona = parametros_persona();
@@ -98,7 +98,7 @@ if (isset($_GET['_id'])) {
                             </div>
                             <h5 class="mb-0 text-primary">
                                 <?php
-                                if ($_id == '') {
+                                if ($id_persona == '') {
                                     echo 'Registrar Persona';
                                 } else {
                                     echo 'Modificar Persona';
@@ -118,7 +118,7 @@ if (isset($_GET['_id'])) {
                             <?php include_once('../vista/GENERAL/registrar_personas.php'); ?>
 
                             <div class="d-flex justify-content-end pt-2">
-                                <?php if ($_id == '') { ?>
+                                <?php if ($id_persona == '') { ?>
                                     <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i> Guardar</button>
                                 <?php } else { ?>
                                     <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i> Guardar</button>
