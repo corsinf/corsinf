@@ -32,6 +32,15 @@ if (isset($_GET['insertar_imagen'])) {
     echo json_encode($controlador->insertar_imagen($_FILES, $_POST));
 }
 
+if (isset($_GET['validar_cedula_duplicada'])) {
+    echo json_encode(
+        $controlador->validar_cedula_duplicada(
+            $_POST['cedula']     ?? '',
+            $_POST['id_persona'] ?? 0
+        )
+    );
+}
+
 
 class th_personasC
 {
@@ -48,6 +57,47 @@ class th_personasC
     {
         $datos = $this->modelo->obtener_persona_con_nombres($id);
         return $datos;
+    }
+
+    public function validar_cedula_duplicada($cedula, $id_persona = 0)
+    {
+        $cedula     = trim($cedula);
+        $id_persona = intval($id_persona);
+
+        if (empty($cedula)) {
+            return ['duplicada' => false];
+        }
+
+        // Verificar en personas
+        $q = $this->modelo->where('th_per_cedula', $cedula)->where('th_per_estado', 1);
+        if ($id_persona > 0) {
+            $q = $this->modelo->where('th_per_id !', $id_persona);
+        }
+        $en_personas = $this->modelo->listar();
+
+        if (!empty($en_personas)) {
+            return ['duplicada' => true, 'origen' => 'persona'];
+        }
+
+        // Verificar en postulantes
+        $q2 = $this->th_postulantes->where('th_pos_cedula', $cedula)->where('th_pos_estado', 1);
+
+        // Si la persona tiene un postulante vinculado, excluirlo
+        if ($id_persona > 0) {
+            $persona_actual = $this->modelo->where('th_per_id', $id_persona)->listar();
+            $th_pos_id_vinculado = $persona_actual[0]['th_pos_id'] ?? null;
+            if ($th_pos_id_vinculado) {
+                $q2 = $this->th_postulantes->where('th_pos_id !', $th_pos_id_vinculado);
+            }
+        }
+
+        $en_postulantes = $this->th_postulantes->listar();
+
+        if (!empty($en_postulantes)) {
+            return ['duplicada' => true, 'origen' => 'postulante'];
+        }
+
+        return ['duplicada' => false];
     }
 
     function insertar_editar($parametros)

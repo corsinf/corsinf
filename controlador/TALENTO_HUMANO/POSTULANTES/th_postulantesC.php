@@ -27,6 +27,12 @@ if (isset($_GET['listar_postulantes_filtro_combinado'])) {
     );
 }
 
+if (isset($_GET['validar_cedula_duplicada'])) {
+    echo json_encode(
+        $controlador->validar_cedula_duplicada($_POST['cedula'] ?? '')
+    );
+}
+
 if (isset($_GET['listar_personas_rol'])) {
     echo json_encode($controlador->listar_postulantes_personas_postulacion());
 }
@@ -134,6 +140,27 @@ class th_postulantesC
             $lista = $this->modelo->where('th_pos_estado', 1)->listar();
         }
         return $lista;
+    }
+
+    public function validar_cedula_duplicada($cedula)
+    {
+        $cedula = trim($cedula);
+
+        if (empty($cedula)) {
+            return ['duplicada' => false];
+        }
+
+        // Verificar en postulantes
+        if (!empty($this->modelo->where('th_pos_cedula', $cedula)->listar())) {
+            return ['duplicada' => true];
+        }
+
+        // Verificar en personas
+        if (!empty($this->personas->where('th_per_cedula', $cedula)->listar())) {
+            return ['duplicada' => true];
+        }
+
+        return ['duplicada' => false];
     }
 
     public function listar_postulantes_filtro_combinado($id_tipo_seleccion, $areas_ids, $niveles_ids)

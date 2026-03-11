@@ -176,11 +176,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                             class="bx bx-plus me-1"></i><span>Nuevo</span></a>
                                 </div>
                             </div>
-                            <div class="row mx-1">
+                            <div class="row">
                                 <div class="col-12">
-                                    <button type="button" class="btn btn-sm btn-success d-flex align-items-center"
+                                    <button type="button" class="btn btn-sm btn-primary d-flex align-items-center"
                                         onclick="abrir_modal_nuevo_postulante()">
-                                        <i class="bx bx-plus me-1"></i><span>Nuevo Modal</span>
+                                        <i class="bx bx-plus me-1"></i><span>Invitar</span>
                                     </button>
                                 </div>
                             </div>
@@ -343,9 +343,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         var cedula = $.trim($('#txt_cedula_inv').val());
         var correo = $.trim($('#txt_correo_inv').val());
 
-        $('#modal_nuevo_postulante').modal('hide');
+        // ── NO ocultar el modal aquí ────────────────────────
 
-        // ── PASO 1: Insertar ────────────────────────
         Swal.fire({
             title: 'Registrando...',
             text: 'Guardando postulante.',
@@ -355,6 +354,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 Swal.showLoading();
             }
         });
+
         $.ajax({
             url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?insertar_postulante=true',
             type: 'POST',
@@ -368,48 +368,30 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             success: function(res) {
 
                 if (res == -2) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Cédula ya registrada',
-                        text: 'La cédula ingresada ya está en uso.',
-                        confirmButtonColor: '#3085d6'
-                    }).then(function() {
-                        $('#modal_nuevo_postulante').modal('show');
-                        $('#txt_cedula_inv').addClass('is-invalid').removeClass('is-valid');
-                        $('#err_cedula_inv').text('Esta cédula ya está registrada.');
-                    });
+                    Swal.close();
+                    $('#txt_cedula_inv').addClass('is-invalid').removeClass('is-valid');
+                    $('#err_cedula_inv').text('Esta cédula ya está registrada.');
                     return;
                 }
 
                 if (res == -3) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Correo ya registrado',
-                        text: 'El correo ingresado ya está en uso.',
-                        confirmButtonColor: '#3085d6'
-                    }).then(function() {
-                        $('#modal_nuevo_postulante').modal('show');
-                        $('#txt_correo_inv').addClass('is-invalid').removeClass('is-valid');
-                        $('#err_correo_inv').text('Este correo ya está registrado.');
-                    });
+                    Swal.close();
+                    $('#txt_correo_inv').addClass('is-invalid').removeClass('is-valid');
+                    $('#err_correo_inv').text('Este correo ya está registrado.');
                     return;
                 }
 
                 if (res == -4) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Datos duplicados',
-                        text: 'La cédula y el correo ingresados ya están en uso.',
-                        confirmButtonColor: '#3085d6'
-                    }).then(function() {
-                        $('#modal_nuevo_postulante').modal('show');
-                        $('#txt_cedula_inv').addClass('is-invalid').removeClass('is-valid');
-                        $('#err_cedula_inv').text('Esta cédula ya está registrada.');
-                        $('#txt_correo_inv').addClass('is-invalid').removeClass('is-valid');
-                        $('#err_correo_inv').text('Este correo ya está registrado.');
-                    });
+                    Swal.close();
+                    $('#txt_cedula_inv').addClass('is-invalid').removeClass('is-valid');
+                    $('#err_cedula_inv').text('Esta cédula ya está registrada.');
+                    $('#txt_correo_inv').addClass('is-invalid').removeClass('is-valid');
+                    $('#err_correo_inv').text('Este correo ya está registrado.');
                     return;
                 }
+
+                // ── Solo aquí ocultar el modal porque fue exitoso ──
+                $('#modal_nuevo_postulante').modal('hide');
 
                 Swal.update({
                     title: 'Enviando correo...',
@@ -467,7 +449,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             }
         });
     }
-
     /* ── Recargar tabla si existe ──────────────────── */
     function recargar_tabla() {
         if (typeof cargar_tabla_postulantes === 'function') {

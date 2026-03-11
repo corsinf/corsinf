@@ -49,6 +49,37 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
         $("#loader-overlay").fadeOut("slow");
     });
 
+    $(document).on('input', '#txt_cedula', function() {
+        var val = $(this).val().trim();
+        var $err = $('#error_txt_cedula');
+
+        $(this).removeClass('is-invalid is-valid');
+        $err.text('');
+
+        if (val.length === 10) {
+            var id_actual = $('input[name="txt_persona_id"]').val() || 0;
+
+            $.ajax({
+                url: '../controlador/GENERAL/th_personasC.php?validar_cedula_duplicada=true',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    cedula: val,
+                    id_persona: id_actual
+                },
+                success: function(res) {
+                    if (res.duplicada) {
+                        $('#txt_cedula').addClass('is-invalid').removeClass('is-valid');
+                        $err.text('Esta cédula ya está registrada en el sistema.');
+                    } else {
+                        $('#txt_cedula').addClass('is-valid').removeClass('is-invalid');
+                        $err.text('');
+                    }
+                }
+            });
+        }
+    });
+
     // Postulante agregar en caso de que no este
     $(document).ready(function() {
         <?php if (isset($_GET['id_postulante'])) { ?>

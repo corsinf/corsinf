@@ -15,6 +15,34 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'postulante_info') {
         cargar_selects2();
     })
 
+    $(document).on('input', '#txt_cedula', function() {
+        var val = $(this).val().trim();
+        var $err = $('#error_txt_cedula');
+
+        $(this).removeClass('is-invalid is-valid');
+        $err.text('');
+
+        if (val.length === 10) {
+            $.ajax({
+                url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?validar_cedula_duplicada=true',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    cedula: val
+                },
+                success: function(res) {
+                    if (res.duplicada) {
+                        $('#txt_cedula').addClass('is-invalid').removeClass('is-valid');
+                        $err.text('Esta cédula ya está registrada en el sistema.');
+                    } else {
+                        $('#txt_cedula').addClass('is-valid').removeClass('is-invalid');
+                        $err.text('');
+                    }
+                }
+            });
+        }
+    });
+
     function cargar_selects2() {
 
         url_etniaC = '../controlador/TALENTO_HUMANO/CATALOGOS/th_cat_etniaC.php?buscar=true';
