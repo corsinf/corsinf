@@ -176,6 +176,14 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                             class="bx bx-plus me-1"></i><span>Nuevo</span></a>
                                 </div>
                             </div>
+                            <div class="row mx-1">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-sm btn-success d-flex align-items-center"
+                                        onclick="abrir_modal_nuevo_postulante()">
+                                        <i class="bx bx-plus me-1"></i><span>Nuevo Modal</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
                         <hr>
@@ -203,6 +211,270 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modal_nuevo_postulante" tabindex="-1"
+    data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:420px;">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bx bx-user-plus me-2 text-success"></i>
+                    Nuevo Postulante
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body px-4 py-3">
+                <p class="text-muted small mb-3">
+                    <i class="bx bx-info-circle me-1"></i>
+                    Se registrará el postulante y se enviará automáticamente
+                    un correo con sus credenciales de acceso.
+                </p>
+
+                <!-- Cédula -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold small">
+                        Cédula <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" id="txt_cedula_inv"
+                        class="form-control form-control-sm"
+                        placeholder="Ej: 1234567890"
+                        maxlength="10"
+                        oninput="this.value=this.value.replace(/\D/g,'')">
+                    <div class="invalid-feedback" id="err_cedula_inv"></div>
+                </div>
+
+                <!-- Correo -->
+                <div class="mb-1">
+                    <label class="form-label fw-semibold small">
+                        Correo electrónico <span class="text-danger">*</span>
+                    </label>
+                    <input type="email" id="txt_correo_inv"
+                        class="form-control form-control-sm"
+                        placeholder="correo@ejemplo.com">
+                    <div class="invalid-feedback" id="err_correo_inv"></div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm"
+                    data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success btn-sm"
+                    onclick="guardar_e_invitar()">
+                    <i class="bx bx-save me-1"></i> Guardar y enviar correo
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    /* ── Abrir modal ───────────────────────────────── */
+    function abrir_modal_nuevo_postulante() {
+        $('#txt_cedula_inv').val('').removeClass('is-invalid is-valid');
+        $('#txt_correo_inv').val('').removeClass('is-invalid is-valid');
+        $('#err_cedula_inv').text('');
+        $('#err_correo_inv').text('');
+        $('#modal_nuevo_postulante').modal('show');
+    }
+
+    /* ── Validación ────────────────────────────────── */
+    function validar_campos_inv() {
+        var ok = true;
+        var ced = $.trim($('#txt_cedula_inv').val());
+        var email = $.trim($('#txt_correo_inv').val());
+        var reEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // Cédula
+        if (!ced) {
+            $('#txt_cedula_inv').addClass('is-invalid').removeClass('is-valid');
+            $('#err_cedula_inv').text('Ingrese el número de cédula.');
+            ok = false;
+        } else if (ced.length !== 10) {
+            $('#txt_cedula_inv').addClass('is-invalid').removeClass('is-valid');
+            $('#err_cedula_inv').text('La cédula debe tener 10 dígitos.');
+            ok = false;
+        } else {
+            $('#txt_cedula_inv').removeClass('is-invalid').addClass('is-valid');
+            $('#err_cedula_inv').text('');
+        }
+
+        // Correo
+        if (!email) {
+            $('#txt_correo_inv').addClass('is-invalid').removeClass('is-valid');
+            $('#err_correo_inv').text('Ingrese el correo electrónico.');
+            ok = false;
+        } else if (!reEmail.test(email)) {
+            $('#txt_correo_inv').addClass('is-invalid').removeClass('is-valid');
+            $('#err_correo_inv').text('El formato del correo no es válido.');
+            ok = false;
+        } else {
+            $('#txt_correo_inv').removeClass('is-invalid').addClass('is-valid');
+            $('#err_correo_inv').text('');
+        }
+
+        return ok;
+    }
+
+    /* ── Validación en tiempo real ─────────────────── */
+    $(document).on('input', '#txt_cedula_inv', function() {
+        if ($.trim($(this).val()).length === 10) {
+            $(this).removeClass('is-invalid').addClass('is-valid');
+            $('#err_cedula_inv').text('');
+        }
+    });
+    $(document).on('input', '#txt_correo_inv', function() {
+        if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($.trim($(this).val()))) {
+            $(this).removeClass('is-invalid').addClass('is-valid');
+            $('#err_correo_inv').text('');
+        }
+    });
+
+    /* ════════════════════════════════════════════════
+       PASO 1: Insertar postulante
+       PASO 2: Enviar correo con credenciales
+       (usa el mismo endpoint que enviar_correo_postulante)
+    ════════════════════════════════════════════════ */
+    function guardar_e_invitar() {
+        if (!validar_campos_inv()) return;
+
+        var cedula = $.trim($('#txt_cedula_inv').val());
+        var correo = $.trim($('#txt_correo_inv').val());
+
+        $('#modal_nuevo_postulante').modal('hide');
+
+        // ── PASO 1: Insertar ────────────────────────
+        Swal.fire({
+            title: 'Registrando...',
+            text: 'Guardando postulante.',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            didOpen: function() {
+                Swal.showLoading();
+            }
+        });
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?insertar_postulante=true',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                parametros: {
+                    cedula: cedula,
+                    correo: correo
+                }
+            },
+            success: function(res) {
+
+                if (res == -2) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cédula ya registrada',
+                        text: 'La cédula ingresada ya está en uso.',
+                        confirmButtonColor: '#3085d6'
+                    }).then(function() {
+                        $('#modal_nuevo_postulante').modal('show');
+                        $('#txt_cedula_inv').addClass('is-invalid').removeClass('is-valid');
+                        $('#err_cedula_inv').text('Esta cédula ya está registrada.');
+                    });
+                    return;
+                }
+
+                if (res == -3) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Correo ya registrado',
+                        text: 'El correo ingresado ya está en uso.',
+                        confirmButtonColor: '#3085d6'
+                    }).then(function() {
+                        $('#modal_nuevo_postulante').modal('show');
+                        $('#txt_correo_inv').addClass('is-invalid').removeClass('is-valid');
+                        $('#err_correo_inv').text('Este correo ya está registrado.');
+                    });
+                    return;
+                }
+
+                if (res == -4) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Datos duplicados',
+                        text: 'La cédula y el correo ingresados ya están en uso.',
+                        confirmButtonColor: '#3085d6'
+                    }).then(function() {
+                        $('#modal_nuevo_postulante').modal('show');
+                        $('#txt_cedula_inv').addClass('is-invalid').removeClass('is-valid');
+                        $('#err_cedula_inv').text('Esta cédula ya está registrada.');
+                        $('#txt_correo_inv').addClass('is-invalid').removeClass('is-valid');
+                        $('#err_correo_inv').text('Este correo ya está registrado.');
+                    });
+                    return;
+                }
+
+                Swal.update({
+                    title: 'Enviando correo...',
+                    text: 'Enviando credenciales al postulante.'
+                });
+
+                $.ajax({
+                    url: '../controlador/TALENTO_HUMANO/th_logs_correosC.php?enviar_correo_postulante=true',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        parametros: {
+                            pos_id: res,
+                            enviar_credenciales: 1,
+                            asunto: '',
+                            descripcion: ''
+                        }
+                    },
+                    success: function(resMail) {
+                        if (resMail.error) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Postulante registrado',
+                                html: 'El postulante fue guardado, pero ocurrió un error al enviar el correo:<br><small class="text-danger">' + resMail.error + '</small>',
+                                confirmButtonColor: '#f0ad4e'
+                            }).then(function() {
+                                recargar_tabla();
+                            });
+                            return;
+                        }
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Listo!',
+                            html: 'Postulante registrado y credenciales enviadas a:<br><strong>' + resMail.correo + '</strong>',
+                            confirmButtonColor: '#198754'
+                        }).then(function() {
+                            recargar_tabla();
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Postulante registrado',
+                            text: 'Guardado correctamente, pero falló el envío del correo: ' + error,
+                            confirmButtonColor: '#f0ad4e'
+                        }).then(function() {
+                            recargar_tabla();
+                        });
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                Swal.fire('Error', 'Error en la conexión: ' + error, 'error');
+            }
+        });
+    }
+
+    /* ── Recargar tabla si existe ──────────────────── */
+    function recargar_tabla() {
+        if (typeof cargar_tabla_postulantes === 'function') {
+            cargar_tabla_postulantes();
+        }
+    }
+</script>
 
 <style>
     .disabled {
