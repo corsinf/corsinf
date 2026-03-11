@@ -32,7 +32,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         let href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&id_persona=${item.id_persona}&id_postulante=${id_postulante}&_origen=nomina&_persona_nomina=true`;
 
                         return `<a href="${href}">
-                        <u>${item.primer_apellido} ${item.segundo_apellido} ${item.primer_nombre} ${item.segundo_nombre}</u>
+                        <u>${item.primer_apellido ?? ''} ${item.segundo_apellido ?? ''} ${item.primer_nombre ?? ''} ${item.segundo_nombre ?? ''}</u>
                     </a>`;
                     }
                 },

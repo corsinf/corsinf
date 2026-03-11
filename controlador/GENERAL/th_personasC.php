@@ -58,10 +58,6 @@ class th_personasC
                 ? $parametros['txt_fecha_nacimiento']
                 : null;
 
-            $txt_fecha_ingreso = !empty($parametros['txt_fecha_ingreso'])
-                ? $parametros['txt_fecha_ingreso']
-                : null;
-
             // Generar nombres completos
             $nombres_completos = trim(
                 trim($parametros['txt_primer_apellido'] ?? '') . ' ' .
