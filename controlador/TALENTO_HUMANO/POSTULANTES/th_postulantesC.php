@@ -15,6 +15,18 @@ if (isset($_GET['listar_todo'])) {
     echo json_encode($controlador->listar_todo());
 }
 
+if (isset($_GET['listar_postulantes_filtro_combinado'])) {
+    $areas_ids   = json_decode($_POST['areas_ids']   ?? '[]', true);
+    $niveles_ids = json_decode($_POST['niveles_ids'] ?? '[]', true);
+    echo json_encode(
+        $controlador->listar_postulantes_filtro_combinado(
+            $_POST['id_tipo_seleccion'] ?? 0,
+            $areas_ids,
+            $niveles_ids
+        )
+    );
+}
+
 if (isset($_GET['listar_personas_rol'])) {
     echo json_encode($controlador->listar_postulantes_personas_postulacion());
 }
@@ -122,6 +134,14 @@ class th_postulantesC
             $lista = $this->modelo->where('th_pos_estado', 1)->listar();
         }
         return $lista;
+    }
+
+    public function listar_postulantes_filtro_combinado($id_tipo_seleccion, $areas_ids, $niveles_ids)
+    {
+        if (!is_array($areas_ids))   $areas_ids   = json_decode($areas_ids,   true) ?? [];
+        if (!is_array($niveles_ids)) $niveles_ids = json_decode($niveles_ids, true) ?? [];
+
+        return $this->modelo->listarPorFiltrosCombinados($id_tipo_seleccion, $areas_ids, $niveles_ids);
     }
 
     function listarNoContratados($id, $coincidencias = false)

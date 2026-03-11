@@ -21,6 +21,17 @@
                 // ==========================
                 // HEADER Y DATOS GENERALES
                 // ==========================
+
+                window._areas_estudio_requeridas = [...new Set([
+                    ...(cargo.areas_estudio_cargo || []).map(a => a.id_area_estudio),
+                    ...(p.areas_estudio_plaza || []).map(a => a.id_area_estudio)
+                ])];
+
+                window._detalle_niveles_academicos = [
+                    ...(cargo.instruccion_cargo || []),
+                    ...(p.requisitos_instruccion_plaza || [])
+                ];
+
                 $('#txt_header_titulo').text(p.cn_pla_titulo);
                 $('#txt_cargo_nombre_oficial').text(cargo.nombre);
                 $('#txt_header_departamento').text(p.departamento.th_dep_nombre);

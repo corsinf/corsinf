@@ -220,9 +220,125 @@ class th_postulantesM extends BaseModel
         return $this->db->datos($sql);
     }
 
-    function obtener_id($id){
+    function obtener_id($id)
+    {
         $sql = "SELECT th_pos_id AS id_postulante FROM $this->tabla WHERE th_pos_id = $id";
         $resultado = $this->db->datos($sql);
         return $resultado;
+    }
+
+    public function listarPorAreaEstudio($id_plaza = '', $areas_ids = [], $id_tipo_seleccion = 0)
+    {
+        $id_tipo_seleccion = intval($id_tipo_seleccion);
+
+        if (empty($areas_ids)) {
+            return [];
+        }
+
+        $placeholders = implode(',', array_map('intval', $areas_ids));
+
+        if ($id_tipo_seleccion == 1) {
+            $filtro_contratado = 'AND t.th_pos_contratado = 0';
+        } elseif ($id_tipo_seleccion == 2) {
+            $filtro_contratado = 'AND t.th_pos_contratado = 1';
+        } else {
+            $filtro_contratado = '';
+        }
+
+        $sql = "
+        SELECT DISTINCT
+            t.th_pos_id                   AS _id,
+            t.th_pos_primer_nombre,
+            t.th_pos_segundo_nombre,
+            t.th_pos_primer_apellido,
+            t.th_pos_segundo_apellido,
+            t.th_pos_cedula,
+            t.th_pos_correo,
+            t.th_pos_telefono_1,
+            t.th_pos_contratado,
+            CONCAT(
+                COALESCE(t.th_pos_primer_apellido,  ''), ' ',
+                COALESCE(t.th_pos_segundo_apellido, ''), ' ',
+                COALESCE(t.th_pos_primer_nombre,    ''), ' ',
+                COALESCE(t.th_pos_segundo_nombre,   '')
+            ) AS nombre_completo
+        FROM th_postulantes t
+        INNER JOIN th_pos_formacion_academica f
+            ON  f.th_pos_id       = t.th_pos_id
+            AND f.id_area_estudio IN ($placeholders)
+            AND f.th_fora_estado  = 1
+        WHERE
+            t.th_pos_estado = 1
+            $filtro_contratado
+        ORDER BY
+            t.th_pos_primer_apellido,
+            t.th_pos_primer_nombre
+    ";
+
+        return $this->db->datos($sql);
+    }
+
+    public function listarPorFiltrosCombinados($id_tipo_seleccion = 0, $areas_ids = [], $niveles_ids = [])
+    {
+        $id_tipo_seleccion = intval($id_tipo_seleccion);
+
+        if (!is_array($areas_ids))   $areas_ids   = [];
+        if (!is_array($niveles_ids)) $niveles_ids = [];
+
+        if ($id_tipo_seleccion == 1) {
+            $filtro_contratado = 'AND t.th_pos_contratado = 0';
+        } elseif ($id_tipo_seleccion == 2) {
+            $filtro_contratado = 'AND t.th_pos_contratado = 1';
+        } else {
+            $filtro_contratado = '';
+        }
+
+        // Construir condiciones del JOIN según lo que venga marcado
+        $condiciones_join = 'f.th_fora_estado = 1';
+
+        if (!empty($areas_ids) && !empty($niveles_ids)) {
+            // Ambos checks activos → debe cumplir los dos
+            $in_areas   = implode(',', array_map('intval', $areas_ids));
+            $in_niveles = implode(',', array_map('intval', $niveles_ids));
+            $condiciones_join .= " AND f.id_area_estudio IN ($in_areas)
+                               AND f.id_nivel_academico IN ($in_niveles)";
+        } elseif (!empty($areas_ids)) {
+            $in_areas = implode(',', array_map('intval', $areas_ids));
+            $condiciones_join .= " AND f.id_area_estudio IN ($in_areas)";
+        } elseif (!empty($niveles_ids)) {
+            $in_niveles = implode(',', array_map('intval', $niveles_ids));
+            $condiciones_join .= " AND f.id_nivel_academico IN ($in_niveles)";
+        }
+
+        $sql = "
+        SELECT DISTINCT
+            t.th_pos_id                   AS _id,
+            t.th_pos_primer_nombre,
+            t.th_pos_segundo_nombre,
+            t.th_pos_primer_apellido,
+            t.th_pos_segundo_apellido,
+            t.th_pos_cedula,
+            t.th_pos_correo,
+            t.th_pos_telefono_1,
+            t.th_pos_contratado,
+            CONCAT(
+                COALESCE(t.th_pos_primer_apellido,  ''), ' ',
+                COALESCE(t.th_pos_segundo_apellido, ''), ' ',
+                COALESCE(t.th_pos_primer_nombre,    ''), ' ',
+                COALESCE(t.th_pos_segundo_nombre,   '')
+            ) AS nombre_completo
+        FROM th_postulantes t
+        INNER JOIN th_pos_formacion_academica f
+            ON  f.th_pos_id = t.th_pos_id
+            AND $condiciones_join
+        WHERE
+            t.th_pos_estado = 1
+            $filtro_contratado
+        ORDER BY
+            t.th_pos_primer_apellido,
+            t.th_pos_primer_nombre
+    ";
+
+        return $this->db->datos($sql);
     }
 }
