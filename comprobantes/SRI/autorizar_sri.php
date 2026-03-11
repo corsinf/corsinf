@@ -35,8 +35,8 @@ class autorizacion_sri
 		// $this->conn = new db();
 		$this->conn = new db();
 		$this->SRI = new linkSRI();
-		$this->JDK8 = escapeshellarg("C:\\Program Files\\Java\\jdk-1.8\\bin\\");
-		// $this->JDK8 = "";
+		// $this->JDK8 = escapeshellarg("C:\\Program Files\\Java\\jdk-1.8\\bin\\");
+		$this->JDK8 = "";
 	}
 
 
