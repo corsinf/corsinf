@@ -119,7 +119,7 @@ function detalle_factura(id)
                 $('#DCTipoPago').val(response.factura.Tipo_pago);
             }
             $('#txt_datos_adicionales').val(response.factura.datos_adicionales);
-            if(response.factura.estado_factura.trim()=='A')
+            if(response.factura.estado_factura?.trim() =='A')
             {
                  $('#txt_estado').text('Factura Autorizada');
                  $('#txt_estado').css('background','greenyellow');
@@ -127,14 +127,14 @@ function detalle_factura(id)
                   $('#btn_anular').css('display','initial');
                  $('#btn_eliminar').css('display','none');   
                 $('#txt_estado').css('color','black');
-            }else if(response.factura.estado_factura.trim()=='R')
+            }else if(response.factura.estado_factura?.trim() =='R')
             {
                  $('#txt_estado').text('Factura rechazada');
                   $('#txt_estado').css('background','coral');
                   $('#txt_estado').css('color','white');
                   $('#btn_sri_error').css('display','initial');
                   $('#btn_eliminar').css('display','none');
-            }else if(response.factura.estado_factura.trim()=='AN'){
+            }else if(response.factura.estado_factura?.trim() =='AN'){
 
                  $('#btn_autorizar').css('display','none');
                  $('#form_add_producto').css('display','none');
