@@ -65,7 +65,7 @@ if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
                 dataType: 'json',
                 data: {
                     cedula: val,
-                    id_persona: id_actual
+                    id_persona: '<?= $id_persona ?>'
                 },
                 success: function(res) {
                     if (res.duplicada) {

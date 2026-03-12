@@ -68,10 +68,18 @@ class th_personasC
             return ['duplicada' => false];
         }
 
-        // Verificar en personas
-        $q = $this->modelo->where('th_per_cedula', $cedula)->where('th_per_estado', 1);
+        // ── Obtener el postulante vinculado a esta persona PRIMERO ──
+        $th_pos_id_vinculado = null;
         if ($id_persona > 0) {
-            $q = $this->modelo->where('th_per_id !', $id_persona);
+            $persona_actual = $this->modelo->where('th_per_id', $id_persona)->listar();
+            $th_pos_id_vinculado = !empty($persona_actual) ? ($persona_actual[0]['th_pos_id'] ?? null) : null;
+        }
+
+        // ── Verificar en personas (excluir la persona actual) ──────
+        $this->modelo->where('th_per_cedula', $cedula);
+        $this->modelo->where('th_per_estado', 1);
+        if ($id_persona > 0) {
+            $this->modelo->where('th_per_id !', $id_persona);
         }
         $en_personas = $this->modelo->listar();
 
@@ -79,18 +87,13 @@ class th_personasC
             return ['duplicada' => true, 'origen' => 'persona'];
         }
 
-        // Verificar en postulantes
-        $q2 = $this->th_postulantes->where('th_pos_cedula', $cedula)->where('th_pos_estado', 1);
 
-        // Si la persona tiene un postulante vinculado, excluirlo
-        if ($id_persona > 0) {
-            $persona_actual = $this->modelo->where('th_per_id', $id_persona)->listar();
-            $th_pos_id_vinculado = $persona_actual[0]['th_pos_id'] ?? null;
-            if ($th_pos_id_vinculado) {
-                $q2 = $this->th_postulantes->where('th_pos_id !', $th_pos_id_vinculado);
-            }
+        // ── Verificar en postulantes (excluir el vinculado a esta persona) ──
+        $this->th_postulantes->where('th_pos_cedula', $cedula);
+        $this->th_postulantes->where('th_pos_estado', 1);
+        if ($th_pos_id_vinculado > 0) {
+            $this->th_postulantes->where('th_pos_id !', $th_pos_id_vinculado);
         }
-
         $en_postulantes = $this->th_postulantes->listar();
 
         if (!empty($en_postulantes)) {

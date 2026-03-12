@@ -1,35 +1,4 @@
 <script>
-    $(document).on('input', '#txt_cedula', function() {
-        var val = $(this).val().trim();
-        var $err = $('#error_txt_cedula');
-
-        $(this).removeClass('is-invalid is-valid');
-        $err.text('');
-
-        if (val.length === 10) {
-            var id_actual = $('input[name="txt_persona_id"]').val() || 0;
-
-            $.ajax({
-                url: '../controlador/GENERAL/th_personasC.php?validar_cedula_duplicada=true',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    cedula: val,
-                    id_persona: id_actual
-                },
-                success: function(res) {
-                    if (res.duplicada) {
-                        $('#txt_cedula').addClass('is-invalid').removeClass('is-valid');
-                        $err.text('Esta cédula ya está registrada en el sistema.');
-                    } else {
-                        $('#txt_cedula').addClass('is-valid').removeClass('is-invalid');
-                        $err.text('');
-                    }
-                }
-            });
-        }
-    });
-
     function cargar_datos_persona(id) {
         $.ajax({
             url: '../controlador/GENERAL/th_personasC.php?listar=true',

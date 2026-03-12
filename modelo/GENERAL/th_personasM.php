@@ -54,6 +54,7 @@ class th_personasM extends BaseModel
         'id_religion',
         'th_per_correo_personal_1',
         'th_per_correo_personal_2',
+        'th_pos_id',
         // 'th_per_etnia AS etnia',
         // 'th_per_orientacion AS orientacion',
         // 'th_per_religion AS religion',

@@ -125,6 +125,12 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                                 disabled>
                                                 <i class='bx bx-file me-1'></i> Descargar Nómina
                                             </button>
+                                            <button class="btn btn-primary btn-sm"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modal_mensaje"
+                                                >
+                                                <i class='bx bx-file me-1'></i> Empleados Eliminados 
+                                            </button>
                                         </div>
                                     </div>
 

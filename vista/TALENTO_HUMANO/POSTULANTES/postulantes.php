@@ -68,6 +68,35 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         });
     });
 
+
+    $(document).on('input', '#txt_cedula_inv', function() {
+        var val = $(this).val().trim();
+        var $err = $('#err_cedula_inv');
+
+        $(this).removeClass('is-invalid is-valid');
+        $err.text('');
+
+        if (val.length === 10) {
+            $.ajax({
+                url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?validar_cedula_duplicada=true',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    cedula: val
+                },
+                success: function(res) {
+                    if (res.duplicada) {
+                        $('#txt_cedula_inv').addClass('is-invalid').removeClass('is-valid');
+                        $err.text('Esta cédula ya está registrada en el sistema.');
+                    } else {
+                        $('#txt_cedula_inv').addClass('is-valid').removeClass('is-invalid');
+                        $err.text('');
+                    }
+                }
+            });
+        }
+    });
+
     function agregar_postulante_persona(pos_cedula) {
         // botón que disparó la acción (si lo tienes). Si no, comentarlo.
         const $btn = $('#btnAgregarPostulante'); // ajusta selector si hace falta
