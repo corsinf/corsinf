@@ -1,7 +1,7 @@
 <?php
-require_once(dirname(__DIR__, 1) . '/GENERAL/BaseModel.php');
+require_once(dirname(__DIR__, 2) . '/GENERAL/BaseModel.php');
 
-class empleadosM extends BaseModel
+class EMPLEADOSM extends BaseModel
 {
     protected $tabla = 'EMPLEADOS';
     protected $primaryKey = 'id_empleado AS _id';

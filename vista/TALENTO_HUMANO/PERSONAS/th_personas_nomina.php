@@ -89,7 +89,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     url: '../assets/plugins/datatable/spanish.json'
                 },
                 ajax: {
-                    url: '../controlador/TALENTO_HUMANO/empleadosC.php?listar=true',
+                    url: '../controlador/GENERAL/NO_CONCURRENTES/EMPLEADOSC.php?listar=true',
                     type: 'POST',
                     data: function(d) {
                         d.id = id_departamento;
@@ -158,7 +158,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         }
 
         $.ajax({
-            url: '../controlador/TALENTO_HUMANO/empleadosC.php?restaurar=true',
+            url: '../controlador/GENERAL/NO_CONCURRENTES/EMPLEADOSC.php?restaurar=true',
             type: 'POST',
             dataType: 'json',
             data: {
