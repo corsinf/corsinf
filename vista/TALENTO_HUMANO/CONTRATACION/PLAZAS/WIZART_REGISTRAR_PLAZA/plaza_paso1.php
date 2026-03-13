@@ -414,7 +414,7 @@
                     id="txt_cn_pla_num_vacantes" name="txt_cn_pla_num_vacantes" placeholder="Ej: 1" required />
             </div>
             <div class="col-md-3">
-                <label for="ddl_id_seccion" class="form-label">Sessión </label>
+                <label for="ddl_id_seccion" class="form-label">Sección / Área </label>
                 <select class="form-select form-select-sm select2-validation" id="ddl_id_seccion" name="ddl_id_seccion">
                     <option value="" selected hidden>-- Seleccione --</option>
                 </select>

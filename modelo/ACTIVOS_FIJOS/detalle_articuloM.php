@@ -35,36 +35,30 @@ class detalle_articuloM extends BaseModel
 		$id = intval($id);
 
 		$sql = "SELECT
-					-- Identificación del artículo
 					P.id_articulo AS 'id_A',
 					P.tag_unique AS 'rfid',
 					P.tag_serie AS 'tag_s',
 					P.tag_antiguo AS 'ant',
 					P.subnumero AS 'subnum',
 					P.longitud_rfid AS 'longitud_rfid',
-					-- Descripción y características
 					P.descripcion AS 'nom',
 					P.descripcion_2 AS 'des',
 					P.caracteristica AS 'carac',
 					P.observaciones AS 'obs',
 					P.modelo AS 'mod',
 					P.serie AS 'ser',
-					-- Cantidad, precio y estado del artículo
 					P.cantidad AS 'cant',
 					P.precio AS 'prec',
 					P.imagen AS 'imagen',
 					P.kit AS 'es_kit',
 					P.maximo AS 'max',
 					P.minimo AS 'min',
-					-- Unidades de medida y tipo de artículo
 					P.id_unidad_medida AS 'id_unidad_medida',
 					CONCAT(UM.ac_nombre, ' - ', UM.ac_simbolo) AS 'unidad_medida',
 					P.id_tipo_articulo AS 'id_tipo_articulo',
-					-- Localización
 					P.id_localizacion AS 'id_loc',
 					L.DENOMINACION AS 'loc_nom',
 					L.EMPLAZAMIENTO AS 'c_loc',
-					-- Custodio (Persona)
 					PE.th_per_id AS 'id_person',
 					PE.th_per_cedula AS 'person_ci',
 					CONCAT(PE.th_per_primer_apellido, ' ', PE.th_per_segundo_apellido, ' ', PE.th_per_primer_nombre, ' ', PE.th_per_segundo_nombre) AS 'person_nom',
@@ -74,7 +68,6 @@ class detalle_articuloM extends BaseModel
 					PE.th_per_foto_url AS 'foto',
 					PE.th_per_codigo_sap AS 'person_no',
 					PE.th_per_unidad_org_sap AS 'unidad_org',
-					-- Marca, Estado, Género, Color
 					P.id_marca AS 'id_mar',
 					M.DESCRIPCION AS 'marca',
 					M.CODIGO AS 'c_mar',
@@ -87,25 +80,20 @@ class detalle_articuloM extends BaseModel
 					P.id_color AS 'id_col',
 					C.DESCRIPCION AS 'color',
 					C.CODIGO AS 'c_col',
-					-- Proyecto
 					P.id_proyecto AS 'id_pro',
 					PR.denominacion AS 'proyecto',
 					PR.programa_financiacion AS 'c_pro',
-					-- Clase de Movimiento
 					P.id_clase_movimiento AS 'id_clase_movimiento',
 					CM.DESCRIPCION AS 'movimiento',
-					-- Familia y Subfamilia
 					P.id_familia AS 'id_fam',
 					F.detalle_familia AS 'familia',
 					P.id_subfamilia AS 'id_subfam',
 					SF.detalle_familia AS 'subfamilia',
-					-- Información financiera
 					P.companycode AS 'companycode',
 					P.centro_costos AS 'centro_costos',
 					P.resp_cctr AS 'resp_cctr',
 					P.funds_ctr_apc AS 'funds_ctr_apc',
 					P.profit_ctr AS 'profit_ctr',
-					-- Auditoría y fechas
 					P.id_usuario_actualizar AS 'id_usuario_actualizar',
 					P.fecha_creacion AS 'fecha_creacion',
 					P.fecha_modificacion AS 'fecha_modificacion',
@@ -121,8 +109,7 @@ class detalle_articuloM extends BaseModel
 					P.lote_2 AS 'lote_2',
 					P.lote_3 AS 'lote_3'
 					
-				FROM
-					ac_articulos P
+				FROM ac_articulos P
 					LEFT JOIN ac_localizacion L ON P.id_localizacion = L.ID_LOCALIZACION
 					LEFT JOIN th_personas PE ON P.th_per_id = PE.th_per_id
 					LEFT JOIN ac_marcas M ON P.id_marca = M.ID_MARCA

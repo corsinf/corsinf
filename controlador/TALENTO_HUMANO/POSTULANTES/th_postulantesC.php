@@ -2,6 +2,8 @@
 require_once(dirname(__DIR__, 3) . '/lib/pdf/fpdf.php');
 require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/POSTULANTES/th_postulantesM.php');
 require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/th_personasM.php');
+require_once(dirname(__DIR__, 3) . '/db/codigos_globales.php');
+
 
 $controlador = new th_postulantesC();
 
@@ -11,6 +13,24 @@ if (isset($_GET['listar'])) {
 
 if (isset($_GET['listar_todo'])) {
     echo json_encode($controlador->listar_todo());
+}
+
+if (isset($_GET['listar_postulantes_filtro_combinado'])) {
+    $areas_ids   = json_decode($_POST['areas_ids']   ?? '[]', true);
+    $niveles_ids = json_decode($_POST['niveles_ids'] ?? '[]', true);
+    echo json_encode(
+        $controlador->listar_postulantes_filtro_combinado(
+            $_POST['id_tipo_seleccion'] ?? 0,
+            $areas_ids,
+            $niveles_ids
+        )
+    );
+}
+
+if (isset($_GET['validar_cedula_duplicada'])) {
+    echo json_encode(
+        $controlador->validar_cedula_duplicada($_POST['cedula'] ?? '')
+    );
 }
 
 if (isset($_GET['listar_personas_rol'])) {
@@ -28,6 +48,10 @@ if (isset($_GET['listar_postulantes'])) {
 
 if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
+}
+
+if (isset($_GET['insertar_postulante'])) {
+    echo json_encode($controlador->insertar_postulante($_POST['parametros']));
 }
 
 if (isset($_GET['insertar_imagen'])) {
@@ -51,11 +75,13 @@ class th_postulantesC
 {
     private $modelo;
     private $personas;
+    private $codigo_globales;
 
     function __construct()
     {
         $this->modelo = new th_postulantesM();
         $this->personas = new th_personasM();
+        $this->codigo_globales = new codigos_globales();
     }
 
     function listar($id, $id_persona = '')
@@ -116,6 +142,35 @@ class th_postulantesC
         return $lista;
     }
 
+    public function validar_cedula_duplicada($cedula)
+    {
+        $cedula = trim($cedula);
+
+        if (empty($cedula)) {
+            return ['duplicada' => false];
+        }
+
+        // Verificar en postulantes
+        if (!empty($this->modelo->where('th_pos_cedula', $cedula)->listar())) {
+            return ['duplicada' => true];
+        }
+
+        // Verificar en personas
+        if (!empty($this->personas->where('th_per_cedula', $cedula)->listar())) {
+            return ['duplicada' => true];
+        }
+
+        return ['duplicada' => false];
+    }
+
+    public function listar_postulantes_filtro_combinado($id_tipo_seleccion, $areas_ids, $niveles_ids)
+    {
+        if (!is_array($areas_ids))   $areas_ids   = json_decode($areas_ids,   true) ?? [];
+        if (!is_array($niveles_ids)) $niveles_ids = json_decode($niveles_ids, true) ?? [];
+
+        return $this->modelo->listarPorFiltrosCombinados($id_tipo_seleccion, $areas_ids, $niveles_ids);
+    }
+
     function listarNoContratados($id, $coincidencias = false)
     {
         $lista = $this->modelo->listarNoContratados($id);
@@ -142,7 +197,7 @@ class th_postulantesC
 
         $cedula_duplicada = false;
         $correo_duplicado = false;
-       
+
         if (!empty($cedula)) {
 
             $this->modelo->where('th_pos_cedula', $cedula);
@@ -160,7 +215,7 @@ class th_postulantesC
             }
         }
 
-       
+
         if (!empty($correo)) {
 
             $this->modelo->where('th_pos_correo', $correo);
@@ -177,7 +232,7 @@ class th_postulantesC
                 }
             }
         }
-       
+
         if ($cedula_duplicada && $correo_duplicado) return -4;
         if ($cedula_duplicada)                      return -2;
         if ($correo_duplicado)                      return -3;
@@ -228,6 +283,51 @@ class th_postulantesC
         }
 
         return $datos;
+    }
+
+
+    function insertar_postulante($parametros)
+    {
+        $cedula = trim($parametros['cedula'] ?? '');
+        $correo = trim($parametros['correo'] ?? '');
+
+        // ── Validar duplicados ─────────────────────────────────────────
+        $cedula_duplicada = false;
+        $correo_duplicado = false;
+
+        // Cédula en postulantes y personas
+        if (!empty($this->modelo->where('th_pos_cedula', $cedula)->listar())) {
+            $cedula_duplicada = true;
+        }
+        if (!$cedula_duplicada) {
+            if (!empty($this->personas->where('th_per_cedula', $cedula)->listar())) {
+                $cedula_duplicada = true;
+            }
+        }
+
+        // Correo en postulantes y personas
+        if (!empty($correo)) {
+            if (!empty($this->modelo->where('th_pos_correo', $correo)->listar())) {
+                $correo_duplicado = true;
+            }
+            if (!$correo_duplicado) {
+                if (!empty($this->personas->where('th_per_correo', $correo)->listar())) {
+                    $correo_duplicado = true;
+                }
+            }
+        }
+
+        if ($cedula_duplicada && $correo_duplicado) return -4;
+        if ($cedula_duplicada)                      return -2;
+        if ($correo_duplicado)                      return -3;
+
+        // ── Insertar solo cédula y correo ──────────────────────────────
+        $datos = [
+            ['campo' => 'th_pos_cedula', 'dato' => $cedula],
+            ['campo' => 'th_pos_correo', 'dato' => $correo],
+        ];
+
+        return $this->modelo->insertar_id($datos); // retorna el pos_id
     }
 
     function eliminar($id)

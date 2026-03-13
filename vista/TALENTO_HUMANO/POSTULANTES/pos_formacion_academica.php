@@ -50,6 +50,11 @@
                     text: response[0].nivel_academico_descripcion,
                     selected: true
                 }));
+                $('#ddl_area_estudio').append($('<option>', {
+                    value: response[0].id_area_estudio,
+                    text: response[0].area_estudio_descripcion,
+                    selected: true
+                }));
                 $('#ddl_pais').append($('<option>', {
                     value: response[0].id_pais,
                     text: response[0].pais_nombre,

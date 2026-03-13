@@ -25,7 +25,7 @@ class avaluo_articuloM
 					observacion,
 					usu_id,
 					fecha_creacion
-				FROM ac_avaluos_articulos
+				FROM _activos.ac_avaluos_articulos
 				WHERE 1 = 1 ";
 
 		if ($id) {

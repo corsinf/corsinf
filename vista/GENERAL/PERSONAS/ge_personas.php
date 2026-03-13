@@ -27,7 +27,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 {
                     data: null,
                     render: function(data, type, item) {
-                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=ge_registrar_personas&_id=${item._id}`;
+                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=ge_registrar_personas&id_persona=${item.th_per_id}`;
                         return `<a href="${href}"><u>${item.primer_apellido} ${item.segundo_apellido} ${item.primer_nombre} ${item.segundo_nombre}</u></a>`;
                     }
                 },

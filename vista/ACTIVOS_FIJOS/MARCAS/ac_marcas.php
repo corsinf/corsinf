@@ -7,7 +7,7 @@ include(dirname(__DIR__, 3) . '/cabeceras/header2.php');
     tbl_marcas = $('#tbl_marcas').DataTable($.extend({}, configuracion_datatable('Marcas', 'marcas'), {
       reponsive: true,
       language: {
-        url: '../assets/plugins/datatable/spanish.json'
+        url: 'assets/plugins/datatable/spanish.json'
       },
       ajax: {
         url: 'controlador/ACTIVOS_FIJOS/marcasC.php?lista=true',

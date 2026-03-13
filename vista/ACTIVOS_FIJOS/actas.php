@@ -858,7 +858,7 @@
                   <div class="col-sm-7 d-flex justify-content-end" id="pnl_radio_articulos">
                     <div class="form-check me-2">
                       <input class="form-check-input form-check-sm" type="radio" name="rbl_serie" id="rbl_serie" onclick="lista_articulos()" checked>
-                      <label class="form-check-label" for="rbl_serie">SERIE </label>
+                      <label class="form-check-label" for="rbl_serie">SKU </label>
                     </div>
                     <div class="form-check me-2">
                       <input class="form-check-input" type="radio" name="rbl_serie" id="rbl_rfid" onclick="lista_articulos()">

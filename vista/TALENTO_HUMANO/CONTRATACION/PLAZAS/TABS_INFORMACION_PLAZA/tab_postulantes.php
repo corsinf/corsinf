@@ -79,6 +79,8 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
+
+                <!-- Tipo de selección (solo MIXTA) -->
                 <div class="row mb-3" id="bloque_ddl_tipo_seleccion" style="display:none;">
                     <div class="col-md-4">
                         <label for="ddl_id_tipo_seleccion" class="form-label fw-semibold small">Tipo de Selección</label>
@@ -88,6 +90,31 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                         </select>
                     </div>
                 </div>
+
+                <!-- Barra de filtros con checkboxes -->
+                <div class="p-2 bg-light rounded border mb-3">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bx bx-filter-alt text-primary"></i>
+                        <h6 class="text-muted fs-7 mb-0 fw-bold text-uppercase ls-1">Filtrar por requisitos de la plaza</h6>
+                    </div>
+                    <div class="d-flex align-items-center gap-4">
+                        <div class="form-check form-switch mb-0">
+                            <input type="checkbox" class="form-check-input" id="cbx_filtro_area"
+                                onchange="aplicar_filtros_modal()">
+                            <label for="cbx_filtro_area" class="form-check-label fw-semibold small text-primary">
+                                <i class="bx bx-book-open me-1"></i>Área de Estudio
+                            </label>
+                        </div>
+                        <div class="form-check form-switch mb-0">
+                            <input type="checkbox" class="form-check-input" id="cbx_filtro_nivel"
+                                onchange="aplicar_filtros_modal()">
+                            <label for="cbx_filtro_nivel" class="form-check-label fw-semibold small text-primary">
+                                <i class="bx bx-graduation me-1"></i>Nivel Académico
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
                 <table class="table table-striped" id="tbl_postulantes_modal" style="width:100%">
                     <thead>
                         <tr>
@@ -122,7 +149,13 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
 
         $('#ddl_id_tipo_seleccion').on('change', function() {
             id_seleccion = $(this).val();
-            cargar_postulantes_modal(id_seleccion);
+            aplicar_filtros_modal();
+        });
+
+        // Al cerrar el modal → resetear checkboxes
+        $('#modal_agregar_postulante').on('hidden.bs.modal', function() {
+            $('#cbx_filtro_area').prop('checked', false);
+            $('#cbx_filtro_nivel').prop('checked', false);
         });
     });
 
@@ -147,17 +180,15 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         $(modalEl).off('shown.bs.modal').on('shown.bs.modal', function() {
             if (desc === 'INTERNA' || desc === 'EXTERNA') {
                 $('#bloque_ddl_tipo_seleccion').hide();
-                cargar_postulantes_modal(window._tipo_seleccion_id || 0);
+                id_seleccion = window._tipo_seleccion_id || 0;
+                cargar_postulantes_modal(id_seleccion);
             } else {
                 $('#bloque_ddl_tipo_seleccion').show();
                 var val = $('#ddl_id_tipo_seleccion').val();
                 if (val) {
                     cargar_postulantes_modal(val);
                 } else {
-                    if (tabla_modal_postulantes && $.fn.DataTable.isDataTable('#tbl_postulantes_modal')) {
-                        tabla_modal_postulantes.destroy();
-                        $('#tbl_postulantes_modal tbody').empty();
-                    }
+                    _destruir_tabla_modal();
                 }
             }
         });
@@ -165,6 +196,160 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         modal.show();
     }
 
+    // ─── APLICAR FILTROS ─────────────────────────────────────────────────────
+    function aplicar_filtros_modal() {
+        var filtro_area = $('#cbx_filtro_area').is(':checked');
+        var filtro_nivel = $('#cbx_filtro_nivel').is(':checked');
+
+        // Ninguno marcado → sin filtro
+        if (!filtro_area && !filtro_nivel) {
+            cargar_postulantes_modal(id_seleccion);
+            return;
+        }
+
+        var areas_ids = [];
+        var niveles_ids = [];
+
+        if (filtro_area) {
+            areas_ids = window._areas_estudio_requeridas || [];
+            if (areas_ids.length === 0) {
+                Swal.fire('Aviso', 'Esta plaza no tiene áreas de estudio requeridas definidas.', 'info');
+                $('#cbx_filtro_area').prop('checked', false);
+                // Si el otro también está vacío, no filtrar
+                if (!filtro_nivel) {
+                    cargar_postulantes_modal(id_seleccion);
+                    return;
+                }
+            }
+        }
+
+        if (filtro_nivel) {
+            niveles_ids = [...new Set(
+                (window._detalle_niveles_academicos || []).map(function(n) {
+                    return n.id_nivel_academico;
+                })
+            )];
+            if (niveles_ids.length === 0) {
+                Swal.fire('Aviso', 'Esta plaza no tiene niveles académicos requeridos definidos.', 'info');
+                $('#cbx_filtro_nivel').prop('checked', false);
+                if (!filtro_area || areas_ids.length === 0) {
+                    cargar_postulantes_modal(id_seleccion);
+                    return;
+                }
+            }
+        }
+
+        cargar_postulantes_modal_filtrado(id_seleccion, areas_ids, niveles_ids);
+    }
+
+    // ─── TABLA MODAL SIN FILTRO ───────────────────────────────────────────────
+    function cargar_postulantes_modal(id_sel) {
+        _destruir_tabla_modal();
+
+        tabla_modal_postulantes = $('#tbl_postulantes_modal').DataTable({
+            responsive: true,
+            dom: 'frtip',
+            language: {
+                url: '../assets/plugins/datatable/spanish.json',
+                emptyTable: 'No hay postulantes disponibles.',
+                zeroRecords: 'No se encontraron postulantes.'
+            },
+            ajax: {
+                url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?listar_todos_postulantes=true',
+                type: 'POST',
+                data: {
+                    id: id_sel
+                },
+                dataSrc: ''
+            },
+            columns: _columnas_modal(),
+            order: [
+                [1, 'asc']
+            ],
+            drawCallback: function() {
+                $('#cbx_all_modal').prop('checked', false);
+            }
+        });
+    }
+
+    // ─── TABLA MODAL CON FILTRO ───────────────────────────────────────────────
+    function cargar_postulantes_modal_filtrado(id_sel, areas_ids, niveles_ids) {
+        _destruir_tabla_modal();
+
+        tabla_modal_postulantes = $('#tbl_postulantes_modal').DataTable({
+            responsive: true,
+            dom: 'frtip',
+            language: {
+                url: '../assets/plugins/datatable/spanish.json',
+                emptyTable: 'No hay postulantes que coincidan con los filtros aplicados.',
+                zeroRecords: 'No se encontraron postulantes.'
+            },
+            ajax: {
+                url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?listar_postulantes_filtro_combinado=true',
+                type: 'POST',
+                data: {
+                    id_tipo_seleccion: id_sel || 0,
+                    areas_ids: JSON.stringify(areas_ids || []),
+                    niveles_ids: JSON.stringify(niveles_ids || [])
+                },
+                dataSrc: ''
+            },
+            columns: _columnas_modal(),
+            order: [
+                [1, 'asc']
+            ],
+            drawCallback: function() {
+                $('#cbx_all_modal').prop('checked', false);
+            }
+        });
+    }
+
+    // ─── HELPERS ─────────────────────────────────────────────────────────────
+    function _destruir_tabla_modal() {
+        if (tabla_modal_postulantes && $.fn.DataTable.isDataTable('#tbl_postulantes_modal')) {
+            tabla_modal_postulantes.destroy();
+            $('#tbl_postulantes_modal tbody').empty();
+        }
+    }
+
+    function _columnas_modal() {
+        return [{
+                data: null,
+                orderable: false,
+                className: 'text-center',
+                width: '35px',
+                render: function(d, t, item) {
+                    return '<input type="checkbox" class="cbx-postulante-modal form-check-input" value="' + (item._id || '') + '">';
+                }
+            },
+            {
+                data: null,
+                render: function(d, t, item) {
+                    var n = [
+                        item.th_pos_primer_apellido || '',
+                        item.th_pos_segundo_apellido || '',
+                        item.th_pos_primer_nombre || '',
+                        item.th_pos_segundo_nombre || ''
+                    ].join(' ').replace(/\s+/g, ' ').trim();
+                    return '<strong>' + (n || 'Sin nombre') + '</strong>';
+                }
+            },
+            {
+                data: 'th_pos_cedula',
+                defaultContent: '<span class="text-muted">—</span>'
+            },
+            {
+                data: 'th_pos_correo',
+                defaultContent: '<span class="text-muted">—</span>'
+            },
+            {
+                data: 'th_pos_telefono_1',
+                defaultContent: '<span class="text-muted">—</span>'
+            }
+        ];
+    }
+
+    // ─── TABLA PRINCIPAL ─────────────────────────────────────────────────────
     function cargar_postulantes() {
         if (tabla_plaza_postulantes && $.fn.DataTable.isDataTable('#tabla_plaza_postulantes')) {
             tabla_plaza_postulantes.destroy();
@@ -247,71 +432,6 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
         });
     }
 
-    function cargar_postulantes_modal(id_sel) {
-        if (tabla_modal_postulantes && $.fn.DataTable.isDataTable('#tbl_postulantes_modal')) {
-            tabla_modal_postulantes.destroy();
-            $('#tbl_postulantes_modal tbody').empty();
-        }
-
-        tabla_modal_postulantes = $('#tbl_postulantes_modal').DataTable({
-            responsive: true,
-            dom: 'frtip',
-            language: {
-                url: '../assets/plugins/datatable/spanish.json',
-                emptyTable: 'No hay postulantes disponibles.',
-                zeroRecords: 'No se encontraron postulantes.'
-            },
-            ajax: {
-                url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?listar_todos_postulantes=true',
-                type: 'POST',
-                data: {
-                    id: id_sel
-                },
-                dataSrc: ''
-            },
-            columns: [{
-                    data: null,
-                    orderable: false,
-                    className: 'text-center',
-                    width: '35px',
-                    render: function(d, t, item) {
-                        return '<input type="checkbox" class="cbx-postulante-modal form-check-input" value="' + (item._id || '') + '">';
-                    }
-                },
-                {
-                    data: null,
-                    render: function(d, t, item) {
-                        var n = [
-                            item.th_pos_primer_apellido || '',
-                            item.th_pos_segundo_apellido || '',
-                            item.th_pos_primer_nombre || '',
-                            item.th_pos_segundo_nombre || ''
-                        ].join(' ').replace(/\s+/g, ' ').trim();
-                        return '<strong>' + (n || 'Sin nombre') + '</strong>';
-                    }
-                },
-                {
-                    data: 'th_pos_cedula',
-                    defaultContent: '<span class="text-muted">—</span>'
-                },
-                {
-                    data: 'th_pos_correo',
-                    defaultContent: '<span class="text-muted">—</span>'
-                },
-                {
-                    data: 'th_pos_telefono_1',
-                    defaultContent: '<span class="text-muted">—</span>'
-                }
-            ],
-            order: [
-                [1, 'asc']
-            ],
-            drawCallback: function() {
-                $('#cbx_all_modal').prop('checked', false);
-            }
-        });
-    }
-
     function agregar_postulantes_seleccionados() {
         var ids = [];
         $('#tbl_postulantes_modal tbody .cbx-postulante-modal:checked').each(function() {
@@ -343,16 +463,15 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                     icon: response.fallidos > 0 ? 'warning' : 'success',
                     title: 'Operación completada',
                     html: response.fallidos > 0 ?
-                        'Agregados: <b>' + response.exitosos + '</b> &nbsp; Fallidos: <b>' + response.fallidos + '</b>' : '<b>' + response.exitosos + '</b> postulante(s) agregado(s) correctamente.',
+                        'Agregados: <b>' + response.exitosos + '</b> &nbsp; Fallidos: <b>' + response.fallidos + '</b>' :
+                        '<b>' + response.exitosos + '</b> postulante(s) agregado(s) correctamente.',
                     timer: 2000,
                     showConfirmButton: false
                 }).then(function() {
                     cargar_postulantes();
-
                     var $tabEtapas = $('a[href="#tab_etapas_proceso"]');
                     if ($tabEtapas.length) {
-                        $tabEtapas[0].click(); // ← activa el tab
-                        // ← Esperar que el tab esté visible antes de recargar
+                        $tabEtapas[0].click();
                         setTimeout(function() {
                             <?php if (!empty($_id_plaza)) { ?>
                                 cargar_etapas_tarjetas(<?= (int)$_id_plaza ?>);

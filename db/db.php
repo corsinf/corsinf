@@ -187,6 +187,8 @@ class db
 			$sql = $this->esquema_modulo($sql);
 		}
 
+		// print_r($sql); exit(); die();
+
 		try {
 			// print_r($sql);die();
 			$stmt = $conn->prepare($sql);
