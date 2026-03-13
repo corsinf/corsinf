@@ -368,8 +368,6 @@ if ($ID_PERSONA > 0) {
             <h6 class="mb-0 text-uppercase">Información Personal</h6>
             <hr>
 
-            <?php print_r($_SESSION['INICIO']); ?>
-
             <div class="row row-cols-1 row-cols-lg-2">
                 <div class="col">
                     <div class="card radius-15 card-user-profile shadow-sm border-0">
