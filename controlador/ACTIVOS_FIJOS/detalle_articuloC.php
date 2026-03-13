@@ -313,7 +313,7 @@ class detalle_articuloC
 
 			$datos = $this->modelo->editar($datos, $where);
 		}
-		
+
 		return $datos;
 
 
