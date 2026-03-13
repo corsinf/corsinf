@@ -18,4 +18,8 @@ if ($_GET['acc'] == 'cliente_factura') {
     include('FACTURACION/cliente_factura.php');
 }
 
+if ($_GET['acc'] == 'lista_clientes') {
+    include('FACTURACION/lista_clientes.php');
+}
+
 ?>

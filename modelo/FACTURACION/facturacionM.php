@@ -182,9 +182,10 @@ class facturacionM extends BaseModel
 
 	 function buscar_facturas($empresa,$numero=false)
 	{
-		$sql= "SELECT id_factura as 'id',num_factura as 'num',fecha,C.nombre,estado_factura  
+		$sql= "SELECT id_factura as 'id',num_factura as 'num',fecha,P.th_per_nombres_completos,estado_factura  
 		FROM facturas F 
-		INNER JOIN cliente C ON F.id_cliente = C.id_cliente 
+		INNER JOIN CLIENTES C ON F.id_cliente = C.id_clientes
+		INNER JOIN th_personas P ON C.th_per_id = P.th_per_id		
 		WHERE F.id_empresa = '".$empresa."' ";
 		if($numero)
 		{			

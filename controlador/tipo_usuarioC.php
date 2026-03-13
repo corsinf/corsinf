@@ -1,7 +1,8 @@
 <?php 
-include('../db/codigos_globales.php');
-include('../modelo/tipo_usuarioM.php');
-include('../modelo/usuariosM.php');
+include_once(dirname(__DIR__,1).'/db/codigos_globales.php');
+include_once(dirname(__DIR__,1).'/modelo/tipo_usuarioM.php');
+include_once(dirname(__DIR__,1).'/modelo/usuariosM.php');
+include_once(dirname(__DIR__,1).'/modelo/no_concurenteM.php');
 
 if(isset($_SESSION['INICIO']))
 {   
@@ -132,6 +133,8 @@ class tipo_usuarioC
 	private $header;
 	private $usuarios;
 
+	private $no_concurente;
+
 	
 	function __construct()
 	{
@@ -139,7 +142,7 @@ class tipo_usuarioC
 		$this->pagina = new codigos_globales();
 		$this->usuario = new usuariosM();
 
-		// $this->header = new headerM();
+		$this->no_concurente = new no_concurenteM();
 		// $this->pagina->registrar_pagina_creada('../vista/tipo_usuario.php','Tipo usuario y accesos','3','estado');
 	}
 
@@ -441,41 +444,73 @@ class tipo_usuarioC
 		if($parametros['edi']=='true'){ $edi = 1;} 
 		if($parametros['eli']=='true'){ $eli = 1;}
 
-		$dato = $this->modelo->existe_acceso($parametros['pag'],$parametros['perfil'],$_SESSION['INICIO']['ID_EMPRESA']);
 		// print_r($dato);die();
-		if(count($dato)>0)
-		{
-			$where[0]['campo'] = 'id_accesos';
-			$where[0]['dato'] = $dato[0]['id_accesos'];
 
-			$datos[0]['campo'] = 'Ver';
-			$datos[0]['dato'] = $ver;
-			$datos[1]['campo'] = 'editar';
-			$datos[1]['dato'] = $edi;
-			$datos[2]['campo'] = 'eliminar';
-			$datos[2]['dato'] = $eli;
-			$datos[3]['campo'] = 'id_empresa';
-			$datos[3]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];
-			$this->modelo->update('ACCESOS',$datos,$where);
-			// $this->modelo->updateLocal('ACCESOS',$datos,$where);
-		}else
+		if($parametros['perfil']!='' && $parametros['subperfil']=='')
 		{
-			$datos[0]['campo'] = 'Ver';
-			$datos[0]['dato'] = $ver;
-			$datos[1]['campo'] = 'editar';
-			$datos[1]['dato'] = $edi;
-			$datos[2]['campo'] = 'eliminar';
-			$datos[2]['dato'] = $eli;
-			$datos[3]['campo'] = 'id_paginas';
-			$datos[3]['dato'] = $parametros['pag'];
-			$datos[4]['campo'] = 'id_tipo_usu';
-			$datos[4]['dato'] = $parametros['perfil'];
-			$datos[5]['campo'] = 'id_empresa';
-			$datos[5]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];
+				$dato = $this->modelo->existe_acceso($parametros['pag'],$parametros['perfil'],$_SESSION['INICIO']['ID_EMPRESA']);
+				if(count($dato)>0)
+				{
+					$where[0]['campo'] = 'id_accesos';
+					$where[0]['dato'] = $dato[0]['id_accesos'];
 
-			$this->modelo->guardar($datos,'ACCESOS');	
-			// $this->modelo->guardarLocal($datos,'ACCESOS');	
+					$datos[0]['campo'] = 'Ver';
+					$datos[0]['dato'] = $ver;
+					$datos[1]['campo'] = 'editar';
+					$datos[1]['dato'] = $edi;
+					$datos[2]['campo'] = 'eliminar';
+					$datos[2]['dato'] = $eli;
+					$datos[3]['campo'] = 'id_empresa';
+					$datos[3]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];
+					$this->modelo->update('ACCESOS',$datos,$where);
+
+					$no_concu = $this->no_concurente->lista_sub_perfil($parametros['perfil']);
+					if(count($no_concu)>0)
+					{
+						 foreach ($no_concu as $key => $value) {
+						 	$this->addSubperfil($value['id'], $parametros['pag'],$ver,$edi,$eli);
+						 }
+					}
+					// $this->modelo->updateLocal('ACCESOS',$datos,$where);
+				}else
+				{
+					$datos[0]['campo'] = 'Ver';
+					$datos[0]['dato'] = $ver;
+					$datos[1]['campo'] = 'editar';
+					$datos[1]['dato'] = $edi;
+					$datos[2]['campo'] = 'eliminar';
+					$datos[2]['dato'] = $eli;
+					$datos[3]['campo'] = 'id_paginas';
+					$datos[3]['dato'] = $parametros['pag'];
+					$datos[4]['campo'] = 'id_tipo_usu';
+					$datos[4]['dato'] = $parametros['perfil'];
+					$datos[5]['campo'] = 'id_empresa';
+					$datos[5]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];
+					$this->modelo->guardar($datos,'ACCESOS');	
+					// $this->modelo->guardarLocal($datos,'ACCESOS');	
+					$no_concu = $this->no_concurente->lista_sub_perfil($parametros['perfil']);
+					if(count($no_concu)>0)
+					{
+						 foreach ($no_concu as $key => $value) {
+						 	$this->addSubperfil($value['id'], $parametros['pag'],$ver,$edi,$eli);
+						 }
+					}
+				}
+
+
+		}else if($parametros['perfil']!='' && $parametros['subperfil']!='')
+		{
+				$this->addSubperfil($parametros['subperfil'], $parametros['pag'],$ver,$edi,$eli);
 		}
+
+
+
+
+		
+		// si tiene subperfil
+
+
+
 
 		if($empresa[0]['Ip_host']==IP_MASTER)
 			{
@@ -489,6 +524,45 @@ class tipo_usuarioC
 
 		// return  $this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);	
 		// print_r($parametros);die();
+	}
+
+
+	function addSubperfil($subperfil,$pagina,$ver,$edi,$eli)
+	{
+			$dato = $this->modelo->existe_acceso($pagina,$subperfil,$_SESSION['INICIO']['ID_EMPRESA']);
+			if(count($dato)==0)
+			{
+
+				$datos[0]['campo'] = 'Ver';
+				$datos[0]['dato'] = $ver;
+				$datos[1]['campo'] = 'editar';
+				$datos[1]['dato'] = $edi;
+				$datos[2]['campo'] = 'eliminar';
+				$datos[2]['dato'] = $eli;
+				$datos[3]['campo'] = 'id_paginas';
+				$datos[3]['dato'] = $pagina;
+				$datos[4]['campo'] = 'id_tipo_usu';
+				$datos[4]['dato'] = $subperfil;
+				$datos[5]['campo'] = 'id_empresa';
+				$datos[5]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];
+				$this->modelo->guardar($datos,'ACCESOS');	
+			}else
+			{
+					$where[0]['campo'] = 'id_accesos';
+					$where[0]['dato'] = $dato[0]['id_accesos'];
+
+					$datos[0]['campo'] = 'Ver';
+					$datos[0]['dato'] = $ver;
+					$datos[1]['campo'] = 'editar';
+					$datos[1]['dato'] = $edi;
+					$datos[2]['campo'] = 'eliminar';
+					$datos[2]['dato'] = $eli;
+					$datos[3]['campo'] = 'id_empresa';
+					$datos[3]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];
+					$this->modelo->update('ACCESOS',$datos,$where);
+
+			}
+
 	}
 
 	function add_tipo($parametros)
@@ -612,18 +686,16 @@ class tipo_usuarioC
 	}
 	function accesos_asignados($parametros)
 	{
-		// $perfil = $this->modelo->lista_usuarios_en_tipo(false,$parametros['usuario']);
-		// 	print_r($perfil);die();
 		// print_r($parametros);die();
-		// if($parametros['usuario']=='T')
-		// {
-		// 	// print_r('e');die();
-			return $this->modelo->lista_accesos_asignados($parametros['perfil']);
-		// }else
-		// {
-		// 	// validar que solo se cargue cuando sea perfil (porm desarrollar)
-		// 	return $this->modelo->lista_accesos_por_perfil($parametros['perfil']);
-		// }
+			if($parametros['perfil']!='' && $parametros['subperfil']=='')
+			{
+				// print_r('solo perfil');die();
+				return $this->modelo->lista_accesos_asignados($parametros['perfil']);
+			}else if($parametros['perfil']!='' && $parametros['subperfil']!='')
+			{
+				// print_r('solo sub perfil');die();
+				return $this->modelo->lista_accesos_asignados($parametros['subperfil']);
+			}
 	}
 	function guardar_modulos($parametros)
 	{

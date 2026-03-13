@@ -34,6 +34,7 @@ $(document).ready(function () {
             $('#txt_razon').val(ui.item.razon); // save selected id to input
             $('#txt_direccion').val(ui.item.direccion); // save selected id to input
             $('#txt_id').val(ui.item.value); // save selected id to input
+            $('#txt_idPersona').val(ui.item.idPersona); // save selected id to input
 
             return false;
         },
@@ -67,6 +68,7 @@ $(document).ready(function () {
             $('#txt_razon').val(ui.item.razon); // save selected id to input
             $('#txt_direccion').val(ui.item.direccion); // save selected id to input
             $('#txt_id').val(ui.item.value); // save selected id to input
+            $('#txt_idPersona').val(ui.item.idPersona); // save selected id to input
 
             return false;
         },
@@ -150,6 +152,7 @@ function guardar()
 	                   	 <div class="col-sm-12">
 	                   	 	<div class="row">
 	                   	 		<input type="hidden" name="txt_id" id="txt_id">
+	                   	 		<input type="hidden" name="txt_idPersona" id="txt_idPersona">
 	                   	 		<input type="hidden" name="txt_tc" id="txt_tc" value="<?php echo $tipo; ?>">
 	                   	 		 <div class="col-sm-6">
 			                   		<b>CI / RUC</b>

@@ -72,7 +72,9 @@
         console.log(response);
         var op = '';
         response.forEach(function(item, i) {
-          op += '<tr><td>' + item.Total + '</td><td>' + item.Tabla + '</td><td>' + item.Campo_usuario + '</td><td>' + item.Campo_pass + '</td><td>' + item.perfil + '</td>' +
+          var perfil_asig = item.perfil;
+          if(item.PADRE!=null) { perfil_asig = item.PADRE+' / '+perfil_asig; }
+          op += '<tr><!-- <td>' + item.Total + '</td> --> <td>' + item.Tabla + '</td><td>' + item.Campo_usuario + '</td><td>' + item.Campo_pass + '</td><td>' + perfil_asig + '</td>' +
             '<td>' +
             '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_no_concurente(\'' + item.Tabla + '\')"><i class="bx bx-trash me-0"></i></button>' +
             '</td>' +
@@ -310,7 +312,7 @@
                 <table class="table table-hover table-striped align-middle">
                   <thead class="table-light">
                     <tr>
-                      <th>Total Asociados</th>
+                      <!-- <th>Total Asociados</th> -->
                       <th>Tabla</th>
                       <th>Campo Usuario</th>
                       <th>Campo Password</th>

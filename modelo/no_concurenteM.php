@@ -30,11 +30,13 @@ class no_concurenteM
 
 	function lista_no_concurente($query = false)
 	{
-		$sql = "SELECT count(*) as 'Total',Tabla,Campo_usuario,Campo_pass,TU.DESCRIPCION as 'perfil' 
-			FROM TABLAS_NOCONCURENTE T
-			INNER JOIN TIPO_USUARIO TU ON T.tipo_perfil = TU.ID_TIPO
+		$sql = "SELECT Id_no_concurente,Tabla,Campo_usuario,Campo_pass,TU.DESCRIPCION as 'perfil',TU.PADRE as idPadre,TU2.DESCRIPCION as PADRE
+				FROM TABLAS_NOCONCURENTE T 
+				INNER JOIN TIPO_USUARIO TU ON T.tipo_perfil = TU.ID_TIPO 
+				LEFT JOIN TIPO_USUARIO TU2 ON TU.PADRE = TU2.ID_TIPO 
 				WHERE Id_Empresa = '" . $_SESSION['INICIO']['ID_EMPRESA'] . "'
-				GROUP BY Tabla,Campo_usuario,Campo_pass,TU.DESCRIPCION";
+				GROUP BY Id_no_concurente,Tabla,Campo_usuario,Campo_pass,TU.DESCRIPCION,TU.PADRE,TU2.DESCRIPCION
+				ORDER BY Id_no_concurente desc";
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql, 1);
 		return $datos;

@@ -508,7 +508,7 @@ class db
 
 	function sql_string_cod_error($sql, $master = false)
 	{
-		// print_r($sql);		
+		// print_r($sql);		die();
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
 		// print_r("sqlsrv:Server=".$this->servidor .''. $this->puerto.";Database=".$this->database.' '.$this->usuario.' '.$this->password);die();

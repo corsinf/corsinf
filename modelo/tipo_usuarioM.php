@@ -287,9 +287,14 @@ class tipo_usuarioM
 	}
 	function eliminar_tipo($id)
 	{
+		// elimina primero acceso
+		$sql = "DELETE FROM ACCESOS WHERE id_tipo_usu = '".$id."'";
+		$datos = $this->db->sql_string_cod_error($sql,1);
 		$sql = "DELETE FROM TIPO_USUARIO WHERE ID_TIPO='".$id."'";
 		// print_r($sql);die();
 		$datos = $this->db->sql_string_cod_error($sql,1);
+
+		// print_r($datos);die();
 		if($datos==1)
 		{
 			return 1;

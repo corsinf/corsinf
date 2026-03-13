@@ -2,6 +2,7 @@
 require_once(dirname(__DIR__,2).'/modelo/FACTURACION/fac_clientesM.php');
 require_once(dirname(__DIR__,2).'/modelo/FACTURACION/facturacionM.php');
 require_once(dirname(__DIR__,2).'/modelo/FACTURACION/secuencialesM.php');
+require_once(dirname(__DIR__,2).'/modelo/GENERAL/th_personasM.php');
 
 /**
  * 
@@ -114,11 +115,13 @@ class cliente_facturaC
 	private $modelo;
 	private $factura;
 	private $secuencial;
+	private $personas;
 	function __construct()
 	{
 	  $this->modelo = new fac_clientesM();
 	  $this->factura = new facturacionM();
 	  $this->secuencial= new secuencialesM();
+	  $this->personas = new th_personasM();
 	}
 
 	// function datos_factura($id)
@@ -231,47 +234,35 @@ class cliente_facturaC
 
 	function editar_cliente($parametros)
 	{
-		// print_r($parametros);die();
-		// print_r($_SESSION);die();
-		$datos[0]['campo']='nombre';
-		$datos[0]['dato']=$parametros['txt_nombre'];
-		$datos[1]['campo']='telefono';
-		$datos[1]['dato']=$parametros['txt_telefono'];
-		$datos[2]['campo']='mail';
-		$datos[2]['dato']=$parametros['txt_email'];
-		$datos[3]['campo']='direccion';
-		$datos[3]['dato']=$parametros['txt_direccion'];		
-		$datos[4]['campo']=	'ci_ruc';
-		$datos[4]['dato']=$parametros['txt_ci'];		
-		$datos[5]['campo']=	'id_empresa';
-		$datos[5]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];	
-		$datos[6]['campo']=	'Razon_Social';
-		if($parametros['txt_razon']!='')
-		{
-			$datos[6]['dato']=$parametros['txt_razon'];	
-		}else
-		{
-			$datos[6]['dato']=$parametros['txt_nombre'];
-		}
-		$datos[7]['campo']=	'tipo';
-		$datos[7]['dato']='C';
-
+		$data = array(array('campo'=>'th_per_nombres_completos','dato'=>$parametros['txt_nombre']),
+					  array('campo'=>'th_per_telefono_1','dato'=>$parametros['txt_telefono']),
+					  array('campo'=>'th_per_correo','dato'=>$parametros['txt_email']),
+					  array('campo'=>'th_per_direccion','dato'=>$parametros['txt_direccion']),
+					  array('campo'=>'th_per_cedula','dato'=>$parametros['txt_ci']),
+		); 
+		
 		$idCli = '';
 		if($parametros['txt_id']!='')
 		{
-		    $where[0]['campo']='id_cliente';
-		    $where[0]['dato']=$parametros['txt_id'];
-            $this->modelo->editar($datos,$where);
+
+		    $where = array(array('campo'=>'th_per_id','dato'=>$parametros['txt_idPersona']));
+            $this->personas->Editar($data,$where);
             $idCli = $parametros['txt_id'];
 
 		}else
 		{
-		   $this->modelo->insertar($datos);
-		   $dato = $this->modelo->lista_clientes(false,$datos[4]['dato']);
+		   $this->personas->insertar($data);
+		   $perso = $this->personas->where('th_per_cedula',$data[4]['dato'])->listar();
+
+		   $personacliente = array(
+		   		array('campo'=>'th_per_id','dato'=>$perso[0]['_id']),
+		   );
+		   $this->modelo->insertar($personacliente);
+		   $dato = $this->modelo->lista_clientes(false,$data[4]['dato']);
+		   // print_r($dato);die();
 		   $idCli = $dato[0]['id'];
 		}
-
-
+		// print_r('expression');die();
 		if(!isset($parametros['txt_fecha']))
 		{
 			$parametros['txt_fecha'] = date('Y-m-d');
@@ -287,7 +278,8 @@ class cliente_facturaC
 			// $numero[0]['Autorizacion'] = $_SESSION['INICIO']['Autorizacion'];
 		}
 
-
+		// print_r($numero);die();
+		
 		$vali = $this->secuencial->validar_mas_series('FA_SERIE_'.$_SESSION['INICIO']['SERIE']);
 
         $new_num = $numero[0]['numero']+1;
@@ -421,7 +413,7 @@ class cliente_facturaC
 		$lista =array();
 		$nombres = $this->modelo->lista_clientes($query,$ci);
 		foreach ($nombres as $key => $value) {
-			$lista[] = array('value'=>$value['id'],'label'=>$value['ci_ruc'],'telefono'=>$value['telefono'],'email'=>$value['mail'],'direccion'=>$value['direccion'],'nombre'=>$value['nombre'],'razon'=>$value['razon']);
+			$lista[] = array('value'=>$value['id'],'label'=>$value['th_per_cedula'],'telefono'=>$value['th_per_telefono_1'],'email'=>$value['th_per_correo'],'direccion'=>$value['th_per_direccion'],'nombre'=>$value['th_per_nombres_completos'],'razon'=>$value['th_per_nombres_completos'],'idPersona'=>$value['idPersona']);
 		}
 		// print_r($lista);die();
         return  $lista;
@@ -436,7 +428,7 @@ class cliente_facturaC
 		$lista =array();
 		$nombres = $this->modelo->lista_clientes($query,$ci);
 		foreach ($nombres as $key => $value) {
-			$lista[] = array('value'=>$value['id'],'label'=>$value['nombre'],'telefono'=>$value['telefono'],'email'=>$value['mail'],'direccion'=>$value['direccion'],'ci'=>$value['ci_ruc'],'razon'=>$value['razon']);
+			$lista[] = array('value'=>$value['id'],'label'=>$value['th_per_nombres_completos'],'telefono'=>$value['th_per_telefono_1'],'email'=>$value['th_per_correo'],'direccion'=>$value['th_per_direccion'],'ci'=>$value['th_per_cedula'],'razon'=>$value['th_per_nombres_completos'],'idPersona'=>$value['idPersona']);
 		}
 		// print_r($lista);die();
         return  $lista;
@@ -477,81 +469,19 @@ class cliente_facturaC
 
 	function lista_clientes($parametros)
 	{
-		// print_r($query);die();
+		// print_r($parametros);die();
 		$ci=false;$nombre=false;
 		if(is_numeric($parametros['query']))
 		{
-			$ci = $parametros['query'];
+			// $ci = $parametros['query'];
+			$datos = $this->modelo->lista_clientes(false,$parametros['query'],false,$tipo='C');
 		}else
 		{
-			$nombre = $parametros['query'];
+			// $nombre = $parametros['query'];
+			$datos = $this->modelo->lista_clientes($parametros['query'],false,false,$tipo='C');
 		}
-		$datos = $this->modelo->lista_clientes($nombre,$ci);
-		$tr='';
-		foreach ($datos as $key => $value) {
-			$foto = 'sin_foto.jpg';
-			if(file_exists('../img/clientes/'.$value['foto']))
-			{
-				$foto = $value['foto'];
-			}
-			if($foto=='' || $foto==null)
-			{
-				$foto = 'sin_foto.jpg';
-			}
-			$tr.='<div class="col-xl-4">
-			<div class="card">							
-				<div class="card-body">
-					<div class="row g-0">
-						<div class="col-sm-3 col-xl-12 col-xxl-3 text-center">
-							<img src="../img/clientes/'.$foto.'" width="80" height="80" class="rounded-circle mt-2" alt="Angelica Ramos">
-						</div>						
-					</div>
-					<table class="table table-sm mt-2 mb-4">
-						<tbody>
-							<tr>
-								<th>Nombre</th>
-								<td>'.$value['nombre'].'</td>
-							</tr>
-							<tr>
-								<th>Razon social</th>
-								<td>'.$value['razon'].'</td>
-							</tr>
-							<tr>
-								<th>CI / RUC</th>
-								<td>'.$value['ci_ruc'].'</td>
-							</tr>
-							<tr>
-								<th>Email</th>
-								<td>'.$value['mail'].'</td>
-							</tr>
-							<tr>
-								<th>Telefono</th>
-								<td>'.$value['telefono'].'</td>
-							</tr>
-							<tr>
-								<th>Estado</th>';
-								if($value['estado']=='A')
-								{
-									$tr.='<td><span class="badge bg-success">Active</span></td>';
-								}else
-								{
-									$tr.='<td><span class="badge bg-danger">Inactivo</span></td>';
-								}
-							$tr.='</tr>
-							<tr>
-								<th>Direccion</th>
-								<td>'.$value['direccion'].'</td>
-							</tr>
-
-						</tbody>
-					</table>
-					<a href="detalle_cliente.php?id='.$value['id'].'" class="btn btn-primary btn-block btn-sm"><i class="fa fa-eye"></i> Ver Detalles</a>
-				</div>
-			</div>
-		</div>';
-			// code...
-		}
-        return  $tr;
+	
+        return  $datos;
 	}
 
 

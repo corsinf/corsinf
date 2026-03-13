@@ -75,7 +75,8 @@ class loginM
 	function buscar_db_terceros($database,$usuario,$password,$servidor,$puerto,$parametros)
 	{
 		$item = array();
-		$sql = "SELECT * FROM ".$parametros['tabla']." WHERE ".$parametros['Campo_Usuario']." = '".$parametros['email']."' ";
+		$sql = "SELECT * FROM ".$parametros['tabla']." 
+		WHERE ".$parametros['Campo_Usuario']." = '".$parametros['email']."' ";
 		if(isset($parametros['Campo_Pass']))
 		{
 		    $sql.=" AND ".$parametros['Campo_Pass']."='".$parametros['pass']."'";
@@ -89,7 +90,7 @@ class loginM
 		if($dbconnection!=-1)
 		{
 		 	$item = $this->db->datos_db_terceros($database,$usuario,$password,$servidor,$puerto,$sql);
-		 	// print_r($item);
+		 	// print_r($item);die();
 		}
 		return $item;
 	}

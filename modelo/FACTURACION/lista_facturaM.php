@@ -144,11 +144,14 @@ class lista_facturaM  extends BaseModel
 
 	function cliente_factura($id,$id_empresa)
 	{
-		$sql="SELECT C.id_cliente,nombre,mail,C.telefono,C.direccion,ci_ruc,num_factura,serie,valor_iva,Autorizacion,fecha,estado_factura,Tipo_pago,datos_adicionales,estado_pago 
+		$sql="SELECT C.id_clientes,th_per_nombres_completos as nombre,th_per_correo as mail,th_per_telefono_1 as telefono,th_per_direccion as direccion, th_per_cedula as ci_ruc,num_factura,serie,valor_iva,Autorizacion,fecha,estado_factura,Tipo_pago,datos_adicionales,estado_pago 
 		FROM facturas F
-		INNER JOIN cliente C ON F.id_cliente = C.id_cliente
+		INNER JOIN CLIENTES  C ON F.id_cliente = C.id_clientes	
+		INNER JOIN th_personas P ON C.th_per_id = P.th_per_id		
 		INNER JOIN EMPRESAS E ON F.id_empresa = E.id_empresa
 		WHERE F.id_factura = '".$id."'";
+
+		// print_r($sql);die();
 		$result = $this->db->datos($sql);
 	    return $result;
 				

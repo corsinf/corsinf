@@ -282,13 +282,50 @@
        });
   }
 
+   function cargar_sub_perfil()
+  {
+    perfil = $('#ddl_perfil').val();
+    var parametros = 
+    {
+      'perfil':perfil,
+    }
+      $.ajax({
+        data:  {parametros:parametros},
+        url: '../controlador/no_concurenteC.php?lista_sub_perfil=true',
+        type: 'post',
+        dataType: 'json',
+        /*beforeSend: function () {   
+             var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           $('#tabla_').html(spiner);
+        },*/
+        success: function(response) {
+          console.log(response);
+          var op = '<option value="">Seleccione Sub perfil</option>';
+          
+          if(response.length>0)
+          {
+            $('#pnl_sub_perfil').removeClass('d-none');
+            response.forEach(function(item, i) {
+              op += '<option value="'+item.id+'">'+item.nombre+'</option>';
+            })
+          }else
+          {            
+            $('#pnl_sub_perfil').addClass('d-none');
+          }
+          $('#ddl_sub_perfil').html(op);
+        }
+      });
+  }
+
   function accesos_asignados()
   {
     var perfil = $('#ddl_perfil').val();
+    var subperfil = $('#ddl_sub_perfil').val();
     var usuario_perfil = $('#ddl_usuario_perfil').val();
     parametros = 
     {
       'perfil':perfil,
+      'subperfil':subperfil,
       'usuario':usuario_perfil,
       'modulo_sis':$('#ddl_modulos').val(),
       'modulo':$('#ddl_menu').val(),
@@ -335,6 +372,7 @@
       'modulo':$('#ddl_modulos').val(),
       'pag':id,
       'perfil':$('#ddl_perfil').val(),
+      'subperfil':$('#ddl_sub_perfil').val(),
       'ver':$('#ver_'+id).prop('checked'),
       'edi':$('#edi_'+id).prop('checked'),
       'eli':$('#eli_'+id).prop('checked'),
@@ -539,19 +577,13 @@
             <hr>
             <div class="card">
               <div class="card-body">
-                <div class="row"><br>                                     
-                    <div class="col-sm-3">                    
-                      <b>Perfil usuario</b>
-                      <select class="form-select form-select-sm" id="ddl_perfil" name="ddl_perfil" onchange="accesos_asignados()">
-                        <option value="">Seleccione perfil de usuario</option>
-                      </select>                    
-                    </div>
-                    <div class="col-sm-5" style="display:none;">
-                      <b>Usuarios</b>
-                      <select class="form-select form-select-sm" id="ddl_usuario_perfil" name="ddl_usuario_perfil" onchange="lista_paginas()">
-                        <option value="T">Aplicar a todos</option>
-                      </select>                      
-                    </div>
+                <div class="row text-end">
+                    <div class="col-sm-8"></div>
+                    <div class="col-sm-4">
+                        <input type="text" name="txt_pagina" id="txt_pagina" placeholder="Buscar pagina" class="form-control form-control-sm" onkeyup="lista_paginas()">             
+                    </div>                    
+                </div>
+                <div class="row"> 
                     <div class="col-sm-2">
                       <b>Modulo </b>
                       <select class="form-select form-select-sm" id="ddl_modulos" name="ddl_modulos" onchange="cargar_menu();lista_paginas();validar_licencia()">
@@ -564,12 +596,29 @@
                       <select class="form-select form-select-sm" id="ddl_menu" name="ddl_menu" onchange="lista_paginas()">
                         <option value="">Modulos</option>
                       </select>                    
+                    </div>                                  
+                    <div class="col-sm-3">                    
+                      <b>Perfil usuario</b>
+                      <select class="form-select form-select-sm" id="ddl_perfil" name="ddl_perfil" onchange="cargar_sub_perfil(); accesos_asignados()">
+                        <option value="">Seleccione perfil de usuario</option>
+                      </select>                    
                     </div>
-                    <div class="col-sm-4">
-                      <b>Buscar pagina</b>
-                        <input type="text" name="txt_pagina" id="txt_pagina" placeholder="Buscar pagina" class="form-control form-control-sm" onkeyup="lista_paginas()">             
-                    </div>  
+                    <div class="col-sm-3 d-none" id="pnl_sub_perfil">                    
+                      <b>sub perfil usuario</b>
+                      <select class="form-select form-select-sm" id="ddl_sub_perfil" name="ddl_sub_perfil" onchange="accesos_asignados()">
+                        <option value="">Seleccione perfil de usuario</option>
+                      </select>                    
+                    </div>
+
+                    <div class="col-sm-5" style="display:none;">
+                      <b>Usuarios</b>
+                      <select class="form-select form-select-sm" id="ddl_usuario_perfil" name="ddl_usuario_perfil" onchange="lista_paginas()">
+                        <option value="T">Aplicar a todos</option>
+                      </select>                      
+                    </div>
+                   
                 </div>
+                
                 <hr>
                 <table class="table">
                   <thead>
