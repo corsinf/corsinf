@@ -472,17 +472,20 @@ class loginC
 			 	 		$tipo = $value['tipo'];
 			 	 	 	$empresa = $this->login->lista_empresa($value['Id_Empresa']);
 			 	 	 	$parametros['Campo_Usuario'] = $value['Campo_usuario'];
+			 	 	 	// $parametros['Campo_pass'] = $value['Campo_pass'];
 			 	 	 	$Campo_Pass = $value['Campo_pass'];
 			 	 	 	$parametros['tabla'] = $value['Tabla'];
 			 	 	 	$parametros['politicas'] = $value['campo_politicas'];
+			 	 	 	// $parametros['pass'] = $this->cod_global->enciptar_clave($parametros['pass']);
 
 			 	 	 	// print_r($empresa);die();
 			 	 	 	if(count($empresa)>0)
 			 	 	 	{
 					 	 	 	$busqueda_tercero = $this->login->buscar_db_terceros($empresa[0]['Base_datos'],$empresa[0]['Usuario_db'],$empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db'],$parametros);
 
-					 	 	 	if(count($busqueda_tercero)>0)
+					 	 	 	if(count($busqueda_tercero)>0 && isset($busqueda_tercero[0]['DELETE_LOGIC']) && $busqueda_tercero[0]['DELETE_LOGIC'] == 0)
 					 	 	 	{
+					 	 	 		// print_r($busqueda_tercero);die();
 					 	 	 		$roles[] = array('DESCRIPCION'=>$value['tipo'],'ID_TIPO'=>$value['tipo_perfil'],'normal'=>0);
 					 	 	 	}
 				 	 	 }
@@ -491,7 +494,7 @@ class loginC
 
 			//actualizamos
 			$empresa = $this->login->lista_empresa($parametros['empresa']);
-			// print_r($empresa);die();
+			// print_r($roles);die();
 			// if($empresa[0]['Ip_host']==IP_MASTER)
 			// {
 			// 	// print_r($licencias);print_r($empresa);die();
