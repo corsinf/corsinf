@@ -109,8 +109,7 @@ class detalle_articuloM extends BaseModel
 					P.lote_2 AS 'lote_2',
 					P.lote_3 AS 'lote_3'
 					
-				FROM
-					_activos.ac_articulos P
+				FROM ac_articulos P
 					LEFT JOIN ac_localizacion L ON P.id_localizacion = L.ID_LOCALIZACION
 					LEFT JOIN th_personas PE ON P.th_per_id = PE.th_per_id
 					LEFT JOIN ac_marcas M ON P.id_marca = M.ID_MARCA

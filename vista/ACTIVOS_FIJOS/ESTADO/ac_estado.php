@@ -7,7 +7,7 @@ include(dirname(__DIR__, 3) . '/cabeceras/header2.php');
     tbl_estados = $('#tbl_estados').DataTable($.extend({}, configuracion_datatable('Estados', 'estados'), {
       reponsive: true,
       language: {
-        url: '../assets/plugins/datatable/spanish.json'
+        url: 'assets/plugins/datatable/spanish.json'
       },
       ajax: {
         url: 'controlador/ACTIVOS_FIJOS/estadoC.php?lista=true',
