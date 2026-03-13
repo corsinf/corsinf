@@ -3,7 +3,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 $redireccionar_vista = 'index';
 
 //Para obtener el id de la persona que solicita la firma (No concurrente)
-$_id = isset($_SESSION['INICIO']['NO_CONCURENTE']) ? $_SESSION['INICIO']['NO_CONCURENTE'] : null;
+$_id = isset($_SESSION['INICIO']['ID_PERSONA']) ? $_SESSION['INICIO']['ID_PERSONA'] : null;
 
 // if (empty($_id)) {
 //     $_id = '';

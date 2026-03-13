@@ -946,7 +946,7 @@ class loginC
 						$_SESSION["INICIO"]['EDITAR'] = $datos[0]['editar'];
 						$_SESSION["INICIO"]['ELIMINAR'] = $datos[0]['eliminar'];
 						$_SESSION["INICIO"]['DBA'] = $datos[0]['dba'];
-						$_SESSION["INICIO"]['USUARIO'] = $datos[0]['nombres'].' '.$datos[0]['apellidos'];
+						$_SESSION["INICIO"]['USUARIO'] = $datos[0]['apellidos'];
 						$_SESSION["INICIO"]['ID_USUARIO'] = $datos[0]['id'];
 						$_SESSION["INICIO"]['EMAIL'] = $datos[0]['email'];
 						$_SESSION["INICIO"]['TIPO'] = $parametros['tipo'];
@@ -957,6 +957,7 @@ class loginC
 							$_SESSION["INICIO"]['FOTO'] = $datos_usu[0][$parametros['foto']];
 						}
 						$_SESSION["INICIO"]['NO_CONCURENTE'] = $busqueda_tercero[0][$id[0]['ID']] ;
+						$_SESSION["INICIO"]['ID_PERSONA'] = $busqueda_tercero[0]['th_per_id'] ?? -1;
 						$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] =$parametros['email'];
 						$_SESSION["INICIO"]['NO_CONCURENTE_POLITICAS'] = $busqueda_tercero[0][$parametros['politicas']];
 						$_SESSION["INICIO"]['NO_CONCURENTE_TABLA_ID'] =$id[0]['ID'];

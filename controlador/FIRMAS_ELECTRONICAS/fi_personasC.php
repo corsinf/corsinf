@@ -60,7 +60,7 @@ class fi_personasC
     //Rol usuario
     function listar()
     {
-        $_id = isset($_SESSION['INICIO']['NO_CONCURENTE']) ? $_SESSION['INICIO']['NO_CONCURENTE'] : null;
+        $_id = isset($_SESSION['INICIO']['ID_PERSONA']) ? $_SESSION['INICIO']['ID_PERSONA'] : null;
         $datos = [];
 
         if (!empty($_id)) {
@@ -129,7 +129,7 @@ class fi_personasC
 
     function editar($parametros)
     {
-        $_id = isset($_SESSION['INICIO']['NO_CONCURENTE']) ? $_SESSION['INICIO']['NO_CONCURENTE'] : null;
+        $_id = isset($_SESSION['INICIO']['ID_PERSONA']) ? $_SESSION['INICIO']['ID_PERSONA'] : null;
         $datos = [];
 
         if (!empty($_id)) {
@@ -188,7 +188,7 @@ class fi_personasC
 
     function validar_paso_2()
     {
-        $_id = isset($_SESSION['INICIO']['NO_CONCURENTE']) ? $_SESSION['INICIO']['NO_CONCURENTE'] : null;
+        $_id = isset($_SESSION['INICIO']['ID_PERSONA']) ? $_SESSION['INICIO']['ID_PERSONA'] : null;
         $datos = [];
 
         if (!empty($_id)) {
@@ -204,7 +204,7 @@ class fi_personasC
 
     function agregar_documentos_repositorio($file, $parametros)
     {
-        $_id = isset($_SESSION['INICIO']['NO_CONCURENTE']) ? $_SESSION['INICIO']['NO_CONCURENTE'] : null;
+        $_id = isset($_SESSION['INICIO']['ID_PERSONA']) ? $_SESSION['INICIO']['ID_PERSONA'] : null;
         $persona_cedula = $this->modelo->where('th_per_id', $_id)->listar(1)[0]['cedula'];
         $persona = array(
             'txt_cedula' => $persona_cedula

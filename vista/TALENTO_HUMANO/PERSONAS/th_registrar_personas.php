@@ -18,7 +18,7 @@ if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
     $redireccionar_vista = 'th_personas_nomina';
 }
 
-if ($_SESSION['INICIO']['TIPO'] == "PERSONAS") {
+if ($_SESSION['INICIO']['ID_PERSONA'] > 0) {
     $redireccionar_vista = "th_registrar_personas&id_persona=$id_persona&id_postulante=$id_postulante&_origen=nomina&_persona_nomina=true";
 }
 
@@ -31,8 +31,8 @@ $html_disabled = $es_restringido ? "disabled" : "";
 
 /* Validar que sea el usuario correspondiente ******************************************** */
 
-if ($_SESSION['INICIO']['PERFIL'] == "PERSONAS") {
-    if ($_SESSION['INICIO']['NO_CONCURENTE'] != $id_persona && $id_persona != '') {
+if ($_SESSION['INICIO']['ID_PERSONA'] > 0) {
+    if ($_SESSION['INICIO']['ID_PERSONA'] != $id_persona && $id_persona != '') {
         echo "<script>location.href = 'inicio.php?acc=pagina_error';</script>";
         exit;
     }

@@ -9,7 +9,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
     const USER_DATA = {
         tipo: "<?= $_SESSION['INICIO']['TIPO'] ?>",
-        id: "<?= (in_array($_SESSION['INICIO']['TIPO'], ['DBA', 'ADMINISTRADOR'])) ? '' : $_SESSION['INICIO']['NO_CONCURENTE'] ?>"
+        id: "<?= (in_array($_SESSION['INICIO']['TIPO'], ['DBA', 'ADMINISTRADOR'])) ? '' : $_SESSION['INICIO']['ID_PERSONA'] ?>"
     };
 
     if (USER_DATA.id !== "") {

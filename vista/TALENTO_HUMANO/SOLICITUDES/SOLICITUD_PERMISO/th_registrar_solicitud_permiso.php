@@ -70,7 +70,7 @@ $ruta = '';
 
         const USER_DATA = {
             tipo: "<?= $_SESSION['INICIO']['TIPO'] ?>",
-            id: "<?= (($_SESSION['INICIO']['TIPO'] === 'DBA' || $_SESSION['INICIO']['TIPO'] === 'ADMINISTRADOR')) ? '' : $_SESSION['INICIO']['NO_CONCURENTE'] ?>"
+            id: "<?= (($_SESSION['INICIO']['TIPO'] === 'DBA' || $_SESSION['INICIO']['TIPO'] === 'ADMINISTRADOR')) ? '' : $_SESSION['INICIO']['ID_PERSONA'] ?>"
         };
 
 

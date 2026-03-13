@@ -47,7 +47,7 @@ class th_control_acceso_temporalC
     {
         // print_r($estado_aprobacion); exit(); die();
         if ($id == '') {
-            $id_persona = $_SESSION['INICIO']['NO_CONCURENTE'] ?? '';
+            $id_persona = $_SESSION['INICIO']['ID_PERSONA'] ?? '';
             $datos = $this->modelo->listar_accesos_temporales($id_persona, '', $estado_aprobacion);
         } else {
             $datos = $this->modelo->where('th_act_id', $id)->listar();
@@ -68,7 +68,7 @@ class th_control_acceso_temporalC
 
     function insertar_editar($parametros)
     {
-        $id = (isset($_SESSION['INICIO']['NO_CONCURENTE']) && $_SESSION['INICIO']['NO_CONCURENTE']) ? $_SESSION['INICIO']['NO_CONCURENTE'] : -10;
+        $id = (isset($_SESSION['INICIO']['ID_PERSONA']) && $_SESSION['INICIO']['ID_PERSONA']) ? $_SESSION['INICIO']['ID_PERSONA'] : -10;
 
         if ($id == -10) {
             return $id;
@@ -347,7 +347,7 @@ class th_control_acceso_temporalC
 
     function validar_triangulacion($longitud = 0, $latitud = 0)
     {
-        $id_persona = (isset($_SESSION['INICIO']['NO_CONCURENTE']) && $_SESSION['INICIO']['NO_CONCURENTE']) ? $_SESSION['INICIO']['NO_CONCURENTE'] : -10;
+        $id_persona = (isset($_SESSION['INICIO']['ID_PERSONA']) && $_SESSION['INICIO']['ID_PERSONA']) ? $_SESSION['INICIO']['ID_PERSONA'] : -10;
 
         if ($id_persona == -10) {
             return ['error' => 'Persona no válida', 'tri_id' => null, 'zona' => null, 'dentro' => false];

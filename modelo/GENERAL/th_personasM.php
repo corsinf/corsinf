@@ -39,8 +39,6 @@ class th_personasM extends BaseModel
         'th_per_estado AS estado',
         'th_per_fecha_creacion AS fecha_creacion',
         'th_per_fecha_modificacion AS fecha_modificacion',
-        'PERFIL',
-        // 'PASS',
         'th_per_codigo_sap AS codigo_sap',
         'th_per_unidad_org_sap AS unidad_org_sap',
         'th_per_tipo_sangre AS tipo_sangre',
@@ -112,7 +110,6 @@ class th_personasM extends BaseModel
                 p.th_per_estado                      AS estado,
                 p.th_per_fecha_creacion              AS fecha_creacion,
                 p.th_per_fecha_modificacion          AS fecha_modificacion,   
-                p.PERFIL                             AS PERFIL,
                 p.th_per_codigo_sap                  AS th_per_codigo_sap,
                 p.th_per_unidad_org_sap              AS th_per_unidad_org_sap,
                 p.th_per_tipo_sangre                 AS id_tipo_sangre,
@@ -199,8 +196,6 @@ class th_personasM extends BaseModel
                 p.th_per_cedula                      AS cedula,
                 p.th_per_correo                      AS correo,
                 p.th_per_estado                      AS estado,
-                p.PERFIL                             AS PERFIL,
-                p.POLITICAS_ACEPTACION               AS POLITICAS_ACEPTACION,
                 p.th_pos_id                          AS id_postulante
             FROM th_personas p
             WHERE {$condicion};";

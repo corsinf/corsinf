@@ -1267,6 +1267,10 @@ class db
 			? $_SESSION['INICIO']['MODULO_SISTEMA_NOMBRE']
 			: 'SISTEMA';
 
+		$tabla_noconcurrente = (isset($_SESSION['INICIO']['NO_CONCURENTE_TABLA']))
+			? $_SESSION['INICIO']['NO_CONCURENTE_TABLA']
+			: '';
+
 		$datos_insert = [
 			['campo' => 'usuario_id', 'dato' => $usuario_id],
 			['campo' => 'usuario_nombre', 'dato' => $usuario_nombre],
@@ -1289,6 +1293,8 @@ class db
 
 			['campo' => 'ip_address', 'dato' => $_SERVER['REMOTE_ADDR'] ?? null],
 			['campo' => 'user_agent', 'dato' => $_SERVER['HTTP_USER_AGENT'] ?? null],
+
+			['campo' => 'tabla_usuario', 'dato' => $tabla_noconcurrente],
 		];
 
 		$this->insert_log_auditoria('LOGS_AUDITORIA', $datos_insert);

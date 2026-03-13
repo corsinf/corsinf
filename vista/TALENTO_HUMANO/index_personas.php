@@ -4,10 +4,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
 
 $NO_CONCURENTE_TABLA = $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
 $NO_CONCURENTE_CAMPO_ID = $_SESSION['INICIO']['NO_CONCURENTE'];
+$ID_PERSONA = $_SESSION['INICIO']['ID_PERSONA'] ?? -1;
 
 $link_edicion = "#";
-if ($NO_CONCURENTE_TABLA == "_talentoh.th_personas") {
-    $link_edicion = "../vista/inicio.php?mod=$modulo_sistema&acc=th_registrar_personas&id_persona=$NO_CONCURENTE_CAMPO_ID&id_postulante=postulante&_origen=nomina&_persona_nomina=true";
+if ($ID_PERSONA > 0) {
+    $link_edicion = "../vista/inicio.php?mod=$modulo_sistema&acc=th_registrar_personas&id_persona=$ID_PERSONA&id_postulante=postulante&_origen=nomina&_persona_nomina=true";
 } else if ($NO_CONCURENTE_TABLA == "_talentoh.th_postulantes") {
     $link_edicion = "../vista/inicio.php?mod=" . $modulo_sistema . "&acc=th_informacion_personal&id_postulante=" . $NO_CONCURENTE_CAMPO_ID;
 }
@@ -359,15 +360,15 @@ if ($NO_CONCURENTE_TABLA == "_talentoh.th_personas") {
 
 
 <?php if (
-    $_SESSION['INICIO']['TIPO'] == 'DBA' ||
-    $_SESSION['INICIO']['TIPO'] == 'ADMINISTRADOR'
-) {
-} else { ?>
+    $ID_PERSONA > 0
+) { ?>
 
     <div class="row">
         <div class="col-12">
             <h6 class="mb-0 text-uppercase">Información Personal</h6>
             <hr>
+
+            <?php print_r($_SESSION['INICIO']); ?>
 
             <div class="row row-cols-1 row-cols-lg-2">
                 <div class="col">
@@ -397,12 +398,13 @@ if ($NO_CONCURENTE_TABLA == "_talentoh.th_personas") {
             <h6 class="mb-0 text-uppercase">Notificaciones de Asistencia</h6>
             <hr>
             <div class="px-3" id="notificationContainer"> -->
-                <!-- Las alertas aparecerán aquí automáticamente -->
-            <!-- </div>
+    <!-- Las alertas aparecerán aquí automáticamente -->
+    <!-- </div>
         </div>
     </div> -->
 
 
+<?php } else { ?>
 
 
 <?php } ?>

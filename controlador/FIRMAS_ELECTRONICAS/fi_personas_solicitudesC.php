@@ -23,14 +23,14 @@ class fi_personas_solicitudesC
 
     function listar()
     {
-        $_id = isset($_SESSION['INICIO']['NO_CONCURENTE']) ? $_SESSION['INICIO']['NO_CONCURENTE'] : null;
+        $_id = isset($_SESSION['INICIO']['ID_PERSONA']) ? $_SESSION['INICIO']['ID_PERSONA'] : null;
         $datos = $this->modelo->listar_join($_id);
         return $datos;
     }
 
     function pdf_acta_consentimiento($id_solicitud)
     {
-        $_id = isset($_SESSION['INICIO']['NO_CONCURENTE']) ? $_SESSION['INICIO']['NO_CONCURENTE'] : null;
+        $_id = isset($_SESSION['INICIO']['ID_PERSONA']) ? $_SESSION['INICIO']['ID_PERSONA'] : null;
         $datos = $this->modelo->listar_join_pdf($_id, $id_solicitud);
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 

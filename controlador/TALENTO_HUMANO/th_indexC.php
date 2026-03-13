@@ -278,8 +278,8 @@ class th_indexC
     function notificaciones_asistencias()
     {
 
-        if ($_SESSION['INICIO']['NO_CONCURENTE']) {
-            $th_per_id = $_SESSION['INICIO']['NO_CONCURENTE'];
+        if ($_SESSION['INICIO']['ID_PERSONA']) {
+            $th_per_id = $_SESSION['INICIO']['ID_PERSONA'];
 
             $personaHorario = $this->th_programar_horarios->listar_persona_departamentos($th_per_id, 'per');
 

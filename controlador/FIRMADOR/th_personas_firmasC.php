@@ -68,8 +68,8 @@ class th_personas_firmasC
     function listar()
     {
 
-        if ($_SESSION['INICIO']['NO_CONCURENTE'] > 1) {
-            $id = $_SESSION['INICIO']['NO_CONCURENTE'];
+        if ($_SESSION['INICIO']['ID_PERSONA'] > 0) {
+            $id = $_SESSION['INICIO']['ID_PERSONA'];
             $datos = $this->modelo->lista_personas_firma($id);
         } else {
             $id = $_SESSION['INICIO']['ID_USUARIO'];
@@ -82,8 +82,8 @@ class th_personas_firmasC
     {
         $lista = [];
 
-        if ($_SESSION['INICIO']['NO_CONCURENTE'] > 1) {
-            $id = $_SESSION['INICIO']['NO_CONCURENTE'];
+        if ($_SESSION['INICIO']['ID_PERSONA'] > 0) {
+            $id = $_SESSION['INICIO']['ID_PERSONA'];
             $datos = $this->modelo->lista_personas_firma($id);
         } else {
             $id = $_SESSION['INICIO']['ID_USUARIO'];

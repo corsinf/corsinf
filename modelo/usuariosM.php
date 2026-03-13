@@ -281,28 +281,7 @@ foto,link_fb,link_gmail,link_ins,link_tw,link_web";
 
 		// print_r($tabla); exit(); die();
 
-		if ($tabla === '_talentoh.th_personas') {
-
-			$sql = "SELECT
-						th_per_id                AS id,
-						th_per_cedula            AS ci,
-						th_per_primer_nombre     AS nombre,
-						th_per_segundo_nombre    AS nombre2,
-						th_per_primer_apellido   AS apellido,
-						th_per_segundo_apellido  AS apellido2,
-						th_per_sexo              AS sexo,
-						th_per_fecha_nacimiento  AS fechaN,
-						th_per_correo            AS email,
-						th_per_telefono_1        AS telefono,
-						th_per_foto_url          AS foto,
-						PERFIL                   AS usu,
-						PASS                     AS pass,
-						th_per_tabla      		 AS tabla
-					FROM $tabla
-					WHERE $campo = $usuario;";
-
-			return $this->db->datos($sql, false, false, true);
-		} else {
+		if ($tabla === '_talentoh.th_postulantes') {
 			$sql = "SELECT
 						th_pos_id                AS id,
 						th_pos_cedula            AS ci,
@@ -320,6 +299,42 @@ foto,link_fb,link_gmail,link_ins,link_tw,link_web";
 						th_pos_tabla      		 AS tabla
 					FROM $tabla
 					WHERE $campo = $usuario;";
+			return $this->db->datos($sql, false, false, true);
+		} else {
+			// $sql = "SELECT
+			// 			th_per_id                AS id,
+			// 			th_per_cedula            AS ci,
+			// 			th_per_primer_nombre     AS nombre,
+			// 			th_per_segundo_nombre    AS nombre2,
+			// 			th_per_primer_apellido   AS apellido,
+			// 			th_per_segundo_apellido  AS apellido2,
+			// 			th_per_sexo              AS sexo,
+			// 			th_per_fecha_nacimiento  AS fechaN,
+			// 			th_per_correo            AS email,
+			// 			th_per_telefono_1        AS telefono,
+			// 			th_per_foto_url          AS foto
+			// 		FROM $tabla
+			// 		WHERE $campo = $usuario;";
+
+			$sql = "SELECT
+						p.th_per_id                AS id,
+						p.th_per_cedula            AS ci,
+						p.th_per_primer_nombre     AS nombre,
+						p.th_per_segundo_nombre    AS nombre2,
+						p.th_per_primer_apellido   AS apellido,
+						p.th_per_segundo_apellido  AS apellido2,
+						p.th_per_sexo              AS sexo,
+						p.th_per_fecha_nacimiento  AS fechaN,
+						p.th_per_correo            AS email,
+						p.th_per_telefono_1        AS telefono,
+						p.th_per_foto_url          AS foto,
+						noc.PASS,
+						noc.PERFIL
+					FROM _talentoh.th_personas p
+					INNER JOIN $tabla noc
+						ON p.th_per_id = noc.th_per_id
+					WHERE noc.$campo = $usuario;";
+
 			return $this->db->datos($sql, false, false, true);
 		}
 

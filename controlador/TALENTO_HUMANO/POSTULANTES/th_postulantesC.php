@@ -111,14 +111,16 @@ class th_postulantesC
 
     function listar_postulantes_personas_postulacion()
     {
-        $id = $_SESSION['INICIO']['NO_CONCURENTE'] ?? '';
+        $id = '';
         $tabla = $_SESSION['INICIO']['NO_CONCURENTE_TABLA'] ?? '';
 
         if ($id != null || $id != '' || $id != 0) {
 
-            if ($tabla == '_talentoh.th_personas') {
+            if ($tabla == '_no_concurrentes.EMPLEADOS') {
+                $id = $_SESSION['INICIO']['ID_PERSONA'] ?? '';
                 $datos = $this->personas->obtener_id($id);
             } else if ($tabla == '_talentoh.th_postulantes') {
+                $id = $_SESSION['INICIO']['NO_CONCURENTE'] ?? '';
                 $datos = $this->modelo->obtener_id($id);
             } else {
                 return -2; //Usuario no vinculado a ninguna tabla para realizar la postulacion

@@ -23,6 +23,7 @@ if (isset($_GET['lista_drop'])) {
     }
     echo json_encode($controlador->lista_triangular_drop($q));
 }
+
 if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
@@ -45,8 +46,8 @@ class th_triangularC
     function listar($id = '')
     {
         if ($id == '') {
-            if ($_SESSION['INICIO']['NO_CONCURENTE'] && $_SESSION['INICIO']['NO_CONCURENTE_TABLA'] == 'th_personas') {
-                $datos = $this->th_triangular_departamento_persona->listar_pdt($_SESSION['INICIO']['NO_CONCURENTE']);
+            if ($_SESSION['INICIO']['ID_PERSONA'] > 0) {
+                $datos = $this->th_triangular_departamento_persona->listar_pdt($_SESSION['INICIO']['ID_PERSONA']);
                 // print_r($datos); exit(); die();
             } else {
                 $datos = $this->modelo->where('th_tri_estado', 1)->listar();
@@ -67,6 +68,7 @@ class th_triangularC
             array('campo' => 'usu_id', 'dato' => $_SESSION['INICIO']['ID_USUARIO'] ?? ''),
             array('campo' => 'th_tri_fecha_creacion', 'dato' => date('Y-m-d H:i:s') ?? null),
         );
+
         if ($parametros['_id'] == '') {
             if (count($this->modelo->where('th_tri_nombre', $parametros['txt_nombre'])->where('th_tri_estado', 1)->listar()) == 0) {
                 $id = $this->modelo->insertar_id($datos);
@@ -90,11 +92,11 @@ class th_triangularC
                     }
                 }
 
-                if ($_SESSION['INICIO']['NO_CONCURENTE']) {
+                if ($_SESSION['INICIO']['ID_PERSONA'] > 0) {
                     $datos = array(
                         array('campo' => 'th_tri_id', 'dato' => $id),
                         array('campo' => 'th_dep_id', 'dato' => 0),
-                        array('campo' => 'th_per_id', 'dato' => $_SESSION['INICIO']['NO_CONCURENTE']),
+                        array('campo' => 'th_per_id', 'dato' => $_SESSION['INICIO']['ID_PERSONA']),
                         array('campo' => 'th_tdp_estado', 'dato' => 1),
 
                         array('campo' => 'th_tdp_fecha_creacion', 'dato' => date('Y-m-d H:i:s') ?? null),
@@ -133,13 +135,13 @@ class th_triangularC
         return $datos;
     }
 
-    public function lista_triangular_drop($q)
+    function lista_triangular_drop($q)
     {
         $datos = $this->modelo->lista_triangular(false, $q);
         $datos2 = array();
         foreach ($datos as $value) {
             $datos2[] = array(
-                'id' => $value['_id'],  // ⚠ asegúrate de usar '_id' si así lo aliaste
+                'id' => $value['_id'],
                 'text' => $value['nombre']
             );
         }

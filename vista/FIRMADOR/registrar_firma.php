@@ -686,7 +686,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
       <div class="modal-body">
         <form id="registrar_firma" enctype="multipart/form-data" method="post" style="width: inherit;">
           <input type="hidden" name="_id" id="_id" value="">
-          <input type="hidden" name="th_per_id" id="th_per_id" value="<?= $_SESSION['INICIO']['NO_CONCURENTE'] ? $_SESSION['INICIO']['NO_CONCURENTE'] : NULL  ?>">
+          <input type="hidden" name="th_per_id" id="th_per_id" value="<?= $_SESSION['INICIO']['ID_PERSONA'] ? $_SESSION['INICIO']['ID_PERSONA'] : NULL  ?>">
           <input type="hidden" name="th_usuario_id" id="th_usuario_id" value="<?= $_SESSION['INICIO']['ID_USUARIO'] ? $_SESSION['INICIO']['ID_USUARIO'] : 2 ?>">
           <input type="hidden" name="txt_fecha_inicio" id="txt_fecha_inicio" value="">
           <input type="hidden" name="cedula" id="cedula" value="">

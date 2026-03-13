@@ -8,7 +8,7 @@
 
 ?>
 <script type="text/javascript">
-	noconcurente = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE']; ?>';
+	noconcurente = '<?php echo $_SESSION['INICIO']['ID_PERSONA']; ?>';
 	noconcurente_nom = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE_NOM']; ?>';
 $( document ).ready(function() {
 	eliminar_solicitud();
