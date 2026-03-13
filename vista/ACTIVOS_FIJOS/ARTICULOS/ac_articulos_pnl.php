@@ -690,7 +690,7 @@ if ($_SESSION['INICIO']['MODULO_SISTEMA'] == 2018) {
             <label class="error" style="display: none;" for="ddl_clase_mov"></label>
         </div>
 
-        <div class="col-sm-6" hidden>
+        <div class="col-sm-6">
             <div class="d-flex justify-content-between align-items-center">
                 <label for="ddl_proyecto" class="form-label">Proyecto </label>
                 <small id="lbl_sap_pro"><u>Código: </u></small>
