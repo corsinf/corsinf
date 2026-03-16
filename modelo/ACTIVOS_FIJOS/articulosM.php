@@ -39,7 +39,7 @@ class articulosM
 			'host' => $IP_HOST,
 		);
 
-		$table = $this->db->esquema_modulo('v_articulos_detalle',1);
+		$table = $this->db->esquema_modulo('v_articulos_detalle', 1);
 
 		$primaryKey = 'id';
 
@@ -57,7 +57,7 @@ class articulosM
 					$ruta_completa = $ruta_img . $row['imagen'];
 					$id = $row['id'];
 					return '<img src="' . $ruta_completa . '" 
-                 alt="'. $row['nom'] .'" 
+                 alt="' . $row['nom'] . '" 
                  style="width:50px;height:auto;cursor:pointer;" 
 				 class="rounded" 
                  onclick="modal_ver_imagen(\'' . $ruta_completa . '\', \'' . $id . '\')">';
@@ -98,7 +98,7 @@ class articulosM
 		}
 
 		//Sirve para buscar las columnas que se necesitan buscar para no sobrecargar la db
-		$columnSearch = [0, 1, 4];
+		$columnSearch = [0, 1, 2, 3, 4];
 
 		//echo $table;
 		return (
