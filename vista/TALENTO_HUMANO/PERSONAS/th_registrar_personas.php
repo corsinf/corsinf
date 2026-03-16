@@ -295,12 +295,19 @@ if ($_SESSION['INICIO']['ID_PERSONA'] > 0) {
                     return;
                 }
             }
+            let busqueda = '';
+
+            <?php if ($redireccionar_vista == 'th_personas') { ?>
+                busqueda = 'persona';
+            <?php } else if ($redireccionar_vista == 'th_personas_nomina') { ?>
+                busqueda = 'nomina';
+            <?php } ?>
             var parametrosLogCorreos = {
                 enviar_credenciales: enviarCred ? 1 : 0,
                 asunto: asunto,
                 descripcion: descripcion,
                 per_id: '<?= $id_persona ? $id_persona : '' ?>',
-                personas: 'personas'
+                personas: busqueda,
             };
             enviar_Mail_Persona(parametrosLogCorreos);
             $modal.modal('hide');

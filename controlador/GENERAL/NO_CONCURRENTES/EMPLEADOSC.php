@@ -9,6 +9,9 @@ $controlador = new EMPLEADOSC();
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
+if (isset($_GET['listar_personas_departamentos'])) {
+    echo json_encode($controlador->listar_personas_departamentos($_POST['id'] ?? ''));
+}
 
 if (isset($_GET['restaurar'])) {
     $id_empleado     = $_POST['id_empleado']     ?? '';
@@ -31,6 +34,10 @@ class EMPLEADOSC
     function listar($id = '')
     {
         return $this->modelo->listar_empleados_eliminados($id);
+    }
+    function listar_personas_departamentos($id = '')
+    {
+        return $this->modelo->listar_personas_departamentos($id);
     }
 
     function restaurar($id_empleado, $id_persona, $id_departamento)

@@ -17,7 +17,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
-                url: '../controlador/TALENTO_HUMANO/th_personas_departamentosC.php?listar=true',
+                url: '../controlador/GENERAL/NO_CONCURRENTES/EMPLEADOSC.php?listar_personas_departamentos=true',
                 type: 'POST',
                 data: function(d) {
                     d.id = id_departamento;
@@ -352,19 +352,66 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 
 <!-- Modal Enviar Mensaje -->
+<!-- Modal Enviar Mensaje -->
 <div class="modal fade" id="modal_mensaje_personas" tabindex="-1" aria-labelledby="modal_mensaje_label" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal_mensaje_label">Enviar Mensaje</h5>
+                <h5 class="modal-title" id="modal_mensaje_label">
+                    <i class="bx bx-envelope me-1"></i> Enviar Mensaje
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <form id="form_mensaje" onsubmit="return false;">
                 <div class="modal-body">
+
                     <div class="form-check mb-3">
                         <input class="form-check-input" type="checkbox" value="1" id="cbx_enviar_credenciales" checked>
-                        <label class="form-check-label" for="cbx_enviar_credenciales">Enviar credenciales</label>
+                        <label class="form-check-label fw-semibold" for="cbx_enviar_credenciales">Enviar credenciales</label>
                     </div>
+
+                    <!-- Opciones de tipo de envío (visibles solo cuando "Enviar credenciales" está activo) -->
+                    <div id="cont_tipo_envio">
+                        <p class="text-muted small mb-2">Selecciona a quiénes deseas enviar las credenciales:</p>
+
+                        <div class="border rounded p-3 mb-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="rdb_tipo_envio" id="rdb_todos" value="todos" checked>
+                                <label class="form-check-label fw-semibold" for="rdb_todos">
+                                    <i class="bx bx-group me-1 text-primary"></i> Enviar a todos
+                                </label>
+                            </div>
+                            <div class="small text-muted mt-1 ms-4">
+                                Se genera una nueva contraseña y se reinicia la política de aceptación para <strong>todos</strong> los empleados del listado actual.
+                            </div>
+                        </div>
+
+                        <div class="border rounded p-3 mb-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="rdb_tipo_envio" id="rdb_faltantes" value="faltantes">
+                                <label class="form-check-label fw-semibold" for="rdb_faltantes">
+                                    <i class="bx bx-user-x me-1 text-warning"></i> Enviar a faltantes
+                                </label>
+                            </div>
+                            <div class="small text-muted mt-1 ms-4">
+                                Solo se envía a los empleados que <strong>aún no tienen contraseña</strong> asignada en el sistema. No afecta a los que ya la tienen.
+                            </div>
+                        </div>
+
+                        <div class="border rounded p-3 mb-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="rdb_tipo_envio" id="rdb_no_aceptan" value="no_aceptan">
+                                <label class="form-check-label fw-semibold" for="rdb_no_aceptan">
+                                    <i class="bx bx-shield-x me-1 text-danger"></i> Enviar a los que no aceptan políticas
+                                </label>
+                            </div>
+                            <div class="small text-muted mt-1 ms-4">
+                                Se envía a los empleados que <strong>no han aceptado las políticas</strong> del sistema (incluye también a quienes no tienen contraseña).
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Campos para mensaje personalizado (visibles solo cuando NO se envían credenciales) -->
                     <div id="cont_inputs_mensaje" style="display: none;">
                         <div class="mb-3">
                             <label for="txt_asunto" class="form-label">Asunto</label>
@@ -375,13 +422,13 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                             <textarea class="form-control" id="txt_descripcion" name="txt_descripcion" rows="5" placeholder="Escribe aquí la descripción..."></textarea>
                         </div>
                     </div>
-                    <div id="info_credenciales" class="small text-muted" style="display: block;">
-                        Se enviarán las credenciales almacenadas para todas las personas.
-                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" id="btn_enviar_mensaje" class="btn btn-primary">Enviar</button>
+                    <button type="button" id="btn_enviar_mensaje" class="btn btn-primary">
+                        <i class="bx bx-send me-1"></i> Enviar
+                    </button>
                 </div>
             </form>
         </div>
@@ -392,22 +439,23 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     $(document).ready(function() {
         var $cbx = $('#cbx_enviar_credenciales');
         var $contInputs = $('#cont_inputs_mensaje');
-        var $infoCred = $('#info_credenciales');
+        var $contTipo = $('#cont_tipo_envio');
         var $modal = $('#modal_mensaje_personas');
         var perId = '<?= isset($id_persona) ? $id_persona : "" ?>';
 
         function actualizarVista() {
             if ($cbx.is(':checked')) {
+                $contTipo.show();
                 $contInputs.hide();
-                $infoCred.show();
             } else {
+                $contTipo.hide();
                 $contInputs.show();
-                $infoCred.hide();
             }
         }
 
         $modal.on('show.bs.modal', function() {
             $cbx.prop('checked', true);
+            $('input[name="rdb_tipo_envio"][value="todos"]').prop('checked', true);
             $('#txt_asunto').val('');
             $('#txt_descripcion').val('');
             actualizarVista();
@@ -423,6 +471,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
         function enviarMensaje() {
             var enviarCred = $cbx.is(':checked');
+            var tipoEnvio = $('input[name="rdb_tipo_envio"]:checked').val() || 'todos';
             var asunto = $.trim($('#txt_asunto').val() || '');
             var descripcion = $.trim($('#txt_descripcion').val() || '');
 
@@ -437,16 +486,38 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 }
             }
 
-            var parametrosLogCorreos = {
-                enviar_credenciales: enviarCred ? 1 : 0,
-                asunto: asunto,
-                descripcion: descripcion,
-                per_id: perId,
-                personas: 'nomina'
+            // Confirmación con descripción del tipo seleccionado
+            var mensajesConfirmacion = {
+                todos: '¿Seguro? Se generará una nueva contraseña y se reiniciará la política de aceptación para <b>todos</b> los empleados.',
+                faltantes: '¿Seguro? Solo se enviarán credenciales a los empleados <b>sin contraseña</b> asignada.',
+                no_aceptan: '¿Seguro? Se enviará a los empleados que <b>no han aceptado las políticas</b> (incluye los sin contraseña).'
             };
 
-            enviar_Mail_Persona(parametrosLogCorreos);
-            $modal.modal('hide');
+            var htmlConfirm = enviarCred ?
+                (mensajesConfirmacion[tipoEnvio] || '') :
+                '¿Deseas enviar el mensaje a los empleados?';
+
+            Swal.fire({
+                title: 'Confirmar envío',
+                html: htmlConfirm,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, enviar',
+                cancelButtonText: 'Cancelar'
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    var parametrosLogCorreos = {
+                        enviar_credenciales: enviarCred ? 1 : 0,
+                        tipo_envio: tipoEnvio,
+                        asunto: asunto,
+                        descripcion: descripcion,
+                        per_id: perId,
+                        personas: 'nomina'
+                    };
+                    enviar_Mail_Persona(parametrosLogCorreos);
+                    $modal.modal('hide');
+                }
+            });
         }
 
         function enviar_Mail_Persona(parametrosLogCorreos) {
@@ -459,7 +530,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 },
                 beforeSend: function() {
                     Swal.fire({
-                        title: 'Enviando...',
+                        title: 'Enviando correos...',
                         showConfirmButton: false,
                         allowOutsideClick: false,
                         didOpen: () => {
@@ -473,11 +544,12 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         detalleHtml = `
                             <hr style="margin:12px 0">
                             <details style="text-align:left">
-                                <summary style="cursor:pointer;font-weight:600">Detalle de correos fallidos/enviados</summary>
+                                <summary style="cursor:pointer;font-weight:600">Detalle de envíos</summary>
                                 <ul style="margin-top:8px;padding-left:18px">
                                     ${response.detalle.map(d => `
                                         <li style="margin-bottom:6px">
-                                            <span style="font-weight:600">${d.correo}</span><br>
+                                            <span style="font-weight:600">${d.correo}</span>
+                                            <span style="margin-left:6px;padding:1px 6px;border-radius:4px;font-size:12px;background:${d.estado === 'OK' ? '#e8f5e9' : '#ffebee'};color:${d.estado === 'OK' ? '#2e7d32' : '#c62828'}">${d.estado}</span><br>
                                             <span style="color:#666;font-size:13px">${d.mensaje}</span>
                                         </li>
                                     `).join('')}
@@ -502,7 +574,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         title: 'Resultado del envío',
                         html: mensaje,
                         confirmButtonText: 'Aceptar',
-                        width: 480,
+                        width: 500,
                         allowOutsideClick: false
                     });
                 },

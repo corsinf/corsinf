@@ -970,6 +970,8 @@ function abrir_modal_personas() {
                                 </li>
                                 <?php } ?>
 
+                                <!--
+
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link" data-bs-toggle="tab" href="#successDepartament" role="tab"
                                         aria-selected="false">
@@ -980,6 +982,7 @@ function abrir_modal_personas() {
                                         </div>
                                     </a>
                                 </li>
+-->
                             </ul>
 
                             <div class="tab-content py-3">

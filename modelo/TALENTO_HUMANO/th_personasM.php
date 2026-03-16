@@ -228,37 +228,57 @@ class th_personasM extends BaseModel
         return $this->db->datos($sql);
     }
 
-    function listar_personas_departamentos($id_departamento, $per_id = '')
+    function listar_personas_departamentos($id_departamento, $per_id = '', $tipo_envio = '')
     {
         $sql =
             "SELECT
-                    p.th_per_id AS th_per_id,
-                    p.th_per_correo AS th_per_correo,
-                    P.PASS AS PASS,
-                    CONCAT(
-                    ISNULL(p.th_per_primer_nombre, ''), ' ',
-                    ISNULL(p.th_per_segundo_nombre, ''), ' ',
-                    ISNULL(p.th_per_primer_apellido, ''), ' ',
-                    ISNULL(p.th_per_segundo_apellido, '')
-                    ) AS nombre_completo,
-                    dep.th_dep_nombre AS nombre_departamento
-                FROM
-                th_personas_departamentos per_dep
-                INNER JOIN th_personas p ON per_dep.th_per_id = p.th_per_id 
-                INNER JOIN th_departamentos dep ON per_dep.th_dep_id = dep.th_dep_id
-                WHERE p.th_per_estado = 1 ";
+            p.th_per_id                 AS th_per_id,
+            p.th_per_correo             AS th_per_correo,
+            CONCAT(
+                ISNULL(p.th_per_primer_nombre,   ''), ' ',
+                ISNULL(p.th_per_segundo_nombre,  ''), ' ',
+                ISNULL(p.th_per_primer_apellido,  ''), ' ',
+                ISNULL(p.th_per_segundo_apellido, '')
+            )                           AS nombre_completo,
+            dep.th_dep_nombre           AS nombre_departamento,
+            emp.id_empleado             AS id_empleado,
+            emp.PERFIL                  AS perfil,
+            emp.PASS                    AS PASS,
+            emp.NICK                    AS nick,
+            emp.POLITICAS_ACEPTACION    AS POLITICAS_ACEPTACION
+        FROM th_personas_departamentos per_dep
+        INNER JOIN th_personas  p   ON per_dep.th_per_id  = p.th_per_id
+        INNER JOIN th_departamentos dep ON per_dep.th_dep_id = dep.th_dep_id
+        INNER JOIN EMPLEADOS    emp ON emp.th_per_id       = p.th_per_id
+            AND emp.DELETE_LOGIC = 0
+        WHERE p.th_per_estado = 1";
 
-        if ($id_departamento != '' && $id_departamento != null) {
+        if ($id_departamento != '' && $id_departamento !== null) {
             $sql .= " AND per_dep.th_dep_id = '$id_departamento'";
         }
-        if ($per_id != '' && $per_id != null) {
+        if ($per_id != '' && $per_id !== null) {
             $sql .= " AND p.th_per_id = '$per_id'";
+        }
+
+        if ($tipo_envio === 'faltantes') {
+            $sql .= " AND (
+        emp.PASS IS NULL 
+        OR LTRIM(RTRIM(emp.PASS)) = ''
+        OR emp.PASS = '.'
+    )";
+        } elseif ($tipo_envio === 'no_aceptan') {
+            $sql .= " AND (
+        emp.POLITICAS_ACEPTACION = 0 
+        OR emp.POLITICAS_ACEPTACION IS NULL
+        OR emp.PASS IS NULL 
+        OR LTRIM(RTRIM(emp.PASS)) = ''
+        OR emp.PASS = '.'
+    )";
         }
 
         $sql .= ";";
 
-        $datos = $this->db->datos($sql);
-        return $datos;
+        return $this->db->datos($sql);
     }
     public function buscar_personas_con_departamento_unicamente($parametros)
     {
@@ -326,7 +346,8 @@ class th_personasM extends BaseModel
         return $this->db->datos($sql);
     }
 
-    function obtener_id($id){
+    function obtener_id($id)
+    {
         $sql = "SELECT th_pos_id AS id_postulante FROM $this->tabla WHERE th_per_id = $id";
         $resultado = $this->db->datos($sql);
         return $resultado;

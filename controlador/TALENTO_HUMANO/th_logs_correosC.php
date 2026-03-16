@@ -2,6 +2,7 @@
 date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_personasM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/GENERAL/NO_CONCURRENTES/EMPLEADOSM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/POSTULANTES/th_postulantesM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_logs_correosM.php');
 include_once(dirname(__DIR__, 2) . '/lib/phpmailer/enviar_emails.php');
@@ -45,6 +46,7 @@ class th_logs_correosC
     private $personas;
     private $postulantes;
     private $codigo_globales;
+    private $EMPLEADOS;
 
     function __construct()
     {
@@ -53,6 +55,7 @@ class th_logs_correosC
         $this->personas = new th_personasM();
         $this->postulantes = new th_postulantesM();
         $this->codigo_globales = new codigos_globales();
+        $this->EMPLEADOS = new EMPLEADOSM();
     }
 
 
@@ -61,99 +64,163 @@ class th_logs_correosC
     {
         if (!isset($parametros['per_id']) || !isset($parametros['enviar_credenciales'])) {
             return [
-                'total'     => 0,
-                'enviados'  => 0,
-                'fallidos'  => 0,
-                'detalle'   => [],
-                'error'     => 'Parámetros faltantes'
+                'total'    => 0,
+                'enviados' => 0,
+                'fallidos' => 0,
+                'detalle'  => [],
+                'error'    => 'Parámetros faltantes'
             ];
         }
 
-        $enviados = 0;
-        $fallidos = 0;
-        $detalle = [];
+        $enviados  = 0;
+        $fallidos  = 0;
+        $detalle   = [];
 
         $empresa             = $_SESSION['INICIO']['RAZON_SOCIAL'] ?? 'Sistema';
         $support_por_defecto = 'soporte@corsinf.com';
-        $id_remitente        = $_SESSION['INICIO']['ID_USUARIO'] ?? null;
+        $id_remitente        = $_SESSION['INICIO']['ID_USUARIO']   ?? null;
 
-        $id_dep = $parametros['id_dep'] ?? '';
-        $per_id = $parametros['per_id'];
+        $id_dep     = $parametros['id_dep']     ?? '';
+        $per_id     = $parametros['per_id'];
+        $tipo_envio = $parametros['tipo_envio'] ?? 'todos';   // 'todos' | 'faltantes' | 'no_aceptan'
 
-        $baseUrl = 'https://corsinf.com:447/corsinf/';
-
+        $baseUrl  = 'https://corsinf.com:447/corsinf/';
         $loginUrl = $baseUrl . 'login.php';
-
         $logoPath = $_SESSION['INICIO']['LOGO'] ?? '';
-
-        $logoUrl = $logoPath !== ''
+        $logoUrl  = $logoPath !== ''
             ? $baseUrl . ltrim($logoPath, './')
             : $baseUrl . 'img/empresa/apudata.png';
 
         try {
 
             if ($parametros['personas'] == 'nomina') {
-                $personas_correos =  $this->personas->listar_personas_departamentos($id_dep, $per_id);
 
-                $clave = $this->codigo_globales->generar_clave_digitos();
-                $clave_enc = $this->codigo_globales->enciptar_clave($clave);
-
-                $datos = array(
-                    array('campo' => 'POLITICAS_ACEPTACION', 'dato' => '0'),
-                    array('campo' => 'PASS', 'dato' => $clave_enc),
+                // ── 1. Obtener el listado según el tipo de envío ──────────────
+                $personas_correos = $this->personas->listar_personas_departamentos(
+                    $id_dep,
+                    $per_id,
+                    $tipo_envio
                 );
 
-                $where = array(
-                    array('campo' => 'th_per_id', 'dato' => $per_id)
-                );
+                if (empty($personas_correos)) {
+                    return [
+                        'total'    => 0,
+                        'enviados' => 0,
+                        'fallidos' => 0,
+                        'detalle'  => [],
+                        'mensaje'  => 'No se encontraron personas para el tipo de envío seleccionado.'
+                    ];
+                }
 
-                $this->personas->editar($datos, $where);
+                // ── 2. Preparar contraseñas según el tipo ─────────────────────
+                if ($tipo_envio === 'todos') {
+                    /*
+                 * Todos: se genera contraseña nueva y se reinicia
+                 * POLITICAS_ACEPTACION para cada empleado del listado.
+                 */
+                    foreach ($personas_correos as &$persona) {
+                        $clave     = $this->codigo_globales->generar_clave_digitos();
+                        $clave_enc = $this->codigo_globales->enciptar_clave($clave);
 
-                $personas_correos =  $this->personas->listar_personas_departamentos($id_dep, $per_id);
+                        $this->EMPLEADOS->editar(
+                            [
+                                ['campo' => 'POLITICAS_ACEPTACION', 'dato' => '0'],
+                                ['campo' => 'PASS',                 'dato' => $clave_enc],
+                            ],
+                            [['campo' => 'id_empleado', 'dato' => $persona['id_empleado']]]
+                        );
+
+                        $persona['PASS'] = $clave_enc;   // actualizar en memoria para el envío
+                    }
+                    unset($persona);
+                } elseif ($tipo_envio === 'faltantes') {
+                    /*
+                 * Faltantes: la query ya filtró solo los sin contraseña,
+                 * se genera contraseña nueva para cada uno.
+                 */
+                    foreach ($personas_correos as &$persona) {
+                        $clave     = $this->codigo_globales->generar_clave_digitos();
+                        $clave_enc = $this->codigo_globales->enciptar_clave($clave);
+
+                        $this->EMPLEADOS->editar(
+                            [
+                                ['campo' => 'POLITICAS_ACEPTACION', 'dato' => '0'],
+                                ['campo' => 'PASS',                 'dato' => $clave_enc],
+                            ],
+                            [['campo' => 'id_empleado', 'dato' => $persona['id_empleado']]]
+                        );
+
+                        $persona['PASS'] = $clave_enc;
+                    }
+                    unset($persona);
+                } elseif ($tipo_envio === 'no_aceptan') {
+                    /*
+                 * No aceptan políticas: la query ya los filtró.
+                 * - Si no tienen contraseña → se genera una nueva.
+                 * - Si ya tienen contraseña → se reenvía la existente
+                 *   (solo se reinicia POLITICAS_ACEPTACION por si acaso).
+                 */
+                    foreach ($personas_correos as &$persona) {
+                        $tiene_pass = !empty(trim($persona['PASS'] ?? ''));
+
+                        if (!$tiene_pass) {
+                            $clave     = $this->codigo_globales->generar_clave_digitos();
+                            $clave_enc = $this->codigo_globales->enciptar_clave($clave);
+
+                            $this->EMPLEADOS->editar(
+                                [
+                                    ['campo' => 'POLITICAS_ACEPTACION', 'dato' => '0'],
+                                    ['campo' => 'PASS',                 'dato' => $clave_enc],
+                                ],
+                                [['campo' => 'id_empleado', 'dato' => $persona['id_empleado']]]
+                            );
+
+                            $persona['PASS'] = $clave_enc;
+                        }
+                        // Si ya tiene contraseña, no se toca, se reenvía la existente.
+                    }
+                    unset($persona);
+                }
             } else {
+                // ── Flujo original para envíos individuales (fuera de nómina) ─
+                $personas_correos = $this->personas->where('th_per_id', $per_id)->listar();
 
-                $personas_correos =  $this->personas->where('th_per_id', $per_id)->listar();
-
-                $clave = $this->codigo_globales->generar_clave_digitos();
+                $clave     = $this->codigo_globales->generar_clave_digitos();
                 $clave_enc = $this->codigo_globales->enciptar_clave($clave);
 
-                $datos = array(
-                    array('campo' => 'POLITICAS_ACEPTACION', 'dato' => '0'),
-                    array('campo' => 'PASS', 'dato' => $clave_enc),
+                $this->personas->editar(
+                    [
+                        ['campo' => 'POLITICAS_ACEPTACION', 'dato' => '0'],
+                        ['campo' => 'PASS',                 'dato' => $clave_enc],
+                    ],
+                    [['campo' => 'th_per_id', 'dato' => $per_id]]
                 );
 
-                $where = array(
-                    array('campo' => 'th_per_id', 'dato' => $per_id)
-                );
-
-                $this->personas->editar($datos, $where);
-
-                $personas_correos =  $this->personas->where('th_per_id', $per_id)->listar();
-
+                $personas_correos = $this->personas->where('th_per_id', $per_id)->listar();
             }
 
             if (empty($personas_correos)) {
                 return [
-                    'total'     => 0,
-                    'enviados'  => 0,
-                    'fallidos'  => 0,
-                    'detalle'   => [],
-                    'mensaje'   => 'No se encontraron personas para enviar correos'
+                    'total'    => 0,
+                    'enviados' => 0,
+                    'fallidos' => 0,
+                    'detalle'  => [],
+                    'mensaje'  => 'No se encontraron personas para enviar correos'
                 ];
             }
 
+            // ── 3. Enviar correos ─────────────────────────────────────────────
             foreach ($personas_correos as $value) {
 
-                $correo = $value['th_per_correo'] ?? $value['correo'] ?? '';
-                $correo = trim($correo);
+                $correo  = trim($value['th_per_correo'] ?? $value['correo'] ?? '');
                 $usuario = trim($value['nombre_completo'] ?? '');
                 $password = $this->codigo_globales->desenciptar_clave(trim($value['PASS'] ?? ''));
 
                 $id_destinatario = $value['th_per_id'] ?? null;
 
                 if ($parametros['enviar_credenciales'] == 0) {
-                    $asunto = $parametros['asunto'] ?? 'Notificación';
-                    $descripcion = $parametros['descripcion'] ?? '';
+                    $asunto        = $parametros['asunto']      ?? 'Notificación';
+                    $descripcion   = $parametros['descripcion'] ?? '';
                     $titulo_correo = $asunto;
 
                     $htmlBody = $this->crearPlantillaMensajeHTML(
@@ -181,11 +248,11 @@ class th_logs_correosC
                 if (!filter_var($correo, FILTER_VALIDATE_EMAIL) || empty($correo)) {
                     $fallidos++;
                     $estado_envio = 0;
-                    $detalle_log = 'Correo inválido o vacío';
+                    $detalle_log  = 'Correo inválido o vacío';
 
                     $detalle[] = [
-                        'correo' => $correo ?: 'Sin correo',
-                        'estado' => 'ERROR',
+                        'correo'  => $correo ?: 'Sin correo',
+                        'estado'  => 'ERROR',
                         'mensaje' => $detalle_log
                     ];
                 } else {
@@ -206,50 +273,35 @@ class th_logs_correosC
                         if ($envio_exitoso) {
                             $enviados++;
                             $estado_envio = 1;
-                            $detalle_log = 'Correo enviado correctamente';
-
-                            $detalle[] = [
-                                'correo' => $correo,
-                                'estado' => 'OK',
-                                'mensaje' => $detalle_log
-                            ];
+                            $detalle_log  = 'Correo enviado correctamente';
+                            $detalle[] = ['correo' => $correo, 'estado' => 'OK',    'mensaje' => $detalle_log];
                         } else {
                             $fallidos++;
                             $estado_envio = 0;
-                            $detalle_log = !empty($error_mensaje)
+                            $detalle_log  = !empty($error_mensaje)
                                 ? substr($error_mensaje, 0, 500)
                                 : 'Error desconocido al enviar correo';
-
-                            $detalle[] = [
-                                'correo' => $correo,
-                                'estado' => 'ERROR',
-                                'mensaje' => $detalle_log
-                            ];
+                            $detalle[] = ['correo' => $correo, 'estado' => 'ERROR', 'mensaje' => $detalle_log];
                         }
                     } catch (Exception $e) {
                         $fallidos++;
                         $estado_envio = 0;
-                        $detalle_log = substr('Excepción: ' . $e->getMessage(), 0, 500);
-
-                        $detalle[] = [
-                            'correo' => $correo,
-                            'estado' => 'ERROR',
-                            'mensaje' => $detalle_log
-                        ];
+                        $detalle_log  = substr('Excepción: ' . $e->getMessage(), 0, 500);
+                        $detalle[] = ['correo' => $correo, 'estado' => 'ERROR', 'mensaje' => $detalle_log];
                     }
                 }
 
                 try {
                     $this->insertar_editar([
-                        'correo_destino'      => $correo,
-                        'asunto'              => $titulo_correo,
-                        'detalle'             => $detalle_log,
-                        'id_remitente'        => $id_remitente,
-                        'tabla_remitente'     => 'USUARIOS',
-                        'id_destinatario'     => $id_destinatario,
-                        'tabla_destinatario'  => 'th_personas',
-                        'enviado'             => $estado_envio,
-                        'estado'              => 1
+                        'correo_destino'     => $correo,
+                        'asunto'             => $titulo_correo,
+                        'detalle'            => $detalle_log,
+                        'id_remitente'       => $id_remitente,
+                        'tabla_remitente'    => 'USUARIOS',
+                        'id_destinatario'    => $id_destinatario,
+                        'tabla_destinatario' => 'th_personas',
+                        'enviado'            => $estado_envio,
+                        'estado'             => 1
                     ]);
                 } catch (Exception $e) {
                     error_log("Error al registrar log de correo: " . $e->getMessage());
@@ -257,19 +309,19 @@ class th_logs_correosC
             }
         } catch (Exception $e) {
             return [
-                'total'     => 0,
-                'enviados'  => 0,
-                'fallidos'  => 0,
-                'detalle'   => [],
-                'error'     => 'Error crítico: ' . $e->getMessage()
+                'total'    => 0,
+                'enviados' => 0,
+                'fallidos' => 0,
+                'detalle'  => [],
+                'error'    => 'Error crítico: ' . $e->getMessage()
             ];
         }
 
         return [
-            'total'     => $enviados + $fallidos,
-            'enviados'  => $enviados,
-            'fallidos'  => $fallidos,
-            'detalle'   => $detalle
+            'total'    => $enviados + $fallidos,
+            'enviados' => $enviados,
+            'fallidos' => $fallidos,
+            'detalle'  => $detalle
         ];
     }
 

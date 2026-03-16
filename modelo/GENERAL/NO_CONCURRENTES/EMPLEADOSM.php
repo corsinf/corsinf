@@ -42,5 +42,43 @@ class EMPLEADOSM extends BaseModel
         $datos = $this->db->datos($sql);
         return $datos;
     }
-   
+
+
+    function listar_personas_departamentos($id_departamento)
+    {
+        $sql =
+            "SELECT
+                per_dep.th_perdep_id AS _id,
+                per.th_per_id AS id_persona,
+                per.th_per_id_comunidad AS id_comunidad,
+                per.th_per_primer_apellido AS primer_apellido,
+                per.th_per_segundo_apellido AS segundo_apellido,
+                per.th_per_primer_nombre AS primer_nombre,
+                per.th_per_segundo_nombre AS segundo_nombre,
+                per.th_per_cedula AS cedula,
+                per.th_per_telefono_1 AS telefono_1,
+                per.th_per_correo AS correo,
+                per.th_pos_id AS _id_postulante,
+                dep.th_dep_nombre AS nombre_departamento,
+                per.th_per_fecha_creacion AS fecha_creacion,
+                emp.id_empleado AS id_empleado,
+                emp.PERFIL AS perfil,
+                emp.NICK AS nick
+            FROM
+            th_personas_departamentos per_dep
+            INNER JOIN th_personas per ON per_dep.th_per_id = per.th_per_id 
+            INNER JOIN th_departamentos dep ON per_dep.th_dep_id = dep.th_dep_id
+            INNER JOIN EMPLEADOS emp ON emp.th_per_id = per.th_per_id
+                AND emp.DELETE_LOGIC = 0
+            WHERE per.th_per_estado = 1 ";
+
+        if ($id_departamento != '' && $id_departamento != null && $id_departamento != ' ') {
+            $sql .= " AND per_dep.th_dep_id = '$id_departamento'";
+        }
+
+        $sql .= ";";
+
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
 }
