@@ -5,7 +5,16 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <script src="TALENTO_HUMANO/CONTRATACION/VACANTES/js/cn_vacantes.js?v=1.0"></script>
+<?php
+// Primero defines las variables
+$session = $_SESSION['INICIO'];
+?>
 
+<script type="text/javascript">
+    // Luego las usas
+    const datos = <?php echo json_encode($session); ?>;
+    console.log(datos);
+</script>
 <script>
     var pagina_actual = 1;
     var por_pagina = 10;

@@ -4,6 +4,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <script type="text/javascript">
+    let per_id = '';
     $(document).ready(function() {
 
         tbl_triangulacion = $('#tbl_triangulacion').DataTable($.extend({}, configuracion_datatable('Localización', 'Localización'), {
@@ -13,7 +14,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             },
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/th_triangularC.php?listar=true',
-                dataSrc: ''
+                dataSrc: '',
+                data: {
+                    per_id: per_id
+                },
             },
             columns: [{
                     data: null,

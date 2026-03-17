@@ -125,8 +125,10 @@ class th_personas_departamentosM extends BaseModel
             per.th_per_segundo_apellido AS segundo_apellido,
             per.th_per_primer_nombre AS primer_nombre,
             per.th_per_segundo_nombre AS segundo_nombre,
-            per.th_per_estado_civil AS estado_civil,
-            per.th_per_sexo AS sexo,
+            per.th_per_estado_civil AS id_estado_civil,
+            per.th_per_sexo AS id_sexo,
+            ts.descripcion AS sexo,
+            tec.descripcion AS estado_civil,
             per.th_per_cedula AS cedula,
             per.th_per_telefono_1 AS telefono_1,
             per.th_per_correo AS correo,
@@ -145,6 +147,8 @@ class th_personas_departamentosM extends BaseModel
         LEFT JOIN th_departamentos dep ON per_dep.th_dep_id = dep.th_dep_id
         LEFT JOIN th_per_estado_laboral el ON per.th_per_id = el.th_per_id AND el.th_est_estado = 1
         LEFT JOIN th_cat_cargo c ON el.id_cargo = c.id_cargo
+        LEFT JOIN th_cat_tipo_sexo ts ON per.th_per_sexo = ts.id_sexo
+        LEFT JOIN th_cat_tipo_estado_civil tec ON per.th_per_estado_civil = tec.id_tipo_estado_civil
         WHERE
             per.th_per_id = $id_persona;
         ";

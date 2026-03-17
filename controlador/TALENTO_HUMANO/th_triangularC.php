@@ -43,15 +43,12 @@ class th_triangularC
         $this->th_triangular_departamento_persona = new th_triangular_departamento_personaM();
     }
 
-    function listar($id = '')
+    function listar($id = '', $per_id = '')
     {
         if ($id == '') {
-            if ($_SESSION['INICIO']['ID_PERSONA'] > 0) {
-                $datos = $this->th_triangular_departamento_persona->listar_pdt($_SESSION['INICIO']['ID_PERSONA']);
-                // print_r($datos); exit(); die();
-            } else {
-                $datos = $this->modelo->where('th_tri_estado', 1)->listar();
-            }
+            $datos = $this->modelo->where('th_tri_estado', 1)->listar();
+        } else if ($per_id == '') {
+            $datos = $this->th_triangular_departamento_persona->listar_pdt($per_id);
         } else {
 
             $datos = $this->modelo->where('th_tri_id', $id)->where('th_tri_estado', 1)->listar();

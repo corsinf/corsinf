@@ -6,17 +6,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script type="text/javascript">
-
     const USER_DATA = {
         tipo: "<?= $_SESSION['INICIO']['TIPO'] ?>",
         id: "<?= (in_array($_SESSION['INICIO']['TIPO'], ['DBA', 'ADMINISTRADOR'])) ? '' : $_SESSION['INICIO']['ID_PERSONA'] ?>"
     };
 
-    if (USER_DATA.id !== "") {
-        window.location.href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_solicitud_persona&_id=${USER_DATA.id}`;
-    } else {
-        console.log("Acceso de administrador: No se requiere redirección automática.");
-    }
 
     $(document).ready(function() {
 
