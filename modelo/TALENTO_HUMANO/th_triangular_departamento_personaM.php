@@ -74,28 +74,28 @@ class th_triangular_departamento_personaM extends BaseModel
         if ($id_departamento > 0 || $id_usuario == 0) {
             $sql = "
    SELECT tri.th_tri_id, tri.th_tri_nombre
-    FROM th_triangular AS tri
+    FROM _talentohth_triangular AS tri
     WHERE tri.th_tri_estado = 1 AND usu_id != 2
     AND tri.th_tri_id NOT IN (
         SELECT th_tri_id
-        FROM th_triangular_departamento_persona
+        FROM _talentoh.th_triangular_departamento_persona
         WHERE th_dep_id = $id_departamento AND th_tdp_estado = 1 
     )
 ";
         } else if ($id_usuario > 0 || $id_departamento == 0) {
             $sql = "
   SELECT tri.th_tri_id, tri.th_tri_nombre
-    FROM th_triangular AS tri
+    FROM _talentoh.th_triangular AS tri
     WHERE tri.th_tri_estado = 1 AND usu_id != 2
     AND tri.th_tri_id NOT IN (
         SELECT th_tri_id
-        FROM th_triangular_departamento_persona
+        FROM _talentoh.th_triangular_departamento_persona
         WHERE th_per_id = $id_usuario AND th_tdp_estado = 1 
     )
 ";
         }
 
-        $datos = $this->db->datos($sql);
+        $datos = $this->db->datos($sql, false, false, true);
 
 
         return $datos;

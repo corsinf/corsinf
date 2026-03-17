@@ -163,3 +163,14 @@ if ($_GET['acc'] == 'custodio_detalle') {
 // if ($_GET['acc'] == 'terceros') {
 //     include('ACTIVOS_FIJOS/terceros.php');
 // }
+
+
+if ($_GET['acc'] == 'ac_tipo_articulo') {
+    include('ACTIVOS_FIJOS/TIPO_ARTICULO/ac_tipo_articulo.php');
+}
+if ($_GET['acc'] == 'ac_unidad_medida') {
+    include('ACTIVOS_FIJOS/UNIDAD_MEDIDA/ac_unidad_medida.php');
+}
+if ($_GET['acc'] == 'ac_unidad_medida_registrar') {
+    include('ACTIVOS_FIJOS/UNIDAD_MEDIDA/ac_unidad_medida_registrar.php');
+}

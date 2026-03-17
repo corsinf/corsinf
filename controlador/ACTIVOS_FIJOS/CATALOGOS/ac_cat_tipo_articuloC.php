@@ -4,7 +4,7 @@ require_once(dirname(__DIR__, 3) . '/modelo/ACTIVOS_FIJOS/CATALOGOS/ac_cat_tipo_
 $controlador = new ac_cat_tipo_articuloC();
 
 if (isset($_GET['listar'])) {
-    echo json_encode($controlador->listar($_POST['_id']));
+    echo json_encode($controlador->listar($_POST['_id'] ?? ''));
 }
 
 class ac_cat_tipo_articuloC
