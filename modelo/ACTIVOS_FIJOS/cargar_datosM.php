@@ -127,7 +127,7 @@ class cargar_datosM
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
 		$parametros = array($OPCION, $USUARIO);
-		$sql = "EXEC SP_ACTUALIZACION_ARTICULOS @OPCION=?, @USUARIO=?";
+		$sql = "EXEC _activos.SP_ACTUALIZACION_ARTICULOS @OPCION=?, @USUARIO=?";
 		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
@@ -138,7 +138,7 @@ class cargar_datosM
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
 		$parametros = array($OPCION, $USUARIO);
-		$sql = "EXEC SP_ACTUALIZAR_PERSONAS @OPCION=?,@USUARIO=?";
+		$sql = "EXEC _activos.SP_ACTUALIZAR_PERSONAS @OPCION=?,@USUARIO=?";
 		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
@@ -149,7 +149,7 @@ class cargar_datosM
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
 		$parametros = array($OPCION, $USUARIO);
-		$sql = "EXEC SP_ACTUALIZAR_LOCALIZACION @OPCION=?,@USUARIO=?";
+		$sql = "EXEC _activos.SP_ACTUALIZAR_LOCALIZACION @OPCION=?,@USUARIO=?";
 		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
@@ -160,7 +160,7 @@ class cargar_datosM
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
 		$parametros = array($OPCION, $USUARIO);
-		$sql = "EXEC SP_ACTUALIZAR_MARCAS @OPCION=?,@USUARIO=?";
+		$sql = "EXEC _activos.SP_ACTUALIZAR_MARCAS @OPCION=?,@USUARIO=?";
 		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
@@ -171,7 +171,7 @@ class cargar_datosM
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
 		$parametros = array($OPCION, $USUARIO);
-		$sql = "EXEC SP_ACTUALIZAR_ESTADO @OPCION=?,@USUARIO=?";
+		$sql = "EXEC _activos.SP_ACTUALIZAR_ESTADO @OPCION=?,@USUARIO=?";
 		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
@@ -182,7 +182,7 @@ class cargar_datosM
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
 		$parametros = array($OPCION, $USUARIO);
-		$sql = "EXEC SP_ACTUALIZAR_GENERO @OPCION=?,@USUARIO=?";
+		$sql = "EXEC _activos.SP_ACTUALIZAR_GENERO @OPCION=?,@USUARIO=?";
 		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
@@ -193,7 +193,7 @@ class cargar_datosM
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
 		$parametros = array($OPCION, $USUARIO);
-		$sql = "EXEC SP_ACTUALIZAR_COLORES @OPCION=?,@USUARIO=?";
+		$sql = "EXEC _activos.SP_ACTUALIZAR_COLORES @OPCION=?,@USUARIO=?";
 		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
@@ -206,7 +206,7 @@ class cargar_datosM
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
 		$parametros = array($OPCION, $USUARIO);
-		$sql = "EXEC SP_ACTUALIZAR_PROYECTOS @OPCION=?,@USUARIO=?";
+		$sql = "EXEC _activos.SP_ACTUALIZAR_PROYECTOS @OPCION=?,@USUARIO=?";
 		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
@@ -218,7 +218,7 @@ class cargar_datosM
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
 		$parametros = array($OPCION, $USUARIO);
-		$sql = "EXEC SP_ACTUALIZAR_CLASES_MOVIMIENTO @OPCION=?,@USUARIO=?";
+		$sql = "EXEC _activos.SP_ACTUALIZAR_CLASES_MOVIMIENTO @OPCION=?,@USUARIO=?";
 		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
