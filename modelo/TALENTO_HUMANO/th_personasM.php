@@ -39,8 +39,8 @@ class th_personasM extends BaseModel
         'th_per_estado AS estado',
         'th_per_fecha_creacion AS fecha_creacion',
         //'th_per_fecha_modificacion AS fecha_modificacion',
-        'PERFIL',
-        'PASS',
+        //'PERFIL',
+        //'PASS',
         'th_pos_id AS id_postulante',
 
         // Campos adicionales que pueden ser necesarios en el futuro

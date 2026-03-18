@@ -537,6 +537,8 @@ $_id_plaza      = isset($_GET['_id_plaza']) ? $_GET['_id_plaza'] : '';
                         Evaluar_plaza();
                     }
 
+                    console.log(id_plaza_estado);
+
                 } else {
                     Swal.fire('Error', response.error || 'No se pudieron guardar los cambios.', 'error');
                 }
