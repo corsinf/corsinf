@@ -82,11 +82,12 @@ class articulosM
 			array('db' => 'estado', 'dt' => 9),            // Estado
 			array('db' => 'genero', 'dt' => 10),           // Género
 			array('db' => 'color', 'dt' => 11),            // Color
-			array('db' => 'fecha_in', 'dt' => 12),         // Fecha Inv.
-			array('db' => 'observacion', 'dt' => 13),      // Observación
-			array('db' => 'id', 'dt' => 14),               // id del artículo
-			array('db' => 'tipo_articulo', 'dt' => 15),    // Tipo de artículo
-			array('db' => 'tipo_articulo_COLOR', 'dt' => 16) // Tipo de artículo COLOR
+			array('db' => 'proyecto', 'dt' => 12),            // Color
+			array('db' => 'fecha_in', 'dt' => 13),         // Fecha Inv.
+			array('db' => 'observacion', 'dt' => 14),      // Observación
+			array('db' => 'id', 'dt' => 15),               // id del artículo
+			array('db' => 'tipo_articulo', 'dt' => 16),    // Tipo de artículo
+			array('db' => 'tipo_articulo_COLOR', 'dt' => 17) // Tipo de artículo COLOR
 		);
 
 
