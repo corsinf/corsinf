@@ -353,10 +353,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
   </script>
 
   <script>
-    let graficoAsistencias; // 🟢 Guardar instancia del chart
-    let ctx; // 🟢 Variable para el contexto del canvas
+    let graficoAsistencias; //  Guardar instancia del chart
+    let ctx; //  Variable para el contexto del canvas
 
-    // 🟢 Inicializar cuando el DOM esté listo
+    //  Inicializar cuando el DOM esté listo
     document.addEventListener('DOMContentLoaded', function() {
       // Obtener el contexto del canvas
       ctx = document.getElementById('grafico_asistencias_semanal').getContext('2d');
@@ -364,7 +364,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
       document.getElementById('tipoAsistencia').addEventListener('change', function() {
         actualizarGrafico();
       });
-      // 🟢 Cargar datos iniciales - SIEMPRE datos generales al comenzar
+      //  Cargar datos iniciales - SIEMPRE datos generales al comenzar
       control_acceso_datos(); // Forzar carga de datos generales al inicio
     });
 
@@ -372,13 +372,13 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
       // Cuando cambie el select de departamento, ejecuta la función
       $('#ddl_tipoDepartamento').on('change', function() {
         let valorSeleccionado = $(this).val();
-        // 🟢 Pequeño delay para asegurar que el valor se haya actualizado
+        //  Pequeño delay para asegurar que el valor se haya actualizado
         setTimeout(function() {
           actualizarGrafico();
         }, 100);
       });
 
-      // 🟢 Configurar el select con una opción por defecto si no existe
+      //  Configurar el select con una opción por defecto si no existe
       const selectDepartamento = $('#ddl_tipoDepartamento');
       if (selectDepartamento.length > 0) {
         // Si no tiene valor seleccionado, establecer uno por defecto
@@ -391,7 +391,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
       }
     });
 
-    // 🟢 Función unificada para decidir qué datos cargar
+    //  Función unificada para decidir qué datos cargar
     function actualizarGrafico() {
       let departamento = $('#ddl_tipoDepartamento').val();
       // Si no hay departamento seleccionado, es "GENERAL", "TODOS" o valor vacío -> cargar datos generales
@@ -402,11 +402,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
       }
     }
 
-    // 🟢 Función reutilizable para cargar el gráfico (modificada para aceptar ambos formatos)
+    //  Función reutilizable para cargar el gráfico (modificada para aceptar ambos formatos)
     function cargar_grafico_asistencias_semanal(datosServidor) {
       let datosProcesados;
 
-      // 🟢 Detectar el formato de los datos y normalizarlos
+      //  Detectar el formato de los datos y normalizarlos
       if (Array.isArray(datosServidor) && datosServidor.length > 0) {
         // Formato de departamento específico: [{departamento: "X", datos_por_fecha: {...}}]
         datosProcesados = datosServidor[0];
@@ -422,8 +422,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
       let departamentoActual = datosProcesados.departamento;
 
       let fechas = Object.keys(datosPorFecha);
-      fechas.sort((a, b) => new Date(a) - new Date(b)); // 🟢 Orden cronológico correcto
-      let ultimasFechas = fechas.slice(-4); // 🟢 Tomar las últimas 4 fechas
+      fechas.sort((a, b) => new Date(a) - new Date(b)); //  Orden cronológico correcto
+      let ultimasFechas = fechas.slice(-4); //  Tomar las últimas 4 fechas
 
       let dataset1 = [];
       let tipo = document.getElementById('tipoAsistencia').value;
@@ -465,12 +465,12 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
         dataset1.push(valor);
       });
 
-      // 🟢 Destruir gráfico anterior si existe
+      //  Destruir gráfico anterior si existe
       if (graficoAsistencias) {
         graficoAsistencias.destroy();
       }
 
-      // 🟢 Configurar colores según el tipo
+      //  Configurar colores según el tipo
       let backgroundColor = '#007bff';
       let borderColor = '#0056b3';
 
@@ -497,7 +497,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
           break;
       }
 
-      // 🟢 Formatear las fechas para mejor visualización
+      //  Formatear las fechas para mejor visualización
       let fechasFormateadas = ultimasFechas.map(fecha => {
         let fechaObj = new Date(fecha + 'T00:00:00');
         return fechaObj.toLocaleDateString('es-ES', {
@@ -568,14 +568,14 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
         }
       });
 
-      // 🟢 Actualizar información en la interfaz si existe
+      //  Actualizar información en la interfaz si existe
       const departamentoInfo = document.getElementById('departamentoInfo');
       if (departamentoInfo) {
         departamentoInfo.textContent = departamentoActual === 'GENERAL' ? 'TODOS LOS DEPARTAMENTOS' : departamentoActual;
       }
     }
 
-    // 🟢 Función para obtener labels más descriptivos
+    //  Función para obtener labels más descriptivos
     function obtenerLabelTipo(tipo) {
       const labels = {
         'asistencias': 'Asistencias',
@@ -587,7 +587,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
       return labels[tipo] || tipo;
     }
 
-    // 🟢 Función para cargar datos generales del servidor
+    //  Función para cargar datos generales del servidor
     function control_acceso_datos() {
       $.ajax({
         url: '../controlador/TALENTO_HUMANO/th_indexC.php?control_acceso_datos=true',
@@ -612,7 +612,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
       });
     }
 
-    // 🟢 Función para cargar datos por departamento específico
+    //  Función para cargar datos por departamento específico
     function control_acceso_datos_departamento() {
       let departamento = $('#ddl_tipoDepartamento').val();
 
@@ -627,7 +627,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
         success: function(response) {
 
           if (response && Array.isArray(response) && response.length > 0 && response[0].datos_por_fecha) {
-            // 🟢 Reutilizar la misma función de gráfico
+            //  Reutilizar la misma función de gráfico
             cargar_grafico_asistencias_semanal(response);
           } else {
             console.error('Estructura de datos por departamento incorrecta:', response);
