@@ -495,22 +495,23 @@ class loginC
 			//actualizamos
 			$empresa = $this->login->lista_empresa($parametros['empresa']);
 			// print_r($roles);die();
-			// if($empresa[0]['Ip_host']==IP_MASTER)
-			// {
-			// 	// print_r($licencias);print_r($empresa);die();
-			// 	$tablas_iguales = $this->cod_global->tablas_por_licencias($licencias,$empresa);			
-			// 	// print_r($tablas_iguales);die();	
-		 	// 	$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
-		 	// 	// print_r($res);die();
-		 	// 	// print_r($tablas_iguales);die();
-		 	// 	if($tablas_iguales==-1){
-			//  		foreach ($licencias as $key => $value) {
-			//  		// print_r($licencias);die();
-			//  				$r = $this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos']);
-			//  				// print_r($r);die();
-			//  		}
-		 	// 	}
-		 	// }else{
+			if($empresa[0]['Ip_host']==IP_MASTER)
+			{
+				// print_r($licencias);print_r($empresa);die();
+				// $tablas_iguales = $this->cod_global->tablas_por_licencias($licencias,$empresa);			
+				// print_r($tablas_iguales);die();	
+		 		$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
+		 		// print_r($res);die();
+		 		// print_r($tablas_iguales);die();
+		 		// if($tablas_iguales==-1){
+			 	// 	foreach ($licencias as $key => $value) {
+			 	// 	// print_r($licencias);die();
+			 	// 			$r = $this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos']);
+			 	// 			// print_r($r);die();
+			 	// 	}
+		 		// }
+		 	}
+		 	// else{
 
 		 	// 	// print_r('s');die();
 
@@ -525,6 +526,8 @@ class loginC
 			//  	}
 		 	// 	// print_r($empresa);die();
 		 	// }
+
+
 		 	$rol = '';
 		 	$noConcu = 0;		 	
 		 	$num_roles = count($roles);
@@ -879,6 +882,7 @@ class loginC
 				$_SESSION["INICIO"]['FOTO'] = $datos[0]['foto'];			
 				$_SESSION["INICIO"]['SERIE'] = $datos[0]['serie'];
 				$_SESSION["INICIO"]['NO_CONCURENTE'] = '';
+				$_SESSION["INICIO"]['ID_PERSONA'] = -1;
 				$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] ='';
 				$_SESSION["INICIO"]['NO_CONCURENTE_POLITICAS'] ='';
 				$_SESSION["INICIO"]['NO_CONCURENTE_TABLA_ID'] ='';
@@ -1201,6 +1205,7 @@ class loginC
 				$_SESSION["INICIO"]['PERFIL'] = $datos[0]['perfil'];				
 				$_SESSION["INICIO"]['FOTO'] = $datos[0]['foto'];
 				$_SESSION["INICIO"]['NO_CONCURENTE'] = '';
+				$_SESSION["INICIO"]['ID_PERSONA'] = '';
 				$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] ='';
 				$_SESSION["INICIO"]['NO_CONCURENTE_POLITICAS'] ='';
 				$_SESSION["INICIO"]['NO_CONCURENTE_TABLA_ID'] ='';
@@ -1272,6 +1277,7 @@ class loginC
 						$_SESSION["INICIO"]['FOTO'] = $datos_usu[0][$parametros['foto']];
 					}
 					$_SESSION["INICIO"]['NO_CONCURENTE'] = $busqueda_tercero[0][$id[0]['ID']] ;
+					$_SESSION["INICIO"]['ID_PERSONA'] = $busqueda_tercero[0][$id[0]['ID']] ;
 					$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] =$parametros['email'];
 					$_SESSION["INICIO"]['NO_CONCURENTE_POLITICAS'] =$busqueda_tercero[0][$parametros['politicas']];
 					$_SESSION["INICIO"]['NO_CONCURENTE_TABLA_ID'] =$id[0]['ID'];

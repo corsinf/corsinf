@@ -19,6 +19,8 @@ if (isset($_GET['_id'])) {
             cargar_datos_persona('<?= $id_persona ?>');
             listar_solicitud_persona('<?= $id_persona ?>');
         <?php } ?>
+
+        cargar_select2_persona();
     })
 
     function insertar_editar() {

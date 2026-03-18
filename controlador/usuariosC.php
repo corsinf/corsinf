@@ -609,8 +609,11 @@ class usuariosC
 			}
 		}
 
+		// print_r($datos);die();
+
 		if ($datos[0]['pass'] != '') {
-			// $datos[0]['pass'] = $this->pagina->desenciptar_clave($datos[0]['pass']);
+			// esto muestra en usuarios que aparsca bien la clave si hay que comentarla para que funcione en otro lado toca cambiar de forma
+			$datos[0]['pass'] = $this->pagina->desenciptar_clave($datos[0]['pass']);
 		}
 
 		// print_r($datos);die();

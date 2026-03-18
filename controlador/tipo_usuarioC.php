@@ -503,14 +503,8 @@ class tipo_usuarioC
 				$this->addSubperfil($parametros['subperfil'], $parametros['pag'],$ver,$edi,$eli);
 		}
 
-
-
-
 		
 		// si tiene subperfil
-
-
-
 
 		if($empresa[0]['Ip_host']==IP_MASTER)
 			{

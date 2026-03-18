@@ -176,7 +176,10 @@ if(isset($_GET["usuario"]))
   	       $('#txt_emial').val(response[0].email);
 
            response[0].tipo.forEach(function(item,i){
-              $('#ddl_tipo_usuario').append($('<option>',{value: item.Id_Tipo_usuario, text:item.DESCRIPCION,selected: true }));;
+              if(item.DESCRIPCION!='DBA')
+              {
+                $('#ddl_tipo_usuario').append($('<option>',{value: item.Id_Tipo_usuario, text:item.DESCRIPCION,selected: true }));;
+              }
            }) 
   	       $('#txt_apellido').val(response[0].apellido);
   	       $('#txt_pass').val(response[0].pass);
