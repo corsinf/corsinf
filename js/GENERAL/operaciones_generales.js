@@ -329,32 +329,54 @@ function configuracion_datatable(title, filename, buttons = 'contenedor_botones'
             // Información y paginación en la parte inferior
             '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
         // Opciones adicionales que podrían ser comunes en todas las tablas
-        buttons: [{
-            extend: 'excel',
-            text: '<i class="bx bx-grid me-0 pb-1"></i> Excel',
-            title: title,
-            filename: filename,
-            className: 'btn btn-outline-success btn-sm me-1'
-        },
-        {
-            extend: 'pdf',
-            text: '<i class="bx bxs-file-pdf me-0 pb-1"></i> PDF',
-            title: title,
-            filename: filename,
-            className: 'btn btn-outline-danger btn-sm me-1'
-        },
-        {
-            extend: 'csv',
-            text: '<i class="bx bx-align-justify me-0 pb-1"></i> CSV',
-            title: title,
-            filename: filename,
-            className: 'btn btn-outline-primary btn-sm me-1'
-        },
-        {
-            extend: 'colvis',
-            text: 'Columnas',
-            className: 'btn btn-dark btn-sm text-white'
-        },
+        buttons: [
+            {
+                extend: 'excel',
+                text: '<i class="bx bx-grid me-0 pb-1"></i> Excel',
+                title: title,
+                filename: filename,
+                className: 'btn btn-outline-success btn-sm me-1',
+                exportOptions: {
+                    columns: ':visible',
+                    modifier: {
+                        search: 'applied',
+                        order: 'applied'
+                    }
+                }
+            },
+            {
+                extend: 'pdf',
+                text: '<i class="bx bxs-file-pdf me-0 pb-1"></i> PDF',
+                title: title,
+                filename: filename,
+                className: 'btn btn-outline-danger btn-sm me-1',
+                exportOptions: {
+                    columns: ':visible',
+                    modifier: {
+                        search: 'applied',
+                        order: 'applied'
+                    }
+                }
+            },
+            {
+                extend: 'csv',
+                text: '<i class="bx bx-align-justify me-0 pb-1"></i> CSV',
+                title: title,
+                filename: filename,
+                className: 'btn btn-outline-primary btn-sm me-1',
+                exportOptions: {
+                    columns: ':visible',
+                    modifier: {
+                        search: 'applied',
+                        order: 'applied'
+                    }
+                }
+            },
+            {
+                extend: 'colvis',
+                text: 'Columnas',
+                className: 'btn btn-dark btn-sm text-white'
+            }
         ],
         initComplete: function () {
             // Añadir clase btn-sm a los botones de paginación
