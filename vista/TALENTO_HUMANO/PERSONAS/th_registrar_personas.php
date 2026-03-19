@@ -22,7 +22,7 @@ if ($_SESSION['INICIO']['ID_PERSONA'] > 0) {
     $redireccionar_vista = "th_registrar_personas&id_persona=$id_persona&id_postulante=$id_postulante&_origen=nomina&_persona_nomina=true";
 }
 
-$roles_restringidos = ['PERSONAS', 'POSTULANTES'];
+$roles_restringidos = ['EMPLEADOS', 'POSTULANTES'];
 $tipo_usuario = strtoupper($_SESSION['INICIO']['TIPO']);
 $es_restringido = in_array($tipo_usuario, $roles_restringidos);
 
