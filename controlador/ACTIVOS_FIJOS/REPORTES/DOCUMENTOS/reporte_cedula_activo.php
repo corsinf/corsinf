@@ -1,25 +1,58 @@
  <?php
     require_once(dirname(__DIR__, 4) . '/lib/TCPDF/tcpdf.php');
+    require_once(dirname(__DIR__, 4) . '/db/codigos_globales.php');
+
 
     function pdf_cedula_activo($articulos, $datos_articulo_it, $mostrar = false, $local = false, $pdf = null, $adicional = null)
     {
+        $codigos_globales = new codigos_globales();
 
         $nuevo_pdf = false;
         $ruta = $_SESSION['INICIO']['RUTA_IMG_RELATIVA'];
         $empresa = $_SESSION['INICIO']['BASEDATO'];
 
         //Informacion adicional para mostar
+
         $nombre_empresa = '';
         $logo = null;
         $id_codificado = null;
         $token_empresa = null;
+        $adicional = null;
+
+        // Validar si existen las variables de sesión necesarias
+        if (
+            isset($_SESSION['INICIO']['TITULO_PESTANIA']) &&
+            isset($_SESSION['INICIO']['ID_EMPRESA'])
+        ) {
+            $es_web = true;
+        } else {
+            $es_web = false;
+        }
+
+        // Ejecutar solo si realmente es web (o sea, si hay sesión)
+        if ($es_web) {
+            $nombre_empresa = $_SESSION['INICIO']['TITULO_PESTANIA'];
+            $logo = $_SESSION['INICIO']['LOGO'] ?? '';
+            $logo = preg_replace('/^\.\.\//', '', $logo);
+
+            $id_codificado = $codigos_globales->encriptar_alfanumerico($articulos[0]['id']);
+            $token_empresa = $codigos_globales->encriptar_alfanumerico($_SESSION['INICIO']['ID_EMPRESA']);
+
+            $adicional = [
+                'nombre_empresa' => $nombre_empresa,
+                'logo' => $logo,
+                'id_codificado' => $id_codificado,
+                'token_empresa' => $token_empresa,
+            ];
+        }
+
+        // Si viene adicional (por ejemplo desde URL u otra fuente), sobrescribe
         if ($adicional != null) {
             $nombre_empresa = $adicional['nombre_empresa'];
             $logo = $adicional['logo'];
             $id_codificado = $adicional['id_codificado'];
             $token_empresa = $adicional['token_empresa'];
         }
-
 
         // print_r($nombre_empresa); exit(); die();
 
@@ -40,7 +73,7 @@
                 $pdf->SetTitle('GESTIÓN');
                 $pdf->SetSubject('Datasheet');
             }
-            
+
             $pdf->SetMargins(10, 15, 10);
             $pdf->SetAutoPageBreak(true, 15);
             $pdf->setFillColor(249, 254, 247);

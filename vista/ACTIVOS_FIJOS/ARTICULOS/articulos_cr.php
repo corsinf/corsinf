@@ -51,7 +51,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             },
 
             columnDefs: [{
-                targets: [13, 14],
+                targets: [14, 15],
                 visible: false
             }]
         }));
@@ -205,6 +205,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                                 <th>Estado</th>
                                                 <th>Género</th>
                                                 <th>Color</th>
+                                                <th>Proyecto</th>
                                                 <th>Fecha Referencia</th>
                                                 <th>Observación</th>
                                                 <th>ID</th>

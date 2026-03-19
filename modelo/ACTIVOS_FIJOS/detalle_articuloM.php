@@ -173,19 +173,19 @@ class detalle_articuloM extends BaseModel
 					TA.DESCRIPCION AS 'tipo_articulo'
 					
 				FROM
-					ac_articulos P
-					LEFT JOIN ac_localizacion L ON P.id_localizacion = L.ID_LOCALIZACION
-					LEFT JOIN th_personas PE ON P.th_per_id = PE.th_per_id
-					LEFT JOIN ac_marcas M ON P.id_marca = M.ID_MARCA
-					LEFT JOIN ac_estado E ON P.id_estado = E.ID_ESTADO
-					LEFT JOIN ac_genero G ON P.id_genero = G.ID_GENERO
-					LEFT JOIN ac_colores C ON P.id_color = C.ID_COLORES
-					LEFT JOIN ac_proyecto PR ON P.id_proyecto = PR.ID_PROYECTO
-					LEFT JOIN ac_familias F ON P.id_familia = F.id_familia
-					LEFT JOIN ac_familias SF ON P.id_subfamilia = SF.id_familia
-					LEFT JOIN ac_clase_movimiento CM ON P.id_clase_movimiento = CM.ID_MOVIMIENTO
-					LEFT JOIN ac_cat_tipo_articulo TA ON P.id_tipo_articulo = TA.ID_TIPO_ARTICULO
-					LEFT JOIN ac_cat_unidad_medida UM ON P.id_unidad_medida = UM.ac_id_unidad
+					_activos.ac_articulos P
+					LEFT JOIN _activos.ac_localizacion L ON P.id_localizacion = L.ID_LOCALIZACION
+					LEFT JOIN _talentoh.th_personas PE ON P.th_per_id = PE.th_per_id
+					LEFT JOIN _activos.ac_marcas M ON P.id_marca = M.ID_MARCA
+					LEFT JOIN _activos.ac_estado E ON P.id_estado = E.ID_ESTADO
+					LEFT JOIN _activos.ac_genero G ON P.id_genero = G.ID_GENERO
+					LEFT JOIN _activos.ac_colores C ON P.id_color = C.ID_COLORES
+					LEFT JOIN _activos.ac_proyecto PR ON P.id_proyecto = PR.ID_PROYECTO
+					LEFT JOIN _activos.ac_familias F ON P.id_familia = F.id_familia
+					LEFT JOIN _activos.ac_familias SF ON P.id_subfamilia = SF.id_familia
+					LEFT JOIN _activos.ac_clase_movimiento CM ON P.id_clase_movimiento = CM.ID_MOVIMIENTO
+					LEFT JOIN _activos.ac_cat_tipo_articulo TA ON P.id_tipo_articulo = TA.ID_TIPO_ARTICULO
+					LEFT JOIN _activos.ac_cat_unidad_medida UM ON P.id_unidad_medida = UM.ac_id_unidad
 				WHERE 
 					P.id_articulo = $id;";
 
