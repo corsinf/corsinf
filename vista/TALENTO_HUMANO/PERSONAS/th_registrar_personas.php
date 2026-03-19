@@ -434,7 +434,8 @@ if ($_SESSION['INICIO']['ID_PERSONA'] > 0) {
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
             <div class="breadcrumb-title pe-3">Persona</div>
-            <h6></h6>
+            <h6><?php //print_r($_SESSION['INICIO']); echo $es_restringido 
+                ?></h6>
             <div class="ps-3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
@@ -590,14 +591,19 @@ if ($_SESSION['INICIO']['ID_PERSONA'] > 0) {
                                             </h5> -->
 
 
-                                            <?php if ($_SESSION['INICIO']['TIPO'] != "PERSONAS") { ?>
+                                            <?php if (!$es_restringido) { ?>
                                                 <div class="col-12 pt-2">
                                                     <button class="btn btn-primary btn-sm" onclick="modalBiometria()"><i
                                                             class="bx bx-sync"></i>Biometria</button>
-                                                    <a href="javascript:void(0)" class="btn btn-success btn-sm" data-bs-toggle="modal"
-                                                        data-bs-target="#modal_mensaje">
-                                                        <i class="bx bx-envelope"></i> Enviar Mensaje
-                                                    </a>
+
+                                                    <?php if (isset($_GET['_persona_nomina']) && $_GET['_persona_nomina'] == 'true') { ?>
+
+                                                        <a href="javascript:void(0)" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                                            data-bs-target="#modal_mensaje">
+                                                            <i class="bx bx-envelope"></i> Enviar Mensaje
+                                                        </a>
+                                                    <?php } ?>
+
                                                     <!-- Todo lo relacionado con Biometria -->
                                                     <?php include_once('../vista/TALENTO_HUMANO/PERSONAS/MENU/th_persona_biometrico.php'); ?>
 
@@ -607,7 +613,9 @@ if ($_SESSION['INICIO']['ID_PERSONA'] > 0) {
 
                                         </div>
 
-                                        <hr>
+                                        <?php if ($es_restringido) { ?>
+                                            <hr>
+                                        <?php } ?>
 
                                         <div class="pt-2">
                                             <form id="registrar_personas" class="modal_general_provincias">
@@ -622,9 +630,12 @@ if ($_SESSION['INICIO']['ID_PERSONA'] > 0) {
                                                         <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center"
                                                             onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i>
                                                             Guardar</button>
-                                                        <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center"
-                                                            onclick="delete_datos_persona()" type="button"><i class="bx bx-trash"></i>
-                                                            Eliminar</button>
+
+                                                        <?php if (isset($_GET['_persona_nomina']) && $_GET['_persona_nomina'] != 'true') { ?>
+                                                            <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center"
+                                                                onclick="delete_datos_persona()" type="button"><i class="bx bx-trash"></i>
+                                                                Eliminar</button>
+                                                        <?php } ?>
                                                     <?php } ?>
                                                 </div>
                                             </form>
