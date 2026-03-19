@@ -127,7 +127,7 @@
 
             <!-- Botón -->
             <div class="col-sm-12 text-end mt-2">
-               <button class="btn btn-primary btn-sm" type="submit">Guardar</button>
+                <button class="btn btn-primary btn-sm" type="submit">Guardar</button>
             </div>
         </div>
     </form>
@@ -148,7 +148,7 @@
         // Validación del formulario
         $("#form_detalle_it").validate({
             rules: {
-                txt_sistema_op: {
+                /*txt_sistema_op: {
                     required: true
                 },
                 txt_arquitectura: {
@@ -175,14 +175,14 @@
                 },
                 txt_serie_numbre: {
                     required: true
-                },
+                },*/
                 txt_ip_address: {
                     required: true,
                     ipv4: true
                 }
             },
             messages: {
-                txt_sistema_op: {
+                /*txt_sistema_op: {
                     required: "Ingrese el Sistema Operativo."
                 },
                 txt_arquitectura: {
@@ -209,7 +209,7 @@
                 },
                 txt_serie_numbre: {
                     required: "Ingrese el número de serie."
-                },
+                },*/
                 txt_ip_address: {
                     required: "Ingrese la dirección IP.",
                     ipv4: "Formato de IP inválido (ej: 192.168.1.1)"

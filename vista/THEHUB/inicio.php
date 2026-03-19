@@ -5,25 +5,6 @@ if ($_GET['acc'] == 'hub_miembros') {
 }
 
 
-//TOdo sobre los espacios
-
-if ($_GET['acc'] == 'hub_espacios') {
-    include('THEHUB/ESPACIOS/hub_espacios.php');
-}
-
-if ($_GET['acc'] == 'hub_tipo_espacio') {
-    include('THEHUB/ESPACIOS/hub_tipo_espacio.php');
-}
-
-
-if ($_GET['acc'] == 'hub_registrar_espacio') {
-    include('THEHUB/ESPACIOS/hub_registrar_espacio.php');
-}
-
-if ($_GET['acc'] == 'hub_registrar_tipo_espacio') {
-    include('THEHUB/ESPACIOS/hub_registrar_tipo_espacio.php');
-}
-
 
 //Servicios de la los espacios
 
@@ -61,8 +42,8 @@ if ($_GET['acc'] == 'hub_registrar_ubicacion') {
 
 //rutas de las bodegas
 
-if ($_GET['acc'] == 'hub_bodegas') {
-    include('THEHUB/BODEGAS/hub_bodegas.php');
+if ($_GET['acc'] == 'hub_bodega') {
+    include('THEHUB/BODEGAS/hub_bodega.php');
 }
 
 if ($_GET['acc'] == 'hub_registrar_bodega') {
