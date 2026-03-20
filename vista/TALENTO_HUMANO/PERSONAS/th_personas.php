@@ -374,6 +374,15 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                             <i class="bx bx-import me-1"></i> Importar desde biométrico
                                         </button>
 
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <button type="button" class="btn btn-sm btn-primary d-flex align-items-center"
+                                                    onclick="abrir_modal_nuevo_persona()">
+                                                    <i class="bx bx-plus me-1"></i><span>Invitar</span>
+                                                </button>
+                                            </div>
+                                        </div>
+
                                         <!-- <a href="javascript:void(0)" class="btn btn-success btn-sm"
                                             data-bs-toggle="modal" data-bs-target="#modal_mensaje">
                                             <i class="bx bx-envelope me-1"></i> Enviar Mensaje
@@ -514,3 +523,281 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         </div>
     </div>
 </div>
+<div class="modal fade" id="modal_nuevo_persona" tabindex="-1"
+    data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:420px;">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bx bx-user-plus me-2 text-primary"></i>
+                    Nueva Persona
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body px-4 py-3">
+                <p class="text-muted small mb-3">
+                    <i class="bx bx-info-circle me-1"></i>
+                    Se registrará la persona y se enviará automáticamente
+                    un correo con sus credenciales de acceso.
+                </p>
+
+                <!-- Cédula -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold small">
+                        Cédula <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" id="txt_cedula_per"
+                        class="form-control form-control-sm"
+                        placeholder="Ej: 1234567890"
+                        maxlength="10"
+                        oninput="this.value=this.value.replace(/\D/g,'')">
+                    <div class="invalid-feedback" id="err_cedula_per"></div>
+                </div>
+
+                <!-- Correo -->
+                <div class="mb-1">
+                    <label class="form-label fw-semibold small">
+                        Correo electrónico <span class="text-danger">*</span>
+                    </label>
+                    <input type="email" id="txt_correo_per"
+                        class="form-control form-control-sm"
+                        placeholder="correo@ejemplo.com">
+                    <div class="invalid-feedback" id="err_correo_per"></div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm"
+                    data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary btn-sm"
+                    onclick="guardar_e_invitar_persona()">
+                    <i class="bx bx-save me-1"></i> Guardar y enviar correo
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    /* ── Abrir modal ───────────────────────────────── */
+    function abrir_modal_nuevo_persona() {
+        $('#txt_cedula_per').val('').removeClass('is-invalid is-valid');
+        $('#txt_correo_per').val('').removeClass('is-invalid is-valid');
+        $('#err_cedula_per').text('');
+        $('#err_correo_per').text('');
+        $('#modal_nuevo_persona').modal('show');
+    }
+
+    /* ── Validación ────────────────────────────────── */
+    function validar_campos_per() {
+        var ok = true;
+        var ced = $.trim($('#txt_cedula_per').val());
+        var email = $.trim($('#txt_correo_per').val());
+        var reEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // Cédula
+        if (!ced) {
+            $('#txt_cedula_per').addClass('is-invalid').removeClass('is-valid');
+            $('#err_cedula_per').text('Ingrese el número de cédula.');
+            ok = false;
+        } else if (ced.length !== 10) {
+            $('#txt_cedula_per').addClass('is-invalid').removeClass('is-valid');
+            $('#err_cedula_per').text('La cédula debe tener 10 dígitos.');
+            ok = false;
+        } else {
+            $('#txt_cedula_per').removeClass('is-invalid').addClass('is-valid');
+            $('#err_cedula_per').text('');
+        }
+
+        // Correo
+        if (!email) {
+            $('#txt_correo_per').addClass('is-invalid').removeClass('is-valid');
+            $('#err_correo_per').text('Ingrese el correo electrónico.');
+            ok = false;
+        } else if (!reEmail.test(email)) {
+            $('#txt_correo_per').addClass('is-invalid').removeClass('is-valid');
+            $('#err_correo_per').text('El formato del correo no es válido.');
+            ok = false;
+        } else {
+            $('#txt_correo_per').removeClass('is-invalid').addClass('is-valid');
+            $('#err_correo_per').text('');
+        }
+
+        return ok;
+    }
+
+    /* ── Validación cédula en tiempo real ──────────── */
+    $(document).on('input', '#txt_cedula_per', function() {
+        var val = $(this).val().trim();
+        var $err = $('#err_cedula_per');
+
+        $(this).removeClass('is-invalid is-valid');
+        $err.text('');
+
+        if (val.length === 10) {
+            $.ajax({
+                url: '../controlador/TALENTO_HUMANO/th_personasC.php?validar_cedula_duplicada_persona=true',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    cedula: val
+                },
+                success: function(res) {
+                    if (res.duplicada) {
+                        $('#txt_cedula_per').addClass('is-invalid').removeClass('is-valid');
+                        $err.text('Esta cédula ya está registrada en el sistema.');
+                    } else {
+                        $('#txt_cedula_per').addClass('is-valid').removeClass('is-invalid');
+                        $err.text('');
+                    }
+                }
+            });
+        }
+    });
+
+    /* ── Validación correo en tiempo real ──────────── */
+    $(document).on('input', '#txt_correo_per', function() {
+        if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($.trim($(this).val()))) {
+            $(this).removeClass('is-invalid').addClass('is-valid');
+            $('#err_correo_per').text('');
+        }
+    });
+
+    /* ════════════════════════════════════════════════
+       PASO 1: Insertar persona
+       PASO 2: Enviar correo con credenciales
+    ════════════════════════════════════════════════ */
+    function guardar_e_invitar_persona() {
+        if (!validar_campos_per()) return;
+
+        var cedula = $.trim($('#txt_cedula_per').val());
+        var correo = $.trim($('#txt_correo_per').val());
+
+        Swal.fire({
+            title: 'Registrando...',
+            text: 'Guardando persona.',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            didOpen: function() {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_personasC.php?insertar_persona=true',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                parametros: {
+                    cedula: cedula,
+                    correo: correo
+                }
+            },
+            success: function(res) {
+
+                if (res == -2) {
+                    Swal.close();
+                    $('#txt_cedula_per').addClass('is-invalid').removeClass('is-valid');
+                    $('#err_cedula_per').text('Esta cédula ya está registrada.');
+                    return;
+                }
+
+                if (res == -3) {
+                    Swal.close();
+                    $('#txt_correo_per').addClass('is-invalid').removeClass('is-valid');
+                    $('#err_correo_per').text('Este correo ya está registrado.');
+                    return;
+                }
+
+                if (res == -4) {
+                    Swal.close();
+                    $('#txt_cedula_per').addClass('is-invalid').removeClass('is-valid');
+                    $('#err_cedula_per').text('Esta cédula ya está registrada.');
+                    $('#txt_correo_per').addClass('is-invalid').removeClass('is-valid');
+                    $('#err_correo_per').text('Este correo ya está registrado.');
+                    return;
+                }
+
+                // Solo ocultar si fue exitoso
+                $('#modal_nuevo_persona').modal('hide');
+
+                Swal.update({
+                    title: 'Enviando correo...',
+                    text: 'Enviando credenciales a la persona.'
+                });
+
+                $.ajax({
+                    url: '../controlador/TALENTO_HUMANO/th_logs_correosC.php?enviar_correo=true',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        parametros: {
+                            per_id: res,
+                            enviar_credenciales: 1,
+                            asunto: '',
+                            descripcion: '',
+                            personas: 'visitantes',
+                        }
+                    },
+                    success: function(resMail) {
+                        if (resMail.error) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Persona registrada',
+                                html: 'La persona fue guardada, pero ocurrió un error al enviar el correo:<br><small class="text-danger">' + resMail.error + '</small>',
+                                confirmButtonColor: '#f0ad4e'
+                            }).then(function() {
+                                recargar_tabla_personas();
+                            });
+                            return;
+                        }
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Listo!',
+                            html: 'Persona registrada y credenciales enviadas a:<br><strong>' + resMail.correo + '</strong>',
+                            confirmButtonColor: '#0d6efd'
+                        }).then(function() {
+                            recargar_tabla_personas();
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Persona registrada',
+                            text: 'Guardado correctamente, pero falló el envío del correo: ' + error,
+                            confirmButtonColor: '#f0ad4e'
+                        }).then(function() {
+                            recargar_tabla_personas();
+                        });
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                Swal.fire('Error', 'Error en la conexión: ' + error, 'error');
+            }
+        });
+    }
+
+    /* ── Recargar tabla si existe ──────────────────── */
+    function recargar_tabla_personas() {
+        if (typeof cargar_tabla_personas === 'function') {
+            cargar_tabla_personas();
+        }
+    }
+</script>
+
+<style>
+    .disabled {
+        /* Hace que el enlace no responda al clic */
+        pointer-events: none;
+        /* Cambia el aspecto visual (grisáceo) */
+        opacity: 0.6;
+        /* Quita el cursor de mano */
+        cursor: not-allowed;
+        text-decoration: none;
+    }
+</style>

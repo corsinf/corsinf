@@ -2,6 +2,7 @@
 date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_personasM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/POSTULANTES/th_postulantesM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_personas_departamentosM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_dispositivosM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_cardM.php');
@@ -10,6 +11,10 @@ require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_faceM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/empresaM.php');
 require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 require_once(dirname(__DIR__, 2) . '/APIS-TERCEROS/HIKCENTRAL/hikcentralHttp.php');
+
+
+require_once(dirname(__DIR__, 2) . '/modelo/GENERAL/NO_CONCURRENTES/VISITANTESM.php');
+
 
 $controlador = new th_personasC();
 
@@ -203,6 +208,16 @@ if (isset($_GET['DeleteFaceBase'])) {
     echo json_encode($controlador->DeleteFaceBase($_POST['parametros']));
 }
 
+if (isset($_GET['insertar_persona'])) {
+    echo json_encode($controlador->insertar_persona($_POST['parametros']));
+}
+
+if (isset($_GET['validar_cedula_duplicada_persona'])) {
+    echo json_encode(
+        $controlador->validar_cedula_duplicada_persona($_POST['cedula'] ?? '')
+    );
+}
+
 class th_personasC
 {
     private $modelo;
@@ -216,6 +231,9 @@ class th_personasC
     private $empresa;
     private $hikcentralHttp;
     private $biometria;
+    private $th_postulantes;
+    private $VISITANTE;
+
 
     function __construct()
     {
@@ -232,6 +250,9 @@ class th_personasC
         // $this->sdk_patch = "C:\\Users\\lenovo\\source\\repos\\CorsinfSDKHik\\CorsinfSDKHik\\bin\\Debug\\net8.0\\CorsinfSDKHik.dll ";
         $this->empresa = new empresaM();
         $this->hikcentralHttp = new HikcentralHttp();
+
+        $this->th_postulantes = new th_postulantesM();
+        $this->VISITANTE = new VISITANTESM();
     }
 
     function listar($id = '')
@@ -1185,5 +1206,102 @@ class th_personasC
         }
 
         return $lista;
+    }
+
+
+    public function validar_cedula_duplicada_persona($cedula)
+    {
+        $cedula = trim($cedula);
+
+        if (empty($cedula)) {
+            return ['duplicada' => false];
+        }
+
+        // Verificar en postulantes
+        $en_postulantes = $this->th_postulantes
+            ->where('th_pos_cedula', $cedula)
+            ->where('th_pos_estado', 1)
+            ->listar();
+
+        $this->th_postulantes->reset(); // ← limpiar estado del modelo
+
+        if (!empty($en_postulantes)) {
+            return ['duplicada' => true];
+        }
+
+        // Verificar en personas
+        $en_personas = $this->modelo
+            ->where('th_per_cedula', $cedula)
+            ->where('th_per_estado', 1)
+            ->listar();
+
+        $this->modelo->reset(); // ← limpiar estado del modelo
+
+        if (!empty($en_personas)) {
+            return ['duplicada' => true];
+        }
+
+        return ['duplicada' => false];
+    }
+
+    function insertar_persona($parametros)
+    {
+        $cedula = trim($parametros['cedula'] ?? '');
+        $correo = trim($parametros['correo'] ?? '');
+
+        // ── Validar duplicados ─────────────────────────────────────────
+        $cedula_duplicada = false;
+        $correo_duplicado = false;
+
+        // Cédula en postulantes
+        if (!empty($this->th_postulantes->where('th_pos_cedula', $cedula)->where('th_pos_estado', 1)->listar())) {
+            $cedula_duplicada = true;
+        }
+        $this->th_postulantes->reset();
+
+        // Cédula en personas
+        if (!$cedula_duplicada) {
+            if (!empty($this->modelo->where('th_per_cedula', $cedula)->where('th_per_estado', 1)->listar())) {
+                $cedula_duplicada = true;
+            }
+            $this->modelo->reset();
+        }
+
+        // Correo en postulantes
+        if (!empty($correo)) {
+            if (!empty($this->th_postulantes->where('th_pos_correo', $correo)->where('th_pos_estado', 1)->listar())) {
+                $correo_duplicado = true;
+            }
+            $this->th_postulantes->reset();
+
+            // Correo en personas
+            if (!$correo_duplicado) {
+                if (!empty($this->modelo->where('th_per_correo', $correo)->where('th_per_estado', 1)->listar())) {
+                    $correo_duplicado = true;
+                }
+                $this->modelo->reset();
+            }
+        }
+
+        if ($cedula_duplicada && $correo_duplicado) return -4;
+        if ($cedula_duplicada)                      return -2;
+        if ($correo_duplicado)                      return -3;
+
+        $datos = [
+            ['campo' => 'th_per_cedula', 'dato' => $cedula],
+            ['campo' => 'th_per_correo', 'dato' => $correo],
+        ];
+
+        $per_id = $this->modelo->insertar_id($datos);
+
+        if ($per_id > 0) {
+            $datos_visitante = [
+                ['campo' => 'th_per_id',            'dato' => $per_id],
+                ['campo' => 'NICK',                 'dato' => $correo],  
+            ];
+            $this->VISITANTE->insertar($datos_visitante);
+        }
+
+        return $per_id;
     }
 }
