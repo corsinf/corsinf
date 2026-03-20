@@ -1,16 +1,22 @@
 <?php
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
+$per_id = $_SESSION['INICIO']['ID_PERSONA'];
+
+if ($per_id > 0) {
+    $url = "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_solicitud_persona&_id=" . $per_id;
+    echo "<script>window.location.href = '$url';</script>";
+}
+
 ?>
+
+
+
 
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script type="text/javascript">
-    const USER_DATA = {
-        tipo: "<?= $_SESSION['INICIO']['TIPO'] ?>",
-        id: "<?= (in_array($_SESSION['INICIO']['TIPO'], ['DBA', 'ADMINISTRADOR'])) ? '' : $_SESSION['INICIO']['ID_PERSONA'] ?>"
-    };
-
+    let per_id = '<?= $per_id ?>';
 
     $(document).ready(function() {
 
@@ -32,6 +38,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 type: 'POST',
                 data: function(d) {
                     d.estado = estado;
+                    d.per_id = per_id;
                 },
                 dataSrc: ''
             },

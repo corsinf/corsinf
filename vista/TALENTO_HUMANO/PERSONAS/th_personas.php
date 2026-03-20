@@ -758,7 +758,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         Swal.fire({
                             icon: 'success',
                             title: '¡Listo!',
-                            html: 'Persona registrada y credenciales enviadas a:<br><strong>' + resMail.correo + '</strong>',
+                            html: 'Persona registrada y credenciales enviadas a:<br><strong>' + correo + '</strong>',
                             confirmButtonColor: '#0d6efd'
                         }).then(function() {
                             recargar_tabla_personas();
