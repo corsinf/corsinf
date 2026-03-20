@@ -117,42 +117,37 @@ class th_control_accesoM extends BaseModel
     }
 
 
-    function listar_personalizado($fecha_ini = '', $fecha_final = '')
-    {
+   function listar_personalizado($fecha_ini = '', $fecha_final = '', $per_id = '')
+{
+    // TOP 1000 solo cuando no hay ningún filtro
+    $limit = ($fecha_ini == '' && $per_id == '') ? "TOP 1000" : "";
 
-        $limit = '';
-        if ($fecha_ini == '') {
-            $limit = "TOP 1000";
-        }
+    $sql =
+        "SELECT $limit
+            ca.th_acc_fecha_hora AS fecha,
+            p.th_per_codigo_externo_1 AS nombre,
+            d.th_dis_nombre         AS dispositivo_nombre,
+            ca.th_per_id            AS per_id
+        FROM th_control_acceso AS ca
+        LEFT JOIN th_personas AS p
+            ON p.th_per_id = ca.th_per_id
+        LEFT JOIN th_dispositivos AS d
+            ON d.th_dis_host = ca.th_dis_id
+           AND d.th_dis_port = TRY_CONVERT(int, NULLIF(ca.th_acc_puerto, '.'))
+        WHERE 1=1";
 
-        $sql =
-            "SELECT $limit
-                ca.th_acc_fecha_hora AS fecha,
-                p.th_per_codigo_externo_1 AS nombre,
-                d.th_dis_nombre         AS dispositivo_nombre
-            FROM th_control_acceso AS ca
-            LEFT JOIN th_personas AS p
-                ON p.th_per_id = ca.th_per_id
-            LEFT JOIN th_dispositivos AS d
-                ON d.th_dis_host = ca.th_dis_id
-            AND d.th_dis_port = TRY_CONVERT(int, NULLIF(ca.th_acc_puerto, '.'))
-
-            ";
-
-        if ($fecha_ini) {
-            $sql .= "WHERE 
-                    CONVERT(date, ca.th_acc_fecha_hora) BETWEEN '$fecha_ini' AND '$fecha_final'";
-        }
-
-        $sql .= "ORDER BY ca.th_acc_fecha_hora DESC;";
-
-        // print_r($sql); exit(); die();
-
-
-        $datos = $this->db->datos($sql, false, true);
-        return $datos;
+    if ($fecha_ini != '') {
+        $sql .= " AND CONVERT(date, ca.th_acc_fecha_hora) BETWEEN '$fecha_ini' AND '$fecha_final'";
     }
 
+    if ($per_id != '') {
+        $sql .= " AND ca.th_per_id = " . intval($per_id);
+    }
+
+    $sql .= " ORDER BY ca.th_acc_fecha_hora DESC;";
+
+    return $this->db->datos($sql, false, true);
+}
     function listar_marcaciones($tabla = false,$fecha_ini = '', $fecha_final = '',$id_usuario=false,$id_departamento=false,$ordenar='sin_ordenar')
     {
         $tabla_search = 'th_control_acceso';

@@ -6,7 +6,14 @@ require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_accesoM.ph
 $controlador = new th_control_accesoC();
 
 if (isset($_GET['listar'])) {
-    echo json_encode($controlador->listar($_POST['fecha_inicio'] ?? '', $_POST['fecha_fin'] ?? ''));
+    $per_id = $_POST['per_id'] ?? '';
+    if ($per_id == '0' || $per_id == 0) $per_id = ''; 
+
+    echo json_encode($controlador->listar(
+        $_POST['fecha_inicio'] ?? '',
+        $_POST['fecha_fin']    ?? '',
+        $per_id
+    ));
 }
 
 if (isset($_GET['reporte'])) {
@@ -24,48 +31,47 @@ class th_control_accesoC
         $this->modelo = new th_control_accesoM();
     }
 
-    function listar($fecha_ini = '', $fecha_final = '')
+    function listar($fecha_ini = '', $fecha_final = '', $per_id = '')
     {
-        if ($fecha_ini == '') {
-            $datos = $this->modelo->listar_personalizado();
-        } else {
-            $datos = $this->modelo->listar_personalizado($fecha_ini, $fecha_final);
+        if ($fecha_ini == '' && $per_id == '') {
+            return $this->modelo->listar_personalizado();
         }
-        
-        return $datos;
+
+        if ($fecha_ini == '' && $per_id != '') {
+            return $this->modelo->listar_personalizado('', '', $per_id);
+        }
+
+        // Solo fechas o fechas + per_id
+        return $this->modelo->listar_personalizado($fecha_ini, $fecha_final, $per_id);
     }
 
     function listar_datos($parametros)
     {
         // print_r($parametros);die();
-        $fecha_ini =$parametros['txt_fecha_inicio']; 
-        $fecha_final =$parametros['txt_fecha_fin'];
+        $fecha_ini = $parametros['txt_fecha_inicio'];
+        $fecha_final = $parametros['txt_fecha_fin'];
         $departamento = $parametros['ddl_departamentos'];
-        $usuario = $parametros['ddl_personas'];   
-        $orden = $parametros['tipo_ordenamiento'];  
+        $usuario = $parametros['ddl_personas'];
+        $orden = $parametros['tipo_ordenamiento'];
 
 
         $fecha_obj = new DateTime($fecha_ini);
-        $mesdesde =  $fecha_obj->format('Y').''. $fecha_obj->format('m');
+        $mesdesde =  $fecha_obj->format('Y') . '' . $fecha_obj->format('m');
 
         $fecha_obj = new DateTime($fecha_final);
-        $mesHasta =  $fecha_obj->format('Y').''. $fecha_obj->format('m');
+        $mesHasta =  $fecha_obj->format('Y') . '' . $fecha_obj->format('m');
 
         $hoy = date('Ym');
 
         // print_r($mesdesde.'-'.$mesHasta);die();
         $array_table = array();
-        if($mesdesde==$mesHasta)
-        {
-            if($mesdesde==$hoy && $mesHasta==$hoy)
-            {
-                $array_table[] =  array('tbl'=>'th_control_acceso','inicio'=>$fecha_ini,'fin'=>$fecha_final);
-            }else
-            {
-                $array_table[] =  array('tbl'=>'th_control_acceso_'.$mesdesde,'inicio'=>$fecha_ini,'fin'=>$fecha_final);
+        if ($mesdesde == $mesHasta) {
+            if ($mesdesde == $hoy && $mesHasta == $hoy) {
+                $array_table[] =  array('tbl' => 'th_control_acceso', 'inicio' => $fecha_ini, 'fin' => $fecha_final);
+            } else {
+                $array_table[] =  array('tbl' => 'th_control_acceso_' . $mesdesde, 'inicio' => $fecha_ini, 'fin' => $fecha_final);
             }
-        }else
-        {
+        } else {
             $inicio = new DateTime($fecha_ini);
             $fin = new DateTime($fecha_final);
 
@@ -80,21 +86,21 @@ class th_control_accesoC
             foreach ($periodo as $dt) {
                 $periodo = $dt->format('Ym');
                 $hoy = date('Ym');
-                if($periodo!=$hoy)
-                {
+                if ($periodo != $hoy) {
                     $periodo_ = $dt->format('Y-m');
                     $ultimoDia = clone $dt;
                     $ultimoDia->modify('last day of this month');
                     $fecha_ultima = $ultimoDia->format('Y-m-d');
                     $fecha_primero =  $dt->format('Y-m-d');
-                    if($num_meses>1) {$fecha_ini = $fecha_primero; }
+                    if ($num_meses > 1) {
+                        $fecha_ini = $fecha_primero;
+                    }
 
-                    array_push($array_table, array('tbl'=>'th_control_acceso_'.$periodo,'inicio'=>$fecha_ini,'fin'=>$fecha_ultima));
+                    array_push($array_table, array('tbl' => 'th_control_acceso_' . $periodo, 'inicio' => $fecha_ini, 'fin' => $fecha_ultima));
                     $num_meses++;
-                }else
-                {
+                } else {
                     $hoy = date('Y-m');
-                    array_push($array_table, array('tbl'=>'th_control_acceso','inicio'=>$hoy.'-01','fin'=>$fecha_final));
+                    array_push($array_table, array('tbl' => 'th_control_acceso', 'inicio' => $hoy . '-01', 'fin' => $fecha_final));
                 }
             }
         }
@@ -102,7 +108,7 @@ class th_control_accesoC
         // print_r($array_table);die();
         $list_dato = array();
         foreach ($array_table as $key => $value) {
-            $data = $this->traer_datos($value['tbl'],$value['inicio'],$value['fin'],$usuario,$departamento,$orden);
+            $data = $this->traer_datos($value['tbl'], $value['inicio'], $value['fin'], $usuario, $departamento, $orden);
             // print_r($data);die();
             foreach ($data as $key2 => $value2) {
                 array_push($list_dato, $value2);
@@ -110,20 +116,21 @@ class th_control_accesoC
         }
 
 
-              
+
         // print_r($list_dato);die();
 
-        $resultado = array();   
+        $resultado = array();
         // $datos = $this->modelo->listar_marcaciones($tabla,$fecha_ini, $fecha_final,$usuario,$departamento,$orden);
         foreach ($list_dato as $key => $value) {
             $dateTime = new DateTime($value['Fecha']);
-            $dia = (int)$dateTime->format('w')+1;
-            if($dia>=7) {$dias =1; }
+            $dia = (int)$dateTime->format('w') + 1;
+            if ($dia >= 7) {
+                $dias = 1;
+            }
             // print_r($value);die();
-            $horario = $this->modelo->lista_detalle_turnos_x_persona($value['card'],$dia);
+            $horario = $this->modelo->lista_detalle_turnos_x_persona($value['card'], $dia);
             // print_r($horario);die();
-            if(count($horario)>0)
-            {
+            if (count($horario) > 0) {
                 $horario[0]['Ausente'] = 'NO';
                 $resultado[] = array_merge($value, $horario[0]);
             }
@@ -133,10 +140,10 @@ class th_control_accesoC
         // print_r($parametros);die();
     }
 
-    function traer_datos($tabla,$fecha_ini, $fecha_final,$usuario,$departamento,$orden)
-    {        
-       $data = $this->modelo->listar_marcaciones($tabla,$fecha_ini, $fecha_final,$usuario,$departamento,$orden);
-       // print_r($data);die();
-       return $data;
+    function traer_datos($tabla, $fecha_ini, $fecha_final, $usuario, $departamento, $orden)
+    {
+        $data = $this->modelo->listar_marcaciones($tabla, $fecha_ini, $fecha_final, $usuario, $departamento, $orden);
+        // print_r($data);die();
+        return $data;
     }
 }

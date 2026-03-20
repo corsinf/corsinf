@@ -1,24 +1,37 @@
 <?php
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
+$per_id = 0;
+
+if ($_SESSION['INICIO']['ID_PERSONA'] > 0) {
+    /*
+    if ($_SESSION['INICIO']['ID_PERSONA'] != $_per_id && $_per_id != '') {
+        echo "<script>location.href = 'inicio.php?acc=pagina_error';</script>";
+        exit;
+    }*/
+    $per_id = $_SESSION['INICIO']['ID_PERSONA'];
+}
+
 ?>
 
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script type="text/javascript">
+    // ── Declarar globalmente ───────────────────────
+    var tbl_marcaciones = null; // ← fuera de cualquier función
+
     $(document).ready(function() {
         cargar_tabla();
     });
 
-
     function cargar_tabla() {
-        tabla = $('#txt_tabla').val();
+        // var tabla = $('#txt_tabla').val(); ← eliminar, no existe en el HTML
 
-        txt_fecha_inicio = $('#txt_fecha_inicio').val();
-        txt_fecha_fin = $('#txt_fecha_fin').val();
+        var txt_fecha_inicio = $('#txt_fecha_inicio').val();
+        var txt_fecha_fin = $('#txt_fecha_fin').val();
 
         tbl_marcaciones = $('#tbl_marcaciones').DataTable($.extend({}, configuracion_datatable('Marcaciones', 'Marcaciones'), {
-            reponsive: true,
+            responsive: true, // ← estaba "reponsive"
             language: {
                 url: '../assets/plugins/datatable/spanish.json'
             },
@@ -29,20 +42,17 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     d.listar_todo = true;
                     d.fecha_inicio = txt_fecha_inicio;
                     d.fecha_fin = txt_fecha_fin;
-
+                    d.per_id = <?= $per_id ?>;
                 },
                 dataSrc: ''
             },
-            columns: [
-
-                {
+            columns: [{
                     data: 'nombre'
                 },
                 {
                     data: null,
                     render: function(data, type, item) {
-                        salida = fecha_formateada_hora(item.fecha);
-                        return salida;
+                        return fecha_formateada_hora(item.fecha);
                     }
                 },
                 {
@@ -55,11 +65,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         }));
     }
 
-
     function buscar_fechas() {
-
         if (tbl_marcaciones) {
-            tbl_marcaciones.destroy(); // Destruir la instancia existente del DataTable
+            tbl_marcaciones.destroy();
+            tbl_marcaciones = null; // ← limpiar referencia tras destruir
         }
         cargar_tabla();
     }
