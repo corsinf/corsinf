@@ -14,6 +14,7 @@ class th_cardM  extends BaseModel
         'th_card_nombre',
         'th_cardNo',
         'th_card_creacion',
+        'th_card_virtual',
     ];
 
     function sincronizar_datos_card_persona()

@@ -10,6 +10,7 @@ require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_faceM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/empresaM.php');
 require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 require_once(dirname(__DIR__, 2) . '/APIS-TERCEROS/HIKCENTRAL/hikcentralHttp.php');
+require_once(dirname(__DIR__, 2) . '/modelo/FACTURACION/secuencialesM.php');
 
 $controlador = new th_personasC();
 
@@ -217,6 +218,8 @@ class th_personasC
     private $hikcentralHttp;
     private $biometria;
 
+    private $secuenciales;
+
     function __construct()
     {
         $this->modelo = new th_personasM();
@@ -232,6 +235,8 @@ class th_personasC
         // $this->sdk_patch = "C:\\Users\\lenovo\\source\\repos\\CorsinfSDKHik\\CorsinfSDKHik\\bin\\Debug\\net8.0\\CorsinfSDKHik.dll ";
         $this->empresa = new empresaM();
         $this->hikcentralHttp = new HikcentralHttp();
+
+        $this->secuenciales = new secuencialesM();
     }
 
     function listar($id = '')
@@ -698,6 +703,7 @@ class th_personasC
             array('campo' => 'th_per_id', 'dato' => $idPerson),
             array('campo' => 'th_card_creacion', 'dato' => date('Y-m-d')),
             array('campo' => 'th_card_nombre', 'dato' => $nombre),
+            array('campo' => 'th_card_virtual', 'dato' =>'0'),
         );
         $datos = $this->card->insertar($datosBio);
         return $datos;
@@ -773,14 +779,35 @@ class th_personasC
         $dispositivo = $dispositivo[0];
         $persona = $this->modelo->where('th_per_id', $parametros['idPerson'])->listar();
         $nombre = str_replace(" ", "_", $persona[0]['primer_apellido'] . " " . $persona[0]['segundo_apellido'] . " " . $persona[0]['primer_nombre'] . " " . $persona[0]['segundo_nombre']);
-
+        $nombre_completo =  $persona[0]['primer_apellido'] . " " . $persona[0]['segundo_apellido'] . " " . $persona[0]['primer_nombre'] . " " . $persona[0]['segundo_nombre'];
 
         $cards = $this->card->where("th_per_id", $parametros['idPerson'])->listar();
         if (count($cards) == 0) {
-            return -2;
+            $cardNo = '';
+
+            if(isset($persona[0]['cedula']) && $persona[0]['cedula']!=''){$cardNo = $persona[0]['cedula'];}
+            else{
+                $tarjeta = $this->secuenciales->validar_mas_series('CardNo');
+                // print_r($tarjeta);die();
+                $datosCardEdit = array(array('campo'=>'NUMERO','dato'=>($tarjeta[0]['NUMERO']+1)));
+                $datosCardWhere = array(array('campo'=>'ID_SECUENCIALES','dato'=>$tarjeta[0]['ID_SECUENCIALES']));
+                $this->secuenciales->editar($datosCardEdit,$datosCardWhere);
+                $cardNo = $tarjeta[0]['NUMERO'];
+            }
+
+            $dataCardInsert = array(array('campo'=>'th_per_id','dato'=>$persona[0]['_id']),
+                                    array('campo'=>'th_cardNo','dato'=>$cardNo),
+                                    array('campo'=>'th_card_virtual','dato'=>'1'),
+                                    array('campo'=>'th_card_nombre','dato'=>$nombre_completo),
+                                );
+            $this->card->insertar($dataCardInsert);
+
+
+        $cards = $this->card->where("th_per_id", $parametros['idPerson'])->listar();
+
         } //si no tiene tarjetas registradas no puede seguir avanzando
 
-
+// die();
         $dllPath = $this->sdk_patch . '3 ' . $dispositivo['host'] . ' ' . $dispositivo['usuario'] . ' ' . $dispositivo['port'] . ' ' . $dispositivo['pass'] . ' ' . $nombre . 'CapFinger' . $parametros['dedo'] . ' ' . $patch;
         $command = "dotnet $dllPath";
 
@@ -872,6 +899,15 @@ class th_personasC
         $NumFinger = $huellaBase[0]['th_finger_numero'];
         $cards = $huellaBase[0]['th_cardNo'];
 
+        $parametros['idPerson'] = $parametros['PersonaId'];
+        $parametros['device'] = $parametros['dispositivo'];
+
+
+
+
+        $resp = $this->addTarjetaBio($parametros);
+
+        // print_r($resp);die();
 
         $resp = array("msj" => "SetFingegDataSuccessful", "resp" => 1);
         if (file_exists($patch)) {
@@ -904,6 +940,40 @@ class th_personasC
             if ($detectado == "") {
                 $patch = $empresa[0]['ruta_huellas'] . '\\' . $file['huella']['name'];
                 $nombre = $file['huella']['name'];
+            }
+
+            $persona = $this->modelo->where('th_per_id', $idPerson)->listar();
+       
+            $nombre_completo =  $persona[0]['primer_apellido'] . " " . $persona[0]['segundo_apellido'] . " " . $persona[0]['primer_nombre'] . " " . $persona[0]['segundo_nombre'];
+
+
+            // print_r($CardNom);die();
+            if($CardNom=='' || $CardNom==null  || $CardNom=='null' ){
+                // print_r('expression');die();
+                $cardReg = $this->card->where('th_per_id',$idPerson)->listar();
+                if(count($cardReg)>0){$CardNom = $cardReg[0]['th_cardNo'];}
+                else{
+                    $CardNom = '';
+
+                        if(isset($persona[0]['cedula']) && $persona[0]['cedula']!=''){$CardNom = $persona[0]['cedula'];}
+                        else{
+                            $tarjeta = $this->secuenciales->validar_mas_series('CardNo');
+                            // print_r($tarjeta);die();
+                            $datosCardEdit = array(array('campo'=>'NUMERO','dato'=>($tarjeta[0]['NUMERO']+1)));
+                            $datosCardWhere = array(array('campo'=>'ID_SECUENCIALES','dato'=>$tarjeta[0]['ID_SECUENCIALES']));
+                            $this->secuenciales->editar($datosCardEdit,$datosCardWhere);
+                            $CardNom = $tarjeta[0]['NUMERO'];
+                        }
+
+                        $dataCardInsert = array(array('campo'=>'th_per_id','dato'=>$persona[0]['_id']),
+                                                array('campo'=>'th_cardNo','dato'=>$CardNom),
+                                                array('campo'=>'th_card_virtual','dato'=>'1'),
+                                                array('campo'=>'th_card_nombre','dato'=>$nombre_completo),
+                                            );
+                        $this->card->insertar($dataCardInsert);
+                        $cards = $this->card->where("th_per_id", $idPerson)->listar();
+
+                }
             }
 
             //guarda en base de datos
@@ -1004,6 +1074,7 @@ class th_personasC
 
     function addFaceBase($idPerson, $CardNom, $detectado, $file)
     {
+
         $registroFacial = $this->face->where('th_per_id', $idPerson)->where('th_cardNo', $CardNom)->listar();
         if (count($registroFacial) == 0) {
             $patch = $detectado;
@@ -1014,6 +1085,35 @@ class th_personasC
                 $patch = $empresa[0]['ruta_huellas'] . '\\' . $file['huella']['name'];
                 $nombre = $file['huella']['name'];
             }
+
+             if($CardNom=='' || $CardNom==null  || $CardNom=='null' ){
+                // print_r('expression');die();
+                $cardReg = $this->card->where('th_per_id',$idPerson)->listar();
+                if(count($cardReg)>0){$CardNom = $cardReg[0]['th_cardNo'];}
+                else{
+                    $CardNom = '';
+
+                        if(isset($persona[0]['cedula']) && $persona[0]['cedula']!=''){$CardNom = $persona[0]['cedula'];}
+                        else{
+                            $tarjeta = $this->secuenciales->validar_mas_series('CardNo');
+                            // print_r($tarjeta);die();
+                            $datosCardEdit = array(array('campo'=>'NUMERO','dato'=>($tarjeta[0]['NUMERO']+1)));
+                            $datosCardWhere = array(array('campo'=>'ID_SECUENCIALES','dato'=>$tarjeta[0]['ID_SECUENCIALES']));
+                            $this->secuenciales->editar($datosCardEdit,$datosCardWhere);
+                            $CardNom = $tarjeta[0]['NUMERO'];
+                        }
+
+                        $dataCardInsert = array(array('campo'=>'th_per_id','dato'=>$persona[0]['_id']),
+                                                array('campo'=>'th_cardNo','dato'=>$CardNom),
+                                                array('campo'=>'th_card_virtual','dato'=>'1'),
+                                                array('campo'=>'th_card_nombre','dato'=>$nombre_completo),
+                                            );
+                        $this->card->insertar($dataCardInsert);
+                        $cards = $this->card->where("th_per_id", $idPerson)->listar();
+
+                }
+            }
+
 
 
             //guarda en base de datos

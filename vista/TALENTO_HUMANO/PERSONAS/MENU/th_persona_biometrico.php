@@ -182,11 +182,11 @@
                             <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill"
                                 data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home"
                                 aria-selected="true">Tarjeta / card</button>
-                            <button class="nav-link disabled" id="v-pills-profile-tab" data-bs-toggle="pill"
+                            <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill"
                                 data-bs-target="#v-pills-profile" type="button" role="tab"
                                 aria-controls="v-pills-profile" aria-selected="false">Huella digital /
                                 Finger</button>
-                            <button class="nav-link disabled" id="v-pills-messages-tab" data-bs-toggle="pill"
+                            <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill"
                                 data-bs-target="#v-pills-messages" type="button" role="tab"
                                 aria-controls="v-pills-messages" aria-selected="false">Facial / Face</button>
                         </div>
@@ -352,7 +352,7 @@
             <!-- Modal body -->
             <div class="modal-body">
                 <div class="row text-center">
-                    <div class="col-sm-12">
+                    <div class="col-sm-12 d-none" id="pnl_tarjetas_registradas">
                         <div class="input-group input-group-sm"> <span class="input-group-text"><b>Tarjeta
                                     Asociada</b></span>
                             <select class="form-select form-select-sm" id="ddl_tarjetas">
@@ -426,7 +426,7 @@
             <!-- Modal body -->
             <div class="modal-body">
                 <div class="row text-center">
-                    <div class="col-sm-12">
+                    <div class="col-sm-12 d-none" id="pnl_facial_registradas">
                         <div class="input-group input-group-sm"> <span class="input-group-text"><b>Tarjeta
                                     Asociada</b></span>
                             <select class="form-select form-select-sm" id="ddl_tarjetas_facial">
