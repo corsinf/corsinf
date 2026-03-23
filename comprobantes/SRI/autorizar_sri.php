@@ -29,6 +29,8 @@ class autorizacion_sri
 	private $linkRecepcion;
 	private $JDK8;
 	// Puedes generar una diferente usando la funcion $getIV()
+
+	private $tipo_retencion;
 	
 	function __construct()
 	{
@@ -36,7 +38,25 @@ class autorizacion_sri
 		$this->conn = new db();
 		$this->SRI = new linkSRI();
 		$this->JDK8 = escapeshellarg("C:\\Program Files\\Java\\jdk-1.8\\bin\\");
+		$this->tipo_retencion();
 		// $this->JDK8 = "";
+	}
+
+	function tipo_retencion()
+	{
+		$ruta_carpeta = dirname(__DIR__).'/SRI/Tipo_Concepto_Retencion.txt';
+		// print_r($ruta_carpeta);die();
+		$fp = fopen($ruta_carpeta, "r");
+		$tr = array();
+		$num = 0;
+		while(!feof($fp)) 
+		{
+			$linea = fgets($fp);
+			$linea = str_replace('"','',$linea);
+			$ln = explode('	', $linea);
+			$this->tipo_retencion[] = $ln;
+		}                                         
+
 	}
 
 
