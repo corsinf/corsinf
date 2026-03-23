@@ -1,17 +1,12 @@
 <?php
+require_once(dirname(__DIR__, 1) . '/helpers/helper_roles_no_concurrentes.php');
+
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
-$NO_CONCURENTE_TABLA = $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
-$NO_CONCURENTE_CAMPO_ID = $_SESSION['INICIO']['NO_CONCURENTE'];
-$ID_PERSONA = $_SESSION['INICIO']['ID_PERSONA'] ?? -1;
+$link_edicion = obtener_link_edicion();
 
+validar_acceso_persona($_GET['id_persona'] ?? '');
 
-$link_edicion = "#";
-if ($ID_PERSONA > 0) {
-    $link_edicion = "../vista/inicio.php?mod=$modulo_sistema&acc=th_registrar_personas&id_persona=$ID_PERSONA&id_postulante=postulante&_origen=nomina&_persona_nomina=true";
-} else if($NO_CONCURENTE_TABLA == "_talentoh.th_postulantes") {
-    $link_edicion = "../vista/inicio.php?mod=" . $modulo_sistema . "&acc=th_informacion_personal&id_postulante=" . $NO_CONCURENTE_CAMPO_ID;
-}
 
 ?>
 

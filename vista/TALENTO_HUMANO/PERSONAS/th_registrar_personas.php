@@ -1,6 +1,7 @@
 <?php
+require_once(dirname(__DIR__, 3) . '/helpers/helper_roles_no_concurrentes.php');
+
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
-$redireccionar_vista = 'th_personas';
 
 $id_persona = '';
 
@@ -14,30 +15,13 @@ if (isset($_GET['id_postulante'])) {
     $id_postulante = $_GET['id_postulante'];
 }
 
-if (isset($_GET['_origen']) && $_GET['_origen'] == 'nomina') {
-    $redireccionar_vista = 'th_personas_nomina';
-}
+$link_edicion = obtener_link_edicion();
+$html_disabled = html_disabled();
+$redireccionar_vista = obtener_redireccion();
+$es_restringido = es_restringido();
 
-if ($_SESSION['INICIO']['ID_PERSONA'] > 0) {
-    $redireccionar_vista = "th_registrar_personas&id_persona=$id_persona&id_postulante=$id_postulante&_origen=nomina&_persona_nomina=true";
-}
 
-$roles_restringidos = ['EMPLEADOS', 'POSTULANTES'];
-$tipo_usuario = strtoupper($_SESSION['INICIO']['TIPO']);
-$es_restringido = in_array($tipo_usuario, $roles_restringidos);
-
-// Esta variable sirve para CUALQUIER input, select o button
-$html_disabled = $es_restringido ? "disabled" : "";
-
-/* Validar que sea el usuario correspondiente ******************************************** */
-
-if ($_SESSION['INICIO']['ID_PERSONA'] > 0) {
-    if ($_SESSION['INICIO']['ID_PERSONA'] != $id_persona && $id_persona != '') {
-        echo "<script>location.href = 'inicio.php?acc=pagina_error';</script>";
-        exit;
-    }
-}
-
+validar_acceso_persona($_GET['id_persona'] ?? '');
 
 ?>
 
