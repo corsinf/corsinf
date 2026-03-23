@@ -1403,8 +1403,8 @@ class th_personasC
             $where = array(
                 array('campo' => 'th_per_id', 'dato' => $parametros['per_id'])
             );
-
-            $resultado = $this->modelo->editar($datos, $where);
+            $this->modelo->editar($datos, $where);
+            $resultado = $parametros['per_id'];
 
             $datos_visitante = [
                 ['campo' => 'th_per_id',            'dato' => $parametros['per_id']],

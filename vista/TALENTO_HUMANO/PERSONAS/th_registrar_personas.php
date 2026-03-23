@@ -315,14 +315,14 @@ validar_acceso_persona($_GET['id_persona'] ?? '');
             <?php } else if ($redireccionar_vista == 'th_personas_nomina') { ?>
                 busqueda = 'nomina';
             <?php } ?>
-            var parametrosLogCorreos = {
+            var parametrosLogCorreosActualizar = {
                 enviar_credenciales: enviarCred ? 1 : 0,
                 asunto: asunto,
                 descripcion: descripcion,
                 per_id: '<?= $id_persona ? $id_persona : '' ?>',
                 personas: busqueda,
             };
-            enviar_Mail_Persona(parametrosLogCorreos);
+            enviar_Mail_Persona(parametrosLogCorreosActualizar);
             $modal.modal('hide');
         };
 
@@ -335,7 +335,7 @@ validar_acceso_persona($_GET['id_persona'] ?? '');
         }
 
 
-        function enviar_Mail_Persona(parametrosLogCorreos) {
+        function enviar_Mail_Persona(parametrosLogCorreosActualizar) {
 
             var correo = $('#txt_correo').val();
             console.log(correo);
@@ -370,10 +370,6 @@ validar_acceso_persona($_GET['id_persona'] ?? '');
                 });
                 return;
             }
-
-
-
-
 
             $.ajax({
                 data: {
@@ -1007,7 +1003,7 @@ validar_acceso_persona($_GET['id_persona'] ?? '');
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="bx bx-user-plus me-2 text-primary"></i>
-                    Nueva Persona
+                    Editar Persona
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>

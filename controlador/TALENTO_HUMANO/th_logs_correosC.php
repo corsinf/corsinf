@@ -184,7 +184,7 @@ class th_logs_correosC
                     }
                     unset($persona);
                 }
-            } else  if ($parametros['personas'] == 'visitantes' || $parametros['personas'] == 'persona') {
+            } else  if ($parametros['personas'] == 'visitantes') {
                 // ── Flujo original para envíos individuales (fuera de nómina) ─
                 $personas_correos = $this->personas->listar_visitantes($per_id);
 
