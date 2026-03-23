@@ -333,7 +333,7 @@ validar_acceso_persona($_GET['id_persona'] ?? '');
             $('#err_correo_per').text('');
             $('#modal_nuevo_persona').modal('show');
         }
-
+ 
 
         function enviar_Mail_Persona(parametrosLogCorreos) {
 
