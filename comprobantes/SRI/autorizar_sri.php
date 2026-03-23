@@ -3299,6 +3299,143 @@ class autorizacion_sri
 		}
     }
 
+    function recuperar_xml_a_factura($documento)
+	{
+
+		$respuesta = 1;
+		//busco el archivo xml
+		$ruta_G = dirname(__DIR__,2).'/TEMP/XMLS';
+		// print_r($ruta_G);die();
+		
+		$texto = file_get_contents($ruta_G.'/'.$documento);
+		
+		$texto = str_replace('EN PROCESO','nulo', $texto,$remplazado);
+		if($remplazado>0)
+		{
+			return -2;
+		}
+
+		$xml = simplexml_load_string($texto,"SimpleXMLElement",LIBXML_NOCDATA);
+		$objJsonDocument = json_encode($xml);
+		$documentos = json_decode($objJsonDocument, TRUE);
+
+
+		$xml = simplexml_load_string($documentos['comprobante'],"SimpleXMLElement",LIBXML_NOCDATA);
+		$objJsonDocument = json_encode($xml);
+		$documentos = json_decode($objJsonDocument, TRUE);
+
+
+		// print_r($documentos);die();
+		//-----------------------------------cuando es retencion-----------------
+		if(isset($documentos['infoCompRetencion'])){
+			$lineas = array();
+			$encontrado = 0;
+			$tributaria = $documentos['infoTributaria'];
+			$cabecera = $documentos['infoCompRetencion'];
+			if(isset($documentos['impuestos']['impuesto']))
+			{
+				$detalle = $documentos['impuestos']['impuesto'];
+			}
+			if(isset($documentos['docsSustento']['docSustento']['retenciones']['retencion']))
+			{
+				$detalle = $documentos['docsSustento']['docSustento']['retenciones']['retencion'];
+			}
+
+			if(isset($detalle['codigo']))
+			{
+				$detalle = array($detalle);
+			}
+			// print_r($documentos['impuestos']['impuesto']);
+	// print_r($documentos);die();
+			foreach ($detalle as $key => $value) {
+				// print_r($value);
+				// die();
+				foreach ($this->tipo_retencion as $key2 => $value2) {
+					// print_r($value['codigoRetencion']);
+					if(isset($value2[2]))
+					{
+						if(isset($value['codigoRetencion']) && isset($value['porcentajeRetener']) && $value['codigoRetencion']==$value2[2] && intval($value['porcentajeRetener'])==$value2[1])
+						{
+							$lineas[] = array('Tipo'=>'R','Autorizacion'=>$tributaria['claveAcceso'],'detalle'=>$value2[0],'baseImponible'=>$value['baseImponible'],'Porcentaje'=>$value['porcentajeRetener'],'valor'=>$value['valorRetenido']);
+							$encontrado = 1;
+							break;
+						}
+					}
+				}
+				// print_r($encontrado);
+				if($encontrado==0)
+				{
+					// print_r('expression');die();
+					if(isset($value['codigoRetencion']) && $value['codigoRetencion']==1)
+					{
+						$lineas[] = array('Tipo'=>'R','Autorizacion'=>$tributaria['claveAcceso'],'detalle'=>'IVA bienes','baseImponible'=>$value['baseImponible'],'Porcentaje'=>$value['porcentajeRetener'],'valor'=>$value['valorRetenido']);
+					}else if(isset($value['codigoRetencion']) && $value['codigoRetencion']==2)
+					{
+						$lineas[] = array('Tipo'=>'R','Autorizacion'=>$tributaria['claveAcceso'],'detalle'=>'IVA Servicios','baseImponible'=>$value['baseImponible'],'Porcentaje'=>$value['porcentajeRetener'],'valor'=>$value['valorRetenido']);
+					}
+				}
+				$encontrado = 0;
+			}
+
+			
+			return array('lineas' => $lineas,'cabecera'=>$cabecera,"tributatio"=>$tributaria);
+		}
+
+		//-----------------------------------cuando es factura---------------------------
+		if(isset($documentos['infoFactura']))
+		{
+			$tributaria = $documentos['infoTributaria'];
+			$cabecera = $documentos['infoFactura'];
+			$detalle = $documentos['detalles']['detalle'];
+			if(isset($detalle['codigoPrincipal']))
+			{
+				$detalle = $documentos['detalles'];
+			}
+			
+			$lineas = array();
+			foreach ($detalle as $key => $value) {
+				// print_r($value);die();
+				if(isset($value['impuestos']['impuesto']))
+				{
+
+					$iva = $value['impuestos']['impuesto']['tarifa'];
+					$valoriva = $value['impuestos']['impuesto']['valor']; 
+					$lineas[] = array('Tipo'=>'F','Autorizacion'=>$tributaria['claveAcceso'],'detalle'=>$value['descripcion'],'cantidad'=>$value['cantidad'],'pvp'=>$value['precioUnitario'],'descuento'=>$value['descuento'],'subtotal'=>$value['precioTotalSinImpuesto'],'iva'=>$iva,'iva_v'=>$valoriva,'Total'=>$value['precioTotalSinImpuesto']+$valoriva);
+				}
+			}
+			
+			return array('lineas' => $lineas,'cabecera'=>$cabecera,"tributatio"=>$tributaria);
+		}
+
+		//----------------------------cuando es nota de credito--------------------
+		if(isset($documentos['infoNotaCredito']))
+		{
+			$tributaria = $documentos['infoTributaria'];
+			$cabecera = $documentos['infoNotaCredito'];
+			$detalle = $documentos['detalles']['detalle'];
+			if(isset($detalle['codigoInterno']))
+			{
+				$detalle = $documentos['detalles'];
+			}
+			// print_r($detalle);die();
+			$lineas = array();
+			foreach ($detalle as $key => $value) {
+				// print_r($value);die();
+				if(isset($value['impuestos']['impuesto']))
+				{
+
+					$iva = $value['impuestos']['impuesto']['tarifa'];
+					$valoriva = $value['impuestos']['impuesto']['valor']; 
+					$lineas[] = array('Tipo'=>'NC','Autorizacion'=>$tributaria['claveAcceso'],'detalle'=>$value['descripcion'],'cantidad'=>$value['cantidad'],'pvp'=>$value['precioUnitario'],'descuento'=>$value['descuento'],'subtotal'=>$value['precioTotalSinImpuesto'],'iva'=>$iva,'iva_v'=>$valoriva,'Total'=>$value['precioTotalSinImpuesto']+$valoriva);
+				}
+			}
+			// print_r($lineas);die();
+			return array('lineas' => $lineas,'cabecera'=>$cabecera,"tributatio"=>$tributaria);
+
+		}
+		
+	}
+
 }
 
 ?>
