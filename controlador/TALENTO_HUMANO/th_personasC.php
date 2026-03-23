@@ -259,7 +259,6 @@ class th_personasC
         $this->VISITANTE = new VISITANTESM();
 
         $this->secuenciales = new secuencialesM();
-
     }
 
     function listar($id = '')
@@ -726,7 +725,7 @@ class th_personasC
             array('campo' => 'th_per_id', 'dato' => $idPerson),
             array('campo' => 'th_card_creacion', 'dato' => date('Y-m-d')),
             array('campo' => 'th_card_nombre', 'dato' => $nombre),
-            array('campo' => 'th_card_virtual', 'dato' =>'0'),
+            array('campo' => 'th_card_virtual', 'dato' => '0'),
         );
         $datos = $this->card->insertar($datosBio);
         return $datos;
@@ -808,29 +807,30 @@ class th_personasC
         if (count($cards) == 0) {
             $cardNo = '';
 
-            if(isset($persona[0]['cedula']) && $persona[0]['cedula']!=''){$cardNo = $persona[0]['cedula'];}
-            else{
+            if (isset($persona[0]['cedula']) && $persona[0]['cedula'] != '') {
+                $cardNo = $persona[0]['cedula'];
+            } else {
                 $tarjeta = $this->secuenciales->validar_mas_series('CardNo');
                 // print_r($tarjeta);die();
-                $datosCardEdit = array(array('campo'=>'NUMERO','dato'=>($tarjeta[0]['NUMERO']+1)));
-                $datosCardWhere = array(array('campo'=>'ID_SECUENCIALES','dato'=>$tarjeta[0]['ID_SECUENCIALES']));
-                $this->secuenciales->editar($datosCardEdit,$datosCardWhere);
+                $datosCardEdit = array(array('campo' => 'NUMERO', 'dato' => ($tarjeta[0]['NUMERO'] + 1)));
+                $datosCardWhere = array(array('campo' => 'ID_SECUENCIALES', 'dato' => $tarjeta[0]['ID_SECUENCIALES']));
+                $this->secuenciales->editar($datosCardEdit, $datosCardWhere);
                 $cardNo = $tarjeta[0]['NUMERO'];
             }
 
-            $dataCardInsert = array(array('campo'=>'th_per_id','dato'=>$persona[0]['_id']),
-                                    array('campo'=>'th_cardNo','dato'=>$cardNo),
-                                    array('campo'=>'th_card_virtual','dato'=>'1'),
-                                    array('campo'=>'th_card_nombre','dato'=>$nombre_completo),
-                                );
+            $dataCardInsert = array(
+                array('campo' => 'th_per_id', 'dato' => $persona[0]['_id']),
+                array('campo' => 'th_cardNo', 'dato' => $cardNo),
+                array('campo' => 'th_card_virtual', 'dato' => '1'),
+                array('campo' => 'th_card_nombre', 'dato' => $nombre_completo),
+            );
             $this->card->insertar($dataCardInsert);
 
 
-        $cards = $this->card->where("th_per_id", $parametros['idPerson'])->listar();
-
+            $cards = $this->card->where("th_per_id", $parametros['idPerson'])->listar();
         } //si no tiene tarjetas registradas no puede seguir avanzando
 
-// die();
+        // die();
         $dllPath = $this->sdk_patch . '3 ' . $dispositivo['host'] . ' ' . $dispositivo['usuario'] . ' ' . $dispositivo['port'] . ' ' . $dispositivo['pass'] . ' ' . $nombre . 'CapFinger' . $parametros['dedo'] . ' ' . $patch;
         $command = "dotnet $dllPath";
 
@@ -966,36 +966,38 @@ class th_personasC
             }
 
             $persona = $this->modelo->where('th_per_id', $idPerson)->listar();
-       
+
             $nombre_completo =  $persona[0]['primer_apellido'] . " " . $persona[0]['segundo_apellido'] . " " . $persona[0]['primer_nombre'] . " " . $persona[0]['segundo_nombre'];
 
 
             // print_r($CardNom);die();
-            if($CardNom=='' || $CardNom==null  || $CardNom=='null' ){
+            if ($CardNom == '' || $CardNom == null  || $CardNom == 'null') {
                 // print_r('expression');die();
-                $cardReg = $this->card->where('th_per_id',$idPerson)->listar();
-                if(count($cardReg)>0){$CardNom = $cardReg[0]['th_cardNo'];}
-                else{
+                $cardReg = $this->card->where('th_per_id', $idPerson)->listar();
+                if (count($cardReg) > 0) {
+                    $CardNom = $cardReg[0]['th_cardNo'];
+                } else {
                     $CardNom = '';
 
-                        if(isset($persona[0]['cedula']) && $persona[0]['cedula']!=''){$CardNom = $persona[0]['cedula'];}
-                        else{
-                            $tarjeta = $this->secuenciales->validar_mas_series('CardNo');
-                            // print_r($tarjeta);die();
-                            $datosCardEdit = array(array('campo'=>'NUMERO','dato'=>($tarjeta[0]['NUMERO']+1)));
-                            $datosCardWhere = array(array('campo'=>'ID_SECUENCIALES','dato'=>$tarjeta[0]['ID_SECUENCIALES']));
-                            $this->secuenciales->editar($datosCardEdit,$datosCardWhere);
-                            $CardNom = $tarjeta[0]['NUMERO'];
-                        }
+                    if (isset($persona[0]['cedula']) && $persona[0]['cedula'] != '') {
+                        $CardNom = $persona[0]['cedula'];
+                    } else {
+                        $tarjeta = $this->secuenciales->validar_mas_series('CardNo');
+                        // print_r($tarjeta);die();
+                        $datosCardEdit = array(array('campo' => 'NUMERO', 'dato' => ($tarjeta[0]['NUMERO'] + 1)));
+                        $datosCardWhere = array(array('campo' => 'ID_SECUENCIALES', 'dato' => $tarjeta[0]['ID_SECUENCIALES']));
+                        $this->secuenciales->editar($datosCardEdit, $datosCardWhere);
+                        $CardNom = $tarjeta[0]['NUMERO'];
+                    }
 
-                        $dataCardInsert = array(array('campo'=>'th_per_id','dato'=>$persona[0]['_id']),
-                                                array('campo'=>'th_cardNo','dato'=>$CardNom),
-                                                array('campo'=>'th_card_virtual','dato'=>'1'),
-                                                array('campo'=>'th_card_nombre','dato'=>$nombre_completo),
-                                            );
-                        $this->card->insertar($dataCardInsert);
-                        $cards = $this->card->where("th_per_id", $idPerson)->listar();
-
+                    $dataCardInsert = array(
+                        array('campo' => 'th_per_id', 'dato' => $persona[0]['_id']),
+                        array('campo' => 'th_cardNo', 'dato' => $CardNom),
+                        array('campo' => 'th_card_virtual', 'dato' => '1'),
+                        array('campo' => 'th_card_nombre', 'dato' => $nombre_completo),
+                    );
+                    $this->card->insertar($dataCardInsert);
+                    $cards = $this->card->where("th_per_id", $idPerson)->listar();
                 }
             }
 
@@ -1109,31 +1111,33 @@ class th_personasC
                 $nombre = $file['huella']['name'];
             }
 
-             if($CardNom=='' || $CardNom==null  || $CardNom=='null' ){
+            if ($CardNom == '' || $CardNom == null  || $CardNom == 'null') {
                 // print_r('expression');die();
-                $cardReg = $this->card->where('th_per_id',$idPerson)->listar();
-                if(count($cardReg)>0){$CardNom = $cardReg[0]['th_cardNo'];}
-                else{
+                $cardReg = $this->card->where('th_per_id', $idPerson)->listar();
+                if (count($cardReg) > 0) {
+                    $CardNom = $cardReg[0]['th_cardNo'];
+                } else {
                     $CardNom = '';
 
-                        if(isset($persona[0]['cedula']) && $persona[0]['cedula']!=''){$CardNom = $persona[0]['cedula'];}
-                        else{
-                            $tarjeta = $this->secuenciales->validar_mas_series('CardNo');
-                            // print_r($tarjeta);die();
-                            $datosCardEdit = array(array('campo'=>'NUMERO','dato'=>($tarjeta[0]['NUMERO']+1)));
-                            $datosCardWhere = array(array('campo'=>'ID_SECUENCIALES','dato'=>$tarjeta[0]['ID_SECUENCIALES']));
-                            $this->secuenciales->editar($datosCardEdit,$datosCardWhere);
-                            $CardNom = $tarjeta[0]['NUMERO'];
-                        }
+                    if (isset($persona[0]['cedula']) && $persona[0]['cedula'] != '') {
+                        $CardNom = $persona[0]['cedula'];
+                    } else {
+                        $tarjeta = $this->secuenciales->validar_mas_series('CardNo');
+                        // print_r($tarjeta);die();
+                        $datosCardEdit = array(array('campo' => 'NUMERO', 'dato' => ($tarjeta[0]['NUMERO'] + 1)));
+                        $datosCardWhere = array(array('campo' => 'ID_SECUENCIALES', 'dato' => $tarjeta[0]['ID_SECUENCIALES']));
+                        $this->secuenciales->editar($datosCardEdit, $datosCardWhere);
+                        $CardNom = $tarjeta[0]['NUMERO'];
+                    }
 
-                        $dataCardInsert = array(array('campo'=>'th_per_id','dato'=>$persona[0]['_id']),
-                                                array('campo'=>'th_cardNo','dato'=>$CardNom),
-                                                array('campo'=>'th_card_virtual','dato'=>'1'),
-                                                array('campo'=>'th_card_nombre','dato'=>$nombre_completo),
-                                            );
-                        $this->card->insertar($dataCardInsert);
-                        $cards = $this->card->where("th_per_id", $idPerson)->listar();
-
+                    $dataCardInsert = array(
+                        array('campo' => 'th_per_id', 'dato' => $persona[0]['_id']),
+                        array('campo' => 'th_cardNo', 'dato' => $CardNom),
+                        array('campo' => 'th_card_virtual', 'dato' => '1'),
+                        array('campo' => 'th_card_nombre', 'dato' => $nombre_completo),
+                    );
+                    $this->card->insertar($dataCardInsert);
+                    $cards = $this->card->where("th_per_id", $idPerson)->listar();
                 }
             }
 
@@ -1351,6 +1355,7 @@ class th_personasC
         $cedula = trim($parametros['cedula'] ?? '');
         $correo = trim($parametros['correo'] ?? '');
 
+
         // ── Validar duplicados ─────────────────────────────────────────
         $cedula_duplicada = false;
         $correo_duplicado = false;
@@ -1389,21 +1394,40 @@ class th_personasC
         if ($cedula_duplicada)                      return -2;
         if ($correo_duplicado)                      return -3;
 
-        $datos = [
-            ['campo' => 'th_per_cedula', 'dato' => $cedula],
-            ['campo' => 'th_per_correo', 'dato' => $correo],
-        ];
+        if ($parametros['per_id'] > 0) {
+            $datos = [
+                ['campo' => 'th_per_cedula', 'dato' => $cedula],
+                ['campo' => 'th_per_correo', 'dato' => $correo],
+            ];
 
-        $per_id = $this->modelo->insertar_id($datos);
+            $where = array(
+                array('campo' => 'th_per_id', 'dato' => $parametros['per_id'])
+            );
 
-        if ($per_id > 0) {
+            $resultado = $this->modelo->editar($datos, $where);
+
             $datos_visitante = [
-                ['campo' => 'th_per_id',            'dato' => $per_id],
-                ['campo' => 'NICK',                 'dato' => $correo],  
+                ['campo' => 'th_per_id',            'dato' => $parametros['per_id']],
+                ['campo' => 'NICK',                 'dato' => $correo],
             ];
             $this->VISITANTE->insertar($datos_visitante);
+        } else {
+
+            $datos = [
+                ['campo' => 'th_per_cedula', 'dato' => $cedula],
+                ['campo' => 'th_per_correo', 'dato' => $correo],
+            ];
+            $resultado = $this->modelo->insertar_id($datos);
+
+            if ($resultado > 0) {
+                $datos_visitante = [
+                    ['campo' => 'th_per_id',            'dato' => $resultado],
+                    ['campo' => 'NICK',                 'dato' => $correo],
+                ];
+                $this->VISITANTE->insertar($datos_visitante);
+            }
         }
 
-        return $per_id;
+        return $resultado;
     }
 }

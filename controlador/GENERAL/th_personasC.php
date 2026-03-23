@@ -5,6 +5,8 @@ require_once(dirname(__DIR__, 2) . '/modelo/GENERAL/th_personasM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/POSTULANTES/th_postulantesM.php');
 
 
+
+
 $controlador = new th_personasC();
 
 if (isset($_GET['listar'])) {
@@ -161,14 +163,14 @@ class th_personasC
             // ══════════════════════════════════════════════
             if (!empty($correo)) {
 
-                $this->modelo->where('th_per_correo', $correo);
+                $this->modelo->where('th_per_correo', $correo)->where('th_per_estado', '1');
                 if ($id_persona) $this->modelo->where('th_per_id !', $id_persona);
                 if (!empty($this->modelo->listar())) {
                     $correo_duplicado = true;
                 }
 
                 if (!$correo_duplicado) {
-                    $this->th_postulantes->where('th_pos_correo', $correo);
+                    $this->th_postulantes->where('th_pos_correo', $correo)->where('th_pos_estado', '1');
                     if ($th_pos_id_vinculado) $this->th_postulantes->where('th_pos_id !', $th_pos_id_vinculado);
                     if (!empty($this->th_postulantes->listar())) {
                         $correo_duplicado = true;
@@ -182,8 +184,6 @@ class th_personasC
             if ($cedula_duplicada && $correo_duplicado) return -4;
             if ($cedula_duplicada)                      return -2;
             if ($correo_duplicado)                      return -3;
-
-
 
 
             // Array de datos - SOLO CAMPOS QUE EXISTEN EN LA BD
@@ -235,25 +235,6 @@ class th_personasC
             // Verificar si es inserción o edición
             if (empty($parametros['_id'])) {
 
-                // === INSERCIÓN ===
-                $existe_cedula = $this->modelo
-                    ->where('th_per_cedula', trim($cedula))
-                    ->where('th_per_estado', '1')
-                    ->listar();
-
-                if (count($existe_cedula) > 0) {
-                    return -2; // Cédula duplicada
-                }
-
-                $existe_correo = $this->modelo
-                    ->where('th_per_correo', trim($correo))
-                    ->where('th_per_estado', '1')
-                    ->listar();
-
-                if (count($existe_correo) > 0) {
-                    return -3; // Correo duplicado
-                }
-
                 $datos[] = array(
                     'campo' => 'th_per_fecha_creacion',
                     'dato' => date('Y-m-d H:i:s')
@@ -262,30 +243,6 @@ class th_personasC
                 $resultado = $this->modelo->insertar($datos);
                 return $resultado;
             } else {
-
-                // === EDICIÓN ===
-
-                // Validar cédula (excluyendo el registro actual)
-                $existe_cedula = $this->modelo
-                    ->where('th_per_cedula', trim($cedula))
-                    ->where('th_per_estado', '1')
-                    ->where('th_per_id !', $parametros['_id'])
-                    ->listar();
-
-                if (count($existe_cedula) > 0) {
-                    return -2; // Cédula ya pertenece a otro usuario
-                }
-
-                // Validar correo (excluyendo el registro actual)
-                $existe_correo = $this->modelo
-                    ->where('th_per_correo', trim($correo))
-                    ->where('th_per_estado', '1')
-                    ->where('th_per_id !', $parametros['_id'])
-                    ->listar();
-
-                if (count($existe_correo) > 0) {
-                    return -3; // Correo ya pertenece a otro usuario
-                }
 
                 $where = array(
                     array('campo' => 'th_per_id', 'dato' => $parametros['_id'])

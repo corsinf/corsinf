@@ -693,7 +693,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             data: {
                 parametros: {
                     cedula: cedula,
-                    correo: correo
+                    correo: correo,
+                    per_id: 0
                 }
             },
             success: function(res) {
