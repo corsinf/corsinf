@@ -333,11 +333,17 @@ function listaTarjetas()
 
         $('#tbl_cards').on('xhr.dt', function (e, settings, json, xhr) {
         if (json && json.length > 0) {
-            $('#v-pills-profile-tab').removeClass('disabled')
-            $('#v-pills-messages-tab').removeClass('disabled')
+            // $('#v-pills-profile-tab').removeClass('disabled')
+            // $('#v-pills-messages-tab').removeClass('disabled')
+            $('#pnl_tarjetas_registradas').removeClass('d-none');
+            $('#pnl_facial_registradas').removeClass('d-none');
+            
         } else {
-            $('#v-pills-profile-tab').addClass('disabled')
-            $('#v-pills-messages-tab').addClass('disabled')
+            // $('#v-pills-profile-tab').addClass('disabled')
+            // $('#v-pills-messages-tab').addClass('disabled')
+            $('#pnl_tarjetas_registradas').addClass('d-none');
+            $('#pnl_facial_registradas').addClass('d-none');
+            
         }
     });
 
