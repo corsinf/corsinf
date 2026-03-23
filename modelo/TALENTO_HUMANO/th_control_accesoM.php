@@ -42,6 +42,7 @@ class th_control_accesoM extends BaseModel
         $datos = $this->where('th_acc_tipo_origen', 'BIO')->listar(10, true);
         return $datos;
     }
+    
     function buscarAccesoPorPersonaYFecha($idPersona, $fecha)
     {
         $idPersona = intval($idPersona);
@@ -77,17 +78,19 @@ class th_control_accesoM extends BaseModel
         return $datos;
     }
 
-    function actualizar_min_justificacion($min,$id,$fecha,$periodo="")
+    function actualizar_min_justificacion($min, $id, $fecha, $periodo = "")
     {
 
         $table = "th_control_acceso";
-        if($periodo!=''){ $table = "th_control_acceso_".$periodo; }
+        if ($periodo != '') {
+            $table = "th_control_acceso_" . $periodo;
+        }
 
         $sql =
-            "UPDATE _asistencias.".$table."
-            SET th_acc_justificacion_min = ".$min."
-            WHERE th_acc_fecha = '".$fecha."'
-            AND th_per_id = '".$id."'";
+            "UPDATE _asistencias." . $table . "
+            SET th_acc_justificacion_min = " . $min . "
+            WHERE th_acc_fecha = '" . $fecha . "'
+            AND th_per_id = '" . $id . "'";
 
         // print_r($sql); exit(); die();
 
@@ -97,16 +100,20 @@ class th_control_accesoM extends BaseModel
         return $datos;
     }
 
-    function delete_registros($id=false,$periodo="")
+    function delete_registros($id = false, $periodo = "")
     {
 
         $table = "th_control_acceso";
-        if($periodo!=''){ $table = "th_control_acceso_".$periodo; }
+        if ($periodo != '') {
+            $table = "th_control_acceso_" . $periodo;
+        }
 
         $sql =
-            "DELETE FROM _asistencias.".$table."
+            "DELETE FROM _asistencias." . $table . "
             WHERE 1=1 ";
-            if($id){$sql.=" AND th_per_id = '".$id."'";}
+        if ($id) {
+            $sql .= " AND th_per_id = '" . $id . "'";
+        }
 
         // print_r($sql); exit(); die();
 
@@ -117,15 +124,20 @@ class th_control_accesoM extends BaseModel
     }
 
 
-   function listar_personalizado($fecha_ini = '', $fecha_final = '', $per_id = '')
-{
-    // TOP 1000 solo cuando no hay ningún filtro
-    $limit = ($fecha_ini == '' && $per_id == '') ? "TOP 1000" : "";
+    function listar_personalizado($fecha_ini = '', $fecha_final = '', $per_id = '')
+    {
+        // TOP 1000 solo cuando no hay ningún filtro
+        $limit = ($fecha_ini == '' && $per_id == '') ? "TOP 1000" : "";
 
-    $sql =
-        "SELECT $limit
+        $sql =
+            "SELECT $limit
             ca.th_acc_fecha_hora AS fecha,
-            p.th_per_codigo_externo_1 AS nombre,
+            CONCAT(
+                COALESCE(p.th_per_primer_nombre,''), ' ',
+                COALESCE(p.th_per_segundo_nombre,''), ' ',
+                COALESCE(p.th_per_primer_apellido,''), ' ',
+                COALESCE(p.th_per_segundo_apellido,'')
+            ) AS nombre,
             d.th_dis_nombre         AS dispositivo_nombre,
             ca.th_per_id            AS per_id
         FROM th_control_acceso AS ca
@@ -136,28 +148,30 @@ class th_control_accesoM extends BaseModel
            AND d.th_dis_port = TRY_CONVERT(int, NULLIF(ca.th_acc_puerto, '.'))
         WHERE 1=1";
 
-    if ($fecha_ini != '') {
-        $sql .= " AND CONVERT(date, ca.th_acc_fecha_hora) BETWEEN '$fecha_ini' AND '$fecha_final'";
+        if ($fecha_ini != '') {
+            $sql .= " AND CONVERT(date, ca.th_acc_fecha_hora) BETWEEN '$fecha_ini' AND '$fecha_final'";
+        }
+
+        if ($per_id != '') {
+            $sql .= " AND ca.th_per_id = " . intval($per_id);
+        }
+
+        $sql .= " ORDER BY ca.th_acc_fecha_hora DESC;";
+
+        return $this->db->datos($sql, false, true);
     }
 
-    if ($per_id != '') {
-        $sql .= " AND ca.th_per_id = " . intval($per_id);
-    }
-
-    $sql .= " ORDER BY ca.th_acc_fecha_hora DESC;";
-
-    return $this->db->datos($sql, false, true);
-}
-    function listar_marcaciones($tabla = false,$fecha_ini = '', $fecha_final = '',$id_usuario=false,$id_departamento=false,$ordenar='sin_ordenar')
+    function listar_marcaciones($tabla = false, $fecha_ini = '', $fecha_final = '', $id_usuario = false, $id_departamento = false, $ordenar = 'sin_ordenar')
     {
         $tabla_search = 'th_control_acceso';
-        if($tabla) {$tabla_search  = $tabla ;} 
+        if ($tabla) {
+            $tabla_search  = $tabla;
+        }
 
         $limit = '';
         if ($fecha_ini == '') {
             $limit = "TOP 1000";
         }
-
 
         $sql = "
                 WITH CTE AS (
@@ -189,42 +203,43 @@ class th_control_accesoM extends BaseModel
                             PARTITION BY ca.th_per_id,ca.th_acc_fecha
                             ORDER BY ca.th_acc_id DESC
                         ) AS rn
-                    FROM _asistencias.".$tabla." AS ca
+                    FROM _asistencias." . $tabla . " AS ca
                     LEFT JOIN _talentoh.th_personas AS p ON p.th_per_id = ca.th_per_id
                     LEFT JOIN _talentoh.th_personas_departamentos AS pd ON p.th_per_id = pd.th_per_id
                     LEFT JOIN _talentoh.th_departamentos AS de ON pd.th_dep_id = de.th_dep_id
                     LEFT JOIN _talentoh.th_dispositivos AS d ON d.th_dis_host = ca.th_dis_id AND d.th_dis_port = TRY_CONVERT(int, NULLIF(ca.th_acc_puerto, '.')) ";
 
-                    if ($fecha_ini) {
-                    $sql .= "WHERE 
+        if ($fecha_ini) {
+            $sql .= "WHERE 
                             CONVERT(date, ca.th_acc_fecha_hora) BETWEEN '$fecha_ini' AND '$fecha_final'";
-                    }
-                    if($id_usuario)
-                    {
-                        $sql.=" AND ca.th_per_id = '".$id_usuario."' ";
-                    }
-                    if($id_departamento!='todos' && $id_departamento!=' ' && $id_departamento!=''  && $id_departamento!='0')
-                    {
-                        $sql.=" AND de.th_dep_id = '".$id_departamento."'";
-                    }                    
-                    $sql.="
+        }
+
+        if ($id_usuario) {
+            $sql .= " AND ca.th_per_id = '" . $id_usuario . "' ";
+        }
+
+        if ($id_departamento != 'todos' && $id_departamento != ' ' && $id_departamento != ''  && $id_departamento != '0') {
+            $sql .= " AND de.th_dep_id = '" . $id_departamento . "'";
+        }
+
+        $sql .= "
                 )
                 SELECT *
                 FROM CTE
                 WHERE rn = 1
                 ORDER BY idAcc ";
-                $sql.=" DESC;";
+        $sql .= " DESC;";
 
         // print_r($sql);die();
-        $datos = $this->db->datos($sql, false, true,true);
+        $datos = $this->db->datos($sql, false, true, true);
 
         // print_r($datos);die();
         return $datos;
     }
-    
-    function lista_detalle_turnos_x_persona($card=false,$dia=false)
+
+    function lista_detalle_turnos_x_persona($card = false, $dia = false)
     {
-        $sql="SELECT th_pro_id,PH.th_per_id,th_pro_fecha_inicio as 'periodo_ini',th_pro_fecha_fin as 'perido_fin',
+        $sql = "SELECT th_pro_id,PH.th_per_id,th_pro_fecha_inicio as 'periodo_ini',th_pro_fecha_fin as 'perido_fin',
         HO.th_hor_id,PE.th_per_cedula as 'cedula', PE.th_per_nombres_completos,th_card_id,th_cardNo,
         th_tur_hora_entrada as 'entrada_min',th_tur_hora_salida as 'salida_min',
         th_tur_limite_tardanza_in as 'tolerancia_ini',th_tur_limite_tardanza_out as 'tolerancia_fin',
@@ -248,18 +263,17 @@ class th_control_accesoM extends BaseModel
         WHERE PH.th_pro_estado = 1 
         AND HO.th_hor_estado = 1 
         AND PE.th_per_estado = 1 ";
-        if($card)
-        { 
-            $sql.=" AND CA.th_cardNo = '".$card."' ";
+
+        if ($card) {
+            $sql .= " AND CA.th_cardNo = '" . $card . "' ";
         }
-        if($dia)
-        {            
-            $sql.=" AND TH.th_tuh_dia = '".$dia."' ";
+        if ($dia) {
+            $sql .= " AND TH.th_tuh_dia = '" . $dia . "' ";
         }
 
-        $sql.=" UNION ALL ";
+        $sql .= " UNION ALL ";
 
-        $sql.="SELECT th_pro_id,PH.th_per_id,th_pro_fecha_inicio as 'periodo_ini',th_pro_fecha_fin as 'perido_fin',
+        $sql .= "SELECT th_pro_id,PH.th_per_id,th_pro_fecha_inicio as 'periodo_ini',th_pro_fecha_fin as 'perido_fin',
                 HO.th_hor_id,PE.th_per_cedula as 'cedula', PE.th_per_nombres_completos,th_card_id,th_cardNo,
                 th_tur_hora_entrada as 'entrada_min',th_tur_hora_salida as 'salida_min',
                 th_tur_limite_tardanza_in as 'tolerancia_ini',th_tur_limite_tardanza_out as 'tolerancia_fin',
@@ -284,26 +298,22 @@ class th_control_accesoM extends BaseModel
                 WHERE PH.th_pro_estado = 1 
                 AND HO.th_hor_estado = 1 
                 AND PE.th_per_estado = 1 ";
-                if($card)
-                { 
-                    $sql.=" AND CA.th_cardNo = '".$card."' ";
-                }
-                if($dia)
-                {            
-                    $sql.=" AND TH.th_tuh_dia = '".$dia."' ";
-                }
+        if ($card) {
+            $sql .= " AND CA.th_cardNo = '" . $card . "' ";
+        }
+        if ($dia) {
+            $sql .= " AND TH.th_tuh_dia = '" . $dia . "' ";
+        }
 
-                // print_r($sql);die();
+        // print_r($sql);die();
 
-
-        $datos = $this->db->datos($sql, false, true,false);
+        $datos = $this->db->datos($sql, false, true, false);
         return $datos;
-
     }
 
-    function lista_detalle_turnos_x_departamento($card=false,$dia=false)
+    function lista_detalle_turnos_x_departamento($card = false, $dia = false)
     {
-        $sql="SELECT th_pro_id,PH.th_per_id,th_pro_fecha_inicio as 'periodo_ini',th_pro_fecha_fin as 'perido_fin',
+        $sql = "SELECT th_pro_id,PH.th_per_id,th_pro_fecha_inicio as 'periodo_ini',th_pro_fecha_fin as 'perido_fin',
                 HO.th_hor_id,PE.th_per_cedula as 'cedula', PE.th_per_nombres_completos,th_card_id,th_cardNo,
                 th_tur_hora_entrada as 'entrada_min',th_tur_hora_salida as 'salida_min',
                 th_tur_limite_tardanza_in as 'tolerancia_ini',th_tur_limite_tardanza_out as 'tolerancia_fin',
@@ -328,18 +338,14 @@ class th_control_accesoM extends BaseModel
                 WHERE PH.th_pro_estado = 1 
                 AND HO.th_hor_estado = 1 
                 AND PE.th_per_estado = 1 ";
-                if($card)
-                { 
-                    $sql.=" AND CA.th_cardNo = '".$card."' ";
-                }
-                if($dia)
-                {            
-                    $sql.=" AND TH.th_tuh_dia = '".$dia."' ";
-                }
+        if ($card) {
+            $sql .= " AND CA.th_cardNo = '" . $card . "' ";
+        }
+        if ($dia) {
+            $sql .= " AND TH.th_tuh_dia = '" . $dia . "' ";
+        }
 
-        $datos = $this->db->datos($sql, false, true,false);
+        $datos = $this->db->datos($sql, false, true, false);
         return $datos;
-
     }
-
 }
