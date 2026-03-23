@@ -311,18 +311,18 @@ validar_acceso_persona($_GET['id_persona'] ?? '');
             let busqueda = '';
 
             <?php if ($redireccionar_vista == 'th_personas') { ?>
-                busqueda = 'persona';
+                busqueda = 'visitantes';
             <?php } else if ($redireccionar_vista == 'th_personas_nomina') { ?>
                 busqueda = 'nomina';
             <?php } ?>
-            var parametrosLogCorreosActualizar = {
+            var parametrosLogCorreos = {
                 enviar_credenciales: enviarCred ? 1 : 0,
                 asunto: asunto,
                 descripcion: descripcion,
                 per_id: '<?= $id_persona ? $id_persona : '' ?>',
                 personas: busqueda,
             };
-            enviar_Mail_Persona(parametrosLogCorreosActualizar);
+            enviar_Mail_Persona(parametrosLogCorreos);
             $modal.modal('hide');
         };
 
@@ -335,7 +335,7 @@ validar_acceso_persona($_GET['id_persona'] ?? '');
         }
 
 
-        function enviar_Mail_Persona(parametrosLogCorreosActualizar) {
+        function enviar_Mail_Persona(parametrosLogCorreos) {
 
             var correo = $('#txt_correo').val();
             console.log(correo);
