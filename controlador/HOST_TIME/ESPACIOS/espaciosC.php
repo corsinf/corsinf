@@ -1,7 +1,8 @@
 <?php
 date_default_timezone_set('America/Guayaquil');
 
-require_once(dirname(__DIR__, 2) . '/modelo/XPACE_CUBE/espaciosM.php');
+require_once(dirname(__DIR__, 3) . '/modelo/HOST_TIME/ESPACIOS/espaciosM.php');
+
 
 $controlador = new espaciosC();
 
@@ -59,6 +60,9 @@ class espaciosC
         $id_tipo_espacio = isset($parametros['ddl_tipo_espacio']) && $parametros['ddl_tipo_espacio'] !== ''
             ? (int)$parametros['ddl_tipo_espacio']
             : null;
+        $id_numero_piso = isset($parametros['ddl_numero_piso']) && $parametros['ddl_numero_piso'] !== ''
+            ? (int)$parametros['ddl_numero_piso']
+            : null;
 
         $codigo = isset($parametros['txt_codigo']) ? trim($parametros['txt_codigo']) : '';
         $nombre = isset($parametros['txt_nombre']) ? trim($parametros['txt_nombre']) : '';
@@ -84,6 +88,7 @@ class espaciosC
             array('campo' => 'tarifa_hora', 'dato' => $tarifa_hora),
             array('campo' => 'tarifa_dia', 'dato' => $tarifa_dia),
             array('campo' => 'estado', 'dato' => $estado),
+            array('campo' => 'id_numero_piso', 'dato' => $id_numero_piso),
         );
 
         // Si es nuevo registro → insertar

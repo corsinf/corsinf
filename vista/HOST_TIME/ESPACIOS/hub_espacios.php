@@ -17,24 +17,39 @@ if (isset($_GET['_id'])) {
 <script type="text/javascript">
     $(document).ready(function() {
 
-        tbl_tipo_espacios = $('#tbl_tipo_espacios').DataTable($.extend({}, configuracion_datatable('Nombre', 'descripcion'), {
+        tbl_espacios = $('#tbl_espacios').DataTable($.extend({}, configuracion_datatable('Nombre', 'aforo', 'precio'), {
             reponsive: true,
             language: {
                 url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
-                url: '../controlador/XPACE_CUBE/tipo_espacioC.php?listar=true',
+                url: '../controlador/HOST_TIME/ESPACIOS/espaciosC.php?listar=true',
                 dataSrc: ''
             },
             columns: [{
                     data: null,
                     render: function(data, type, item) {
-                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_registrar_tipo_espacio&_id=${item._id}`;
+                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_registrar_espacio&_id=${item._id}`;
                         return `<a href="${href}"><u>${item.nombre}</u></a>`;
                     }
                 },
                 {
-                    data: 'descripcion'
+                    data: 'codigo'
+                },
+                 {
+                    data: 'nombre_ubicacion'
+                },
+                 {
+                    data: 'nombre_tipo_espacio'
+                },
+                {
+                    data: 'capacidad'
+                }, 
+                {
+                    data: 'tarifa_hora'
+                }, 
+                {
+                    data: 'tarifa_dia'
                 }
             ],
             order: [
@@ -60,7 +75,7 @@ if (isset($_GET['_id'])) {
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                           Tipo de espacios
+                            Todos los espacios
                         </li>
                     </ol>
                 </nav>
@@ -79,7 +94,7 @@ if (isset($_GET['_id'])) {
                             <div class="row mx-0">
 
                                 <div class="" id="btn_nuevo">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_registrar_tipo_espacio"
+                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_registrar_espacio"
                                         type="button" class="btn btn-success btn-sm ">
                                         <i class="bx bx-plus me-0 pb-1"></i> Nuevo
                                     </a>
@@ -91,11 +106,16 @@ if (isset($_GET['_id'])) {
                         <section class="content pt-2">
                             <div class="container-fluid">
                                 <div class="table-responsive">
-                                    <table class="table table-striped responsive " id="tbl_tipo_espacios" style="width:100%">
+                                    <table class="table table-striped responsive " id="tbl_espacios" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
-                                                <th>Descripcion</th>
+                                                <th>Codigo</th>
+                                                <th>Ubicación</th>
+                                                <th>Tipo de Espacio</th>
+                                                <th>Capacidad</th>
+                                                <th>Tarifa Hora</th>
+                                                <th>Tarifa Día</th>
                                             </tr>
                                         </thead>
                                         <tbody class="">
