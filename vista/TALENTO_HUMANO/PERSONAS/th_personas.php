@@ -32,9 +32,21 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     }
                 },
                 {
-                    data: 'cedula'
-                },
+                    data: null,
+                    render: function(data, type, item) {
 
+                        let href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&id_persona=${item.th_per_id}`;
+
+                        let nombreCompleto = `${item.primer_apellido ?? ''} ${item.segundo_apellido ?? ''} ${item.primer_nombre ?? ''}`.trim();
+
+                        if (nombreCompleto == '') {
+                            return `<a href="${href}"><u>${item.cedula ?? ''}</u></a>`;
+                        } else {
+                            return `${item.cedula ?? ''}`;
+                        }
+
+                    }
+                },
                 {
                     // data: null,
                     // render: function(data, type, item) {
