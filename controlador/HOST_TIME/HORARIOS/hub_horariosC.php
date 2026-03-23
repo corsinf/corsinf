@@ -37,35 +37,36 @@ class hub_horariosC
 
     function insertar_editar($parametros)
     {
-        $datos = array(
-            array('campo' => 'id_espacio',   'dato' => $parametros['ddl_espacio']),
-            array('campo' => 'dia_semana',   'dato' => $parametros['ddl_dia_semana']),
-            array('campo' => 'hora_inicio',  'dato' => $parametros['txt_hora_inicio']),
-            array('campo' => 'hora_fin',     'dato' => $parametros['txt_hora_fin']),
-            array('campo' => 'activo',       'dato' => $parametros['cbx_activo']),
-            array('campo' => 'estado',       'dato' => 1),
-        );
-
-        if ($parametros['_id'] == '') {
-            $datos = $this->modelo->insertar($datos);
-        } else {
-            $where[0]['campo'] = 'id_horario';
-            $where[0]['dato'] = $parametros['_id'];
-            $datos = $this->modelo->editar($datos, $where);
+        if ($this->modelo->verificar_duplicado(
+            $parametros['ddl_espacio'],
+            $parametros['ddl_dia_semana'],
+            $parametros['txt_hora_inicio'],
+            $parametros['txt_hora_fin'],
+            $parametros['_id']
+        )) {
+            return ['duplicado' => 1, 'mensaje' => 'Ya existe un horario idéntico para este espacio y día.'];
         }
 
-        return $datos;
+        $datos = [
+            ['campo' => 'id_espacio',  'dato' => $parametros['ddl_espacio']],
+            ['campo' => 'dia_semana',  'dato' => $parametros['ddl_dia_semana']],
+            ['campo' => 'hora_inicio', 'dato' => $parametros['txt_hora_inicio']],
+            ['campo' => 'hora_fin',    'dato' => $parametros['txt_hora_fin']],
+            ['campo' => 'activo',      'dato' => $parametros['cbx_activo']],
+            ['campo' => 'estado',      'dato' => 1],
+        ];
+
+        if ($parametros['_id'] == '') {
+            return $this->modelo->insertar($datos);
+        }
+
+        $where = [['campo' => 'id_horario', 'dato' => $parametros['_id']]];
+        return $this->modelo->editar($datos, $where);
     }
 
     function eliminar($id)
     {
-        $datos = array(
-            array('campo' => 'estado', 'dato' => 0),
-        );
-
-        $where[0]['campo'] = 'id_horario';
-        $where[0]['dato'] = $id;
-
-        return $this->modelo->editar($datos, $where);
+        $where = [['campo' => 'id_horario', 'dato' => $id]];
+        return $this->modelo->editar([['campo' => 'estado', 'dato' => 0]], $where);
     }
 }

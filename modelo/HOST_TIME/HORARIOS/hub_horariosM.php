@@ -33,17 +33,37 @@ class hub_horariosM extends BaseModel
         ";
 
         if (!empty($id_espacio)) {
-            $id_espacio = intval($id_espacio);
-            $sql .= " AND h.id_espacio = $id_espacio";
+            $sql .= " AND h.id_espacio = " . intval($id_espacio);
         }
 
         if (!empty($id_horario)) {
-            $id_horario = intval($id_horario);
-            $sql .= " AND h.id_horario = $id_horario";
+            $sql .= " AND h.id_horario = " . intval($id_horario);
         }
 
         $sql .= " ORDER BY h.dia_semana ASC, h.hora_inicio ASC";
 
         return $this->db->datos($sql);
+    }
+
+    public function verificar_duplicado($id_espacio, $dia_semana, $hora_inicio, $hora_fin, $id_horario = '')
+    {
+        $id_espacio  = intval($id_espacio);
+        $dia_semana  = intval($dia_semana);
+        $hora_inicio = addslashes($hora_inicio);
+        $hora_fin    = addslashes($hora_fin);
+
+        $sql = "SELECT COUNT(*) AS c FROM hub_horarios
+                WHERE estado = 1
+                  AND id_espacio = $id_espacio
+                  AND dia_semana = $dia_semana
+                  AND LEFT(hora_inicio, 5) = LEFT('$hora_inicio', 5)
+                  AND LEFT(hora_fin, 5)    = LEFT('$hora_fin', 5)";
+
+        if ($id_horario !== '') {
+            $sql .= " AND id_horario != " . intval($id_horario);
+        }
+
+        $r = $this->db->datos($sql);
+        return intval($r[0]['c']) > 0;
     }
 }

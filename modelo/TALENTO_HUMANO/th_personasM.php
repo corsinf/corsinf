@@ -278,6 +278,41 @@ class th_personasM extends BaseModel
 
         return $this->db->datos($sql);
     }
+
+
+    public function listar_visitantes($per_id = '')
+    {
+        $sql = "SELECT 
+                p.th_per_id AS th_per_id,
+                p.th_per_correo AS th_per_correo,
+                ISNULL(p.th_per_nombres_completos, 
+                    CONCAT(
+                        ISNULL(p.th_per_primer_nombre, ''), ' ', 
+                        ISNULL(p.th_per_segundo_nombre, ''), ' ', 
+                        ISNULL(p.th_per_primer_apellido, ''), ' ', 
+                        ISNULL(p.th_per_segundo_apellido, '')
+                    )
+                ) AS nombre_completo,
+                p.th_per_cedula AS cedula,
+                v.id_visitantes AS id_visitante,
+                v.PERFIL AS PERFIL,
+                v.NICK AS NICK,
+                v.PASS AS PASS,
+                v.POLITICAS_ACEPTACION AS politicas_aceptacion
+            FROM th_personas p
+            INNER JOIN VISITANTES v ON v.th_per_id = p.th_per_id
+            WHERE p.th_per_estado = 1 
+              AND v.DELETE_LOGIC = 0";
+
+        if ($per_id != '' && $per_id !== null) {
+            $sql .= " AND p.th_per_id = '$per_id'";
+        }
+
+
+        $sql .= " ORDER BY nombre_completo ASC;";
+
+        return $this->db->datos($sql);
+    }
     public function buscar_personas_con_departamento_unicamente($parametros)
     {
         $query = isset($parametros['query']) ? trim($parametros['query']) : '';

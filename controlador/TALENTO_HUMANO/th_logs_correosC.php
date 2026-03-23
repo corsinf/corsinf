@@ -186,7 +186,7 @@ class th_logs_correosC
                 }
             } else  if ($parametros['personas'] == 'visitantes') {
                 // ── Flujo original para envíos individuales (fuera de nómina) ─
-                $personas_correos = $this->personas->where('th_per_id', $per_id)->listar();
+                $personas_correos = $this->personas->listar_visitantes($per_id);
 
                 $clave     = $this->codigo_globales->generar_clave_digitos();
                 $clave_enc = $this->codigo_globales->enciptar_clave($clave);
@@ -198,8 +198,7 @@ class th_logs_correosC
                     ],
                     [['campo' => 'th_per_id', 'dato' => $per_id]]
                 );
-
-                $personas_correos = $this->personas->where('th_per_id', $per_id)->listar();
+                $personas_correos = $this->personas->listar_visitantes($per_id);
             }
 
             if (empty($personas_correos)) {
