@@ -185,7 +185,31 @@ class th_logs_correosC
                     unset($persona);
                 }
             } else  if ($parametros['personas'] == 'visitantes') {
-                // ── Flujo original para envíos individuales (fuera de nómina) ─
+
+
+                // Cambiamos el estado a 1 (Activo) para encontrar a la persona
+                $persona_correo = $this->personas->where('th_per_id', $per_id)->where('th_per_estado', 1)->listar();
+
+                $buscar_visitante = $this->VISITANTES->obtener_visitante_por_persona($per_id);
+
+                // Si NO existe el visitante, lo creamos
+                if (empty($buscar_visitante)) {
+                    foreach ($persona_correo as $value) {
+                        // Aseguramos capturar el correo correctamente
+                        $correo = trim($value['th_per_correo'] ?? $value['correo'] ?? '');
+
+                        if ($correo != '') {
+                            $datos_visitante = array(
+                                array('campo' => 'th_per_id',    'dato' => $per_id),
+                                array('campo' => 'NICK',         'dato' => $correo),
+                                array('campo' => 'DELETE_LOGIC', 'dato' => 0),
+                            );
+
+                            $this->VISITANTES->insertar($datos_visitante);
+                        }
+                    }
+                } else {
+                }
                 $personas_correos = $this->personas->listar_visitantes($per_id);
 
                 $clave     = $this->codigo_globales->generar_clave_digitos();
