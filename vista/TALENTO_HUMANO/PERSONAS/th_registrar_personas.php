@@ -381,10 +381,10 @@ validar_acceso_persona($_GET['id_persona'] ?? '');
                 beforeSend: function() {
                     Swal.fire({
                         title: 'Enviando...',
-                        showConfirmButton: false, // Quita el botón OK
-                        allowOutsideClick: false, // Evita que se cierre al hacer clic fuera
+                        showConfirmButton: false, 
+                        allowOutsideClick: false, 
                         didOpen: () => {
-                            Swal.showLoading(); // Muestra el spinner de carga
+                            Swal.showLoading(); 
                         }
                     });
                 },
