@@ -27,12 +27,23 @@ if ($_GET['acc'] == 'hub_numero_piso_registrar') {
 //tipo de espacios
 
 
+if ($_GET['acc'] == 'hub_ubicaciones') {
+    include('HOST_TIME/ESPACIOS/hub_ubicaciones.php');
+}
+if ($_GET['acc'] == 'hub_registrar_ubicacion') {
+    include('HOST_TIME/ESPACIOS/hub_registrar_ubicacion.php');
+}
+//Ubicaciones
+
+
 if ($_GET['acc'] == 'hub_tipos_espacios') {
     include('HOST_TIME/ESPACIOS/hub_tipos_espacios.php');
 }
 if ($_GET['acc'] == 'hub_registrar_tipo_espacio') {
     include('HOST_TIME/ESPACIOS/hub_registrar_tipo_espacio.php');
 }
+
+
 
 
 //

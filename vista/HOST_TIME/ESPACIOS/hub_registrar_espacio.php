@@ -54,7 +54,7 @@ if (isset($_GET['_id'])) {
 
     function cargar_selects2() {
         cargar_select2_url('ddl_tipo_espacio', '../controlador/HOST_TIME/ESPACIOS/tipo_espacioC.php?buscar=true');
-        cargar_select2_url('ddl_ubicacion', '../controlador/HOST_TIME/ESPACIOS/ubicacionesC.php?buscar=true');
+        cargar_select2_url('ddl_ubicacion', '../controlador/HOST_TIME/UBICACIONES/hub_ubicacionesC.php?buscar=true');
         cargar_select2_url('ddl_numero_piso', '../controlador/HOST_TIME/CATALOGOS/hub_cat_numero_pisoC.php?buscar=true');
     }
 
@@ -186,29 +186,29 @@ if (isset($_GET['_id'])) {
 
                             <div class="row pt-3 mb-col">
                                 <div class="col-md-6">
-                                    <label for="txt_nombre" class="form-label">Nombre</label>
+                                    <label for="txt_nombre" class="form-label">Nombre </label>
                                     <input type="text" class="form-control form-control-sm no_caracteres" id="txt_nombre" name="txt_nombre" autocomplete="off">
                                     <span id="error_txt_nombre" class="text-danger"></span>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="txt_codigo" class="form-label">Código</label>
+                                    <label for="txt_codigo" class="form-label">Código </label>
                                     <input type="text" class="form-control form-control-sm no_caracteres" id="txt_codigo" name="txt_codigo" autocomplete="off">
                                 </div>
                             </div>
 
                             <div class="row mb-col">
                                 <div class="col-md-6">
-                                    <label for="ddl_tipo_espacio" class="form-label">Tipo de espacio</label>
-                                    <select class="form-select form-select-sm select2-validation" id="ddl_tipo_espacio" name="ddl_tipo_espacio" required>
+                                    <label for="ddl_tipo_espacio" class="form-label">Tipo de espacio </label>
+                                    <select class="form-select form-select-sm select2-validation" id="ddl_tipo_espacio" name="ddl_tipo_espacio" >
                                         <option value="" selected hidden>-- Seleccione --</option>
                                     </select>
                                     <label class="error" style="display: none;" for="ddl_tipo_espacio"></label>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="ddl_ubicacion" class="form-label">Ubicación</label>
-                                    <select class="form-select form-select-sm select2-validation" id="ddl_ubicacion" name="ddl_ubicacion" required>
+                                    <label for="ddl_ubicacion" class="form-label">Ubicación </label>
+                                    <select class="form-select form-select-sm select2-validation" id="ddl_ubicacion" name="ddl_ubicacion" >
                                         <option value="" selected hidden>-- Seleccione --</option>
                                     </select>
                                     <label class="error" style="display: none;" for="ddl_ubicacion"></label>
@@ -217,15 +217,15 @@ if (isset($_GET['_id'])) {
 
                             <div class="row mb-col">
                                 <div class="col-md-6">
-                                    <label for="ddl_numero_piso" class="form-label">Número de piso</label>
-                                    <select class="form-select form-select-sm select2-validation" id="ddl_numero_piso" name="ddl_numero_piso" required>
+                                    <label for="ddl_numero_piso" class="form-label">Número de piso </label>
+                                    <select class="form-select form-select-sm select2-validation" id="ddl_numero_piso" name="ddl_numero_piso" >
                                         <option value="" selected hidden>-- Seleccione --</option>
                                     </select>
                                     <label class="error" style="display: none;" for="ddl_numero_piso"></label>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="txt_capacidad" class="form-label">Capacidad</label>
+                                    <label for="txt_capacidad" class="form-label">Capacidad </label>
                                     <input type="number" class="form-control form-control-sm" id="txt_capacidad" name="txt_capacidad" min="0" step="1" inputmode="numeric">
                                     <div class="form-text">Número entero (personas/puestos).</div>
                                 </div>
@@ -233,7 +233,7 @@ if (isset($_GET['_id'])) {
 
                             <div class="row mb-col">
                                 <div class="col-md-6">
-                                    <label for="txt_tarifa_hora" class="form-label">Tarifa (Hora)</label>
+                                    <label for="txt_tarifa_hora" class="form-label">Tarifa (Hora) </label>
                                     <div class="input-group input-group-sm">
                                         <span class="input-group-text">$</span>
                                         <input type="number" class="form-control form-control-sm" id="txt_tarifa_hora" name="txt_tarifa_hora" placeholder="0.00" min="0" step="0.01" inputmode="decimal">
@@ -242,7 +242,7 @@ if (isset($_GET['_id'])) {
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="txt_tarifa_dia" class="form-label">Tarifa (Día)</label>
+                                    <label for="txt_tarifa_dia" class="form-label">Tarifa (Día) </label>
                                     <div class="input-group input-group-sm">
                                         <span class="input-group-text">$</span>
                                         <input type="number" class="form-control form-control-sm" id="txt_tarifa_dia" name="txt_tarifa_dia" placeholder="0.00" min="0" step="0.01" inputmode="decimal">
@@ -273,6 +273,9 @@ if (isset($_GET['_id'])) {
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('txt_nombre');
         agregar_asterisco_campo_obligatorio('txt_codigo');
+        agregar_asterisco_campo_obligatorio('txt_capacidad');
+        agregar_asterisco_campo_obligatorio('txt_tarifa_hora');
+        agregar_asterisco_campo_obligatorio('txt_tarifa_dia');
         agregar_asterisco_campo_obligatorio('ddl_tipo_espacio');
         agregar_asterisco_campo_obligatorio('ddl_ubicacion');
         agregar_asterisco_campo_obligatorio('ddl_numero_piso');
@@ -285,6 +288,15 @@ if (isset($_GET['_id'])) {
                 txt_codigo: {
                     required: true
                 },
+                txt_capacidad: {
+                    required: true
+                },
+                txt_tarifa_hora: {
+                    required: true
+                },
+                txt_tarifa_dia: {
+                    required: true
+                },
                 ddl_tipo_espacio: {
                     required: true
                 },
@@ -294,6 +306,13 @@ if (isset($_GET['_id'])) {
                 ddl_numero_piso: {
                     required: true
                 },
+            },
+            errorPlacement: function(error, element) {
+                if (element.closest('.input-group').length) {
+                    error.insertAfter(element.closest('.input-group'));
+                } else {
+                    error.insertAfter(element);
+                }
             },
             highlight: function(element) {
                 $(element).addClass('is-invalid');

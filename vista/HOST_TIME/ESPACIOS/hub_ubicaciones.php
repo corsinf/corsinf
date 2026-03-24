@@ -17,13 +17,13 @@ if (isset($_GET['_id'])) {
 <script type="text/javascript">
     $(document).ready(function() {
 
-        tbl_espacios = $('#tbl_espacios').DataTable($.extend({}, configuracion_datatable('Nombre', 'cuidad', 'telefono'), {
+        tbl_espacios = $('#tbl_espacios').DataTable($.extend({}, {
             reponsive: true,
             language: {
                 url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
-                url: '../controlador/XPACE_CUBE/ubicacionesC.php?listar=true',
+                url: '../controlador/HOST_TIME/UBICACIONES/hub_ubicacionesC.php?listar=true',
                 dataSrc: ''
             },
             columns: [{
@@ -55,7 +55,7 @@ if (isset($_GET['_id'])) {
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Espacios</div>
+            <div class="breadcrumb-title pe-3">Ubicaciones</div>
             <?php
             // print_r($_SESSION['INICIO']);die();
 
@@ -66,7 +66,7 @@ if (isset($_GET['_id'])) {
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Todos los espacios
+                            Todas las ubicaciones
                         </li>
                     </ol>
                 </nav>
@@ -85,7 +85,7 @@ if (isset($_GET['_id'])) {
                             <div class="row mx-0">
 
                                 <div class="" id="btn_nuevo">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_registrar_espacio"
+                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_registrar_ubicacion"
                                         type="button" class="btn btn-success btn-sm ">
                                         <i class="bx bx-plus me-0 pb-1"></i> Nuevo
                                     </a>

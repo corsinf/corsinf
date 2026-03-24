@@ -1,8 +1,9 @@
 <?php
 
-require_once(dirname(__DIR__, 1) . '/GENERAL/BaseModel.php');
+require_once(dirname(__DIR__, 2) . '/GENERAL/BaseModel.php');
 
-class ubicacionesM extends BaseModel
+
+class hub_ubicacionesM extends BaseModel
 {
     // Nombre real de la tabla en BD
     protected $tabla = 'hub_ubicaciones';

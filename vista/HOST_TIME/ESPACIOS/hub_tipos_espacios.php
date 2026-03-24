@@ -17,7 +17,7 @@ if (isset($_GET['_id'])) {
 <script type="text/javascript">
     $(document).ready(function() {
 
-        tbl_tipo_espacios = $('#tbl_tipo_espacios').DataTable($.extend({}, configuracion_datatable('Nombre', 'descripcion'), {
+        tbl_tipo_espacios = $('#tbl_tipo_espacios').DataTable($.extend({}, {
             reponsive: true,
             language: {
                 url: '../assets/plugins/datatable/spanish.json'
@@ -60,7 +60,7 @@ if (isset($_GET['_id'])) {
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                           Tipo de espacios
+                            Tipo de espacios
                         </li>
                     </ol>
                 </nav>

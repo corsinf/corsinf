@@ -23,27 +23,28 @@ if (isset($_GET['_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/HOST_TIME/ESPACIOS/tipo_espacioC.php?listar=true',
+            url: '../controlador/HOST_TIME/UBICACIONES/hub_ubicacionesC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
                 $('#txt_nombre').val(response[0].nombre);
-                $('#txt_descripcion').val(response[0].descripcion);
+                $('#txt_direccion').val(response[0].direccion);
+                $('#txt_ciudad').val(response[0].ciudad);
+                $('#txt_telefono').val(response[0].telefono);
             }
         });
     }
 
     function editar_insertar() {
-        var txt_nombre = $('#txt_nombre').val();
-        var txt_descripcion = $('#txt_descripcion').val();
-
         var parametros = {
             '_id': '<?= $_id ?>',
-            'txt_nombre': txt_nombre,
-            'txt_descripcion': txt_descripcion,
+            'txt_nombre': $('#txt_nombre').val(),
+            'txt_direccion': $('#txt_direccion').val(),
+            'txt_ciudad': $('#txt_ciudad').val(),
+            'txt_telefono': $('#txt_telefono').val(),
         };
 
-        if ($("#form_tipo_espacio").valid()) {
+        if ($("#form_ubicaciones").valid()) {
             insertar(parametros);
         }
     }
@@ -53,13 +54,13 @@ if (isset($_GET['_id'])) {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/HOST_TIME/ESPACIOS/tipo_espacioC.php?insertar=true',
+            url: '../controlador/HOST_TIME/UBICACIONES/hub_ubicacionesC.php?insertar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_tipos_espacios';
+                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_ubicaciones';
                     });
                 } else if (response == -2) {
                     $('#txt_nombre').addClass('is-invalid');
@@ -93,7 +94,7 @@ if (isset($_GET['_id'])) {
             if (result.value) {
                 eliminar(id);
             }
-        })
+        });
     }
 
     function eliminar(id) {
@@ -101,13 +102,13 @@ if (isset($_GET['_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/HOST_TIME/ESPACIOS/tipo_espacioC.php?eliminar=true',
+            url: '../controlador/HOST_TIME/UBICACIONES/hub_ubicacionesC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_tipos_espacios';
+                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_ubicaciones';
                     });
                 }
             }
@@ -119,13 +120,13 @@ if (isset($_GET['_id'])) {
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Tipo de Espacios</div>
+            <div class="breadcrumb-title pe-3">Ubicaciones</div>
             <div class="ps-3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a></li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Registros
+                            <?php echo ($_id == '') ? 'Agregar Ubicación' : 'Modificar Ubicación'; ?>
                         </li>
                     </ol>
                 </nav>
@@ -140,52 +141,55 @@ if (isset($_GET['_id'])) {
                         <div class="card-title d-flex align-items-center">
                             <div><i class="bx bxs-user me-1 font-22 text-primary"></i></div>
                             <h5 class="mb-0 text-primary">
-                                <?php
-                                if ($_id == '') {
-                                    echo 'Registrar Tipo de Espacio';
-                                } else {
-                                    echo 'Modificar Tipo de Espacio';
-                                }
-                                ?>
+                                <?php echo ($_id == '') ? 'Registrar Ubicación' : 'Modificar Ubicación'; ?>
                             </h5>
                             <div class="row m-2">
                                 <div class="col-sm-12">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_tipos_espacios" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_ubicaciones" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                                 </div>
                             </div>
                         </div>
                         <hr>
 
-                        <form id="form_tipo_espacio">
-                            <div class="row g-3">
-                                <div class="col-12">
-                                    <label for="txt_nombre" class="form-label fw-bold">Nombre </label>
-                                    <input type="text"
-                                        class="form-control form-control-sm no_caracteres"
-                                        id="txt_nombre"
-                                        name="txt_nombre"
-                                        placeholder="Ingrese el nombre">
+                        <form id="form_ubicaciones">
+
+                            <div class="row pt-3 mb-col">
+                                <div class="col-md-6">
+                                    <label for="txt_nombre" class="form-label">Nombre </label>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_nombre" name="txt_nombre" maxlength="150" autocomplete="off">
                                     <span id="error_txt_nombre" class="text-danger"></span>
                                 </div>
 
-                                <div class="col-12">
-                                    <label for="txt_descripcion" class="form-label fw-bold">Descripción </label>
-                                    <textarea class="form-control form-control-sm no_caracteres"
-                                        id="txt_descripcion"
-                                        name="txt_descripcion"
-                                        rows="3"
-                                        placeholder="Ingrese la descripción"></textarea>
+                                <div class="col-md-6">
+                                    <label for="txt_direccion" class="form-label">Dirección </label>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_direccion" name="txt_direccion" maxlength="200" autocomplete="off">
+                                    <span id="error_txt_direccion" class="text-danger"></span>
                                 </div>
                             </div>
 
-                            <div class="mt-4 text-end">
+                            <div class="row pt-3 mb-col">
+                                <div class="col-md-6">
+                                    <label for="txt_ciudad" class="form-label">Ciudad </label>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_ciudad" name="txt_ciudad" maxlength="100" autocomplete="off">
+                                    <span id="error_txt_ciudad" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="txt_telefono" class="form-label">Teléfono </label>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_telefono" name="txt_telefono" maxlength="20" autocomplete="off">
+                                    <span id="error_txt_telefono" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end pt-2">
                                 <?php if ($_id == '') { ?>
-                                    <button type="button" class="btn btn-success btn-sm px-4 m-0" onclick="editar_insertar()"><i class="bx bx-save"></i> Guardar</button>
+                                    <button class="btn btn-success btn-sm px-4 m-0" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
                                 <?php } else { ?>
-                                    <button type="button" class="btn btn-success btn-sm px-4 m-1" onclick="editar_insertar()"><i class="bx bx-save"></i> Editar</button>
-                                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()"><i class="bx bx-trash"></i> Eliminar</button>
+                                    <button class="btn btn-success btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Editar</button>
+                                    <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
                                 <?php } ?>
                             </div>
+
                         </form>
 
                     </div>
@@ -199,15 +203,31 @@ if (isset($_GET['_id'])) {
 <script>
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('txt_nombre');
+        agregar_asterisco_campo_obligatorio('txt_direccion');
+        agregar_asterisco_campo_obligatorio('txt_ciudad');
+        agregar_asterisco_campo_obligatorio('txt_telefono');
 
-        $("#form_tipo_espacio").validate({
+        $("#form_ubicaciones").validate({
             rules: {
                 txt_nombre: {
-                    required: true,
+                    required: true
                 },
-                txt_descripcion: {
-                    required: true,
+                txt_direccion: {
+                    required: true
                 },
+                txt_ciudad: {
+                    required: true
+                },
+                txt_telefono: {
+                    required: true
+                },
+            },
+            errorPlacement: function(error, element) {
+                if (element.closest('.input-group').length) {
+                    error.insertAfter(element.closest('.input-group'));
+                } else {
+                    error.insertAfter(element);
+                }
             },
             highlight: function(element) {
                 $(element).addClass('is-invalid');

@@ -30,16 +30,6 @@ if ($_GET['acc'] == 'hub_registrar_reserva_servicio') {
     include('THEHUB/RESERVAS/hub_registrar_reserva_servicio.php');
 }
 
-
-//rutas de las ubicaciones
-if ($_GET['acc'] == 'hub_ubicaciones') {
-    include('THEHUB/UBICACIONES/hub_ubicaciones.php');
-}
-
-if ($_GET['acc'] == 'hub_registrar_ubicacion') {
-    include('THEHUB/UBICACIONES/hub_registrar_ubicacion.php');
-}
-
 //rutas de las bodegas
 
 if ($_GET['acc'] == 'hub_bodega') {

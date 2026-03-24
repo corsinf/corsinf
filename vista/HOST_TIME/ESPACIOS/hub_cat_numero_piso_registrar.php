@@ -157,7 +157,7 @@ if (isset($_GET['_id'])) {
 
                             <div class="row pt-3 mb-col">
                                 <div class="col-md-12">
-                                    <label for="txt_descripcion" class="form-label">Descripción</label>
+                                    <label for="txt_descripcion" class="form-label">Descripción </label>
                                     <input type="text" class="form-control form-control-sm no_caracteres" id="txt_descripcion" name="txt_descripcion" maxlength="100">
                                     <span id="error_txt_descripcion" class="text-danger"></span>
                                 </div>

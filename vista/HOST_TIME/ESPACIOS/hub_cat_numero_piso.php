@@ -6,7 +6,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 <script type="text/javascript">
     $(document).ready(function() {
-        tbl_numero_piso = $('#tbl_numero_piso').DataTable($.extend({}, configuracion_datatable('Número de Piso', 'numero_piso'), {
+        tbl_numero_piso = $('#tbl_numero_piso').DataTable($.extend({}, {
             reponsive: true,
             language: {
                 url: '../assets/plugins/datatable/spanish.json'
@@ -64,14 +64,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="col-12 col-md-6 text-md-end text-start">
-                                <div id="contenedor_botones"></div>
-                            </div>
-
                         </div>
 
-                        <hr>
 
                         <section class="content pt-2">
                             <div class="container-fluid">
