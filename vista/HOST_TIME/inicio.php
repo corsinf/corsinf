@@ -43,6 +43,17 @@ if ($_GET['acc'] == 'hub_registrar_tipo_espacio') {
     include('HOST_TIME/ESPACIOS/hub_registrar_tipo_espacio.php');
 }
 
+//turnos
+
+if ($_GET['acc'] == 'hub_turnos') {
+    include('HOST_TIME/TURNOS/hub_turnos.php');
+}
+
+if ($_GET['acc'] == 'hub_turnos_registrar') {
+    include('HOST_TIME/TURNOS/hub_turnos_registrar.php');
+}
+
+
 
 
 
