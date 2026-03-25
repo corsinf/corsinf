@@ -290,6 +290,10 @@ if ($_GET['acc'] == 'th_solicitud_persona') {
 	include('TALENTO_HUMANO/SOLICITUDES/SOLICITUD_PERMISO/th_solicitud_persona.php');
 }
 
+if ($_GET['acc'] == 'th_prueba_ingreso') {
+	include('TALENTO_HUMANO/SOLICITUDES/SOLICITUD_PERMISO/th_prueba_ingreso.php');
+}
+
 
 
 if ($_GET['acc'] == 'th_aprobacion_solicitudes') {

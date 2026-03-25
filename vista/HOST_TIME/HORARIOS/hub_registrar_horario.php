@@ -10,26 +10,153 @@ if (isset($_GET['_id'])) {
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
-<script type="text/javascript">
-    const DIAS = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+<style>
+    #timeline_24h {
+        user-select: none;
+        -webkit-user-select: none;
+    }
 
+    #rango_actual {
+        transition: none !important;
+    }
+
+    .handle-drag {
+        touch-action: none;
+    }
+</style>
+
+<script type="text/javascript">
     $(document).ready(function() {
         cargar_select2_url('ddl_espacio', '../controlador/HOST_TIME/ESPACIOS/espaciosC.php?buscar=true');
 
+        dibujar_marcas();
+
         <?php if (isset($_GET['_id'])): ?>
             datos_col(<?= $_id ?>);
+        <?php else: ?>
+            $('#txt_hora_inicio').val('08:00');
+            $('#txt_hora_fin').val('17:00');
+            sync_bar_desde_inputs();
         <?php endif; ?>
 
-        $('#ddl_espacio, #ddl_dia_semana').on('change', function() {
-            let id_espacio = $('#ddl_espacio').val();
-            let dia = $('#ddl_dia_semana').val();
-            if (id_espacio && dia !== '') cargar_timeline(id_espacio, dia);
+        $('#txt_hora_inicio, #txt_hora_fin').on('change input', function() {
+            sync_bar_desde_inputs();
+            $('#form_horario').valid();
         });
+
+        init_drag();
     });
+
+    /* ─── Timeline helpers ─── */
+
+    function t_a_min(t) {
+        if (!t) return 0;
+        let p = t.split(':');
+        return parseInt(p[0]) * 60 + parseInt(p[1]);
+    }
+
+    function min_a_t(m) {
+        m = Math.max(0, Math.min(1439, Math.round(m / 5) * 5));
+        return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+    }
+
+    function dibujar_marcas() {
+        let $tl = $('#timeline_24h');
+        for (let h = 0; h < 24; h++) {
+            let pct = (h / 24) * 100;
+            $tl.append(
+                `<div style="position:absolute;left:${pct}%;top:0;bottom:0;border-left:1px solid #dee2e6;z-index:0;"></div>` +
+                `<span style="position:absolute;left:calc(${pct}% + 2px);top:2px;font-size:9px;color:#adb5bd;pointer-events:none;">${String(h).padStart(2, '0')}h</span>`
+            );
+        }
+    }
+
+    function sync_bar_desde_inputs() {
+        let ini = t_a_min($('#txt_hora_inicio').val());
+        let fin = t_a_min($('#txt_hora_fin').val());
+        let pi = (ini / 1440) * 100;
+        let pw = Math.max(0, ((fin - ini) / 1440) * 100);
+
+        $('#rango_actual').css({
+            left: pi + '%',
+            width: pw + '%'
+        });
+        $('#lbl_rango').text(min_a_t(ini) + ' – ' + min_a_t(fin));
+    }
+
+    /* ─── Drag ─── */
+
+    let _dragging = false,
+        _dragType = null,
+        _dragX0, _dragPi0, _dragPf0;
+
+    function get_cx(e) {
+        return e.originalEvent && e.originalEvent.touches ?
+            e.originalEvent.touches[0].clientX :
+            e.clientX;
+    }
+
+    function init_drag() {
+        let $tl = $('#timeline_24h');
+
+        $tl.on('mousedown touchstart', '.handle-drag', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            _dragging = true;
+            _dragType = $(this).data('type');
+            _dragX0 = get_cx(e);
+            _dragPi0 = (t_a_min($('#txt_hora_inicio').val()) / 1440) * 100;
+            _dragPf0 = (t_a_min($('#txt_hora_fin').val()) / 1440) * 100;
+        });
+
+        $tl.on('mousedown touchstart', '#rango_actual', function(e) {
+            if ($(e.target).hasClass('handle-drag')) return;
+            e.preventDefault();
+            _dragging = true;
+            _dragType = 'move';
+            _dragX0 = get_cx(e);
+            _dragPi0 = (t_a_min($('#txt_hora_inicio').val()) / 1440) * 100;
+            _dragPf0 = (t_a_min($('#txt_hora_fin').val()) / 1440) * 100;
+        });
+
+        $(document).on('mousemove touchmove', function(e) {
+            if (!_dragging) return;
+            let W = $('#timeline_24h').width();
+            let delta = ((get_cx(e) - _dragX0) / W) * 100;
+            let snap = (5 / 1440) * 100;
+
+            if (_dragType === 'ini') {
+                let np = Math.max(0, Math.min(_dragPf0 - snap, _dragPi0 + delta));
+                $('#txt_hora_inicio').val(min_a_t((np / 100) * 1440));
+            } else if (_dragType === 'fin') {
+                let np = Math.max(_dragPi0 + snap, Math.min(100, _dragPf0 + delta));
+                $('#txt_hora_fin').val(min_a_t((np / 100) * 1440));
+            } else {
+                let dur = _dragPf0 - _dragPi0;
+                let ni = Math.max(0, Math.min(100 - dur, _dragPi0 + delta));
+                $('#txt_hora_inicio').val(min_a_t((ni / 100) * 1440));
+                $('#txt_hora_fin').val(min_a_t(((ni + dur) / 100) * 1440));
+            }
+
+            sync_bar_desde_inputs();
+        });
+
+        $(document).on('mouseup touchend', function() {
+            if (_dragging) {
+                _dragging = false;
+                _dragType = null;
+                $('#form_horario').valid();
+            }
+        });
+    }
+
+    /* ─── AJAX ─── */
 
     function datos_col(id) {
         $.ajax({
-            data: { id: id },
+            data: {
+                id: id
+            },
             url: '../controlador/HOST_TIME/HORARIOS/hub_horariosC.php?listar=true',
             type: 'post',
             dataType: 'json',
@@ -44,93 +171,44 @@ if (isset($_GET['_id'])) {
                 $('#txt_hora_inicio').val(r.hora_inicio.substring(0, 5));
                 $('#txt_hora_fin').val(r.hora_fin.substring(0, 5));
                 $('#cbx_activo').prop('checked', r.activo == 1);
-                cargar_timeline(r.id_espacio, r.dia_semana);
+                sync_bar_desde_inputs();
             }
         });
-    }
-
-    function cargar_timeline(id_espacio, dia) {
-        $.ajax({
-            data: { id_espacio: id_espacio },
-            url: '../controlador/HOST_TIME/HORARIOS/hub_horariosC.php?listar=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                let horarios_dia = response.filter(h => h.dia_semana == dia && h._id != '<?= $_id ?>');
-                renderizar_timeline(horarios_dia);
-                $('#contenedor_timeline').show();
-            }
-        });
-    }
-
-    function renderizar_timeline(horarios) {
-        let $tl = $('#timeline_24h');
-        $tl.empty();
-
-        for (let h = 0; h < 24; h++) {
-            let pct = (h / 24) * 100;
-            $tl.append(`
-                <div style="position:absolute;left:${pct}%;top:0;bottom:0;border-left:1px solid #dee2e6;"></div>
-                <span style="position:absolute;left:calc(${pct}% + 2px);top:2px;font-size:10px;color:#6c757d;">${String(h).padStart(2,'0')}:00</span>
-            `);
-        }
-
-        horarios.forEach(function(h) {
-            let ini = tiempo_a_minutos(h.hora_inicio);
-            let fin = tiempo_a_minutos(h.hora_fin);
-            let pct_ini = (ini / 1440) * 100;
-            let pct_ancho = ((fin - ini) / 1440) * 100;
-            let color = h.activo == 1 ? '#dc3545' : '#6c757d';
-
-            $tl.append(`
-                <div style="position:absolute;left:${pct_ini}%;width:${pct_ancho}%;top:22px;bottom:4px;
-                    background:${color};opacity:0.7;border-radius:4px;"
-                    title="Ocupado: ${h.hora_inicio.substring(0,5)} - ${h.hora_fin.substring(0,5)}"
-                    data-bs-toggle="tooltip">
-                    <span style="font-size:10px;color:#fff;padding:2px 4px;white-space:nowrap;overflow:hidden;display:block;">
-                        ${h.hora_inicio.substring(0,5)} - ${h.hora_fin.substring(0,5)}
-                    </span>
-                </div>
-            `);
-        });
-
-        $('[data-bs-toggle="tooltip"]').tooltip();
-    }
-
-    function tiempo_a_minutos(hora) {
-        let p = hora.split(':');
-        return parseInt(p[0]) * 60 + parseInt(p[1]);
     }
 
     function editar_insertar() {
-        var parametros = {
-            '_id':           '<?= $_id ?>',
-            'ddl_espacio':   $('#ddl_espacio').val(),
-            'ddl_dia_semana': $('#ddl_dia_semana').val(),
-            'txt_hora_inicio': $('#txt_hora_inicio').val(),
-            'txt_hora_fin':  $('#txt_hora_fin').val(),
-            'cbx_activo':    $('#cbx_activo').prop('checked') ? 1 : 0,
-        };
-
         if ($('#form_horario').valid()) {
-            insertar(parametros);
+            insertar({
+                '_id': '<?= $_id ?>',
+                'ddl_espacio': $('#ddl_espacio').val(),
+                'ddl_dia_semana': $('#ddl_dia_semana').val(),
+                'txt_hora_inicio': $('#txt_hora_inicio').val(),
+                'txt_hora_fin': $('#txt_hora_fin').val(),
+                'cbx_activo': $('#cbx_activo').prop('checked') ? 1 : 0,
+            });
         }
     }
 
     function insertar(parametros) {
         $.ajax({
-            data: { parametros: parametros },
+            data: {
+                parametros: parametros
+            },
             url: '../controlador/HOST_TIME/HORARIOS/hub_horariosC.php?insertar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
+                if (response && response.duplicado) {
+                    Swal.fire('', response.mensaje, 'warning');
+                    return;
+                }
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
                         location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_horarios';
                     });
                 }
             },
-            error: function(xhr, status, error) {
+            error: function(xhr) {
                 Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
         });
@@ -139,7 +217,7 @@ if (isset($_GET['_id'])) {
     function delete_datos() {
         Swal.fire({
             title: 'Eliminar Registro?',
-            text: "Esta seguro de eliminar este registro?",
+            text: 'Esta seguro de eliminar este registro?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -148,7 +226,9 @@ if (isset($_GET['_id'])) {
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    data: { id: '<?= $_id ?>' },
+                    data: {
+                        id: '<?= $_id ?>'
+                    },
                     url: '../controlador/HOST_TIME/HORARIOS/hub_horariosC.php?eliminar=true',
                     type: 'post',
                     dataType: 'json',
@@ -227,19 +307,47 @@ if (isset($_GET['_id'])) {
                                 </div>
                             </div>
 
-                            <!-- Timeline de ocupación -->
-                            <div id="contenedor_timeline" style="display:none;" class="row mb-col">
+                            <!-- Timeline interactivo (solo horario actual) -->
+                            <div class="row mb-col">
                                 <div class="col-12">
                                     <div class="card border">
-                                        <div class="card-header d-flex align-items-center justify-content-between">
-                                            <strong class="small">Horarios ocupados este día</strong>
-                                            <div class="d-flex gap-3 small text-muted">
-                                                <span><span class="badge bg-danger">&nbsp;</span> Ocupado activo</span>
-                                                <span><span class="badge bg-secondary">&nbsp;</span> Ocupado inactivo</span>
-                                            </div>
+                                        <div class="card-header d-flex align-items-center justify-content-between py-2">
+                                            <strong class="small text-muted">
+                                                <i class="bx bx-move-horizontal me-1"></i>
+                                                Arrastra los extremos para ajustar el horario
+                                            </strong>
+                                            <span id="lbl_rango" class="badge bg-primary">--:-- – --:--</span>
                                         </div>
                                         <div class="card-body py-3">
-                                            <div id="timeline_24h" style="position:relative;height:56px;background:#f8f9fa;border-radius:4px;overflow:hidden;border:1px solid #dee2e6;"></div>
+                                            <div id="timeline_24h"
+                                                style="position:relative;height:58px;background:#f8f9fa;border-radius:4px;border:1px solid #dee2e6;overflow:visible;">
+
+                                                <!-- Rango arrastrable -->
+                                                <div id="rango_actual"
+                                                    style="position:absolute;top:20px;bottom:4px;
+                                                           background:rgba(13,110,253,0.18);
+                                                           border:2px solid #0d6efd;border-radius:4px;
+                                                           cursor:grab;min-width:6px;z-index:10;">
+
+                                                    <!-- Handle inicio -->
+                                                    <div class="handle-drag" data-type="ini"
+                                                        style="position:absolute;left:-7px;top:-2px;bottom:-2px;width:14px;
+                                                               background:#0d6efd;border-radius:4px 0 0 4px;
+                                                               cursor:ew-resize;z-index:11;
+                                                               display:flex;align-items:center;justify-content:center;">
+                                                        <span style="color:#fff;font-size:9px;pointer-events:none;">◂</span>
+                                                    </div>
+
+                                                    <!-- Handle fin -->
+                                                    <div class="handle-drag" data-type="fin"
+                                                        style="position:absolute;right:-7px;top:-2px;bottom:-2px;width:14px;
+                                                               background:#0d6efd;border-radius:0 4px 4px 0;
+                                                               cursor:ew-resize;z-index:11;
+                                                               display:flex;align-items:center;justify-content:center;">
+                                                        <span style="color:#fff;font-size:9px;pointer-events:none;">▸</span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -249,11 +357,13 @@ if (isset($_GET['_id'])) {
                                 <div class="col-md-6">
                                     <label for="txt_hora_inicio" class="form-label">Hora inicio</label>
                                     <input type="time" class="form-control form-control-sm" id="txt_hora_inicio" name="txt_hora_inicio">
+                                    <label class="error" for="txt_hora_inicio" style="display:none;"></label>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="txt_hora_fin" class="form-label">Hora fin</label>
                                     <input type="time" class="form-control form-control-sm" id="txt_hora_fin" name="txt_hora_fin">
+                                    <label class="error" for="txt_hora_fin" style="display:none;"></label>
                                 </div>
                             </div>
 
@@ -290,12 +400,32 @@ if (isset($_GET['_id'])) {
         agregar_asterisco_campo_obligatorio('txt_hora_inicio');
         agregar_asterisco_campo_obligatorio('txt_hora_fin');
 
+        $.validator.addMethod('hora_ini_menor', function(value) {
+            let fin = $('#txt_hora_fin').val();
+            return !fin || !value || value < fin;
+        }, 'La hora inicio debe ser menor a la hora fin.');
+
+        $.validator.addMethod('hora_fin_mayor', function(value) {
+            let ini = $('#txt_hora_inicio').val();
+            return !ini || !value || value > ini;
+        }, 'La hora fin debe ser mayor a la hora inicio.');
+
         $('#form_horario').validate({
             rules: {
-                ddl_espacio:    { required: true },
-                ddl_dia_semana: { required: true },
-                txt_hora_inicio:{ required: true },
-                txt_hora_fin:   { required: true },
+                ddl_espacio: {
+                    required: true
+                },
+                ddl_dia_semana: {
+                    required: true
+                },
+                txt_hora_inicio: {
+                    required: true,
+                    hora_ini_menor: true
+                },
+                txt_hora_fin: {
+                    required: true,
+                    hora_fin_mayor: true
+                },
             },
             highlight: function(element) {
                 $(element).addClass('is-invalid').removeClass('is-valid');

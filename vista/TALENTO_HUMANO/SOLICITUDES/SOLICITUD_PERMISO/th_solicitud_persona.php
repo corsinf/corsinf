@@ -2,19 +2,21 @@
 
 <?php
 $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
+$per_id = $_SESSION['INICIO']['ID_PERSONA'];
+
+if ($_SESSION['INICIO']['ID_PERSONA'] > 0) {
+    if ($_SESSION['INICIO']['ID_PERSONA'] != $_id && $_id != '') {
+        echo "<script>location.href = 'inicio.php?acc=pagina_error';</script>";
+        exit;
+    }
+}
 ?>
 
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script type="text/javascript">
-    // 1. Definimos variables globales y cargamos datos de sesión de inmediato
-    //quitar session
-    const session = <?= json_encode($_SESSION) ?>;
-    const TIPO_USUARIO = session.INICIO.TIPO;
-
     // Si no es ADMIN, asignamos el ID de persona antes de cargar la tabla
-    let id_persona = (TIPO_USUARIO === 'DBA' || TIPO_USUARIO === 'ADMINISTRADOR') ? '' : session.INICIO.NO_CONCURENTE;
     let tbl_permisos;
 
     $(document).ready(function() {
@@ -43,7 +45,7 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                 url: '../controlador/TALENTO_HUMANO/th_solicitud_permisoC.php?listar=true',
                 type: 'POST',
                 data: function(d) {
-                    d.th_per_id = id_persona; // Se envía el ID filtrado o vacío si es ADMIN
+                    d.th_per_id = <?= $_id ?>;
                 },
                 dataSrc: ''
             },
@@ -110,12 +112,17 @@ $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
                         <div class="card-title d-flex align-items-center justify-content-between">
                             <h5 class="mb-0 text-primary">Listado de Solicitudes</h5>
 
+
                             <div class="d-flex gap-2">
-                                <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_solicitud_permiso"
-                                    class="btn btn-outline-dark btn-sm">
-                                    <i class="bx bx-arrow-back"></i> Regresar
-                                </a>
-                                <a href = "../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_solicitud_permiso&_per_id=<?= $_id ?>"
+                                <?php if ($per_id > 0) { ?>
+
+                                <?php } else { ?>
+                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_solicitud_permiso"
+                                        class="btn btn-outline-dark btn-sm">
+                                        <i class="bx bx-arrow-back"></i> Regresar
+                                    </a>
+                                <?php } ?>
+                                <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_solicitud_permiso&_per_id=<?= $_id ?>"
                                     class="btn btn-success btn-sm">
                                     <i class="bx bx-plus"></i> Nuevo Permiso
                                 </a>

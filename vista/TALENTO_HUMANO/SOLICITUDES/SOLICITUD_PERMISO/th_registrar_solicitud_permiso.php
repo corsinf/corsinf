@@ -2,6 +2,12 @@
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 $_id = (isset($_GET['_id'])) ? $_GET['_id'] : '';
 $_per_id = (isset($_GET['_per_id'])) ? $_GET['_per_id'] : '';
+if ($_SESSION['INICIO']['ID_PERSONA'] > 0) {
+    if ($_SESSION['INICIO']['ID_PERSONA'] != $_per_id && $_per_id != '') {
+        echo "<script>location.href = 'inicio.php?acc=pagina_error';</script>";
+        exit;
+    }
+}
 $ruta = '';
 ?>
 

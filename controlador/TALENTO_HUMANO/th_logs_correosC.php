@@ -3,6 +3,7 @@ date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_personasM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/GENERAL/NO_CONCURRENTES/EMPLEADOSM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/GENERAL/NO_CONCURRENTES/VISITANTESM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/POSTULANTES/th_postulantesM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_logs_correosM.php');
 include_once(dirname(__DIR__, 2) . '/lib/phpmailer/enviar_emails.php');
@@ -47,6 +48,7 @@ class th_logs_correosC
     private $postulantes;
     private $codigo_globales;
     private $EMPLEADOS;
+    private $VISITANTES;
 
     function __construct()
     {
@@ -56,6 +58,7 @@ class th_logs_correosC
         $this->postulantes = new th_postulantesM();
         $this->codigo_globales = new codigos_globales();
         $this->EMPLEADOS = new EMPLEADOSM();
+        $this->VISITANTES = new VISITANTESM();
     }
 
 
@@ -181,22 +184,21 @@ class th_logs_correosC
                     }
                     unset($persona);
                 }
-            } else {
+            } else  if ($parametros['personas'] == 'visitantes') {
                 // ── Flujo original para envíos individuales (fuera de nómina) ─
-                $personas_correos = $this->personas->where('th_per_id', $per_id)->listar();
+                $personas_correos = $this->personas->listar_visitantes($per_id);
 
                 $clave     = $this->codigo_globales->generar_clave_digitos();
                 $clave_enc = $this->codigo_globales->enciptar_clave($clave);
 
-                $this->personas->editar(
+                $this->VISITANTES->editar(
                     [
                         ['campo' => 'POLITICAS_ACEPTACION', 'dato' => '0'],
                         ['campo' => 'PASS',                 'dato' => $clave_enc],
                     ],
                     [['campo' => 'th_per_id', 'dato' => $per_id]]
                 );
-
-                $personas_correos = $this->personas->where('th_per_id', $per_id)->listar();
+                $personas_correos = $this->personas->listar_visitantes($per_id);
             }
 
             if (empty($personas_correos)) {
