@@ -219,11 +219,9 @@ if (isset($_GET['validar_cedula_duplicada_persona'])) {
     echo json_encode(
         $controlador->validar_cedula_duplicada_persona($_POST['cedula'] ?? '')
     );
-=======
 
 if (isset($_GET['ISAPIConnect'])) {
     echo json_encode($controlador->ISAPIConnect());
->>>>>>> Stashed changes
 }
 
 class th_personasC
@@ -267,11 +265,7 @@ class th_personasC
 
         $this->secuenciales = new secuencialesM();
 
-<<<<<<< Updated upstream
-=======
-
         $this->isapi = new ACS_UserCrud();
->>>>>>> Stashed changes
     }
 
     function listar($id = '')
@@ -1461,7 +1455,6 @@ class th_personasC
         }
 
         return $per_id;
-=======
     //=====================================================funciones  ISAPI ============================//
 
     function ISAPIConnect() {
@@ -1470,49 +1463,6 @@ class th_personasC
          return $this->setUserISAPI();
          die();
 
-        $url = "http://192.168.100.20/ISAPI/System/time?format=json";
-        $ch = curl_init();
-        
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 5); // Timeout de 5 segundos
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
-        curl_setopt($ch, CURLOPT_USERPWD, "admin:Data12/*");
-        
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $curlError = curl_error($ch);
-        curl_close($ch);
-        
-        if ($curlError) {
-            return [
-                'connected' => false,
-                'message' => "Error de conexión: $curlError",
-                'time' => null
-            ];
-        }
-        
-        if ($httpCode === 200) {
-            $data = json_decode($response, true);
-            $this->connected = true;
-            return [
-                'connected' => true,
-                'message' => 'Dispositivo conectado correctamente',
-                'time' => $data['time'] ?? null
-            ];
-        } elseif ($httpCode === 401) {
-            return [
-                'connected' => false,
-                'message' => 'Error de autenticación: verificar usuario/contraseña',
-                'time' => null
-            ];
-        } else {
-            return [
-                'connected' => false,
-                'message' => "Error HTTP $httpCode: Dispositivo no responde",
-                'time' => null
-            ];
-        }
     }
 
 
@@ -1541,7 +1491,5 @@ class th_personasC
         // return $this->isapi->addFingerprint('112',1);
         
         return $this->isapi->addFingerprint('112',1);
-
->>>>>>> Stashed changes
     }
 }
