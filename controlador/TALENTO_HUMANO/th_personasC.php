@@ -11,6 +11,7 @@ require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_faceM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/empresaM.php');
 require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 require_once(dirname(__DIR__, 2) . '/APIS-TERCEROS/HIKCENTRAL/hikcentralHttp.php');
+require_once(dirname(__DIR__, 2) . '/APIS-TERCEROS/ISAPI-HIK/ACS_UserCrud.php');
 require_once(dirname(__DIR__, 2) . '/modelo/FACTURACION/secuencialesM.php');
 
 
@@ -219,6 +220,10 @@ if (isset($_GET['validar_cedula_duplicada_persona'])) {
     );
 }
 
+if (isset($_GET['ISAPIConnect'])) {
+    echo json_encode($controlador->ISAPIConnect());
+}
+
 class th_personasC
 {
     private $modelo;
@@ -234,6 +239,7 @@ class th_personasC
     private $biometria;
     private $th_postulantes;
     private $VISITANTE;
+    private $isapi;
 
 
     private $secuenciales;
@@ -259,6 +265,7 @@ class th_personasC
         $this->VISITANTE = new VISITANTESM();
 
         $this->secuenciales = new secuencialesM();
+        $this->isapi = new ACS_UserCrud();
     }
 
     function listar($id = '')
@@ -1066,6 +1073,8 @@ class th_personasC
     function addFaceBio2($parametros)
     {
 
+        $parametros['idPerson'] = $parametros['PersonaId'];
+        $parametros['device'] = $parametros['dispositivo'];
         $face_registro = $this->face->where('th_id_face', $parametros['_id'])->listar();
         $dispositivo = $this->dispositivos->where('th_dis_id', $parametros['dispositivo'])->listar();
         $dispositivo = $dispositivo[0];
@@ -1075,6 +1084,9 @@ class th_personasC
         $patch = $face_registro[0]['th_face_patch'];
         $nombre = $face_registro[0]['th_face_nombre'];
         $resp = array("msj" => "SetFingegDataSuccessful", "resp" => 1);
+
+
+        $resp = $this->addTarjetaBio($parametros);
 
         if (file_exists($patch)) {
 
@@ -1106,6 +1118,9 @@ class th_personasC
             $nombreTemp = explode("\\", $patch);
             $nombre = $nombreTemp[(count($nombreTemp) - 1)];
             $empresa = $this->empresa->datos_empresa($_SESSION['INICIO']['ID_EMPRESA']);
+            $persona = $this->modelo->where('th_per_id', $idPerson)->listar();
+            $nombre_completo =  $persona[0]['primer_apellido'] . " " . $persona[0]['segundo_apellido'] . " " . $persona[0]['primer_nombre'] . " " . $persona[0]['segundo_nombre'];
+
             if ($detectado == "") {
                 $patch = $empresa[0]['ruta_huellas'] . '\\' . $file['huella']['name'];
                 $nombre = $file['huella']['name'];
@@ -1205,6 +1220,8 @@ class th_personasC
     {
         // print_r($parametros);die();
         $resp = -1;
+        $CardNom = $parametros['CardNo'];
+        $idPerson = $parametros['idPerson'];
         $empresa = $this->empresa->datos_empresa($_SESSION['INICIO']['ID_EMPRESA']);
         $patch = $empresa[0]['ruta_huellas'];
         if (!file_exists($patch)) {
@@ -1215,11 +1232,46 @@ class th_personasC
         $persona = $this->modelo->where('th_per_id', $parametros['idPerson'])->listar();
         $nombre = str_replace(" ", "_", $persona[0]['primer_apellido'] . " " . $persona[0]['segundo_apellido'] . " " . $persona[0]['primer_nombre'] . " " . $persona[0]['segundo_nombre'] . " " . date('YmdHis'));
 
+        $nombre_completo =  $persona[0]['primer_apellido'] . " " . $persona[0]['segundo_apellido'] . " " . $persona[0]['primer_nombre'] . " " . $persona[0]['segundo_nombre'];
 
-        $cards = $this->card->where("th_per_id", $parametros['idPerson'])->listar();
-        if (count($cards) == 0) {
-            return -2;
-        } //si no tiene tarjetas registradas no puede seguir avanzando
+
+
+        // $cards = $this->card->where("th_per_id", $parametros['idPerson'])->listar();
+        // if (count($cards) == 0) {
+        //     return -2;
+        // } //si no tiene tarjetas registradas no puede seguir avanzando
+
+        if ($CardNom == '' || $CardNom == null  || $CardNom == 'null') {
+            // print_r('expression');die();
+            $cardReg = $this->card->where('th_per_id', $idPerson)->listar();
+            if (count($cardReg) > 0) {
+                $CardNom = $cardReg[0]['th_cardNo'];
+            } else {
+                $CardNom = '';
+
+                if (isset($persona[0]['cedula']) && $persona[0]['cedula'] != '') {
+                    $CardNom = $persona[0]['cedula'];
+                } else {
+                    $tarjeta = $this->secuenciales->validar_mas_series('CardNo');
+                    // print_r($tarjeta);die();
+                    $datosCardEdit = array(array('campo' => 'NUMERO', 'dato' => ($tarjeta[0]['NUMERO'] + 1)));
+                    $datosCardWhere = array(array('campo' => 'ID_SECUENCIALES', 'dato' => $tarjeta[0]['ID_SECUENCIALES']));
+                    $this->secuenciales->editar($datosCardEdit, $datosCardWhere);
+                    $CardNom = $tarjeta[0]['NUMERO'];
+                }
+
+                $dataCardInsert = array(
+                    array('campo' => 'th_per_id', 'dato' => $persona[0]['_id']),
+                    array('campo' => 'th_cardNo', 'dato' => $CardNom),
+                    array('campo' => 'th_card_virtual', 'dato' => '1'),
+                    array('campo' => 'th_card_nombre', 'dato' => $nombre_completo),
+                );
+                $this->card->insertar($dataCardInsert);
+                $cards = $this->card->where("th_per_id", $idPerson)->listar();
+            }
+        }
+
+
 
 
         $dllPath = $this->sdk_patch . '11 ' . $dispositivo['host'] . ' ' . $dispositivo['usuario'] . ' ' . $dispositivo['port'] . ' ' . $dispositivo['pass'] . ' ' . $nombre . '_Face ' . $patch;
@@ -1313,7 +1365,6 @@ class th_personasC
 
         return $lista;
     }
-
 
     public function validar_cedula_duplicada_persona($cedula)
     {
@@ -1429,5 +1480,42 @@ class th_personasC
         }
 
         return $resultado;
+    }
+    //=====================================================funciones  ISAPI ============================//
+
+    function ISAPIConnect()
+    {
+
+
+        return $this->setUserISAPI();
+        die();
+    }
+
+
+    function setUserISAPI()
+    {
+        $this->isapi->setDeviceData('192.168.100.20', 'admin', 'Data12/*');
+        // $this->isapi->createUser('11111',"prueba isapi 3");
+
+        // return $this->isapi->getUser('11111');
+        // return $this->isapi->listUsers();
+        // return $this->isapi->deleteUser('112');
+
+        // gestion de tarjetas 
+        // return $this->isapi->addCard('11111','111112');
+        // return $this->isapi->getUserCards('11111');
+        // return $this->isapi->deleteCard('11111');
+
+        // gestion de facial
+        // return $this->isapi->addFaceFromFile('11111',"C:\huella\\ROSERO_EUGENIO.jpg");
+        // return $this->isapi->listFaces();
+        // return $this->isapi->getUserFaces('11111');
+        // return $this->isapi->deleteFace('11111');
+
+
+        // gestion de huella digital
+        // return $this->isapi->addFingerprint('112',1);
+
+        return $this->isapi->addFingerprint('112', 1);
     }
 }
