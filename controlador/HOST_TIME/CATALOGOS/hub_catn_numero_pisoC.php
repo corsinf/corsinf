@@ -1,9 +1,9 @@
 <?php
 date_default_timezone_set('America/Guayaquil');
 
-require_once(dirname(__DIR__, 3) . '/modelo/HOST_TIME/CATALOGOS/hub_cat_numero_pisoM.php');
+require_once(dirname(__DIR__, 3) . '/modelo/HOST_TIME/CATALOGOS/hub_catn_numero_pisoM.php');
 
-$controlador = new hub_cat_numero_pisoC();
+$controlador = new hub_catn_numero_pisoC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
@@ -32,13 +32,13 @@ if (isset($_GET['buscar'])) {
 }
 
 
-class hub_cat_numero_pisoC
+class hub_catn_numero_pisoC
 {
     private $modelo;
 
     function __construct()
     {
-        $this->modelo = new hub_cat_numero_pisoM();
+        $this->modelo = new hub_catn_numero_pisoM();
     }
 
     function listar($id = '')

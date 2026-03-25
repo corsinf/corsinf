@@ -1,10 +1,10 @@
 <?php
 date_default_timezone_set('America/Guayaquil');
 
-require_once(dirname(__DIR__, 3) . '/modelo/HOST_TIME/ESPACIOS/tipo_espacioM.php');
+require_once(dirname(__DIR__, 3) . '/modelo/HOST_TIME/CATALOGOS/hub_catn_tipo_espacioM.php');
 
 
-$controlador = new tipo_espacioC();
+$controlador = new hub_catn_tipo_espacioC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
@@ -33,13 +33,13 @@ if (isset($_GET['buscar'])) {
 }
 
 
-class tipo_espacioC
+class hub_catn_tipo_espacioC
 {
     private $modelo;
 
     function __construct()
     {
-        $this->modelo = new tipo_espacioM();
+        $this->modelo = new hub_catn_tipo_espacioM();
     }
 
     function listar($id = '')

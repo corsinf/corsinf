@@ -23,7 +23,7 @@ if (isset($_GET['_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/HOST_TIME/ESPACIOS/tipo_espacioC.php?listar=true',
+            url: '../controlador/HOST_TIME/CATALOGOS/hub_catn_tipo_espacioC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -53,7 +53,7 @@ if (isset($_GET['_id'])) {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/HOST_TIME/ESPACIOS/tipo_espacioC.php?insertar=true',
+            url: '../controlador/HOST_TIME/CATALOGOS/hub_catn_tipo_espacioC.php?insertar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -101,7 +101,7 @@ if (isset($_GET['_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/HOST_TIME/ESPACIOS/tipo_espacioC.php?eliminar=true',
+            url: '../controlador/HOST_TIME/CATALOGOS/hub_catn_tipo_espacioC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -199,6 +199,7 @@ if (isset($_GET['_id'])) {
 <script>
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('txt_nombre');
+        agregar_asterisco_campo_obligatorio('txt_descripcion');
 
         $("#form_tipo_espacio").validate({
             rules: {

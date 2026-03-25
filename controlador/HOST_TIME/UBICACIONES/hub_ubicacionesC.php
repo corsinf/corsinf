@@ -44,40 +44,31 @@ class hub_ubicacionesC
     function listar($id = '')
     {
         if ($id == '') {
-            $datos = $this->modelo->where('estado', 1)->listar();
+            $datos = $this->modelo->where('is_deleted', 0)->listar();
         } else {
-            $datos = $this->modelo->where('id_ubicacion', $id)->listar();
+            $datos = $this->modelo->listar_por_id($id);
         }
-
         return $datos;
     }
 
     function insertar_editar($parametros)
     {
-        $datos = array(
-            array('campo' => 'nombre',         'dato' => $parametros['txt_nombre']),
-            array('campo' => 'direccion',      'dato' => $parametros['txt_direccion']),
-            array('campo' => 'ciudad',         'dato' => $parametros['txt_ciudad']),
-            array('campo' => 'telefono',       'dato' => $parametros['txt_telefono']),
-            array('campo' => 'estado',         'dato' => 1),
-        );
+        $datos = [
+            ['campo' => 'nombre',      'dato' => $parametros['txt_nombre']],
+            ['campo' => 'direccion',   'dato' => $parametros['txt_direccion']],
+            ['campo' => 'telefono',    'dato' => $parametros['txt_telefono']],
+            ['campo' => 'th_prov_id',  'dato' => $parametros['ddl_provincias']],
+            ['campo' => 'th_ciu_id',   'dato' => $parametros['ddl_ciudad']],
+            ['campo' => 'th_parr_id',  'dato' => $parametros['ddl_parroquia']],
+            ['campo' => 'is_deleted',  'dato' => 0],
+        ];
 
         if ($parametros['_id'] == '') {
-            // Verificar que el nombre no esté duplicado
-            if (count($this->modelo->where('nombre', $parametros['txt_nombre'])->where('estado', 1)->listar()) == 0) {
-                $datos = $this->modelo->insertar($datos);
-            } else {
-                return -2;
-            }
+            $datos = $this->modelo->insertar($datos);
         } else {
-            // Verificar duplicado excluyendo el registro actual
-            if (count($this->modelo->where('nombre', $parametros['txt_nombre'])->where('id_ubicacion !', $parametros['_id'])->where('estado', 1)->listar()) == 0) {
-                $where[0]['campo'] = 'id_ubicacion';
-                $where[0]['dato']  = $parametros['_id'];
-                $datos = $this->modelo->editar($datos, $where);
-            } else {
-                return -2;
-            }
+            $where[0]['campo'] = 'id_ubicacion';
+            $where[0]['dato']  = $parametros['_id'];
+            $datos = $this->modelo->editar($datos, $where);
         }
 
         return $datos;

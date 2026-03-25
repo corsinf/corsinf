@@ -23,7 +23,7 @@ if (isset($_GET['_id'])) {
                 url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
-                url: '../controlador/HOST_TIME/ESPACIOS/tipo_espacioC.php?listar=true',
+                url: '../controlador/HOST_TIME/CATALOGOS/hub_catn_tipo_espacioC.php?listar=true',
                 dataSrc: ''
             },
             columns: [{

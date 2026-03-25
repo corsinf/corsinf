@@ -23,7 +23,7 @@ if (isset($_GET['_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/HOST_TIME/CATALOGOS/hub_cat_numero_pisoC.php?listar=true',
+            url: '../controlador/HOST_TIME/CATALOGOS/hub_catn_numero_pisoC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -50,7 +50,7 @@ if (isset($_GET['_id'])) {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/HOST_TIME/CATALOGOS/hub_cat_numero_pisoC.php?insertar=true',
+            url: '../controlador/HOST_TIME/CATALOGOS/hub_catn_numero_pisoC.php?insertar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -98,7 +98,7 @@ if (isset($_GET['_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/HOST_TIME/CATALOGOS/hub_cat_numero_pisoC.php?eliminar=true',
+            url: '../controlador/HOST_TIME/CATALOGOS/hub_catn_numero_pisoC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

@@ -69,29 +69,20 @@ if (isset($_GET['_id'])) {
 </style>
 
 <script type="text/javascript">
-    /* ══════════════════════════════════════
-       Utilidades
-    ══════════════════════════════════════ */
-    function hora_a_minutos(hora) {
-        if (!hora) return null;
-        var partes = hora.split(':');
-        return parseInt(partes[0]) * 60 + parseInt(partes[1]);
-    }
-
-    function minutos_a_hora(min) {
-        if (min === null || min === undefined) return '';
-        min = ((min % 1440) + 1440) % 1440;
-        var h = Math.floor(min / 60);
-        var m = min % 60;
+    /*
+     * Convierte minutos (ej: 480) a string "HH:MM" (ej: "08:00")
+     * Definida localmente para no depender de operaciones_generales.js
+     * en los callbacks del slider donde esa función puede no estar lista.
+     */
+    function min_to_hhmm(num) {
+        var h = Math.floor(num / 60);
+        var m = num % 60;
         return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
     }
 
-    /* ══════════════════════════════════════
-       Calcular y mostrar duración del turno
-    ══════════════════════════════════════ */
     function calcular_horas_trabajadas() {
         var entradaMin = hora_a_minutos($('#txt_hora_entrada').val());
-        var salidaMin  = hora_a_minutos($('#txt_hora_salida').val());
+        var salidaMin = hora_a_minutos($('#txt_hora_salida').val());
 
         if (entradaMin === null || salidaMin === null) {
             $('#lbl_horas_trabajadas').html('');
@@ -113,8 +104,8 @@ if (isset($_GET['_id'])) {
        Slider → inputs
     ══════════════════════════════════════ */
     function slider_a_inputs(data) {
-        $('#txt_hora_entrada').val(minutos_a_hora(data.from));
-        $('#txt_hora_salida').val(minutos_a_hora(data.to));
+        $('#txt_hora_entrada').val(min_to_hhmm(data.from));
+        $('#txt_hora_salida').val(min_to_hhmm(data.to));
         calcular_horas_trabajadas();
     }
 
@@ -123,7 +114,7 @@ if (isset($_GET['_id'])) {
     ══════════════════════════════════════ */
     function inputs_a_slider() {
         var entradaMin = hora_a_minutos($('#txt_hora_entrada').val());
-        var salidaMin  = hora_a_minutos($('#txt_hora_salida').val());
+        var salidaMin = hora_a_minutos($('#txt_hora_salida').val());
         if (entradaMin !== null && salidaMin !== null && typeof slider_inst !== 'undefined') {
             slider_inst.update({
                 from: entradaMin,
@@ -140,16 +131,12 @@ if (isset($_GET['_id'])) {
        Aplicar color al slider (barra + handles + tooltips)
     ══════════════════════════════════════ */
     function aplicar_color_slider(color) {
-        // Barra de rango seleccionado
         $('.irs-bar, .irs-bar-edge').css('background', color);
-        // Handles (los dos círculos arrastrables)
         $('.irs-handle, .irs-handle.type_last').css({
             'background': color,
             'border-color': color
         });
-        // Tooltips from/to/single
         $('.irs-from, .irs-to, .irs-single').css('background', color);
-        // Etiqueta de duración
         $('#lbl_horas_trabajadas span').css('color', color);
     }
 
@@ -157,9 +144,10 @@ if (isset($_GET['_id'])) {
        Color picker
     ══════════════════════════════════════ */
     function color_input(colorInicial) {
-        // Si ya existe una instancia previa, destruirla antes de crear una nueva
         if (typeof pickr !== 'undefined' && pickr !== null) {
-            try { pickr.destroyAndRemove(); } catch(e) {}
+            try {
+                pickr.destroyAndRemove();
+            } catch (e) {}
             $('#color-picker').html('');
         }
 
@@ -168,20 +156,13 @@ if (isset($_GET['_id'])) {
             theme: 'nano',
             default: colorInicial,
             swatches: [
-                'rgba(244, 67, 54, 1)',
-                'rgba(233, 30, 99, 1)',
-                'rgba(156, 39, 176, 1)',
-                'rgba(103, 58, 183, 1)',
-                'rgba(63, 81, 181, 1)',
-                'rgba(33, 150, 243, 1)',
-                'rgba(3, 169, 244, 1)',
-                'rgba(0, 188, 212, 1)',
-                'rgba(0, 150, 136, 1)',
-                'rgba(76, 175, 80, 1)',
-                'rgba(139, 195, 74, 1)',
-                'rgba(205, 220, 57, 1)',
-                'rgba(255, 235, 59, 1)',
-                'rgba(255, 193, 7, 1)',
+                'rgba(244, 67, 54, 1)', 'rgba(233, 30, 99, 1)',
+                'rgba(156, 39, 176, 1)', 'rgba(103, 58, 183, 1)',
+                'rgba(63, 81, 181, 1)', 'rgba(33, 150, 243, 1)',
+                'rgba(3, 169, 244, 1)', 'rgba(0, 188, 212, 1)',
+                'rgba(0, 150, 136, 1)', 'rgba(76, 175, 80, 1)',
+                'rgba(139, 195, 74, 1)', 'rgba(205, 220, 57, 1)',
+                'rgba(255, 235, 59, 1)', 'rgba(255, 193, 7, 1)',
             ],
             components: {
                 preview: true,
@@ -193,16 +174,15 @@ if (isset($_GET['_id'])) {
                     input: true,
                     clear: true,
                     save: true
-                },
+                }
             },
             i18n: {
-                'btn:save':   'Guardar',
+                'btn:save': 'Guardar',
                 'btn:cancel': 'Cancelar',
-                'btn:clear':  'Limpiar',
+                'btn:clear': 'Limpiar'
             }
         });
 
-        // Aplicar color inicial al slider
         aplicar_color_slider(colorInicial);
 
         pickr.on('change', function(color) {
@@ -220,7 +200,6 @@ if (isset($_GET['_id'])) {
             pickr.hide();
         });
 
-        // Al cerrar el panel (click fuera o save), aplicar el color actual
         pickr.on('hide', function() {
             var color = pickr.getColor();
             if (color) {
@@ -236,17 +215,18 @@ if (isset($_GET['_id'])) {
     ══════════════════════════════════════ */
     function datos_turno(id) {
         $.ajax({
-            data: { id: id },
+            data: {
+                id: id
+            },
             url: '../controlador/HOST_TIME/TURNOS/hub_turnosC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
                 if (response && response.length > 0) {
                     $('#txt_nombre').val(response[0].nombre);
-                    $('#txt_hora_entrada').val(minutos_a_hora(response[0].hora_entrada));
-                    $('#txt_hora_salida').val(minutos_a_hora(response[0].hora_salida));
+                    $('#txt_hora_entrada').val(min_to_hhmm(response[0].hora_entrada));
+                    $('#txt_hora_salida').val(min_to_hhmm(response[0].hora_salida));
 
-                    // Cargar color
                     var color = response[0].color || '#2196F3';
                     $('#txt_color').val(color);
                     color_input(color);
@@ -266,17 +246,19 @@ if (isset($_GET['_id'])) {
         if (!$("#form_turnos").valid()) return;
 
         insertar({
-            '_id':             '<?= $_id ?>',
-            'txt_nombre':      $('#txt_nombre').val(),
+            '_id': '<?= $_id ?>',
+            'txt_nombre': $('#txt_nombre').val(),
             'txt_hora_entrada': hora_a_minutos($('#txt_hora_entrada').val()),
             'txt_hora_salida': hora_a_minutos($('#txt_hora_salida').val()),
-            'txt_color':       $('#txt_color').val(),
+            'txt_color': $('#txt_color').val(),
         });
     }
 
     function insertar(parametros) {
         $.ajax({
-            data: { parametros: parametros },
+            data: {
+                parametros: parametros
+            },
             url: '../controlador/HOST_TIME/TURNOS/hub_turnosC.php?insertar=true',
             type: 'post',
             dataType: 'json',
@@ -321,7 +303,9 @@ if (isset($_GET['_id'])) {
 
     function eliminar(id) {
         $.ajax({
-            data: { id: id },
+            data: {
+                id: id
+            },
             url: '../controlador/HOST_TIME/TURNOS/hub_turnosC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
@@ -336,20 +320,73 @@ if (isset($_GET['_id'])) {
     }
 
     /* ══════════════════════════════════════
-       Validación: salida > entrada
+       Limpiar errores de horas
+    ══════════════════════════════════════ */
+    function limpiar_errores_horas() {
+        $('#txt_hora_entrada').removeClass('is-invalid is-valid');
+        $('#txt_hora_salida').removeClass('is-invalid is-valid');
+        $('#error_hora_entrada').text('');
+        $('#error_hora_salida').text('');
+    }
+
+    /* ══════════════════════════════════════
+       Validación: rangos y salida > entrada
+       – Sin Swal, errores inline bajo cada input
     ══════════════════════════════════════ */
     function validar_horas() {
         var entrada = $('#txt_hora_entrada').val();
-        var salida  = $('#txt_hora_salida').val();
+        var salida = $('#txt_hora_salida').val();
+
+        limpiar_errores_horas();
+
         if (!entrada || !salida) return true;
 
-        if (hora_a_minutos(salida) <= hora_a_minutos(entrada)) {
-            Swal.fire('', 'La hora de salida debe ser mayor que la hora de entrada.', 'warning');
-            $('#txt_hora_salida').addClass('is-invalid');
-            return false;
+        var minPermitido = 420; // 07:00
+        var maxPermitido = 1200; // 20:00
+        var entradaMin = hora_a_minutos(entrada);
+        var salidaMin = hora_a_minutos(salida);
+        var valido = true;
+
+        // ── Rango mínimo ──
+        if (entradaMin < minPermitido) {
+            $('#txt_hora_entrada')
+                .addClass('is-invalid')
+                .val('07:00');
+            $('#error_hora_entrada').text('La hora de entrada no puede ser anterior a las 07:00.');
+            entradaMin = minPermitido;
+            valido = false;
         }
-        $('#txt_hora_salida').removeClass('is-invalid').addClass('is-valid');
-        return true;
+
+        // ── Rango máximo ──
+        if (salidaMin > maxPermitido) {
+            $('#txt_hora_salida')
+                .addClass('is-invalid')
+                .val('20:00');
+            $('#error_hora_salida').text('La hora de salida no puede ser posterior a las 20:00.');
+            salidaMin = maxPermitido;
+            valido = false;
+        }
+
+        // ── Entrada >= Salida ──
+        if (valido) {
+            if (entradaMin >= salidaMin) {
+                // La hora de entrada es mayor o igual a la de salida → marcar entrada
+                $('#txt_hora_entrada').addClass('is-invalid');
+                $('#error_hora_entrada').text('La hora de entrada debe ser menor que la hora de salida.');
+                valido = false;
+            }
+        }
+
+        // Si hubo correcciones de rango, actualizar slider con valores corregidos
+        if (!valido) {
+            inputs_a_slider();
+            calcular_horas_trabajadas();
+        } else {
+            $('#txt_hora_entrada').addClass('is-valid');
+            $('#txt_hora_salida').addClass('is-valid');
+        }
+
+        return valido;
     }
 
     /* ══════════════════════════════════════
@@ -360,7 +397,6 @@ if (isset($_GET['_id'])) {
         <?php if (isset($_GET['_id'])) { ?>
             datos_turno(<?= $_id ?>);
         <?php } else { ?>
-            // Color por defecto al crear un turno nuevo
             var colorDefault = '#2196F3';
             $('#txt_color').val(colorDefault);
             color_input(colorDefault);
@@ -403,10 +439,20 @@ if (isset($_GET['_id'])) {
             }
         });
 
-        // Sincronizar inputs → slider al escribir manualmente
-        $('#txt_hora_entrada, #txt_hora_salida').on('change', function() {
+        /* ── FIX: usar blur para no interrumpir mientras se escribe ── */
+        $('#txt_hora_entrada, #txt_hora_salida').on('blur', function() {
             inputs_a_slider();
             validar_horas();
+        });
+
+        /* Limpiar error individual al volver a enfocar el campo */
+        $('#txt_hora_entrada').on('focus', function() {
+            $(this).removeClass('is-invalid is-valid');
+            $('#error_hora_entrada').text('');
+        });
+        $('#txt_hora_salida').on('focus', function() {
+            $(this).removeClass('is-invalid is-valid');
+            $('#error_hora_salida').text('');
         });
 
     });
@@ -456,7 +502,7 @@ if (isset($_GET['_id'])) {
                             <!-- Nombre + Color -->
                             <div class="row mb-4">
                                 <div class="col-md-6">
-                                    <label for="txt_nombre" class="form-label fw-bold">Nombre del turno</label>
+                                    <label for="txt_nombre" class="form-label fw-bold">Nombre del turno </label>
                                     <input type="text"
                                         class="form-control form-control-sm no_caracteres"
                                         name="txt_nombre"
@@ -466,7 +512,7 @@ if (isset($_GET['_id'])) {
                                     <span id="error_txt_nombre" class="text-danger small"></span>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">Color del turno</label>
+                                    <label class="form-label fw-bold">Color del turno </label>
                                     <div class="row align-items-center">
                                         <div class="col-md-6">
                                             <div id="color-picker"></div>
@@ -500,20 +546,24 @@ if (isset($_GET['_id'])) {
                             <!-- Inputs hora -->
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <label for="txt_hora_entrada" class="form-label fw-bold">Hora de entrada</label>
+                                    <label for="txt_hora_entrada" class="form-label fw-bold">Hora Inicial </label>
                                     <input type="time"
                                         class="form-control form-control-sm"
                                         name="txt_hora_entrada"
                                         id="txt_hora_entrada"
-                                        value="07:00">
+                                        value="08:00">
+                                    <!-- Error inline hora de entrada -->
+                                    <span id="error_hora_entrada" class="text-danger small"></span>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="txt_hora_salida" class="form-label fw-bold">Hora de salida</label>
+                                    <label for="txt_hora_salida" class="form-label fw-bold">Hora Final </label>
                                     <input type="time"
                                         class="form-control form-control-sm"
                                         name="txt_hora_salida"
                                         id="txt_hora_salida"
-                                        value="15:30">
+                                        value="17:00">
+                                    <!-- Error inline hora de salida -->
+                                    <span id="error_hora_salida" class="text-danger small"></span>
                                 </div>
                             </div>
 
@@ -549,10 +599,10 @@ if (isset($_GET['_id'])) {
 
     $(document).ready(function() {
         slider_inst = $("#slider_turno").ionRangeSlider({
-            min: 0,
-            max: 1439,
-            from: 420,
-            to: 930,
+            min: 420,
+            max: 1200,
+            from: 480,
+            to: 1020,
             step: 5,
             grid: true,
             grid_num: 24,
@@ -562,21 +612,25 @@ if (isset($_GET['_id'])) {
                 var m = num % 60;
                 return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
             },
+
+            /* FIX: onStart actualiza los inputs con los valores iniciales del slider */
             onStart: function(data) {
-                // Se dispara una vez cuando el slider termina de renderizarse
-                // En este punto el DOM de .irs-bar ya existe
-                var color = $('#txt_color').val();
-                if (color) aplicar_color_slider(color);
-            },
-            onChange: function(data) {
-                $('#txt_hora_entrada').val(minutos_a_hora(data.from));
-                $('#txt_hora_salida').val(minutos_a_hora(data.to));
+                $('#txt_hora_entrada').val(min_to_hhmm(data.from));
+                $('#txt_hora_salida').val(min_to_hhmm(data.to));
                 calcular_horas_trabajadas();
-                // Reaplicar color en cada cambio porque ionRangeSlider
-                // puede reescribir estilos internos al mover el handle
                 var color = $('#txt_color').val();
                 if (color) aplicar_color_slider(color);
             },
+
+            onChange: function(data) {
+                $('#txt_hora_entrada').val(min_to_hhmm(data.from));
+                $('#txt_hora_salida').val(min_to_hhmm(data.to));
+                calcular_horas_trabajadas();
+                limpiar_errores_horas();
+                var color = $('#txt_color').val();
+                if (color) aplicar_color_slider(color);
+            },
+
             onFinish: function(data) {
                 slider_a_inputs(data);
                 validar_horas();

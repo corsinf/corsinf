@@ -8,6 +8,7 @@ if (isset($_GET['_id'])) {
 }
 ?>
 
+
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
@@ -29,8 +30,22 @@ if (isset($_GET['_id'])) {
             success: function(response) {
                 $('#txt_nombre').val(response[0].nombre);
                 $('#txt_direccion').val(response[0].direccion);
-                $('#txt_ciudad').val(response[0].ciudad);
                 $('#txt_telefono').val(response[0].telefono);
+                $('#ddl_provincias').append($('<option>', {
+                    value: response[0].th_prov_id,
+                    text: response[0].provincia,
+                    selected: true
+                }));
+                $('#ddl_ciudad').append($('<option>', {
+                    value: response[0].th_ciu_id,
+                    text: response[0].ciudad,
+                    selected: true
+                }));
+                $('#ddl_parroquia').append($('<option>', {
+                    value: response[0].th_parr_id,
+                    text: response[0].parroquia,
+                    selected: true
+                }));
             }
         });
     }
@@ -40,8 +55,10 @@ if (isset($_GET['_id'])) {
             '_id': '<?= $_id ?>',
             'txt_nombre': $('#txt_nombre').val(),
             'txt_direccion': $('#txt_direccion').val(),
-            'txt_ciudad': $('#txt_ciudad').val(),
             'txt_telefono': $('#txt_telefono').val(),
+            'ddl_provincias': $('#ddl_provincias').val(),
+            'ddl_ciudad': $('#ddl_ciudad').val(),
+            'ddl_parroquia': $('#ddl_parroquia').val(),
         };
 
         if ($("#form_ubicaciones").valid()) {
@@ -169,16 +186,12 @@ if (isset($_GET['_id'])) {
 
                             <div class="row pt-3 mb-col">
                                 <div class="col-md-6">
-                                    <label for="txt_ciudad" class="form-label">Ciudad </label>
-                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_ciudad" name="txt_ciudad" maxlength="100" autocomplete="off">
-                                    <span id="error_txt_ciudad" class="text-danger"></span>
-                                </div>
-
-                                <div class="col-md-6">
                                     <label for="txt_telefono" class="form-label">Teléfono </label>
                                     <input type="text" class="form-control form-control-sm no_caracteres" id="txt_telefono" name="txt_telefono" maxlength="20" autocomplete="off">
                                     <span id="error_txt_telefono" class="text-danger"></span>
                                 </div>
+
+                                <?php include_once('../vista/HOST_TIME/ESPACIOS/provincias_ciudades_parroquias.php'); ?>
                             </div>
 
                             <div class="d-flex justify-content-end pt-2">
@@ -204,8 +217,10 @@ if (isset($_GET['_id'])) {
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('txt_nombre');
         agregar_asterisco_campo_obligatorio('txt_direccion');
-        agregar_asterisco_campo_obligatorio('txt_ciudad');
         agregar_asterisco_campo_obligatorio('txt_telefono');
+        agregar_asterisco_campo_obligatorio('ddl_provincias');
+        agregar_asterisco_campo_obligatorio('ddl_ciudad');
+        agregar_asterisco_campo_obligatorio('ddl_parroquia');
 
         $("#form_ubicaciones").validate({
             rules: {
@@ -215,10 +230,16 @@ if (isset($_GET['_id'])) {
                 txt_direccion: {
                     required: true
                 },
-                txt_ciudad: {
+                txt_telefono: {
                     required: true
                 },
-                txt_telefono: {
+                ddl_provincias: {
+                    required: true
+                },
+                ddl_ciudad: {
+                    required: true
+                },
+                ddl_parroquia: {
                     required: true
                 },
             },

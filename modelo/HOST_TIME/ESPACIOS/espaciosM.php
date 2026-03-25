@@ -47,8 +47,8 @@ class espaciosM extends BaseModel
             piso.descripcion AS descripcion_numero_piso
         FROM hub_espacios esp
         LEFT JOIN hub_ubicaciones ubi ON esp.id_ubicacion = ubi.id_ubicacion
-        LEFT JOIN hub_tipos_espacios tipo ON esp.id_tipo_espacio = tipo.id_tipo_espacio
-        LEFT JOIN hub_cat_numero_piso piso ON esp.id_numero_piso = piso.id_numero_piso
+        LEFT JOIN hub_catn_tipo_espacios tipo ON esp.id_tipo_espacio = tipo.id_tipo_espacio
+        LEFT JOIN hub_catn_numero_piso piso ON esp.id_numero_piso = piso.id_numero_piso
         WHERE 1=1
 ";
 

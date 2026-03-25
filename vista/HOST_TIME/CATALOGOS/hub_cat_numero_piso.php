@@ -12,7 +12,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 url: '../assets/plugins/datatable/spanish.json'
             },
             ajax: {
-                url: '../controlador/HOST_TIME/CATALOGOS/hub_cat_numero_pisoC.php?listar=true',
+                url: '../controlador/HOST_TIME/CATALOGOS/hub_catn_numero_pisoC.php?listar=true',
                 dataSrc: ''
             },
             columns: [{

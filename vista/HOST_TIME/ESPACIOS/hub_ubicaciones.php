@@ -10,14 +10,13 @@ if (isset($_GET['_id'])) {
 
 ?>
 
-<script src="../js/ACTIVOS_FIJOS/avaluos.js"></script>
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
 
-        tbl_espacios = $('#tbl_espacios').DataTable($.extend({}, {
+        tbl_ubicaciones = $('#tbl_ubicaciones').DataTable($.extend({}, {
             reponsive: true,
             language: {
                 url: '../assets/plugins/datatable/spanish.json'
@@ -35,9 +34,6 @@ if (isset($_GET['_id'])) {
                 },
                 {
                     data: 'direccion'
-                },
-                {
-                    data: 'ciudad'
                 },
                 {
                     data: 'telefono'
@@ -97,12 +93,11 @@ if (isset($_GET['_id'])) {
                         <section class="content pt-2">
                             <div class="container-fluid">
                                 <div class="table-responsive">
-                                    <table class="table table-striped responsive " id="tbl_espacios" style="width:100%">
+                                    <table class="table table-striped responsive " id="tbl_ubicaciones" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
                                                 <th>Dirección</th>
-                                                <th>Ciudad</th>
                                                 <th>Teléfono</th>
                                             </tr>
                                         </thead>
@@ -118,47 +113,5 @@ if (isset($_GET['_id'])) {
             </div>
         </div>
         <!--end row-->
-    </div>
-</div>
-
-
-<div class="modal" id="modal_blank" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-
-                <div class="row">
-                    <div class="col-12">
-                        <label for="">Tipo de <label class="text-danger">*</label></label>
-                        <select name="" id="" class="form-select form-select-sm" onchange="">
-                            <option value="">Seleccione el </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row pt-3">
-                    <div class="col-12">
-                        <label for="">Blank <label class="text-danger">*</label></label>
-                        <select name="" id="" class="form-select form-select-sm">
-                            <option value="">Seleccione el </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row pt-3">
-                    <div class="col-12 text-end">
-                        <button type="button" class="btn btn-success btn-sm" onclick=""><i class="bx bx-save"></i> Agregar</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
     </div>
 </div>
