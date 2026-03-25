@@ -555,8 +555,8 @@ class th_control_acceso_calculosC
             }
         }else
         {
-            $inicio = new DateTime($fecha_ini);
-            $fin = new DateTime($fecha_final);
+            $inicio = new DateTime($txt_fecha_inicio);
+            $fin = new DateTime($txt_fecha_fin);
 
             $inicio->modify('first day of this month');
             $fin->modify('first day of next month');
@@ -578,12 +578,12 @@ class th_control_acceso_calculosC
                     $fecha_primero =  $dt->format('Y-m-d');
                     if($num_meses>1) {$fecha_ini = $fecha_primero; }
 
-                    array_push($array_table, array('tbl'=>'th_control_acceso_'.$periodo,'inicio'=>$fecha_ini,'fin'=>$fecha_ultima));
+                    array_push($array_table, array('tbl'=>'th_control_acceso_'.$periodo,'inicio'=>$txt_fecha_inicio,'fin'=>$fecha_ultima));
                     $num_meses++;
                 }else
                 {
                     $hoy = date('Y-m');
-                    array_push($array_table, array('tbl'=>'th_control_acceso','inicio'=>$hoy.'-01','fin'=>$fecha_final));
+                    array_push($array_table, array('tbl'=>'th_control_acceso','inicio'=>$hoy.'-01','fin'=>$txt_fecha_fin));
                 }
             }
         }
@@ -678,9 +678,9 @@ class th_control_acceso_calculosC
 
             $res = ((int) $dato['RegistroSalida']-(int)$dato['salida_min']);
             $filas_datos = [
-                $dato['APELLIDOS'],
+                utf8_decode($dato['APELLIDOS']),
                 $dato['NOMBRES'],
-                $dato['empleado'],
+                utf8_encode($dato['empleado']),
                 $dato['Cedula'],
                 $dato['Correo'],
                 $dato['Departamento'],
