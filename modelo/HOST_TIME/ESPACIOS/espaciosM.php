@@ -23,6 +23,7 @@ class espaciosM extends BaseModel
         'creado_en',
         'estado',
         'id_numero_piso',
+        'imagen',
     ];
 
     public function listar_espacios($id_espacio = '')
@@ -39,6 +40,7 @@ class espaciosM extends BaseModel
             esp.tarifa_dia,
             esp.activo,
             esp.creado_en,
+            esp.imagen,
             ubi.nombre AS nombre_ubicacion,
             ubi.id_ubicacion,
             tipo.id_tipo_espacio,

@@ -122,42 +122,76 @@
 
 <form id="form_espacios">
 
-    <div class="row pt-3 mb-col">
-        <div class="col-md-6">
-            <label for="txt_nombre" class="form-label">Nombre </label>
-            <input type="text" class="form-control form-control-sm no_caracteres"
-                id="txt_nombre" name="txt_nombre" autocomplete="off">
-            <span id="error_txt_nombre" class="text-danger"></span>
+    <!-- FILA 1: Imagen izquierda + campos a la derecha -->
+    <div class="row pt-3 mb-col align-items-center">
+
+        <?php if ($_id != ''): ?>
+            <!-- Imagen col-3 -->
+            <div class="col-md-3 d-flex justify-content-center align-items-center">
+                <div class="position-relative d-inline-block">
+                    <img id="img_espacio"
+                        src="../img/sin_imagen.jpg"
+                        alt="Imagen espacio"
+                        class="rounded border"
+                        style="width:160px; height:160px; object-fit:cover;">
+                    <button type="button"
+                        class="btn btn-dark btn-sm rounded-circle position-absolute bottom-0 end-0 d-flex align-items-center justify-content-center shadow"
+                        style="width:30px; height:30px; border:2px solid #fff;"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modal_imagen_espacio"
+                        title="Cambiar imagen">
+                        <i class='bx bxs-camera' style="font-size:13px;"></i>
+                    </button>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <!-- Campos apilados col-9 -->
+        <div class="col-md-<?= $_id != '' ? '9' : '12' ?>">
+
+            <!-- Nombre y Codigo en la misma fila -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="txt_nombre" class="form-label">Nombre</label>
+                    <input type="text" class="form-control form-control-sm no_caracteres"
+                        id="txt_nombre" name="txt_nombre" autocomplete="off">
+                    <span id="error_txt_nombre" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label for="txt_codigo" class="form-label">Codigo</label>
+                    <input type="text" class="form-control form-control-sm no_caracteres"
+                        id="txt_codigo" name="txt_codigo" autocomplete="off">
+                </div>
+            </div>
+
+            <!-- Tipo espacio y Ubicación en la misma fila -->
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="ddl_tipo_espacio" class="form-label">Tipo de espacio</label>
+                    <select class="form-select form-select-sm select2-validation"
+                        id="ddl_tipo_espacio" name="ddl_tipo_espacio">
+                        <option value="" selected hidden>-- Seleccione --</option>
+                    </select>
+                    <label class="error" style="display:none;" for="ddl_tipo_espacio"></label>
+                </div>
+                <div class="col-md-6">
+                    <label for="ddl_ubicacion" class="form-label">Ubicación</label>
+                    <select class="form-select form-select-sm select2-validation"
+                        id="ddl_ubicacion" name="ddl_ubicacion">
+                        <option value="" selected hidden>-- Seleccione --</option>
+                    </select>
+                    <label class="error" style="display:none;" for="ddl_ubicacion"></label>
+                </div>
+            </div>
+
         </div>
-        <div class="col-md-6">
-            <label for="txt_codigo" class="form-label">Codigo </label>
-            <input type="text" class="form-control form-control-sm no_caracteres"
-                id="txt_codigo" name="txt_codigo" autocomplete="off">
-        </div>
+
     </div>
 
-    <div class="row mb-col">
+    <!-- FILA 2: Número de piso + Capacidad -->
+    <div class="row mb-col mt-3">
         <div class="col-md-6">
-            <label for="ddl_tipo_espacio" class="form-label">Tipo de espacio </label>
-            <select class="form-select form-select-sm select2-validation"
-                id="ddl_tipo_espacio" name="ddl_tipo_espacio">
-                <option value="" selected hidden>-- Seleccione --</option>
-            </select>
-            <label class="error" style="display:none;" for="ddl_tipo_espacio"></label>
-        </div>
-        <div class="col-md-6">
-            <label for="ddl_ubicacion" class="form-label">Ubicación </label>
-            <select class="form-select form-select-sm select2-validation"
-                id="ddl_ubicacion" name="ddl_ubicacion">
-                <option value="" selected hidden>-- Seleccione --</option>
-            </select>
-            <label class="error" style="display:none;" for="ddl_ubicacion"></label>
-        </div>
-    </div>
-
-    <div class="row mb-col">
-        <div class="col-md-6">
-            <label for="ddl_numero_piso" class="form-label">Numero de piso </label>
+            <label for="ddl_numero_piso" class="form-label">Numero de piso</label>
             <select class="form-select form-select-sm select2-validation"
                 id="ddl_numero_piso" name="ddl_numero_piso">
                 <option value="" selected hidden>-- Seleccione --</option>
@@ -165,15 +199,16 @@
             <label class="error" style="display:none;" for="ddl_numero_piso"></label>
         </div>
         <div class="col-md-6">
-            <label for="txt_capacidad" class="form-label">Capacidad </label>
+            <label for="txt_capacidad" class="form-label">Capacidad</label>
             <input type="number" class="form-control form-control-sm"
                 id="txt_capacidad" name="txt_capacidad" min="0" step="1">
         </div>
     </div>
 
+    <!-- FILA 3: Tarifas -->
     <div class="row mb-col">
         <div class="col-md-6">
-            <label for="txt_tarifa_hora" class="form-label">Tarifa (Hora) </label>
+            <label for="txt_tarifa_hora" class="form-label">Tarifa (Hora)</label>
             <div class="input-group input-group-sm">
                 <span class="input-group-text">$</span>
                 <input type="number" class="form-control form-control-sm"
@@ -182,7 +217,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <label for="txt_tarifa_dia" class="form-label">Tarifa (Dia) </label>
+            <label for="txt_tarifa_dia" class="form-label">Tarifa (Dia)</label>
             <div class="input-group input-group-sm">
                 <span class="input-group-text">$</span>
                 <input type="number" class="form-control form-control-sm"
@@ -192,25 +227,157 @@
         </div>
     </div>
 
+    <!-- Botones -->
     <div class="d-flex justify-content-end pt-2">
         <?php if ($_id == ''): ?>
-            <button type="button" class="btn btn-success btn-sm px-4 m-0"
-                onclick="editar_insertar()">
+            <button type="button" class="btn btn-success btn-sm px-4 m-0" onclick="editar_insertar()">
                 <i class="bx bx-save"></i> Guardar
             </button>
         <?php else: ?>
-            <button type="button" class="btn btn-success btn-sm px-4 m-1"
-                onclick="editar_insertar()">
+            <button type="button" class="btn btn-success btn-sm px-4 m-1" onclick="editar_insertar()">
                 <i class="bx bx-save"></i> Editar
             </button>
-            <button type="button" class="btn btn-danger btn-sm px-4 m-1"
-                onclick="delete_datos()">
+            <button type="button" class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()">
                 <i class="bx bx-trash"></i> Eliminar
             </button>
         <?php endif; ?>
     </div>
 
 </form>
+<?php if ($_id != ''): ?>
+
+    <!-- Modal imagen espacio -->
+    <div class="modal fade" id="modal_imagen_espacio" tabindex="-1"
+        data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="fw-bold mb-0">Imagen del espacio</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="form_imagen_espacio" enctype="multipart/form-data" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="txt_espacio_id_foto" id="txt_espacio_id_foto"
+                            value="<?= $_id ?>">
+                        <div class="text-center mb-3">
+                            <img id="img_espacio_preview"
+                                src="../img/sin_imagen.jpg"
+                                class="rounded border"
+                                style="width:150px; height:150px; object-fit:cover;">
+                        </div>
+                        <hr>
+                        <input type="file" class="form-control form-control-sm"
+                            name="txt_copia_imagen_espacio"
+                            id="txt_copia_imagen_espacio"
+                            accept=".jpg,.jpeg,.png,.webp">
+                        <small class="text-muted">Formatos: JPG, PNG, WEBP · Máx 2MB</small>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-success btn-sm px-4"
+                            onclick="guardar_imagen_espacio();">
+                            <i class="bx bx-save"></i> Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('#modal_imagen_espacio').on('show.bs.modal', function() {
+            var src = $('#img_espacio').attr('src');
+            $('#img_espacio_preview').attr('src', src);
+        });
+        $('#modal_imagen_espacio').on('hidden.bs.modal', function() {
+            $('#txt_copia_imagen_espacio').val('');
+            var src = $('#img_espacio').attr('src').split('?')[0]; // quitar el ?random
+            $('#img_espacio_preview').attr('src', src);
+        });
+        // Preview en el modal
+        $('#txt_copia_imagen_espacio').on('change', function(e) {
+            var file = e.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(ev) {
+                    $('#img_espacio_preview').attr('src', ev.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Guardar imagen
+        function guardar_imagen_espacio() {
+            if (!$("#form_imagen_espacio").valid()) return;
+
+            var form_data = new FormData(document.getElementById('form_imagen_espacio'));
+
+            $.ajax({
+                url: '../controlador/HOST_TIME/ESPACIOS/espaciosC.php?insertar_imagen=true',
+                type: 'post',
+                data: form_data,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(r) {
+                    if (r == 1) {
+                        Swal.fire('', 'Imagen actualizada con éxito.', 'success');
+                        recargar_imagen_espacio('<?= $_id ?>');
+                        $('#modal_imagen_espacio').modal('hide');
+                    } else if (r == -2) {
+                        Swal.fire('', 'Formato no válido. Use JPG, PNG o WEBP.', 'error');
+                    } else {
+                        Swal.fire('', 'Error al guardar la imagen.', 'error');
+                    }
+                },
+                error: function(xhr) {
+                    Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+                }
+            });
+        }
+
+        // Recargar imagen principal en la página
+        function recargar_imagen_espacio(id) {
+            $.ajax({
+                url: '../controlador/HOST_TIME/ESPACIOS/espaciosC.php?listar=true',
+                type: 'post',
+                data: {
+                    id: id
+                },
+                dataType: 'json',
+                success: function(r) {
+                    if (r && r[0] && r[0].imagen) {
+                        $('#img_espacio').attr('src', r[0].imagen + '?' + Math.random());
+                    }
+                }
+            });
+        }
+
+        // Cargar imagen al iniciar si ya tiene una
+        $(document).ready(function() {
+            recargar_imagen_espacio('<?= $_id ?>');
+
+            // Validación del form del modal
+            $("#form_imagen_espacio").validate({
+                rules: {
+                    txt_copia_imagen_espacio: {
+                        required: true
+                    }
+                },
+                messages: {
+                    txt_copia_imagen_espacio: {
+                        required: 'Seleccione una imagen.'
+                    }
+                },
+                highlight: function(el) {
+                    $(el).addClass('is-invalid');
+                },
+                unhighlight: function(el) {
+                    $(el).removeClass('is-invalid');
+                }
+            });
+        });
+    </script>
+<?php endif; ?>
 
 <script>
     $(document).ready(function() {

@@ -33,6 +33,10 @@ if (isset($_GET['buscar'])) {
 }
 
 
+if (isset($_GET['insertar_imagen'])) {
+    echo json_encode($controlador->insertar_imagen($_FILES, $_POST));
+}
+
 class espaciosC
 {
     private $modelo;
@@ -124,5 +128,71 @@ class espaciosC
         }
 
         return $lista;
+    }
+
+    function insertar_imagen($file, $parametros)
+    {
+        $id_espacio = $parametros['txt_espacio_id_foto'] ?? '';
+
+        if ($id_espacio == '') return -1;
+        if (empty($file['txt_copia_imagen_espacio']['tmp_name'])) return -1;
+
+        return $this->guardar_archivo($file, $id_espacio);
+    }
+
+    private function guardar_archivo($file, $id_espacio)
+    {
+        $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
+        $ruta = dirname(__DIR__, 3) . '/REPOSITORIO/HOST_TIME/ESPACIOS/' . $id_empresa . '/' . $id_espacio . '/';
+
+        if (!file_exists($ruta)) {
+            mkdir($ruta, 0777, true);
+        }
+
+        if ($this->validar_formato($file) !== 1) return -2;
+
+        $tmp = $file['txt_copia_imagen_espacio']['tmp_name'];
+        $mime = getimagesize($tmp)['mime'];
+        $nombre = 'imagen_espacio_' . $id_espacio . '.webp';
+        $ruta_fisica = $ruta . $nombre;
+        $ruta_bd = '../REPOSITORIO/HOST_TIME/ESPACIOS/' . $id_empresa . '/' . $id_espacio . '/' . $nombre;
+
+        if (!is_uploaded_file($tmp)) return -1;
+
+        switch ($mime) {
+            case 'image/jpeg':
+            case 'image/jpg':
+                $img = imagecreatefromjpeg($tmp);
+                break;
+            case 'image/png':
+                $img = imagecreatefrompng($tmp);
+                imagepalettetotruecolor($img);
+                imagealphablending($img, true);
+                imagesavealpha($img, true);
+                break;
+            case 'image/gif':
+                $img = imagecreatefromgif($tmp);
+                break;
+            default:
+                return -1;
+        }
+
+        if (!imagewebp($img, $ruta_fisica, 80)) {
+            imagedestroy($img);
+            return -1;
+        }
+
+        imagedestroy($img);
+
+        $datos = [['campo' => 'imagen', 'dato' => $ruta_bd]];
+        $where = [['campo' => 'id_espacio', 'dato' => $id_espacio]];
+        $r = $this->modelo->editar($datos, $where);
+        return $r == 1 ? 1 : -1;
+    }
+
+    function validar_formato($file)
+    {
+        $tipos = ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png', 'image/jpg'];
+        return in_array($file['txt_copia_imagen_espacio']['type'], $tipos) ? 1 : -1;
     }
 }
