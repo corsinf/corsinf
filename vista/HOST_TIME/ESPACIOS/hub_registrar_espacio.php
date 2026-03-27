@@ -65,6 +65,14 @@ if (isset($_GET['_id'])) {
                             </li>
                             <?php if ($_id != ''): ?>
                                 <li class="nav-item" role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tab_tarifas" role="tab">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bx bx-money font-18 me-1"></i>
+                                            <span>Tarifas</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
                                     <a class="nav-link" data-bs-toggle="tab" href="#tab_turnos" role="tab">
                                         <div class="d-flex align-items-center">
                                             <i class="bx bxs-time font-18 me-1"></i>
@@ -72,6 +80,15 @@ if (isset($_GET['_id'])) {
                                         </div>
                                     </a>
                                 </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tab_media" role="tab">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bx bx-images font-18 me-1"></i>
+                                            <span>Media</span>
+                                        </div>
+                                    </a>
+                                </li>
+
                             <?php endif; ?>
                         </ul>
 
@@ -79,13 +96,18 @@ if (isset($_GET['_id'])) {
 
                             <!-- TAB 1: DATOS -->
                             <div class="tab-pane fade show active" id="tab_datos" role="tabpanel">
-                                 <?php include_once('../vista/HOST_TIME/ESPACIOS/TABS_ESPACIOS/tab_formulario_espacios.php'); ?>
+                                <?php include_once('../vista/HOST_TIME/ESPACIOS/TABS_ESPACIOS/tab_formulario_espacios.php'); ?>
                             </div>
-
                             <!-- TAB 2: TURNOS -->
                             <?php if ($_id != ''): ?>
+                                <div class="tab-pane fade" id="tab_tarifas" role="tabpanel">
+                                    <?php include_once('../vista/HOST_TIME/ESPACIOS/TABS_ESPACIOS/tab_tarifas_espacios.php'); ?>
+                                </div>
                                 <div class="tab-pane fade" id="tab_turnos" role="tabpanel">
-                                 <?php include_once('../vista/HOST_TIME/ESPACIOS/TABS_ESPACIOS/tab_calentario_espacio_turno.php'); ?>
+                                    <?php include_once('../vista/HOST_TIME/ESPACIOS/TABS_ESPACIOS/tab_calentario_espacio_turno.php'); ?>
+                                </div>
+                                <div class="tab-pane fade" id="tab_media" role="tabpanel">
+                                    <?php include_once('../vista/HOST_TIME/ESPACIOS/TABS_ESPACIOS/tab_media_espacios.php'); ?>
                                 </div>
                             <?php endif; ?>
 
@@ -101,4 +123,3 @@ if (isset($_GET['_id'])) {
     <script src="../assets/plugins/fullcalendar/js/main.min.js"></script>
     <script src="../assets/plugins/notifications/js/lobibox.min.js"></script>
 <?php endif; ?>
-

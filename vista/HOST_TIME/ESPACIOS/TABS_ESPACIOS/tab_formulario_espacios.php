@@ -5,7 +5,18 @@
             cargar_espacio(<?= $_id ?>);
         <?php endif; ?>
         cargar_selects2();
+        $('#txt_capacidad_max').on('change', function() {
+            var min = parseInt($('#txt_capacidad_min').val());
+            var max = parseInt($(this).val());
+
+            if (max < min) {
+                Swal.fire('', 'La capacidad máxima no puede ser menor que la mínima.', 'warning');
+                $(this).val('');
+            }
+        });
     });
+
+
 
     function cargar_espacio(id) {
         $.ajax({
@@ -19,9 +30,9 @@
                 r = r[0];
                 $('#txt_nombre').val(r.nombre);
                 $('#txt_codigo').val(r.codigo);
-                $('#txt_capacidad').val(r.capacidad);
-                $('#txt_tarifa_hora').val(r.tarifa_hora);
-                $('#txt_tarifa_dia').val(r.tarifa_dia);
+                $('#txt_capacidad_min').val(r.capacidad_minima);
+                $('#txt_capacidad_max').val(r.capacidad_maxima);
+                $('#chk_exclusivo').prop('checked', r.es_exclusivo == 1);
                 $('#ddl_tipo_espacio').append($('<option>', {
                     value: r.id_tipo_espacio,
                     text: r.nombre_tipo_espacio,
@@ -52,9 +63,9 @@
             '_id': '<?= $_id ?>',
             'txt_nombre': $('#txt_nombre').val(),
             'txt_codigo': $('#txt_codigo').val(),
-            'txt_capacidad': $('#txt_capacidad').val(),
-            'txt_tarifa_hora': $('#txt_tarifa_hora').val(),
-            'txt_tarifa_dia': $('#txt_tarifa_dia').val(),
+            'txt_capacidad_min': $('#txt_capacidad_min').val(),
+            'txt_capacidad_max': $('#txt_capacidad_max').val(),
+            'chk_exclusivo': $('#chk_exclusivo').is(':checked') ? 1 : 0,
             'ddl_tipo_espacio': $('#ddl_tipo_espacio').val(),
             'ddl_ubicacion': $('#ddl_ubicacion').val(),
             'ddl_numero_piso': $('#ddl_numero_piso').val(),
@@ -190,7 +201,7 @@
 
     <!-- FILA 2: Número de piso + Capacidad -->
     <div class="row mb-col mt-3">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <label for="ddl_numero_piso" class="form-label">Numero de piso </label>
             <select class="form-select form-select-sm select2-validation"
                 id="ddl_numero_piso" name="ddl_numero_piso">
@@ -198,31 +209,24 @@
             </select>
             <label class="error" style="display:none;" for="ddl_numero_piso"></label>
         </div>
-        <div class="col-md-6">
-            <label for="txt_capacidad" class="form-label">Capacidad </label>
+        <div class="col-md-4">
+            <label for="txt_capacidad_min" class="form-label">Capacidad mínima</label>
             <input type="number" class="form-control form-control-sm"
-                id="txt_capacidad" name="txt_capacidad" min="0" step="1">
+                id="txt_capacidad_min" name="txt_capacidad_min" min="0" step="1">
         </div>
-    </div>
 
-    <!-- FILA 3: Tarifas -->
-    <div class="row mb-col">
-        <div class="col-md-6">
-            <label for="txt_tarifa_hora" class="form-label">Tarifa (Hora) </label>
-            <div class="input-group input-group-sm">
-                <span class="input-group-text">$</span>
-                <input type="number" class="form-control form-control-sm"
-                    id="txt_tarifa_hora" name="txt_tarifa_hora"
-                    placeholder="0.00" min="0" step="0.01">
-            </div>
+        <div class="col-md-4">
+            <label for="txt_capacidad_max" class="form-label">Capacidad máxima</label>
+            <input type="number" class="form-control form-control-sm"
+                id="txt_capacidad_max" name="txt_capacidad_max" min="0" step="1">
         </div>
-        <div class="col-md-6">
-            <label for="txt_tarifa_dia" class="form-label">Tarifa (Dia) </label>
-            <div class="input-group input-group-sm">
-                <span class="input-group-text">$</span>
-                <input type="number" class="form-control form-control-sm"
-                    id="txt_tarifa_dia" name="txt_tarifa_dia"
-                    placeholder="0.00" min="0" step="0.01">
+
+        <div class="col-md-4 d-flex align-items-end">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="chk_exclusivo">
+                <label class="form-check-label" for="chk_exclusivo">
+                    Exclusivo
+                </label>
             </div>
         </div>
     </div>
@@ -383,9 +387,8 @@
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('txt_nombre');
         agregar_asterisco_campo_obligatorio('txt_codigo');
-        agregar_asterisco_campo_obligatorio('txt_capacidad');
-        agregar_asterisco_campo_obligatorio('txt_tarifa_hora');
-        agregar_asterisco_campo_obligatorio('txt_tarifa_dia');
+        agregar_asterisco_campo_obligatorio('txt_capacidad_min');
+        agregar_asterisco_campo_obligatorio('txt_capacidad_max');
         agregar_asterisco_campo_obligatorio('ddl_tipo_espacio');
         agregar_asterisco_campo_obligatorio('ddl_ubicacion');
         agregar_asterisco_campo_obligatorio('ddl_numero_piso');
@@ -398,13 +401,10 @@
                 txt_codigo: {
                     required: true
                 },
-                txt_capacidad: {
+                txt_capacidad_min: {
                     required: true
                 },
-                txt_tarifa_hora: {
-                    required: true
-                },
-                txt_tarifa_dia: {
+                txt_capacidad_max: {
                     required: true
                 },
                 ddl_tipo_espacio: {
