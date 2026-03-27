@@ -9,6 +9,13 @@ $controlador = new espaciosC();
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
+if (isset($_GET['listar_pisos_por_ubicacion'])) {
+    echo json_encode($controlador->listar_pisos_por_ubicacion($_POST['id'] ?? ''));
+}
+
+if (isset($_GET['listar_tipos_por_ubicacion_piso'])) {
+    echo json_encode($controlador->listar_tipos_por_ubicacion_piso($_POST['id_ubicacion'] ?? '', $_POST['id_piso'] ?? ''));
+}
 
 if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
@@ -53,55 +60,50 @@ class espaciosC
 
         return $datos;
     }
+    function listar_pisos_por_ubicacion($id = '')
+    {
+
+        $datos = $this->modelo->listar_pisos_por_ubicacion($id);
+
+        return $datos;
+    }
+    function listar_tipos_por_ubicacion_piso($id_ubicacion = '', $id_piso = '')
+    {
+
+        $datos = $this->modelo->listar_tipos_por_ubicacion_piso($id_ubicacion, $id_piso);
+
+        return $datos;
+    }
 
     public function insertar_editar($parametros)
     {
-        // Normalizar y validar campos básicos
-        $id_ubicacion = isset($parametros['ddl_ubicacion']) && $parametros['ddl_ubicacion'] !== ''
-            ? (int)$parametros['ddl_ubicacion']
-            : null;
+        $id_usuario_sesion = $_SESSION['INICIO']['ID_USUARIO'] ?? null;
+        $fecha_actual = date('Y-m-d H:i:s');
 
-        $id_tipo_espacio = isset($parametros['ddl_tipo_espacio']) && $parametros['ddl_tipo_espacio'] !== ''
-            ? (int)$parametros['ddl_tipo_espacio']
-            : null;
-        $id_numero_piso = isset($parametros['ddl_numero_piso']) && $parametros['ddl_numero_piso'] !== ''
-            ? (int)$parametros['ddl_numero_piso']
-            : null;
-
-        $codigo = isset($parametros['txt_codigo']) ? trim($parametros['txt_codigo']) : '';
-        $nombre = isset($parametros['txt_nombre']) ? trim($parametros['txt_nombre']) : '';
-        $capacidad = isset($parametros['txt_capacidad']) ? (int)$parametros['txt_capacidad'] : 0;
-
-        // Tarifas (hora y día)
-        $tarifa_hora = isset($parametros['txt_tarifa_hora']) ? (float)$parametros['txt_tarifa_hora'] : 0.00;
-        $tarifa_dia = isset($parametros['txt_tarifa_dia']) ? (float)$parametros['txt_tarifa_dia'] : 0.00;
-
-        // Estado general del registro
-        $estado = isset($parametros['estado']) ? (int)$parametros['estado'] : 1; // por defecto activo
-
-        // Marcar fecha de creación solo al insertar
-        $creado_en = date('Y-m-d H:i:s');
-
-        // Estructura para el modelo (siguiendo BaseModel)
+        // Mapeo de campos desde el formulario (parametros)
         $datos = array(
-            array('campo' => 'id_ubicacion', 'dato' => $id_ubicacion),
-            array('campo' => 'id_tipo_espacio', 'dato' => $id_tipo_espacio),
-            array('campo' => 'codigo', 'dato' => $codigo),
-            array('campo' => 'nombre', 'dato' => $nombre),
-            array('campo' => 'capacidad', 'dato' => $capacidad),
-            array('campo' => 'tarifa_hora', 'dato' => $tarifa_hora),
-            array('campo' => 'tarifa_dia', 'dato' => $tarifa_dia),
-            array('campo' => 'estado', 'dato' => $estado),
-            array('campo' => 'id_numero_piso', 'dato' => $id_numero_piso),
+            array('campo' => 'id_ubicacion', 'dato' => (int)$parametros['ddl_ubicacion']),
+            array('campo' => 'id_tipo_espacio', 'dato' => (int)$parametros['ddl_tipo_espacio']),
+            array('campo' => 'id_numero_piso', 'dato' => (int)$parametros['ddl_numero_piso']),
+            array('campo' => 'codigo', 'dato' => trim($parametros['txt_codigo'])),
+            array('campo' => 'nombre', 'dato' => trim($parametros['txt_nombre'])),
+            array('campo' => 'capacidad', 'dato' => (int)$parametros['txt_capacidad']),
+            array('campo' => 'tarifa_hora', 'dato' => (float)$parametros['txt_tarifa_hora']),
+            array('campo' => 'tarifa_dia', 'dato' => (float)$parametros['txt_tarifa_dia']),
+            array('campo' => 'id_estado_espacio', 'dato' => (int)($parametros['ddl_estado'] ?? 1)),
+            array('campo' => 'is_deleted', 'dato' => 0),
         );
 
-        // Si es nuevo registro → insertar
         if (empty($parametros['_id'])) {
-            $datos[] = array('campo' => 'creado_en', 'dato' => $creado_en);
+            // Campos para nuevo registro
+            $datos[] = array('campo' => 'id_usuario_crea', 'dato' => $id_usuario_sesion);
+            $datos[] = array('campo' => 'fecha_creacion', 'dato' => $fecha_actual);
             $resultado = $this->modelo->insertar($datos);
-        }
-        // Si ya existe → actualizar
-        else {
+        } else {
+            // Campos para actualización
+            $datos[] = array('campo' => 'id_usuario_modifica', 'dato' => $id_usuario_sesion);
+            $datos[] = array('campo' => 'fecha_modificacion', 'dato' => $fecha_actual);
+
             $where = array();
             $where[0]['campo'] = 'id_espacio';
             $where[0]['dato'] = (int)$parametros['_id'];
@@ -112,8 +114,17 @@ class espaciosC
         return $resultado;
     }
 
-
-    function eliminar($id) {}
+    // Soft delete (recomendado dado que tienes is_deleted en la tabla)
+    public function eliminar($id)
+    {
+        $datos = array(
+            array('campo' => 'is_deleted', 'dato' => 1)
+        );
+        $where = array(
+            array('campo' => 'id_espacio', 'dato' => (int)$id)
+        );
+        return $this->modelo->editar($datos, $where);
+    }
 
     //Para usar en select2
     function buscar($parametros)

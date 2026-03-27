@@ -16,16 +16,6 @@ if ($_GET['acc'] == 'hub_registrar_servicio') {
     include('THEHUB/SERVICIOS/hub_registrar_servicio.php');
 }
 
-//Reservas de los espacios
-
-if ($_GET['acc'] == 'hub_reservas') {
-    include('THEHUB/RESERVAS/hub_reservas.php');
-}
-
-if ($_GET['acc'] == 'hub_registrar_reserva') {
-    include('THEHUB/RESERVAS/hub_registrar_reserva.php');
-}
-
 if ($_GET['acc'] == 'hub_registrar_reserva_servicio') {
     include('THEHUB/RESERVAS/hub_registrar_reserva_servicio.php');
 }

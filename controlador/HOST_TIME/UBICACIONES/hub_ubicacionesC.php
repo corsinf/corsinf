@@ -91,8 +91,8 @@ class hub_ubicacionesC
     function buscar($parametros)
     {
         $lista  = array();
-        $concat = "nombre, estado";
-        $datos  = $this->modelo->where('estado', 1)->like($concat, $parametros['query']);
+        $concat = "nombre, is_deleted";
+        $datos  = $this->modelo->where('is_deleted', 0)->like($concat, $parametros['query']);
 
         foreach ($datos as $key => $value) {
             $text   = $value['nombre'];

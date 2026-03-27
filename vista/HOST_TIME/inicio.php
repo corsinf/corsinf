@@ -39,6 +39,20 @@ if ($_GET['acc'] == 'hub_turnos_registrar') {
 
 
 //
+//MODULO RESERVAS
+//
+
+//Reservas
+
+if ($_GET['acc'] == 'hub_reservas') {
+    include('HOST_TIME/RESERVAS/hub_reservas.php');
+}
+if ($_GET['acc'] == 'hub_reservas_registrar') {
+    include('HOST_TIME/RESERVAS/hub_reservas_registrar.php'); 
+}
+
+
+//
 //MODULO CATALOGOS
 //
 

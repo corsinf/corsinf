@@ -42,9 +42,9 @@
     }
 
     function cargar_selects2() {
-        cargar_select2_url('ddl_tipo_espacio', '../controlador/HOST_TIME/ESPACIOS/tipo_espacioC.php?buscar=true');
+        cargar_select2_url('ddl_tipo_espacio', '../controlador/HOST_TIME/CATALOGOS/hub_catn_tipo_espacioC.php?buscar=true');
         cargar_select2_url('ddl_ubicacion', '../controlador/HOST_TIME/UBICACIONES/hub_ubicacionesC.php?buscar=true');
-        cargar_select2_url('ddl_numero_piso', '../controlador/HOST_TIME/CATALOGOS/hub_cat_numero_pisoC.php?buscar=true');
+        cargar_select2_url('ddl_numero_piso', '../controlador/HOST_TIME/CATALOGOS/hub_catn_numero_pisoC.php?buscar=true');
     }
 
     function editar_insertar() {
@@ -152,13 +152,13 @@
             <!-- Nombre y Codigo en la misma fila -->
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label for="txt_nombre" class="form-label">Nombre</label>
+                    <label for="txt_nombre" class="form-label">Nombre </label>
                     <input type="text" class="form-control form-control-sm no_caracteres"
                         id="txt_nombre" name="txt_nombre" autocomplete="off">
                     <span id="error_txt_nombre" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
-                    <label for="txt_codigo" class="form-label">Codigo</label>
+                    <label for="txt_codigo" class="form-label">Codigo </label>
                     <input type="text" class="form-control form-control-sm no_caracteres"
                         id="txt_codigo" name="txt_codigo" autocomplete="off">
                 </div>
@@ -167,7 +167,7 @@
             <!-- Tipo espacio y Ubicación en la misma fila -->
             <div class="row">
                 <div class="col-md-6">
-                    <label for="ddl_tipo_espacio" class="form-label">Tipo de espacio</label>
+                    <label for="ddl_tipo_espacio" class="form-label">Tipo de espacio </label>
                     <select class="form-select form-select-sm select2-validation"
                         id="ddl_tipo_espacio" name="ddl_tipo_espacio">
                         <option value="" selected hidden>-- Seleccione --</option>
@@ -175,7 +175,7 @@
                     <label class="error" style="display:none;" for="ddl_tipo_espacio"></label>
                 </div>
                 <div class="col-md-6">
-                    <label for="ddl_ubicacion" class="form-label">Ubicación</label>
+                    <label for="ddl_ubicacion" class="form-label">Ubicación </label>
                     <select class="form-select form-select-sm select2-validation"
                         id="ddl_ubicacion" name="ddl_ubicacion">
                         <option value="" selected hidden>-- Seleccione --</option>
@@ -191,7 +191,7 @@
     <!-- FILA 2: Número de piso + Capacidad -->
     <div class="row mb-col mt-3">
         <div class="col-md-6">
-            <label for="ddl_numero_piso" class="form-label">Numero de piso</label>
+            <label for="ddl_numero_piso" class="form-label">Numero de piso </label>
             <select class="form-select form-select-sm select2-validation"
                 id="ddl_numero_piso" name="ddl_numero_piso">
                 <option value="" selected hidden>-- Seleccione --</option>
@@ -199,7 +199,7 @@
             <label class="error" style="display:none;" for="ddl_numero_piso"></label>
         </div>
         <div class="col-md-6">
-            <label for="txt_capacidad" class="form-label">Capacidad</label>
+            <label for="txt_capacidad" class="form-label">Capacidad </label>
             <input type="number" class="form-control form-control-sm"
                 id="txt_capacidad" name="txt_capacidad" min="0" step="1">
         </div>
@@ -208,7 +208,7 @@
     <!-- FILA 3: Tarifas -->
     <div class="row mb-col">
         <div class="col-md-6">
-            <label for="txt_tarifa_hora" class="form-label">Tarifa (Hora)</label>
+            <label for="txt_tarifa_hora" class="form-label">Tarifa (Hora) </label>
             <div class="input-group input-group-sm">
                 <span class="input-group-text">$</span>
                 <input type="number" class="form-control form-control-sm"
@@ -217,7 +217,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <label for="txt_tarifa_dia" class="form-label">Tarifa (Dia)</label>
+            <label for="txt_tarifa_dia" class="form-label">Tarifa (Dia) </label>
             <div class="input-group input-group-sm">
                 <span class="input-group-text">$</span>
                 <input type="number" class="form-control form-control-sm"

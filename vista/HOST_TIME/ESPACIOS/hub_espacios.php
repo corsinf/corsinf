@@ -43,13 +43,7 @@ if (isset($_GET['_id'])) {
                     data: 'nombre_tipo_espacio'
                 },
                 {
-                    data: 'capacidad'
-                }, 
-                {
-                    data: 'tarifa_hora'
-                }, 
-                {
-                    data: 'tarifa_dia'
+                    data: 'descripcion_numero_piso'
                 }
             ],
             order: [
@@ -113,9 +107,7 @@ if (isset($_GET['_id'])) {
                                                 <th>Codigo</th>
                                                 <th>Ubicación</th>
                                                 <th>Tipo de Espacio</th>
-                                                <th>Capacidad</th>
-                                                <th>Tarifa Hora</th>
-                                                <th>Tarifa Día</th>
+                                                <th>Piso</th>
                                             </tr>
                                         </thead>
                                         <tbody class="">

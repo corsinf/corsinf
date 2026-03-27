@@ -14,7 +14,7 @@ if (isset($_GET['_id'])) {
 <script type="text/javascript">
     $(document).ready(function() {
 
-        tbl_turnos = $('#tbl_turnos').DataTable($.extend({}, configuracion_datatable('Nombre', 'nombre'), {
+        tbl_turnos = $('#tbl_turnos').DataTable($.extend({},{
             responsive: true,
             language: {
                 url: '../assets/plugins/datatable/spanish.json'
