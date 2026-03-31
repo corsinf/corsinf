@@ -82,6 +82,8 @@ $(document).ready(function() {
 
 function syncronizarPersona(id) {
     $('#sync_biometrico').modal('show');
+
+    $('#lbl_en_todos').removeClass('d-none');
     switch(id){
     case 1:
         $('#btn_tarjeta_all').removeClass('d-none');
@@ -122,8 +124,7 @@ function syncronizarPersona(id) {
         $('#btn_delete_tarjeta').removeClass('d-none');
         
         $('#btn_huella_all').addClass('d-none');
-        $('#btn_huella').addClass('d-none');
-        $('#btn_delete_tarjeta').addClass('d-none');     
+        $('#btn_huella').addClass('d-none');  
         $('#btn_huella_lectura').addClass('d-none');
 
         $('#btn_facial').addClass('d-none');
@@ -230,6 +231,26 @@ function syncronizarPersona(id) {
 
         
         break;
+    case 97:
+        $('#btn_tarjeta_All').addClass('d-none');
+        $('#btn_tarjeta').addClass('d-none');
+        $('#btn_delete_tarjeta').addClass('d-none');
+        
+        $('#btn_huella_all').addClass('d-none');
+        $('#btn_huella').addClass('d-none');
+        $('#btn_delete_tarjeta').addClass('d-none');
+
+        $('#btn_facial').addClass('d-none');
+        $('#btn_delete_facial').addClass('d-none');
+
+        $('#btn_huella_lectura').addClass('d-none');
+        $('#btn_face_lectura').addClass('d-none');
+        $('#btn_facial_local').removeClass('d-none');
+        
+
+        $('#lbl_en_todos').addClass('d-none');
+
+        break;
 
     case 98:
         $('#btn_tarjeta_All').addClass('d-none');
@@ -246,6 +267,8 @@ function syncronizarPersona(id) {
         $('#btn_huella_lectura').addClass('d-none');
         $('#btn_face_lectura').removeClass('d-none');
 
+        $('#lbl_en_todos').addClass('d-none');
+
         break;
      case 99:
         $('#btn_tarjeta_All').addClass('d-none');
@@ -261,6 +284,8 @@ function syncronizarPersona(id) {
 
         $('#btn_huella_lectura').removeClass('d-none');
         $('#btn_face_lectura').addClass('d-none');
+
+        $('#lbl_en_todos').addClass('d-none');
 
         break;
     // seccion de eliminar
@@ -319,7 +344,7 @@ function listaTarjetas()
                          return ` <div class="list-inline d-flex customers-contacts ms-auto"> 
                                     <a href="javascript:;" class="list-inline-item bg-danger" title="Eliminar registro" onclick="deteleTarjetaBase('${item.th_cardNo}')"><i class="bx bxs-trash"></i></a>
                                      <a href="javascript:;" class="list-inline-item bg-success" title="Sincronizar en Biometrico" onclick="TarjeInditaBio('${item.th_cardNo}')"><i class="bx bx-sync"></i></a>
-                                    <a href="javascript:;" class="list-inline-item bg-danger" title="Eliminar y sincronizar en biometrico" onclick="deteleTarjeta('${item.th_cardNo}')"><i class="bx bxs-trash-alt"></i></a>
+                                  <!--  <a href="javascript:;" class="list-inline-item bg-danger" title="Eliminar y sincronizar en biometrico" onclick="deteleTarjeta('${item.th_cardNo}')"><i class="bx bxs-trash-alt"></i></a>  -->
                                 </div>`;
                         }
                     },        
@@ -395,92 +420,97 @@ function listaTarjetas()
         });
     }
 
+
+        
+    function entodosBio()
+    {
+        if($('#rbl_todos_bios').prop('checked'))
+        {
+            $('#ddl_dispositivos').prop('disabled',true)
+        }else
+        {
+            $('#ddl_dispositivos').prop('disabled',false)
+        }
+    }
+
+
     function deteleTarjetaBase(CardNo)
     {
 
-        var id = $('#txt_id').val(); 
         Swal.fire({
-          title: 'Quiere eliminar este registro solo de la base de datos?',
-          text: "Esta seguro de eliminar este registro solo de la base de datos!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Si'
-        }).then((result) => {
-            if (result.value) {
+        title: 'Esta seguro de eliminar este registro!',
+        // text: "Esta seguro de eliminar este registro solo de la base de datos!",
+        icon: 'warning',
+        html: `
+            Quiere eliminar este registro! <br><br>
+            <button type="button" class="btn btn-primary" onclick="eliminarSoloBase('`+CardNo+`')">Solo de base</button>
+            <button type="button" class="btn btn-primary" onclick="deteleTarjeta('`+CardNo+`')">Base y biometrico</button>
+            `,
+            showConfirmButton: false,
+            showCancelButton: true,
+            cancelButtonColor: '#d33',
+        });
+    }
 
-                 var parametros = 
+
+    function eliminarSoloBase(CardNo)
+    {
+        var parametros = 
+        {
+            'idPerson':PersonaId,
+            'CardNo':CardNo,
+        }
+        $.ajax({
+            data: { parametros: parametros },
+            url: '../controlador/TALENTO_HUMANO/th_personasC.php?DeleteTarjetaBase=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if(response==1)
                 {
-                    'idPerson':PersonaId,
-                    'CardNo':CardNo,
+                    Swal.fire("Eliminado","","success").then(function(){
+                        listaTarjetas();
+                        tarjetasddl();
+                    })
                 }
-                $.ajax({
-                    data: { parametros: parametros },
-                    url: '../controlador/TALENTO_HUMANO/th_personasC.php?DeleteTarjetaBase=true',
-                    type: 'post',
-                    dataType: 'json',
-                    success: function(response) {
-                        if(response==1)
-                        {
-                            Swal.fire("Eliminado","","success").then(function(){
-                                listaTarjetas();
-                                tarjetasddl();
-                            })
-                        }
-                    }
-                });
             }
-        })
+        });
     }
 
     function deteleTarjeta(CardNo)
     {
+        Swal.close();
         $('#txt_cardNo').val(CardNo);
         syncronizarPersona(3);
     }
 
     function deteleTarjetaBio()
     {
-         Swal.fire({
-          title: 'Quiere eliminar este registro de base y biometrico?',
-          text: "Esta seguro de eliminar este registro!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Si'
-        }).then((result) => {
-            if (result.value) {
-
-
-                 var parametros = 
+        
+         var parametros = 
+        {
+            'device':$('#ddl_dispositivos').val(),
+            'idPerson':PersonaId,
+            'CardNo':$('#txt_cardNo').val(),
+        }
+        $.ajax({
+            data: { parametros: parametros },
+            url: '../controlador/TALENTO_HUMANO/th_personasC.php?DeleteTarjetaBio=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if(response==1)
                 {
-                    'device':$('#ddl_dispositivos').val(),
-                    'idPerson':PersonaId,
-                    'CardNo':$('#txt_cardNo').val(),
+                    Swal.fire("Eliminado","","success").then(function(){
+                        $('#sync_biometrico').modal('hide');
+                        listaTarjetas();
+                        tarjetasddl();
+                    })
                 }
-                $.ajax({
-                    data: { parametros: parametros },
-                    url: '../controlador/TALENTO_HUMANO/th_personasC.php?DeleteTarjetaBio=true',
-                    type: 'post',
-                    dataType: 'json',
-                    success: function(response) {
-                        if(response['resp']==1)
-                        {
-                            Swal.fire("Eliminado","","success").then(function(){
-                                $('#sync_biometrico').modal('hide');
-                                listaTarjetas();
-                                tarjetasddl();
-                            })
-                        }
-                    }
-                });
-
-
             }
-        })
-            
+        });
+
+
     }
 
 
@@ -526,19 +556,29 @@ function listaTarjetas()
             'idPerson':PersonaId,
             'CardNo':$('#txt_cardNo').val(),
         }
+        $('#myModal_espera').modal('show');
         $.ajax({
             data: { parametros: parametros },
             url: '../controlador/TALENTO_HUMANO/th_personasC.php?addTarjetaBio=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
-                if(response['resp']==1)
+                if(response==1)
                 {
                     Swal.fire("Tarjeta registrada","","success").then(function(){
                         $('#sync_biometrico').modal('hide');
+                        $('#nuevaTarjeta').modal('hide');
                          listaTarjetas();
                          tarjetasddl();
                     })
+
+
+                    setInterval(function() {
+                        $('#myModal_espera').modal('hide');
+                    }, 1000);
+
+
+
                 }
                 // $('#txt_CardNumero').val(response[0]['NUMERO'])
             }
@@ -592,7 +632,7 @@ function listaTarjetas()
                     { data: null,
                         render: function(data, type, item) {
                          return ` <div class="list-inline d-flex customers-contacts ms-auto"> 
-                                    <a href="javascript:;" class="list-inline-item bg-danger" title="Eliminar de Base de datos" onclick="deteleHuellaBase('${item._id}')"><i class="bx bxs-trash"></i></a>
+                                    <a href="javascript:;" class="list-inline-item bg-danger" title="Eliminar de Base de datos" onclick="deteleHuellaBase('${item._id}','${item.th_cardNo}')"><i class="bx bxs-trash"></i></a>
                                      <a href="javascript:;" class="list-inline-item bg-success" title="Sincronizar en Biometrico" onclick="HuellaInditaBio('${item._id}','${item.th_cardNo}')"><i class="bx bx-sync"></i></a>
                                     <a href="javascript:;" class="list-inline-item bg-danger" title="Eliminar de base y Biometrico" onclick="deteleHuellaBio('${item.th_cardNo}','${item._id}')"><i class="bx bxs-trash-alt"></i></a>
                                 </div>`;
@@ -709,39 +749,44 @@ function listaTarjetas()
 
     function deteleHuellaBase(id)
     {
-        Swal.fire({
-          title: 'Quiere eliminar este registro solo de la base de datos?',
-          text: "Esta seguro de eliminar este registro solo de la base de datos!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Si'
-        }).then((result) => {
-            if (result.value) {
+         Swal.fire({
+        title: 'Esta seguro de eliminar este registro!',
+        // text: "Esta seguro de eliminar este registro solo de la base de datos!",
+        icon: 'warning',
+        html: `
+            Quiere eliminar este registro! <br><br>
+            <button type="button" class="btn btn-primary" onclick="deteleHuellaSoloBase('`+CardNo+`')">Solo de base</button>
+            <button type="button" class="btn btn-primary" onclick="deteleHuellaBio('`+CardNo+`')">Base y biometrico</button>
+            `,
+            showConfirmButton: false,
+            showCancelButton: true,
+            cancelButtonColor: '#d33',
+        });
 
-                var parametros = 
+     }
+
+     function deteleHuellaSoloBase(id)
+     {
+        var parametros = 
+        {
+            '_id':id,
+        }
+        $.ajax({
+            data: { parametros: parametros },
+            url: '../controlador/TALENTO_HUMANO/th_personasC.php?deteleHuellaBase=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if(response==1)
                 {
-                    '_id':id,
+                    Swal.fire("Eliminado","","success").then(function(){
+                        listaHuella();
+                    })
                 }
-                $.ajax({
-                    data: { parametros: parametros },
-                    url: '../controlador/TALENTO_HUMANO/th_personasC.php?deteleHuellaBase=true',
-                    type: 'post',
-                    dataType: 'json',
-                    success: function(response) {
-                        if(response==1)
-                        {
-                            Swal.fire("Eliminado","","success").then(function(){
-                                listaHuella();
-                            })
-                        }
-                    }
-                });
             }
-        })
-
+        });
     }
+
     function deteleHuellaBio(CardNo,idHuella)
     {
         syncronizarPersona(6);
@@ -804,18 +849,18 @@ function listaTarjetas()
             dataType: 'json',
             success:  function (response) { 
                 $('#myModal_espera').modal('hide');
-                if(response.resp==1)
+                if(response==1)
                 {
                     Swal.fire("Huella dactilar Guardada",response.patch,"success");
                     $('#file-name_bio').text(response.patch);
+                    $('#nuevahuella').modal('hide');
                     $('#sync_biometrico').modal('hide');
+                    // listaHuella();
                 }else
                 {
                     Swal.fire("Huella dactilar",response.msj,"info");
                 }
-
-               
-                     tbl_dispositivos.ajax.reload(null, false);
+                tbl_dispositivos.ajax.reload(null, false);
 
             } ,
               error: function(xhr, status, error) {
@@ -910,15 +955,21 @@ function listaTarjetas()
 
     function addFaceBase()
     {
+        syncronizarPersona(97);
+    }
+
+    function addFaceBaseLocal()
+    {
         var formData = new FormData();
         var archivo = $('#file_face')[0].files[0]; // obtener el archivo
         var CardNo = $('#ddl_tarjetas_facial').val();
         var idPerson =  PersonaId; 
         var detectado = $('#file_name_bio_face').text();
+        var ddl_dispositivos = $('#ddl_dispositivos').val();
 
-        // console.log(archivo)
+        console.log(archivo)
 
-        if(detectado=='' && archivo==undefined)
+        if(archivo==undefined)
         {
             Swal.fire("No sea encontrado huella valida","","info")
             return false;
@@ -928,6 +979,7 @@ function listaTarjetas()
         formData.append('CardNo', CardNo);
         formData.append('idPerson', idPerson);
         formData.append('detectado', detectado);
+        formData.append('dispositivos', ddl_dispositivos);
 
         $.ajax({
            url: '../controlador/TALENTO_HUMANO/th_personasC.php?addFaceBase=true',
@@ -942,6 +994,7 @@ function listaTarjetas()
                 {
                     Swal.fire("Imagen facial agregada","","success");
                     $('#nuevofacial').modal('hide');
+                    $('#sync_biometrico').modal('hide');
 
                     limpiar_facial();
                     listaFace()
@@ -1085,6 +1138,7 @@ function leerFace()
         {
             'iddispostivos':$('#ddl_dispositivos').val(),
             'idPerson':PersonaId, //usuario id
+            // 'CardNo':$('#ddl_tarjetas_facial').val(),
         }
         $.ajax({
             data:  {parametros:parametros},
@@ -1129,4 +1183,27 @@ function leerFace()
         $('#file-name-face').val("");
         $('#file_name_bio_face').val('');
         dispositivos();
+    }
+
+
+    function ISAPIConnect()
+    {
+         $.ajax({
+            // data:  {parametros:parametros},
+            url:   '../controlador/TALENTO_HUMANO/th_personasC.php?ISAPIConnect=true',
+            type:  'post',
+            dataType: 'json',
+            success:  function (response) { 
+                console.log(response);
+            } ,
+              error: function(xhr, status, error) {
+                console.log('Status: ' + status); 
+                console.log('Error: ' + error); 
+                console.log('XHR Response: ' + xhr.responseText); 
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+                $('#myModal_espera').modal('hide');
+            }         
+        });
+
     }
