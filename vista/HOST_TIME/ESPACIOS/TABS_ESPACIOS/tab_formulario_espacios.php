@@ -32,6 +32,7 @@
                 $('#txt_codigo').val(r.codigo);
                 $('#txt_capacidad_min').val(r.capacidad_minima);
                 $('#txt_capacidad_max').val(r.capacidad_maxima);
+                $('#id_tipo_espacio').val(r.id_tipo_espacio);
                 $('#ddl_tipo_espacio').append($('<option>', {
                     value: r.id_tipo_espacio,
                     text: r.nombre_tipo_espacio,
@@ -166,6 +167,7 @@
         <div class="col-md-<?= $_id != '' ? '9' : '12' ?>">
 
             <!-- Nombre y Codigo en la misma fila -->
+             <input type="hidden" name="id_tipo_espacio" id="id_tipo_espacio" value="">
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="txt_nombre" class="form-label">Nombre </label>

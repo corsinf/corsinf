@@ -121,7 +121,7 @@ class hub_catn_tipo_espacioC
     function buscar($parametros)
     {
         $lista = array();
-        $concat = "nombre";
+        $concat = "nombre,is_deleted";
 
         $datos = $this->modelo
             ->where('is_deleted', 0)

@@ -29,11 +29,11 @@ class hub_espacios_tarifasC
     function listar($id = '', $id_espacio = '')
     {
         if ($id) {
-            $datos =  $this->modelo->listar_espacio_tarifa($id);
-        } else if ($id_espacio) {
-            $datos =  $this->modelo->listar_espacio_tarifa('', $id_espacio);
-        } else if ($id == '' && $id_espacio == '') {
-            $datos =  $this->modelo->listar_espacio_tarifa();
+            $datos = $this->modelo->listar_espacio_tarifa($id);
+        } elseif ($id_espacio) {
+            $datos = $this->modelo->listar_espacio_tarifa('', $id_espacio);
+        } else {
+            $datos = $this->modelo->listar_espacio_tarifa();
         }
         return $datos;
     }
@@ -44,22 +44,22 @@ class hub_espacios_tarifasC
         $fecha = date('Y-m-d H:i:s');
 
         $datos = [
-            ['campo' => 'id_espacio', 'dato' => (int)$parametros['ddl_espacio']],
-            ['campo' => 'unidad_tiempo', 'dato' => $parametros['ddl_unidad']],
-            ['campo' => 'cantidad', 'dato' => (int)$parametros['txt_cantidad']],
-            ['campo' => 'precio', 'dato' => (float)$parametros['txt_precio']],
-            ['campo' => 'nombre_plan', 'dato' => trim($parametros['txt_nombre_plan'])],
-            ['campo' => 'is_deleted', 'dato' => 0],
+            ['campo' => 'id_espacio',       'dato' => (int)$parametros['ddl_espacio']],
+            ['campo' => 'id_unidad_tiempo',  'dato' => (int)$parametros['ddl_unidad']],
+            ['campo' => 'cantidad',          'dato' => (int)$parametros['txt_cantidad']],
+            ['campo' => 'precio',            'dato' => (float)$parametros['txt_precio']],
+            ['campo' => 'nombre_plan',       'dato' => trim($parametros['txt_nombre_plan'])],
+            ['campo' => 'is_deleted',        'dato' => 0],
         ];
 
         if (empty($parametros['_id'])) {
-            $datos[] = ['campo' => 'id_usuario_crea', 'dato' => $id_usuario];
-            $datos[] = ['campo' => 'fecha_creacion', 'dato' => $fecha];
+            $datos[] = ['campo' => 'id_usuario_crea',  'dato' => $id_usuario];
+            $datos[] = ['campo' => 'fecha_creacion',   'dato' => $fecha];
 
             return $this->modelo->insertar($datos);
         } else {
             $datos[] = ['campo' => 'id_usuario_modifica', 'dato' => $id_usuario];
-            $datos[] = ['campo' => 'fecha_modificacion', 'dato' => $fecha];
+            $datos[] = ['campo' => 'fecha_modificacion',  'dato' => $fecha];
 
             $where[] = ['campo' => 'id_espacio_tarifa', 'dato' => (int)$parametros['_id']];
 
