@@ -419,6 +419,14 @@ class loginM
 			return $this->db->datos($sql,1);
 		}
 	}
+
+	function lista_empresa_all($master=false)
+	{
+		$sql = "SELECT * FROM EMPRESAS WHERE Estado = 'A'";
+		// print_r($sql);die();
+		
+			return $this->db->datos($sql,$master);
+	}
 	function datos_no_concurente($empresa,$tabla,$campoid,$id)
 	{
 		$database = $empresa[0]['Base_datos'];

@@ -35,7 +35,8 @@ class th_dispositivosM extends BaseModel
         'th_dis_id_modo_indet AS id_modo_indet',
         'th_dis_estado AS estado',
         'th_dis_fecha_creacion AS fecha_creacion',
-        'th_dis_fecha_modificacion AS fecha_modificacion'
+        'th_dis_fecha_modificacion AS fecha_modificacion',
+        'th_dis_port_isapi AS port_isapi',
     ];
 
     function lista_dispositivos($empresa,$id)

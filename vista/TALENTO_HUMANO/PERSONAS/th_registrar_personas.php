@@ -612,10 +612,13 @@ validar_acceso_persona($_GET['id_persona'] ?? '');
 
                                             <?php if (!$es_restringido) { ?>
                                                 <div class="col-12 pt-2">
+
+                                                    <?php if($id_persona!=''){ ?>
                                                     <button class="btn btn-primary btn-sm" onclick="modalBiometria()"><i
                                                             class="bx bx-sync"></i>Biometria</button>
-                                                    <button class="btn btn-primary btn-sm" onclick="ISAPIConnect()"><i
-                                                            class="bx bx-sync"></i>ISAPI</button>
+                                                    <!-- <button class="btn btn-primary btn-sm" onclick="ISAPIConnect()"><i
+                                                            class="bx bx-sync"></i>ISAPI</button> -->
+                                                        <?php } ?>
 
 
 

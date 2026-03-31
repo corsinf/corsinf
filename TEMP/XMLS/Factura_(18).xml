@@ -1,169 +1,170 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <autorizacion>
 <estado>AUTORIZADO</estado>
-<numeroAutorizacion>1301202601050131250800120010120000832799022852310</numeroAutorizacion>
-<fechaAutorizacion>2026-01-13T16:16:38-05:00</fechaAutorizacion>
+<numeroAutorizacion>1302202601171841446700120030020000221860002218619</numeroAutorizacion>
+<fechaAutorizacion>2026-02-13T13:56:40-05:00</fechaAutorizacion>
 <ambiente>PRODUCCIÓN</ambiente>
-<comprobante><![CDATA[<?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<factura version="2.1.0" id="comprobante">
-   <infoTributaria>
-      <ambiente>2</ambiente>
-      <tipoEmision>1</tipoEmision>
-      <razonSocial>MEDINA JUAN HOMERO RUC</razonSocial>
-      <nombreComercial>Matriz</nombreComercial>
-      <ruc>0501312508001</ruc>
-      <claveAcceso>1301202601050131250800120010120000832799022852310</claveAcceso>
-      <codDoc>01</codDoc>
-      <estab>001</estab>
-      <ptoEmi>012</ptoEmi>
-      <secuencial>000083279</secuencial>
-      <dirMatriz>AV. DE LOS SHIRYS y AV. GASPAR DE VILLARROEL Edificio: CENTRO COMERCIAL GALERIA LOCAL 62, Quito, Pichincha, Ecuador</dirMatriz>
-      <agenteRetencion>1</agenteRetencion>
-   </infoTributaria>
-   <infoFactura>
-      <fechaEmision>13/01/2026</fechaEmision>
-      <dirEstablecimiento>AV. DE LOS SHIRYS y AV. GASPAR DE VILLARROEL Edificio: CENTRO COMERCIAL GALERIA LOCAL 62, Quito, Pichincha, Ecuador</dirEstablecimiento>
-      <contribuyenteEspecial>E1288</contribuyenteEspecial>
-      <obligadoContabilidad>SI</obligadoContabilidad>
-      <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
-      <razonSocialComprador>RUBIO PUETATE MILTON ANDRES</razonSocialComprador>
-      <identificacionComprador>1712605284</identificacionComprador>
-      <direccionComprador>DE LOS MOTILONES N40-345 Y CAMILO GALLEGOS, QUITO (EC1709), Pichincha, Ecuador</direccionComprador>
-      <totalSinImpuestos>72.13</totalSinImpuestos>
-      <totalDescuento>45.47</totalDescuento>
-      <totalConImpuestos>
-         <totalImpuesto>
-            <codigo>2</codigo>
-            <codigoPorcentaje>0</codigoPorcentaje>
-            <descuentoAdicional>0.00</descuentoAdicional>
-            <baseImponible>72.13</baseImponible>
-            <valor>0.00</valor>
-         </totalImpuesto>
-      </totalConImpuestos>
-      <propina>0.00</propina>
-      <importeTotal>72.13</importeTotal>
-      <moneda>DOLAR</moneda>
-      <pagos>
-         <pago>
-            <formaPago>20</formaPago>
-            <total>72.13</total>
-            <plazo>0</plazo>
-            <unidadTiempo>DIAS</unidadTiempo>
-         </pago>
-      </pagos>
-      <valorRetIva>0.00</valorRetIva>
-      <valorRetRenta>0.00</valorRetRenta>
-   </infoFactura>
-   <detalles>
-      <detalle>
-         <codigoPrincipal>23712</codigoPrincipal>
-         <codigoAuxiliar>7790375266523</codigoAuxiliar>
-         <descripcion>[23712] NOVO HUMORAP COMX10MGX28</descripcion>
-         <cantidad>2.00</cantidad>
-         <precioUnitario>39.2000</precioUnitario>
-         <descuento>6.27</descuento>
-         <precioTotalSinImpuesto>72.13</precioTotalSinImpuesto>
-         <impuestos>
-            <impuesto>
-               <codigo>2</codigo>
-               <codigoPorcentaje>0</codigoPorcentaje>
-               <tarifa>0</tarifa>
-               <baseImponible>72.13</baseImponible>
-               <valor>0.00</valor>
-            </impuesto>
-         </impuestos>
-      </detalle>
-      <detalle>
-         <codigoPrincipal>23712</codigoPrincipal>
-         <codigoAuxiliar>7790375266523</codigoAuxiliar>
-         <descripcion>[23712] NOVO HUMORAP COMX10MGX28 (3 + 1 en 4 Months)</descripcion>
-         <cantidad>1.00</cantidad>
-         <precioUnitario>39.2000</precioUnitario>
-         <descuento>39.20</descuento>
-         <precioTotalSinImpuesto>0.00</precioTotalSinImpuesto>
-         <impuestos>
-            <impuesto>
-               <codigo>2</codigo>
-               <codigoPorcentaje>0</codigoPorcentaje>
-               <tarifa>0</tarifa>
-               <baseImponible>0.00</baseImponible>
-               <valor>0.00</valor>
-            </impuesto>
-         </impuestos>
-      </detalle>
-   </detalles>
-   <infoAdicional>
-      <campoAdicional nombre="VENDEDOR">Karla Quinaucho</campoAdicional>
-      <campoAdicional nombre="DIRECCION">DE LOS MOTILONES N40-345 Y CAMILO GALLEGOS, QUITO (EC1709), Pichincha, Ecuador</campoAdicional>
-      <campoAdicional nombre="CELULAR">+593 99 921 9738</campoAdicional>
-      <campoAdicional nombre="CORREO ELECTRONICO">mrubio@corsinf.com</campoAdicional>
-   </infoAdicional>
-<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature947240"><ds:SignedInfo Id="Signature-SignedInfo124770"><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><ds:Reference Id="SignedPropertiesID216968" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature947240-SignedProperties274056"><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>zAUNWyyY+B+AOuETtDASVrSrffg=</ds:DigestValue></ds:Reference><ds:Reference URI="#Certificate401261"><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>os5R9fmPl+gPyw6ZPFd84Sp1YqY=</ds:DigestValue></ds:Reference><ds:Reference URI="#comprobante" Id="Reference-ID-612481"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>bCXHMzvqgXMBIaU2AH9UgTqge1I=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue768385">MzL7l0KhdgHSprDdUv8S8j+yhs/C5Aexb39yz0CRwWu5xADWGoLkaU+YzU588MMm8XmOsIQC7mG3
-7xubdpUOlpalkpOmVPH7DwcqVuc6PXoIC/799+dkdCyY+X/m8Vvfx3CycnKhcFflnx6pR2tw4LIp
-InLjt7T3bFPlTyruqyvNAkEdbRGlixfv6jlXBTN3zpgXHCASzaT40lJfc7hiY5N0hQ0aTGZ4FhU3
-3pwq0mXRBpzEHtb+TABiBiU3mYwW6EggDmoufA9SL1bkrWMWZ+rdtJWlHNoCiIF7JjOv4wlMGPj0
-z8s7ADVRyP+Iae0r0SgpAg6auv3JZrpshUaCwA==</ds:SignatureValue><ds:KeyInfo Id="Certificate401261"><ds:X509Data><ds:X509Certificate>
-MIIMZTCCCk2gAwIBAgIEKA1AQTANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNV
-BAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJ
-T04gREUgSU5GT1JNQUNJT04xOTA3BgNVBAMMMEFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNV
-QkNBLTIgU0VDVVJJVFkgREFUQTAeFw0yNTAyMjgxNTEwNTVaFw0yODAyMjgxNTEwNTVaMIGdMRsw
-GQYDVQQDDBJKVUFOIEhPTUVSTyBNRURJTkExIDAeBgNVBAUTFzA1MDEzMTI1MDgtMjgwMjI1MTAy
-MDQ5MTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04xHTAb
-BgNVBAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMQswCQYDVQQGEwJFQzCCASIwDQYJKoZIhvcNAQEB
-BQADggEPADCCAQoCggEBALTdGQU5BeJbVo7ryO4rRcWuryuKdtYZ7POR6yKZNjhAt0Vcc+3xzHVl
-FIf53G+Buf5q2CFM5PA2T8u+QKXv3ZLe5/vRXsWjToWFOHE8C0JksLbGOr3Sr6P4ft6z4jo1eD8e
-IbJ4Q3tvucwo+FklcaAJGNK/zScGhyP5Qnzk+EL45t4+cGtxJIMr2/cGq52CpdPLP7iq1gQ5Jvvq
-fyGHWG5MT2bp1HcdwAu+mSbDmwadXbZ98w1GB32HMAARIbsWkbMDLSQllzYv2LD8sGm8uEoZP5jJ
-KEQQQHCwXV+fhJuZYPaSll1DPj3Jnzd0MvpCiX1cTOg5zRHIQte4AwqwOFcCAwEAAaOCB60wggep
-MAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUjLrKEVd4JYAdawpLVb+NrmLdvY8wWQYIKwYBBQUH
-AQEETTBLMEkGCCsGAQUFBzABhj1odHRwOi8vb2NzcGd3LnNlY3VyaXR5ZGF0YS5uZXQuZWMvZWpi
-Y2EvcHVibGljd2ViL3N0YXR1cy9vY3NwMIHPBgNVHS4EgccwgcQwgcGggb6ggbuGgbhsZGFwOi8v
-bGRhcHNkY2EyLnNlY3VyaXR5ZGF0YS5uZXQuZWMvQ049QVVUT1JJREFEIERFIENFUlRJRklDQUNJ
-T04gU1VCQ0EtMiBTRUNVUklUWSBEQVRBLE9VPUVOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJ
-TkZPUk1BQ0lPTixPPVNFQ1VSSVRZIERBVEEgUy5BLiAyLEM9RUM/ZGVsdGFSZXZvY2F0aW9uTGlz
-dD9iYXNlMCkGA1UdEQQiMCCBHmNvbnRhYmlsaWRhZEBwaGFybWFkZWxpdmVyeS5lYzCCAQYGA1Ud
-IASB/jCB+zBaBgorBgEEAYKmcgIHMEwwSgYIKwYBBQUHAgIwPh48AEMAZQByAHQAaQBmAGkAYwBh
-AGQAbwAgAGQAZQAgAFAAZQByAHMAbwBuAGEAIABOAGEAdAB1AHIAYQBsMIGcBgorBgEEAYKmcgIB
-MIGNMIGKBggrBgEFBQcCARZ+aHR0cHM6Ly93d3cuc2VjdXJpdHlkYXRhLm5ldC5lYy93cC1jb250
-ZW50L2Rvd25sb2Fkcy9Ob3JtYXRpdmFzL1BfZGVfQ2VydGlmaWNhZG9zL1BvbGl0aWNhcyBkZSBD
-ZXJ0aWZpY2FkbyBQZXJzb25hIE5hdHVyYWwucGRmMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDCCAqIGA1UdHwSCApkwggKVMIHloEGgP4Y9aHR0cDovL29jc3Bndy5zZWN1cml0eWRhdGEu
-bmV0LmVjL2VqYmNhL3B1YmxpY3dlYi9zdGF0dXMvb2NzcKKBn6SBnDCBmTE5MDcGA1UEAwwwQVVU
-T1JJREFEIERFIENFUlRJRklDQUNJT04gU1VCQ0EtMiBTRUNVUklUWSBEQVRBMTAwLgYDVQQLDCdF
-TlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04xHTAbBgNVBAoMFFNFQ1VSSVRZ
-IERBVEEgUy5BLiAyMQswCQYDVQQGEwJFQzCBx6CBxKCBwYaBvmxkYXA6Ly9sZGFwc2RjYTIuc2Vj
-dXJpdHlkYXRhLm5ldC5lYy9DTj1BVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0yIFNF
-Q1VSSVRZIERBVEEsT1U9RU5USURBRCBERSBDRVJUSUZJQ0FDSU9OIERFIElORk9STUFDSU9OLE89
-U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1FQz9jZXJ0aWZpY2F0ZVJldm9jYXRpb25MaXN0P2Jhc2Uw
-geCggd2ggdqGgddodHRwczovL3BvcnRhbC1vcGVyYWRvcjIuc2VjdXJpdHlkYXRhLm5ldC5lYy9l
-amJjYS9wdWJsaWN3ZWIvd2ViZGlzdC9jZXJ0ZGlzdD9jbWQ9Y3JsJmlzc3Vlcj1DTj1BVVRPUklE
-QUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0yIFNFQ1VSSVRZIERBVEEsT1U9RU5USURBRCBERSBD
-RVJUSUZJQ0FDSU9OIERFIElORk9STUFDSU9OLE89U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1FQzAd
-BgNVHQ4EFgQUAjMDthFaiBALzwO3wA4auG5DfT8wKwYDVR0QBCQwIoAPMjAyNTAyMjgxNTEwNTVa
-gQ8yMDI4MDIyODE1MTA1NVowCwYDVR0PBAQDAgXgMBoGCisGAQQBgqZyAwEEDAwKMDUwMTMxMjUw
-ODBvBgorBgEEAYKmcgMJBGEMX1FVSVRPIERJU1RSSVRPIE1FVFJPUE9MSVRBTk8gQ0FCRUNFUkEg
-Q0FOVE9OQUwgQ0FQSVRBTCBQUk9WSU5DSUFMIFkgREUgTEEgUkVQVUJMSUNBIERFTCBFQ1VBRE9S
-MBEGCisGAQQBgqZyAyIEAwwBLjA+BgorBgEEAYKmcgMHBDAMLkFWIERFIExPUyBTSElSWVMgUyBO
-IFkgQVYgR0FTUEFSIERFIFZJTExBUlJPRUwwGwYKKwYBBAGCpnIDAgQNDAtKVUFOIEhPTUVSTzAf
-BgorBgEEAYKmcgMgBBEMDzAwMjAwMTAwMDk2MTAxNTARBgorBgEEAYKmcgMjBAMMAS4wEwYKKwYB
-BAGCpnIDIQQFDANQRlgwFwYKKwYBBAGCpnIDDAQJDAdFQ1VBRE9SMBYGCisGAQQBgqZyAwMECAwG
-TUVESU5BMCAGCisGAQQBgqZyAx4EEgwQVklTSVRBRE9SIE1FRElDTzAdBgorBgEEAYKmcgMLBA8M
-DTA1MDEzMTI1MDgwMDEwEQYKKwYBBAGCpnIDHQQDDAEuMBEGCisGAQQBgqZyAwQEAwwBLjAaBgor
-BgEEAYKmcgMIBAwMCjA5OTkxMjYzNDgwDQYJKoZIhvcNAQELBQADggIBAFg/7VnKFBiuceFlRNi/
-+vhrn79LsQAPBiPunqz+7KREBhuuncqJv3iKmQK56h8ZqvRCrXXWonHSbJ8DM9oNDGmDBfI/daVp
-76gffGTGKwj5szQDsv3K1LTsH+qBLhscsSJXhj+mudSJWoRFgtY43kB2KfuW9kNANthWCznkIwl9
-hCpg2nrqux7Q6vOcFfDj2huhhpH2da6dJVC8x2xohhrb7U83YceTQ78wBCfQzG/Bxm8dETey5Ycx
-OFjPJvoYkCuQBBZLvm1DgvXFQwvDYPriyglrCmgJkyH4nwcjGZk+0dB8vrwoF6EtihHjDO28gk27
-L4uW+ubGcXccUkVRIscsFyEt0PA7nCGfutTEnq7bEs2W8SwusZnPCjtHMFdW+FPyBxmmgLEyPBlO
-LCU+GIlYW28W/7PHDLrSDBWXvfjBmQWMaVcVyXxym33jrqd1IDAIh6P2JfKEyaprMa8MJNhI1t9o
-WeXAaWF3TdwgnKyG4nxx5zwdGV0yc8xSCNTLxXInX8W5jqMEVQ54zi5RhmtV3sSBQN1MPu910lB8
-PBidMznp4OAKjUJKnO6BwaKWHPbvyKepNjeGL8XVmpJAu9CrT2T0SyN16clTOl1YOWYiZoa/rcBt
-5c5XuFJvIngnoods7aqyMrmlzQ2cwl6KXpvdNTuijRK6k1DzAVvkAyIS</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>
-tN0ZBTkF4ltWjuvI7itFxa6vK4p21hns85HrIpk2OEC3RVxz7fHMdWUUh/ncb4G5/mrYIUzk8DZP
-y75Ape/dkt7n+9FexaNOhYU4cTwLQmSwtsY6vdKvo/h+3rPiOjV4Px4hsnhDe2+5zCj4WSVxoAkY
-0r/NJwaHI/lCfOT4Qvjm3j5wa3Ekgyvb9warnYKl08s/uKrWBDkm++p/IYdYbkxPZunUdx3AC76Z
-JsObBp1dtn3zDUYHfYcwABEhuxaRswMtJCWXNi/YsPywaby4Shk/mMkoRBBAcLBdX5+Em5lg9pKW
-XUM+PcmfN3Qy+kKJfVxM6DnNEchC17gDCrA4Vw==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="Signature947240-Object550388"><etsi:QualifyingProperties Target="#Signature947240"><etsi:SignedProperties Id="Signature947240-SignedProperties274056"><etsi:SignedSignatureProperties><etsi:SigningTime>2026-01-13T21:16:37Z</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>KeD3jWINl/9/QGEKx1PlsOO5Vb0=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>C=EC,O=SECURITY DATA S.A. 2,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA</ds:X509IssuerName><ds:X509SerialNumber>671957057</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-612481"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?><factura id="comprobante" version="1.1.0">
+<infoTributaria>
+<ambiente>2</ambiente>
+<tipoEmision>1</tipoEmision>
+<razonSocial>CARDOSO CEVALLOS DANIELA CRISTINA</razonSocial>
+<nombreComercial>FORASTERO CARCELEN</nombreComercial>
+<ruc>1718414467001</ruc>
+<claveAcceso>1302202601171841446700120030020000221860002218619</claveAcceso>
+<codDoc>01</codDoc>
+<estab>003</estab>
+<ptoEmi>002</ptoEmi>
+<secuencial>000022186</secuencial>
+<dirMatriz>ISIDRO AYORA N81-51 Y CRISTOBAL ALVEZ</dirMatriz>
+<contribuyenteRimpe>CONTRIBUYENTE RÉGIMEN RIMPE</contribuyenteRimpe>
+</infoTributaria>
+<infoFactura>
+<fechaEmision>13/02/2026</fechaEmision>
+<dirEstablecimiento>ISIDRO AYORA N81-51 Y CRISTOBAL ALVEZ</dirEstablecimiento>
+<obligadoContabilidad>NO</obligadoContabilidad>
+<tipoIdentificacionComprador>05</tipoIdentificacionComprador>
+<razonSocialComprador>MILTON RUBIO</razonSocialComprador>
+<identificacionComprador>1712605284</identificacionComprador>
+<direccionComprador>QUITO</direccionComprador>
+<totalSinImpuestos>11.5</totalSinImpuestos>
+<totalDescuento>0</totalDescuento>
+<totalConImpuestos>
+<totalImpuesto>
+<codigo>2</codigo>
+<codigoPorcentaje>0</codigoPorcentaje>
+<baseImponible>11.5</baseImponible>
+<valor>0</valor>
+</totalImpuesto>
+</totalConImpuestos>
+<propina>0</propina>
+<importeTotal>11.5</importeTotal>
+<moneda>DOLAR</moneda>
+<pagos>
+<pago>
+<formaPago>01</formaPago>
+<total>11.50</total>
+</pago>
+</pagos>
+</infoFactura>
+<detalles>
+<detalle>
+<codigoPrincipal>0010300011</codigoPrincipal>
+<descripcion>COMBO 1/4 DE POLLO</descripcion>
+<cantidad>2</cantidad>
+<precioUnitario>   5.75000</precioUnitario>
+<descuento>0</descuento>
+<precioTotalSinImpuesto>11.5</precioTotalSinImpuesto>
+<impuestos>
+<impuesto>
+<codigo>2</codigo>
+<codigoPorcentaje>0</codigoPorcentaje>
+<tarifa>0</tarifa>
+<baseImponible>11.5</baseImponible>
+<valor>0</valor>
+</impuesto>
+</impuestos>
+</detalle>
+</detalles>
+<infoAdicional>
+<campoAdicional nombre="Direccion">QUITO</campoAdicional>
+<campoAdicional nombre="EmaiL">miltonrubio@hotmail.com</campoAdicional>
+<campoAdicional nombre="NumDocumento">FR0116994A-0101-M</campoAdicional>
+</infoAdicional>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature478697">
+<ds:SignedInfo Id="Signature-SignedInfo679589">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+<ds:Reference Id="SignedPropertiesID1026154" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature478697-SignedProperties667915">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>ZwjMuW5Dvf+4hqgw1cSEHrij2nw=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate1676423">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>zAuk/TdLcBInu7WujV3JEKmBHyQ=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-156955" URI="#comprobante">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>tCc0OFCUjuICM9rDF3TN6MaOA2c=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue1020158">
+xv+xQ2d5jG4smIsvl4v5+ySuXORGqS+Expr2l189c27b+y4/2JP+3U8BRY9DCx+Bnjq3SHU0EglK
+KEs9LL3dHzpjnwUmBhUCaPszIwCKjys2jCEOoZ7rLXIxqJU3Mq6I1+N+hBwLT6xpOX9K47bTOxKS
+VACvUvOFmgY4zKdro7oaTzkZuhsQilGmrpH5Y4GfHS+KpSlEhXorlqeiych2Fz8lpLeVd0EMnSRL
+QSRd19785LwxKTdSaDA8lF8GsMMBb2ZjhLwpqoFVPUDwxjOIlrPZEHcf7xoHf+M7DhGFkMHl7MsU
+TrHOM7XpOcumRHj0ZXlR3pt3bJ/WtVaUqAQ1IQ==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate1676423">
+<ds:X509Data>
+<ds:X509Certificate>
+MIIKnjCCCIagAwIBAgIIf03rVHWVX1MwDQYJKoZIhvcNAQELBQAwgZkxCzAJBgNVBAYTAkVDMR0w
+GwYDVQQKDBRTRUNVUklUWSBEQVRBIFMuQS4gMjEwMC4GA1UECwwnRU5USURBRCBERSBDRVJUSUZJ
+Q0FDSU9OIERFIElORk9STUFDSU9OMTkwNwYDVQQDDDBBVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lP
+TiBTVUJDQS0yIFNFQ1VSSVRZIERBVEEwHhcNMjUxMTIyMTcwMDM5WhcNMjcxMTIyMTcwMDM5WjCB
+rDEqMCgGA1UEAwwhREFOSUVMQSBDUklTVElOQSBDQVJET1NPIENFVkFMTE9TMSAwHgYDVQQFExcx
+NzE4NDE0NDY3LTIyMTEyNTEyMTAzMTEwMC4GA1UECwwnRU5USURBRCBERSBDRVJUSUZJQ0FDSU9O
+IERFIElORk9STUFDSU9OMR0wGwYDVQQKDBRTRUNVUklUWSBEQVRBIFMuQS4gMjELMAkGA1UEBhMC
+RUMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDfyWjgXX3X7257uvIfckfmmwYm3x0I
+R/f0aqns/U9ruNMKeGh3GUTniv0Y5Padyp3FWk8/Hum+4nypfpCkb6nHCMy3m6D26dyH8j0hs2Fw
+CtBHt1DmxVpIJOjDeHSOIZAxLXUvso9KJ4RjhTuM/H8o7wIg89cFLBPfMR0rzXWQE6UJC/lo3kf8
+aqhQBLLn1fL7NVbnbhIhZQGYr2xU57LmPTJmHsjzUnFXo6twICxrb45XY8jZYRHUya7QesFcZ90a
+Mr6+REQt/qQW6LWAhSwyFlgWIHSHDYM21c4sdjp45IbMqjGtolPLAHuigITVhkGDl5XTP5YA3yum
+2vLQZPB/AgMBAAGjggXTMIIFzzAMBgNVHRMBAf8EAjAAMB8GA1UdIwQYMBaAFIy6yhFXeCWAHWsK
+S1W/ja5i3b2PMFkGCCsGAQUFBwEBBE0wSzBJBggrBgEFBQcwAYY9aHR0cDovL29jc3Bndy5zZWN1
+cml0eWRhdGEubmV0LmVjL2VqYmNhL3B1YmxpY3dlYi9zdGF0dXMvb2NzcDAoBgNVHREEITAfgR1k
+YW5pZWxhX2NhcmRvc284NEBob3RtYWlsLmNvbTCCAQYGA1UdIASB/jCB+zBaBgorBgEEAYKmcgIH
+MEwwSgYIKwYBBQUHAgIwPh48AEMAZQByAHQAaQBmAGkAYwBhAGQAbwAgAGQAZQAgAFAAZQByAHMA
+bwBuAGEAIABOAGEAdAB1AHIAYQBsMIGcBgorBgEEAYKmcgIBMIGNMIGKBggrBgEFBQcCARZ+aHR0
+cHM6Ly93d3cuc2VjdXJpdHlkYXRhLm5ldC5lYy93cC1jb250ZW50L2Rvd25sb2Fkcy9Ob3JtYXRp
+dmFzL1BfZGVfQ2VydGlmaWNhZG9zL1BvbGl0aWNhcyBkZSBDZXJ0aWZpY2FkbyBQZXJzb25hIE5h
+dHVyYWwucGRmMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDCCAg8GA1UdHwSCAgYwggIC
+MIHeoDqgOIY2aHR0cDovL2NybDEuc2VjdXJpdHlkYXRhLm5ldC5lYy9zdWJjYTJjcmwxL2NybGZp
+bGUuY3JsooGfpIGcMIGZMTkwNwYDVQQDDDBBVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJD
+QS0yIFNFQ1VSSVRZIERBVEExMDAuBgNVBAsMJ0VOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJ
+TkZPUk1BQ0lPTjEdMBsGA1UECgwUU0VDVVJJVFkgREFUQSBTLkEuIDIxCzAJBgNVBAYTAkVDMDyg
+OqA4hjZodHRwOi8vY3JsMi5zZWN1cml0eWRhdGEubmV0LmVjL3N1YmNhMmNybDIvY3JsZmlsZS5j
+cmwwgeCggd2ggdqGgddodHRwczovL3BvcnRhbC1vcGVyYWRvcjIuc2VjdXJpdHlkYXRhLm5ldC5l
+Yy9lamJjYS9wdWJsaWN3ZWIvd2ViZGlzdC9jZXJ0ZGlzdD9jbWQ9Y3JsJmlzc3Vlcj1DTj1BVVRP
+UklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0yIFNFQ1VSSVRZIERBVEEsT1U9RU5USURBRCBE
+RSBDRVJUSUZJQ0FDSU9OIERFIElORk9STUFDSU9OLE89U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1F
+QzAdBgNVHQ4EFgQUkbdbevftCIDYCBc3N0bQjyo1FM4wKwYDVR0QBCQwIoAPMjAyNTExMjIxNzAw
+MzlagQ8yMDI3MTEyMjE3MDAzOVowCwYDVR0PBAQDAgXgMBoGCisGAQQBgqZyAwEEDAwKMTcxODQx
+NDQ2NzAdBgorBgEEAYKmcgMJBA8MDVNBTiBGUkFOQ0lTQ08wEQYKKwYBBAGCpnIDIgQDDAEuMBYG
+CisGAQQBgqZyAwcECAwGQ1VFTkNBMCAGCisGAQQBgqZyAwIEEgwQREFOSUVMQSBDUklTVElOQTAf
+BgorBgEEAYKmcgMgBBEMDzAxMzAwMTAwMDAxNjQ4NzARBgorBgEEAYKmcgMjBAMMAS4wEwYKKwYB
+BAGCpnIDIQQFDANQRlgwFwYKKwYBBAGCpnIDDAQJDAdFQ1VBRE9SMBcGCisGAQQBgqZyAwMECQwH
+Q0FSRE9TTzAZBgorBgEEAYKmcgMeBAsMCUlOR0VOSUVSQTAdBgorBgEEAYKmcgMLBA8MDTE3MTg0
+MTQ0NjcwMDEwEQYKKwYBBAGCpnIDHQQDDAEuMBgGCisGAQQBgqZyAwQECgwIQ0VWQUxMT1MwGgYK
+KwYBBAGCpnIDCAQMDAowOTk4ODIzOTYwMA0GCSqGSIb3DQEBCwUAA4ICAQCeMqs9og4RyZ3jZbF3
+VAbjz7ugLbHPNuEb/cjneWFL5HGDsQ3xTIoe8loPK2uFAmX7hmL8v/GwePJb/4OikHx41IK9C2tm
+UYb4NdOqB8I6rdbugG0w2Ywmns62DGSgDGp8F2wsV/GHpeMZM8mIH53VSVSGHJtt3TPivGRD8zKM
+14x2OyFjDuf/ryFFowaDlKvS320x4E+EH49X8smhfauNCeyZv2NG9DZUDoy/hoUXQu+eE6VCPaUD
+BaGwfG1ycw0RXdVctut9ZfpWApBEjRyRvHmK0IohzubxuqLThX/pTb4F0XkTDlUMyPLUc0qLB3Op
+fsSjve/LT1PocIBByGiOa67jRkm88s3Dvmp1F7g8dvlkdi2T51BEg26Dk5hXS1p7YbM8ZHagthyu
+p+NoYncaDF21Yg8KErdMiRKdtg7eqf8MB8QMA9oGMdtDb87TBkzxLouuiB6RUPwvST/yk5PBDPQi
+kUzl+DnT2/e+lBSGkfR6VhAXOpmVOCuVKgPYOGLUlqgmA6QZocrCbxlx4bN3NT7/iaLJJtRiiilM
+2kqrDOZ0sm4ezKHp2IBbvLdiYOLoYgmLzPa6rl4iBOnZ9u/SiknaUOp50ZZoyNtNDGgMErgw9XDZ
+uo8hqIiVgzWSfaqDoGLY3+I01qqXeRV/b8VhXGdziTz8BPbPa2ljUQLeIQ==
+</ds:X509Certificate>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+38lo4F191+9ue7ryH3JH5psGJt8dCEf39Gqp7P1Pa7jTCnhodxlE54r9GOT2ncqdxVpPPx7pvuJ8
+qX6QpG+pxwjMt5ug9unch/I9IbNhcArQR7dQ5sVaSCTow3h0jiGQMS11L7KPSieEY4U7jPx/KO8C
+IPPXBSwT3zEdK811kBOlCQv5aN5H/GqoUASy59Xy+zVW524SIWUBmK9sVOey5j0yZh7I81JxV6Or
+cCAsa2+OV2PI2WER1Mmu0HrBXGfdGjK+vkRELf6kFui1gIUsMhZYFiB0hw2DNtXOLHY6eOSGzKox
+raJTywB7ooCE1YZBg5eV0z+WAN8rptry0GTwfw==
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object Id="Signature478697-Object2570"><etsi:QualifyingProperties Target="#Signature478697"><etsi:SignedProperties Id="Signature478697-SignedProperties667915"><etsi:SignedSignatureProperties><etsi:SigningTime>2026-02-13T13:49:20-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>Ge59Qsycc2IIEoGOdZXhISm+bz8=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>9173246764006072147</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-156955"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
 <mensajes/>
 </autorizacion>
 
