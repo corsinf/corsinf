@@ -5,11 +5,13 @@ class HikvisionISAPI {
     private $ip;
     private $username;
     private $password;
+    private $port;
     
-    public function __construct($ip, $username, $password) {
+    public function __construct($ip,$port="8000",$username, $password) {
         $this->ip = $ip;
         $this->username = $username;
         $this->password = $password;
+        $this->port = $port;
     }
     
     /**
@@ -19,9 +21,9 @@ class HikvisionISAPI {
         return $this->request('POST', $endpoint, $data);
     }
 
-    public function postXML( $endpoint, $xmlData)
+    public function postXML( $endpoint, $xmlData,$json=1)
     {
-        return $this->requestXML('POST', $endpoint, $xmlData);
+        return $this->requestXML('POST', $endpoint, $xmlData,$json);
     }
     
     /**
@@ -85,7 +87,12 @@ class HikvisionISAPI {
      * Método base para todas las peticiones HTTP
      */
     private function request($method, $endpoint, $data = null,$xml=0) {
-        $url = "http://{$this->ip}/{$endpoint}";
+        if($this->port=="8000")
+        {
+            $url = "http://{$this->ip}/{$endpoint}";
+        }else{
+            $url = "http://{$this->ip}:{$this->port}/{$endpoint}";
+        }
         
         // Asegurar formato JSON
         if (strpos($url, '?') === false) {
@@ -133,13 +140,21 @@ class HikvisionISAPI {
         ];
     }
 
-    public function requestXML($method, $endpoint, $xmlData) {
-        $url = "http://{$this->ip}/{$endpoint}";
+    public function requestXML($method, $endpoint, $xmlData,$json) {
+        if($this->port=="8000")
+        {
+            $url = "http://{$this->ip}/{$endpoint}";
+        }else{
+            $url = "http://{$this->ip}:{$this->port}/{$endpoint}";
+        }
 
-         if (strpos($url, '?') === false) {
-            $url .= "?format=json";
-        } elseif (strpos($url, 'format=') === false) {
-            $url .= "&format=json";
+        if($json==1)
+        {
+            if (strpos($url, '?') === false) {
+                $url .= "?format=json";
+            } elseif (strpos($url, 'format=') === false) {
+                $url .= "&format=json";
+            }
         }
         
         $ch = curl_init();
@@ -231,7 +246,14 @@ class HikvisionISAPI {
 
 
      public function checkConnection() {
-        $url = "http://{$this->ip}/ISAPI/System/time?format=json";
+        if($this->port=="8000")
+        {
+            $url = "http://{$this->ip}/ISAPI/System/time?format=json";
+        }else{
+            $url = "http://{$this->ip}:{$this->port}/ISAPI/System/time?format=json";
+        }
+
+        // print_r($url);die();
         $ch = curl_init();
         
         curl_setopt($ch, CURLOPT_URL, $url);

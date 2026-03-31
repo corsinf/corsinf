@@ -8,9 +8,9 @@ class ACS_UserCrud {
 
     }
 
-    function setDeviceData($ip,$username,$password)
+    function setDeviceData($ip,$port,$username,$password)
     {       
-        $this->hik = new HikvisionISAPI($ip, $username, $password);
+        $this->hik = new HikvisionISAPI($ip,$port,$username, $password);
     }
     
     function checkConnection() {
@@ -72,7 +72,13 @@ class ACS_UserCrud {
         $dataUser = $this->hik->post("ISAPI/AccessControl/UserInfo/Search?format=json",$data);
         if(isset($dataUser['success']) && $dataUser['success']==1)
         {
-            return $dataUser['data']['UserInfoSearch']['UserInfo'][0];
+            if(isset($dataUser['data']['UserInfoSearch']['UserInfo']))
+            {
+                return $dataUser['data']['UserInfoSearch']['UserInfo'][0];
+            }else
+            {
+                return 0;
+            }
         }else
         {
             return -1;
@@ -143,7 +149,7 @@ class ACS_UserCrud {
                 "cardType" => $cardType
             ]
         ];
-        
+        // print_r($data);die();
         return $this->hik->post("ISAPI/AccessControl/CardInfo/Record", $data);
     }
     
@@ -195,28 +201,61 @@ class ACS_UserCrud {
     
     // ==================== GESTIÓN DE ROSTROS ====================
     
-    // /**
-    //  * Agrega un rostro a un usuario (por URL de imagen)
-    //  */
-    // function addFaceByUrl($employeeNo, $imageUrl, $faceLibType = 'blackFD') {
-    //     if (!$this->isOnline()) {
-    //         return ['success' => false, 'message' => 'Dispositivo no conectado'];
-    //     }
+    //  Agrega un rostro a un usuario (por dispositivo)*/
+
+    function addFaceByDevice($employeeNo,$UrlGuardar,$faceLibType = 'blackFD') {
+        if (!$this->isOnline()) {
+            return ['success' => false, 'message' => 'Dispositivo no conectado'];
+        }
         
-    //     $data = [
-    //         "faceLibType" => $faceLibType,
-    //         "FDID" => 1,
-    //         "FPID" => (string)$employeeNo,
-    //         "faceURL" => $imageUrl,
-    //         "featurePointType" => "face"
-    //     ];
-        
-    //     return $this->hik->post("ISAPI/Intelligent/FDLib/FaceDataRecord", $data);
-    // }
+        $data = '<CaptureFaceDataCond version="2.0" xmlns="http://www.isapi.org/ver20/XMLSchema">
+                    <captureInfrared>false</captureInfrared>
+                    <dataType>url</dataType>
+                </CaptureFaceDataCond>';
+
+        $faceRecord = $this->hik->postXML("ISAPI/AccessControl/CaptureFaceData", $data,0);
+        if(isset($faceRecord['success']) && $faceRecord['success']==1)
+        {
+            if (is_string($faceRecord['raw'])) {
+                $xml = simplexml_load_string($faceRecord['raw']);
+            } else {
+                $xml = $fingerData['raw'];
+            }
+            
+            // Extraer datos
+            $faceDataUrl = (string)$xml->faceDataUrl;
+            $captureProgress = (int)$xml->captureProgress;
+            // print_r($path);die();
+
+
+            $url = $faceDataUrl;
+            $ch = curl_init($url);
+
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_USERPWD, "admin:Data12/*");
+            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+
+            $image = curl_exec($ch);
+            curl_close($ch);
+            file_put_contents($UrlGuardar ."/".$employeeNo.".jpg", $image);
+
+            $data = [
+                    "faceLibType" => $faceLibType,
+                    "FDID" => "1",
+                    "FPID" => (string)$employeeNo,
+                    "faceURL" =>  $faceDataUrl,
+                
+            ];
+    // print_r($data);die();
+            return $this->hik->post("ISAPI/Intelligent/FDLib/FaceDataRecord?format=json", $data);
+        }else
+        {
+            return -1;
+        }
+        // print_r($faceRecord);die();
+    }
     
-    /**
-     * Agrega un rostro a un usuario (con imagen local)
-     */
+    //  Agrega un rostro a un usuario (con imagen local)  */
     function addFaceFromFile($employeeNo, $imagePath, $faceLibType = 'blackFD') {
         if (!$this->isOnline()) {
             return ['success' => false, 'message' => 'Dispositivo no conectado'];
@@ -248,6 +287,7 @@ class ACS_UserCrud {
             "FPID"=>(string)$employeeNo
         ];
         $listFace =  $this->hik->post("ISAPI/Intelligent/FDLib/FDSearch?format=json",$data);
+        // print_r($listFace);die();
         if(isset($listFace['success']) && $listFace['success']==1)
         {
             return $listFace['data']['MatchList'];
@@ -327,13 +367,14 @@ class ACS_UserCrud {
             $data = [
                 "FingerPrintCfg" => [
                     "employeeNo" => (string)$employeeNo,
-                    "fingerPrintID" => $fingerPrintID,
+                    "fingerPrintID" => (int)$fingerPrintID,
                     "fingerType" => "normalFP",
                     "fingerData" => $fingerData,
                     "enableCardReader" => [1,2]
                 ]
             ];
 
+            // print_r($data);die();
            return $this->hik->post("ISAPI/AccessControl/Fingerprint/SetUp", $data);
 
         }else
@@ -343,24 +384,51 @@ class ACS_UserCrud {
     }
     
     //  Lista las huellas de un usuario
-    
-     function getUserFingerprints($employeeNo) {
+
+     function getUserFingerprints($employeeNo,$fingerPrintID) {
         if (!$this->isOnline()) {
             return ['success' => false, 'message' => 'Dispositivo no conectado'];
         }
         
-        return $this->hik->get("ISAPI/AccessControl/FingerPrintInfo/{$employeeNo}?format=json");
+        // return $this->hik->get("ISAPI/AccessControl/FingerPrint?employeeNo=112&fingerPrintID=1");
+        // return $this->hik->get("ISAPI/AccessControl/FingerPrint/Count?format=json&employeeNo=112");
+
+        $data = [
+            "FingerPrintCond" => [
+                "searchID" => uniqid('search_', true),  // ID único de la sesión
+                "employeeNo" => (string)$employeeNo,
+                "fingerPrintID"=>$fingerPrintID
+                ]
+            ];
+
+        $dataFinger =  $this->hik->post("ISAPI/AccessControl/FingerPrintUpload?format=json",$data);
+        if(isset($dataFinger['success']) && $dataFinger['success']==1)
+        {
+            return $dataFinger['data']['FingerPrintInfo']['FingerPrintList'];
+        }else
+        {
+            return -1;
+        }
+
+
     }
     
-    /**
-     * Elimina una huella digital
-     */
+    // Elimina una huella digital
+
      function deleteFingerprint($employeeNo, $fingerPrintID) {
         if (!$this->isOnline()) {
             return ['success' => false, 'message' => 'Dispositivo no conectado'];
         }
-        
-        return $this->hik->delete("ISAPI/AccessControl/FingerPrintInfo/{$employeeNo}/{$fingerPrintID}?format=json");
+
+        $data = [ 
+                "FingerPrintCfg"=>[
+                        "employeeNo"=>(string)$employeeNo,
+                        "fingerPrintID"=>$fingerPrintID,
+                        "deleteFingerPrint"=>true,
+                        "fingerType"=>"normalFP"
+                    ]
+                ];        
+        return $this->hik->post("ISAPI/AccessControl/FingerPrint/SetUp?format=json",$data);
     }
     
     // ==================== FUNCIÓN COMPLETA ====================

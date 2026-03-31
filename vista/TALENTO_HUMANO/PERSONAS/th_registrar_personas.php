@@ -614,6 +614,9 @@ validar_acceso_persona($_GET['id_persona'] ?? '');
                                                 <div class="col-12 pt-2">
                                                     <button class="btn btn-primary btn-sm" onclick="modalBiometria()"><i
                                                             class="bx bx-sync"></i>Biometria</button>
+                                                    <button class="btn btn-primary btn-sm" onclick="ISAPIConnect()"><i
+                                                            class="bx bx-sync"></i>ISAPI</button>
+
 
 
                                                     <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="validarAperturaMensaje();">

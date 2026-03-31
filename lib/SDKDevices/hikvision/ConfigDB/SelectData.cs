@@ -132,7 +132,11 @@ namespace CorsinfSDKHik.ConfigDB
             {
                 DateTime _fechaMarcacion = DateTime.Parse(fechaMarcacion);
                 string yearMonth = _fechaMarcacion.ToString("yyyyMM");
-                tabla = "asis_atrasos_" + yearMonth;
+                if (yearMonth != fecha)
+                {
+                    tabla = "asis_atrasos_" + yearMonth;
+                }
+
             }
             String SqlComman = "SELECT * " +
                 "FROM " + esquema + "."+tabla+" " +
@@ -209,7 +213,10 @@ namespace CorsinfSDKHik.ConfigDB
             {
                 DateTime _fechaMarcacion = DateTime.Parse(fechaMarcacion);
                 string yearMonth = _fechaMarcacion.ToString("yyyyMM");
-                tabla = "asis_extraordinarias_" + yearMonth;
+                if (yearMonth != fecha)
+                {
+                    tabla = "asis_extraordinarias_" + yearMonth;
+                }
             }
             String SqlComman = "SELECT * " +
                 "FROM  " + esquema +"." +tabla+" "+
@@ -241,7 +248,10 @@ namespace CorsinfSDKHik.ConfigDB
             {
                 DateTime _fechaMarcacion = DateTime.Parse(FechaMarcacion);
                 string  yearMonth = _fechaMarcacion.ToString("yyyyMM");
-                tabla = "asis_faltas_"+ yearMonth;
+                if (yearMonth != fecha)
+                {
+                    tabla = "asis_faltas_" + yearMonth;
+                }
             }
             String SqlComman = "SELECT * " +
                 "FROM " + esquema + "." +tabla+" "+
@@ -302,7 +312,10 @@ namespace CorsinfSDKHik.ConfigDB
             {
                 DateTime _fechaMarcacion = DateTime.Parse(FechaMarcacion);
                 string yearMonth = _fechaMarcacion.ToString("yyyyMM");
-                tabla = "th_control_acceso_" + yearMonth;
+                if (yearMonth != fecha)
+                {
+                    tabla = "th_control_acceso_" + yearMonth;
+                }
             }
             String SqlText = "SELECT th_acc_id,th_cardNo,th_dis_id,th_acc_tipo_registro,th_acc_hora,th_acc_fecha,th_acc_fecha_hora,th_acc_fecha_creacion,th_acc_fecha_modificacion," +
                 "th_per_id,th_acc_puerto,th_acc_tipo_origen,th_act_id,th_acc_detalle_registro,th_acc_dia,th_acc_atraso_min,th_acc_almuerzo_min,th_acc_justificacion_min," +
@@ -474,7 +487,10 @@ namespace CorsinfSDKHik.ConfigDB
             {
                 DateTime _fechaMarcacion = DateTime.Parse(FechaMarcacion);
                 string yearMonth = _fechaMarcacion.ToString("yyyyMM");
-                tabla = "th_justificaciones_" + yearMonth;
+                if (yearMonth != fecha)
+                {
+                    tabla = "th_justificaciones_" + yearMonth;
+                }
             }
             String SqlText = "SELECT th_jus_id,th_jus_fecha_inicio,th_jus_fecha_fin,th_tip_jus_id,th_jus_motivo,th_per_id,th_dep_id," +
                 "th_jus_fecha_creacion,th_jus_fecha_modificacion,th_jus_estado,id_usuario,th_jus_es_rango,th_jus_minutos_justificados," +
@@ -510,7 +526,7 @@ namespace CorsinfSDKHik.ConfigDB
                 }
                 if (!string.IsNullOrEmpty(IdDepartamento))
                 {
-                    sql.Parameters.AddWithValue("@IdDepartamento", IdDepartamento);
+                    sql.Parameters.AddWithValue("@th_dep_id", IdDepartamento);
                 }
 
                 using (SqlDataReader reader = sql.ExecuteReader())
