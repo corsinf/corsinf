@@ -1,4 +1,3 @@
-
 <style>
     /* ---------- Grid de cards ---------- */
     .media-grid {
@@ -360,7 +359,7 @@
     var _media_preview_id = null;
     var _media_preview_espacio = '<?= $_id ?>';
 
-   
+
     function cargar_media() {
         $.ajax({
             url: '../controlador/HOST_TIME/ESPACIOS/hub_espacios_mediaC.php?listar=true',
@@ -438,8 +437,7 @@
             '<i class="bx bx-trash"></i>' +
             '</button>' +
             '</div>' +
-            '<div class="media-footer"><small>' + m.nombre_archivo + '</small>' +
-            '<small class="text-muted">' + tam + '</small></div>' +
+            '<div class="media-footer"><small class="text-muted">' + tam + '</small></div>' +
             '</div>';
     }
 
@@ -466,7 +464,7 @@
             '</div>';
     }
 
-  
+
     function abrir_modal_media() {
         $('#form_media')[0].reset();
         $('#upload_preview_wrap').hide();
@@ -480,7 +478,7 @@
         $('#modal_media').modal('show');
     }
 
-   
+
     $('#archivo_media').on('change', function() {
         mostrar_preview_archivo(this.files[0]);
     });
@@ -720,6 +718,7 @@
         if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
         return (bytes / 1048576).toFixed(1) + ' MB';
     }
+
     function escape_attr(str) {
         return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
     }

@@ -15,7 +15,6 @@ class espaciosM extends BaseModel
         'id_tipo_espacio',
         'capacidad_minima',
         'capacidad_maxima',
-        'es_exclusivo',
         'imagen',
         'id_estado_espacio',
         'is_deleted',
@@ -28,29 +27,30 @@ class espaciosM extends BaseModel
     public function listar_espacios($id_espacio = '')
     {
         $sql = "
-        SELECT
-            esp.id_espacio AS _id, 
-            esp.codigo, 
-            esp.nombre, 
-            esp.id_ubicacion, 
-            esp.id_numero_piso,
-            esp.id_tipo_espacio, 
-            esp.capacidad_minima,
-            esp.capacidad_maxima,
-            esp.es_exclusivo,
-            esp.imagen,
-            esp.id_estado_espacio,
-            esp.is_deleted,
-            esp.fecha_creacion,
-            ubi.nombre AS nombre_ubicacion,
-            tipo.nombre AS nombre_tipo_espacio,
-            piso.descripcion AS descripcion_numero_piso
-        FROM hub_espacios esp
-        LEFT JOIN hub_ubicaciones ubi ON esp.id_ubicacion = ubi.id_ubicacion
-        LEFT JOIN hub_catn_tipo_espacios tipo ON esp.id_tipo_espacio = tipo.id_tipo_espacio
-        LEFT JOIN hub_catn_numero_piso piso ON esp.id_numero_piso = piso.id_numero_piso
-        WHERE esp.is_deleted = 0
-        ";
+    SELECT
+        esp.id_espacio AS _id, 
+        esp.codigo, 
+        esp.nombre, 
+        esp.id_ubicacion, 
+        esp.id_numero_piso,
+        esp.id_tipo_espacio, 
+        esp.capacidad_minima,
+        esp.capacidad_maxima,
+        esp.imagen,
+        esp.id_estado_espacio,
+        esp.is_deleted,
+        esp.fecha_creacion,
+        ubi.nombre AS nombre_ubicacion,
+        tipo.nombre AS nombre_tipo_espacio,
+        piso.descripcion AS descripcion_numero_piso,
+        est.nombre AS nombre_estado_espacio
+    FROM hub_espacios esp
+    LEFT JOIN hub_ubicaciones ubi ON esp.id_ubicacion = ubi.id_ubicacion
+    LEFT JOIN hub_catn_tipo_espacios tipo ON esp.id_tipo_espacio = tipo.id_tipo_espacio
+    LEFT JOIN hub_catn_numero_piso piso ON esp.id_numero_piso = piso.id_numero_piso
+    LEFT JOIN hub_cats_estado_espacios est ON esp.id_estado_espacio = est.id_estado_espacio
+    WHERE esp.is_deleted = 0
+    ";
 
         if ($id_espacio !== '') {
             $id = (int) $id_espacio;
@@ -94,6 +94,42 @@ class espaciosM extends BaseModel
           AND esp.id_estado_espacio = 1
         ORDER BY tipo.nombre ASC
     ";
+        return $this->db->datos($sql);
+    }
+
+    public function listar_espacios_por_ubicacion_piso($id_ubicacion, $id_piso)
+    {
+        $id_ubi = intval($id_ubicacion);
+        $id_p   = intval($id_piso);
+
+        $sql = "
+    SELECT
+        esp.id_espacio AS _id,
+        esp.codigo,
+        esp.nombre,
+        esp.id_ubicacion,
+        esp.id_numero_piso,
+        esp.id_tipo_espacio,
+        esp.capacidad_minima,
+        esp.capacidad_maxima,
+        esp.imagen,
+        esp.id_estado_espacio,
+        esp.is_deleted,
+        esp.fecha_creacion,
+        ubi.nombre  AS nombre_ubicacion,
+        tipo.nombre AS nombre_tipo_espacio,
+        piso.descripcion AS descripcion_numero_piso
+    FROM hub_espacios esp
+    LEFT JOIN hub_ubicaciones        ubi  ON esp.id_ubicacion    = ubi.id_ubicacion
+    LEFT JOIN hub_catn_tipo_espacios tipo ON esp.id_tipo_espacio = tipo.id_tipo_espacio
+    LEFT JOIN hub_catn_numero_piso   piso ON esp.id_numero_piso  = piso.id_numero_piso
+    WHERE esp.is_deleted       = 0
+      AND esp.id_estado_espacio = 1
+      AND esp.id_ubicacion      = {$id_ubi}
+      AND esp.id_numero_piso    = {$id_p}
+    ORDER BY esp.nombre ASC
+    ";
+
         return $this->db->datos($sql);
     }
 }

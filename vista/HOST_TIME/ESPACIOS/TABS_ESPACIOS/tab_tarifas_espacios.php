@@ -29,12 +29,26 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 },
                 {
                     data: 'precio'
-                },
-                {
-                    data: 'cantidad'
-                },
-                {
-                    data: 'unidad_tiempo'
+                }, {
+                    data: null,
+                    render: function(data, type, row) {
+                        var cantidad = parseInt(data.cantidad);
+                        var unidad = data.unidad_tiempo.toLowerCase();
+
+                        // Singular o plural
+                        var label = '';
+                        if (unidad === 'mes' || unidad === 'meses') {
+                            label = cantidad === 1 ? 'Mes' : 'Meses';
+                        } else if (unidad === 'hora' || unidad === 'horas') {
+                            label = cantidad === 1 ? 'Hora' : 'Horas';
+                        } else if (unidad === 'dia' || unidad === 'días' || unidad === 'dias') {
+                            label = cantidad === 1 ? 'Día' : 'Días';
+                        } else {
+                            label = data.unidad_tiempo;
+                        }
+
+                        return cantidad + ' ' + label;
+                    }
                 },
                 {
                     data: null,
@@ -173,8 +187,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     <tr>
                         <th>Nombre</th>
                         <th>Precio</th>
-                        <th>Cantidad</th>
-                        <th>Tiempo</th>
+                        <th>Periodo</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -202,13 +215,13 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
                     <div class="row g-3">
                         <div class="col-12">
-                            <label class="form-label fw-semibold">Nombre del plan</label>
-                            <input type="text" class="form-control form-control-sm" id="txt_nombre_plan" placeholder="Ej: Plan Corporativo Mensual">
+                            <label for="txt_nombre_plan" class="form-label fw-semibold">Nombre del plan </label>
+                            <input type="text" class="form-control form-control-sm" id="txt_nombre_plan" name="txt_nombre_plan" placeholder="Ej: Plan Corporativo Mensual">
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Unidad</label>
-                            <select class="form-select form-select-sm" id="ddl_unidad">
+                            <label for="ddl_unidad" class="form-label fw-semibold">Unidad </label>
+                            <select class="form-select form-select-sm" id="ddl_unidad" name="ddl_unidad">
                                 <option value="">-- Seleccione --</option>
                                 <option value="HORA">Hora</option>
                                 <option value="MES">Mes</option>
@@ -216,15 +229,15 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Cantidad</label>
-                            <input type="number" class="form-control form-control-sm" id="txt_cantidad" min="1" value="1">
+                            <label for="txt_cantidad" class="form-label fw-semibold">Cantidad </label>
+                            <input type="number" class="form-control form-control-sm" id="txt_cantidad" name="txt_cantidad" min="1" value="1">
                         </div>
 
                         <div class="col-12">
-                            <label class="form-label fw-semibold">Precio</label>
+                            <label for="txt_precio" class="form-label fw-semibold">Precio </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text">$</span>
-                                <input type="number" class="form-control" id="txt_precio" step="0.01" min="0" placeholder="0.00">
+                                <input type="number" class="form-control" id="txt_precio" name="txt_precio" step="0.01" min="0" placeholder="0.00">
                             </div>
                         </div>
 
@@ -257,19 +270,31 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     required: true
                 },
                 txt_cantidad: {
-                    required: true
+                    required: true,
+                    min: 1
                 },
                 txt_precio: {
-                    required: true
+                    required: true,
+                    min: 0
                 }
             },
+            messages: {
+                txt_nombre_plan: "Ingrese el nombre del plan",
+                ddl_unidad: "Seleccione una unidad",
+                txt_cantidad: "Mínimo 1",
+                txt_precio: "Ingrese el precio"
+            },
+            errorElement: 'span', // Cambia el error a un span
+            errorPlacement: function(error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.col-12, .col-md-6').append(error); // Ubica el error debajo del input
+            },
             highlight: function(el) {
-                $(el).addClass('is-invalid');
+                $(el).addClass('is-invalid').removeClass('is-valid');
             },
             unhighlight: function(el) {
                 $(el).removeClass('is-invalid').addClass('is-valid');
             }
         });
-
     });
 </script>

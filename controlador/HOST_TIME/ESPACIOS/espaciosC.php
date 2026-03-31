@@ -44,6 +44,13 @@ if (isset($_GET['insertar_imagen'])) {
     echo json_encode($controlador->insertar_imagen($_FILES, $_POST));
 }
 
+if (isset($_GET['listar_por_ubicacion_piso'])) {
+    echo json_encode($controlador->listar_por_ubicacion_piso(
+        $_POST['id_ubicacion'] ?? '',
+        $_POST['id_piso']      ?? ''
+    ));
+}
+
 class espaciosC
 {
     private $modelo;
@@ -52,6 +59,13 @@ class espaciosC
     {
         $this->modelo = new espaciosM();
     }
+
+    function listar_por_ubicacion_piso($id_ubicacion = '', $id_piso = '')
+    {
+        $datos = $this->modelo->listar_espacios_por_ubicacion_piso($id_ubicacion, $id_piso);
+        return $datos;
+    }
+
 
     function listar($id = '')
     {
@@ -89,7 +103,6 @@ class espaciosC
             array('campo' => 'nombre', 'dato' => trim($parametros['txt_nombre'])),
             array('campo' => 'capacidad_minima', 'dato' => (int)$parametros['txt_capacidad_min']),
             array('campo' => 'capacidad_maxima', 'dato' => (int)$parametros['txt_capacidad_max']),
-            array('campo' => 'es_exclusivo', 'dato' => isset($parametros['chk_exclusivo']) ? 1 : 0),
             array('campo' => 'id_estado_espacio', 'dato' => (int)($parametros['ddl_estado'] ?? 1)),
             array('campo' => 'is_deleted', 'dato' => 0),
         );
@@ -125,6 +138,7 @@ class espaciosC
         );
         return $this->modelo->editar($datos, $where);
     }
+
 
     //Para usar en select2
     function buscar($parametros)

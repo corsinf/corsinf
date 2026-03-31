@@ -32,7 +32,6 @@
                 $('#txt_codigo').val(r.codigo);
                 $('#txt_capacidad_min').val(r.capacidad_minima);
                 $('#txt_capacidad_max').val(r.capacidad_maxima);
-                $('#chk_exclusivo').prop('checked', r.es_exclusivo == 1);
                 $('#ddl_tipo_espacio').append($('<option>', {
                     value: r.id_tipo_espacio,
                     text: r.nombre_tipo_espacio,
@@ -48,6 +47,11 @@
                     text: r.descripcion_numero_piso,
                     selected: true
                 }));
+                $('#ddl_estado_espacio').append($('<option>', {
+                    value: r.id_estado_espacio,
+                    text: r.nombre_estado_espacio,
+                    selected: true
+                }));
             }
         });
     }
@@ -56,24 +60,25 @@
         cargar_select2_url('ddl_tipo_espacio', '../controlador/HOST_TIME/CATALOGOS/hub_catn_tipo_espacioC.php?buscar=true');
         cargar_select2_url('ddl_ubicacion', '../controlador/HOST_TIME/UBICACIONES/hub_ubicacionesC.php?buscar=true');
         cargar_select2_url('ddl_numero_piso', '../controlador/HOST_TIME/CATALOGOS/hub_catn_numero_pisoC.php?buscar=true');
+        cargar_select2_url('ddl_estado_espacio', '../controlador/HOST_TIME/CATALOGOS/hub_cats_estado_espaciosC.php?buscar=true');
     }
 
-    function editar_insertar() {
+    function editar_insertar_espacio() {
         var parametros = {
             '_id': '<?= $_id ?>',
             'txt_nombre': $('#txt_nombre').val(),
             'txt_codigo': $('#txt_codigo').val(),
             'txt_capacidad_min': $('#txt_capacidad_min').val(),
             'txt_capacidad_max': $('#txt_capacidad_max').val(),
-            'chk_exclusivo': $('#chk_exclusivo').is(':checked') ? 1 : 0,
             'ddl_tipo_espacio': $('#ddl_tipo_espacio').val(),
+            'ddl_estado': $('#ddl_estado_espacio').val(),
             'ddl_ubicacion': $('#ddl_ubicacion').val(),
             'ddl_numero_piso': $('#ddl_numero_piso').val(),
         };
-        if ($("#form_espacios").valid()) insertar(parametros);
+        if ($("#form_espacios").valid()) insertar_espacio(parametros);
     }
 
-    function insertar(parametros) {
+    function insertar_espacio(parametros) {
         $.ajax({
             data: {
                 parametros: parametros
@@ -201,7 +206,7 @@
 
     <!-- FILA 2: Número de piso + Capacidad -->
     <div class="row mb-col mt-3">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label for="ddl_numero_piso" class="form-label">Numero de piso </label>
             <select class="form-select form-select-sm select2-validation"
                 id="ddl_numero_piso" name="ddl_numero_piso">
@@ -209,36 +214,36 @@
             </select>
             <label class="error" style="display:none;" for="ddl_numero_piso"></label>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
+            <label for="ddl_estado_espacio" class="form-label">Estado del espacio</label>
+            <select class="form-select form-select-sm select2-validation"
+                id="ddl_estado_espacio" name="ddl_estado_espacio">
+                <option value="" selected hidden>-- Seleccione --</option>
+            </select>
+            <label class="error" style="display:none;" for="ddl_estado_espacio"></label>
+        </div>
+        <div class="col-md-3">
             <label for="txt_capacidad_min" class="form-label">Capacidad mínima</label>
             <input type="number" class="form-control form-control-sm"
                 id="txt_capacidad_min" name="txt_capacidad_min" min="0" step="1">
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label for="txt_capacidad_max" class="form-label">Capacidad máxima</label>
             <input type="number" class="form-control form-control-sm"
                 id="txt_capacidad_max" name="txt_capacidad_max" min="0" step="1">
         </div>
 
-        <div class="col-md-4 d-flex align-items-end">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="chk_exclusivo">
-                <label class="form-check-label" for="chk_exclusivo">
-                    Exclusivo
-                </label>
-            </div>
-        </div>
     </div>
 
     <!-- Botones -->
     <div class="d-flex justify-content-end pt-2">
         <?php if ($_id == ''): ?>
-            <button type="button" class="btn btn-success btn-sm px-4 m-0" onclick="editar_insertar()">
+            <button type="button" class="btn btn-success btn-sm px-4 m-0" onclick="editar_insertar_espacio()">
                 <i class="bx bx-save"></i> Guardar
             </button>
         <?php else: ?>
-            <button type="button" class="btn btn-success btn-sm px-4 m-1" onclick="editar_insertar()">
+            <button type="button" class="btn btn-success btn-sm px-4 m-1" onclick="editar_insertar_espacio()">
                 <i class="bx bx-save"></i> Editar
             </button>
             <button type="button" class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()">
@@ -392,6 +397,7 @@
         agregar_asterisco_campo_obligatorio('ddl_tipo_espacio');
         agregar_asterisco_campo_obligatorio('ddl_ubicacion');
         agregar_asterisco_campo_obligatorio('ddl_numero_piso');
+        agregar_asterisco_campo_obligatorio('ddl_estado_espacio');
 
         $("#form_espacios").validate({
             rules: {
@@ -414,6 +420,9 @@
                     required: true
                 },
                 ddl_numero_piso: {
+                    required: true
+                },
+                ddl_estado_espacio: {
                     required: true
                 },
             },
