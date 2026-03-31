@@ -69,10 +69,15 @@
 
 
 
-   function lista_tipo_usuario_drop_pagina()
+  function lista_tipo_usuario_drop_pagina()
   {
+     var parametros = 
+    {
+      'empresaActual':$('#cbx_empresas').prop('checked'),
+      'empresaId':$('#ddl_empresas').val(),
+    }
     $.ajax({
-         // data:  {parametros:parametros},
+         data:  {parametros:parametros},
          url:   '../controlador/tipo_usuarioC.php?lista_usuarios_drop=true',
          type:  'post',
          dataType: 'json',
@@ -154,14 +159,14 @@
 
   function lista_modulos()
   {
-    //  var parametros = 
-    // {
-    //   'perfil':$('#ddl_perfil').val(),
-    //   'query':$('#txt_pagina').val(),
-    // }
+     var parametros = 
+    {
+      'empresaActual':$('#cbx_empresas').prop('checked'),
+      'empresaId':$('#ddl_empresas').val(),
+    }
 
     $.ajax({
-         // data:  {parametros:parametros},
+         data:  {parametros:parametros},
          url:   '../controlador/tipo_usuarioC.php?modulo_sistema=true',
          type:  'post',
          dataType: 'json',
@@ -376,6 +381,8 @@
       'ver':$('#ver_'+id).prop('checked'),
       'edi':$('#edi_'+id).prop('checked'),
       'eli':$('#eli_'+id).prop('checked'),
+      'idempresa': $('#ddl_empresas').val(),
+      'empresaActual':$('#cbx_empresas').prop('checked'),
     } 
     $.ajax({
          data:  parametros,
@@ -553,6 +560,41 @@
      })
 
    }
+
+   function ver_empresas()
+   {
+      listado_empresas();
+      if($('#cbx_empresas').prop('checked'))
+      {
+          $('#ddl_empresas').addClass('d-none');
+      }else
+      {
+          $('#ddl_empresas').removeClass('d-none');
+      }
+   }
+
+   function listado_empresas()
+   {     
+      $.ajax({
+         // data:  {parametros:parametros},
+        url: '../controlador/loginC.php?lista_empresa_all=true',
+        type:  'post',
+        dataType: 'json',
+           success:  function (response) { 
+            var op_Empresa = '';
+            response.forEach(function(item,i){
+              op_Empresa+='<option value="'+item.Id_empresa+'">'+item.Nombre_Comercial+'</option>'
+            })
+
+            $('#ddl_empresas').html(op_Empresa);
+            lista_modulos();
+            // lista_tipo_usuario_drop_pagina();
+            console.log(response);
+          } 
+          
+       });
+   }
+
 </script>
 
 
@@ -577,13 +619,15 @@
             <hr>
             <div class="card">
               <div class="card-body">
-                <div class="row text-end">
-                    <div class="col-sm-8"></div>
-                    <div class="col-sm-4">
-                        <input type="text" name="txt_pagina" id="txt_pagina" placeholder="Buscar pagina" class="form-control form-control-sm" onkeyup="lista_paginas()">             
-                    </div>                    
-                </div>
-                <div class="row"> 
+                <div class="row">
+                    <div class="col-sm-2">
+                      <?php if($_SESSION['INICIO']['TIPO']=='DBA'){ ?>
+                          <label><input type="checkbox" id="cbx_empresas" checked onchange="ver_empresas();" /> En empresa actual</label> <br>
+                      <?php } ?>       
+                       <select class="form-select form-select-sm d-none" id="ddl_empresas" name="ddl_empresas" onchange="lista_modulos()">
+                          <option value="">Seleccione empresa</option>
+                      </select>    
+                    </div>
                     <div class="col-sm-2">
                       <b>Modulo </b>
                       <select class="form-select form-select-sm" id="ddl_modulos" name="ddl_modulos" onchange="cargar_menu();lista_paginas();validar_licencia()">
@@ -617,6 +661,12 @@
                       </select>                      
                     </div>
                    
+                </div>
+                <div class="row mt-1">
+                  <div class="col-sm-8"></div>
+                   <div class="col-sm-4">
+                        <input type="text" name="txt_pagina" id="txt_pagina" placeholder="Buscar pagina" class="form-control form-control-sm" onkeyup="lista_paginas()">             
+                    </div>                                        
                 </div>
                 
                 <hr>

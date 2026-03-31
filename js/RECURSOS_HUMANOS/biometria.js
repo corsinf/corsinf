@@ -1155,6 +1155,7 @@ function leerFace()
                     Swal.fire("Facial Guardada",response.patch,"success");
                     $('#file_name_bio_face').text(response.patch);
                     $('#sync_biometrico').modal('hide');
+                    $('#nuevofacial').modal('hide');
                 }else
                 {
                     Swal.fire("Facial",response.msj,"info");

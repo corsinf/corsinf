@@ -74,7 +74,8 @@ class tipo_usuarioM
 
 	function lista_tipo_usuario($query=false)
 	{
-		$sql = "SELECT ID_TIPO as 'id', DESCRIPCION as 'nombre' FROM TIPO_USUARIO 
+		$sql = "SELECT ID_TIPO as 'id', DESCRIPCION as 'nombre' 
+		FROM TIPO_USUARIO 
 		WHERE ESTADO='A'
 		AND PADRE = 0 ";
 		if($query)
@@ -159,28 +160,31 @@ class tipo_usuarioM
 		return $datos ;
 	}
 
-	function modulos_sis()
+	function modulos_sis($empresa)
 	{
-		switch ($_SESSION['INICIO']['TIPO']) {
-			case 'DBA':
-				$sql = "SELECT  * FROM MODULOS_SISTEMA";
-				$datos = $this->db->datos($sql,1);
-				break;
-			case 'ADMINISTRADOR':
-			case 'ADMIN':
+		// switch ($_SESSION['INICIO']['TIPO']) {
+		// 	case 'DBA':
+		// 		$sql = "SELECT  * FROM MODULOS_SISTEMA";
+		// 		$datos = $this->db->datos($sql,1);
+		// 		break;
+		// 	case 'ADMINISTRADOR':
+		// 	case 'ADMIN':
 			   $sql ="SELECT MS.*
 						FROM LICENCIAS L
 						INNER JOIN MODULOS_SISTEMA MS ON L.Id_Modulo = MS.id_modulos
-						WHERE Id_empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."' AND L.registrado = 1 AND DATEDIFF(DAY, GETDATE(), Fecha_exp) >= 0 ";
+						WHERE Id_empresa = '".$empresa."' 
+						AND L.registrado = 1 AND DATEDIFF(DAY, GETDATE(), Fecha_exp) >= 0 ";
+
+						// print_r($sql);die();
 				$datos = $this->db->datos($sql,1);
-				break;			
+		// 		break;			
 
-			default:
-				$sql = "SELECT  * FROM MODULOS_SISTEMA";
-				$datos = $this->db->datos($sql);
+		// 	default:
+		// 		$sql = "SELECT  * FROM MODULOS_SISTEMA";
+		// 		$datos = $this->db->datos($sql);
 
-				break;
-		}
+		// 		break;
+		// }
 		
 		return $datos;
 	}
