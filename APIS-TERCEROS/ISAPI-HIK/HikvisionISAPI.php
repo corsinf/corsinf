@@ -48,7 +48,7 @@ class HikvisionISAPI {
      * Realiza petición POST multipart (para imágenes)
      */
     public function postMultipart($endpoint, $jsonData, $imagePath) {
-        $url = "http://{$this->ip}/{$endpoint}?format=json";
+        $url = "{$this->ip}/{$endpoint}?format=json";
         $ch = curl_init();
         
         $boundary = "---------------------" . md5(microtime());
@@ -65,6 +65,10 @@ class HikvisionISAPI {
         ]);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+
+        
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -89,9 +93,9 @@ class HikvisionISAPI {
     private function request($method, $endpoint, $data = null,$xml=0) {
         if($this->port=="8000")
         {
-            $url = "http://{$this->ip}/{$endpoint}";
+            $url = "{$this->ip}/{$endpoint}";
         }else{
-            $url = "http://{$this->ip}:{$this->port}/{$endpoint}";
+            $url = "{$this->ip}:{$this->port}/{$endpoint}";
         }
         
         // Asegurar formato JSON
@@ -108,6 +112,10 @@ class HikvisionISAPI {
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
         curl_setopt($ch, CURLOPT_USERPWD, "{$this->username}:{$this->password}");
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         
         if ($data && ($method === 'POST' || $method === 'PUT')) {
             $jsonData = json_encode($data);
@@ -143,9 +151,9 @@ class HikvisionISAPI {
     public function requestXML($method, $endpoint, $xmlData,$json) {
         if($this->port=="8000")
         {
-            $url = "http://{$this->ip}/{$endpoint}";
+            $url = "{$this->ip}/{$endpoint}";
         }else{
-            $url = "http://{$this->ip}:{$this->port}/{$endpoint}";
+            $url = "{$this->ip}:{$this->port}/{$endpoint}";
         }
 
         if($json==1)
@@ -169,6 +177,10 @@ class HikvisionISAPI {
         ]);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $xmlData);
         curl_setopt($ch, CURLOPT_TIMEOUT, 60); // Mayor timeout para captura
+
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -248,9 +260,9 @@ class HikvisionISAPI {
      public function checkConnection() {
         if($this->port=="8000")
         {
-            $url = "http://{$this->ip}/ISAPI/System/time?format=json";
+            $url = "{$this->ip}/ISAPI/System/time?format=json";
         }else{
-            $url = "http://{$this->ip}:{$this->port}/ISAPI/System/time?format=json";
+            $url = "{$this->ip}:{$this->port}/ISAPI/System/time?format=json";
         }
 
         // print_r($url);die();
@@ -261,6 +273,9 @@ class HikvisionISAPI {
         curl_setopt($ch, CURLOPT_TIMEOUT, 5); // Timeout de 5 segundos
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
         curl_setopt($ch, CURLOPT_USERPWD, "{$this->username}:{$this->password}");
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
