@@ -1327,8 +1327,8 @@ function para_ftp($nombre,$texto)
 			if($incrementar)
 			{
 				$NUM = 1+$datos[0]['NUMERO'];
-				$sql3 = "UPDATE SECUENCIALES SET NUMERO = '".$NUM."' WHERE ID_SECUENCIALES = '".$datos[0]['ID_SECUENCIALES']."'";
-				$this->db->sql_string($sql3);
+				$sql3 = "UPDATE dbo.SECUENCIALES SET NUMERO = '".$NUM."' WHERE ID_SECUENCIALES = '".$datos[0]['ID_SECUENCIALES']."'";
+				$this->db->sql_string($sql3,false,true);
 				return $this->db->datos($sql);
 			}else
 			{

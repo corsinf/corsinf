@@ -122,6 +122,12 @@ if(isset($_GET['primerInicioActive']))
 	$parametros = $_POST['parametros'];
 	echo json_encode($controlador->primerInicioActive($parametros));
 }
+
+if(isset($_GET['lista_empresa_all']))
+{
+	// $parametros = $_POST['parametros'];
+	echo json_encode($controlador->lista_empresa_all());
+}
 class loginC
 {
 	private $login;
@@ -2054,6 +2060,11 @@ class loginC
 			return -2;
 		}
 
+	}
+
+	function lista_empresa_all()
+	{
+		return $this->login->lista_empresa_all(1);
 	}
 
 }

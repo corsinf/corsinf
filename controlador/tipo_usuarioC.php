@@ -26,7 +26,8 @@ if(isset($_GET['lista_usuarios_all']))
 }
 if(isset($_GET['lista_usuarios_drop']))
 {
-	echo json_encode($controlador->lista_tipo_usuarios_drop());
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->lista_tipo_usuarios_drop($parametros));
 }
 if(isset($_GET['lista_usuarios_asignados']))
 {
@@ -217,8 +218,10 @@ class tipo_usuarioC
 	}
 
 
-	function lista_tipo_usuarios_drop()
+	function lista_tipo_usuarios_drop($parametros)
 	{
+
+		// print_r($parametros);die();
 		$datos = $this->modelo->lista_tipo_usuario();
 
 		// print_r($datos);die();
@@ -318,11 +321,18 @@ class tipo_usuarioC
 		}
 		return $html;
 	}
-	function modulo_sistema()
+	function modulo_sistema($parametros)
 	{
 		$tr ='<option value="" selected>Todos</option>';
-	 
-		$datos= $this->modelo->modulos_sis();
+	 	
+	 	$empresaId = $_SESSION['INICIO']['ID_EMPRESA'];
+	 	if($parametros['empresaActual']=='false')
+	 	{	 		
+	 			$empresaId = $parametros['empresaId'];
+	 	}
+// print_r($parametros);die();
+	 	// print_r($empresaId);die();
+		$datos= $this->modelo->modulos_sis($empresaId);
 		foreach ($datos as $key => $value) {
 			
 				$tr.='<option value="'.$value['id_modulos'].'">'.$value['nombre_modulo'].'</option>';				
@@ -438,13 +448,20 @@ class tipo_usuarioC
 	{
 		// print_r($parametros);die();
 
-		$empresa = $this->pagina->lista_empresa($_SESSION['INICIO']['ID_EMPRESA']);
+		$empresaID = $_SESSION['INICIO']['ID_EMPRESA'];
+		if($parametros['empresaActual']!=true)
+		{
+			$empresaID = $parametros['idempresa'];
+		}
+
+
+
+		$empresa = $this->pagina->lista_empresa($empresaID);
 		$ver = 0;	$edi =0;$eli =0;
 		if($parametros['ver']=='true'){ $ver = 1;}
 		if($parametros['edi']=='true'){ $edi = 1;} 
 		if($parametros['eli']=='true'){ $eli = 1;}
 
-		// print_r($dato);die();
 
 		if($parametros['perfil']!='' && $parametros['subperfil']=='')
 		{
@@ -461,7 +478,7 @@ class tipo_usuarioC
 					$datos[2]['campo'] = 'eliminar';
 					$datos[2]['dato'] = $eli;
 					$datos[3]['campo'] = 'id_empresa';
-					$datos[3]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];
+					$datos[3]['dato'] = $empresaID;
 					$this->modelo->update('ACCESOS',$datos,$where);
 
 					$no_concu = $this->no_concurente->lista_sub_perfil($parametros['perfil']);
@@ -485,7 +502,7 @@ class tipo_usuarioC
 					$datos[4]['campo'] = 'id_tipo_usu';
 					$datos[4]['dato'] = $parametros['perfil'];
 					$datos[5]['campo'] = 'id_empresa';
-					$datos[5]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];
+					$datos[5]['dato'] = $empresaID;
 					$this->modelo->guardar($datos,'ACCESOS');	
 					// $this->modelo->guardarLocal($datos,'ACCESOS');	
 					$no_concu = $this->no_concurente->lista_sub_perfil($parametros['perfil']);
