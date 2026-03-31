@@ -728,7 +728,7 @@ class th_personasC
         // enviando al biometrico  
 
         // genera conexion al biometrico     
-        $this->isapi->setDeviceData("https://".$dispositivo[0]['host'],$dispositivo[0]['port'],$dispositivo[0]['usuario'],$dispositivo[0]['pass']);
+        $this->isapi->setDeviceData("https://".$dispositivo[0]['host'],$dispositivo[0]['port_isapi'],$dispositivo[0]['usuario'],$dispositivo[0]['pass']);
 
         //buscar si el usuario ya esta en el biometrico
         $usuarioBio = $this->isapi->getUser($EmployedId);
@@ -799,7 +799,7 @@ class th_personasC
                         array('campo'=>'th_cardNo','dato'=>$parametros['CardNo']),
                     );
         $this->card->eliminar($datos);
-        $this->isapi->setDeviceData("https://".$dispositivo[0]['host'],$dispositivo[0]['port'],$dispositivo[0]['usuario'],$dispositivo[0]['pass']);
+        $this->isapi->setDeviceData("https://".$dispositivo[0]['host'],$dispositivo[0]['port_isapi'],$dispositivo[0]['usuario'],$dispositivo[0]['pass']);
         $resp =  $this->isapi->deleteCard($CardNom);
         if($resp['success']==1)
         {
@@ -914,7 +914,7 @@ class th_personasC
         $this->addHuellaBase($parametros['idPerson'], $CardNom, $parametros['dedo']);
 
         //verificamos si existe el usuario en el biometrico
-        $this->isapi->setDeviceData("https://".$dispositivo[0]['host'],$dispositivo[0]['port'],$dispositivo[0]['usuario'],$dispositivo[0]['pass']);
+        $this->isapi->setDeviceData("https://".$dispositivo[0]['host'],$dispositivo[0]['port_isapi'],$dispositivo[0]['usuario'],$dispositivo[0]['pass']);
         $user = $this->isapi->getUser($parametros['idPerson']);
         
         if($user==0)
@@ -1302,7 +1302,7 @@ class th_personasC
             );
             $datos = $this->face->insertar($datosBio);
 
-            $this->isapi->setDeviceData("https://".$dispositivo[0]['host'],$dispositivo[0]['port'],$dispositivo[0]['usuario'],$dispositivo[0]['pass']);
+            $this->isapi->setDeviceData("https://".$dispositivo[0]['host'],$dispositivo[0]['port_isapi'],$dispositivo[0]['usuario'],$dispositivo[0]['pass']);
             $resp =  $this->isapi->addFaceFromFile($idPerson,$patch);
             if($resp['success'])
             {
@@ -1435,7 +1435,7 @@ class th_personasC
 
         $nombre_completo =  $persona[0]['primer_apellido'] . " " . $persona[0]['segundo_apellido'] . " " . $persona[0]['primer_nombre'] . " " . $persona[0]['segundo_nombre'];
 
-        $this->isapi->setDeviceData("https://".$dispositivo[0]['host'],$dispositivo[0]['port'],$dispositivo[0]['usuario'],$dispositivo[0]['pass']);
+        $this->isapi->setDeviceData("https://".$dispositivo[0]['host'],$dispositivo[0]['port_isapi'],$dispositivo[0]['usuario'],$dispositivo[0]['pass']);
         $user = $this->isapi->getUser($idPerson);
         if($user==0)
         {
