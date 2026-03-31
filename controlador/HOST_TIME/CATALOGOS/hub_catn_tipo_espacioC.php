@@ -45,9 +45,9 @@ class hub_catn_tipo_espacioC
     function listar($id = '')
     {
         if ($id == '') {
-            $datos = $this->modelo->where('estado', 1)->listar();
+            $datos = $this->modelo->where('is_deleted', 0)->listar();
         } else {
-            $datos = $this->modelo->where('id_tipo_espacio', $id)->where('estado', 1)->listar();
+            $datos = $this->modelo->where('id_tipo_espacio', $id)->where('is_deleted', 0)->listar();
         }
         return $datos;
     }
@@ -57,16 +57,17 @@ class hub_catn_tipo_espacioC
         $datos = array(
             array('campo' => 'nombre',      'dato' => $parametros['txt_nombre']),
             array('campo' => 'descripcion', 'dato' => $parametros['txt_descripcion']),
+            array('campo' => 'es_exclusivo', 'dato' => $parametros['chk_exclusivo']),
         );
 
         if ($parametros['_id'] == '') {
-            if (count($this->modelo->where('nombre', $parametros['txt_nombre'])->where('estado', 1)->listar()) == 0) {
+            if (count($this->modelo->where('nombre', $parametros['txt_nombre'])->where('is_deleted', 0)->listar()) == 0) {
                 $datos = $this->modelo->insertar($datos);
             } else {
                 return -2;
             }
         } else {
-            if (count($this->modelo->where('nombre', $parametros['txt_nombre'])->where('id_tipo_espacio !', $parametros['_id'])->where('estado', 1)->listar()) == 0) {
+            if (count($this->modelo->where('nombre', $parametros['txt_nombre'])->where('id_tipo_espacio !', $parametros['_id'])->where('is_deleted', 0)->listar()) == 0) {
                 $where[0]['campo'] = 'id_tipo_espacio';
                 $where[0]['dato'] = $parametros['_id'];
                 $datos = $this->modelo->editar($datos, $where);
@@ -81,7 +82,7 @@ class hub_catn_tipo_espacioC
     function eliminar($id)
     {
         $datos = array(
-            array('campo' => 'estado', 'dato' => 0),
+            array('campo' => 'is_deleted', 'dato' => 0),
         );
 
         $where[0]['campo'] = 'id_tipo_espacio';
@@ -94,8 +95,8 @@ class hub_catn_tipo_espacioC
     function buscar($parametros)
     {
         $lista = array();
-        $concat = "nombre, estado";
-        $datos = $this->modelo->where('estado', 1)->like($concat, $parametros['query']);
+        $concat = "nombre, is_deleted";
+        $datos = $this->modelo->where('is_deleted', 0)->like($concat, $parametros['query']);
 
         foreach ($datos as $key => $value) {
             $text = $value['nombre'];

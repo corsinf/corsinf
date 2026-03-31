@@ -29,6 +29,7 @@ if (isset($_GET['_id'])) {
             success: function(response) {
                 $('#txt_nombre').val(response[0].nombre);
                 $('#txt_descripcion').val(response[0].descripcion);
+                $('#chk_exclusivo').prop('checked', response[0].es_exclusivo == 1);
             }
         });
     }
@@ -37,10 +38,12 @@ if (isset($_GET['_id'])) {
         var txt_nombre = $('#txt_nombre').val();
         var txt_descripcion = $('#txt_descripcion').val();
 
+
         var parametros = {
             '_id': '<?= $_id ?>',
             'txt_nombre': txt_nombre,
             'txt_descripcion': txt_descripcion,
+            'chk_exclusivo': $('#chk_exclusivo').is(':checked') ? 1 : 0
         };
 
         if ($("#form_tipo_espacio").valid()) {
@@ -176,6 +179,19 @@ if (isset($_GET['_id'])) {
                                         rows="3"
                                         placeholder="Ingrese la descripción"></textarea>
                                 </div>
+
+                                <div class="col-12 d-flex align-items-center gap-2">
+
+                                    <input type="checkbox" id="chk_exclusivo" class="form-check-input">
+                                    <label class="form-check-label mb-0">Exclusivo</label>
+                                    <i class="bx bx-error-circle text-warning"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="right"
+                                        title="Si marcas esta opción, este tipo de espacio será exclusivo y no podrá ser compartido.">
+                                    </i>
+
+                                </div>
+
                             </div>
 
                             <div class="mt-4 text-end">
