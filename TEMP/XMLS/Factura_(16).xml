@@ -1,393 +1,188 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <autorizacion>
 <estado>AUTORIZADO</estado>
-<numeroAutorizacion>1001202601019007200200120509080000688950780531916</numeroAutorizacion>
-<fechaAutorizacion>2026-01-10T15:08:00-05:00</fechaAutorizacion>
+<numeroAutorizacion>1202202601099239475700120020020001316949846951119</numeroAutorizacion>
+<fechaAutorizacion>2026-02-12T15:03:24-05:00</fechaAutorizacion>
 <ambiente>PRODUCCIÓN</ambiente>
-<comprobante><![CDATA[<?xml version = '1.0' encoding = 'UTF-8'?>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <factura id="comprobante" version="1.1.0">
-<infoTributaria>
-<ambiente>2</ambiente>
-<tipoEmision>1</tipoEmision>
-<razonSocial>GERARDO ORTIZ E HIJOS CIA LTDA</razonSocial>
-<ruc>0190072002001</ruc>
-<claveAcceso>1001202601019007200200120509080000688950780531916</claveAcceso>
-<codDoc>01</codDoc>
-<estab>050</estab>
-<ptoEmi>908</ptoEmi>
-<secuencial>000068895</secuencial>
-<dirMatriz>AV. CARLOS JULIO AROSEMENA S/N</dirMatriz>
-</infoTributaria>
-<infoFactura>
-<fechaEmision>10/01/2026</fechaEmision>
-<dirEstablecimiento>AV INTEROCEANICA S/N Y EL DORADO</dirEstablecimiento>
-<contribuyenteEspecial>3517</contribuyenteEspecial>
-<obligadoContabilidad>SI</obligadoContabilidad>
-<tipoIdentificacionComprador>05</tipoIdentificacionComprador>
-<razonSocialComprador>MILTON RUBIO</razonSocialComprador>
-<identificacionComprador>1712605284</identificacionComprador>
-<direccionComprador>CAROLINA</direccionComprador>
-<totalSinImpuestos>44.89</totalSinImpuestos>
-<totalDescuento>5.15</totalDescuento>
-<totalConImpuestos>
-<totalImpuesto>
-<codigo>2</codigo>
-<codigoPorcentaje>0</codigoPorcentaje>
-<baseImponible>6.32</baseImponible>
-<valor>0.00</valor>
-</totalImpuesto>
-<totalImpuesto>
-<codigo>2</codigo>
-<codigoPorcentaje>4</codigoPorcentaje>
-<baseImponible>38.57</baseImponible>
-<valor>5.79</valor>
-</totalImpuesto>
-</totalConImpuestos>
-<propina>0.00</propina>
-<importeTotal>50.68</importeTotal>
-<moneda>DOLAR</moneda>
-<pagos>
-<pago>
-<formaPago>19</formaPago>
-<total>50.68</total>
-</pago>
-</pagos>
-</infoFactura>
-<detalles>
-<detalle>
-<codigoPrincipal>X99010E</codigoPrincipal>
-<descripcion>ARROZ ENVEJECIDO PREMIUM CASA 2KG</descripcion>
-<cantidad>1.0000</cantidad>
-<precioUnitario>3.0385</precioUnitario>
-<descuento>0.09</descuento>
-<precioTotalSinImpuesto>2.95</precioTotalSinImpuesto>
-<detallesAdicionales>
-<detAdicional nombre="Medida" valor="UN"/>
-<detAdicional nombre="Centro Logistico" valor="50"/>
-</detallesAdicionales>
-<impuestos>
-<impuesto>
-<codigo>2</codigo>
-<codigoPorcentaje>0</codigoPorcentaje>
-<tarifa>0.00</tarifa>
-<baseImponible>2.95</baseImponible>
-<valor>0.00</valor>
-</impuesto>
-</impuestos>
-</detalle>
-<detalle>
-<codigoPrincipal>X9MG365</codigoPrincipal>
-<descripcion>YOGURT SEMIGRIEGO DURAZ/FRU/GRANOL 140GR</descripcion>
-<cantidad>1.0000</cantidad>
-<precioUnitario>0.8974</precioUnitario>
-<descuento>0.03</descuento>
-<precioTotalSinImpuesto>0.87</precioTotalSinImpuesto>
-<detallesAdicionales>
-<detAdicional nombre="Medida" valor="UN"/>
-<detAdicional nombre="Centro Logistico" valor="50"/>
-</detallesAdicionales>
-<impuestos>
-<impuesto>
-<codigo>2</codigo>
-<codigoPorcentaje>0</codigoPorcentaje>
-<tarifa>0.00</tarifa>
-<baseImponible>0.87</baseImponible>
-<valor>0.00</valor>
-</impuesto>
-</impuestos>
-</detalle>
-<detalle>
-<codigoPrincipal>X9MG589</codigoPrincipal>
-<descripcion>SAN ENRIQUE QUESO FRESCO 400 GR</descripcion>
-<cantidad>1.0000</cantidad>
-<precioUnitario>2.9103</precioUnitario>
-<descuento>0.41</descuento>
-<precioTotalSinImpuesto>2.50</precioTotalSinImpuesto>
-<detallesAdicionales>
-<detAdicional nombre="Medida" valor="UN"/>
-<detAdicional nombre="Centro Logistico" valor="50"/>
-</detallesAdicionales>
-<impuestos>
-<impuesto>
-<codigo>2</codigo>
-<codigoPorcentaje>0</codigoPorcentaje>
-<tarifa>0.00</tarifa>
-<baseImponible>2.50</baseImponible>
-<valor>0.00</valor>
-</impuesto>
-</impuestos>
-</detalle>
-<detalle>
-<codigoPrincipal>X1MV056</codigoPrincipal>
-<descripcion>ESPUMA DE CARNAVAL CORAL 345G</descripcion>
-<cantidad>1.0000</cantidad>
-<precioUnitario>0.8769</precioUnitario>
-<descuento>0.03</descuento>
-<precioTotalSinImpuesto>0.85</precioTotalSinImpuesto>
-<detallesAdicionales>
-<detAdicional nombre="Medida" valor="UN"/>
-<detAdicional nombre="Centro Logistico" valor="50"/>
-</detallesAdicionales>
-<impuestos>
-<impuesto>
-<codigo>2</codigo>
-<codigoPorcentaje>4</codigoPorcentaje>
-<tarifa>15.00</tarifa>
-<baseImponible>0.85</baseImponible>
-<valor>0.13</valor>
-</impuesto>
-</impuestos>
-</detalle>
-<detalle>
-<codigoPrincipal>X7000EO</codigoPrincipal>
-<descripcion>DETERGENTE LIQUIDO CICLON 3L</descripcion>
-<cantidad>1.0000</cantidad>
-<precioUnitario>9.2411</precioUnitario>
-<descuento>0.28</descuento>
-<precioTotalSinImpuesto>8.96</precioTotalSinImpuesto>
-<detallesAdicionales>
-<detAdicional nombre="Medida" valor="UN"/>
-<detAdicional nombre="Centro Logistico" valor="50"/>
-</detallesAdicionales>
-<impuestos>
-<impuesto>
-<codigo>2</codigo>
-<codigoPorcentaje>4</codigoPorcentaje>
-<tarifa>15.00</tarifa>
-<baseImponible>8.96</baseImponible>
-<valor>1.34</valor>
-</impuesto>
-</impuestos>
-</detalle>
-<detalle>
-<codigoPrincipal>X70015P</codigoPrincipal>
-<descripcion>TIP`S DESINFECTANTE LAVANDA 2000ML</descripcion>
-<cantidad>1.0000</cantidad>
-<precioUnitario>3.5262</precioUnitario>
-<descuento>0.85</descuento>
-<precioTotalSinImpuesto>2.68</precioTotalSinImpuesto>
-<detallesAdicionales>
-<detAdicional nombre="Medida" valor="UN"/>
-<detAdicional nombre="Centro Logistico" valor="50"/>
-</detallesAdicionales>
-<impuestos>
-<impuesto>
-<codigo>2</codigo>
-<codigoPorcentaje>4</codigoPorcentaje>
-<tarifa>15.00</tarifa>
-<baseImponible>2.68</baseImponible>
-<valor>0.40</valor>
-</impuesto>
-</impuestos>
-</detalle>
-<detalle>
-<codigoPrincipal>X7N00C6</codigoPrincipal>
-<descripcion>NIVEA DESMQUILLANTE BIFASICO DE OJOS 125</descripcion>
-<cantidad>1.0000</cantidad>
-<precioUnitario>10.4155</precioUnitario>
-<descuento>0.31</descuento>
-<precioTotalSinImpuesto>10.11</precioTotalSinImpuesto>
-<detallesAdicionales>
-<detAdicional nombre="Medida" valor="UN"/>
-<detAdicional nombre="Centro Logistico" valor="50"/>
-</detallesAdicionales>
-<impuestos>
-<impuesto>
-<codigo>2</codigo>
-<codigoPorcentaje>4</codigoPorcentaje>
-<tarifa>15.00</tarifa>
-<baseImponible>10.11</baseImponible>
-<valor>1.52</valor>
-</impuesto>
-</impuestos>
-</detalle>
-<detalle>
-<codigoPrincipal>X89001A</codigoPrincipal>
-<descripcion>COCTEL FRUTAS GUSTADINA 820G 8594</descripcion>
-<cantidad>1.0000</cantidad>
-<precioUnitario>3.2923</precioUnitario>
-<descuento>0.10</descuento>
-<precioTotalSinImpuesto>3.19</precioTotalSinImpuesto>
-<detallesAdicionales>
-<detAdicional nombre="Medida" valor="UN"/>
-<detAdicional nombre="Centro Logistico" valor="50"/>
-</detallesAdicionales>
-<impuestos>
-<impuesto>
-<codigo>2</codigo>
-<codigoPorcentaje>4</codigoPorcentaje>
-<tarifa>15.00</tarifa>
-<baseImponible>3.19</baseImponible>
-<valor>0.48</valor>
-</impuesto>
-</impuestos>
-</detalle>
-<detalle>
-<codigoPrincipal>X900J71</codigoPrincipal>
-<descripcion>"CEPILLO DENTAL XTRA BLANCURA 2UNI0,04GR</descripcion>
-<cantidad>1.0000</cantidad>
-<precioUnitario>2.7279</precioUnitario>
-<descuento>0.68</descuento>
-<precioTotalSinImpuesto>2.05</precioTotalSinImpuesto>
-<detallesAdicionales>
-<detAdicional nombre="Medida" valor="UN"/>
-<detAdicional nombre="Centro Logistico" valor="50"/>
-</detallesAdicionales>
-<impuestos>
-<impuesto>
-<codigo>2</codigo>
-<codigoPorcentaje>4</codigoPorcentaje>
-<tarifa>15.00</tarifa>
-<baseImponible>2.05</baseImponible>
-<valor>0.31</valor>
-</impuesto>
-</impuestos>
-</detalle>
-<detalle>
-<codigoPrincipal>X900N15</codigoPrincipal>
-<descripcion>PH TRIPLE HOJA. CORAL PQ X18RLL 35M</descripcion>
-<cantidad>1.0000</cantidad>
-<precioUnitario>11.6521</precioUnitario>
-<descuento>2.33</descuento>
-<precioTotalSinImpuesto>9.32</precioTotalSinImpuesto>
-<detallesAdicionales>
-<detAdicional nombre="Medida" valor="UN"/>
-<detAdicional nombre="Centro Logistico" valor="50"/>
-</detallesAdicionales>
-<impuestos>
-<impuesto>
-<codigo>2</codigo>
-<codigoPorcentaje>4</codigoPorcentaje>
-<tarifa>15.00</tarifa>
-<baseImponible>9.32</baseImponible>
-<valor>1.40</valor>
-</impuesto>
-</impuestos>
-</detalle>
-<detalle>
-<codigoPrincipal>X9301M89</codigoPrincipal>
-<descripcion>MASA PARA EMPANADAS</descripcion>
-<cantidad>1.0000</cantidad>
-<precioUnitario>1.4474</precioUnitario>
-<descuento>0.04</descuento>
-<precioTotalSinImpuesto>1.41</precioTotalSinImpuesto>
-<detallesAdicionales>
-<detAdicional nombre="Medida" valor="UN"/>
-<detAdicional nombre="Centro Logistico" valor="50"/>
-</detallesAdicionales>
-<impuestos>
-<impuesto>
-<codigo>2</codigo>
-<codigoPorcentaje>4</codigoPorcentaje>
-<tarifa>15.00</tarifa>
-<baseImponible>1.41</baseImponible>
-<valor>0.21</valor>
-</impuesto>
-</impuestos>
-</detalle>
-</detalles>
-<infoAdicional>
-<campoAdicional nombre="Tipo Contribuyente">Gran Contribuyente, no aplica retencion en la fuente Impuesto a la Renta Resolucion NAC-GCFOIOC21-00000889-E</campoAdicional>
-<campoAdicional nombre="Lugar Venta">CORAL TUMBACO</campoAdicional>
-<campoAdicional nombre="ICE FUNDA EXCENTO">Resolucion Nro. MPCEIP-SCIT-2020-0041-R</campoAdicional>
-<campoAdicional nombre="Codigo">9999999</campoAdicional>
-<campoAdicional nombre="Deducible Alimentacion">3.19</campoAdicional>
-</infoAdicional>
-<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature664511" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#">
-<ds:SignedInfo Id="Signature-SignedInfo1044401">
-<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
-<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
-<ds:Reference URI="#Signature664511-SignedProperties1005618" Id="SignedPropertiesID685149" Type="http://uri.etsi.org/01903#SignedProperties">
-<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>cabMwkRAfIbJfA8RAHoglyOKBEQ=</ds:DigestValue>
+  <infoTributaria>
+    <ambiente>2</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>SISTEMAS DE SEGURIDAD S.A. SISEGUSA</razonSocial>
+    <nombreComercial>SISEGU S.A.</nombreComercial>
+    <ruc>0992394757001</ruc>
+    <claveAcceso>1202202601099239475700120020020001316949846951119</claveAcceso>
+    <codDoc>01</codDoc>
+    <estab>002</estab>
+    <ptoEmi>002</ptoEmi>
+    <secuencial>000131694</secuencial>
+    <dirMatriz>GUAYAS / GUAYAQUIL / AV. LAS LOMAS 403 Y CUARTA - QUINTA</dirMatriz>
+  </infoTributaria>
+  <infoFactura>
+    <fechaEmision>12/02/2026</fechaEmision>
+    <dirEstablecimiento>Calle Isla San Cristóbal N 44-29 y Río Coca. Quito - Ecuador</dirEstablecimiento>
+    <contribuyenteEspecial>00048</contribuyenteEspecial>
+    <obligadoContabilidad>SI</obligadoContabilidad>
+    <tipoIdentificacionComprador>04</tipoIdentificacionComprador>
+    <razonSocialComprador>RUBIO PUETATE MILTON ANDRES</razonSocialComprador>
+    <identificacionComprador>1712605284001</identificacionComprador>
+    <direccionComprador>Cristóbal de Acuña E1-18 y Av. 10 de Agosto</direccionComprador>
+    <totalSinImpuestos>62.87</totalSinImpuestos>
+    <totalDescuento>0.00</totalDescuento>
+    <totalConImpuestos>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>4</codigoPorcentaje>
+        <descuentoAdicional>0.00</descuentoAdicional>
+        <baseImponible>62.87</baseImponible>
+        <valor>9.43</valor>
+      </totalImpuesto>
+    </totalConImpuestos>
+    <propina>0.00</propina>
+    <importeTotal>72.30</importeTotal>
+    <moneda>DOLAR</moneda>
+    <pagos>
+      <pago>
+        <formaPago>16</formaPago>
+        <total>72.30</total>
+        <unidadTiempo>DIAS</unidadTiempo>
+      </pago>
+    </pagos>
+  </infoFactura>
+  <detalles>
+    <detalle>
+      <codigoPrincipal>DS-IDS-7204HQHI-M1/XT</codigoPrincipal>
+      <codigoAuxiliar>DS-IDS-7204HQHI-M1/XT</codigoAuxiliar>
+      <descripcion>GRABADOR DIGITAL 4CH HD-TVI 1HDD 1080P ACUSENSE CON AUDIO</descripcion>
+      <cantidad>1.000000</cantidad>
+      <precioUnitario>62.870000</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>62.87</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="UNIDAD MEDIDA" valor="UN"></detAdicional>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15.00</tarifa>
+          <baseImponible>62.87</baseImponible>
+          <valor>9.43</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+  </detalles>
+  <infoAdicional>
+    <campoAdicional nombre="Telefono">6016222</campoAdicional>
+    <campoAdicional nombre="Direccion">CRISTÓBAL DE ACUÑA E1-18 Y AV. 10 DE AGOSTO--QUITOPICHINCHA</campoAdicional>
+    <campoAdicional nombre="Email">mrubio@corsinf.com</campoAdicional>
+    <campoAdicional nombre="CIATelefono">593-4- 3712850</campoAdicional>
+    <campoAdicional nombre="Condición de Pago">Contado</campoAdicional>
+    <campoAdicional nombre="Observacion">-</campoAdicional>
+    <campoAdicional nombre="Nota">Sistemas de Seguridad S.A. solicita a usted enviar el comprobante de retención a Envio de retenciones a: retenciones.uio@sisegusa.com máximo 5 días hábiles posteriores a la emisión de la factura de acuerdo con el Art. 50 del LRTI.</campoAdicional>
+  </infoAdicional>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature369778">
+<ds:SignedInfo Id="Signature-SignedInfo20461">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"></ds:SignatureMethod>
+<ds:Reference Id="SignedPropertiesID938038" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature369778-SignedProperties23019">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>c1jnRI9lb68vEmmDspU5rf4BkLc=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference URI="#Certificate1985543">
-<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>ec5Dla7q0IguyKq/ByAM6beVMPI=</ds:DigestValue>
+<ds:Reference URI="#Certificate16587">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>nvfHhc+1Vh3J7k7rFOOaOKH8eH4=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference URI="#comprobante" Id="Reference-ID-281270">
+<ds:Reference Id="Reference-ID-443281" URI="#comprobante">
 <ds:Transforms>
-<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></ds:Transform>
 </ds:Transforms>
-<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>jRZL3d/sGKd7u5sml6a4HJyyzrU=</ds:DigestValue>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>aFD+N+QARK/mXbUmA9JlpS4P+tM=</ds:DigestValue>
 </ds:Reference>
 </ds:SignedInfo>
-<ds:SignatureValue Id="SignatureValue532865">
-uexbAPg42NV5kN6ADPMIV4BdiSoAMcRc8Aob9Ks31YCluvKCAC03pBrccsWx9WzH6DCQdV0bJLoh
-+vxeAaFd3eDvWZ+BCAVEk+NjmXzPffKmB6wbMKeltkrAMnAJmw1OBLad2m6HBALq3zxs8ceuC+/6
-1INMbnFCwTWKWLZsT9NSzIFHZrwzt1aWYNl9hLhv291vGGbVnupvQWzwsmYrVrwuwrWrvpb180jA
-wtFoajlbbqxiB7rrNVOVtD7s/Bv79hjY8On+MgVnzFHhgBne4ocsdqaTMD9eEdKxXRT6t5XOzqfE
-kQU+2zAesWoW+HVQElvU4Cu9NWI7HVqSQtBuaw==
+<ds:SignatureValue Id="SignatureValue41420">
+UR0LGM2deVJTKgPY4JnbelYKDWaEpXzr+U2YzQI4Ti5lrgmBGZGRZOYWnNnFxjr4KArnWcFMIu5z
+PYactp2FUgk6qEV0XXT/5j833GoQyhGS28nRMfyxGhGLypkGLlmgk6DuZG/oNnZ0wLqn2v41OP4K
+NFcXVm/yhznTz6RhMoLmGLnTovyEseKSE0sIZxAVAg2NCIXd2ddCUchsQfu9p444CoZDgR9V3Ah6
+zpcqgzBx0YaDWzTUsrIg2TgEGJ4B/76t6/sENc3QSTe7G97XQwEkp84IJu/QCo59YOETCKKCrhgb
+VdpIl+NWIxd7QfovK0zm9hRmdcU2i1KMjNn9tQ==
 </ds:SignatureValue>
-<ds:KeyInfo Id="Certificate1985543">
+<ds:KeyInfo Id="Certificate16587">
 <ds:X509Data>
 <ds:X509Certificate>
-MIIK0TCCCLmgAwIBAgIIT+5gpJcyO/swDQYJKoZIhvcNAQELBQAwgZkxCzAJBgNVBAYTAkVDMR0w
-GwYDVQQKDBRTRUNVUklUWSBEQVRBIFMuQS4gMjEwMC4GA1UECwwnRU5USURBRCBERSBDRVJUSUZJ
-Q0FDSU9OIERFIElORk9STUFDSU9OMTkwNwYDVQQDDDBBVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lP
-TiBTVUJDQS0yIFNFQ1VSSVRZIERBVEEwHhcNMjUxMjI0MjIyNjA5WhcNMjcxMjI0MjIyNjA5WjCB
-qDEmMCQGA1UEAwwdSFVHTyBBTkRSRVMgUVVFWkFEQSBJWlFVSUVSRE8xIDAeBgNVBAUTFzAxMDQ3
-MTQwMTktMjQxMjI1MTczNjAxMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJT04gREUg
-SU5GT1JNQUNJT04xHTAbBgNVBAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMQswCQYDVQQGEwJFQzCC
-ASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAM7IBuEyytdoBhh5Z+QUMCatDOfwwePTUKeX
-khWZktuAdg0U3bPPkIZb2CsyCRWoMBL16d2EMM7mNhXdVKSHVWCOnM5e5gt9swablZpa2C+DCkY+
-+ncZoYLLfmADLWfvVWeyiGlYpgZ85XuijuLXP+J06Kh3D7Rr3Ww/d/N9//TibiYnNGhQhU7tr4EE
-Q78lPv1ZsWcCztNX6heGWwQ+/XdI3CL9I8GUutH2tviJHKf8EE4ol9vv2bZRO8NJozJYfth7IoNm
-s1Aw9FHSUo/NpLfJWzvinXvIhJs+RmttmSG+nX/wrWr8byy4Nx4PXBgc+0C4dymWHrKmag+rjnXB
-E1UCAwEAAaOCBgowggYGMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUjLrKEVd4JYAdawpLVb+N
-rmLdvY8wWQYIKwYBBQUHAQEETTBLMEkGCCsGAQUFBzABhj1odHRwOi8vb2NzcGd3LnNlY3VyaXR5
-ZGF0YS5uZXQuZWMvZWpiY2EvcHVibGljd2ViL3N0YXR1cy9vY3NwMCYGA1UdEQQfMB2BG2dlcmFy
-b3J0aXpAZ2VyYXJkb29ydGl6LmNvbTCCARUGA1UdIASCAQwwggEIMGIGCisGAQQBgqZyAgkwVDBS
-BggrBgEFBQcCAjBGHkQAQwBlAHIAdABpAGYAaQBjAGEAZABvACAAZABlACAAUgBlAHAAcgBlAHMA
-ZQBuAHQAYQBuAHQAZQAgAEwAZQBnAGEAbDCBoQYKKwYBBAGCpnICAzCBkjCBjwYIKwYBBQUHAgEW
-gYJodHRwczovL3d3dy5zZWN1cml0eWRhdGEubmV0LmVjL3dwLWNvbnRlbnQvZG93bmxvYWRzL05v
-cm1hdGl2YXMvUF9kZV9DZXJ0aWZpY2Fkb3MvUG9saXRpY2FzIGRlIENlcnRpZmljYWRvIFJlcHJl
-c2VudGFudGUgTGVnYWwucGRmMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDCCAg8GA1Ud
-HwSCAgYwggICMIHeoDqgOIY2aHR0cDovL2NybDEuc2VjdXJpdHlkYXRhLm5ldC5lYy9zdWJjYTJj
-cmwxL2NybGZpbGUuY3JsooGfpIGcMIGZMTkwNwYDVQQDDDBBVVRPUklEQUQgREUgQ0VSVElGSUNB
+MIIMETCCCfmgAwIBAgIEapUqcjANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNV
+BAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJ
+T04gREUgSU5GT1JNQUNJT04xOTA3BgNVBAMMMEFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNV
+QkNBLTIgU0VDVVJJVFkgREFUQTAeFw0yNDExMTkxNTU3NTJaFw0yOTExMTkxNTU3NTJaMIGlMSMw
+IQYDVQQDDBpSRU5aTyBIVU1CRVJUTyBBTFZBIFNPTEFSSTEgMB4GA1UEBRMXMDkzMDAzNTc2MS0x
+OTExMjQxMTA3NDUxMDAuBgNVBAsMJ0VOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1B
+Q0lPTjEdMBsGA1UECgwUU0VDVVJJVFkgREFUQSBTLkEuIDIxCzAJBgNVBAYTAkVDMIIBIjANBgkq
+hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApemGH6lziDRJZ//6ID9LkqNgYPU1huUMR2riA4MLioOK
+IAqQv28lYBnM1Wa7HXl44KtQx+CcZ1TdlLz4JR07gTosPiVU1E2M9qt+ZCDg+XxLWdcJQgpgvEGC
+vNUAgGCRji1pjaaPva2Xhu+7s2dWSO1ie+eKGq/RYnRaIr/sQqGkJgxs25TwfKYi833jvWEdIU/K
+3gJfotMxZaxhtiAGGTx6aQxC48Z/jCvW858M5wx85Vnu9BkRODHwT5b1BPcdcdUUmDY0UXmjdddF
+05b7F++TQ7CmMLkoi0OVOY6xvL4RBPieP3PjKg7mFVSi3b6ALmu8cAOq/VXXa0xOa2sUJwIDAQAB
+o4IHUTCCB00wDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBSMusoRV3glgB1rCktVv42uYt29jzBZ
+BggrBgEFBQcBAQRNMEswSQYIKwYBBQUHMAGGPWh0dHA6Ly9vY3NwZ3cuc2VjdXJpdHlkYXRhLm5l
+dC5lYy9lamJjYS9wdWJsaWN3ZWIvc3RhdHVzL29jc3Awgc8GA1UdLgSBxzCBxDCBwaCBvqCBu4aB
+uGxkYXA6Ly9sZGFwc2RjYTIuc2VjdXJpdHlkYXRhLm5ldC5lYy9DTj1BVVRPUklEQUQgREUgQ0VS
+VElGSUNBQ0lPTiBTVUJDQS0yIFNFQ1VSSVRZIERBVEEsT1U9RU5USURBRCBERSBDRVJUSUZJQ0FD
+SU9OIERFIElORk9STUFDSU9OLE89U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1FQz9kZWx0YVJldm9j
+YXRpb25MaXN0P2Jhc2UwHgYDVR0RBBcwFYETci5hbHZhQHNpc2VndXNhLmNvbTCCARUGA1UdIASC
+AQwwggEIMGIGCisGAQQBgqZyAgkwVDBSBggrBgEFBQcCAjBGHkQAQwBlAHIAdABpAGYAaQBjAGEA
+ZABvACAAZABlACAAUgBlAHAAcgBlAHMAZQBuAHQAYQBuAHQAZQAgAEwAZQBnAGEAbDCBoQYKKwYB
+BAGCpnICAzCBkjCBjwYIKwYBBQUHAgEWgYJodHRwczovL3d3dy5zZWN1cml0eWRhdGEubmV0LmVj
+L3dwLWNvbnRlbnQvZG93bmxvYWRzL05vcm1hdGl2YXMvUF9kZV9DZXJ0aWZpY2Fkb3MvUG9saXRp
+Y2FzIGRlIENlcnRpZmljYWRvIFJlcHJlc2VudGFudGUgTGVnYWwucGRmMIICogYDVR0fBIICmTCC
+ApUwgeWgQaA/hj1odHRwOi8vb2NzcGd3LnNlY3VyaXR5ZGF0YS5uZXQuZWMvZWpiY2EvcHVibGlj
+d2ViL3N0YXR1cy9vY3NwooGfpIGcMIGZMTkwNwYDVQQDDDBBVVRPUklEQUQgREUgQ0VSVElGSUNB
 Q0lPTiBTVUJDQS0yIFNFQ1VSSVRZIERBVEExMDAuBgNVBAsMJ0VOVElEQUQgREUgQ0VSVElGSUNB
 Q0lPTiBERSBJTkZPUk1BQ0lPTjEdMBsGA1UECgwUU0VDVVJJVFkgREFUQSBTLkEuIDIxCzAJBgNV
-BAYTAkVDMDygOqA4hjZodHRwOi8vY3JsMi5zZWN1cml0eWRhdGEubmV0LmVjL3N1YmNhMmNybDIv
-Y3JsZmlsZS5jcmwwgeCggd2ggdqGgddodHRwczovL3BvcnRhbC1vcGVyYWRvcjIuc2VjdXJpdHlk
-YXRhLm5ldC5lYy9lamJjYS9wdWJsaWN3ZWIvd2ViZGlzdC9jZXJ0ZGlzdD9jbWQ9Y3JsJmlzc3Vl
-cj1DTj1BVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0yIFNFQ1VSSVRZIERBVEEsT1U9
-RU5USURBRCBERSBDRVJUSUZJQ0FDSU9OIERFIElORk9STUFDSU9OLE89U0VDVVJJVFkgREFUQSBT
-LkEuIDIsQz1FQzAdBgNVHQ4EFgQUTTQBQJhD+fLYNHLRztWwh67j0KUwKwYDVR0QBCQwIoAPMjAy
-NTEyMjQyMjI2MDlagQ8yMDI3MTIyNDIyMjYwOVowCwYDVR0PBAQDAgXgMBoGCisGAQQBgqZyAwUE
-DAwKUFJFU0lERU5URTAaBgorBgEEAYKmcgMBBAwMCjAxMDQ3MTQwMTkwFgYKKwYBBAGCpnIDCQQI
-DAZUQVJRVUkwEQYKKwYBBAGCpnIDIgQDDAEuMC0GCisGAQQBgqZyAwcEHwwdQVYgQ0FSTE9TIEpV
-TElPIEFST1NFTUVOQSBTIE4wGwYKKwYBBAGCpnIDAgQNDAtIVUdPIEFORFJFUzAfBgorBgEEAYKm
-cgMgBBEMDzY2NjY2NjY2NjY2NjY2NjATBgorBgEEAYKmcgMhBAUMA1BGWDAXBgorBgEEAYKmcgMM
-BAkMB0VDVUFET1IwFwYKKwYBBAGCpnIDAwQJDAdRVUVaQURBMC4GCisGAQQBgqZyAwoEIAweR0VS
-QVJETyBPUlRJWiBFIEhJSk9TIENJQSBMVERBMB0GCisGAQQBgqZyAwsEDwwNMDE5MDA3MjAwMjAw
-MTARBgorBgEEAYKmcgMdBAMMAS4wGQYKKwYBBAGCpnIDBAQLDAlJWlFVSUVSRE8wGgYKKwYBBAGC
-pnIDCAQMDAowOTY3MzcxNzAyMA0GCSqGSIb3DQEBCwUAA4ICAQAZHJkkPcgD9avISssT2+jpBk27
-SEA3k9PDYhek0Gdqu26UiacEulM6CssUg6o2wIirqmQktI5lfeoCKzBptNL+0nb8oCfqahPJxUsY
-LYTUOPcchbXSX4CrntlDjlet7BAR48NYJPOKqu8J8Z+Cj/4c2yhgkXZHd8xVHu/qZbacynSijKuB
-yuWGsQ4NQ8HSozKAugjuh4M5sRiQDK/roV1lsPu3NxoLgX30kFWdZEWFHEADt8Fd85ufoe3GBx3+
-mHg4oJeI6bj4jdejkJXJvavi/doKPIsxBsHJD9BGzJRIS+qd8IZrx6yUo3oh2jDFp400orvRQOaK
-kefIGZhf9xMpNBOGLPs0smdQLV+sy13+aUg7o250e4HlkHbJ8fA++O3xmYrbwnOyF8pVqlhE88Bh
-aXGg1tgMgCZY3uJXWFo+LccCvDc1GavJr6H18dQIf72DH/xVMq/cA/BBEs8VtCdq/0YjXoTGFtUJ
-p5zsSo70JaKalXFGP1WiVuBmYBqxSuvSVgcez23cTyQNPNXjJMj1YX4QGmuVat72RcuNTOtjiyPJ
-X9Ds4G0qVqky39ZrrZ2RT1PdzQKld9qJ8da3MRpHJuVlEbnq0Ank3uzGugr11pXLjYUXc0tqQZI9
-TZJabpJQK3g0iVG5puyFMwJfoKGkzt0vEYNhNO3q6CwDJuj9lw==
+BAYTAkVDMIHHoIHEoIHBhoG+bGRhcDovL2xkYXBzZGNhMi5zZWN1cml0eWRhdGEubmV0LmVjL0NO
+PUFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNVQkNBLTIgU0VDVVJJVFkgREFUQSxPVT1FTlRJ
+REFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04sTz1TRUNVUklUWSBEQVRBIFMuQS4g
+MixDPUVDP2NlcnRpZmljYXRlUmV2b2NhdGlvbkxpc3Q/YmFzZTCB4KCB3aCB2oaB12h0dHBzOi8v
+cG9ydGFsLW9wZXJhZG9yMi5zZWN1cml0eWRhdGEubmV0LmVjL2VqYmNhL3B1YmxpY3dlYi93ZWJk
+aXN0L2NlcnRkaXN0P2NtZD1jcmwmaXNzdWVyPUNOPUFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9O
+IFNVQkNBLTIgU0VDVVJJVFkgREFUQSxPVT1FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5G
+T1JNQUNJT04sTz1TRUNVUklUWSBEQVRBIFMuQS4gMixDPUVDMB0GA1UdDgQWBBSCcRhSkawhC5BE
+D3E/WXaigGFHkTArBgNVHRAEJDAigA8yMDI0MTExOTE1NTc1MlqBDzIwMjkxMTE5MTU1NzUyWjAL
+BgNVHQ8EBAMCBeAwHwYKKwYBBAGCpnIDBQQRDA9HRVJFTlRFIEdFTkVSQUwwGgYKKwYBBAGCpnID
+AQQMDAowOTMwMDM1NzYxMBYGCisGAQQBgqZyAwkECAwGVEFSUVVJMBEGCisGAQQBgqZyAyIEAwwB
+LjAwBgorBgEEAYKmcgMHBCIMIEFWIExBUyBMT01BUyA0MDMgWSBDVUFSVEEgUVVJTlRBMB4GCisG
+AQQBgqZyAwIEEAwOUkVOWk8gSFVNQkVSVE8wHwYKKwYBBAGCpnIDIAQRDA8wMDEwMDIwMDA2NzA5
+NTAwEwYKKwYBBAGCpnIDIQQFDANQRlgwFwYKKwYBBAGCpnIDDAQJDAdFQ1VBRE9SMBQGCisGAQQB
+gqZyAwMEBgwEQUxWQTAyBgorBgEEAYKmcgMKBCQMIlNJU1RFTUFTIERFIFNFR1VSSURBRCBTIEEg
+U0lTRUdVU0EwHQYKKwYBBAGCpnIDCwQPDA0wOTkyMzk0NzU3MDAxMBEGCisGAQQBgqZyAx0EAwwB
+LjAWBgorBgEEAYKmcgMEBAgMBlNPTEFSSTAaBgorBgEEAYKmcgMIBAwMCjA5ODA5NTA0ODkwDQYJ
+KoZIhvcNAQELBQADggIBAA1vFoHHpzRMxuu2GiQTjUz1RzR6eoRUxYhTTJBSB+La2f7s6tUAPTja
+syueB7lKGt6uD2T1M3r6zyD9hE6SoGnvLeJo8dtlFMxMtx43H6Bf6i7hoIV36hKrQGgJOiZxWTF6
+voO7dqG1f7vlUR3bfcc2SfAxzvGnwr9S1uNBe21byphvK5j8TnLx0gVmZd7QDCJOTuttmz0R7g7Q
+O2QWJXdi+f5SJYvdwwIObpPS8Io0B7gNAJWYppDUI1wZmR1jcmzLRFGRbIZIE0+8VnJl4caVghmP
+mIAQKS44oHMb3CqecUghQFhfOutt4Z+g1Fc+Zile+ha/UT+prIb1W/VE2KPla99AA+jVSZHsZJeA
+1BfTMqS7gLxEp1V9ICtBFiN37Z4i4aoleNyze2fv3steGeI0F7xyMzwM/7B+z3GhqdqVg6NU6ZMQ
+WQtWfsAC5b+2kzHckw4/HR023jBtYLq0hFLAgCbWp8hAZrvrFdCzfDz24dwdx5VFOcy7WtdGDeXx
+edF7f5wkbZcsvRn5/s5BIFP25/9GeRumAbSx/3bFlySW87Ho7Wl9jRPbYKExeRSADRx8DBTC1zdL
+SdRV3MP8xXgWRA3IHZdqgadkvP0S9175XxaD+9Y30LkO5bOr1IPe397uPg9f4HuUL26kgPXUtcgu
+fG7/KEVHx1OOWR60g58x
 </ds:X509Certificate>
 </ds:X509Data>
 <ds:KeyValue>
 <ds:RSAKeyValue>
 <ds:Modulus>
-zsgG4TLK12gGGHln5BQwJq0M5/DB49NQp5eSFZmS24B2DRTds8+QhlvYKzIJFagwEvXp3YQwzuY2
-Fd1UpIdVYI6czl7mC32zBpuVmlrYL4MKRj76dxmhgst+YAMtZ+9VZ7KIaVimBnzle6KO4tc/4nTo
-qHcPtGvdbD93833/9OJuJic0aFCFTu2vgQRDvyU+/VmxZwLO01fqF4ZbBD79d0jcIv0jwZS60fa2
-+Ikcp/wQTiiX2+/ZtlE7w0mjMlh+2Hsig2azUDD0UdJSj82kt8lbO+Kde8iEmz5Ga22ZIb6df/Ct
-avxvLLg3Hg9cGBz7QLh3KZYesqZqD6uOdcETVQ==
+pemGH6lziDRJZ//6ID9LkqNgYPU1huUMR2riA4MLioOKIAqQv28lYBnM1Wa7HXl44KtQx+CcZ1Td
+lLz4JR07gTosPiVU1E2M9qt+ZCDg+XxLWdcJQgpgvEGCvNUAgGCRji1pjaaPva2Xhu+7s2dWSO1i
+e+eKGq/RYnRaIr/sQqGkJgxs25TwfKYi833jvWEdIU/K3gJfotMxZaxhtiAGGTx6aQxC48Z/jCvW
+858M5wx85Vnu9BkRODHwT5b1BPcdcdUUmDY0UXmjdddF05b7F++TQ7CmMLkoi0OVOY6xvL4RBPie
+P3PjKg7mFVSi3b6ALmu8cAOq/VXXa0xOa2sUJw==
 </ds:Modulus>
 <ds:Exponent>AQAB</ds:Exponent>
 </ds:RSAKeyValue>
 </ds:KeyValue>
 </ds:KeyInfo>
-<ds:Object Id="Signature664511-Object870729"><etsi:QualifyingProperties Target="#Signature664511"><etsi:SignedProperties Id="Signature664511-SignedProperties1005618"><etsi:SignedSignatureProperties><etsi:SigningTime>2026-01-10T15:08:00-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>5GHD3haE6AdwVZL/hTET+lTa+ok=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>5759647233480997883</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-281270"><etsi:Description>Contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+<ds:Object Id="Signature369778-Object608852"><etsi:QualifyingProperties Target="#Signature369778"><etsi:SignedProperties Id="Signature369778-SignedProperties23019"><etsi:SignedSignatureProperties><etsi:SigningTime>2026-02-12T15:03:21-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>u1yHlJmYCv0e07SHNjf1JjFZCEI=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1788160626</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-443281"><etsi:Description>DOCUMENTO EMITIDO CON ECUAFACT. LA FACTURACION ELECTRONICA DEL ECUADOR. Visitenos en http://www.ecuanexus.com </etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
 <mensajes/>
 </autorizacion>
 

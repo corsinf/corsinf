@@ -22,3 +22,4 @@ start /B "" "C:\xampp\php\php.exe" "C:\xampp\htdocs\corsinf\controlador\TALENTO_
 start /B "" "C:\xampp\php\php.exe" "C:\xampp\htdocs\corsinf\controlador\TALENTO_HUMANO\th_dispositivosC.php" ejecutar_segundoPlano  "{ dispositivos : 2 , nombreCard : 1 , huellas : 1 , facial : 1 , ID_EMPRESA : 3044 }"
 start /B "" "C:\xampp\php\php.exe" "C:\xampp\htdocs\corsinf\controlador\TALENTO_HUMANO\th_dispositivosC.php" ejecutar_segundoPlano  "{ dispositivos : 2 , nombreCard : 1 , huellas : 1 , facial : 1 , ID_EMPRESA : 3044 }"
 start /B "" "C:\xampp\php\php.exe" "C:\xampp\htdocs\corsinf\controlador\TALENTO_HUMANO\th_dispositivosC.php" ejecutar_segundoPlano  "{ dispositivos : 2 , nombreCard : 1 , huellas : 1 , facial : 1 , ID_EMPRESA : 3044 }"
+start /B "" "C:\php-8.1.32\php.exe" "C:\Apache24\htdocs\php81\corsinf\controlador\TALENTO_HUMANO\th_dispositivosC.php" ejecutar_segundoPlano  "{ dispositivos : 5 , nombreCard : 1 , huellas : 1 , facial : 1 , ID_EMPRESA : 4071 }"

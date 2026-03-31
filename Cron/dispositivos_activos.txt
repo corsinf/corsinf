@@ -1,7 +1,5 @@
-dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8501 SASd52dasd 4071
-dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 192.168.100.20 admin 8000 Data12/* 1033
-dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8502 SASd52dasd 4071
-dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8503 SASd52dasd 4071
+dotnet C:\Apache24\htdocs\php81\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8501 SASd52dasd 4071
+dotnet C:\Apache24\htdocs\php81\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8503 SASd52dasd 4071
 
 dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8501 SASd52dasd 4071
 dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8503 SASd52dasd 4071
@@ -28,8 +26,23 @@ dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\Corsinf
 dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8502 SASd52dasd 1033
 dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8503 SASd52dasd 1033
 
+<<<<<<< HEAD
+dotnet C:\Apache24\htdocs\php81\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8501 SASd52dasd 4071
+dotnet C:\Apache24\htdocs\php81\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8502 SASd52dasd 4071
+dotnet C:\Apache24\htdocs\php81\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8503 SASd52dasd 4071
+
+dotnet C:\Apache24\htdocs\php81\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8501 SASd52dasd 4071
+dotnet C:\Apache24\htdocs\php81\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8502 SASd52dasd 4071
+dotnet C:\Apache24\htdocs\php81\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8503 SASd52dasd 4071
+
+dotnet C:\Apache24\htdocs\php81\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8501 SASd52dasd 4071
+dotnet C:\Apache24\htdocs\php81\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8502 SASd52dasd 4071
+dotnet C:\Apache24\htdocs\php81\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8503 SASd52dasd 4071
+dotnet C:\Apache24\htdocs\php81\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8504 SASd52dasd 4071
+=======
 dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8501 SASd52dasd 1033
 dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 192.168.100.25 admin 8000 Data12/* 1033
 dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8502 SASd52dasd 1033
 dotnet C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\bin\Debug\net8.0\CorsinfSDKHik.dll 6 45.162.74.226 admin 8503 SASd52dasd 1033
+>>>>>>> 86f9d54520e735f51ea5968f7baeafac682f3dee
 
