@@ -390,7 +390,7 @@ class th_reportesC
         {
             if($parametros['persona']!='')
             {
-                $persona = $this->card->where('th_card_id',$parametros['persona'])->listar();
+                $persona = $this->card->where('th_per_id',$parametros['persona'])->listar();
                 $card[] = array('ID'=>$persona[0]['_id'],'card'=> $persona[0]['th_cardNo']);
             }
         }else
@@ -477,6 +477,7 @@ class th_reportesC
                     // print_r($output);die();
                     if($output!='')
                     {
+                        print_r($output);die();
                         $resp = json_decode($output,true);
                         $cadena = $resp['msj'];
                     }

@@ -135,7 +135,11 @@ namespace CorsinfSDKHik.ConfigDB
             {
                 DateTime _fechaMarcacion = DateTime.Parse(FechaMarcacion);
                 string yearMonth = _fechaMarcacion.ToString("yyyyMM");
-                tabla = "asis_atrasos_" + yearMonth;
+                if (yearMonth != fecha)
+                {
+                    tabla = "asis_atrasos_" + yearMonth;
+                }
+
             }
             string querySQL = "INSERT INTO  " + esquema + "."+tabla+" (" +
                 "th_per_id," +
@@ -282,7 +286,10 @@ namespace CorsinfSDKHik.ConfigDB
             {
                 DateTime _fechaMarcacion = DateTime.Parse(FechaMarcacion);
                 string yearMonth = _fechaMarcacion.ToString("yyyyMM");
-                tabla = "asis_extraordinarias_" + yearMonth;
+                if (yearMonth != fecha)
+                {
+                    tabla = "asis_extraordinarias_" + yearMonth;
+                }
             }
             string querySQL = "INSERT INTO  " + esquema + "." + tabla + " ("+
                 "th_per_id," +
@@ -332,7 +339,10 @@ namespace CorsinfSDKHik.ConfigDB
             {
                 DateTime _fechaMarcacion = DateTime.Parse(FechaMarcacion);
                 string yearMonth = _fechaMarcacion.ToString("yyyyMM");
-                tabla = "asis_faltas_" + yearMonth;
+                if (yearMonth != fecha)
+                {
+                    tabla = "asis_faltas_" + yearMonth;
+                }
             }
             string querySQL = "INSERT INTO  " + esquema + "."+tabla+" (" +
                 "th_per_id," +

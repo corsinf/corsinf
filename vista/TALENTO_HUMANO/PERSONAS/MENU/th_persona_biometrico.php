@@ -196,8 +196,7 @@
                                 <div class="row">
                                     <div class="col-12 text-end">
                                         <button type="button" class="btn btn-primary btn-sm"
-                                            onclick="nuevaTarjeta()"><i class="bx bx-plus"></i>Nueva
-                                            Tarjeta</button>
+                                            onclick="nuevaTarjeta()"><i class="bx bx-plus"></i>Nueva Tarjeta</button>
                                     </div>
                                     <div class="col-12">
                                         <div class="table-responsive">
@@ -331,7 +330,9 @@
                 <div class="row pt-3">
                     <div class="col-12 text-end">
                         <button type="button" class="btn btn-success btn-sm" onclick="addTarjetaBase()"><i
-                                class="bx bx-sync"></i>Guardar</button>
+                                class="bx bx-save"></i>Guardar tarjeta</button>
+                        <button type="button" class="btn btn-success btn-sm" onclick="TarjeInditaBio($('#txt_CardNumero').val())"><i
+                                class="bx bx-sync"></i>Guardar y enviar a biometrico</button>
                         <button type="button" class="btn btn-sm btn-secondary"
                             data-bs-dismiss="modal">Cerrar</button>
                     </div>
@@ -352,14 +353,14 @@
             <!-- Modal body -->
             <div class="modal-body">
                 <div class="row text-center">
-                    <div class="col-sm-12 d-none" id="pnl_tarjetas_registradas">
+                    <!-- <div class="col-sm-12 d-none" id="pnl_tarjetas_registradas">
                         <div class="input-group input-group-sm"> <span class="input-group-text"><b>Tarjeta
                                     Asociada</b></span>
                             <select class="form-select form-select-sm" id="ddl_tarjetas">
                                 <option value="">Seleccione Tarjeta</option>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-sm-12">
                         <div class="col">
                             <div class="btn-group" role="group" aria-label="First group">
@@ -426,14 +427,14 @@
             <!-- Modal body -->
             <div class="modal-body">
                 <div class="row text-center">
-                    <div class="col-sm-12 d-none" id="pnl_facial_registradas">
+                    <!-- <div class="col-sm-12 d-none" id="pnl_facial_registradas">
                         <div class="input-group input-group-sm"> <span class="input-group-text"><b>Tarjeta
                                     Asociada</b></span>
                             <select class="form-select form-select-sm" id="ddl_tarjetas_facial">
                                 <option value="">Seleccione Tarjeta</option>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-sm-12">
                         <img id="img_face" src="../img/de_sistema/facial.png">
                         <span id="file_name_bio_face"></span>
@@ -445,7 +446,7 @@
                                     onclick="syncronizarPersona(98)">Capturar de Biometrico</button>
                             </div>
                             <div class="col-12">
-                                <label for="file_face" class="btn btn-outline-dark btn-sm">Seleccionar foto</label>
+                                <label for="file_face" class="btn btn-outline-dark btn-sm d-none">Seleccionar foto</label>
                                 <input id="file_face" type="file" /><br>
                                 <span id="file-name-face"></span>
                             </div>
@@ -472,12 +473,12 @@
 
 <div class="modal" id="sync_biometrico" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static"
     data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog  modal-sm modal-dialog-centered">
         <div class="modal-content">
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h3>Syncronizar a biometrico</h3>
+                <h3>Sincronizar a biometrico</h3>
             </div>
 
             <!-- Modal body -->
@@ -489,6 +490,7 @@
                         <select class="form-select" id="ddl_dispositivos"></select>
                         <input type="hidden" name="txt_cardNo" id="txt_cardNo">
                         <input type="hidden" name="txt_id_reg" id="txt_id_reg">
+                        <label id="lbl_en_todos"><input type="checkbox" id="rbl_todos_bios" name="rbl_todos_bios" onchange="entodosBio()" > Sincronizar en todos los dispositivos </label>
                     </div>
                 </div>
 
@@ -513,6 +515,7 @@
 
                         <button type="button" id="btn_facial" class="btn btn-success btn-sm d-none"
                             onclick="addFaceBio()"><i class="bx bx-sync"></i> Sincronizar Facial</button>
+
                         <button type="button" id="btn_delete_facial" class="btn btn-danger btn-sm d-none"
                             onclick="deteleFace()"><i class="bx bx-sync"></i>Eliminar facial</button>
 
@@ -521,6 +524,9 @@
                             onclick="leerDedo()"><i class="bx bx-sync"></i> Iniciar lectura de huella</button>
                         <button type="button" id="btn_face_lectura" class="btn btn-primary btn-sm d-none"
                             onclick="leerFace()"><i class="bx bx-sync"></i> Iniciar lectura facial</button>
+
+                        <button type="button" id="btn_facial_local" class="btn btn-sm btn-primary d-none"
+                            onclick="addFaceBaseLocal()">Guardar facial</button>
 
 
                         <button type="button" class="btn btn-sm btn-secondary"
