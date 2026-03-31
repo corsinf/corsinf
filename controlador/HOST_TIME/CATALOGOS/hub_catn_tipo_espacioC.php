@@ -42,65 +42,96 @@ class hub_catn_tipo_espacioC
         $this->modelo = new hub_catn_tipo_espacioM();
     }
 
+    // ================= LISTAR =================
     function listar($id = '')
     {
-        if ($id == '') {
-            $datos = $this->modelo->where('is_deleted', 0)->listar();
-        } else {
-            $datos = $this->modelo->where('id_tipo_espacio', $id)->where('is_deleted', 0)->listar();
-        }
-        return $datos;
+        return $this->modelo
+            ->listar_tipo_espacio($id);
     }
 
+    // ================= INSERTAR / EDITAR =================
     function insertar_editar($parametros)
     {
         $datos = array(
-            array('campo' => 'nombre',      'dato' => $parametros['txt_nombre']),
+            array('campo' => 'nombre', 'dato' => $parametros['txt_nombre']),
             array('campo' => 'descripcion', 'dato' => $parametros['txt_descripcion']),
+            array('campo' => 'id_unidad_tiempo', 'dato' => $parametros['ddl_unidad_tiempo']),
             array('campo' => 'es_exclusivo', 'dato' => $parametros['chk_exclusivo']),
         );
 
+        // ===== INSERT =====
         if ($parametros['_id'] == '') {
-            if (count($this->modelo->where('nombre', $parametros['txt_nombre'])->where('is_deleted', 0)->listar()) == 0) {
-                $datos = $this->modelo->insertar($datos);
-            } else {
-                return -2;
-            }
-        } else {
-            if (count($this->modelo->where('nombre', $parametros['txt_nombre'])->where('id_tipo_espacio !', $parametros['_id'])->where('is_deleted', 0)->listar()) == 0) {
-                $where[0]['campo'] = 'id_tipo_espacio';
-                $where[0]['dato'] = $parametros['_id'];
-                $datos = $this->modelo->editar($datos, $where);
+
+            if (count(
+                $this->modelo
+                    ->where('nombre', $parametros['txt_nombre'])
+                    ->where('is_deleted', 0)
+                    ->listar()
+            ) == 0) {
+
+                $datos[] = array('campo' => 'id_usuario_crea', 'dato' => $_SESSION['INICIO']['ID_USUARIO']);
+                $datos[] = array('campo' => 'fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
+
+                return $this->modelo->insertar($datos);
             } else {
                 return -2;
             }
         }
 
-        return $datos;
+        // ===== UPDATE =====
+        else {
+
+            if (count(
+                $this->modelo
+                    ->where('nombre', $parametros['txt_nombre'])
+                    ->where('id_tipo_espacio !', $parametros['_id'])
+                    ->where('is_deleted', 0)
+                    ->listar()
+            ) == 0) {
+
+                $datos[] = array('campo' => 'id_usuario_modifica', 'dato' => $_SESSION['INICIO']['ID_USUARIO']);
+                $datos[] = array('campo' => 'fecha_modificacion', 'dato' => date('Y-m-d H:i:s'));
+
+                $where[0]['campo'] = 'id_tipo_espacio';
+                $where[0]['dato']  = $parametros['_id'];
+
+                return $this->modelo->editar($datos, $where);
+            } else {
+                return -2;
+            }
+        }
     }
 
+    // ================= ELIMINAR =================
     function eliminar($id)
     {
         $datos = array(
-            array('campo' => 'is_deleted', 'dato' => 0),
+            array('campo' => 'is_deleted', 'dato' => 1), // 👈 CORRECTO (eliminado)
+            array('campo' => 'id_usuario_modifica', 'dato' => $_SESSION['INICIO']['ID_USUARIO']),
+            array('campo' => 'fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
         );
 
         $where[0]['campo'] = 'id_tipo_espacio';
-        $where[0]['dato'] = $id;
+        $where[0]['dato']  = $id;
 
-        $datos = $this->modelo->editar($datos, $where);
-        return $datos;
+        return $this->modelo->editar($datos, $where);
     }
 
+    // ================= BUSCAR =================
     function buscar($parametros)
     {
         $lista = array();
-        $concat = "nombre, is_deleted";
-        $datos = $this->modelo->where('is_deleted', 0)->like($concat, $parametros['query']);
+        $concat = "nombre";
 
-        foreach ($datos as $key => $value) {
-            $text = $value['nombre'];
-            $lista[] = array('id' => ($value['id_tipo_espacio']), 'text' => ($text));
+        $datos = $this->modelo
+            ->where('is_deleted', 0)
+            ->like($concat, $parametros['query']);
+
+        foreach ($datos as $value) {
+            $lista[] = array(
+                'id' => ($value['id_tipo_espacio']),
+                'text' => ($value['nombre'])
+            );
         }
 
         return $lista;

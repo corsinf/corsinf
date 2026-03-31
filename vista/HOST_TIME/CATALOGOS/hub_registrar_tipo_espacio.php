@@ -16,7 +16,13 @@ if (isset($_GET['_id'])) {
         <?php if (isset($_GET['_id'])) { ?>
             datos_col(<?= $_id ?>);
         <?php } ?>
+        cargar_selects2();
     });
+
+    function cargar_selects2() {
+        let url_unidad_tiempoC = '../controlador/HOST_TIME/CATALOGOS/hub_cats_unidad_tiempoC.php?buscar=true';
+        cargar_select2_url('ddl_unidad_tiempo', url_unidad_tiempoC);
+    }
 
     function datos_col(id) {
         $.ajax({
@@ -30,6 +36,12 @@ if (isset($_GET['_id'])) {
                 $('#txt_nombre').val(response[0].nombre);
                 $('#txt_descripcion').val(response[0].descripcion);
                 $('#chk_exclusivo').prop('checked', response[0].es_exclusivo == 1);
+                $('#ddl_unidad_tiempo').append($('<option>', {
+                    value: response[0].id_unidad_tiempo,
+                    text: response[0].nombre_unidad_tiempo,
+                    selected: true
+                }));
+
             }
         });
     }
@@ -37,12 +49,14 @@ if (isset($_GET['_id'])) {
     function editar_insertar() {
         var txt_nombre = $('#txt_nombre').val();
         var txt_descripcion = $('#txt_descripcion').val();
+        var ddl_unidad_tiempo = $('#ddl_unidad_tiempo').val();
 
 
         var parametros = {
             '_id': '<?= $_id ?>',
             'txt_nombre': txt_nombre,
             'txt_descripcion': txt_descripcion,
+            'ddl_unidad_tiempo': ddl_unidad_tiempo,
             'chk_exclusivo': $('#chk_exclusivo').is(':checked') ? 1 : 0
         };
 
@@ -161,7 +175,7 @@ if (isset($_GET['_id'])) {
 
                         <form id="form_tipo_espacio">
                             <div class="row g-3">
-                                <div class="col-12">
+                                <div class="col-6">
                                     <label for="txt_nombre" class="form-label fw-bold">Nombre </label>
                                     <input type="text"
                                         class="form-control form-control-sm no_caracteres"
@@ -170,6 +184,18 @@ if (isset($_GET['_id'])) {
                                         placeholder="Ingrese el nombre">
                                     <span id="error_txt_nombre" class="text-danger"></span>
                                 </div>
+                                <div class="col-6">
+                                    <label for="ddl_unidad_tiempo" class="form-label">Unidad de Tiempo </label>
+                                    <select class="form-select form-select-sm select2-validation"
+                                        id="ddl_unidad_tiempo" name="ddl_unidad_tiempo">
+                                        <option value="" selected hidden>-- Seleccione --</option>
+                                    </select>
+                                    <label class="error" style="display:none;" for="ddl_unidad_tiempo"></label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+
+
 
                                 <div class="col-12">
                                     <label for="txt_descripcion" class="form-label fw-bold">Descripción </label>
@@ -216,6 +242,7 @@ if (isset($_GET['_id'])) {
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('txt_nombre');
         agregar_asterisco_campo_obligatorio('txt_descripcion');
+        agregar_asterisco_campo_obligatorio('ddl_unidad_tiempo');
 
         $("#form_tipo_espacio").validate({
             rules: {
@@ -223,6 +250,9 @@ if (isset($_GET['_id'])) {
                     required: true,
                 },
                 txt_descripcion: {
+                    required: true,
+                },
+                ddl_unidad_tiempo: {
                     required: true,
                 },
             },

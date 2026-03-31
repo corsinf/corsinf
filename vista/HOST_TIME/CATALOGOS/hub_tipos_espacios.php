@@ -35,6 +35,9 @@ if (isset($_GET['_id'])) {
                 },
                 {
                     data: 'descripcion'
+                },
+                {
+                    data: 'nombre_unidad_tiempo'
                 }
             ],
             order: [
@@ -96,6 +99,7 @@ if (isset($_GET['_id'])) {
                                             <tr>
                                                 <th>Nombre</th>
                                                 <th>Descripcion</th>
+                                                <th>Unidad de Tiempo</th>
                                             </tr>
                                         </thead>
                                         <tbody class="">
