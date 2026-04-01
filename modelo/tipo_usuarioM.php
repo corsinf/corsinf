@@ -160,33 +160,29 @@ class tipo_usuarioM
 		return $datos ;
 	}
 
-	function modulos_sis($empresa)
+	function modulos_sis($empresa = null)
 	{
-		// switch ($_SESSION['INICIO']['TIPO']) {
-		// 	case 'DBA':
-		// 		$sql = "SELECT  * FROM MODULOS_SISTEMA";
-		// 		$datos = $this->db->datos($sql,1);
-		// 		break;
-		// 	case 'ADMINISTRADOR':
-		// 	case 'ADMIN':
-			   $sql ="SELECT MS.*
-						FROM LICENCIAS L
-						INNER JOIN MODULOS_SISTEMA MS ON L.Id_Modulo = MS.id_modulos
-						WHERE Id_empresa = '".$empresa."' 
-						AND L.registrado = 1 AND DATEDIFF(DAY, GETDATE(), Fecha_exp) >= 0 ";
+		// Si no se envía empresa, toma la de sesión
+		if ($empresa === null) {
+			$empresa = $_SESSION['INICIO']['ID_EMPRESA'];
+		}
 
-						// print_r($sql);die();
-				$datos = $this->db->datos($sql,1);
-		// 		break;			
+		// Caso DBA: ve todo sin restricciones
+		if ($_SESSION['INICIO']['TIPO'] == 'DBA') {
+			$sql = "SELECT * FROM MODULOS_SISTEMA";
+			return $this->db->datos($sql, 1);
+		}
 
-		// 	default:
-		// 		$sql = "SELECT  * FROM MODULOS_SISTEMA";
-		// 		$datos = $this->db->datos($sql);
+		// Resto de usuarios: solo módulos con licencia activa
+		$sql = "SELECT MS.*
+				FROM LICENCIAS L
+				INNER JOIN MODULOS_SISTEMA MS 
+					ON L.Id_Modulo = MS.id_modulos
+				WHERE L.Id_empresa = '".$empresa."' 
+				AND L.registrado = 1 
+				AND DATEDIFF(DAY, GETDATE(), L.Fecha_exp) >= 0";
 
-		// 		break;
-		// }
-		
-		return $datos;
+		return $this->db->datos($sql, 1);
 	}
 
 	function modulos_sistema_actual($id)

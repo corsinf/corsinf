@@ -26,7 +26,7 @@ if(isset($_GET['lista_usuarios_all']))
 }
 if(isset($_GET['lista_usuarios_drop']))
 {
-	$parametros = $_POST['parametros'];
+	$parametros = $_POST['parametros'] ?? '';
 	echo json_encode($controlador->lista_tipo_usuarios_drop($parametros));
 }
 if(isset($_GET['lista_usuarios_asignados']))
@@ -132,7 +132,7 @@ class tipo_usuarioC
 	private $global;
 	private $pdf;
 	private $header;
-	private $usuarios;
+	private $usuario;
 
 	private $no_concurente;
 
@@ -371,9 +371,12 @@ class tipo_usuarioC
 		if($tipo==false){$tipo['tipo']=false;}
 		$datos= $this->modelo->lista_modulos();
 		$tr ='';
+
+		$empresaId = $_SESSION['INICIO']['ID_EMPRESA'];
+
 		foreach ($datos as $key => $value) {
 		
-		$modulos_sis = $this->modelo->modulos_sis();
+		$modulos_sis = $this->modelo->modulos_sis($empresaId);
 		$op = '';
 		foreach ($modulos_sis as $key2 => $value2) {
 			if($value2['id_modulos']==$value['modulos_sistema'])
