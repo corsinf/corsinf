@@ -47,6 +47,25 @@ class HikvisionISAPI {
     /**
      * Realiza petición POST multipart (para imágenes)
      */
+
+    public function getImgBio($faceDataUrl)
+    {
+            $url = $faceDataUrl;
+            $ch = curl_init($url);
+
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_USERPWD, "{$this->username}:{$this->password}");
+            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+
+
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+
+            $image = curl_exec($ch);
+            curl_close($ch);
+
+            return $image;
+    }
     public function postMultipart($endpoint, $jsonData, $imagePath) {
         $url = "{$this->ip}/{$endpoint}?format=json";
         $ch = curl_init();
@@ -66,7 +85,7 @@ class HikvisionISAPI {
         curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 
-        
+
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         

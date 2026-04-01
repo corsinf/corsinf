@@ -228,16 +228,8 @@ class ACS_UserCrud {
             // print_r($path);die();
 
 
-            $url = $faceDataUrl;
-            $ch = curl_init($url);
-
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_USERPWD, "admin:Data12/*");
-            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
-
-            $image = curl_exec($ch);
-            curl_close($ch);
-            file_put_contents($UrlGuardar ."/".$employeeNo.".jpg", $image);
+            $image = $this->hik->getImgBio($faceDataUrl);
+            file_put_contents($UrlGuardar, $image);
 
             $data = [
                     "faceLibType" => $faceLibType,
@@ -375,12 +367,35 @@ class ACS_UserCrud {
             ];
 
             // print_r($data);die();
-           return $this->hik->post("ISAPI/AccessControl/Fingerprint/SetUp", $data);
+           $data =  $this->hik->post("ISAPI/AccessControl/Fingerprint/SetUp", $data);
+           $data['fingerData'] = $fingerData;
+           return $data;
 
         }else
         {
             return -1;
         }
+    }
+
+    function addFingerprintBase64($employeeNo, $fingerPrintID,$fingerData) {
+        if (!$this->isOnline()) {
+            return ['success' => false, 'message' => 'Dispositivo no conectado'];
+        }        
+    
+            $data = [
+                "FingerPrintCfg" => [
+                    "employeeNo" => (string)$employeeNo,
+                    "fingerPrintID" => (int)$fingerPrintID,
+                    "fingerType" => "normalFP",
+                    "fingerData" => $fingerData,
+                    "enableCardReader" => [1,2]
+                ]
+            ];
+
+            // print_r($data);die();
+           $data =  $this->hik->post("ISAPI/AccessControl/Fingerprint/SetUp", $data);
+           $data['fingerData'] = $fingerData;
+           return $data;
     }
     
     //  Lista las huellas de un usuario

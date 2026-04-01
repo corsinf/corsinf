@@ -911,8 +911,6 @@ class th_personasC
         }else {$CardNom = $cards[0]['th_cardNo']; } //si no tiene tarjetas registradas no puede seguir avanzando
 
 
-        $this->addHuellaBase($parametros['idPerson'], $CardNom, $parametros['dedo']);
-
         //verificamos si existe el usuario en el biometrico
         $this->isapi->setDeviceData("https://".$dispositivo[0]['host'],$dispositivo[0]['port_isapi'],$dispositivo[0]['usuario'],$dispositivo[0]['pass']);
         $user = $this->isapi->getUser($parametros['idPerson']);
@@ -924,6 +922,7 @@ class th_personasC
         $resp =  $this->isapi->addFingerprint($parametros['idPerson'],$parametros['dedo']);
         if($resp['success'])
         {
+            $this->addHuellaBase($parametros['idPerson'], $CardNom, $parametros['dedo'],"",$resp['fingerData']);
             return 1;
         }else
         {
@@ -1061,7 +1060,6 @@ class th_personasC
 
         $huellaBase = $this->finger->where('th_id_finger', $parametros['_id'])->listar();
         $dispositivo = $this->dispositivos->where('th_dis_id', $parametros['dispositivo'])->listar();
-        $dispositivo = $dispositivo[0];
         $patch = $huellaBase[0]['th_finger_patch'];
         $NumFinger = $huellaBase[0]['th_finger_numero'];
         $cards = $huellaBase[0]['th_cardNo'];
@@ -1069,34 +1067,49 @@ class th_personasC
         $parametros['idPerson'] = $parametros['PersonaId'];
         $parametros['device'] = $parametros['dispositivo'];
 
+        // print_r($huellaBase);die();
+
+        if(count($huellaBase)>0 && $huellaBase[0]['th_finger_base64']!='')
+        {
+             $this->isapi->setDeviceData("https://".$dispositivo[0]['host'],$dispositivo[0]['port_isapi'],$dispositivo[0]['usuario'],$dispositivo[0]['pass']);
+           $resp = $this->isapi->addFingerprintBase64($huellaBase[0]['th_per_id'],$huellaBase[0]['th_finger_numero'],$huellaBase[0]['th_finger_base64']);
+           if($resp['success'])
+           {
+            return 1;
+           }else
+           {
+            return $resp;
+           }
+
+        }else if(count($huellaBase)>0 && $huellaBase[0]['th_finger_patch']!='')
+        {
+
+            $resp = $this->addTarjetaBio($parametros);
+
+            // print_r($resp);die();
+
+            $resp = array("msj" => "SetFingegDataSuccessful", "resp" => 1);
+            if (file_exists($patch)) {
+
+                $dllPath = $this->sdk_patch . '4 ' . $dispositivo['host'] . ' ' . $dispositivo['usuario'] . ' ' . $dispositivo['port'] . ' ' . $dispositivo['pass'] . ' ' . $cards . ' ' . $patch . ' ' . $NumFinger;
+                $command = "dotnet $dllPath";
 
 
-
-        $resp = $this->addTarjetaBio($parametros);
-
-        // print_r($resp);die();
-
-        $resp = array("msj" => "SetFingegDataSuccessful", "resp" => 1);
-        if (file_exists($patch)) {
-
-            $dllPath = $this->sdk_patch . '4 ' . $dispositivo['host'] . ' ' . $dispositivo['usuario'] . ' ' . $dispositivo['port'] . ' ' . $dispositivo['pass'] . ' ' . $cards . ' ' . $patch . ' ' . $NumFinger;
-            $command = "dotnet $dllPath";
-
-
-            // print_r($command);die();
-            $output = shell_exec($command);
-            $msj = json_decode($output, true);
-            if ($msj['resp'] != 1) {
-                $resp = $msj;
+                // print_r($command);die();
+                $output = shell_exec($command);
+                $msj = json_decode($output, true);
+                if ($msj['resp'] != 1) {
+                    $resp = $msj;
+                }
+            } else {
+                return  array("msj" => "Archivo no encontrado", "resp" => -2);
             }
-        } else {
-            return  array("msj" => "Archivo no encontrado", "resp" => -2);
-        }
 
-        return $resp;
+            return $resp;
+        }
     }
 
-     function addHuellaBase($idPerson, $CardNom, $NumFinger,$patch="")
+     function addHuellaBase($idPerson, $CardNom, $NumFinger,$patch="",$base64="")
     {
         $huella = $this->finger->where('th_per_id', $idPerson)->where('th_cardNo', $CardNom)->where('th_finger_numero', $NumFinger)->listar();
 
@@ -1113,6 +1126,7 @@ class th_personasC
                 array('campo' => 'th_finger_numero', 'dato' => $NumFinger),
                 array('campo' => 'th_finger_patch', 'dato' => $patch),
                 array('campo' => 'th_finger_nombre', 'dato' => $nombre_completo),
+                array('campo' => 'th_finger_base64', 'dato' => $base64),
             );
             $datos = $this->finger->insertar($datosBio);
             return $datos;
@@ -1234,6 +1248,34 @@ class th_personasC
     }
 
     function addFaceBio2($parametros)
+    {
+
+        $parametros['idPerson'] = $parametros['PersonaId'];
+        $parametros['device'] = $parametros['dispositivo'];
+        $face_registro = $this->face->where('th_id_face', $parametros['_id'])->listar();
+        $dispositivo = $this->dispositivos->where('th_dis_id', $parametros['dispositivo'])->listar();
+        $persona = $this->modelo->where('th_per_id', $parametros['PersonaId'])->listar();
+        $cards = $parametros['CardNo'];
+
+        $patch = $face_registro[0]['th_face_patch'];
+        $nombre = $face_registro[0]['th_face_nombre'];
+        $resp = array("msj" => "SetFingegDataSuccessful", "resp" => 1);
+
+        $this->isapi->setDeviceData("https://".$dispositivo[0]['host'],$dispositivo[0]['port_isapi'],$dispositivo[0]['usuario'],$dispositivo[0]['pass']);
+        $resp = $this->isapi->addFaceFromFile($parametros['PersonaId'],$face_registro[0]['th_face_patch']);
+        if($resp['success'])
+        {
+            return 1;
+
+        }else
+        {
+            return $resp;
+        }
+       
+    }
+
+
+    function addFaceBio2SDK($parametros)
     {
 
         $parametros['idPerson'] = $parametros['PersonaId'];
@@ -1387,6 +1429,34 @@ class th_personasC
         // die();
         $resp = -1;
         $datos = $this->modelo->where('th_per_id', $parametros['idPerson'])->listar();
+        $dispositivo = $this->dispositivos->where('th_dis_id', $parametros['device'])->listar();
+        $fingerData = $this->finger->where('th_id_finger', $parametros['idHuella'])->listar();
+
+        if(count($fingerData)>0)
+        {
+            $this->isapi->setDeviceData("https://".$dispositivo[0]['host'],$dispositivo[0]['port_isapi'],$dispositivo[0]['usuario'],$dispositivo[0]['pass']);
+            $resp = $this->isapi->deleteFingerprint($parametros['idPerson'],$fingerData[0]['th_finger_numero']);
+            $datosBio = array(
+                array('campo' => 'th_id_finger', 'dato' => $parametros['idHuella']),
+            );
+
+            $resp = $this->finger->eliminar($datosBio);
+            $fingerData = $this->finger->where('th_per_id',$parametros['idPerson'])->listar();
+            foreach ($fingerData as $key => $value) {
+                if($value['th_finger_base64']!=''){
+                    $this->isapi->addFingerprintBase64($value['th_per_id'],$value['th_finger_numero'],$value['th_finger_base64']);
+                }
+            }
+        }
+        return $resp;
+    }
+
+    function deteleHuellaSDK($parametros)
+    {
+        // print_r($parametros);die();
+        // die();
+        $resp = -1;
+        $datos = $this->modelo->where('th_per_id', $parametros['idPerson'])->listar();
         $CardNom = $parametros['CardNo'];
         $dispositivo = $this->dispositivos->where('th_dis_id', $parametros['device'])->listar();
         $fingerData = $this->finger->where('th_id_finger', $parametros['idHuella'])->listar();
@@ -1416,8 +1486,10 @@ class th_personasC
         return $resp;
     }
 
+
     function deteleHuellaBase($parametros)
     {
+        // print_r($parametros);die();
         $datosBio = array(
             array('campo' => 'th_id_finger', 'dato' => $parametros['_id']),
         );
@@ -1429,9 +1501,21 @@ class th_personasC
         $resp = -1;
         $idPerson = $parametros['idPerson'];
         $empresa = $this->empresa->datos_empresa($_SESSION['INICIO']['ID_EMPRESA']);
+        
+        $patch = $empresa[0]['ruta_huellas'];
+        if (!file_exists($patch)) {
+            mkdir($patch, 0777, true);
+        }
+
         $dispositivo = $this->dispositivos->where('th_dis_id', $parametros['iddispostivos'])->listar();
         $persona = $this->modelo->where('th_per_id', $parametros['idPerson'])->listar();
-        $nombre = str_replace(" ", "_", $persona[0]['primer_apellido'] . " " . $persona[0]['segundo_apellido'] . " " . $persona[0]['primer_nombre'] . " " . $persona[0]['segundo_nombre'] . " " . date('YmdHis'));
+        if($persona[0]['cedula']=='')
+        {
+            $nombre = str_replace(" ", "_", $persona[0]['primer_apellido'] . " " . $persona[0]['segundo_apellido'] . " " . $persona[0]['primer_nombre'] . " " . $persona[0]['segundo_nombre'] . " " . date('YmdHis').'.jpg');
+        }else
+        {
+            $nombre = $persona[0]['cedula'].'_'.date('YmdHis').'.jpg';
+        }
 
         $nombre_completo =  $persona[0]['primer_apellido'] . " " . $persona[0]['segundo_apellido'] . " " . $persona[0]['primer_nombre'] . " " . $persona[0]['segundo_nombre'];
 
@@ -1442,13 +1526,9 @@ class th_personasC
             $this->isapi->createUser($idPerson,$nombre_completo);
         }
 
-        $patch = dirname(__DIR__,2).'/APIS-TERCEROS/ISAPI-HIK/FACIAL';
-        if(!file_exists($patch))
-        {
-            mkdir($patch, 0777, true);
-        }
-
-        $resp = $this->isapi->addFaceByDevice($idPerson,$patch);
+        // $patch = dirname(__DIR__,2).'/APIS-TERCEROS/ISAPI-HIK/FACIAL';
+       
+        $resp = $this->isapi->addFaceByDevice($idPerson,$patch.'/'.$nombre);
         if($resp['success']==1)
         {
              $datosBio = array(
@@ -1553,6 +1633,25 @@ class th_personasC
     }
 
     function DeleteFaceBio($parametros)
+    {
+        // print_r($parametros);die();
+        // die();
+        $resp = 1;
+        $datos = $this->modelo->where('th_per_id', $parametros['idPerson'])->listar();
+        $CardNom = $parametros['CardNo'];
+        $dispositivo = $this->dispositivos->where('th_dis_id', $parametros['device'])->listar();
+       
+        $this->isapi->setDeviceData("https://".$dispositivo[0]['host'],$dispositivo[0]['port_isapi'],$dispositivo[0]['usuario'],$dispositivo[0]['pass']);
+        $this->isapi->deleteFace($parametros['idPerson']);
+
+        $datosBio = array(
+            array('campo' => 'th_id_face', 'dato' => $parametros['_idFace']),
+        );
+        $this->face->eliminar($datosBio);
+        return $resp;
+    }
+
+     function DeleteFaceBioSDK($parametros)
     {
         // print_r($parametros);die();
         // die();

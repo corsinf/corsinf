@@ -16,6 +16,7 @@ class th_fingerM  extends BaseModel
         'th_finger_numero',
         'th_cardNo',
         'th_finger_creacion',
+        'th_finger_base64',
     ];
 
 

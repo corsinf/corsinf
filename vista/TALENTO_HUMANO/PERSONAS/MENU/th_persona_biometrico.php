@@ -265,7 +265,7 @@
                                 aria-labelledby="v-pills-messages-tab">
                                 <div class="row">
                                     <div class="col-sm-12 text-end">
-                                        <button class="btn btn-primary btn-sm" onclick="nuevofacial()"><i
+                                        <button class="btn btn-primary btn-sm" id="btn_nuevo_facial" onclick="nuevofacial()"><i
                                                 class="bx bx-plus"></i>Nuevo facial</button>
 
                                     </div>
