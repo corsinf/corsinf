@@ -51,6 +51,13 @@ if (isset($_GET['listar_por_ubicacion_piso'])) {
     ));
 }
 
+if (isset($_GET['cambiar_estado'])) {
+    echo json_encode($controlador->cambiar_estado(
+        $_POST['id_espacio']      ?? '',
+        $_POST['id_estado_nuevo'] ?? ''
+    ));
+}
+
 class espaciosC
 {
     private $modelo;
@@ -111,7 +118,7 @@ class espaciosC
             // Campos para nuevo registro
             $datos[] = array('campo' => 'id_usuario_crea', 'dato' => $id_usuario_sesion);
             $datos[] = array('campo' => 'fecha_creacion', 'dato' => $fecha_actual);
-            $resultado = $this->modelo->insertar($datos);
+            $resultado = $this->modelo->insertar_id($datos);
         } else {
             // Campos para actualización
             $datos[] = array('campo' => 'id_usuario_modifica', 'dato' => $id_usuario_sesion);
@@ -121,7 +128,9 @@ class espaciosC
             $where[0]['campo'] = 'id_espacio';
             $where[0]['dato'] = (int)$parametros['_id'];
 
-            $resultado = $this->modelo->editar($datos, $where);
+            $this->modelo->editar($datos, $where);
+
+            $resultado = (int)$parametros['_id'];
         }
 
         return $resultado;
@@ -144,8 +153,8 @@ class espaciosC
     function buscar($parametros)
     {
         $lista = array();
-        $concat = "nombre, estado";
-        $datos = $this->modelo->where('estado', 1)->like($concat, $parametros['query']);
+        $concat = "nombre, is_deleted";
+        $datos = $this->modelo->where('is_deleted', 0)->like($concat, $parametros['query']);
 
         foreach ($datos as $key => $value) {
             $text = $value['nombre'];
@@ -219,5 +228,29 @@ class espaciosC
     {
         $tipos = ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png', 'image/jpg'];
         return in_array($file['txt_copia_imagen_espacio']['type'], $tipos) ? 1 : -1;
+    }
+
+    public function cambiar_estado($id_espacio, $id_estado_nuevo)
+    {
+        $id_espacio    = (int) $id_espacio;
+        $id_estado_nuevo = (int) $id_estado_nuevo;
+
+        if ($id_espacio < 1 || $id_estado_nuevo < 1) return -1;
+
+        // Estados válidos según catálogo
+        $estados_validos = [1, 2, 3, 4];
+        if (!in_array($id_estado_nuevo, $estados_validos)) return -1;
+
+        $datos = [
+            ['campo' => 'id_estado_espacio',  'dato' => $id_estado_nuevo],
+            ['campo' => 'id_usuario_modifica', 'dato' => $_SESSION['INICIO']['ID_USUARIO'] ?? null],
+            ['campo' => 'fecha_modificacion', 'dato' => date('Y-m-d H:i:s')],
+        ];
+
+        $where = [
+            ['campo' => 'id_espacio', 'dato' => $id_espacio]
+        ];
+
+        return $this->modelo->editar($datos, $where);
     }
 }

@@ -28,6 +28,10 @@ if (isset($_GET['crear_reserva'])) {
     echo json_encode($controlador->crear_reserva($_POST['parametros']));
 }
 
+if (isset($_GET['listar_detalle'])) {
+    echo json_encode($controlador->listar_detalle($_POST['id'] ?? ''));
+}
+
 class hub_reservasC
 {
     private $modelo;
@@ -40,6 +44,11 @@ class hub_reservasC
     function crear_reserva($parametros)
     {
         return $this->modelo->ejecutar_crear_reserva($parametros);
+    }
+
+    function listar_detalle($id = '')
+    {
+        return $this->modelo->listar_reservas_detalle($id);
     }
 
     function listar($id = '') {}

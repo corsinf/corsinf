@@ -1,1246 +1,1375 @@
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        /* ── TOP BAR ── */
-        .topbar {
-            background: var(--ink);
-            color: #fff;
-            padding: 14px 28px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .topbar .logo {
-            font-family: 'DM Serif Display', serif;
-            font-size: 1.35rem;
-            letter-spacing: .5px;
-        }
-
-        .topbar .breadcrumb-bar {
-            font-size: .82rem;
-            color: #aaa;
-            margin-left: auto;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .breadcrumb-bar .sep {
-            color: #555;
-        }
-
-        /* ── STEP INDICATOR ── */
-        .step-bar {
-            background: var(--sand);
-            border-bottom: 1px solid var(--border);
-            padding: 10px 28px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: .82rem;
-            color: var(--muted);
-            flex-wrap: wrap;
-        }
-
-        .step-pill {
-            padding: 4px 14px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            background: #fff;
-            cursor: default;
-            transition: all .2s;
-            white-space: nowrap;
-        }
-
-        .step-pill.active {
-            background: var(--accent);
-            color: #fff;
-            border-color: var(--accent);
-        }
-
-        .step-pill.done {
-            background: var(--accent2);
-            color: #fff;
-            border-color: var(--accent2);
-        }
-
-        .step-arrow {
-            color: var(--border);
-        }
-
-        /* ── MAIN LAYOUT ── */
-        .main-wrap {
-            display: flex;
-            min-height: calc(100vh - 94px);
-        }
-
-        /* LEFT SIDEBAR – pisos */
-        .sidebar {
-            width: 220px;
-            min-width: 220px;
-            background: var(--sand);
-            border-right: 1px solid var(--border);
-            padding: 20px 0;
-            transition: width .3s, opacity .3s;
-            overflow: hidden;
-        }
-
-        .sidebar.hidden {
-            width: 0;
-            min-width: 0;
-            opacity: 0;
-            padding: 0;
-        }
-
-        .sidebar-title {
-            font-size: .7rem;
-            font-weight: 600;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            color: var(--muted);
-            padding: 0 20px 10px;
-        }
-
-        .floor-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-left: 3px solid transparent;
-            transition: all .15s;
-            font-size: .88rem;
-        }
-
-        .floor-item:hover {
-            background: rgba(0, 0, 0, .04);
-        }
-
-        .floor-item.active {
-            border-left-color: var(--accent);
-            background: rgba(45, 106, 79, .07);
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        .floor-badge {
-            margin-left: auto;
-            background: var(--border);
-            color: var(--muted);
-            font-size: .7rem;
-            padding: 1px 7px;
-            border-radius: 10px;
-        }
-
-        .floor-item.active .floor-badge {
-            background: var(--accent2);
-            color: #fff;
-        }
-
-        /* CONTENT AREA */
-        .content-area {
-            flex: 1;
-            padding: 28px;
-            overflow-y: auto;
-        }
-
-        /* LOCATION CARDS */
-        .loc-card {
-            border: 1.5px solid var(--border);
-            border-radius: var(--card-r);
-            background: #fff;
-            padding: 22px 24px;
-            cursor: pointer;
-            transition: all .2s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .loc-card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: var(--border);
-            transition: background .2s;
-        }
-
-        .loc-card:hover {
-            border-color: var(--accent2);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, .07);
-        }
-
-        .loc-card:hover::before {
-            background: var(--accent2);
-        }
-
-        .loc-card.selected {
-            border-color: var(--accent);
-            box-shadow: 0 6px 24px rgba(45, 106, 79, .12);
-        }
-
-        .loc-card.selected::before {
-            background: var(--accent);
-        }
-
-        .loc-card .loc-name {
-            font-family: 'DM Serif Display', serif;
-            font-size: 1.15rem;
-            margin-bottom: 6px;
-        }
-
-        .loc-card .loc-meta {
-            font-size: .82rem;
-            color: var(--muted);
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .loc-card .loc-meta i {
-            color: var(--accent2);
-            margin-right: 5px;
-        }
-
-        .loc-card .loc-badge {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            background: var(--sand);
-            font-size: .7rem;
-            color: var(--muted);
-            padding: 2px 10px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-        }
-
-        /* SPACE TYPE TABS */
-        .type-tabs {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 24px;
-        }
-
-        .type-tab {
-            padding: 7px 18px;
-            border-radius: 30px;
-            border: 1.5px solid var(--border);
-            background: #fff;
-            font-size: .84rem;
-            cursor: pointer;
-            transition: all .15s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .type-tab:hover {
-            border-color: var(--accent2);
-            color: var(--accent);
-        }
-
-        .type-tab.active {
-            background: var(--accent);
-            color: #fff;
-            border-color: var(--accent);
-        }
-
-        /* SPACE CARDS */
-        .space-card {
-            border: 1.5px solid var(--border);
-            border-radius: var(--card-r);
-            background: #fff;
-            overflow: hidden;
-            transition: all .2s;
-            cursor: pointer;
-        }
-
-        .space-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 28px rgba(0, 0, 0, .09);
-            border-color: var(--accent2);
-        }
-
-        .space-card.expanded {
-            border-color: var(--accent);
-            box-shadow: 0 8px 28px rgba(45, 106, 79, .13);
-        }
-
-        .space-img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            background: linear-gradient(135deg, #c5e1c8, #a8d5b5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            color: rgba(255, 255, 255, .6);
-        }
-
-        .space-img img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-        }
-
-        .space-body {
-            padding: 14px 16px;
-        }
-
-        .space-name {
-            font-family: 'DM Serif Display', serif;
-            font-size: 1rem;
-            margin-bottom: 4px;
-        }
-
-        .space-meta {
-            font-size: .78rem;
-            color: var(--muted);
-            display: flex;
-            gap: 12px;
-        }
-
-        .space-meta span {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* SPACE DETAIL EXPAND */
-        .space-detail {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height .35s ease;
-            background: var(--sand);
-            border-top: 1px solid var(--border);
-        }
-
-        .space-detail.open {
-            max-height: 400px;
-        }
-
-        .space-detail-inner {
-            padding: 14px 16px;
-        }
-
-        .amenity-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            background: #fff;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 4px 10px;
-            font-size: .78rem;
-            margin: 3px 3px 3px 0;
-        }
-
-        .amenity-tag i {
-            color: var(--accent2);
-        }
-
-        /* TARIFA */
-        .tarifa-row {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .tarifa-chip {
-            background: var(--accent);
-            color: #fff;
-            border-radius: 8px;
-            padding: 4px 12px;
-            font-size: .78rem;
-            font-weight: 600;
-        }
-
-        .tarifa-chip.day {
-            background: var(--accent2);
-        }
-
-        /* CALENDAR MODAL */
-        .modal-content {
-            border-radius: 16px;
-            border: none;
-        }
-
-        .modal-header {
-            border-bottom: 1px solid var(--border);
-            padding: 18px 24px;
-        }
-
-        .modal-title {
-            font-family: 'DM Serif Display', serif;
-            font-size: 1.2rem;
-        }
-
-        .modal-body {
-            padding: 20px 24px;
-        }
-
-        /* MINI CALENDAR */
-        .cal-nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-
-        .cal-nav .cal-month {
-            font-family: 'DM Serif Display', serif;
-            font-size: 1rem;
-        }
-
-        .cal-nav button {
-            background: none;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .cal-nav button:hover {
-            background: var(--sand);
-        }
-
-        .cal-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 3px;
-        }
-
-        .cal-day-head {
-            text-align: center;
-            font-size: .7rem;
-            font-weight: 600;
-            color: var(--muted);
-            padding: 4px 0;
-            text-transform: uppercase;
-        }
-
-        .cal-day {
-            text-align: center;
-            padding: 6px 2px;
-            font-size: .82rem;
-            border-radius: 8px;
-            cursor: pointer;
-            position: relative;
-            transition: background .15s;
-        }
-
-        .cal-day:hover:not(.empty):not(.past) {
-            background: var(--sand);
-        }
-
-        .cal-day.empty {
-            cursor: default;
-        }
-
-        .cal-day.past {
-            color: #ccc;
-            cursor: default;
-        }
-
-        .cal-day.today {
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        .cal-day.has-shift::after {
-            content: '';
-            display: block;
-            width: 5px;
-            height: 5px;
-            background: var(--accent2);
-            border-radius: 50%;
-            margin: 2px auto 0;
-        }
-
-        .cal-day.selected {
-            background: var(--accent);
-            color: #fff;
-        }
-
-        .cal-day.in-range {
-            background: rgba(45, 106, 79, .12);
-        }
-
-        .cal-day.range-start,
-        .cal-day.range-end {
-            background: var(--accent);
-            color: #fff;
-        }
-
-        .cal-day.reserved {
-            background: rgba(82, 183, 136, .15);
-        }
-
-        /* TURNOS EN DÍA */
-        .turno-chip {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 6px;
-            font-size: .74rem;
-            color: #fff;
-            margin: 2px;
-        }
-
-        .reserve-option label {
-            font-size: .88rem;
-        }
-
-        .section-label {
-            font-size: .7rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 12px;
-        }
-
-        /* EMPTY STATE */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--muted);
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            color: var(--border);
-            margin-bottom: 12px;
-        }
-    </style>
-
-    <div class="page-wrapper">
-        <div class="page-content">
-            <!--breadcrumb-->
-            <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-                <div class="breadcrumb-title pe-3">RESERVAS</div>
-                <div class="ps-3">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-0 p-0">
-                            <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">
-                                Todos las reservas
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
+<?php
+$modulo_sistema = $_SESSION['INICIO']['MODULO_SISTEMA'];
+?>
+
+<script>
+    $(document).ready(function() {
+        cargar_selects_clientes();
+    });
+
+    function cargar_selects_clientes() {
+        cargar_select2_url('ddl_clientes',
+            '../controlador/GENERAL/NO_CONCURRENTES/CLIENTESC.php?buscar_clientes=true',
+            '', '#modalReserva');
+    }
+</script>
+<script src="../lib/jquery_validation/jquery.validate.js"></script>
+<script src="../js/GENERAL/operaciones_generales.js"></script>
+
+<div class="page-wrapper">
+    <div class="page-content">
+
+        <!-- Breadcrumb -->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">RESERVAS</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a></li>
+                        <li class="breadcrumb-item active">Hub · Espacios</li>
+                    </ol>
+                </nav>
             </div>
-            <!--end breadcrumb-->
+        </div>
 
-            <div class="row">
-                <div class="col-xl-12 mx-auto">
-                    <div class="card border-top border-0 border-4 border-primary">
-                        <div class="card-body p-5">
-                            <div class="card-title d-flex align-items-center">
+        <div class="row">
+            <div class="col-xl-12 mx-auto">
+                <div class="card border-top border-0 border-4 border-primary">
+                    <div class="card-body p-4">
 
-                                <h5 class="mb-0 text-primary"></h5>
-                                <!--
-                                <div class="row mx-0">
+                        <!-- Step bar -->
+                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_reservas"
+                            class="btn btn-outline-dark btn-sm mb-3">
+                            <i class="bx bx-arrow-back"></i> Regresar
+                        </a>
+                        <div class="d-flex align-items-center gap-2 flex-wrap mb-3">
+                            <span class="badge bg-primary px-3 py-2" id="st1"><i class='bx bx-map me-1'></i>Ubicación</span>
+                            <i class='bx bx-chevron-right text-muted'></i>
+                            <span class="badge bg-secondary px-3 py-2" id="st2"><i class='bx bx-layer me-1'></i>Piso</span>
+                            <i class='bx bx-chevron-right text-muted'></i>
+                            <span class="badge bg-secondary px-3 py-2" id="st3"><i class='bx bx-category me-1'></i>Tipo</span>
+                            <i class='bx bx-chevron-right text-muted'></i>
+                            <span class="badge bg-secondary px-3 py-2" id="st4"><i class='bx bx-door-open me-1'></i>Espacio</span>
+                        </div>
 
-                                    <div class="" id="btn_nuevo">
-                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_registrar_espacio"
-                                            type="button" class="btn btn-success btn-sm ">
-                                            <i class="bx bx-plus me-0 pb-1"></i> Nuevo
-                                        </a>
+
+                        <div class="row g-3">
+                            <!-- Sidebar pisos -->
+                            <div class="col-md-2" id="sidebar-col" style="display:none;">
+                                <div class="card border mb-0 h-100">
+                                    <div class="card-header py-2 bg-light">
+                                        <small class="fw-bold text-muted text-uppercase"><i class='bx bx-layer me-1'></i>Pisos</small>
                                     </div>
+                                    <div class="card-body p-0" id="floor-list"></div>
                                 </div>
--->
                             </div>
 
+                            <!-- Content area -->
+                            <div id="content-col" class="col-md-12">
 
-                            <section class="content pt-2">
-                                <div class="container-fluid">
-                                    <div class="topbar">
-                                        <span class="logo"><i class='bx bx-building-house me-2'></i>Hub · Espacios</span>
-                                        <div class="breadcrumb-bar">
-                                            <span id="bc-loc">Ubicaciones</span>
-                                            <span class="sep" id="bc-sep1" style="display:none">›</span>
-                                            <span id="bc-floor" style="display:none"></span>
-                                            <span class="sep" id="bc-sep2" style="display:none">›</span>
-                                            <span id="bc-type" style="display:none"></span>
+                                <!-- Step 1: Ubicaciones -->
+                                <div id="view-locations">
+                                    <p class="text-muted small fw-semibold text-uppercase mb-2">
+                                        <i class='bx bx-map-pin me-1'></i>Selecciona una ubicación
+                                    </p>
+                                    <div class="row g-3" id="loc-cards">
+                                        <div class="col-12 text-center py-4 text-muted">
+                                            <div class="spinner-border spinner-border-sm me-2"></div>Cargando ubicaciones...
                                         </div>
                                     </div>
-                                    <!-- STEP BAR -->
-                                    <div class="step-bar">
-                                        <span class="step-pill active" id="st1"><i class='bx bx-map me-1'></i>Ubicación</span>
-                                        <span class="step-arrow">›</span>
-                                        <span class="step-pill" id="st2"><i class='bx bx-layer me-1'></i>Piso</span>
-                                        <span class="step-arrow">›</span>
-                                        <span class="step-pill" id="st3"><i class='bx bx-category me-1'></i>Tipo</span>
-                                        <span class="step-arrow">›</span>
-                                        <span class="step-pill" id="st4"><i class='bx bx-door-open me-1'></i>Espacio</span>
+                                </div>
+
+                                <!-- Step 2+: Espacios -->
+                                <div id="view-spaces" style="display:none;">
+                                    <div class="d-flex align-items-center gap-2 mb-3">
+                                        <button class="btn btn-sm btn-outline-secondary" onclick="goBackToLocations()">
+                                            <i class='bx bx-arrow-back'></i> Volver
+                                        </button>
+                                        <p class="text-muted small fw-semibold text-uppercase mb-0">
+                                            <i class='bx bx-category me-1'></i>Tipo de espacio
+                                        </p>
                                     </div>
+                                    <div class="d-flex gap-2 flex-wrap mb-3" id="type-tabs"></div>
+                                    <p class="text-muted small fw-semibold text-uppercase mb-2">
+                                        <i class='bx bx-grid-alt me-1'></i>Espacios disponibles
+                                    </p>
+                                    <div class="row g-3" id="space-cards"></div>
+                                </div>
 
-                                    <!-- MAIN -->
-                                    <div class="main-wrap">
-
-                                        <!-- SIDEBAR PISOS -->
-                                        <div class="sidebar hidden" id="sidebar">
-                                            <div class="sidebar-title"><i class='bx bx-layer me-1'></i>Pisos</div>
-                                            <div id="floor-list"></div>
-                                        </div>
-
-                                        <!-- CONTENT -->
-                                        <div class="content-area" id="content-area">
-
-                                            <!-- STEP 1: UBICACIONES -->
-                                            <div id="view-locations">
-                                                <div class="section-label mb-3"><i class='bx bx-map-pin me-1'></i>Selecciona una ubicación</div>
-                                                <div class="row g-3" id="loc-cards"></div>
-                                            </div>
-
-                                            <!-- STEP 3: TIPOS + ESPACIOS (hidden initially) -->
-                                            <div id="view-spaces" style="display:none;">
-                                                <div class="d-flex align-items-center gap-2 mb-3">
-                                                    <button class="btn btn-sm btn-outline-secondary" onclick="goBackToLocations()">
-                                                        <i class='bx bx-arrow-back'></i>
-                                                    </button>
-                                                    <span class="section-label mb-0"><i class='bx bx-category me-1'></i>Tipo de espacio</span>
-                                                </div>
-                                                <div class="type-tabs" id="type-tabs"></div>
-                                                <div class="section-label"><i class='bx bx-grid-alt me-1'></i>Espacios disponibles</div>
-                                                <div class="row g-3" id="space-cards"></div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <!-- MODAL RESERVA -->
-                                    <div class="modal fade" id="modalReserva" tabindex="-1" data-bs-backdrop="static">
-                                        <div class="modal-dialog modal-dialog-centered modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <div>
-                                                        <div class="modal-title" id="modal-space-name">Reservar espacio</div>
-                                                        <div class="text-muted" style="font-size:.8rem;" id="modal-space-sub"></div>
-                                                    </div>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="row g-4">
-
-                                                        <!-- LEFT: calendario -->
-                                                        <div class="col-md-7">
-                                                            <div class="section-label"><i class='bx bx-calendar me-1'></i>Selecciona fecha(s)</div>
-                                                            <div class="cal-nav">
-                                                                <button onclick="calPrev()"><i class='bx bx-chevron-left'></i></button>
-                                                                <span class="cal-month" id="cal-month-label"></span>
-                                                                <button onclick="calNext()"><i class='bx bx-chevron-right'></i></button>
-                                                            </div>
-                                                            <div class="cal-grid" id="cal-grid">
-                                                                <div class="cal-day-head">Lu</div>
-                                                                <div class="cal-day-head">Ma</div>
-                                                                <div class="cal-day-head">Mi</div>
-                                                                <div class="cal-day-head">Ju</div>
-                                                                <div class="cal-day-head">Vi</div>
-                                                                <div class="cal-day-head">Sá</div>
-                                                                <div class="cal-day-head">Do</div>
-                                                            </div>
-                                                            <!-- Turnos del día seleccionado -->
-                                                            <div id="turnos-dia" class="mt-3" style="display:none;">
-                                                                <div class="section-label"><i class='bx bx-time me-1'></i>Turnos disponibles ese día</div>
-                                                                <div id="turnos-dia-list"></div>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- RIGHT: opciones -->
-                                                        <div class="col-md-5">
-                                                            <div class="section-label"><i class='bx bx-slider-alt me-1'></i>Tipo de reserva</div>
-                                                            <div class="mb-3">
-                                                                <div class="form-check reserve-option mb-2">
-                                                                    <input class="form-check-input" type="radio" name="tipo_reserva" id="r_dia" value="dia" checked onchange="toggleTipoReserva()">
-                                                                    <label class="form-check-label" for="r_dia"><i class='bx bx-calendar-check me-1 text-success'></i>Por un día</label>
-                                                                </div>
-                                                                <div class="form-check reserve-option">
-                                                                    <input class="form-check-input" type="radio" name="tipo_reserva" id="r_rango" value="rango" onchange="toggleTipoReserva()">
-                                                                    <label class="form-check-label" for="r_rango"><i class='bx bx-calendar-alt me-1 text-primary'></i>Por rango de fechas</label>
-                                                                </div>
-                                                            </div>
-
-                                                            <!-- Por día: fecha única -->
-                                                            <div id="opt-dia">
-                                                                <label class="form-label" style="font-size:.84rem;">Fecha</label>
-                                                                <input type="date" class="form-control form-control-sm mb-2" id="inp-fecha-dia">
-                                                            </div>
-
-                                                            <!-- Por rango -->
-                                                            <div id="opt-rango" style="display:none;">
-                                                                <label class="form-label" style="font-size:.84rem;">Fecha inicio</label>
-                                                                <input type="date" class="form-control form-control-sm mb-2" id="inp-fecha-ini" onchange="syncRange()">
-                                                                <label class="form-label" style="font-size:.84rem;">Fecha fin</label>
-                                                                <input type="date" class="form-control form-control-sm mb-2" id="inp-fecha-fin" onchange="syncRange()">
-                                                            </div>
-
-                                                            <hr class="my-3">
-                                                            <div class="section-label"><i class='bx bx-receipt me-1'></i>Resumen</div>
-                                                            <div id="resumen-reserva" class="small text-muted">Selecciona una fecha para ver el resumen.</div>
-
-                                                            <div class="d-grid mt-3">
-                                                                <button class="btn btn-success" onclick="confirmarReserva()">
-                                                                    <i class='bx bx-calendar-plus me-1'></i>Confirmar reserva
-                                                                </button>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><!-- /.container-fluid -->
-                            </section>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!--end row-->
+        </div>
+
+    </div><!-- /page-content -->
+</div><!-- /page-wrapper -->
+
+
+<!-- ════════════════════════════════════════
+     MODAL 1: GALERÍA DE IMÁGENES Y VIDEOS
+════════════════════════════════════════ -->
+<div class="modal fade" id="modalGaleria" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content" style="background:#111827;">
+
+            <div class="modal-header border-0 pb-0 px-4 pt-3">
+                <div>
+                    <h6 class="modal-title fw-bold text-white" id="gal-nombre"></h6>
+                    <small class="text-secondary" id="gal-codigo"></small>
+                </div>
+                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body p-0">
+                <!-- Tabs -->
+                <ul class="nav nav-tabs px-4 pt-2 border-0" id="gal-tabs" role="tablist"
+                    style="border-bottom:1px solid #374151!important;">
+                    <li class="nav-item">
+                        <button class="nav-link active" id="tab-fotos-btn"
+                            data-bs-toggle="tab" data-bs-target="#panel-fotos"
+                            style="color:#9ca3af; background:transparent; border:none; border-bottom:2px solid transparent;">
+                            <i class='bx bx-image me-1'></i>Fotos
+                            <span class="badge bg-secondary ms-1" id="gal-fotos-count">0</span>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="tab-videos-btn"
+                            data-bs-toggle="tab" data-bs-target="#panel-videos"
+                            style="color:#9ca3af; background:transparent; border:none; border-bottom:2px solid transparent;">
+                            <i class='bx bx-video me-1'></i>Videos
+                            <span class="badge bg-secondary ms-1" id="gal-videos-count">0</span>
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <!-- Panel Fotos -->
+                    <div class="tab-pane fade show active p-3" id="panel-fotos">
+                        <!-- Carousel principal -->
+                        <div id="carousel-fotos" class="carousel slide rounded overflow-hidden mb-3"
+                            style="background:#000; height:380px;">
+                            <div class="carousel-inner h-100" id="carousel-fotos-inner"></div>
+                            <button class="carousel-control-prev" type="button"
+                                data-bs-target="#carousel-fotos" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button"
+                                data-bs-target="#carousel-fotos" data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                            <div class="carousel-indicators" id="gal-indicators"></div>
+                        </div>
+                        <!-- Thumbnails -->
+                        <div class="d-flex gap-2 overflow-auto pb-1" id="gal-thumbs"
+                            style="scrollbar-width:thin; scrollbar-color:#374151 transparent;"></div>
+                        <!-- Vacío fotos -->
+                        <div id="gal-fotos-empty" class="text-center py-5" style="display:none; color:#6b7280;">
+                            <i class='bx bx-image fs-1 d-block mb-2'></i>
+                            <p class="small mb-0">Sin imágenes cargadas</p>
+                        </div>
+                    </div>
+
+                    <!-- Panel Videos -->
+                    <div class="tab-pane fade p-3" id="panel-videos">
+                        <div class="row g-3" id="gal-videos-list"></div>
+                        <div id="gal-videos-empty" class="text-center py-5" style="display:none; color:#6b7280;">
+                            <i class='bx bx-video-off fs-1 d-block mb-2'></i>
+                            <p class="small mb-0">Sin videos cargados</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
+</div>
 
 
+<!-- ════════════════════════════════════════
+     MODAL 2: SELECCIÓN DE TARIFA (pre-reserva)
+════════════════════════════════════════ -->
+<div class="modal fade" id="modalTarifas" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:440px;">
+        <div class="modal-content">
 
-    <script>
-        const UBICACIONES = [{
-                id: 1,
-                nombre: 'Sede Norte',
-                direccion: 'Av. Atahualpa 1200 y Av. El Maestro',
-                telefono: '(02) 234-5678',
-                pisos: 3
-            },
-            {
-                id: 2,
-                nombre: 'Sede Centro',
-                direccion: 'Calle Bolívar 540 y García Moreno',
-                telefono: '(02) 222-1100',
-                pisos: 4
-            },
-            {
-                id: 3,
-                nombre: 'Sede Sur',
-                direccion: 'Av. Napo km 3, Parque Industrial',
-                telefono: '(02) 298-7654',
-                pisos: 2
-            },
-        ];
+            <div class="modal-header">
+                <div>
+                    <h6 class="modal-title fw-bold"><i class='bx bx-money me-1 text-primary'></i>Elige un plan</h6>
+                    <small class="text-muted" id="tar-sub">Selecciona la tarifa para continuar</small>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
 
-        const PISOS = {
-            1: [{
-                id: 1,
-                desc: 'Planta Baja',
-                espacios: 4
-            }, {
-                id: 2,
-                desc: 'Piso 1',
-                espacios: 3
-            }, {
-                id: 3,
-                desc: 'Piso 2',
-                espacios: 5
-            }],
-            2: [{
-                id: 4,
-                desc: 'Planta Baja',
-                espacios: 6
-            }, {
-                id: 5,
-                desc: 'Piso 1',
-                espacios: 4
-            }, {
-                id: 6,
-                desc: 'Piso 2',
-                espacios: 3
-            }, {
-                id: 7,
-                desc: 'Piso 3',
-                espacios: 2
-            }],
-            3: [{
-                id: 8,
-                desc: 'Planta Baja',
-                espacios: 5
-            }, {
-                id: 9,
-                desc: 'Piso 1',
-                espacios: 3
-            }],
-        };
+            <div class="modal-body px-3 py-2">
+                <!-- Loading -->
+                <div id="tar-loading" class="text-center py-4 text-muted">
+                    <div class="spinner-border spinner-border-sm me-2"></div>Cargando planes...
+                </div>
+                <!-- Vacío -->
+                <div id="tar-empty" class="text-center py-4 text-muted" style="display:none;">
+                    <i class='bx bx-info-circle fs-2 d-block mb-2 text-warning'></i>
+                    <p class="small mb-0">Este espacio no tiene planes configurados.</p>
+                    <p class="small text-muted">Contacta al administrador.</p>
+                </div>
+                <!-- Lista de tarifas -->
+                <div id="tar-lista" class="list-group list-group-flush" style="display:none;"></div>
+            </div>
 
-        const TIPOS = [{
-                id: 1,
-                nombre: 'Sala de reuniones',
-                icon: 'bx-group'
-            },
-            {
-                id: 2,
-                nombre: 'Oficina privada',
-                icon: 'bx-door-open'
-            },
-            {
-                id: 3,
-                nombre: 'Auditorio',
-                icon: 'bx-microphone'
-            },
-            {
-                id: 4,
-                nombre: 'Coworking',
-                icon: 'bx-laptop'
-            },
-        ];
-
-        const AMENITIES = {
-            1: ['40 sillas', 'Proyector HD', 'Pizarrón inteligente', 'Aire acondicionado', 'Wi-Fi 200Mbps', 'Cafetera'],
-            2: ['12 sillas', 'TV 65"', 'Videoconferencia', 'Wi-Fi dedicado', 'Impresora'],
-            3: ['Podio + micrófonos', '80 sillas', 'Sistema de audio', 'Proyector 4K', 'Cabina de traducción', 'Catering disponible'],
-            4: ['20 escritorios', 'Salas de enfoque', 'Wi-Fi 500Mbps', 'Cocina equipada', 'Casilleros', 'Sala de descanso'],
-        };
-
-        // Espacios por ubicación+piso+tipo (simulado)
-        function getEspacios(ubid, pisoid, tipoid) {
-            const nombres = ['Espacio Alpha', 'Espacio Beta', 'Sala Quito', 'Sala Cuenca', 'Suite Azul', 'Suite Verde', 'Hub Central'];
-            const codigos = ['ESP-01', 'ESP-02', 'ESP-03', 'ESP-04', 'ESP-05', 'ESP-06', 'ESP-07'];
-            const cap = [10, 15, 8, 20, 5, 12, 30];
-            const th = [8.50, 10, 7, 15, 5, 9, 12];
-            const td = [65, 80, 55, 120, 40, 72, 95];
-            // generate 2-4 spaces
-            const n = 2 + ((ubid + pisoid + tipoid) % 3);
-            return Array.from({
-                length: n
-            }, (_, i) => ({
-                id: ubid * 100 + pisoid * 10 + tipoid * 1 + i,
-                nombre: nombres[(ubid + pisoid + i) % nombres.length],
-                codigo: codigos[i],
-                capacidad: cap[(ubid + i) % cap.length],
-                tarifa_hora: th[(pisoid + i) % th.length],
-                tarifa_dia: td[(tipoid + i) % td.length],
-                id_tipo: tipoid,
-                imagen: null,
-            }));
-        }
-
-        // Turnos mock
-        const TURNOS = [{
-                id: 1,
-                nombre: 'Mañana',
-                entrada: '07:00',
-                salida: '12:00',
-                color: '#2d6a4f'
-            },
-            {
-                id: 2,
-                nombre: 'Tarde',
-                entrada: '13:00',
-                salida: '18:00',
-                color: '#1d3557'
-            },
-            {
-                id: 3,
-                nombre: 'Full Day',
-                entrada: '07:00',
-                salida: '18:00',
-                color: '#c77dff'
-            },
-        ];
-
-        // Reservas estáticas mock
-        const RESERVAS = {};
-
-        /* ════════════════════════════════════════
-           STATE
-        ════════════════════════════════════════ */
-        let selUbicacion = null,
-            selPiso = null,
-            selTipo = null,
-            selEspacio = null;
-
-        /* ════════════════════════════════════════
-           INIT
-        ════════════════════════════════════════ */
-        renderUbicaciones();
-
-        function renderUbicaciones() {
-            const cont = document.getElementById('loc-cards');
-            cont.innerHTML = UBICACIONES.map(u => `
-    <div class="col-md-4 col-sm-6">
-      <div class="loc-card" id="loc-${u.id}" onclick="selectUbicacion(${u.id})">
-        <span class="loc-badge">${PISOS[u.id].length} pisos</span>
-        <div class="loc-name">${u.nombre}</div>
-        <div class="loc-meta">
-          <span><i class='bx bx-map-pin'></i>${u.direccion}</span>
-          <span><i class='bx bx-phone'></i>${u.telefono}</span>
+            <div class="modal-footer py-2">
+                <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-sm btn-primary" id="btn-continuar-reserva" disabled>
+                    Continuar <i class='bx bx-chevron-right'></i>
+                </button>
+            </div>
         </div>
-      </div>
-    </div>`).join('');
+    </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     MODAL 3: FORMULARIO DE RESERVA
+════════════════════════════════════════ -->
+<div class="modal fade" id="modalReserva" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header py-2">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <div>
+                        <h6 class="modal-title fw-bold mb-0" id="res-space-nombre">Reservar espacio</h6>
+                        <small class="text-muted" id="res-space-codigo"></small>
+                    </div>
+                    <span class="badge bg-primary ms-1" id="res-tarifa-badge"></span>
+                </div>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row g-3">
+
+                    <!-- Columna Izquierda: Calendario -->
+                    <div class="col-md-7">
+                        <p class="text-muted small fw-semibold text-uppercase mb-2">
+                            <i class='bx bx-calendar me-1'></i>
+                            <span id="res-cal-label">Selecciona una fecha</span>
+                        </p>
+
+                        <!-- INPUT FECHA DIRECTA -->
+                        <div class="mb-2">
+                            <input type="date" class="form-control form-control-sm"
+                                id="inp-fecha-directa"
+                                style="max-width:200px;">
+                            <div class="text-danger small mt-1" id="err-fecha-directa" style="min-height:16px;"></div>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <button class="btn btn-sm btn-outline-secondary" id="btn-res-prev">
+                                <i class='bx bx-chevron-left'></i>
+                            </button>
+                            <strong id="res-month-label"></strong>
+                            <button class="btn btn-sm btn-outline-secondary" id="btn-res-next">
+                                <i class='bx bx-chevron-right'></i>
+                            </button>
+                        </div>
+                        <div id="res-cal-grid" class="hub-cal-grid"></div>
+
+                        <!-- Hora inicio (solo para tarifas HORA) -->
+                        <div id="seccion-hora" class="mt-3" style="display:none;">
+                            <label class="form-label small fw-semibold">
+                                <i class='bx bx-time me-1 text-primary'></i>Hora de inicio
+                            </label>
+                            <input type="time" class="form-control form-control-sm" id="inp-hora-inicio"
+                                value="08:00" style="max-width:160px;">
+                            <div id="label-hora-fin" class="mt-2 small"></div>
+                        </div>
+                    </div>
+
+                    <!-- Columna Derecha: Tarifa info + Cliente + Resumen -->
+                    <div class="col-md-5">
+
+                        <!-- Info tarifa seleccionada -->
+                        <p class="text-muted small fw-semibold text-uppercase mb-2">
+                            <i class='bx bx-receipt me-1'></i>Plan seleccionado
+                        </p>
+                        <div class="card border-primary mb-3">
+                            <div class="card-body py-2 px-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-bold small" id="res-tarifa-nombre">—</div>
+                                        <small class="text-muted" id="res-tarifa-detalle">—</small>
+                                    </div>
+                                    <span class="fs-6 fw-bold text-success" id="res-tarifa-precio">$0.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cliente -->
+                        <div class="mb-3">
+                            <label for="ddl_clientes" class="form-label small fw-semibold">
+                                <i class='bx bx-user me-1'></i>Persona
+                            </label>
+                            <select class="form-select form-select-sm select2-validation"
+                                id="ddl_clientes" name="ddl_clientes">
+                                <option selected disabled>-- Seleccione --</option>
+                            </select>
+                        </div>
+
+                        <!-- Período calculado -->
+                        <div id="res-periodo" class="alert alert-info py-2 small mb-3" style="display:none;">
+                            <i class='bx bx-calendar-check me-1'></i>
+                            <span id="res-periodo-texto"></span>
+                        </div>
+
+                        <!-- Total -->
+                        <div id="res-total-box" class="d-flex justify-content-between align-items-center
+                             rounded p-2 mb-3" style="display:none!important;
+                             background:rgba(13,110,253,.07); border:1px solid rgba(13,110,253,.2);">
+                            <span class="small text-muted">Total</span>
+                            <strong class="text-primary" id="res-total-valor">$0.00</strong>
+                        </div>
+
+                        <div class="d-grid">
+                            <button class="btn btn-success" id="btn-confirmar" disabled>
+                                <i class='bx bx-calendar-plus me-1'></i>Confirmar reserva
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     ESTILOS
+════════════════════════════════════════ -->
+<style>
+    /* Calendarios */
+    .hub-cal-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 3px
+    }
+
+    .hub-cal-head {
+        text-align: center;
+        font-size: .7rem;
+        font-weight: 600;
+        color: #6c757d;
+        padding: 4px 0;
+        text-transform: uppercase
+    }
+
+    .hub-cal-day {
+        text-align: center;
+        padding: 7px 2px;
+        font-size: .82rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background .15s;
+        user-select: none
+    }
+
+    .hub-cal-day:hover:not(.empty):not(.past) {
+        background: #f0f0f0
+    }
+
+    .hub-cal-day.empty,
+    .hub-cal-day.past {
+        color: #ccc;
+        cursor: default
+    }
+
+    .hub-cal-day.today {
+        font-weight: 700;
+        color: #0d6efd
+    }
+
+    .hub-cal-day.has-shift::after {
+        content: '';
+        display: block;
+        width: 4px;
+        height: 4px;
+        background: #52b788;
+        border-radius: 50%;
+        margin: 2px auto 0
+    }
+
+    /* DÍA SELECCIONADO (inicio) */
+    .hub-cal-day.selected {
+        background: #0d6efd !important;
+        color: #fff !important;
+        font-weight: 700;
+        border-radius: 6px
+    }
+
+    .hub-cal-day.selected::after {
+        display: none
+    }
+
+    /* RANGO INTERMEDIO (solo tarifas MES) */
+    .hub-cal-day.in-range {
+        background: rgba(13, 110, 253, .13) !important;
+        color: #0d6efd;
+        border-radius: 0
+    }
+
+    .hub-cal-day.in-range::after {
+        display: none
+    }
+
+    /* DÍA FINAL DEL RANGO (solo tarifas MES) */
+    .hub-cal-day.range-end {
+        background: #0d6efd !important;
+        color: #fff !important;
+        font-weight: 700;
+        border-radius: 6px
+    }
+
+    .hub-cal-day.range-end::after {
+        display: none
+    }
+
+    /* Pisos sidebar */
+    .floor-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        cursor: pointer;
+        border-left: 3px solid transparent;
+        transition: all .15s;
+        font-size: .88rem
+    }
+
+    .floor-item:hover {
+        background: rgba(0, 0, 0, .04)
+    }
+
+    .floor-item.active {
+        border-left-color: #0d6efd;
+        background: rgba(13, 110, 253, .07);
+        color: #0d6efd;
+        font-weight: 600
+    }
+
+    /* Location cards */
+    .loc-card {
+        border: 1.5px solid #dee2e6;
+        border-radius: .5rem;
+        background: #fff;
+        padding: 18px 20px;
+        cursor: pointer;
+        transition: all .2s;
+        border-left: 4px solid #dee2e6
+    }
+
+    .loc-card:hover {
+        border-left-color: #52b788;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, .08)
+    }
+
+    .loc-card.selected {
+        border-left-color: #0d6efd;
+        box-shadow: 0 4px 14px rgba(13, 110, 253, .12)
+    }
+
+    /* Space cards */
+    .space-card {
+        border: 1.5px solid #dee2e6;
+        border-radius: .5rem;
+        background: #fff;
+        overflow: hidden;
+        transition: all .2s
+    }
+
+    .space-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, .09);
+        border-color: #52b788
+    }
+
+    .space-img-wrap {
+        width: 100%;
+        height: 140px;
+        overflow: hidden;
+        background: #e9ecef
+    }
+
+    .space-img-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover
+    }
+
+    .space-img-placeholder {
+        width: 100%;
+        height: 140px;
+        background: linear-gradient(135deg, #c5e1c8, #a8d5b5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        color: rgba(255, 255, 255, .7)
+    }
+
+    /* Type tabs */
+    .type-tab {
+        padding: 6px 16px;
+        border-radius: 30px;
+        border: 1.5px solid #dee2e6;
+        background: #fff;
+        font-size: .84rem;
+        cursor: pointer;
+        transition: all .15s;
+        display: flex;
+        align-items: center;
+        gap: 5px
+    }
+
+    .type-tab:hover {
+        border-color: #52b788
+    }
+
+    .type-tab.active {
+        background: #0d6efd;
+        color: #fff;
+        border-color: #0d6efd
+    }
+
+    /* Galería thumbnails */
+    .gal-thumb {
+        width: 72px;
+        height: 60px;
+        border-radius: 6px;
+        overflow: hidden;
+        cursor: pointer;
+        flex-shrink: 0;
+        border: 2px solid transparent;
+        transition: border-color .15s;
+        opacity: .7
+    }
+
+    .gal-thumb:hover,
+    .gal-thumb.active {
+        border-color: #3b82f6;
+        opacity: 1
+    }
+
+    .gal-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover
+    }
+
+    /* Tarifa item */
+    .tar-item.active,
+    .tar-item:active {
+        background: rgba(13, 110, 253, .08) !important;
+        border-left: 3px solid #0d6efd !important
+    }
+
+    /* Total box show */
+    #res-total-box.visible {
+        display: flex !important
+    }
+
+    /* Nav tabs galería */
+    #gal-tabs .nav-link.active {
+        color: #fff !important;
+        border-bottom: 2px solid #3b82f6 !important
+    }
+</style>
+
+
+<!-- ════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════ -->
+<script>
+    $(function() {
+
+        var URL_UBICACIONES = '../controlador/HOST_TIME/UBICACIONES/hub_ubicacionesC.php';
+        var URL_ESPACIOS = '../controlador/HOST_TIME/ESPACIOS/espaciosC.php';
+        var URL_TURNOS = '../controlador/HOST_TIME/ESPACIOS/hub_espacios_turnosC.php';
+        var URL_MEDIA = '../controlador/HOST_TIME/ESPACIOS/hub_espacios_mediaC.php';
+        var URL_TARIFAS = '../controlador/HOST_TIME/ESPACIOS/hub_espacios_tarifasC.php';
+        var URL_RESERVAS = '../controlador/HOST_TIME/RESERVAS/hub_reservasC.php';
+
+        var MONTHS = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        var DOW = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'];
+
+        /* ── Estado global ── */
+        var activeEspacioId = null;
+        var activeEspacioNom = null;
+        var activeEspacioCod = null;
+        var activeTarifa = null;
+        var resViewDate = new Date();
+        var resSelected = null;
+
+        /* ════════════════════════════
+           HELPERS
+        ════════════════════════════ */
+        function pad2(n) {
+            return String(n).padStart(2, '0');
         }
 
-        function selectUbicacion(id) {
-            selUbicacion = id;
+        function fmtISO(d) {
+            return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+        }
+
+        function fromISO(s) {
+            var p = s.split('-');
+            return new Date(+p[0], +p[1] - 1, +p[2]);
+        }
+
+        function fmtHuman(d) {
+            return pad2(d.getDate()) + ' de ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+        }
+
+        function todayMN() {
+            var t = new Date();
+            t.setHours(0, 0, 0, 0);
+            return t;
+        }
+
+        /* Calcula fecha fin del rango según tarifa */
+        function calcEndDate(d) {
+            if (!activeTarifa || activeTarifa.unidad_tiempo === 'HORA') return d;
+            var e = new Date(d);
+            e.setMonth(e.getMonth() + activeTarifa.cantidad);
+            e.setDate(e.getDate() - 1);
+            return e;
+        }
+
+        /* ════════════════════════════
+           STEP BAR
+        ════════════════════════════ */
+        function setStep(n) {
+            for (var i = 1; i <= 4; i++) {
+                $('#st' + i).removeClass('bg-primary bg-success bg-secondary')
+                    .addClass(i < n ? 'bg-success' : i === n ? 'bg-primary' : 'bg-secondary');
+            }
+        }
+
+        /* ════════════════════════════
+           STEP 1: UBICACIONES
+        ════════════════════════════ */
+        function cargarUbicaciones() {
+            $.post(URL_UBICACIONES + '?listar=true', {}, function(data) {
+                var html = '';
+                if (!data || !data.length) {
+                    html = '<div class="col-12 text-center text-muted py-3">No hay ubicaciones.</div>';
+                } else {
+                    $.each(data, function(_, u) {
+                        html += '<div class="col-md-4 col-sm-6">' +
+                            '<div class="loc-card" data-id="' + u._id + '">' +
+                            '<h6 class="mb-1 fw-bold">' + u.nombre + '</h6>' +
+                            '<div class="small text-muted">' +
+                            '<div><i class="bx bx-map-pin me-1 text-success"></i>' + u.direccion + '</div>' +
+                            '<div><i class="bx bx-phone me-1 text-success"></i>' + u.telefono + '</div>' +
+                            '</div></div></div>';
+                    });
+                }
+                $('#loc-cards').html(html);
+            }, 'json');
+        }
+
+        $(document).on('click', '.loc-card', function() {
+            $('.loc-card').removeClass('selected');
+            $(this).addClass('selected');
+            selUbicacion = $(this).data('id');
             selPiso = null;
             selTipo = null;
-            selEspacio = null;
-
-            document.querySelectorAll('.loc-card').forEach(c => c.classList.remove('selected'));
-            document.getElementById('loc-' + id).classList.add('selected');
-
-            // render floors
-            const sidebar = document.getElementById('sidebar');
-            const fl = document.getElementById('floor-list');
-            fl.innerHTML = PISOS[id].map(p => `
-    <div class="floor-item" id="fl-${p.id}" onclick="selectPiso(${p.id})">
-      <i class='bx bx-layer'></i> ${p.desc}
-      <span class="floor-badge">${p.espacios}</span>
-    </div>`).join('');
-            sidebar.classList.remove('hidden');
-
-            // update breadcrumb
-            const u = UBICACIONES.find(x => x.id === id);
-            document.getElementById('bc-loc').textContent = u.nombre;
-
             setStep(2);
+            cargarPisos(selUbicacion);
+        });
+
+        /* ════════════════════════════
+           STEP 2: PISOS
+        ════════════════════════════ */
+        function cargarPisos(id_ubicacion) {
+            $.ajax({
+                url: URL_ESPACIOS + '?listar_pisos_por_ubicacion=true',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    id: id_ubicacion
+                },
+                success: function(data) {
+                    var html = '';
+                    if (!Array.isArray(data) || !data.length) {
+                        html = '<div class="p-3 small text-muted text-center">Sin pisos.</div>';
+                    } else {
+                        $.each(data, function(_, p) {
+                            html += '<div class="floor-item" data-id="' + p._id + '">' +
+                                '<i class="bx bx-layer"></i><span>' + p.nombre_piso + '</span></div>';
+                        });
+                    }
+                    $('#floor-list').html(html);
+                    $('#sidebar-col').show();
+                    $('#content-col').removeClass('col-md-12').addClass('col-md-10');
+                    $('#view-locations').hide();
+                    $('#view-spaces').show();
+                }
+            });
         }
 
-        function selectPiso(id) {
-            selPiso = id;
-            selTipo = null;
+        var selPiso = null;
+        var selUbicacion = null;
+        var selTipo = null;
 
-            document.querySelectorAll('.floor-item').forEach(f => f.classList.remove('active'));
-            document.getElementById('fl-' + id).classList.add('active');
-
-            const piso = Object.values(PISOS).flat().find(p => p.id === id);
-            document.getElementById('bc-floor').textContent = piso.desc;
-            document.getElementById('bc-sep1').style.display = '';
-            document.getElementById('bc-floor').style.display = '';
-
+        $(document).on('click', '.floor-item', function() {
+            $('.floor-item').removeClass('active');
+            $(this).addClass('active');
+            selPiso = $(this).data('id');
             setStep(3);
-            renderViewSpaces();
-        }
-
-        function renderViewSpaces() {
-            document.getElementById('view-locations').style.display = 'none';
-            document.getElementById('view-spaces').style.display = 'block';
-
-            // type tabs
-            const tabs = document.getElementById('type-tabs');
-            tabs.innerHTML = TIPOS.map(t => `
-    <div class="type-tab ${selTipo===t.id?'active':''}" id="tt-${t.id}" onclick="selectTipo(${t.id})">
-      <i class='bx ${t.icon}'></i> ${t.nombre}
-    </div>`).join('');
-
+            cargarTipos();
             renderEspacios();
+        });
+
+        /* ════════════════════════════
+           STEP 3: TIPOS
+        ════════════════════════════ */
+        function cargarTipos() {
+            $.ajax({
+                url: URL_ESPACIOS + '?listar_tipos_por_ubicacion_piso=true',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    id_ubicacion: selUbicacion,
+                    id_piso: selPiso
+                },
+                success: function(data) {
+                    var html = '<div class="type-tab active" data-tipo="0"><i class="bx bx-grid-alt"></i> Todos</div>';
+                    $.each(data || [], function(_, t) {
+                        html += '<div class="type-tab" data-tipo="' + t.id_tipo_espacio + '">' +
+                            '<i class="bx bx-category"></i> ' + t.nombre + '</div>';
+                    });
+                    $('#type-tabs').html(html);
+                }
+            });
         }
 
-        function selectTipo(id) {
-            selTipo = id;
-            document.querySelectorAll('.type-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById('tt-' + id).classList.add('active');
-
-            const tipo = TIPOS.find(t => t.id === id);
-            document.getElementById('bc-type').textContent = tipo.nombre;
-            document.getElementById('bc-sep2').style.display = '';
-            document.getElementById('bc-type').style.display = '';
-
+        $(document).on('click', '.type-tab', function() {
+            selTipo = $(this).data('tipo') == 0 ? null : $(this).data('tipo');
+            $('.type-tab').removeClass('active');
+            $(this).addClass('active');
             setStep(4);
             renderEspacios();
-        }
+        });
 
+        /* ════════════════════════════
+           STEP 4: ESPACIOS
+        ════════════════════════════ */
         function renderEspacios() {
-            const cont = document.getElementById('space-cards');
             if (!selPiso) {
-                cont.innerHTML = '';
-                return;
-            }
-            const espacios = selTipo ? getEspacios(selUbicacion, selPiso, selTipo) : getEspacios(selUbicacion, selPiso, 1).concat(getEspacios(selUbicacion, selPiso, 2));
-
-            if (!espacios.length) {
-                cont.innerHTML = `<div class="col-12 empty-state"><i class='bx bx-folder-open'></i><p>No hay espacios disponibles</p></div>`;
+                $('#space-cards').html('');
                 return;
             }
 
-            cont.innerHTML = espacios.map(e => {
-                const amenidades = AMENITIES[e.id_tipo] || AMENITIES[1];
-                return `
-    <div class="col-md-4 col-sm-6">
-      <div class="space-card" id="sc-${e.id}">
-        <div class="space-img" onclick="toggleEspacio(${e.id})">
-          <i class='bx bx-building-house'></i>
-        </div>
-        <div class="space-body" onclick="toggleEspacio(${e.id})">
-          <div class="space-name">${e.nombre}</div>
-          <div class="space-meta">
-            <span><i class='bx bx-user'></i>${e.capacidad} personas</span>
-            <span><i class='bx bx-hash'></i>${e.codigo}</span>
-          </div>
-        </div>
-        <div class="space-detail" id="sd-${e.id}">
-          <div class="space-detail-inner">
-            <div class="section-label mb-2"><i class='bx bx-star me-1'></i>Servicios incluidos</div>
-            ${amenidades.map(a=>`<span class="amenity-tag"><i class='bx bx-check-circle'></i>${a}</span>`).join('')}
-            <div class="tarifa-row mt-2">
-              <span class="tarifa-chip"><i class='bx bx-time-five me-1'></i>$${e.tarifa_hora.toFixed(2)}/hora</span>
-              <span class="tarifa-chip day"><i class='bx bx-sun me-1'></i>$${e.tarifa_dia.toFixed(2)}/día</span>
-            </div>
-            <div class="d-grid mt-3">
-              <button class="btn btn-success btn-sm" onclick="abrirReserva(${e.id}, '${e.nombre}', '${e.codigo}')">
-                <i class='bx bx-calendar-plus me-1'></i>Reservar este espacio
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>`;
-            }).join('');
-        }
+            $('#space-cards').html(
+                '<div class="col-12 text-center py-3 text-muted">' +
+                '<div class="spinner-border spinner-border-sm me-2"></div>Cargando...</div>'
+            );
 
-        function toggleEspacio(id) {
-            const card = document.getElementById('sc-' + id);
-            const det = document.getElementById('sd-' + id);
-            const isOpen = det.classList.contains('open');
-            document.querySelectorAll('.space-detail.open').forEach(d => {
-                d.classList.remove('open');
-                d.closest('.space-card').classList.remove('expanded');
+            $.ajax({
+                url: URL_ESPACIOS + '?listar_por_ubicacion_piso=true',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    id_ubicacion: selUbicacion,
+                    id_piso: selPiso
+                },
+                success: function(data) {
+                    var lista = data || [];
+
+                    // Filtro de tipo solo en cliente (ya viene filtrado por ubicación+piso desde el servidor)
+                    if (selTipo) {
+                        lista = $.grep(lista, function(e) {
+                            return parseInt(e.id_tipo_espacio) === parseInt(selTipo);
+                        });
+                    }
+
+                    if (!lista.length) {
+                        $('#space-cards').html(
+                            '<div class="col-12 text-center text-muted py-4">No hay espacios.</div>'
+                        );
+                        return;
+                    }
+
+                    var html = '';
+                    $.each(lista, function(_, e) {
+                        var imgWrap = e.imagen ?
+                            '<div class="space-img-wrap"><img src="' + e.imagen + '" alt="' + e.nombre + '" loading="lazy"></div>' :
+                            '<div class="space-img-placeholder"><i class="bx bx-building-house"></i></div>';
+
+                        html +=
+                            '<div class="col-md-4 col-sm-6">' +
+                            '<div class="space-card">' +
+                            imgWrap +
+                            '<div class="p-3">' +
+                            '<div class="fw-bold mb-1">' + e.nombre + '</div>' +
+                            '<div class="small text-muted mb-1">' +
+                            '<i class="bx bx-category me-1"></i>' + (e.nombre_tipo_espacio || '—') +
+                            ' &nbsp;·&nbsp; <i class="bx bx-hash me-1"></i>' + e.codigo +
+                            '</div>' +
+                            '<div class="small text-muted mb-3">' +
+                            '<i class="bx bx-user me-1"></i>' + e.capacidad_minima + ' - ' + e.capacidad_maxima + ' personas' +
+                            '</div>' +
+                            '<div class="d-flex gap-2">' +
+                            '<button class="btn btn-outline-secondary btn-sm flex-fill btn-galeria"' +
+                            ' data-id="' + e._id + '" data-nombre="' + e.nombre + '" data-codigo="' + e.codigo + '">' +
+                            '<i class="bx bx-images me-1"></i>Galería</button>' +
+                            '<button class="btn btn-primary btn-sm flex-fill btn-pre-reservar"' +
+                            ' data-id="' + e._id + '" data-nombre="' + e.nombre + '" data-codigo="' + e.codigo + '">' +
+                            '<i class="bx bx-calendar-plus me-1"></i>Reservar</button>' +
+                            '</div>' +
+                            '</div></div></div>';
+                    });
+                    $('#space-cards').html(html);
+                },
+                error: function() {
+                    $('#space-cards').html(
+                        '<div class="col-12 text-center text-danger py-4">Error al cargar espacios.</div>'
+                    );
+                }
             });
-            if (!isOpen) {
-                det.classList.add('open');
-                card.classList.add('expanded');
-            }
         }
 
-        function goBackToLocations() {
-            document.getElementById('view-locations').style.display = 'block';
-            document.getElementById('view-spaces').style.display = 'none';
-            document.getElementById('sidebar').classList.add('hidden');
+        window.goBackToLocations = function() {
             selPiso = null;
             selTipo = null;
-            document.getElementById('bc-sep1').style.display = 'none';
-            document.getElementById('bc-floor').style.display = 'none';
-            document.getElementById('bc-sep2').style.display = 'none';
-            document.getElementById('bc-type').style.display = 'none';
-            document.getElementById('bc-loc').textContent = 'Ubicaciones';
+            $('#view-spaces').hide();
+            $('#view-locations').show();
+            $('#sidebar-col').hide();
+            $('#content-col').removeClass('col-md-10').addClass('col-md-12');
             setStep(1);
-        }
+        };
 
-        /* ════════════════════════════════════════
-           STEPS
-        ════════════════════════════════════════ */
-        function setStep(n) {
-            for (let i = 1; i <= 4; i++) {
-                const el = document.getElementById('st' + i);
-                el.className = 'step-pill ' + (i < n ? 'done' : i === n ? 'active' : '');
-            }
-        }
+        /* ════════════════════════════
+           MODAL GALERÍA
+        ════════════════════════════ */
+        $(document).on('click', '.btn-galeria', function() {
+            var id = $(this).data('id');
+            $('#gal-nombre').text($(this).data('nombre'));
+            $('#gal-codigo').text($(this).data('codigo'));
+            $('#carousel-fotos-inner').html('');
+            $('#gal-indicators').html('');
+            $('#gal-thumbs').html('');
+            $('#gal-videos-list').html('');
+            $('#gal-fotos-empty,#gal-videos-empty').hide();
+            $('#gal-fotos-count,#gal-videos-count').text('0');
+            $('#tab-fotos-btn').tab('show');
 
-        /* ════════════════════════════════════════
-           CALENDAR
-        ════════════════════════════════════════ */
-        let calDate = new Date();
-        let calSelStart = null,
-            calSelEnd = null;
-        let activeEspacioId = null;
+            $.ajax({
+                url: URL_MEDIA + '?listar=true',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    id_espacio: id
+                },
+                success: function(data) {
+                    var fotos = (data || []).filter(function(m) {
+                        return m.tipo === 'imagen';
+                    });
+                    var videos = (data || []).filter(function(m) {
+                        return m.tipo === 'video';
+                    });
+                    fotos.sort(function(a, b) {
+                        return (b.es_principal || 0) - (a.es_principal || 0);
+                    });
 
-        const MONTHS = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+                    $('#gal-fotos-count').text(fotos.length);
+                    $('#gal-videos-count').text(videos.length);
 
-        function abrirReserva(id, nombre, codigo) {
-            activeEspacioId = id;
-            document.getElementById('modal-space-name').textContent = nombre;
-            document.getElementById('modal-space-sub').textContent = codigo;
-            calDate = new Date();
-            calSelStart = null;
-            calSelEnd = null;
-            renderCalendar();
-            document.getElementById('inp-fecha-dia').value = '';
-            document.getElementById('inp-fecha-ini').value = '';
-            document.getElementById('inp-fecha-fin').value = '';
-            document.getElementById('resumen-reserva').textContent = 'Selecciona una fecha para ver el resumen.';
-            document.getElementById('turnos-dia').style.display = 'none';
-            new bootstrap.Modal(document.getElementById('modalReserva')).show();
-        }
-
-        function calPrev() {
-            calDate.setMonth(calDate.getMonth() - 1);
-            renderCalendar();
-        }
-
-        function calNext() {
-            calDate.setMonth(calDate.getMonth() + 1);
-            renderCalendar();
-        }
-
-        function renderCalendar() {
-            document.getElementById('cal-month-label').textContent = MONTHS[calDate.getMonth()] + ' ' + calDate.getFullYear();
-            const grid = document.getElementById('cal-grid');
-            // keep headers
-            const headers = Array.from(grid.querySelectorAll('.cal-day-head'));
-            grid.innerHTML = '';
-            headers.forEach(h => grid.appendChild(h));
-
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const year = calDate.getFullYear(),
-                month = calDate.getMonth();
-            const first = new Date(year, month, 1);
-            let startDow = first.getDay(); // 0=Sun
-            // shift to Mon-based: Mon=0
-            startDow = (startDow + 6) % 7;
-
-            for (let i = 0; i < startDow; i++) {
-                const e = document.createElement('div');
-                e.className = 'cal-day empty';
-                grid.appendChild(e);
-            }
-
-            const days = new Date(year, month + 1, 0).getDate();
-            for (let d = 1; d <= days; d++) {
-                const date = new Date(year, month, d);
-                const key = fmtDate(date);
-                const el = document.createElement('div');
-                el.className = 'cal-day';
-                el.textContent = d;
-
-                if (date < today) el.classList.add('past');
-                else {
-                    if (date.getTime() === today.getTime()) el.classList.add('today');
-                    // has shift: every day has shifts (mock)
-                    el.classList.add('has-shift');
-                    // reserved
-                    if (RESERVAS[key]) el.classList.add('reserved');
-                    // selected range
-                    if (calSelStart && calSelEnd) {
-                        if (date >= calSelStart && date <= calSelEnd) el.classList.add('in-range');
-                        if (date.getTime() === calSelStart.getTime()) {
-                            el.classList.remove('in-range');
-                            el.classList.add('range-start');
-                        }
-                        if (date.getTime() === calSelEnd.getTime()) {
-                            el.classList.remove('in-range');
-                            el.classList.add('range-end');
-                        }
-                    } else if (calSelStart && date.getTime() === calSelStart.getTime()) {
-                        el.classList.add('selected');
-                    }
-
-                    el.onclick = () => selectCalDay(date);
-                }
-                grid.appendChild(el);
-            }
-        }
-
-        function selectCalDay(date) {
-            const tipo = document.querySelector('input[name="tipo_reserva"]:checked').value;
-            if (tipo === 'dia') {
-                calSelStart = date;
-                calSelEnd = null;
-                document.getElementById('inp-fecha-dia').value = fmtDate(date);
-                mostrarTurnosDia(date);
-                updateResumen();
-            } else {
-                if (!calSelStart || (calSelStart && calSelEnd)) {
-                    calSelStart = date;
-                    calSelEnd = null;
-                    document.getElementById('inp-fecha-ini').value = fmtDate(date);
-                    document.getElementById('inp-fecha-fin').value = '';
-                } else {
-                    if (date >= calSelStart) {
-                        calSelEnd = date;
-                        document.getElementById('inp-fecha-fin').value = fmtDate(date);
+                    if (!fotos.length) {
+                        $('#gal-fotos-empty').show();
                     } else {
-                        calSelEnd = calSelStart;
-                        calSelStart = date;
-                        document.getElementById('inp-fecha-ini').value = fmtDate(date);
-                        document.getElementById('inp-fecha-fin').value = fmtDate(calSelEnd);
+                        var carHtml = '',
+                            indHtml = '',
+                            thumbHtml = '';
+                        fotos.forEach(function(f, i) {
+                            var actCar = i === 0 ? 'active' : '';
+                            var actInd = i === 0 ? 'active' : '';
+                            carHtml +=
+                                '<div class="carousel-item h-100 ' + actCar + '">' +
+                                '<img src="' + f.url_archivo + '" class="d-block w-100 h-100"' +
+                                ' style="object-fit:contain;" alt="' + escAttr(f.nombre_archivo) + '">' +
+                                (f.es_principal == 1 ?
+                                    '<div class="carousel-caption d-none d-md-block pb-1">' +
+                                    '<span class="badge bg-warning text-dark"><i class="bx bxs-star me-1"></i>Principal</span></div>' :
+                                    '') +
+                                '</div>';
+                            indHtml +=
+                                '<button type="button" data-bs-target="#carousel-fotos"' +
+                                ' data-bs-slide-to="' + i + '" class="' + actInd + '"' +
+                                (i === 0 ? ' aria-current="true"' : '') + ' aria-label="Foto ' + i + '"></button>';
+                            thumbHtml +=
+                                '<div class="gal-thumb' + (i === 0 ? ' active' : '') + '" data-idx="' + i + '">' +
+                                '<img src="' + f.url_archivo + '" alt="" loading="lazy">' +
+                                '</div>';
+                        });
+                        $('#carousel-fotos-inner').html(carHtml);
+                        $('#gal-indicators').html(indHtml);
+                        $('#gal-thumbs').html(thumbHtml);
                     }
-                    updateResumen();
+
+                    if (!videos.length) {
+                        $('#gal-videos-empty').show();
+                    } else {
+                        var vidHtml = '';
+                        videos.forEach(function(v) {
+                            vidHtml +=
+                                '<div class="col-md-6">' +
+                                '<div class="card border">' +
+                                '<div class="ratio ratio-16x9">' +
+                                '<video controls preload="metadata" class="rounded-top"' +
+                                ' style="background:#000; object-fit:contain;">' +
+                                '<source src="' + v.url_archivo + '" type="video/' + v.formato + '">' +
+                                '</video></div>' +
+                                '<div class="card-footer py-1 px-2">' +
+                                '<small class="text-muted text-truncate d-block">' +
+                                '<i class="bx bx-video me-1"></i>' + v.nombre_archivo +
+                                '</small></div></div></div>';
+                        });
+                        $('#gal-videos-list').html(vidHtml);
+                    }
                 }
-            }
-            renderCalendar();
-        }
+            });
+            $('#modalGaleria').modal('show');
+        });
 
-        function mostrarTurnosDia(date) {
-            const dow = date.getDay(); // 0-6
-            const cont = document.getElementById('turnos-dia');
-            const list = document.getElementById('turnos-dia-list');
-            // show all shifts (mock: all shifts available every day)
-            list.innerHTML = TURNOS.map(t => `
-    <span class="turno-chip" style="background:${t.color}">${t.nombre}: ${t.entrada} – ${t.salida}</span>`).join('');
-            cont.style.display = '';
-        }
+        $(document).on('click', '.gal-thumb', function() {
+            var idx = $(this).data('idx');
+            $('#carousel-fotos').carousel(idx);
+            $('.gal-thumb').removeClass('active');
+            $(this).addClass('active');
+        });
+        $('#carousel-fotos').on('slid.bs.carousel', function(e) {
+            $('.gal-thumb').removeClass('active');
+            $('.gal-thumb[data-idx="' + e.to + '"]').addClass('active');
+        });
+        $('#modalGaleria').on('hide.bs.modal', function() {
+            $(this).find('video').each(function() {
+                this.pause();
+                this.currentTime = 0;
+            });
+        });
 
-        function updateResumen() {
-            const tipo = document.querySelector('input[name="tipo_reserva"]:checked').value;
-            const res = document.getElementById('resumen-reserva');
-            if (tipo === 'dia' && calSelStart) {
-                res.innerHTML = `<strong>Fecha:</strong> ${calSelStart.toLocaleDateString('es-EC',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}<br>Elige un turno y confirma.`;
-            } else if (tipo === 'rango' && calSelStart && calSelEnd) {
-                const days = Math.round((calSelEnd - calSelStart) / (1000 * 60 * 60 * 24)) + 1;
-                res.innerHTML = `<strong>Desde:</strong> ${fmtDate(calSelStart)}<br><strong>Hasta:</strong> ${fmtDate(calSelEnd)}<br><strong>Días:</strong> ${days}`;
-            }
-        }
+        /* ════════════════════════════
+           MODAL TARIFAS (pre-reserva)
+        ════════════════════════════ */
+        $(document).on('click', '.btn-pre-reservar', function() {
+            activeEspacioId = $(this).data('id');
+            activeEspacioNom = $(this).data('nombre');
+            activeEspacioCod = $(this).data('codigo');
+            activeTarifa = null;
 
-        function syncRange() {
-            const ini = document.getElementById('inp-fecha-ini').value;
-            const fin = document.getElementById('inp-fecha-fin').value;
-            if (ini) {
-                calSelStart = new Date(ini + 'T00:00:00');
-            }
-            if (fin) {
-                calSelEnd = new Date(fin + 'T00:00:00');
-            }
-            if (ini && fin) updateResumen();
-            renderCalendar();
-        }
+            $('#tar-sub').text(activeEspacioNom);
+            $('#tar-lista').html('').hide();
+            $('#tar-empty').hide();
+            $('#tar-loading').show();
+            $('#btn-continuar-reserva').prop('disabled', true);
 
-        function toggleTipoReserva() {
-            const tipo = document.querySelector('input[name="tipo_reserva"]:checked').value;
-            document.getElementById('opt-dia').style.display = tipo === 'dia' ? '' : 'none';
-            document.getElementById('opt-rango').style.display = tipo === 'rango' ? '' : 'none';
-            calSelStart = null;
-            calSelEnd = null;
-            document.getElementById('turnos-dia').style.display = 'none';
-            renderCalendar();
-        }
-
-        function confirmarReserva() {
-            const tipo = document.querySelector('input[name="tipo_reserva"]:checked').value;
-            let ok = false;
-            if (tipo === 'dia' && calSelStart) {
-                RESERVAS[fmtDate(calSelStart)] = activeEspacioId;
-                ok = true;
-            } else if (tipo === 'rango' && calSelStart && calSelEnd) {
-                let d = new Date(calSelStart);
-                while (d <= calSelEnd) {
-                    RESERVAS[fmtDate(d)] = activeEspacioId;
-                    d.setDate(d.getDate() + 1);
+            $.ajax({
+                url: URL_TARIFAS + '?listar=true',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    id_espacio: activeEspacioId
+                },
+                success: function(data) {
+                    $('#tar-loading').hide();
+                    if (!data || !data.length) {
+                        $('#tar-empty').show();
+                        return;
+                    }
+                    renderListaTarifas(data);
+                    $('#tar-lista').show();
+                },
+                error: function() {
+                    $('#tar-loading').hide();
+                    $('#tar-empty').show();
                 }
-                ok = true;
+            });
+            $('#modalTarifas').modal('show');
+        });
+
+        function renderListaTarifas(tarifas) {
+            var html = '';
+            tarifas.forEach(function(t) {
+                var unidad = t.unidad_tiempo === 'HORA' ? 'hora' : 'mes';
+                var duracion = t.cantidad > 1 ? t.cantidad + ' ' + unidad + 's' : '1 ' + unidad;
+                var icono = t.unidad_tiempo === 'HORA' ? 'bx-time' : 'bx-calendar';
+                html +=
+                    '<button type="button" class="list-group-item list-group-item-action tar-item py-2 px-3"' +
+                    ' data-id="' + t._id + '" data-nombre="' + escAttr(t.nombre_plan) + '"' +
+                    ' data-precio="' + t.precio + '" data-cantidad="' + t.cantidad + '"' +
+                    ' data-unidad="' + t.unidad_tiempo + '">' +
+                    '<div class="d-flex align-items-center gap-3">' +
+                    '<div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center flex-shrink-0"' +
+                    ' style="width:38px;height:38px;">' +
+                    '<i class="bx ' + icono + ' text-primary"></i></div>' +
+                    '<div class="flex-grow-1">' +
+                    '<div class="fw-semibold small">' + t.nombre_plan + '</div>' +
+                    '<small class="text-muted"><i class="bx bx-time-five me-1"></i>' + duracion + ' por reserva</small>' +
+                    '</div>' +
+                    '<span class="fw-bold text-success fs-6">$' + parseFloat(t.precio).toFixed(2) + '</span>' +
+                    '</div></button>';
+            });
+            $('#tar-lista').html(html);
+        }
+
+        $(document).on('click', '.tar-item', function() {
+            $('.tar-item').removeClass('active');
+            $(this).addClass('active');
+            activeTarifa = {
+                _id: $(this).data('id'),
+                nombre_plan: $(this).data('nombre'),
+                precio: parseFloat($(this).data('precio')),
+                cantidad: parseInt($(this).data('cantidad')),
+                unidad_tiempo: $(this).data('unidad')
+            };
+            $('#btn-continuar-reserva').prop('disabled', false);
+        });
+
+        $('#btn-continuar-reserva').on('click', function() {
+            $('#modalTarifas').modal('hide');
+            abrirModalReserva();
+        });
+
+        /* ════════════════════════════
+           MODAL RESERVA
+        ════════════════════════════ */
+        function abrirModalReserva() {
+            resViewDate = new Date();
+            resViewDate.setHours(0, 0, 0, 0);
+            resSelected = null;
+
+            $('#btn-confirmar').prop('disabled', true);
+            $('#res-periodo').hide();
+            $('#res-total-box').removeClass('visible');
+            $('#label-hora-fin').html('');
+            $('#inp-hora-inicio').val('08:00');
+            $('#inp-fecha-directa').val('');
+            $('#err-fecha-directa').text('');
+            $('#ddl_clientes').val(null).trigger('change');
+
+            $('#res-space-nombre').text(activeEspacioNom);
+            $('#res-space-codigo').text(activeEspacioCod);
+
+            var unidad = activeTarifa.unidad_tiempo === 'HORA' ? 'hora' : 'mes';
+            var duracion = activeTarifa.cantidad > 1 ?
+                activeTarifa.cantidad + ' ' + unidad + 's por reserva' :
+                '1 ' + unidad + ' por reserva';
+
+            $('#res-tarifa-badge').text(activeTarifa.nombre_plan);
+            $('#res-tarifa-nombre').text(activeTarifa.nombre_plan);
+            $('#res-tarifa-detalle').text(duracion);
+            $('#res-tarifa-precio').text('$' + activeTarifa.precio.toFixed(2));
+
+            if (activeTarifa.unidad_tiempo === 'HORA') {
+                $('#res-cal-label').text('Selecciona el día');
+                $('#seccion-hora').show();
+            } else {
+                $('#res-cal-label').text('Selecciona la fecha de inicio');
+                $('#seccion-hora').hide();
             }
-            if (!ok) {
-                alert('Selecciona una fecha primero.');
+
+            renderResCalendar();
+            $('#modalReserva').modal('show');
+        }
+
+        /* ════════════════════════════
+           CALENDARIO — render
+        ════════════════════════════ */
+        function renderResCalendar() {
+            var yr = resViewDate.getFullYear();
+            var mo = resViewDate.getMonth();
+            $('#res-month-label').text(MONTHS[mo] + ' ' + yr);
+            $('#res-cal-grid').html(buildMonthGrid(yr, mo));
+        }
+
+        $('#btn-res-prev').on('click', function() {
+            resViewDate.setMonth(resViewDate.getMonth() - 1);
+            renderResCalendar();
+        });
+        $('#btn-res-next').on('click', function() {
+            resViewDate.setMonth(resViewDate.getMonth() + 1);
+            renderResCalendar();
+        });
+
+        /* ════════════════════════════
+           CLICK DÍA EN CALENDARIO
+        ════════════════════════════ */
+        $(document).on('click', '#res-cal-grid .hub-cal-day', function() {
+            if ($(this).hasClass('past') || $(this).hasClass('empty')) return;
+            var ds = $(this).data('date');
+            if (!ds) return;
+            resSelected = fromISO(ds);
+            // Sincronizar el input de texto
+            $('#inp-fecha-directa').val(ds);
+            $('#err-fecha-directa').text('');
+            renderResCalendar();
+            calcularPeriodo();
+        });
+
+        /* ════════════════════════════
+           INPUT FECHA DIRECTA
+        ════════════════════════════ */
+        $('#inp-fecha-directa').on('change', function() {
+            var val = $(this).val();
+            var $err = $('#err-fecha-directa');
+
+            if (!val) {
+                resSelected = null;
+                $err.text('');
+                renderResCalendar();
+                calcularPeriodo();
                 return;
             }
-            renderCalendar();
-            bootstrap.Modal.getInstance(document.getElementById('modalReserva')).hide();
 
-            // small toast
-            const toast = document.createElement('div');
-            toast.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#2d6a4f;color:#fff;padding:12px 20px;border-radius:10px;font-size:.88rem;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.2)';
-            toast.innerHTML = '<i class="bx bx-check-circle me-2"></i>¡Reserva registrada con éxito!';
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
+            var d = fromISO(val);
+            var t = todayMN();
+
+            if (d < t) {
+                $err.text('La fecha no puede ser anterior a hoy.');
+                $(this).val('');
+                resSelected = null;
+                renderResCalendar();
+                calcularPeriodo();
+                return;
+            }
+
+            $err.text('');
+            resSelected = d;
+            // Navegar el calendario al mes de la fecha escrita
+            resViewDate = new Date(d.getFullYear(), d.getMonth(), 1);
+            renderResCalendar();
+            calcularPeriodo();
+        });
+
+        /* ════════════════════════════
+           RECALCULAR AL CAMBIAR HORA
+        ════════════════════════════ */
+        $('#inp-hora-inicio').on('change input', function() {
+            calcularPeriodo();
+        });
+
+        /* ════════════════════════════
+           CALCULAR PERÍODO
+        ════════════════════════════ */
+        function calcularPeriodo() {
+            if (!resSelected || !activeTarifa) {
+                $('#res-periodo').hide();
+                $('#res-total-box').removeClass('visible');
+                $('#btn-confirmar').prop('disabled', true);
+                return;
+            }
+
+            var texto = '';
+            var fechaIni = fmtHuman(resSelected);
+
+            if (activeTarifa.unidad_tiempo === 'HORA') {
+                var horaIni = $('#inp-hora-inicio').val() || '08:00';
+                var partes = horaIni.split(':');
+                var totalMins = parseInt(partes[0]) * 60 + parseInt(partes[1]) + activeTarifa.cantidad * 60;
+                var hFin = Math.floor(totalMins / 60) % 24;
+                var mFin = totalMins % 60;
+                var diasExtra = Math.floor(totalMins / 1440);
+                var labelFin = '';
+                if (diasExtra > 0) {
+                    var dFin = new Date(resSelected);
+                    dFin.setDate(dFin.getDate() + diasExtra);
+                    labelFin = fmtHuman(dFin) + ' ';
+                }
+                var horaFinStr = pad2(hFin) + ':' + pad2(mFin);
+                texto = '<strong>' + fechaIni + '</strong> de <strong>' + horaIni + '</strong> a <strong>' + labelFin + horaFinStr + '</strong>';
+                $('#label-hora-fin').html(
+                    '<span class="badge bg-light text-dark border">' +
+                    '<i class="bx bx-time me-1 text-primary"></i>' +
+                    'Fin: ' + (labelFin || '') + horaFinStr + '</span>');
+            } else {
+                var endDate = calcEndDate(resSelected);
+                var fechaFin = fmtHuman(endDate);
+                texto = 'Del <strong>' + fechaIni + '</strong> al <strong>' + fechaFin + '</strong>' +
+                    ' &nbsp;·&nbsp; ' + activeTarifa.cantidad + ' mes' + (activeTarifa.cantidad !== 1 ? 'es' : '');
+            }
+
+            $('#res-periodo-texto').html(texto);
+            $('#res-periodo').show();
+            $('#res-total-valor').text('$' + activeTarifa.precio.toFixed(2));
+            $('#res-total-box').addClass('visible');
+            $('#btn-confirmar').prop('disabled', false);
         }
 
-        function fmtDate(d) {
-            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        /* ════════════════════════════
+           BUILD MONTH GRID (corregido)
+        ════════════════════════════ */
+        function buildMonthGrid(year, month) {
+            var t = todayMN();
+            var endDate = (resSelected && activeTarifa && activeTarifa.unidad_tiempo !== 'HORA') ?
+                calcEndDate(resSelected) : null;
+
+            var html = '';
+            DOW.forEach(function(d) {
+                html += '<div class="hub-cal-head">' + d + '</div>';
+            });
+
+            var startDow = (new Date(year, month, 1).getDay() + 6) % 7;
+            var days = new Date(year, month + 1, 0).getDate();
+
+            for (var i = 0; i < startDow; i++) html += '<div class="hub-cal-day empty"></div>';
+
+            for (var d = 1; d <= days; d++) {
+                var dt = new Date(year, month, d);
+                var ds = fmtISO(dt);
+                var cls = 'hub-cal-day';
+
+                if (dt < t) {
+                    cls += ' past';
+                    html += '<div class="' + cls + '">' + d + '</div>';
+                    continue;
+                }
+
+                if (dt.getTime() === t.getTime()) cls += ' today';
+
+                if (resSelected && dt.getTime() === resSelected.getTime()) {
+                    // Día de inicio seleccionado
+                    cls += ' selected';
+                } else if (endDate && resSelected) {
+                    if (dt > resSelected && dt.getTime() === endDate.getTime()) {
+                        // Día final del rango
+                        cls += ' range-end';
+                    } else if (dt > resSelected && dt < endDate) {
+                        // Días intermedios del rango
+                        cls += ' in-range';
+                    }
+                }
+
+                html += '<div class="' + cls + '" data-date="' + ds + '">' + d + '</div>';
+            }
+            return html;
         }
-    </script>
+
+        /* ════════════════════════════
+           CONFIRMAR RESERVA
+        ════════════════════════════ */
+        $('#btn-confirmar').on('click', function() {
+            if (!resSelected) {
+                Swal.fire('', 'Selecciona una fecha.', 'warning');
+                return;
+            }
+            if (!$('#ddl_clientes').val()) {
+                Swal.fire('', 'Selecciona una persona.', 'warning');
+                return;
+            }
+
+            var fechaIni = fmtISO(resSelected);
+            var fechaFin = fechaIni;
+
+            if (activeTarifa.unidad_tiempo === 'HORA') {
+                var horaIni = $('#inp-hora-inicio').val() || '08:00';
+                var p = horaIni.split(':');
+                var totalMins = parseInt(p[0]) * 60 + parseInt(p[1]) + activeTarifa.cantidad * 60;
+                var diasExtra = Math.floor(totalMins / 1440);
+                if (diasExtra > 0) {
+                    var dFin2 = new Date(resSelected);
+                    dFin2.setDate(dFin2.getDate() + diasExtra);
+                    fechaFin = fmtISO(dFin2);
+                }
+            } else {
+                var endDate2 = calcEndDate(resSelected);
+                fechaFin = fmtISO(endDate2);
+            }
+
+            var params = {
+                id_espacio: activeEspacioId,
+                th_per_id: $('#ddl_clientes').val(),
+                inicio: fechaIni,
+                fin: fechaFin,
+                id_tarifa: activeTarifa._id,
+                costo_total: activeTarifa.precio
+            };
+
+            $.ajax({
+                url: URL_RESERVAS + '?crear_reserva=true',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    parametros: params
+                },
+                success: function(r) {
+                    var msg = (r && r[0] && r[0].message) ? r[0].message : 'Reserva registrada.';
+                    Swal.fire({
+                        icon: 'success',
+                        title: msg
+                    });
+                    $('#modalReserva').modal('hide');
+                },
+                error: function() {
+                    Swal.fire('', 'Error al guardar la reserva.', 'error');
+                }
+            });
+        });
+
+        /* ════════════════════════════
+           HELPER
+        ════════════════════════════ */
+        function escAttr(s) {
+            return (s || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        }
+
+        function resetearSeleccion() {
+            resSelected = null;
+            activeTarifa = null;
+            activeEspacioId = null;
+            activeEspacioNom = null;
+            activeEspacioCod = null;
+            resViewDate = new Date();
+            resViewDate.setHours(0, 0, 0, 0);
+        }
+        $(document).on('click', '.loc-card', function() {
+            $('.loc-card').removeClass('selected');
+            $(this).addClass('selected');
+            selUbicacion = $(this).data('id');
+            selPiso = null;
+            selTipo = null;
+
+            // ── Limpiar espacios y selección
+            resetearSeleccion();
+            $('#space-cards').html('');
+            $('#type-tabs').html('');
+            $('#floor-list .floor-item').removeClass('active');
+
+            setStep(2);
+            cargarPisos(selUbicacion);
+        });
+        $(document).on('click', '.floor-item', function() {
+            $('.floor-item').removeClass('active');
+            $(this).addClass('active');
+            selPiso = $(this).data('id');
+            selTipo = null;
+
+            // ── Limpiar espacios y selección
+            resetearSeleccion();
+            $('#space-cards').html('');
+            $('.type-tab').removeClass('active');
+
+            setStep(3);
+            cargarTipos();
+            renderEspacios();
+        });
+
+        /* ════════════════════════════
+           INIT
+        ════════════════════════════ */
+        setStep(1);
+        cargarUbicaciones();
+    });
+</script>

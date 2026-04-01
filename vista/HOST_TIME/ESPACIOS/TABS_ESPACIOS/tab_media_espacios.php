@@ -235,6 +235,7 @@
     </div>
 </div>
 
+<!-- Modal: Subir archivo -->
 <div class="modal fade" id="modal_media" tabindex="-1"
     data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
@@ -301,6 +302,7 @@
     </div>
 </div>
 
+<!-- Modal: Preview imagen -->
 <div class="modal fade" id="modal_preview_img" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content bg-dark border-0">
@@ -316,9 +318,8 @@
                     style="max-width:100%; max-height:70vh; object-fit:contain; border-radius:8px;">
             </div>
             <div class="modal-footer border-0 pt-0 justify-content-center gap-2">
-                <button class="btn btn-warning btn-sm" id="btn_set_principal_preview"
+                <button class="btn btn-sm" id="btn_set_principal_preview"
                     onclick="set_principal_desde_preview()">
-                    <i class="bx bx-star me-1"></i>Marcar como principal
                 </button>
                 <button class="btn btn-danger btn-sm" id="btn_eliminar_preview"
                     onclick="eliminar_desde_preview()">
@@ -329,7 +330,7 @@
     </div>
 </div>
 
-
+<!-- Modal: Preview video -->
 <div class="modal fade" id="modal_preview_vid" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content bg-dark border-0">
@@ -357,8 +358,13 @@
 
 <script>
     var _media_preview_id = null;
+    var _media_preview_principal = 0; // guarda el estado actual de es_principal
     var _media_preview_espacio = '<?= $_id ?>';
 
+
+    /* ============================================================
+       CARGA Y RENDERIZADO
+    ============================================================ */
 
     function cargar_media() {
         $.ajax({
@@ -405,35 +411,40 @@
         }
 
         items.forEach(function(m) {
-            var card = tipo === 'imagen' ?
-                card_imagen(m) :
-                card_video(m);
+            var card = tipo === 'imagen' ? card_imagen(m) : card_video(m);
             $grid.append(card);
         });
     }
 
     function card_imagen(m) {
-        var principal = m.es_principal == 1 ?
+        var esPrincipal = m.es_principal == 1;
+
+        var badgePrincipal = esPrincipal ?
             '<span class="badge-principal"><i class="bx bxs-star" style="font-size:.65rem;"></i> Principal</span>' :
             '';
+
+        // Botón estrella: siempre visible, cambia estilo y tooltip según estado
+        var btnEstrella =
+            '<button class="btn ' + (esPrincipal ? 'btn-warning' : 'btn-outline-light') + ' btn-sm rounded-circle" ' +
+            'style="width:34px;height:34px;" ' +
+            'title="' + (esPrincipal ? 'Quitar como principal' : 'Marcar como principal') + '" ' +
+            'onclick="set_principal(' + m._id + ', event)">' +
+            '<i class="bx ' + (esPrincipal ? 'bxs-star' : 'bx-star') + '"></i>' +
+            '</button>';
 
         var tam = formatear_bytes(m.tamanio_bytes);
 
         return '<div class="media-card" data-id="' + m._id + '">' +
-            principal +
+            badgePrincipal +
             '<img class="media-thumb" src="' + m.url_archivo + '?' + Date.now() + '" alt="' + m.nombre_archivo + '" loading="lazy">' +
             '<div class="media-overlay">' +
             '<button class="btn btn-light btn-sm rounded-circle" style="width:34px;height:34px;" ' +
-            'onclick="preview_imagen(' + m._id + ',\'' + escape_attr(m.url_archivo) + '\',\'' + escape_attr(m.nombre_archivo) + '\')">' +
+            'onclick="preview_imagen(' + m._id + ',\'' + escape_attr(m.url_archivo) + '\',\'' + escape_attr(m.nombre_archivo) + '\',' + m.es_principal + ')">' +
             '<i class="bx bx-expand-alt"></i>' +
             '</button>' +
-            (m.es_principal != 1 ?
-                '<button class="btn btn-warning btn-sm rounded-circle" style="width:34px;height:34px;" ' +
-                'title="Marcar principal" onclick="set_principal(' + m._id + ',event)">' +
-                '<i class="bx bx-star"></i>' +
-                '</button>' : '') +
+            btnEstrella +
             '<button class="btn btn-danger btn-sm rounded-circle" style="width:34px;height:34px;" ' +
-            'onclick="eliminar_media(' + m._id + ',event)">' +
+            'onclick="eliminar_media(' + m._id + ', event)">' +
             '<i class="bx bx-trash"></i>' +
             '</button>' +
             '</div>' +
@@ -455,7 +466,7 @@
             '<i class="bx bx-play"></i>' +
             '</button>' +
             '<button class="btn btn-danger btn-sm rounded-circle" style="width:34px;height:34px;" ' +
-            'onclick="eliminar_media(' + m._id + ',event)">' +
+            'onclick="eliminar_media(' + m._id + ', event)">' +
             '<i class="bx bx-trash"></i>' +
             '</button>' +
             '</div>' +
@@ -464,6 +475,10 @@
             '</div>';
     }
 
+
+    /* ============================================================
+       MODAL UPLOAD
+    ============================================================ */
 
     function abrir_modal_media() {
         $('#form_media')[0].reset();
@@ -477,7 +492,6 @@
         $('#upload_progress_bar').css('width', '0%');
         $('#modal_media').modal('show');
     }
-
 
     $('#archivo_media').on('change', function() {
         mostrar_preview_archivo(this.files[0]);
@@ -497,12 +511,9 @@
         dropZone.classList.remove('drag-over');
         var file = e.dataTransfer.files[0];
         if (!file) return;
-
-        // Asignar al input
         var dt = new DataTransfer();
         dt.items.add(file);
         document.getElementById('archivo_media').files = dt.files;
-
         mostrar_preview_archivo(file);
     });
 
@@ -514,7 +525,6 @@
         var mime = file.type;
         var tam = file.size;
 
-        // Limpiar
         $('#upload_preview_img').hide();
         $('#upload_preview_vid').hide().attr('src', '');
         $('#lbl_tipo_archivo').text('');
@@ -541,8 +551,7 @@
                 return;
             }
             var url = URL.createObjectURL(file);
-            var $vid = $('#upload_preview_vid');
-            $vid.attr('src', url).show();
+            $('#upload_preview_vid').attr('src', url).show();
             $('#lbl_tipo_archivo').html('<i class="bx bx-video me-1 text-primary"></i>Video · ' + formatear_bytes(tam));
             $('#btn_guardar_media').prop('disabled', false);
 
@@ -555,7 +564,6 @@
         $('#upload_preview_nombre small').text(file.name);
         $('#upload_preview_wrap').show();
     }
-
 
     function guardar_media() {
         var archivos = document.getElementById('archivo_media').files;
@@ -611,16 +619,40 @@
         });
     }
 
-    function preview_imagen(id, url, nombre) {
+
+    /* ============================================================
+       PREVIEW IMAGEN
+    ============================================================ */
+
+    function preview_imagen(id, url, nombre, es_principal) {
         _media_preview_id = id;
+        _media_preview_principal = es_principal;
+
         $('#img_preview_full').attr('src', url + '?' + Date.now());
         $('#lbl_img_nombre').text(nombre);
+
+        // Actualizar botón del modal según el estado actual
+        actualizar_btn_preview_principal(es_principal);
+
         $('#modal_preview_img').modal('show');
     }
 
+    function actualizar_btn_preview_principal(es_principal) {
+        var $btn = $('#btn_set_principal_preview');
+        if (es_principal == 1) {
+            $btn.removeClass('btn-warning').addClass('btn-outline-warning')
+                .html('<i class="bx bx-star me-1"></i>Quitar como principal');
+        } else {
+            $btn.removeClass('btn-outline-warning').addClass('btn-warning')
+                .html('<i class="bx bxs-star me-1"></i>Marcar como principal');
+        }
+    }
+
     function set_principal_desde_preview() {
-        set_principal(_media_preview_id, null, function() {
-            $('#modal_preview_img').modal('hide');
+        set_principal(_media_preview_id, null, function(nuevoEstado) {
+            // Actualizar el estado local y el botón sin cerrar el modal
+            _media_preview_principal = nuevoEstado;
+            actualizar_btn_preview_principal(nuevoEstado);
         });
     }
 
@@ -629,16 +661,19 @@
         eliminar_media(_media_preview_id);
     }
 
+
+    /* ============================================================
+       PREVIEW VIDEO
+    ============================================================ */
+
     function preview_video(id, url, nombre) {
         _media_preview_id = id;
-        var $vid = $('#vid_preview_full');
         $('#vid_preview_src').attr('src', url);
-        $vid[0].load();
+        $('#vid_preview_full')[0].load();
         $('#lbl_vid_nombre').text(nombre);
         $('#modal_preview_vid').modal('show');
     }
 
-    // Detener video al cerrar modal
     $('#modal_preview_vid').on('hidden.bs.modal', function() {
         var $vid = $('#vid_preview_full');
         $vid[0].pause();
@@ -649,6 +684,11 @@
         $('#modal_preview_vid').modal('hide');
         eliminar_media(_media_preview_id);
     }
+
+
+    /* ============================================================
+       SET PRINCIPAL (con toggle y reset de los demás)
+    ============================================================ */
 
     function set_principal(id, evento, callback) {
         if (evento) evento.stopPropagation();
@@ -663,18 +703,35 @@
             dataType: 'json',
             success: function(r) {
                 if (r == 1) {
+                    // Se asignó como principal
                     Swal.fire({
                         icon: 'success',
-                        title: 'Imagen principal actualizada',
+                        title: 'Imagen principal asignada',
                         timer: 1200,
                         showConfirmButton: false
                     });
                     cargar_media();
-                    if (typeof callback === 'function') callback();
+                    if (typeof callback === 'function') callback(1);
+
+                } else if (r == 2) {
+                    // Se removió el principal
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Principal removida',
+                        timer: 1200,
+                        showConfirmButton: false
+                    });
+                    cargar_media();
+                    if (typeof callback === 'function') callback(0);
                 }
             }
         });
     }
+
+
+    /* ============================================================
+       ELIMINAR
+    ============================================================ */
 
     function eliminar_media(id, evento) {
         if (evento) evento.stopPropagation();
@@ -712,6 +769,11 @@
         });
     }
 
+
+    /* ============================================================
+       UTILIDADES
+    ============================================================ */
+
     function formatear_bytes(bytes) {
         if (!bytes || bytes === 0) return '—';
         if (bytes < 1024) return bytes + ' B';
@@ -722,6 +784,7 @@
     function escape_attr(str) {
         return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
     }
+
     $(document).ready(function() {
         cargar_media();
     });

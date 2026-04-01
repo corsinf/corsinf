@@ -38,15 +38,16 @@ class hub_espacios_mediaC
         return $this->modelo->listar_media($id_espacio);
     }
 
+
     public function insertar($files, $post)
     {
         $id_espacio = $post['id_espacio'] ?? '';
-        if ($id_espacio === '')             return -1;
+        if ($id_espacio === '')              return -1;
         if (empty($files['archivo']['tmp_name'])) return -1;
 
-        $archivo    = $files['archivo'];
-        $mime       = mime_content_type($archivo['tmp_name']);
-        $tamanio    = $archivo['size'];
+        $archivo = $files['archivo'];
+        $mime    = mime_content_type($archivo['tmp_name']);
+        $tamanio = $archivo['size'];
 
         $imagenes_permitidas = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
         $videos_permitidos   = ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'];
@@ -59,8 +60,8 @@ class hub_espacios_mediaC
             return -2;
         }
 
-        if ($tipo === 'video' && $tamanio > 50 * 1024 * 1024) return -3;
-        if ($tipo === 'imagen' && $tamanio > 5 * 1024 * 1024)  return -4;
+        if ($tipo === 'video'  && $tamanio > 50 * 1024 * 1024) return -3;
+        if ($tipo === 'imagen' && $tamanio > 5  * 1024 * 1024) return -4;
 
         $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
         $ruta_dir   = dirname(__DIR__, 3) . '/REPOSITORIO/HOST_TIME/ESPACIOS/'
@@ -72,45 +73,45 @@ class hub_espacios_mediaC
         $lista = $this->modelo->listar_media($id_espacio);
         $orden = count($lista) + 1;
 
-        // Insertar primero con nombre temporal
+        // Insertar registro con datos temporales para obtener el ID
         $datos = [
-            ['campo' => 'id_espacio',     'dato' => (int) $id_espacio],
-            ['campo' => 'tipo',           'dato' => $tipo],
-            ['campo' => 'url_archivo',    'dato' => ''],
-            ['campo' => 'nombre_archivo', 'dato' => ''],
-            ['campo' => 'formato',        'dato' => ''],
-            ['campo' => 'tamanio_bytes',  'dato' => $tamanio],
-            ['campo' => 'orden',          'dato' => $orden],
-            ['campo' => 'es_principal',   'dato' => 0],
-            ['campo' => 'is_deleted',     'dato' => 0],
+            ['campo' => 'id_espacio',      'dato' => (int) $id_espacio],
+            ['campo' => 'tipo',            'dato' => $tipo],
+            ['campo' => 'url_archivo',     'dato' => ''],
+            ['campo' => 'nombre_archivo',  'dato' => ''],
+            ['campo' => 'formato',         'dato' => ''],
+            ['campo' => 'tamanio_bytes',   'dato' => $tamanio],
+            ['campo' => 'orden',           'dato' => $orden],
+            ['campo' => 'es_principal',    'dato' => 0],
+            ['campo' => 'is_deleted',      'dato' => 0],
             ['campo' => 'id_usuario_crea', 'dato' => $_SESSION['INICIO']['ID_USUARIO'] ?? null],
-            ['campo' => 'fecha_creacion', 'dato' => date('Y-m-d H:i:s')],
+            ['campo' => 'fecha_creacion',  'dato' => date('Y-m-d H:i:s')],
         ];
 
-        $id_nuevo = $this->modelo->insertar_id($datos); 
+        $id_nuevo = $this->modelo->insertar_id($datos);
         if (!$id_nuevo || $id_nuevo < 1) return -1;
 
-        // Ahora guardar el archivo con el ID real
+        // Guardar el archivo físico con el ID real
         if ($tipo === 'imagen') {
             $nombre_bd = $this->guardar_imagen($archivo, $ruta_dir, $id_nuevo);
-            if ($nombre_bd < 0) {
-                // Revertir el registro si falla
-                $this->modelo->editar([['campo' => 'is_deleted', 'dato' => 1]], [['campo' => 'id_espacio_media', 'dato' => $id_nuevo]]);
-                return $nombre_bd;
-            }
         } else {
             $nombre_bd = $this->guardar_video($archivo, $ruta_dir, $id_nuevo, $mime);
-            if ($nombre_bd < 0) {
-                $this->modelo->editar([['campo' => 'is_deleted', 'dato' => 1]], [['campo' => 'id_espacio_media', 'dato' => $id_nuevo]]);
-                return $nombre_bd;
-            }
+        }
+
+        if ($nombre_bd < 0) {
+            // Revertir registro si falla el guardado físico
+            $this->modelo->editar(
+                [['campo' => 'is_deleted', 'dato' => 1]],
+                [['campo' => 'id_espacio_media', 'dato' => $id_nuevo]]
+            );
+            return $nombre_bd;
         }
 
         $extension = pathinfo($nombre_bd, PATHINFO_EXTENSION);
         $url_bd    = '../REPOSITORIO/HOST_TIME/ESPACIOS/'
             . $id_empresa . '/' . $id_espacio . '/MEDIA/' . $nombre_bd;
 
-        // Actualizar el registro con el nombre y url reales
+        // Actualizar el registro con nombre y URL reales
         $this->modelo->editar([
             ['campo' => 'url_archivo',    'dato' => $url_bd],
             ['campo' => 'nombre_archivo', 'dato' => $nombre_bd],
@@ -120,10 +121,13 @@ class hub_espacios_mediaC
         return 1;
     }
 
+
     private function guardar_imagen($archivo, $ruta_dir, $id_media)
     {
-        $mime   = getimagesize($archivo['tmp_name'])['mime'];
-        // Nombre con el ID real del registro
+        $info = getimagesize($archivo['tmp_name']);
+        if (!$info) return -2;
+
+        $mime   = $info['mime'];
         $nombre = 'espacio_' . $id_media . '.webp';
 
         switch ($mime) {
@@ -151,6 +155,7 @@ class hub_espacios_mediaC
             imagedestroy($img);
             return -1;
         }
+
         imagedestroy($img);
         return $nombre;
     }
@@ -165,8 +170,7 @@ class hub_espacios_mediaC
             'video/quicktime' => 'mov',
         ];
         $ext    = $extensiones[$mime] ?? 'mp4';
-        $ts     = time();
-        $nombre = 'vid_' . $id_espacio . '_' . $ts . '.' . $ext;
+        $nombre = 'vid_' . $id_espacio . '_' . time() . '.' . $ext;
 
         if (!move_uploaded_file($archivo['tmp_name'], $ruta_dir . $nombre)) {
             return -1;
@@ -180,25 +184,47 @@ class hub_espacios_mediaC
         $media = $this->modelo->where('id_espacio_media', $id)->listar();
         if (empty($media)) return -1;
 
-        // $media es un array de registros, necesitas el primero
-        $registro = $media[0];
-
+        $registro    = $media[0];
         $ruta_fisica = dirname(__DIR__, 3) . '/' . str_replace('../', '', $registro['url_archivo']);
 
         if (file_exists($ruta_fisica)) {
             unlink($ruta_fisica);
         }
 
-        $datos = [['campo' => 'is_deleted', 'dato' => 1]];
-        $where = [['campo' => 'id_espacio_media', 'dato' => (int) $id]];
-        return $this->modelo->editar($datos, $where);
+        return $this->modelo->editar(
+            [['campo' => 'is_deleted', 'dato' => 1]],
+            [['campo' => 'id_espacio_media', 'dato' => (int) $id]]
+        );
     }
-
-
+   
     public function set_principal($id, $id_espacio)
     {
-        $datos = [['campo' => 'es_principal', 'dato' => 1]];
-        $where = [['campo' => 'id_espacio_media', 'dato' => (int) $id]];
-        return $this->modelo->editar($datos, $where);
+        // Verificar que el registro exista
+        $media = $this->modelo->where('id_espacio_media', $id)->listar();
+        if (empty($media)) return -1;
+
+        $registro = $media[0];
+
+        if ($registro['es_principal'] == 1) {
+            // Ya es principal → quitar
+            $resultado = $this->modelo->editar(
+                [['campo' => 'es_principal', 'dato' => 0]],
+                [['campo' => 'id_espacio_media', 'dato' => (int) $id]]
+            );
+            return $resultado ? 2 : -1;
+        }
+
+        // No es principal → primero resetear todas las del espacio
+        $this->modelo->editar(
+            [['campo' => 'es_principal', 'dato' => 0]],
+            [['campo' => 'id_espacio',   'dato' => (int) $id_espacio]]
+        );
+
+        // Luego asignar la seleccionada
+        $resultado = $this->modelo->editar(
+            [['campo' => 'es_principal', 'dato' => 1]],
+            [['campo' => 'id_espacio_media', 'dato' => (int) $id]]
+        );
+        return $resultado ? 1 : -1;
     }
 }

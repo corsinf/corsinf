@@ -246,14 +246,14 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     <div class="row g-3">
 
                         <div class="col-12">
-                            <label for="txt_nombre_plan" class="form-label fw-semibold">Nombre del plan</label>
+                            <label for="txt_nombre_plan" class="form-label fw-semibold">Nombre del plan </label>
                             <input type="text" class="form-control form-control-sm"
                                 id="txt_nombre_plan" name="txt_nombre_plan"
                                 placeholder="Ej: Plan Corporativo Mensual">
                         </div>
 
                         <div class="col-6">
-                            <label for="ddl_unidad_tiempo" class="form-label fw-semibold">Unidad de Tiempo</label>
+                            <label for="ddl_unidad_tiempo" class="form-label fw-semibold">Unidad de Tiempo </label>
                             <select class="form-select form-select-sm select2-validation"
                                 id="ddl_unidad_tiempo" name="ddl_unidad_tiempo">
                                 <option value="" selected hidden>-- Seleccione --</option>
@@ -262,13 +262,13 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         </div>
 
                         <div class="col-md-6">
-                            <label for="txt_cantidad" class="form-label fw-semibold">Cantidad</label>
+                            <label for="txt_cantidad" class="form-label fw-semibold">Cantidad </label>
                             <input type="number" class="form-control form-control-sm"
                                 id="txt_cantidad" name="txt_cantidad" min="1" value="1">
                         </div>
 
                         <div class="col-12">
-                            <label for="txt_precio" class="form-label fw-semibold">Precio</label>
+                            <label for="txt_precio" class="form-label fw-semibold">Precio </label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text">$</span>
                                 <input type="number" class="form-control"

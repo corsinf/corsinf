@@ -48,7 +48,14 @@ if ($_GET['acc'] == 'hub_reservas') {
     include('HOST_TIME/RESERVAS/hub_reservas.php');
 }
 if ($_GET['acc'] == 'hub_reservas_registrar') {
-    include('HOST_TIME/RESERVAS/hub_reservas_registrar.php'); 
+    include('HOST_TIME/RESERVAS/hub_reservas_registrar.php');
+}
+
+if ($_GET['acc'] == 'hub_reservas_detalle') {
+    include('HOST_TIME/RESERVAS/hub_reservas_detalle.php');
+}
+if ($_GET['acc'] == 'hub_reservas_info') {
+    include('HOST_TIME/RESERVAS/hub_reservas_info.php');
 }
 
 

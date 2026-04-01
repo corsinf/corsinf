@@ -10,7 +10,6 @@ if (isset($_GET['_id'])) {
 
 ?>
 
-<script src="../js/ACTIVOS_FIJOS/avaluos.js"></script>
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 

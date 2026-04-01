@@ -107,14 +107,15 @@ class CLIENTESC
         $lista = array();
 
         foreach ($datos as $value) {
-            // Formato solicitado: Cédula - Nombre Completo
-            $text = $value['th_per_cedula'] . ' - ' . $value['th_per_nombres_completos'];
+
+            // Usamos el nombre ya armado desde el modelo
+            $text = $value['cedula'] . ' - ' . trim($value['nombre_persona']);
 
             $lista[] = array(
-                'id'    => $value['th_per_id'], // Se retorna la cédula en el value
-                'text'  => $text,
-                'telefono' => $value['th_per_telefono_1'],
-                'correo'   => $value['th_per_correo']
+                'id'        => $value['th_per_id'],
+                'text'      => $text,
+                'telefono'  => $value['th_per_telefono_1'],
+                'correo'    => $value['th_per_correo']
             );
         }
 

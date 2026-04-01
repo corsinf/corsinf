@@ -88,9 +88,9 @@
             type: 'post',
             dataType: 'json',
             success: function(response) {
-                if (response == 1) {
+                if (response > 0) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_espacios';
+                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_registrar_espacio&_id=' + response;
                     });
                 } else if (response == -2) {
                     $('#txt_nombre').addClass('is-invalid');
@@ -167,7 +167,7 @@
         <div class="col-md-<?= $_id != '' ? '9' : '12' ?>">
 
             <!-- Nombre y Codigo en la misma fila -->
-             <input type="hidden" name="id_tipo_espacio" id="id_tipo_espacio" value="">
+            <input type="hidden" name="id_tipo_espacio" id="id_tipo_espacio" value="">
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="txt_nombre" class="form-label">Nombre </label>
@@ -217,7 +217,7 @@
             <label class="error" style="display:none;" for="ddl_numero_piso"></label>
         </div>
         <div class="col-md-3">
-            <label for="ddl_estado_espacio" class="form-label">Estado del espacio</label>
+            <label for="ddl_estado_espacio" class="form-label">Estado del espacio </label>
             <select class="form-select form-select-sm select2-validation"
                 id="ddl_estado_espacio" name="ddl_estado_espacio">
                 <option value="" selected hidden>-- Seleccione --</option>
@@ -225,13 +225,13 @@
             <label class="error" style="display:none;" for="ddl_estado_espacio"></label>
         </div>
         <div class="col-md-3">
-            <label for="txt_capacidad_min" class="form-label">Capacidad mínima</label>
+            <label for="txt_capacidad_min" class="form-label">Capacidad mínima </label>
             <input type="number" class="form-control form-control-sm"
                 id="txt_capacidad_min" name="txt_capacidad_min" min="0" step="1">
         </div>
 
         <div class="col-md-3">
-            <label for="txt_capacidad_max" class="form-label">Capacidad máxima</label>
+            <label for="txt_capacidad_max" class="form-label">Capacidad máxima </label>
             <input type="number" class="form-control form-control-sm"
                 id="txt_capacidad_max" name="txt_capacidad_max" min="0" step="1">
         </div>
