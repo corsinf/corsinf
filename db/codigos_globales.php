@@ -16,6 +16,7 @@ class codigos_globales
 	private $db;
 	private $CodAES;
 	private $iv;
+	private $CodLicencias;
 	function __construct()
 	{
 		$this->db = new db();
