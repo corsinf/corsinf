@@ -18,7 +18,7 @@ class hub_espacios_turnosM extends BaseModel
         'fecha_modificacion',
     ];
 
-    /* Listar asignaciones de un espacio con datos del turno */
+    /* Listar TODAS las asignaciones de un espacio con datos del turno */
     public function listar_por_espacio($id_espacio)
     {
         $id = intval($id_espacio);
@@ -37,6 +37,40 @@ class hub_espacios_turnosM extends BaseModel
             WHERE et.is_deleted = 0
               AND et.id_espacios = {$id}
             ORDER BY et.hub_tuh_dia ASC, t.hub_tur_hora_entrada ASC
+        ";
+        return $this->db->datos($sql);
+    }
+
+    /**
+     * Listar el turno de un espacio para un día específico.
+     * hub_tuh_dia sigue el convenio JS: 0=Dom, 1=Lu … 6=Sáb.
+     *
+     * @param  int $id_espacio
+     * @param  int $dia        Número de día JS (0-6)
+     * @return array           Array con un registro o vacío
+     */
+    public function listar_por_espacio_y_dia($id_espacio, $dia)
+    {
+        $id  = intval($id_espacio);
+        $dia = intval($dia);
+
+        $sql = "
+            SELECT
+                et.hub_tuh_id          AS _id,
+                et.id_espacios,
+                et.hub_tur_id,
+                et.hub_tuh_dia,
+                t.hub_tur_nombre       AS nombre,
+                t.hub_tur_hora_entrada AS hora_entrada,
+                t.hub_tur_hora_salida  AS hora_salida,
+                t.hub_tur_color        AS color
+            FROM hub_espacios_turnos et
+            INNER JOIN hub_turnos t ON et.hub_tur_id = t.hub_tur_id
+            WHERE et.is_deleted  = 0
+              AND et.id_espacios = {$id}
+              AND et.hub_tuh_dia = {$dia}
+            ORDER BY t.hub_tur_hora_entrada ASC
+            LIMIT 1
         ";
         return $this->db->datos($sql);
     }
@@ -61,7 +95,7 @@ class hub_espacios_turnosM extends BaseModel
             $sql .= " AND hub_tuh_id != " . intval($excluir_id);
         }
 
-        return  $this->db->datos($sql);
+        return $this->db->datos($sql);
     }
 
     public function verificar_solapamiento($id_espacio, $hub_tur_id, $dia)
@@ -71,18 +105,18 @@ class hub_espacios_turnosM extends BaseModel
         $dia        = intval($dia);
 
         $sql = "
-        SELECT COUNT(*) AS c
-        FROM hub_espacios_turnos et
-        INNER JOIN hub_turnos t_nuevo 
-            ON t_nuevo.hub_tur_id = {$hub_tur_id}
-        INNER JOIN hub_turnos t_exist 
-            ON et.hub_tur_id = t_exist.hub_tur_id
-        WHERE et.is_deleted = 0
-          AND et.id_espacios = {$id_espacio}
-          AND et.hub_tuh_dia = {$dia}
-          AND t_nuevo.hub_tur_hora_entrada < t_exist.hub_tur_hora_salida
-          AND t_nuevo.hub_tur_hora_salida  > t_exist.hub_tur_hora_entrada
-    ";
+            SELECT COUNT(*) AS c
+            FROM hub_espacios_turnos et
+            INNER JOIN hub_turnos t_nuevo
+                ON t_nuevo.hub_tur_id = {$hub_tur_id}
+            INNER JOIN hub_turnos t_exist
+                ON et.hub_tur_id = t_exist.hub_tur_id
+            WHERE et.is_deleted = 0
+              AND et.id_espacios = {$id_espacio}
+              AND et.hub_tuh_dia = {$dia}
+              AND t_nuevo.hub_tur_hora_entrada < t_exist.hub_tur_hora_salida
+              AND t_nuevo.hub_tur_hora_salida  > t_exist.hub_tur_hora_entrada
+        ";
 
         return $this->db->datos($sql);
     }

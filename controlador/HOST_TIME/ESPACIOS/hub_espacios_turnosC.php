@@ -9,6 +9,14 @@ if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id_espacio'] ?? ''));
 }
 
+/* Nuevo endpoint: listar turno de un espacio para un día específico */
+if (isset($_GET['listar_por_dia'])) {
+    echo json_encode($controlador->listar_por_dia(
+        $_POST['id_espacio'] ?? '',
+        $_POST['dia']        ?? ''
+    ));
+}
+
 if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar($_POST['parametros']));
 }
@@ -27,10 +35,21 @@ class hub_espacios_turnosC
         $this->modelo = new hub_espacios_turnosM();
     }
 
+    /* Todos los turnos del espacio (todos los días) */
     function listar($id_espacio = '')
     {
         if ($id_espacio === '') return [];
         return $this->modelo->listar_por_espacio($id_espacio);
+    }
+
+    /**
+     * Turno del espacio para el día indicado (día JS: 0=Dom…6=Sáb).
+     * Devuelve array con 1 elemento o array vacío si no hay turno.
+     */
+    function listar_por_dia($id_espacio = '', $dia = '')
+    {
+        if ($id_espacio === '' || $dia === '') return [];
+        return $this->modelo->listar_por_espacio_y_dia($id_espacio, $dia);
     }
 
     function insertar($parametros)

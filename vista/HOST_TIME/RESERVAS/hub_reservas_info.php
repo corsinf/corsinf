@@ -244,7 +244,7 @@ $_id = $_GET['_id'] ?? '';
             dataType: 'json',
             success: function(response) {
                 let e = response[0];
-                _id_espacio_actual = e.id_espacio;
+                _id_espacio_actual = e._id;
                 _estado_espacio_actual = parseInt(e.id_estado_espacio);
 
                 $('#det_ubicacion').text(e.nombre_ubicacion || '—');
@@ -312,7 +312,7 @@ $_id = $_GET['_id'] ?? '';
         let $botones = $('#contenedor_botones_accion');
         $botones.empty();
 
-        if (estado === 4) {
+        if (estado === 1) {
             // BLOQUEADO → Aprobar + Cancelar
             $wrap.show();
             $('#txt_msg_accion').html('<i class="bx bx-lock me-1 text-danger"></i> El espacio está <strong>bloqueado</strong>. Puede aprobarlo para habilitarlo o cancelar la reserva.');
@@ -331,7 +331,7 @@ $_id = $_GET['_id'] ?? '';
                 })
             );
 
-        } else if (estado === 1) {
+        } else if (estado === 2) {
             // ACTIVO → Finalizado + No presentado
             $wrap.show();
             $('#txt_msg_accion').html('<i class="bx bx-check-circle me-1 text-success"></i> El espacio está <strong>activo</strong>. Indique el resultado de la reserva.');
@@ -357,6 +357,12 @@ $_id = $_GET['_id'] ?? '';
 
     /* ── Cambiar estado del espacio ── */
     function cambiar_estado_espacio(nuevo_estado, accion) {
+
+        var parametros = {
+            'id_espacio': _id_espacio_actual,
+            'id_estado_nuevo': 2,
+            'id_reserva': '<?= $_id ?>',
+        };
         let textos = {
             aprobar: 'El espacio pasará a estado ACTIVO.',
             cancelar: 'El espacio pasará a estado INACTIVO.'
@@ -375,8 +381,7 @@ $_id = $_GET['_id'] ?? '';
                 url: '../controlador/HOST_TIME/ESPACIOS/espaciosC.php?cambiar_estado=true',
                 type: 'post',
                 data: {
-                    id_espacio: _id_espacio_actual,
-                    id_estado_nuevo: nuevo_estado
+                    parametros: parametros
                 },
                 dataType: 'json',
                 success: function(r) {

@@ -2,6 +2,8 @@
 date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 3) . '/modelo/HOST_TIME/ESPACIOS/espaciosM.php');
+require_once(dirname(__DIR__, 3) . '/modelo/HOST_TIME/RESERVAS/hub_reservasM.php');
+
 
 
 $controlador = new espaciosC();
@@ -52,19 +54,18 @@ if (isset($_GET['listar_por_ubicacion_piso'])) {
 }
 
 if (isset($_GET['cambiar_estado'])) {
-    echo json_encode($controlador->cambiar_estado(
-        $_POST['id_espacio']      ?? '',
-        $_POST['id_estado_nuevo'] ?? ''
-    ));
+    echo json_encode($controlador->cambiar_estado($_POST['parametros']));
 }
 
 class espaciosC
 {
     private $modelo;
+    private $hub_reservas;
 
     function __construct()
     {
         $this->modelo = new espaciosM();
+        $this->hub_reservas = new hub_reservasM();
     }
 
     function listar_por_ubicacion_piso($id_ubicacion = '', $id_piso = '')
@@ -230,22 +231,36 @@ class espaciosC
         return in_array($file['txt_copia_imagen_espacio']['type'], $tipos) ? 1 : -1;
     }
 
-    public function cambiar_estado($id_espacio, $id_estado_nuevo)
+    public function cambiar_estado($parametros)
     {
-        $id_espacio    = (int) $id_espacio;
-        $id_estado_nuevo = (int) $id_estado_nuevo;
+        $id_espacio    = (int) $parametros['id_espacio'];
+        $id_estado_nuevo    = (int) $parametros['id_estado_nuevo'];
+        $id_reserva    = (int) $parametros['id_reserva'];
 
-        if ($id_espacio < 1 || $id_estado_nuevo < 1) return -1;
+        $id_estado_reserva = 0;
 
-        // Estados válidos según catálogo
-        $estados_validos = [1, 2, 3, 4];
-        if (!in_array($id_estado_nuevo, $estados_validos)) return -1;
+        if ($id_estado_nuevo == 2) {
+            $id_estado_reserva = 2;
+        }
 
         $datos = [
             ['campo' => 'id_estado_espacio',  'dato' => $id_estado_nuevo],
             ['campo' => 'id_usuario_modifica', 'dato' => $_SESSION['INICIO']['ID_USUARIO'] ?? null],
             ['campo' => 'fecha_modificacion', 'dato' => date('Y-m-d H:i:s')],
         ];
+
+        $datos_reserva = [
+            ['campo' => 'id_estado_reservas',  'dato' => $id_estado_reserva],
+            ['campo' => 'id_usuario_modifica', 'dato' => $_SESSION['INICIO']['ID_USUARIO'] ?? null],
+            ['campo' => 'fecha_modificacion', 'dato' => date('Y-m-d H:i:s')],
+        ];
+
+        $where_reserva = [
+            ['campo' => 'id_reserva', 'dato' => $id_reserva]
+        ];
+
+
+        $this->hub_reservas->editar($datos_reserva, $where_reserva);
 
         $where = [
             ['campo' => 'id_espacio', 'dato' => $id_espacio]
